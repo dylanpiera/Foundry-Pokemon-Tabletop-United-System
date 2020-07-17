@@ -27,13 +27,11 @@ export class PTUActor extends Actor {
 
     // Make modifications to data here. For example:
 
-    // Loop through ability scores, and add their modifiers to our sheet output.
-    for (let [key, ability] of Object.entries(data.abilities)) {
-      // Calculate the modifier using d20 rules.
-      ability.mod = Math.floor((ability.value - 10) / 2);
-    }
+    data.health.max = 10 + (data.level * 2) + (data.stats.hp.value * 3);
 
     data.health.percent = Math.round((data.health.value / data.health.max) * 100);
+
+    data.ap.total = 5 + Math.floor(data.level / 5);
   }
 
 }

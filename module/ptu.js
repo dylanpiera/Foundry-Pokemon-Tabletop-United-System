@@ -6,7 +6,7 @@ import { PTUItemSheet } from "./item/item-sheet.js";
 
 Hooks.once('init', async function() {
 
-  game.pokemontabletopunited = {
+  game.ptu = {
     PTUActor,
     PTUItem,
     rollItemMacro
@@ -27,9 +27,9 @@ Hooks.once('init', async function() {
 
   // Register sheet application classes
   Actors.unregisterSheet("core", ActorSheet);
-  Actors.registerSheet("pokemontabletopunited", PTUActorSheet, { makeDefault: true });
+  Actors.registerSheet("ptu", PTUActorSheet, { makeDefault: true });
   Items.unregisterSheet("core", ItemSheet);
-  Items.registerSheet("pokemontabletopunited", PTUItemSheet, { makeDefault: true });
+  Items.registerSheet("ptu", PTUItemSheet, { makeDefault: true });
 
   // If you need to add Handlebars helpers, here are a few useful examples:
   Handlebars.registerHelper('concat', function() {
@@ -69,7 +69,7 @@ async function createPTUMacro(data, slot) {
   const item = data.data;
 
   // Create the macro command
-  const command = `game.pokemontabletopunited.rollItemMacro("${item.name}");`;
+  const command = `game.ptu.rollItemMacro("${item.name}");`;
   let macro = game.macros.entities.find(m => (m.name === item.name) && (m.command === command));
   if (!macro) {
     macro = await Macro.create({
@@ -77,7 +77,7 @@ async function createPTUMacro(data, slot) {
       type: "script",
       img: item.img,
       command: command,
-      flags: { "pokemontabletopunited.itemMacro": true }
+      flags: { "ptu.itemMacro": true }
     });
   }
   game.user.assignHotbarMacro(macro, slot);

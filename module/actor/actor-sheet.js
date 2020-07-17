@@ -7,8 +7,8 @@ export class PTUActorSheet extends ActorSheet {
   /** @override */
   static get defaultOptions() {
     return mergeObject(super.defaultOptions, {
-      classes: ["pokemontabletopunited", "sheet", "actor"],
-      template: "systems/pokemontabletopunited/templates/actor/actor-sheet.html",
+      classes: ["ptu", "sheet", "actor"],
+      template: "systems/ptu/templates/actor/actor-sheet.html",
       width: 600,
       height: 630,
       tabs: [{ navSelector: ".sheet-tabs", contentSelector: ".sheet-body", initial: "pkmn" }]
@@ -21,10 +21,7 @@ export class PTUActorSheet extends ActorSheet {
   getData() {
     const data = super.getData();
     data.dtypes = ["String", "Number", "Boolean"];
-    for (let attr of Object.values(data.data.attributes)) {
-      attr.isCheckbox = attr.dtype === "Boolean";
-    }
-
+    
     // Prepare items.
     if (this.actor.data.type == 'character') {
       this._prepareCharacterItems(data);

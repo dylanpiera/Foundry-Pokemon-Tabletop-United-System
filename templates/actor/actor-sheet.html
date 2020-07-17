@@ -5,11 +5,6 @@
         <img class="profile-img" src="{{actor.img}}" data-edit="img" title="{{actor.name}}" height="120" width="120"/>
         <div class="header-fields">
             <div class="resources">
-
-              <!-- <div class="resource flex-group-center">
-                  <label for="data.health.value" class="resource-label">Health</label>
-
-              </div> -->
               <div class="pokemon-header-stats stats-flipped">
                 <h2 class="pokemon-name"><input name="name" type="text" value="{{actor.name}}" placeholder="Name"/></h2>
                 <div class="options" style="padding-bottom: 5px;">
@@ -21,20 +16,11 @@
                   <span> / </span>
                   <input type="text" name="data.health.max" value="{{data.health.max}}" data-dtype="Number"/>
                 </div>
-
                 <div class="options level-header">
-                    <label for="data.attributes.level.value" class="level"></label>
-                    <input type="text" name="data.attributes.level.value" value="{{data.attributes.level.value}}" data-dtype="Number"/>
+                    <label for="data.level" class="level"></label>
+                    <input style="display: flex;" type="text" name="data.level" value="{{data.level}}" data-dtype="Number"/>
                 </div>
               </div>
-              <!-- <div class="resource flex-group-center">
-                  <label for="data.power.value" class="resource-label">Power</label>
-                  <div class="resource-content flexrow flex-center flex-between">
-                    <input type="text" name="data.power.value" value="{{data.power.value}}" data-dtype="Number"/>
-                    <span> / </span>
-                    <input type="text" name="data.power.max" value="{{data.power.max}}" data-dtype="Number"/>
-                  </div>
-              </div> -->
           </div>
         </div>
     </header>
@@ -53,31 +39,31 @@
         {{!-- PKMN Tab --}}
         <div class="tab details pkmn" data-group="primary" data-tab="pkmn">
           <div class="abilities framed">
-            {{#each data.abilities as |ability key|}}
+            {{#each data.stats as |stat key|}}
               <div class="ability flexrow flex-group-center">
-                <label for="data.abilities.{{key}}.value" class="resource-label">{{key}}</label>
-                <input type="text" name="data.abilities.{{key}}.value" value="{{ability.value}}" data-dtype="Number"/>
+                <label for="data.stats.{{key}}.value" class="resource-label">{{key}}</label>
+                <input type="text" name="data.stats.{{key}}.value" value="{{stat.value}}" data-dtype="Number"/>
                 <!-- <span class="ability-mod rollable" data-roll="d20+@abilities.{{key}}.mod" data-label="{{key}}">{{numberFormat ability.mod decimals=0 sign=true}}</span> -->
               </div>
             {{/each}}
           </div>
-          <div class="types stats-flipped">
+          <!--div class="types stats-flipped">
               <div class="ability flexrow flex-group-center">
-                  <label for="data.attributes.type1.value" class="resource-label">Type1</label>
-                  <input type="text" name="data.attributes.type1.value" value="{{data.attributes.type1.value}}" />
+                  <label for="data.type.primary.value" class="resource-label">Type1</label>
+                  <input type="text" name="data.type.primary.value" value="{{data.type.primary.value}}" />
                   <!-- <span class="ability-mod rollable" data-roll="d20+@abilities.{{key}}.mod" data-label="{{key}}">{{numberFormat ability.mod decimals=0 sign=true}}</span> -->
-                </div>
+                <!--/div>
                 <div class="ability flexrow flex-group-center">
-                    <label for="data.attributes.type2.value" class="resource-label">Type2</label>
-                    <input type="text" name="data.attributes.type2.value" value="{{data.attributes.type2.value}}" />
+                    <label for="data.type.secondary.value" class="resource-label">Type2</label>
+                    <input type="text" name="data.type.secondary.value" value="{{data.type.secondary.value}}" />
                   <!-- <span class="ability-mod rollable" data-roll="d20+@abilities.{{key}}.mod" data-label="{{key}}">{{numberFormat ability.mod decimals=0 sign=true}}</span> -->
-                </div>
-          </div>
+                <!--/div>
+          </div-->
         </div>
 
         {{!-- Biography Tab --}}
         <div class="tab biography framed no-hd" data-group="primary" data-tab="dex">
-            {{editor content=data.biography target="data.biography" button=true owner=owner editable=editable}}
+            {{editor content=data.biography.personality target="data.biography.personality" button=true owner=owner editable=editable}}
         </div>
 
         {{!-- Owned Items Tab --}}
@@ -104,7 +90,8 @@
             {{/each}}
             </ol>
         </div>
-
+        
+        <!--
         {{!-- Owned Moves Tab --}}
         <div class="tab moves framed no-hd" data-group="primary" data-tab="moves">
             <ol class="items-list">
@@ -156,6 +143,7 @@
                 {{/each}}
             </ol>
         </div>
+        -->
 
     </section>
 </form>

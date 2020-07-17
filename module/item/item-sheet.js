@@ -7,7 +7,7 @@ export class PTUItemSheet extends ItemSheet {
   /** @override */
   static get defaultOptions() {
     return mergeObject(super.defaultOptions, {
-      classes: ["pokemontabletopunited", "sheet", "item"],
+      classes: ["ptu", "sheet", "item"],
       width: 520,
       height: 480,
       tabs: [{ navSelector: ".sheet-tabs", contentSelector: ".sheet-body", initial: "description" }]
@@ -16,7 +16,7 @@ export class PTUItemSheet extends ItemSheet {
 
   /** @override */
   get template() {
-    const path = "systems/pokemontabletopunited/templates/item";
+    const path = "systems/ptu/templates/item";
     // Return a single sheet for all item types.
     // return `${path}/item-sheet.html`;
 

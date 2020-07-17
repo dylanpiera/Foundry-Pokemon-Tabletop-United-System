@@ -108,7 +108,8 @@ h1, h2, h3, h4, h5, h6{
     justify-content: flex-start !important;
 
     &>input {
-        width: 25px !important;
+        min-width: 35px;
+        max-width: 45px;
     }
 }
 

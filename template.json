@@ -1,124 +1,128 @@
 {
   "Actor": {
-    "types": ["character, pokemon"],
+    "types": ["character", "pokemon"],
     "templates": {
       "skills": {
-        "acrobatics": {
-          "value": 2,
-          "label": "Acrobatics",
-          "modifier": []
-        },
-        "athletics": {
-          "value": 2,
-          "label": "Athletics",
-          "modifier": []
-        },
-        "charm": {
-          "value": 2,
-          "label": "Charm",
-          "modifier": []
-        },
-        "combat": {
-          "value": 2,
-          "label": "Combat",
-          "modifier": []
-        },
-        "command": {
-          "value": 2,
-          "label": "Command",
-          "modifier": []
-        },
-        "generalEd": {
-          "value": 2,
-          "label": "General Education",
-          "modifier": []
-        },
-        "medicineEd": {
-          "value": 2,
-          "label": "Medicine Education",
-          "modifier": []
-        },
-        "occultEd": {
-          "value": 2,
-          "label": "Occult Education",
-          "modifier": []
-        },
-        "pokemonEd": {
-          "value": 2,
-          "label": "Pokémon Education",
-          "modifier": []
-        },
-        "techEd": {
-          "value": 2,
-          "label": "Technology Education",
-          "modifier": []
-        },
-        "focus": {
-          "value": 2,
-          "label": "Focus",
-          "modifier": []
-        }, 
-        "guile": {
-          "value": 2,
-          "label": "Guile",
-          "modifier": []
-        },
-        "intimidation": {
-          "value": 2,
-          "label": "Intimidation",
-          "modifier": []
-        },
-        "intuition": {
-          "value": 2,
-          "label": "Intuition",
-          "modifier": []
-        },
-        "perception": {
-          "value": 2,
-          "label": "Perception",
-          "modifier": []
-        },
-        "stealth": {
-          "value": 2,
-          "label": "Stealth",
-          "modifier": []
-        },
-        "survival": {
-          "value": 2,
-          "label": "Survival",
-          "modifier": []
+        "skills": {
+          "acrobatics": {
+            "value": 2,
+            "label": "Acrobatics",
+            "modifier": []
+          },
+          "athletics": {
+            "value": 2,
+            "label": "Athletics",
+            "modifier": []
+          },
+          "charm": {
+            "value": 2,
+            "label": "Charm",
+            "modifier": []
+          },
+          "combat": {
+            "value": 2,
+            "label": "Combat",
+            "modifier": []
+          },
+          "command": {
+            "value": 2,
+            "label": "Command",
+            "modifier": []
+          },
+          "generalEd": {
+            "value": 2,
+            "label": "General Education",
+            "modifier": []
+          },
+          "medicineEd": {
+            "value": 2,
+            "label": "Medicine Education",
+            "modifier": []
+          },
+          "occultEd": {
+            "value": 2,
+            "label": "Occult Education",
+            "modifier": []
+          },
+          "pokemonEd": {
+            "value": 2,
+            "label": "Pokémon Education",
+            "modifier": []
+          },
+          "techEd": {
+            "value": 2,
+            "label": "Technology Education",
+            "modifier": []
+          },
+          "focus": {
+            "value": 2,
+            "label": "Focus",
+            "modifier": []
+          }, 
+          "guile": {
+            "value": 2,
+            "label": "Guile",
+            "modifier": []
+          },
+          "intimidation": {
+            "value": 2,
+            "label": "Intimidation",
+            "modifier": []
+          },
+          "intuition": {
+            "value": 2,
+            "label": "Intuition",
+            "modifier": []
+          },
+          "perception": {
+            "value": 2,
+            "label": "Perception",
+            "modifier": []
+          },
+          "stealth": {
+            "value": 2,
+            "label": "Stealth",
+            "modifier": []
+          },
+          "survival": {
+            "value": 2,
+            "label": "Survival",
+            "modifier": []
+          }
         }
       },
       "stats": {
-        "hp": {
-          "value": 10,
-          "label": "Hit Points",
-          "modifier": []
-        },
-        "atk": {
-          "value": 5,
-          "label": "Attack",
-          "modifier": []
-        },
-        "def": {
-          "value": 5,
-          "label": "Defense",
-          "modifier": []
-        },
-        "spatk": {
-          "value": 5,
-          "label": "Special Attack",
-          "modifier": []
-        },
-        "spdef": {
-          "value": 5,
-          "label": "Special Defense",
-          "modifier": []
-        },
-        "spd": {
-          "value": 5,
-          "label": "Speed",
-          "modifier": []
+        "stats": {
+          "hp": {
+            "value": 10,
+            "label": "Hit Points",
+            "modifier": []
+          },
+          "atk": {
+            "value": 5,
+            "label": "Attack",
+            "modifier": []
+          },
+          "def": {
+            "value": 5,
+            "label": "Defense",
+            "modifier": []
+          },
+          "spatk": {
+            "value": 5,
+            "label": "Special Attack",
+            "modifier": []
+          },
+          "spdef": {
+            "value": 5,
+            "label": "Special Defense",
+            "modifier": []
+          },
+          "spd": {
+            "value": 5,
+            "label": "Speed",
+            "modifier": []
+          }
         }
       }
     },
@@ -134,10 +138,11 @@
       "money": 0,
 
       "level": 1,
-
+      "health": {
+        "value": 0
+      },
       "ap": {
-        "total": 5,
-        "used": 0
+        "value": 5
       },
 
       "biography": {
