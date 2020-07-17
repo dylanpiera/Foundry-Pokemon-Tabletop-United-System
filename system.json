@@ -1,0 +1,33 @@
+{
+  "name": "ptu",
+  "title": "Pokemon Tabletop United",
+  "description": "A Pen and Paper Roleplaying Game Set in the World of Pokemon",
+  "version": "0.0.2",
+  "minimumCoreVersion": "0.6.5",
+  "compatibleCoreVersion": "0.6.5",
+  "templateVersion": 2,
+  "author": "Dylan Piera, Tymo Wessel & Cody Swendrowski",
+  "esmodules": ["module/ptu.js"],
+  "styles": [
+    "css/ptu.css",
+    "css/main.css"
+  ],
+  "scripts": [],
+  "packs": [],
+  "languages": [
+    {
+      "lang": "en",
+      "name": "English",
+      "path": "lang/en.json"
+    }
+  ],
+  "gridDistance": 1,
+  "gridUnits": "m",
+  "primaryTokenAttribute": "health",
+  "secondaryTokenAttribute": "exp",
+  "url": "https://github.com/dylanpiera/Foundry-Pokemon-Tabletop-United-System",
+  "manifest": "",
+  "download": "https://github.com/dylanpiera/Foundry-Pokemon-Tabletop-United-System/archive/master.zip",
+  "initiative": "",
+  "license": "LICENSE.txt"
+}

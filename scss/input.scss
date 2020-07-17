@@ -1,0 +1,66 @@
+@import '_variables.scss';
+@import '_mixins.scss';
+
+$pixel-scale: 2px;
+
+a.button, a.button:hover, a.button:active{
+    color: $contrast;
+    text-decoration: none;
+}
+
+button, .button{
+    position: relative;
+    font-family: $font-content;
+    background: none;
+    border: none;
+    padding: 0 0 0 1em;
+    text-transform: uppercase;
+    cursor: pointer;
+    
+    &:hover::before{
+        content: "";
+        position: absolute;
+        top: 2px;
+        left: -2px;
+
+        @include arrow-right;
+    }
+
+    &.pokemon{
+        text-indent: -1000em;
+        width: 100%;
+        background: url('./images/pkmn.png') 1em center no-repeat !important;
+        background-size: contain !important;
+
+        &.active {
+            background: url('./images/pkmn-selected.png') 1em center no-repeat !important;
+            background-size: contain !important;
+        }
+    }
+}
+
+.sheet-tabs > li > button::before {
+    top: 20%;
+}
+
+ul.buttons{
+    display: inline-flex;
+    padding: 0;
+    list-style: none;
+    flex-direction: column;
+
+    li{
+        padding: 0;
+        margin: 0.5em;
+    }
+
+    &.compact{
+        flex-direction: row;
+        flex-wrap: wrap;
+
+        & li {
+            flex-basis: 45%;
+        }
+    }
+
+}

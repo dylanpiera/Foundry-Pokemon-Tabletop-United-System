@@ -1,0 +1,41 @@
+/* Overrides for the core Foundry CSS */
+
+.window-content {
+    background: #F8F3F8 !important;
+}
+
+form button, #settings button {
+    background: #F8F3F8 !important;
+    border: none !important;
+}
+
+.sheet-tabs .item {
+    text-align: left !important;
+}
+
+h2 { 
+    border-bottom: none;
+}
+
+.sheet {
+    input[type="text"], input[type="password"], input[type="datetime-local"] {
+        border: dotted;
+    }
+}
+
+
+.sheet .sheet-header img {
+    height: 109px !important;
+    widows: 109px !important;
+    margin-right: 10px !important;
+}
+
+.message {
+    position: relative !important;
+    border-image: url('./images/frame.png') 7 round !important;
+    border-width: 7px !important;
+    border-style: solid !important;
+    padding: 1em !important;
+    margin: 1em 0 0 0 !important;
+    background: #F8F3F8 !important;
+}
