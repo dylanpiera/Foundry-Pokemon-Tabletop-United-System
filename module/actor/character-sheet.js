@@ -2,16 +2,16 @@
  * Extend the basic ActorSheet with some very simple modifications
  * @extends {ActorSheet}
  */
-export class PTUActorSheet extends ActorSheet {
+export class PTUCharacterSheet extends ActorSheet {
 
   /** @override */
   static get defaultOptions() {
     return mergeObject(super.defaultOptions, {
       classes: ["ptu", "sheet", "actor"],
-      template: "systems/ptu/templates/actor/actor-sheet.html",
+      template: "systems/ptu/templates/actor/character-sheet.html",
       width: 600,
       height: 630,
-      tabs: [{ navSelector: ".sheet-tabs", contentSelector: ".sheet-body", initial: "pkmn" }]
+      tabs: [{ navSelector: ".sheet-tabs", contentSelector: ".sheet-body", initial: "skills" }]
     });
   }
 

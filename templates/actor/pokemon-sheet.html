@@ -1,0 +1,68 @@
+<form class="{{cssClass}} flexcol framed" autocomplete="off">
+
+    {{!-- Sheet Header --}}
+    <header class="sheet-header">
+        <img class="profile-img" src="{{actor.img}}" data-edit="img" title="{{actor.name}}" height="120" width="120"/>
+        <div class="header-fields">
+            <div class="resources">
+              <div class="pokemon-header-stats stats-flipped">
+                <h2 class="pokemon-name"><input name="name" type="text" value="{{actor.name}}" placeholder="Name"/></h2>
+                <div class="options" style="padding-bottom: 5px;">
+                    <label for="progressBar" class="hp"></label>
+                    <div class="progress-bar p{{data.health.percent}}" id="progressBar"></div>
+                </div>
+                <div class="resource-content flexrow flex-group-right hp-info">
+                  <input type="text" name="data.health.value" value="{{data.health.value}}" data-dtype="Number"/>
+                  <span> / </span>
+                  <input type="text" name="data.health.max" value="{{data.health.max}}" data-dtype="Number"/>
+                </div>
+                <div class="options level-header">
+                    <label for="data.level" class="level"></label>
+                    <input style="display: flex;" type="text" name="data.level" value="{{data.level}}" data-dtype="Number"/>
+                </div>
+              </div>
+          </div>
+        </div>
+    </header>
+
+    {{!-- Sheet Tab Navigation --}}
+    <ul class="sheet-tabs tabs pokemon-nav framed no-hd buttons compact" data-group="primary">
+        <li><button class="item" data-tab="skills">Skills</button></li>
+        <li><button class="item" data-tab="moves">Moves</button></li>
+    </ul>
+
+    {{!-- Sheet Body --}}
+    <section class="sheet-body no-hd">
+
+        {{!-- Skills Tab --}}
+        <div class="tab details pkmn" data-group="primary" data-tab="skills">
+          <div class="abilities framed">
+            {{#each data.stats as |stat key|}}
+              <div class="ability flexrow flex-group-center">
+                <label for="data.stats.{{key}}.value" class="resource-label">{{key}}</label>
+                <input type="text" name="data.stats.{{key}}.value" value="{{stat.value}}" data-dtype="Number"/>
+                <!-- <span class="ability-mod rollable" data-roll="d20+@abilities.{{key}}.mod" data-label="{{key}}">{{numberFormat ability.mod decimals=0 sign=true}}</span> -->
+              </div>
+            {{/each}}
+          </div>
+          <!--div class="types stats-flipped">
+              <div class="ability flexrow flex-group-center">
+                  <label for="data.type.primary.value" class="resource-label">Type1</label>
+                  <input type="text" name="data.type.primary.value" value="{{data.type.primary.value}}" />
+                  <!-- <span class="ability-mod rollable" data-roll="d20+@abilities.{{key}}.mod" data-label="{{key}}">{{numberFormat ability.mod decimals=0 sign=true}}</span> -->
+                <!--/div>
+                <div class="ability flexrow flex-group-center">
+                    <label for="data.type.secondary.value" class="resource-label">Type2</label>
+                    <input type="text" name="data.type.secondary.value" value="{{data.type.secondary.value}}" />
+                  <!-- <span class="ability-mod rollable" data-roll="d20+@abilities.{{key}}.mod" data-label="{{key}}">{{numberFormat ability.mod decimals=0 sign=true}}</span> -->
+                <!--/div>
+          </div-->
+        </div>
+
+        {{!-- Moves Tab --}}
+        <div class="tab moves framed no-hd" data-group="primary" data-tab="moves">
+            
+        </div>
+    </section>
+</form>
+

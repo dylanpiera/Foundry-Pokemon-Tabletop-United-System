@@ -1,8 +1,10 @@
 // Import Modules
 import { PTUActor } from "./actor/actor.js";
-import { PTUActorSheet } from "./actor/actor-sheet.js";
+import { PTUCharacterSheet } from "./actor/character-sheet.js";
+import { PTUPokemonSheet } from "./actor/pokemon-sheet.js";
 import { PTUItem } from "./item/item.js";
 import { PTUItemSheet } from "./item/item-sheet.js";
+import { measureDistances } from "./canvas.js";
 
 Hooks.once('init', async function() {
 
@@ -17,7 +19,7 @@ Hooks.once('init', async function() {
    * @type {String}
    */
   CONFIG.Combat.initiative = {
-    formula: "1d20 + @abilities.dex.mod",
+    formula: "@stats.spd.value",
     decimals: 2
   };
 
@@ -27,7 +29,8 @@ Hooks.once('init', async function() {
 
   // Register sheet application classes
   Actors.unregisterSheet("core", ActorSheet);
-  Actors.registerSheet("ptu", PTUActorSheet, { makeDefault: true });
+  Actors.registerSheet("ptu", PTUCharacterSheet, { types: ["character"], makeDefault: true });
+  Actors.registerSheet("ptu", PTUPokemonSheet, { types: ["pokemon"], makeDefault: true });
   Items.unregisterSheet("core", ItemSheet);
   Items.registerSheet("ptu", PTUItemSheet, { makeDefault: true });
 
@@ -51,6 +54,16 @@ Hooks.once("ready", async function() {
   // Wait to register hotbar drop hook on ready so that modules could register earlier if they want to
   Hooks.on("hotbarDrop", (bar, data, slot) => createPTUMacro(data, slot));
 });
+
+/* -------------------------------------------- */
+/*  Canvas Initialization                       */
+/* -------------------------------------------- */
+
+Hooks.on("canvasInit", function() {
+  // Extend Diagonal Measurement
+  SquareGrid.prototype.measureDistances = measureDistances;
+});
+
 
 /* -------------------------------------------- */
 /*  Hotbar Macros                               */

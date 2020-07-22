@@ -163,6 +163,9 @@
            
       "level": 5,
       "exp": 40,
+      "health": {
+        "value": null
+      },
 
       "type": {
         "primary": "",
