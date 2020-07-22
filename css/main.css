@@ -50,6 +50,158 @@ a.item {
 #combat h4 {
   padding: 0;
 }
+.skills {
+  width: 100%;
+  align-self: center;
+  justify-self: center;
+}
+.skills.grid {
+  display: grid;
+  column-gap: 5px;
+  row-gap: 3px;
+}
+.skills.grid.pokemon {
+  grid-template: [row1-start] "stats-header base-header mod-header levelUp-header stage-header total-header" 25px [row1-end] [row2-start] "hp hp-base hp-mod hp-levelUp . hp-total" 25px [row2-end] [row3-start] "atk atk-base atk-mod atk-levelUp atk-stage atk-total" 25px [row3-end] [row4-start] "def def-base def-mod def-levelUp def-stage def-total" 25px [row4-end] [row5-start] "spatk spatk-base spatk-mod spatk-levelUp spatk-stage spatk-total" 25px [row5-end] [row6-start] "spdef spdef-base spdef-mod spdef-levelUp spdef-stage spdef-total" 25px [row6-end] [row7-start] "spd spd-base spd-mod spd-levelUp spd-stage spd-total" 25px [row7-end] / 15% 15% 15% 15% 15% 20%;
+}
+.skills.grid.player {
+  grid-template: [row1-start] "stats-header base-header mod-header levelUp-header total-header" 25px [row1-end] [row2-start] "hp hp-base hp-mod hp-levelUp hp-total" 25px [row2-end] [row3-start] "atk atk-base atk-mod atk-levelUp atk-total" 25px [row3-end] [row4-start] "def def-base def-mod def-levelUp def-total" 25px [row4-end] [row5-start] "spatk spatk-base spatk-mod spatk-levelUp spatk-total" 25px [row5-end] [row6-start] "spdef spdef-base spdef-mod spdef-levelUp spdef-total" 25px [row6-end] [row7-start] "spd spd-base spd-mod spd-levelUp spd-total" 25px [row7-end] / 15% 20% 20% 20% 20%;
+}
+.skills.header {
+  text-align: center;
+}
+.skills.header.stats {
+  grid-area: stats-header;
+}
+.skills.header.base {
+  grid-area: base-header;
+}
+.skills.header.mod {
+  grid-area: mod-header;
+}
+.skills.header.levelUp {
+  grid-area: levelUp-header;
+  font-size: 10px;
+}
+.skills.header.stage {
+  grid-area: stage-header;
+}
+.skills.header.total {
+  grid-area: total-header;
+}
+.skills.base,
+.skills.mod,
+.skills.stage,
+.skills.total {
+  padding: 5px;
+}
+.skills.hp {
+  grid-area: hp;
+}
+.skills.hp.base {
+  grid-area: hp-base;
+}
+.skills.hp.mod {
+  grid-area: hp-mod;
+}
+.skills.hp.stage {
+  grid-area: hp-stage;
+}
+.skills.hp.total {
+  grid-area: hp-total;
+}
+.skills.hp.levelUp {
+  grid-area: hp-levelUp;
+}
+.skills.atk {
+  grid-area: atk;
+}
+.skills.atk.base {
+  grid-area: atk-base;
+}
+.skills.atk.mod {
+  grid-area: atk-mod;
+}
+.skills.atk.stage {
+  grid-area: atk-stage;
+}
+.skills.atk.total {
+  grid-area: atk-total;
+}
+.skills.atk.levelUp {
+  grid-area: atk-levelUp;
+}
+.skills.def {
+  grid-area: def;
+}
+.skills.def.base {
+  grid-area: def-base;
+}
+.skills.def.mod {
+  grid-area: def-mod;
+}
+.skills.def.stage {
+  grid-area: def-stage;
+}
+.skills.def.total {
+  grid-area: def-total;
+}
+.skills.def.levelUp {
+  grid-area: def-levelUp;
+}
+.skills.spatk {
+  grid-area: spatk;
+}
+.skills.spatk.base {
+  grid-area: spatk-base;
+}
+.skills.spatk.mod {
+  grid-area: spatk-mod;
+}
+.skills.spatk.stage {
+  grid-area: spatk-stage;
+}
+.skills.spatk.total {
+  grid-area: spatk-total;
+}
+.skills.spatk.levelUp {
+  grid-area: spatk-levelUp;
+}
+.skills.spdef {
+  grid-area: spdef;
+}
+.skills.spdef.base {
+  grid-area: spdef-base;
+}
+.skills.spdef.mod {
+  grid-area: spdef-mod;
+}
+.skills.spdef.stage {
+  grid-area: spdef-stage;
+}
+.skills.spdef.total {
+  grid-area: spdef-total;
+}
+.skills.spdef.levelUp {
+  grid-area: spdef-levelUp;
+}
+.skills.spd {
+  grid-area: spd;
+}
+.skills.spd.base {
+  grid-area: spd-base;
+}
+.skills.spd.mod {
+  grid-area: spd-mod;
+}
+.skills.spd.stage {
+  grid-area: spd-stage;
+}
+.skills.spd.total {
+  grid-area: spd-total;
+}
+.skills.spd.levelUp {
+  grid-area: spd-levelUp;
+}
 /* Freeware Font Credits: https://www.fontspace.com/jackster-productions/pokemon-gb */
 @font-face {
   font-family: "Pokemon GB";
@@ -122,7 +274,7 @@ h6 {
 .framed.danger.exclude-border {
   background-clip: padding-box;
 }
-.stats {
+/*.stats {
   position: relative;
   border: 4px solid #181010;
   border-top: none;
@@ -130,6 +282,7 @@ h6 {
   padding: 2em;
   margin-right: 64px;
 }
+
 .stats::after {
   position: absolute;
   right: 0;
@@ -142,7 +295,7 @@ h6 {
   color: #181010;
   -webkit-box-shadow: -4em -1em 0 #181010, -5em -1em 0 #181010, -4em 0 0 #181010, -5em 0 0 #181010, -3em 0 0 #181010, -2em 0 0 #181010, 1em 2em 0 #181010, 1em 2em 0 #181010, 2em 2em 0 #181010, 2em 2em 0 #181010;
   box-shadow: -4em -1em 0 #181010, -5em -1em 0 #181010, -4em 0 0 #181010, -5em 0 0 #181010, -3em 0 0 #181010, -2em 0 0 #181010, 1em 2em 0 #181010, 1em 2em 0 #181010, 2em 2em 0 #181010, 2em 2em 0 #181010;
-}
+}*/
 .stats h2 {
   background-color: #F8F3F8;
   margin-left: -2em;
@@ -1436,7 +1589,7 @@ h6 {
   max-width: 45px;
   width: fit-content;
 }
-.hp {
+.resources .hp {
   content: "";
   width: 30px;
   background: url("./images/hp.png") no-repeat !important;

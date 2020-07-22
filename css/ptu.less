@@ -59,3 +59,177 @@ a.item {
         padding: 0;
     }
 }
+
+.skills {
+    width: 100%;
+    align-self: center;
+    justify-self: center;
+
+
+    &.grid {
+        display: grid;
+
+        column-gap: 5px;
+        row-gap: 3px;
+
+        &.pokemon {
+            grid-template:
+            [row1-start] "stats-header base-header mod-header levelUp-header stage-header total-header" 25px [row1-end]
+            [row2-start] "hp hp-base hp-mod hp-levelUp . hp-total" 25px [row2-end]
+            [row3-start] "atk atk-base atk-mod atk-levelUp atk-stage atk-total" 25px [row3-end]
+            [row4-start] "def def-base def-mod def-levelUp def-stage def-total" 25px [row4-end]
+            [row5-start] "spatk spatk-base spatk-mod spatk-levelUp spatk-stage spatk-total" 25px [row5-end]
+            [row6-start] "spdef spdef-base spdef-mod spdef-levelUp spdef-stage spdef-total" 25px [row6-end]
+            [row7-start] "spd spd-base spd-mod spd-levelUp spd-stage spd-total" 25px [row7-end]
+            / 15% 15% 15% 15% 15% 20%;
+        }
+        &.player {
+            grid-template:
+            [row1-start] "stats-header base-header mod-header levelUp-header total-header" 25px [row1-end]
+            [row2-start] "hp hp-base hp-mod hp-levelUp hp-total" 25px [row2-end]
+            [row3-start] "atk atk-base atk-mod atk-levelUp atk-total" 25px [row3-end]
+            [row4-start] "def def-base def-mod def-levelUp def-total" 25px [row4-end]
+            [row5-start] "spatk spatk-base spatk-mod spatk-levelUp spatk-total" 25px [row5-end]
+            [row6-start] "spdef spdef-base spdef-mod spdef-levelUp spdef-total" 25px [row6-end]
+            [row7-start] "spd spd-base spd-mod spd-levelUp spd-total" 25px [row7-end]
+            / 15% 20% 20% 20% 20%;
+        }
+    }
+
+    &.header {
+        text-align: center;
+        &.stats {
+            grid-area: stats-header;
+        }
+        &.base {
+            grid-area: base-header;
+        }
+        &.mod {
+            grid-area: mod-header;
+        }
+        &.levelUp {
+            grid-area: levelUp-header;
+            font-size: 10px;
+        }
+        &.stage {
+            grid-area: stage-header;
+        }
+        &.total {
+            grid-area: total-header;
+        }
+    }
+
+    &.base, &.mod, &.stage, &.total {
+        padding: 5px;
+    }
+
+    &.hp {
+        grid-area: hp;
+        &.base {
+            grid-area: hp-base
+        }
+        &.mod {
+            grid-area: hp-mod
+        }
+        &.stage {
+            grid-area: hp-stage
+        }
+        &.total {
+            grid-area: hp-total
+        }
+        &.levelUp {
+            grid-area: hp-levelUp
+        }
+    }
+    &.atk {
+        grid-area: atk;
+        &.base {
+            grid-area: atk-base
+        }
+        &.mod {
+            grid-area: atk-mod
+        }
+        &.stage {
+            grid-area: atk-stage
+        }
+        &.total {
+            grid-area: atk-total
+        }
+        &.levelUp {
+            grid-area: atk-levelUp
+        }
+    }
+    &.def {
+        grid-area: def;
+        &.base {
+            grid-area: def-base
+        }
+        &.mod {
+            grid-area: def-mod
+        }
+        &.stage {
+            grid-area: def-stage
+        }
+        &.total {
+            grid-area: def-total
+        }
+        &.levelUp {
+            grid-area: def-levelUp
+        }
+    }
+    &.spatk {
+        grid-area: spatk;
+        &.base {
+            grid-area: spatk-base
+        }
+        &.mod {
+            grid-area: spatk-mod
+        }
+        &.stage {
+            grid-area: spatk-stage
+        }
+        &.total {
+            grid-area: spatk-total
+        }
+        &.levelUp {
+            grid-area: spatk-levelUp
+        }
+    }
+    &.spdef {
+        grid-area: spdef;
+        &.base {
+            grid-area: spdef-base
+        }
+        &.mod {
+            grid-area: spdef-mod
+        }
+        &.stage {
+            grid-area: spdef-stage
+        }
+        &.total {
+            grid-area: spdef-total
+        }
+        &.levelUp {
+            grid-area: spdef-levelUp
+        }
+    }
+    &.spd {
+        grid-area: spd;
+        &.base {
+            grid-area: spd-base
+        }
+        &.mod {
+            grid-area: spd-mod
+        }
+        &.stage {
+            grid-area: spd-stage
+        }
+        &.total {
+            grid-area: spd-total
+        }
+        &.levelUp {
+            grid-area: spd-levelUp
+        }
+    }
+
+}

@@ -19,7 +19,7 @@ Hooks.once('init', async function() {
    * @type {String}
    */
   CONFIG.Combat.initiative = {
-    formula: "@stats.spd.value",
+    formula: "@stats.spd.total + (1d20 * 0.01)",
     decimals: 2
   };
 
@@ -47,6 +47,10 @@ Hooks.once('init', async function() {
 
   Handlebars.registerHelper('toLowerCase', function(str) {
     return str.toLowerCase();
+  });
+
+  Handlebars.registerHelper('isdefined', function (value) {
+    return value !== undefined;
   });
 });
 

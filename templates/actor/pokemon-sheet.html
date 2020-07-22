@@ -27,23 +27,34 @@
 
     {{!-- Sheet Tab Navigation --}}
     <ul class="sheet-tabs tabs pokemon-nav framed no-hd buttons compact" data-group="primary">
-        <li><button class="item" data-tab="skills">Skills</button></li>
+        <li><button class="item" data-tab="stats">Stats</button></li>
         <li><button class="item" data-tab="moves">Moves</button></li>
     </ul>
 
     {{!-- Sheet Body --}}
     <section class="sheet-body no-hd">
 
-        {{!-- Skills Tab --}}
-        <div class="tab details pkmn" data-group="primary" data-tab="skills">
-          <div class="abilities framed">
-            {{#each data.stats as |stat key|}}
-              <div class="ability flexrow flex-group-center">
-                <label for="data.stats.{{key}}.value" class="resource-label">{{key}}</label>
-                <input type="text" name="data.stats.{{key}}.value" value="{{stat.value}}" data-dtype="Number"/>
-                <!-- <span class="ability-mod rollable" data-roll="d20+@abilities.{{key}}.mod" data-label="{{key}}">{{numberFormat ability.mod decimals=0 sign=true}}</span> -->
-              </div>
-            {{/each}}
+        {{!-- Stats Tab --}}
+        <div class="tab details pkmn" data-group="primary" data-tab="stats">
+          <div class="skills framed">
+            <div class="skills grid pokemon">
+              <div class="skills header stats">Stats</div>
+              <div class="skills header base">Base</div>
+              <div class="skills header mod">Mod</div>
+              <div class="skills header levelUp">Level-Up</div>
+              <div class="skills header stage">Stage</div>
+              <div class="skills header total">Total</div>
+              {{#each data.stats as |stat key|}}
+                <div class="skills {{key}}"><label for="data.stats.{{key}}.value" class="resource-label">{{key}}</label></div>
+                <div class="skills {{key}} base"><input type="text" name="data.stats.{{key}}.value" value="{{stat.value}}" data-dtype="Number"/></div>
+                <div class="skills {{key}} mod"><input type="text" name="data.stats.{{key}}.mod" value="{{stat.mod}}" data-dtype="Number"/></div>
+                <div class="skills {{key}} levelUp"><input type="text" name="data.stats.{{key}}.levelUp" value="{{stat.levelUp}}" data-dtype="Number"/></div>
+                {{#if (isdefined stat.stage)}}
+                <div class="skills {{key}} stage"><input type="text" name="data.stats.{{key}}.stage" value="{{stat.stage}}" data-dtype="Number"/></div>
+                {{/if}}
+                <div class="skills {{key}} total"><input type="text" name="data.stats.{{key}}.total" value="{{stat.total}}" data-dtype="Number" disabled/></div>
+              {{/each}}
+            </div>
           </div>
           <!--div class="types stats-flipped">
               <div class="ability flexrow flex-group-center">

@@ -95,31 +95,48 @@
         "stats": {
           "hp": {
             "value": 10,
+            "mod": 0,
+            "levelUp": 0,
             "label": "Hit Points",
             "modifier": []
           },
           "atk": {
             "value": 5,
+            "mod": 0,
+            "stage": 0,
+            "levelUp": 0,
             "label": "Attack",
             "modifier": []
           },
           "def": {
             "value": 5,
+            "mod": 0,
+            "stage": 0,
+            "levelUp": 0,
             "label": "Defense",
             "modifier": []
           },
           "spatk": {
             "value": 5,
+            "mod": 0,
+            "stage": 0,
+            "levelUp": 0,
             "label": "Special Attack",
             "modifier": []
           },
           "spdef": {
             "value": 5,
+            "mod": 0,
+            "stage": 0,
+            "levelUp": 0,
             "label": "Special Defense",
             "modifier": []
           },
           "spd": {
             "value": 5,
+            "mod": 0,
+            "stage": 0,
+            "levelUp": 0,
             "label": "Speed",
             "modifier": []
           }
