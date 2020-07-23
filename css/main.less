@@ -1,4 +1,6 @@
 @import "ptu.less";
+@import "utils.less";
+@import "bootstrap-grid.css";
 
 /* Freeware Font Credits: https://www.fontspace.com/jackster-productions/pokemon-gb */
 @font-face {
@@ -219,12 +221,11 @@ ul.buttons.compact li {
 .progress-bar {
   position: relative;
   width: 100%;
-  height: 5px;
   -o-border-image: url("./images/progress-frame.png") 1 round;
   border-image: url("./images/progress-frame.png") 1 round;
-  border-width: 4px;
   border-style: solid;
   background-clip: padding-box;
+  height: 9px;
 }
 
 .progress-bar.p1::after {
@@ -232,7 +233,7 @@ ul.buttons.compact li {
   display: inline-block;
   background: #B3181C;
   width: 1%;
-  height: 5px;
+  height: 3px;
   position: absolute;
   top: 0;
   left: 0;
@@ -243,7 +244,7 @@ ul.buttons.compact li {
   display: inline-block;
   background: #B3181C;
   width: 2%;
-  height: 5px;
+  height: 3px;
   position: absolute;
   top: 0;
   left: 0;
@@ -254,7 +255,7 @@ ul.buttons.compact li {
   display: inline-block;
   background: #B3181C;
   width: 3%;
-  height: 5px;
+  height: 3px;
   position: absolute;
   top: 0;
   left: 0;
@@ -265,7 +266,7 @@ ul.buttons.compact li {
   display: inline-block;
   background: #B3181C;
   width: 4%;
-  height: 5px;
+  height: 3px;
   position: absolute;
   top: 0;
   left: 0;
@@ -276,7 +277,7 @@ ul.buttons.compact li {
   display: inline-block;
   background: #B3181C;
   width: 5%;
-  height: 5px;
+  height: 3px;
   position: absolute;
   top: 0;
   left: 0;
@@ -287,7 +288,7 @@ ul.buttons.compact li {
   display: inline-block;
   background: #B3181C;
   width: 6%;
-  height: 5px;
+  height: 3px;
   position: absolute;
   top: 0;
   left: 0;
@@ -298,7 +299,7 @@ ul.buttons.compact li {
   display: inline-block;
   background: #B3181C;
   width: 7%;
-  height: 5px;
+  height: 3px;
   position: absolute;
   top: 0;
   left: 0;
@@ -309,7 +310,7 @@ ul.buttons.compact li {
   display: inline-block;
   background: #B3181C;
   width: 8%;
-  height: 5px;
+  height: 3px;
   position: absolute;
   top: 0;
   left: 0;
@@ -320,7 +321,7 @@ ul.buttons.compact li {
   display: inline-block;
   background: #B3181C;
   width: 9%;
-  height: 5px;
+  height: 3px;
   position: absolute;
   top: 0;
   left: 0;
@@ -331,7 +332,7 @@ ul.buttons.compact li {
   display: inline-block;
   background: #B3181C;
   width: 10%;
-  height: 5px;
+  height: 3px;
   position: absolute;
   top: 0;
   left: 0;
@@ -342,7 +343,7 @@ ul.buttons.compact li {
   display: inline-block;
   background: #B3181C;
   width: 11%;
-  height: 5px;
+  height: 3px;
   position: absolute;
   top: 0;
   left: 0;
@@ -353,7 +354,7 @@ ul.buttons.compact li {
   display: inline-block;
   background: #B3181C;
   width: 12%;
-  height: 5px;
+  height: 3px;
   position: absolute;
   top: 0;
   left: 0;
@@ -364,7 +365,7 @@ ul.buttons.compact li {
   display: inline-block;
   background: #B3181C;
   width: 13%;
-  height: 5px;
+  height: 3px;
   position: absolute;
   top: 0;
   left: 0;
@@ -375,7 +376,7 @@ ul.buttons.compact li {
   display: inline-block;
   background: #B3181C;
   width: 14%;
-  height: 5px;
+  height: 3px;
   position: absolute;
   top: 0;
   left: 0;
@@ -386,7 +387,7 @@ ul.buttons.compact li {
   display: inline-block;
   background: #B3181C;
   width: 15%;
-  height: 5px;
+  height: 3px;
   position: absolute;
   top: 0;
   left: 0;
@@ -397,7 +398,7 @@ ul.buttons.compact li {
   display: inline-block;
   background: #B3181C;
   width: 16%;
-  height: 5px;
+  height: 3px;
   position: absolute;
   top: 0;
   left: 0;
@@ -408,7 +409,7 @@ ul.buttons.compact li {
   display: inline-block;
   background: #B3181C;
   width: 17%;
-  height: 5px;
+  height: 3px;
   position: absolute;
   top: 0;
   left: 0;
@@ -419,7 +420,7 @@ ul.buttons.compact li {
   display: inline-block;
   background: #B3181C;
   width: 18%;
-  height: 5px;
+  height: 3px;
   position: absolute;
   top: 0;
   left: 0;
@@ -430,7 +431,7 @@ ul.buttons.compact li {
   display: inline-block;
   background: #B3181C;
   width: 19%;
-  height: 5px;
+  height: 3px;
   position: absolute;
   top: 0;
   left: 0;
@@ -441,7 +442,7 @@ ul.buttons.compact li {
   display: inline-block;
   background: #B3181C;
   width: 20%;
-  height: 5px;
+  height: 3px;
   position: absolute;
   top: 0;
   left: 0;
@@ -452,7 +453,7 @@ ul.buttons.compact li {
   display: inline-block;
   background: #F0B088;
   width: 21%;
-  height: 5px;
+  height: 3px;
   position: absolute;
   top: 0;
   left: 0;
@@ -463,7 +464,7 @@ ul.buttons.compact li {
   display: inline-block;
   background: #F0B088;
   width: 22%;
-  height: 5px;
+  height: 3px;
   position: absolute;
   top: 0;
   left: 0;
@@ -474,7 +475,7 @@ ul.buttons.compact li {
   display: inline-block;
   background: #F0B088;
   width: 23%;
-  height: 5px;
+  height: 3px;
   position: absolute;
   top: 0;
   left: 0;
@@ -485,7 +486,7 @@ ul.buttons.compact li {
   display: inline-block;
   background: #F0B088;
   width: 24%;
-  height: 5px;
+  height: 3px;
   position: absolute;
   top: 0;
   left: 0;
@@ -496,7 +497,7 @@ ul.buttons.compact li {
   display: inline-block;
   background: #F0B088;
   width: 25%;
-  height: 5px;
+  height: 3px;
   position: absolute;
   top: 0;
   left: 0;
@@ -507,7 +508,7 @@ ul.buttons.compact li {
   display: inline-block;
   background: #F0B088;
   width: 26%;
-  height: 5px;
+  height: 3px;
   position: absolute;
   top: 0;
   left: 0;
@@ -518,7 +519,7 @@ ul.buttons.compact li {
   display: inline-block;
   background: #F0B088;
   width: 27%;
-  height: 5px;
+  height: 3px;
   position: absolute;
   top: 0;
   left: 0;
@@ -529,7 +530,7 @@ ul.buttons.compact li {
   display: inline-block;
   background: #F0B088;
   width: 28%;
-  height: 5px;
+  height: 3px;
   position: absolute;
   top: 0;
   left: 0;
@@ -540,7 +541,7 @@ ul.buttons.compact li {
   display: inline-block;
   background: #F0B088;
   width: 29%;
-  height: 5px;
+  height: 3px;
   position: absolute;
   top: 0;
   left: 0;
@@ -551,7 +552,7 @@ ul.buttons.compact li {
   display: inline-block;
   background: #F0B088;
   width: 30%;
-  height: 5px;
+  height: 3px;
   position: absolute;
   top: 0;
   left: 0;
@@ -562,7 +563,7 @@ ul.buttons.compact li {
   display: inline-block;
   background: #F0B088;
   width: 31%;
-  height: 5px;
+  height: 3px;
   position: absolute;
   top: 0;
   left: 0;
@@ -573,7 +574,7 @@ ul.buttons.compact li {
   display: inline-block;
   background: #F0B088;
   width: 32%;
-  height: 5px;
+  height: 3px;
   position: absolute;
   top: 0;
   left: 0;
@@ -584,7 +585,7 @@ ul.buttons.compact li {
   display: inline-block;
   background: #F0B088;
   width: 33%;
-  height: 5px;
+  height: 3px;
   position: absolute;
   top: 0;
   left: 0;
@@ -595,7 +596,7 @@ ul.buttons.compact li {
   display: inline-block;
   background: #F0B088;
   width: 34%;
-  height: 5px;
+  height: 3px;
   position: absolute;
   top: 0;
   left: 0;
@@ -606,7 +607,7 @@ ul.buttons.compact li {
   display: inline-block;
   background: #F0B088;
   width: 35%;
-  height: 5px;
+  height: 3px;
   position: absolute;
   top: 0;
   left: 0;
@@ -617,7 +618,7 @@ ul.buttons.compact li {
   display: inline-block;
   background: #F0B088;
   width: 36%;
-  height: 5px;
+  height: 3px;
   position: absolute;
   top: 0;
   left: 0;
@@ -628,7 +629,7 @@ ul.buttons.compact li {
   display: inline-block;
   background: #F0B088;
   width: 37%;
-  height: 5px;
+  height: 3px;
   position: absolute;
   top: 0;
   left: 0;
@@ -639,7 +640,7 @@ ul.buttons.compact li {
   display: inline-block;
   background: #F0B088;
   width: 38%;
-  height: 5px;
+  height: 3px;
   position: absolute;
   top: 0;
   left: 0;
@@ -650,7 +651,7 @@ ul.buttons.compact li {
   display: inline-block;
   background: #F0B088;
   width: 39%;
-  height: 5px;
+  height: 3px;
   position: absolute;
   top: 0;
   left: 0;
@@ -661,7 +662,7 @@ ul.buttons.compact li {
   display: inline-block;
   background: #F0B088;
   width: 40%;
-  height: 5px;
+  height: 3px;
   position: absolute;
   top: 0;
   left: 0;
@@ -672,7 +673,7 @@ ul.buttons.compact li {
   display: inline-block;
   background: #F0B088;
   width: 41%;
-  height: 5px;
+  height: 3px;
   position: absolute;
   top: 0;
   left: 0;
@@ -683,7 +684,7 @@ ul.buttons.compact li {
   display: inline-block;
   background: #F0B088;
   width: 42%;
-  height: 5px;
+  height: 3px;
   position: absolute;
   top: 0;
   left: 0;
@@ -694,7 +695,7 @@ ul.buttons.compact li {
   display: inline-block;
   background: #F0B088;
   width: 43%;
-  height: 5px;
+  height: 3px;
   position: absolute;
   top: 0;
   left: 0;
@@ -705,7 +706,7 @@ ul.buttons.compact li {
   display: inline-block;
   background: #F0B088;
   width: 44%;
-  height: 5px;
+  height: 3px;
   position: absolute;
   top: 0;
   left: 0;
@@ -716,7 +717,7 @@ ul.buttons.compact li {
   display: inline-block;
   background: #F0B088;
   width: 45%;
-  height: 5px;
+  height: 3px;
   position: absolute;
   top: 0;
   left: 0;
@@ -727,7 +728,7 @@ ul.buttons.compact li {
   display: inline-block;
   background: #F0B088;
   width: 46%;
-  height: 5px;
+  height: 3px;
   position: absolute;
   top: 0;
   left: 0;
@@ -738,7 +739,7 @@ ul.buttons.compact li {
   display: inline-block;
   background: #F0B088;
   width: 47%;
-  height: 5px;
+  height: 3px;
   position: absolute;
   top: 0;
   left: 0;
@@ -749,7 +750,7 @@ ul.buttons.compact li {
   display: inline-block;
   background: #F0B088;
   width: 48%;
-  height: 5px;
+  height: 3px;
   position: absolute;
   top: 0;
   left: 0;
@@ -760,7 +761,7 @@ ul.buttons.compact li {
   display: inline-block;
   background: #F0B088;
   width: 49%;
-  height: 5px;
+  height: 3px;
   position: absolute;
   top: 0;
   left: 0;
@@ -771,7 +772,7 @@ ul.buttons.compact li {
   display: inline-block;
   background: #F0B088;
   width: 50%;
-  height: 5px;
+  height: 3px;
   position: absolute;
   top: 0;
   left: 0;
@@ -782,7 +783,7 @@ ul.buttons.compact li {
   display: inline-block;
   background: #48A058;
   width: 51%;
-  height: 5px;
+  height: 3px;
   position: absolute;
   top: 0;
   left: 0;
@@ -793,7 +794,7 @@ ul.buttons.compact li {
   display: inline-block;
   background: #48A058;
   width: 52%;
-  height: 5px;
+  height: 3px;
   position: absolute;
   top: 0;
   left: 0;
@@ -804,7 +805,7 @@ ul.buttons.compact li {
   display: inline-block;
   background: #48A058;
   width: 53%;
-  height: 5px;
+  height: 3px;
   position: absolute;
   top: 0;
   left: 0;
@@ -815,7 +816,7 @@ ul.buttons.compact li {
   display: inline-block;
   background: #48A058;
   width: 54%;
-  height: 5px;
+  height: 3px;
   position: absolute;
   top: 0;
   left: 0;
@@ -826,7 +827,7 @@ ul.buttons.compact li {
   display: inline-block;
   background: #48A058;
   width: 55%;
-  height: 5px;
+  height: 3px;
   position: absolute;
   top: 0;
   left: 0;
@@ -837,7 +838,7 @@ ul.buttons.compact li {
   display: inline-block;
   background: #48A058;
   width: 56%;
-  height: 5px;
+  height: 3px;
   position: absolute;
   top: 0;
   left: 0;
@@ -848,7 +849,7 @@ ul.buttons.compact li {
   display: inline-block;
   background: #48A058;
   width: 57%;
-  height: 5px;
+  height: 3px;
   position: absolute;
   top: 0;
   left: 0;
@@ -859,7 +860,7 @@ ul.buttons.compact li {
   display: inline-block;
   background: #48A058;
   width: 58%;
-  height: 5px;
+  height: 3px;
   position: absolute;
   top: 0;
   left: 0;
@@ -870,7 +871,7 @@ ul.buttons.compact li {
   display: inline-block;
   background: #48A058;
   width: 59%;
-  height: 5px;
+  height: 3px;
   position: absolute;
   top: 0;
   left: 0;
@@ -881,7 +882,7 @@ ul.buttons.compact li {
   display: inline-block;
   background: #48A058;
   width: 60%;
-  height: 5px;
+  height: 3px;
   position: absolute;
   top: 0;
   left: 0;
@@ -892,7 +893,7 @@ ul.buttons.compact li {
   display: inline-block;
   background: #48A058;
   width: 61%;
-  height: 5px;
+  height: 3px;
   position: absolute;
   top: 0;
   left: 0;
@@ -903,7 +904,7 @@ ul.buttons.compact li {
   display: inline-block;
   background: #48A058;
   width: 62%;
-  height: 5px;
+  height: 3px;
   position: absolute;
   top: 0;
   left: 0;
@@ -914,7 +915,7 @@ ul.buttons.compact li {
   display: inline-block;
   background: #48A058;
   width: 63%;
-  height: 5px;
+  height: 3px;
   position: absolute;
   top: 0;
   left: 0;
@@ -925,7 +926,7 @@ ul.buttons.compact li {
   display: inline-block;
   background: #48A058;
   width: 64%;
-  height: 5px;
+  height: 3px;
   position: absolute;
   top: 0;
   left: 0;
@@ -936,7 +937,7 @@ ul.buttons.compact li {
   display: inline-block;
   background: #48A058;
   width: 65%;
-  height: 5px;
+  height: 3px;
   position: absolute;
   top: 0;
   left: 0;
@@ -947,7 +948,7 @@ ul.buttons.compact li {
   display: inline-block;
   background: #48A058;
   width: 66%;
-  height: 5px;
+  height: 3px;
   position: absolute;
   top: 0;
   left: 0;
@@ -958,7 +959,7 @@ ul.buttons.compact li {
   display: inline-block;
   background: #48A058;
   width: 67%;
-  height: 5px;
+  height: 3px;
   position: absolute;
   top: 0;
   left: 0;
@@ -969,7 +970,7 @@ ul.buttons.compact li {
   display: inline-block;
   background: #48A058;
   width: 68%;
-  height: 5px;
+  height: 3px;
   position: absolute;
   top: 0;
   left: 0;
@@ -980,7 +981,7 @@ ul.buttons.compact li {
   display: inline-block;
   background: #48A058;
   width: 69%;
-  height: 5px;
+  height: 3px;
   position: absolute;
   top: 0;
   left: 0;
@@ -991,7 +992,7 @@ ul.buttons.compact li {
   display: inline-block;
   background: #48A058;
   width: 70%;
-  height: 5px;
+  height: 3px;
   position: absolute;
   top: 0;
   left: 0;
@@ -1002,7 +1003,7 @@ ul.buttons.compact li {
   display: inline-block;
   background: #48A058;
   width: 71%;
-  height: 5px;
+  height: 3px;
   position: absolute;
   top: 0;
   left: 0;
@@ -1013,7 +1014,7 @@ ul.buttons.compact li {
   display: inline-block;
   background: #48A058;
   width: 72%;
-  height: 5px;
+  height: 3px;
   position: absolute;
   top: 0;
   left: 0;
@@ -1024,7 +1025,7 @@ ul.buttons.compact li {
   display: inline-block;
   background: #48A058;
   width: 73%;
-  height: 5px;
+  height: 3px;
   position: absolute;
   top: 0;
   left: 0;
@@ -1035,7 +1036,7 @@ ul.buttons.compact li {
   display: inline-block;
   background: #48A058;
   width: 74%;
-  height: 5px;
+  height: 3px;
   position: absolute;
   top: 0;
   left: 0;
@@ -1046,7 +1047,7 @@ ul.buttons.compact li {
   display: inline-block;
   background: #48A058;
   width: 75%;
-  height: 5px;
+  height: 3px;
   position: absolute;
   top: 0;
   left: 0;
@@ -1057,7 +1058,7 @@ ul.buttons.compact li {
   display: inline-block;
   background: #48A058;
   width: 76%;
-  height: 5px;
+  height: 3px;
   position: absolute;
   top: 0;
   left: 0;
@@ -1068,7 +1069,7 @@ ul.buttons.compact li {
   display: inline-block;
   background: #48A058;
   width: 77%;
-  height: 5px;
+  height: 3px;
   position: absolute;
   top: 0;
   left: 0;
@@ -1079,7 +1080,7 @@ ul.buttons.compact li {
   display: inline-block;
   background: #48A058;
   width: 78%;
-  height: 5px;
+  height: 3px;
   position: absolute;
   top: 0;
   left: 0;
@@ -1090,7 +1091,7 @@ ul.buttons.compact li {
   display: inline-block;
   background: #48A058;
   width: 79%;
-  height: 5px;
+  height: 3px;
   position: absolute;
   top: 0;
   left: 0;
@@ -1101,7 +1102,7 @@ ul.buttons.compact li {
   display: inline-block;
   background: #48A058;
   width: 80%;
-  height: 5px;
+  height: 3px;
   position: absolute;
   top: 0;
   left: 0;
@@ -1112,7 +1113,7 @@ ul.buttons.compact li {
   display: inline-block;
   background: #48A058;
   width: 81%;
-  height: 5px;
+  height: 3px;
   position: absolute;
   top: 0;
   left: 0;
@@ -1123,7 +1124,7 @@ ul.buttons.compact li {
   display: inline-block;
   background: #48A058;
   width: 82%;
-  height: 5px;
+  height: 3px;
   position: absolute;
   top: 0;
   left: 0;
@@ -1134,7 +1135,7 @@ ul.buttons.compact li {
   display: inline-block;
   background: #48A058;
   width: 83%;
-  height: 5px;
+  height: 3px;
   position: absolute;
   top: 0;
   left: 0;
@@ -1145,7 +1146,7 @@ ul.buttons.compact li {
   display: inline-block;
   background: #48A058;
   width: 84%;
-  height: 5px;
+  height: 3px;
   position: absolute;
   top: 0;
   left: 0;
@@ -1156,7 +1157,7 @@ ul.buttons.compact li {
   display: inline-block;
   background: #48A058;
   width: 85%;
-  height: 5px;
+  height: 3px;
   position: absolute;
   top: 0;
   left: 0;
@@ -1167,7 +1168,7 @@ ul.buttons.compact li {
   display: inline-block;
   background: #48A058;
   width: 86%;
-  height: 5px;
+  height: 3px;
   position: absolute;
   top: 0;
   left: 0;
@@ -1178,7 +1179,7 @@ ul.buttons.compact li {
   display: inline-block;
   background: #48A058;
   width: 87%;
-  height: 5px;
+  height: 3px;
   position: absolute;
   top: 0;
   left: 0;
@@ -1189,7 +1190,7 @@ ul.buttons.compact li {
   display: inline-block;
   background: #48A058;
   width: 88%;
-  height: 5px;
+  height: 3px;
   position: absolute;
   top: 0;
   left: 0;
@@ -1200,7 +1201,7 @@ ul.buttons.compact li {
   display: inline-block;
   background: #48A058;
   width: 89%;
-  height: 5px;
+  height: 3px;
   position: absolute;
   top: 0;
   left: 0;
@@ -1211,7 +1212,7 @@ ul.buttons.compact li {
   display: inline-block;
   background: #48A058;
   width: 90%;
-  height: 5px;
+  height: 3px;
   position: absolute;
   top: 0;
   left: 0;
@@ -1222,7 +1223,7 @@ ul.buttons.compact li {
   display: inline-block;
   background: #48A058;
   width: 91%;
-  height: 5px;
+  height: 3px;
   position: absolute;
   top: 0;
   left: 0;
@@ -1233,7 +1234,7 @@ ul.buttons.compact li {
   display: inline-block;
   background: #48A058;
   width: 92%;
-  height: 5px;
+  height: 3px;
   position: absolute;
   top: 0;
   left: 0;
@@ -1244,7 +1245,7 @@ ul.buttons.compact li {
   display: inline-block;
   background: #48A058;
   width: 93%;
-  height: 5px;
+  height: 3px;
   position: absolute;
   top: 0;
   left: 0;
@@ -1255,7 +1256,7 @@ ul.buttons.compact li {
   display: inline-block;
   background: #48A058;
   width: 94%;
-  height: 5px;
+  height: 3px;
   position: absolute;
   top: 0;
   left: 0;
@@ -1266,7 +1267,7 @@ ul.buttons.compact li {
   display: inline-block;
   background: #48A058;
   width: 95%;
-  height: 5px;
+  height: 3px;
   position: absolute;
   top: 0;
   left: 0;
@@ -1277,7 +1278,7 @@ ul.buttons.compact li {
   display: inline-block;
   background: #48A058;
   width: 96%;
-  height: 5px;
+  height: 3px;
   position: absolute;
   top: 0;
   left: 0;
@@ -1288,7 +1289,7 @@ ul.buttons.compact li {
   display: inline-block;
   background: #48A058;
   width: 97%;
-  height: 5px;
+  height: 3px;
   position: absolute;
   top: 0;
   left: 0;
@@ -1299,7 +1300,7 @@ ul.buttons.compact li {
   display: inline-block;
   background: #48A058;
   width: 98%;
-  height: 5px;
+  height: 3px;
   position: absolute;
   top: 0;
   left: 0;
@@ -1310,7 +1311,7 @@ ul.buttons.compact li {
   display: inline-block;
   background: #48A058;
   width: 99%;
-  height: 5px;
+  height: 3px;
   position: absolute;
   top: 0;
   left: 0;
@@ -1321,17 +1322,13 @@ ul.buttons.compact li {
   display: inline-block;
   background: #48A058;
   width: 100%;
-  height: 5px;
+  height: 3px;
   position: absolute;
   top: 0;
   left: 0;
 }
 
 /* Overrides for the core Foundry CSS */
-.window-content {
-  background: #F8F3F8 !important;
-}
-
 form button, #settings button {
   background: #F8F3F8 !important;
   border: none !important;
@@ -1345,9 +1342,9 @@ h2 {
   border-bottom: none;
 }
 
-.sheet input[type="text"], .sheet input[type="password"], .sheet input[type="datetime-local"] {
-  border: dotted;
-}
+// .sheet input[type="text"], .sheet input[type="password"], .sheet input[type="datetime-local"] {
+//   border: dotted;
+// }
 
 .sheet .sheet-header img {
   height: 109px !important;
@@ -1377,8 +1374,6 @@ body {
   -ms-interpolation-mode: nearest-neighbor;
   image-rendering: -webkit-optimize-contrast;
   image-rendering: -moz-crisp-edges;
-  image-rendering: -o-pixelated;
-  image-rendering: pixelated;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -1465,13 +1460,6 @@ h1, h2, h3, h4, h5, h6 {
   }
 }
 
-.level {
-  content: "";
-  width: 35px;
-  background: url("./images/lvl.png") no-repeat !important;
-  background-size: contain !important;
-}
-
 .pokeball {
   content: "";
   width: 24px;
@@ -1531,14 +1519,14 @@ h1, h2, h3, h4, h5, h6 {
 .hp-info {
   -webkit-box-pack: end;
   -ms-flex-pack: end;
-  justify-content: flex-end;
+  justify-content: center;
   padding-right: 5px;
 }
 
 .hp-info > input, .hp-info > span {
   -webkit-box-flex: 0 !important;
-  -ms-flex: 0 0 50px !important;
-  flex: 0 0 50px !important;
+  -ms-flex: 0 0 40px !important;
+  flex: 0 0 40px !important;
 }
 
 .hp-info > span {
@@ -1552,7 +1540,7 @@ h1, h2, h3, h4, h5, h6 {
 
 .pokemon-name {
   margin-left: 0 !important;
-  margin-right: -1em;
+  //margin-right: -1em;
 }
 
 .pokemon-header-stats {
@@ -1589,13 +1577,6 @@ h1, h2, h3, h4, h5, h6 {
 
 .sheet-header {
   height: 150px;
-  -webkit-box-flex: unset;
-  -ms-flex: unset;
-  flex: unset;
-}
-
-.sheet-body {
-  height: 250px;
   -webkit-box-flex: unset;
   -ms-flex: unset;
   flex: unset;

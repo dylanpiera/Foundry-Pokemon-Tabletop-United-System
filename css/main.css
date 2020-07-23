@@ -1,3 +1,4 @@
+@import "bootstrap-grid.css";
 h1,
 h2,
 h3,
@@ -50,157 +51,610 @@ a.item {
 #combat h4 {
   padding: 0;
 }
-.skills {
+.hgss-box {
+  border: black solid 1px;
+  box-shadow: 0px 0px 4px 1px black;
+  background: #E0E8E8;
+  word-break: break-all;
+}
+.hgss-box .hgss-header {
+  padding: 2px 5px;
+  background: #8898A8;
+  display: flex;
+}
+.hgss-box .hgss-body {
+  padding: 2px 5px;
+  display: flex;
+}
+.name-label {
+  content: "";
+  width: 35px;
+  background: url("./images/pokeball-hgss.png") no-repeat !important;
+  background-size: contain !important;
+  padding-right: 5px;
+}
+.level {
+  content: "";
+  width: 26px;
+  background: url("./images/lvl.png") no-repeat !important;
+  background-size: contain !important;
+  margin: 0 5px 0 10px;
+  position: relative;
+  bottom: -8px;
+  left: -12x;
+}
+.options .hp {
+  width: 6rem;
+  background: url("./images/hp.png") no-repeat !important;
+  background-size: contain !important;
+  margin: 0 5px 0 0px;
+  position: relative;
+  left: 3px;
+  bottom: -10px;
+  font-weight: bold;
+}
+.window-content {
+  background: #E0E8E8 !important;
+}
+.stat-block {
+  border: 1px solid black;
+  box-shadow: 0px 0px 3px 1px;
+  border-radius: 3%;
+}
+.panel.character {
+  background: #F06058;
+  border-radius: 0 8% 8% 0;
+  justify-content: center;
+  padding: 15px;
+  box-shadow: 0px 0px 3px 1px black;
+  border: black solid 2px;
+}
+.sheet-footer {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  padding: 10px 20px;
+  width: 100%;
+}
+.sheet-footer .tabs {
+  padding-right: 8px;
+}
+.sheet-footer .tabs li {
+  float: left;
+}
+.sheet-footer .tabs ul {
+  display: inline;
+}
+.grid {
+  display: grid;
+  column-gap: 8px;
+  row-gap: 3px;
+}
+.grid.character {
+  grid-template: "panel profile" "panel extra" "tabs tabs" / 65% 35%;
+}
+.grid.profile {
+  grid-area: profile;
+}
+.grid.profile.character {
+  display: grid;
+  grid-template: "nametag" "avatar" "helditem";
+  padding-right: 8px;
+}
+.grid.profile .nametag {
+  grid-area: nametag;
+}
+.grid.profile .avatar {
+  text-align: center;
+  grid-area: avatar;
+}
+.grid.profile .avatar img {
+  max-width: 75%;
+  max-height: auto;
+}
+.grid.profile .helditem {
+  grid-area: helditem;
+}
+.grid.panel {
+  grid-area: panel;
+}
+.grid.panel.character {
+  display: grid;
+  grid-template: "stats" "abilities" "moves";
+  background: #F06058;
+  border-radius: 0 8% 8% 0;
+  justify-content: center;
+  padding: 0 10px;
+  box-shadow: 1px 1px 10px 2px black;
+  border: black solid 3px;
+}
+.grid.panel .skills {
+  grid-area: stats;
+}
+.grid.panel .abilities {
+  grid-area: abilities;
+}
+.grid.panel .moves {
+  grid-area: moves;
+}
+.grid.extra {
+  grid-area: extra;
+  padding-right: 8px;
+}
+.no-gutters {
+  margin-right: 0;
+  margin-left: 0;
+}
+.no-gutters > .col,
+.no-gutters > [class*="col-"] {
+  padding-right: 0;
+  padding-left: 0;
+}
+.stat-block .row.header {
+  text-align: center;
+  background: #E0E8E8;
+  font-weight: bold;
+}
+.stat-block .row .key {
+  padding: 12px 0 12px 5px;
+}
+.stat-block .row .key.hp,
+.stat-block .row .key.def,
+.stat-block .row .key.spdef {
+  background: #788898;
+}
+.stat-block .row .key.atk,
+.stat-block .row .key.spatk,
+.stat-block .row .key.spd,
+.stat-block .row .key.stat-header {
+  background: #8898A8;
+}
+.stat-block .row.hp,
+.stat-block .row.def,
+.stat-block .row.spdef {
+  background: #C8D0D8;
+}
+.stat-block .row.atk,
+.stat-block .row.spatk,
+.stat-block .row.spd {
+  background: #E0E8E8;
+}
+.stats {
   width: 100%;
   align-self: center;
   justify-self: center;
 }
-.skills.grid {
+.stats.stat-block {
+  background: #607888;
+  border-radius: 2%;
+  padding: 3px;
+}
+.stats.grid {
   display: grid;
-  column-gap: 5px;
+  column-gap: 1px;
   row-gap: 3px;
+  background: #E0E8E8;
+  border-radius: 2%;
+  padding: 3px 10px;
 }
-.skills.grid.pokemon {
-  grid-template: [row1-start] "stats-header base-header mod-header levelUp-header stage-header total-header" 25px [row1-end] [row2-start] "hp hp-base hp-mod hp-levelUp . hp-total" 25px [row2-end] [row3-start] "atk atk-base atk-mod atk-levelUp atk-stage atk-total" 25px [row3-end] [row4-start] "def def-base def-mod def-levelUp def-stage def-total" 25px [row4-end] [row5-start] "spatk spatk-base spatk-mod spatk-levelUp spatk-stage spatk-total" 25px [row5-end] [row6-start] "spdef spdef-base spdef-mod spdef-levelUp spdef-stage spdef-total" 25px [row6-end] [row7-start] "spd spd-base spd-mod spd-levelUp spd-stage spd-total" 25px [row7-end] / 15% 15% 15% 15% 15% 20%;
+.stats.grid.pokemon {
+  grid-template: [row1-start] "stats-header base-header mod-header levelUp-header stage-header total-header" 25px [row1-end] [row2-start] "hp hp-base hp-mod hp-levelUp . hp-total" 25px [row2-end] [row3-start] "atk atk-base atk-mod atk-levelUp atk-stage atk-total" 25px [row3-end] [row4-start] "def def-base def-mod def-levelUp def-stage def-total" 25px [row4-end] [row5-start] "spatk spatk-base spatk-mod spatk-levelUp spatk-stage spatk-total" 25px [row5-end] [row6-start] "spdef spdef-base spdef-mod spdef-levelUp spdef-stage spdef-total" 25px [row6-end] [row7-start] "spd spd-base spd-mod spd-levelUp spd-stage spd-total" 25px [row7-end] / 15% 15% 15% 15% 15% 25%;
 }
-.skills.grid.player {
-  grid-template: [row1-start] "stats-header base-header mod-header levelUp-header total-header" 25px [row1-end] [row2-start] "hp hp-base hp-mod hp-levelUp hp-total" 25px [row2-end] [row3-start] "atk atk-base atk-mod atk-levelUp atk-total" 25px [row3-end] [row4-start] "def def-base def-mod def-levelUp def-total" 25px [row4-end] [row5-start] "spatk spatk-base spatk-mod spatk-levelUp spatk-total" 25px [row5-end] [row6-start] "spdef spdef-base spdef-mod spdef-levelUp spdef-total" 25px [row6-end] [row7-start] "spd spd-base spd-mod spd-levelUp spd-total" 25px [row7-end] / 15% 20% 20% 20% 20%;
+.stats.grid.player {
+  grid-template: [row1-start] "stats-header base-header mod-header levelUp-header total-header" 25px [row1-end] [row2-start] "hp hp-base hp-mod hp-levelUp hp-total" 25px [row2-end] [row3-start] "atk atk-base atk-mod atk-levelUp atk-total" 25px [row3-end] [row4-start] "def def-base def-mod def-levelUp def-total" 25px [row4-end] [row5-start] "spatk spatk-base spatk-mod spatk-levelUp spatk-total" 25px [row5-end] [row6-start] "spdef spdef-base spdef-mod spdef-levelUp spdef-total" 25px [row6-end] [row7-start] "spd spd-base spd-mod spd-levelUp spd-total" 25px [row7-end] / 15% 20% 20% 20% 25%;
 }
-.skills.header {
+.stats.header {
   text-align: center;
 }
-.skills.header.stats {
+.stats.header.stats {
   grid-area: stats-header;
 }
-.skills.header.base {
+.stats.header.base {
   grid-area: base-header;
 }
-.skills.header.mod {
+.stats.header.mod {
   grid-area: mod-header;
 }
-.skills.header.levelUp {
+.stats.header.levelUp {
   grid-area: levelUp-header;
   font-size: 10px;
 }
-.skills.header.stage {
+.stats.header.stage {
   grid-area: stage-header;
 }
-.skills.header.total {
+.stats.header.total {
   grid-area: total-header;
 }
-.skills.base,
-.skills.mod,
-.skills.stage,
-.skills.total {
+.stats.base,
+.stats.mod,
+.stats.stage,
+.stats.total {
   padding: 5px;
 }
-.skills.hp {
+.stats.hp {
   grid-area: hp;
 }
-.skills.hp.base {
+.stats.hp.base {
   grid-area: hp-base;
 }
-.skills.hp.mod {
+.stats.hp.mod {
   grid-area: hp-mod;
 }
-.skills.hp.stage {
+.stats.hp.stage {
   grid-area: hp-stage;
 }
-.skills.hp.total {
+.stats.hp.total {
   grid-area: hp-total;
 }
-.skills.hp.levelUp {
+.stats.hp.levelUp {
   grid-area: hp-levelUp;
 }
-.skills.atk {
+.stats.atk {
   grid-area: atk;
 }
-.skills.atk.base {
+.stats.atk.base {
   grid-area: atk-base;
 }
-.skills.atk.mod {
+.stats.atk.mod {
   grid-area: atk-mod;
 }
-.skills.atk.stage {
+.stats.atk.stage {
   grid-area: atk-stage;
 }
-.skills.atk.total {
+.stats.atk.total {
   grid-area: atk-total;
 }
-.skills.atk.levelUp {
+.stats.atk.levelUp {
   grid-area: atk-levelUp;
 }
-.skills.def {
+.stats.def {
   grid-area: def;
 }
-.skills.def.base {
+.stats.def.base {
   grid-area: def-base;
 }
-.skills.def.mod {
+.stats.def.mod {
   grid-area: def-mod;
 }
-.skills.def.stage {
+.stats.def.stage {
   grid-area: def-stage;
 }
-.skills.def.total {
+.stats.def.total {
   grid-area: def-total;
 }
-.skills.def.levelUp {
+.stats.def.levelUp {
   grid-area: def-levelUp;
 }
-.skills.spatk {
+.stats.spatk {
   grid-area: spatk;
 }
-.skills.spatk.base {
+.stats.spatk.base {
   grid-area: spatk-base;
 }
-.skills.spatk.mod {
+.stats.spatk.mod {
   grid-area: spatk-mod;
 }
-.skills.spatk.stage {
+.stats.spatk.stage {
   grid-area: spatk-stage;
 }
-.skills.spatk.total {
+.stats.spatk.total {
   grid-area: spatk-total;
 }
-.skills.spatk.levelUp {
+.stats.spatk.levelUp {
   grid-area: spatk-levelUp;
 }
-.skills.spdef {
+.stats.spdef {
   grid-area: spdef;
 }
-.skills.spdef.base {
+.stats.spdef.base {
   grid-area: spdef-base;
 }
-.skills.spdef.mod {
+.stats.spdef.mod {
   grid-area: spdef-mod;
 }
-.skills.spdef.stage {
+.stats.spdef.stage {
   grid-area: spdef-stage;
 }
-.skills.spdef.total {
+.stats.spdef.total {
   grid-area: spdef-total;
 }
-.skills.spdef.levelUp {
+.stats.spdef.levelUp {
   grid-area: spdef-levelUp;
 }
-.skills.spd {
+.stats.spd {
   grid-area: spd;
 }
-.skills.spd.base {
+.stats.spd.base {
   grid-area: spd-base;
 }
-.skills.spd.mod {
+.stats.spd.mod {
   grid-area: spd-mod;
 }
-.skills.spd.stage {
+.stats.spd.stage {
   grid-area: spd-stage;
 }
-.skills.spd.total {
+.stats.spd.total {
   grid-area: spd-total;
 }
-.skills.spd.levelUp {
+.stats.spd.levelUp {
   grid-area: spd-levelUp;
+}
+.w-25 {
+  width: 25% !important;
+}
+.w-50 {
+  width: 50% !important;
+}
+.w-75 {
+  width: 75% !important;
+}
+.w-100 {
+  width: 100% !important;
+}
+.h-25 {
+  height: 25% !important;
+}
+.h-50 {
+  height: 50% !important;
+}
+.h-75 {
+  height: 75% !important;
+}
+.h-100 {
+  height: 100% !important;
+}
+.mw-100 {
+  max-width: 100% !important;
+}
+.mh-100 {
+  max-height: 100% !important;
+}
+.m-0 {
+  margin: 0 !important;
+}
+.mt-0,
+.my-0 {
+  margin-top: 0 !important;
+}
+.mr-0,
+.mx-0 {
+  margin-right: 0 !important;
+}
+.mb-0,
+.my-0 {
+  margin-bottom: 0 !important;
+}
+.ml-0,
+.mx-0 {
+  margin-left: 0 !important;
+}
+.m-1 {
+  margin: 0.25rem !important;
+}
+.mt-1,
+.my-1 {
+  margin-top: 0.25rem !important;
+}
+.mr-1,
+.mx-1 {
+  margin-right: 0.25rem !important;
+}
+.mb-1,
+.my-1 {
+  margin-bottom: 0.25rem !important;
+}
+.ml-1,
+.mx-1 {
+  margin-left: 0.25rem !important;
+}
+.m-2 {
+  margin: 0.5rem !important;
+}
+.mt-2,
+.my-2 {
+  margin-top: 0.5rem !important;
+}
+.mr-2,
+.mx-2 {
+  margin-right: 0.5rem !important;
+}
+.mb-2,
+.my-2 {
+  margin-bottom: 0.5rem !important;
+}
+.ml-2,
+.mx-2 {
+  margin-left: 0.5rem !important;
+}
+.m-3 {
+  margin: 1rem !important;
+}
+.mt-3,
+.my-3 {
+  margin-top: 1rem !important;
+}
+.mr-3,
+.mx-3 {
+  margin-right: 1rem !important;
+}
+.mb-3,
+.my-3 {
+  margin-bottom: 1rem !important;
+}
+.ml-3,
+.mx-3 {
+  margin-left: 1rem !important;
+}
+.m-4 {
+  margin: 1.5rem !important;
+}
+.mt-4,
+.my-4 {
+  margin-top: 1.5rem !important;
+}
+.mr-4,
+.mx-4 {
+  margin-right: 1.5rem !important;
+}
+.mb-4,
+.my-4 {
+  margin-bottom: 1.5rem !important;
+}
+.ml-4,
+.mx-4 {
+  margin-left: 1.5rem !important;
+}
+.m-5 {
+  margin: 3rem !important;
+}
+.mt-5,
+.my-5 {
+  margin-top: 3rem !important;
+}
+.mr-5,
+.mx-5 {
+  margin-right: 3rem !important;
+}
+.mb-5,
+.my-5 {
+  margin-bottom: 3rem !important;
+}
+.ml-5,
+.mx-5 {
+  margin-left: 3rem !important;
+}
+.p-0 {
+  padding: 0 !important;
+}
+.pt-0,
+.py-0 {
+  padding-top: 0 !important;
+}
+.pr-0,
+.px-0 {
+  padding-right: 0 !important;
+}
+.pb-0,
+.py-0 {
+  padding-bottom: 0 !important;
+}
+.pl-0,
+.px-0 {
+  padding-left: 0 !important;
+}
+.p-1 {
+  padding: 0.25rem !important;
+}
+.pt-1,
+.py-1 {
+  padding-top: 0.25rem !important;
+}
+.pr-1,
+.px-1 {
+  padding-right: 0.25rem !important;
+}
+.pb-1,
+.py-1 {
+  padding-bottom: 0.25rem !important;
+}
+.pl-1,
+.px-1 {
+  padding-left: 0.25rem !important;
+}
+.p-2 {
+  padding: 0.5rem !important;
+}
+.pt-2,
+.py-2 {
+  padding-top: 0.5rem !important;
+}
+.pr-2,
+.px-2 {
+  padding-right: 0.5rem !important;
+}
+.pb-2,
+.py-2 {
+  padding-bottom: 0.5rem !important;
+}
+.pl-2,
+.px-2 {
+  padding-left: 0.5rem !important;
+}
+.p-3 {
+  padding: 1rem !important;
+}
+.pt-3,
+.py-3 {
+  padding-top: 1rem !important;
+}
+.pr-3,
+.px-3 {
+  padding-right: 1rem !important;
+}
+.pb-3,
+.py-3 {
+  padding-bottom: 1rem !important;
+}
+.pl-3,
+.px-3 {
+  padding-left: 1rem !important;
+}
+.p-4 {
+  padding: 1.5rem !important;
+}
+.pt-4,
+.py-4 {
+  padding-top: 1.5rem !important;
+}
+.pr-4,
+.px-4 {
+  padding-right: 1.5rem !important;
+}
+.pb-4,
+.py-4 {
+  padding-bottom: 1.5rem !important;
+}
+.pl-4,
+.px-4 {
+  padding-left: 1.5rem !important;
+}
+.p-5 {
+  padding: 3rem !important;
+}
+.pt-5,
+.py-5 {
+  padding-top: 3rem !important;
+}
+.pr-5,
+.px-5 {
+  padding-right: 3rem !important;
+}
+.pb-5,
+.py-5 {
+  padding-bottom: 3rem !important;
+}
+.pl-5,
+.px-5 {
+  padding-left: 3rem !important;
+}
+.m-auto {
+  margin: auto !important;
+}
+.mt-auto,
+.my-auto {
+  margin-top: auto !important;
+}
+.mr-auto,
+.mx-auto {
+  margin-right: auto !important;
+}
+.mb-auto,
+.my-auto {
+  margin-bottom: auto !important;
+}
+.ml-auto,
+.mx-auto {
+  margin-left: auto !important;
 }
 /* Freeware Font Credits: https://www.fontspace.com/jackster-productions/pokemon-gb */
 @font-face {
@@ -403,19 +857,18 @@ ul.buttons.compact li {
 .progress-bar {
   position: relative;
   width: 100%;
-  height: 5px;
   -o-border-image: url("./images/progress-frame.png") 1 round;
   border-image: url("./images/progress-frame.png") 1 round;
-  border-width: 4px;
   border-style: solid;
   background-clip: padding-box;
+  height: 9px;
 }
 .progress-bar.p1::after {
   content: '';
   display: inline-block;
   background: #B3181C;
   width: 1%;
-  height: 5px;
+  height: 3px;
   position: absolute;
   top: 0;
   left: 0;
@@ -425,7 +878,7 @@ ul.buttons.compact li {
   display: inline-block;
   background: #B3181C;
   width: 2%;
-  height: 5px;
+  height: 3px;
   position: absolute;
   top: 0;
   left: 0;
@@ -435,7 +888,7 @@ ul.buttons.compact li {
   display: inline-block;
   background: #B3181C;
   width: 3%;
-  height: 5px;
+  height: 3px;
   position: absolute;
   top: 0;
   left: 0;
@@ -445,7 +898,7 @@ ul.buttons.compact li {
   display: inline-block;
   background: #B3181C;
   width: 4%;
-  height: 5px;
+  height: 3px;
   position: absolute;
   top: 0;
   left: 0;
@@ -455,7 +908,7 @@ ul.buttons.compact li {
   display: inline-block;
   background: #B3181C;
   width: 5%;
-  height: 5px;
+  height: 3px;
   position: absolute;
   top: 0;
   left: 0;
@@ -465,7 +918,7 @@ ul.buttons.compact li {
   display: inline-block;
   background: #B3181C;
   width: 6%;
-  height: 5px;
+  height: 3px;
   position: absolute;
   top: 0;
   left: 0;
@@ -475,7 +928,7 @@ ul.buttons.compact li {
   display: inline-block;
   background: #B3181C;
   width: 7%;
-  height: 5px;
+  height: 3px;
   position: absolute;
   top: 0;
   left: 0;
@@ -485,7 +938,7 @@ ul.buttons.compact li {
   display: inline-block;
   background: #B3181C;
   width: 8%;
-  height: 5px;
+  height: 3px;
   position: absolute;
   top: 0;
   left: 0;
@@ -495,7 +948,7 @@ ul.buttons.compact li {
   display: inline-block;
   background: #B3181C;
   width: 9%;
-  height: 5px;
+  height: 3px;
   position: absolute;
   top: 0;
   left: 0;
@@ -505,7 +958,7 @@ ul.buttons.compact li {
   display: inline-block;
   background: #B3181C;
   width: 10%;
-  height: 5px;
+  height: 3px;
   position: absolute;
   top: 0;
   left: 0;
@@ -515,7 +968,7 @@ ul.buttons.compact li {
   display: inline-block;
   background: #B3181C;
   width: 11%;
-  height: 5px;
+  height: 3px;
   position: absolute;
   top: 0;
   left: 0;
@@ -525,7 +978,7 @@ ul.buttons.compact li {
   display: inline-block;
   background: #B3181C;
   width: 12%;
-  height: 5px;
+  height: 3px;
   position: absolute;
   top: 0;
   left: 0;
@@ -535,7 +988,7 @@ ul.buttons.compact li {
   display: inline-block;
   background: #B3181C;
   width: 13%;
-  height: 5px;
+  height: 3px;
   position: absolute;
   top: 0;
   left: 0;
@@ -545,7 +998,7 @@ ul.buttons.compact li {
   display: inline-block;
   background: #B3181C;
   width: 14%;
-  height: 5px;
+  height: 3px;
   position: absolute;
   top: 0;
   left: 0;
@@ -555,7 +1008,7 @@ ul.buttons.compact li {
   display: inline-block;
   background: #B3181C;
   width: 15%;
-  height: 5px;
+  height: 3px;
   position: absolute;
   top: 0;
   left: 0;
@@ -565,7 +1018,7 @@ ul.buttons.compact li {
   display: inline-block;
   background: #B3181C;
   width: 16%;
-  height: 5px;
+  height: 3px;
   position: absolute;
   top: 0;
   left: 0;
@@ -575,7 +1028,7 @@ ul.buttons.compact li {
   display: inline-block;
   background: #B3181C;
   width: 17%;
-  height: 5px;
+  height: 3px;
   position: absolute;
   top: 0;
   left: 0;
@@ -585,7 +1038,7 @@ ul.buttons.compact li {
   display: inline-block;
   background: #B3181C;
   width: 18%;
-  height: 5px;
+  height: 3px;
   position: absolute;
   top: 0;
   left: 0;
@@ -595,7 +1048,7 @@ ul.buttons.compact li {
   display: inline-block;
   background: #B3181C;
   width: 19%;
-  height: 5px;
+  height: 3px;
   position: absolute;
   top: 0;
   left: 0;
@@ -605,7 +1058,7 @@ ul.buttons.compact li {
   display: inline-block;
   background: #B3181C;
   width: 20%;
-  height: 5px;
+  height: 3px;
   position: absolute;
   top: 0;
   left: 0;
@@ -615,7 +1068,7 @@ ul.buttons.compact li {
   display: inline-block;
   background: #F0B088;
   width: 21%;
-  height: 5px;
+  height: 3px;
   position: absolute;
   top: 0;
   left: 0;
@@ -625,7 +1078,7 @@ ul.buttons.compact li {
   display: inline-block;
   background: #F0B088;
   width: 22%;
-  height: 5px;
+  height: 3px;
   position: absolute;
   top: 0;
   left: 0;
@@ -635,7 +1088,7 @@ ul.buttons.compact li {
   display: inline-block;
   background: #F0B088;
   width: 23%;
-  height: 5px;
+  height: 3px;
   position: absolute;
   top: 0;
   left: 0;
@@ -645,7 +1098,7 @@ ul.buttons.compact li {
   display: inline-block;
   background: #F0B088;
   width: 24%;
-  height: 5px;
+  height: 3px;
   position: absolute;
   top: 0;
   left: 0;
@@ -655,7 +1108,7 @@ ul.buttons.compact li {
   display: inline-block;
   background: #F0B088;
   width: 25%;
-  height: 5px;
+  height: 3px;
   position: absolute;
   top: 0;
   left: 0;
@@ -665,7 +1118,7 @@ ul.buttons.compact li {
   display: inline-block;
   background: #F0B088;
   width: 26%;
-  height: 5px;
+  height: 3px;
   position: absolute;
   top: 0;
   left: 0;
@@ -675,7 +1128,7 @@ ul.buttons.compact li {
   display: inline-block;
   background: #F0B088;
   width: 27%;
-  height: 5px;
+  height: 3px;
   position: absolute;
   top: 0;
   left: 0;
@@ -685,7 +1138,7 @@ ul.buttons.compact li {
   display: inline-block;
   background: #F0B088;
   width: 28%;
-  height: 5px;
+  height: 3px;
   position: absolute;
   top: 0;
   left: 0;
@@ -695,7 +1148,7 @@ ul.buttons.compact li {
   display: inline-block;
   background: #F0B088;
   width: 29%;
-  height: 5px;
+  height: 3px;
   position: absolute;
   top: 0;
   left: 0;
@@ -705,7 +1158,7 @@ ul.buttons.compact li {
   display: inline-block;
   background: #F0B088;
   width: 30%;
-  height: 5px;
+  height: 3px;
   position: absolute;
   top: 0;
   left: 0;
@@ -715,7 +1168,7 @@ ul.buttons.compact li {
   display: inline-block;
   background: #F0B088;
   width: 31%;
-  height: 5px;
+  height: 3px;
   position: absolute;
   top: 0;
   left: 0;
@@ -725,7 +1178,7 @@ ul.buttons.compact li {
   display: inline-block;
   background: #F0B088;
   width: 32%;
-  height: 5px;
+  height: 3px;
   position: absolute;
   top: 0;
   left: 0;
@@ -735,7 +1188,7 @@ ul.buttons.compact li {
   display: inline-block;
   background: #F0B088;
   width: 33%;
-  height: 5px;
+  height: 3px;
   position: absolute;
   top: 0;
   left: 0;
@@ -745,7 +1198,7 @@ ul.buttons.compact li {
   display: inline-block;
   background: #F0B088;
   width: 34%;
-  height: 5px;
+  height: 3px;
   position: absolute;
   top: 0;
   left: 0;
@@ -755,7 +1208,7 @@ ul.buttons.compact li {
   display: inline-block;
   background: #F0B088;
   width: 35%;
-  height: 5px;
+  height: 3px;
   position: absolute;
   top: 0;
   left: 0;
@@ -765,7 +1218,7 @@ ul.buttons.compact li {
   display: inline-block;
   background: #F0B088;
   width: 36%;
-  height: 5px;
+  height: 3px;
   position: absolute;
   top: 0;
   left: 0;
@@ -775,7 +1228,7 @@ ul.buttons.compact li {
   display: inline-block;
   background: #F0B088;
   width: 37%;
-  height: 5px;
+  height: 3px;
   position: absolute;
   top: 0;
   left: 0;
@@ -785,7 +1238,7 @@ ul.buttons.compact li {
   display: inline-block;
   background: #F0B088;
   width: 38%;
-  height: 5px;
+  height: 3px;
   position: absolute;
   top: 0;
   left: 0;
@@ -795,7 +1248,7 @@ ul.buttons.compact li {
   display: inline-block;
   background: #F0B088;
   width: 39%;
-  height: 5px;
+  height: 3px;
   position: absolute;
   top: 0;
   left: 0;
@@ -805,7 +1258,7 @@ ul.buttons.compact li {
   display: inline-block;
   background: #F0B088;
   width: 40%;
-  height: 5px;
+  height: 3px;
   position: absolute;
   top: 0;
   left: 0;
@@ -815,7 +1268,7 @@ ul.buttons.compact li {
   display: inline-block;
   background: #F0B088;
   width: 41%;
-  height: 5px;
+  height: 3px;
   position: absolute;
   top: 0;
   left: 0;
@@ -825,7 +1278,7 @@ ul.buttons.compact li {
   display: inline-block;
   background: #F0B088;
   width: 42%;
-  height: 5px;
+  height: 3px;
   position: absolute;
   top: 0;
   left: 0;
@@ -835,7 +1288,7 @@ ul.buttons.compact li {
   display: inline-block;
   background: #F0B088;
   width: 43%;
-  height: 5px;
+  height: 3px;
   position: absolute;
   top: 0;
   left: 0;
@@ -845,7 +1298,7 @@ ul.buttons.compact li {
   display: inline-block;
   background: #F0B088;
   width: 44%;
-  height: 5px;
+  height: 3px;
   position: absolute;
   top: 0;
   left: 0;
@@ -855,7 +1308,7 @@ ul.buttons.compact li {
   display: inline-block;
   background: #F0B088;
   width: 45%;
-  height: 5px;
+  height: 3px;
   position: absolute;
   top: 0;
   left: 0;
@@ -865,7 +1318,7 @@ ul.buttons.compact li {
   display: inline-block;
   background: #F0B088;
   width: 46%;
-  height: 5px;
+  height: 3px;
   position: absolute;
   top: 0;
   left: 0;
@@ -875,7 +1328,7 @@ ul.buttons.compact li {
   display: inline-block;
   background: #F0B088;
   width: 47%;
-  height: 5px;
+  height: 3px;
   position: absolute;
   top: 0;
   left: 0;
@@ -885,7 +1338,7 @@ ul.buttons.compact li {
   display: inline-block;
   background: #F0B088;
   width: 48%;
-  height: 5px;
+  height: 3px;
   position: absolute;
   top: 0;
   left: 0;
@@ -895,7 +1348,7 @@ ul.buttons.compact li {
   display: inline-block;
   background: #F0B088;
   width: 49%;
-  height: 5px;
+  height: 3px;
   position: absolute;
   top: 0;
   left: 0;
@@ -905,7 +1358,7 @@ ul.buttons.compact li {
   display: inline-block;
   background: #F0B088;
   width: 50%;
-  height: 5px;
+  height: 3px;
   position: absolute;
   top: 0;
   left: 0;
@@ -915,7 +1368,7 @@ ul.buttons.compact li {
   display: inline-block;
   background: #48A058;
   width: 51%;
-  height: 5px;
+  height: 3px;
   position: absolute;
   top: 0;
   left: 0;
@@ -925,7 +1378,7 @@ ul.buttons.compact li {
   display: inline-block;
   background: #48A058;
   width: 52%;
-  height: 5px;
+  height: 3px;
   position: absolute;
   top: 0;
   left: 0;
@@ -935,7 +1388,7 @@ ul.buttons.compact li {
   display: inline-block;
   background: #48A058;
   width: 53%;
-  height: 5px;
+  height: 3px;
   position: absolute;
   top: 0;
   left: 0;
@@ -945,7 +1398,7 @@ ul.buttons.compact li {
   display: inline-block;
   background: #48A058;
   width: 54%;
-  height: 5px;
+  height: 3px;
   position: absolute;
   top: 0;
   left: 0;
@@ -955,7 +1408,7 @@ ul.buttons.compact li {
   display: inline-block;
   background: #48A058;
   width: 55%;
-  height: 5px;
+  height: 3px;
   position: absolute;
   top: 0;
   left: 0;
@@ -965,7 +1418,7 @@ ul.buttons.compact li {
   display: inline-block;
   background: #48A058;
   width: 56%;
-  height: 5px;
+  height: 3px;
   position: absolute;
   top: 0;
   left: 0;
@@ -975,7 +1428,7 @@ ul.buttons.compact li {
   display: inline-block;
   background: #48A058;
   width: 57%;
-  height: 5px;
+  height: 3px;
   position: absolute;
   top: 0;
   left: 0;
@@ -985,7 +1438,7 @@ ul.buttons.compact li {
   display: inline-block;
   background: #48A058;
   width: 58%;
-  height: 5px;
+  height: 3px;
   position: absolute;
   top: 0;
   left: 0;
@@ -995,7 +1448,7 @@ ul.buttons.compact li {
   display: inline-block;
   background: #48A058;
   width: 59%;
-  height: 5px;
+  height: 3px;
   position: absolute;
   top: 0;
   left: 0;
@@ -1005,7 +1458,7 @@ ul.buttons.compact li {
   display: inline-block;
   background: #48A058;
   width: 60%;
-  height: 5px;
+  height: 3px;
   position: absolute;
   top: 0;
   left: 0;
@@ -1015,7 +1468,7 @@ ul.buttons.compact li {
   display: inline-block;
   background: #48A058;
   width: 61%;
-  height: 5px;
+  height: 3px;
   position: absolute;
   top: 0;
   left: 0;
@@ -1025,7 +1478,7 @@ ul.buttons.compact li {
   display: inline-block;
   background: #48A058;
   width: 62%;
-  height: 5px;
+  height: 3px;
   position: absolute;
   top: 0;
   left: 0;
@@ -1035,7 +1488,7 @@ ul.buttons.compact li {
   display: inline-block;
   background: #48A058;
   width: 63%;
-  height: 5px;
+  height: 3px;
   position: absolute;
   top: 0;
   left: 0;
@@ -1045,7 +1498,7 @@ ul.buttons.compact li {
   display: inline-block;
   background: #48A058;
   width: 64%;
-  height: 5px;
+  height: 3px;
   position: absolute;
   top: 0;
   left: 0;
@@ -1055,7 +1508,7 @@ ul.buttons.compact li {
   display: inline-block;
   background: #48A058;
   width: 65%;
-  height: 5px;
+  height: 3px;
   position: absolute;
   top: 0;
   left: 0;
@@ -1065,7 +1518,7 @@ ul.buttons.compact li {
   display: inline-block;
   background: #48A058;
   width: 66%;
-  height: 5px;
+  height: 3px;
   position: absolute;
   top: 0;
   left: 0;
@@ -1075,7 +1528,7 @@ ul.buttons.compact li {
   display: inline-block;
   background: #48A058;
   width: 67%;
-  height: 5px;
+  height: 3px;
   position: absolute;
   top: 0;
   left: 0;
@@ -1085,7 +1538,7 @@ ul.buttons.compact li {
   display: inline-block;
   background: #48A058;
   width: 68%;
-  height: 5px;
+  height: 3px;
   position: absolute;
   top: 0;
   left: 0;
@@ -1095,7 +1548,7 @@ ul.buttons.compact li {
   display: inline-block;
   background: #48A058;
   width: 69%;
-  height: 5px;
+  height: 3px;
   position: absolute;
   top: 0;
   left: 0;
@@ -1105,7 +1558,7 @@ ul.buttons.compact li {
   display: inline-block;
   background: #48A058;
   width: 70%;
-  height: 5px;
+  height: 3px;
   position: absolute;
   top: 0;
   left: 0;
@@ -1115,7 +1568,7 @@ ul.buttons.compact li {
   display: inline-block;
   background: #48A058;
   width: 71%;
-  height: 5px;
+  height: 3px;
   position: absolute;
   top: 0;
   left: 0;
@@ -1125,7 +1578,7 @@ ul.buttons.compact li {
   display: inline-block;
   background: #48A058;
   width: 72%;
-  height: 5px;
+  height: 3px;
   position: absolute;
   top: 0;
   left: 0;
@@ -1135,7 +1588,7 @@ ul.buttons.compact li {
   display: inline-block;
   background: #48A058;
   width: 73%;
-  height: 5px;
+  height: 3px;
   position: absolute;
   top: 0;
   left: 0;
@@ -1145,7 +1598,7 @@ ul.buttons.compact li {
   display: inline-block;
   background: #48A058;
   width: 74%;
-  height: 5px;
+  height: 3px;
   position: absolute;
   top: 0;
   left: 0;
@@ -1155,7 +1608,7 @@ ul.buttons.compact li {
   display: inline-block;
   background: #48A058;
   width: 75%;
-  height: 5px;
+  height: 3px;
   position: absolute;
   top: 0;
   left: 0;
@@ -1165,7 +1618,7 @@ ul.buttons.compact li {
   display: inline-block;
   background: #48A058;
   width: 76%;
-  height: 5px;
+  height: 3px;
   position: absolute;
   top: 0;
   left: 0;
@@ -1175,7 +1628,7 @@ ul.buttons.compact li {
   display: inline-block;
   background: #48A058;
   width: 77%;
-  height: 5px;
+  height: 3px;
   position: absolute;
   top: 0;
   left: 0;
@@ -1185,7 +1638,7 @@ ul.buttons.compact li {
   display: inline-block;
   background: #48A058;
   width: 78%;
-  height: 5px;
+  height: 3px;
   position: absolute;
   top: 0;
   left: 0;
@@ -1195,7 +1648,7 @@ ul.buttons.compact li {
   display: inline-block;
   background: #48A058;
   width: 79%;
-  height: 5px;
+  height: 3px;
   position: absolute;
   top: 0;
   left: 0;
@@ -1205,7 +1658,7 @@ ul.buttons.compact li {
   display: inline-block;
   background: #48A058;
   width: 80%;
-  height: 5px;
+  height: 3px;
   position: absolute;
   top: 0;
   left: 0;
@@ -1215,7 +1668,7 @@ ul.buttons.compact li {
   display: inline-block;
   background: #48A058;
   width: 81%;
-  height: 5px;
+  height: 3px;
   position: absolute;
   top: 0;
   left: 0;
@@ -1225,7 +1678,7 @@ ul.buttons.compact li {
   display: inline-block;
   background: #48A058;
   width: 82%;
-  height: 5px;
+  height: 3px;
   position: absolute;
   top: 0;
   left: 0;
@@ -1235,7 +1688,7 @@ ul.buttons.compact li {
   display: inline-block;
   background: #48A058;
   width: 83%;
-  height: 5px;
+  height: 3px;
   position: absolute;
   top: 0;
   left: 0;
@@ -1245,7 +1698,7 @@ ul.buttons.compact li {
   display: inline-block;
   background: #48A058;
   width: 84%;
-  height: 5px;
+  height: 3px;
   position: absolute;
   top: 0;
   left: 0;
@@ -1255,7 +1708,7 @@ ul.buttons.compact li {
   display: inline-block;
   background: #48A058;
   width: 85%;
-  height: 5px;
+  height: 3px;
   position: absolute;
   top: 0;
   left: 0;
@@ -1265,7 +1718,7 @@ ul.buttons.compact li {
   display: inline-block;
   background: #48A058;
   width: 86%;
-  height: 5px;
+  height: 3px;
   position: absolute;
   top: 0;
   left: 0;
@@ -1275,7 +1728,7 @@ ul.buttons.compact li {
   display: inline-block;
   background: #48A058;
   width: 87%;
-  height: 5px;
+  height: 3px;
   position: absolute;
   top: 0;
   left: 0;
@@ -1285,7 +1738,7 @@ ul.buttons.compact li {
   display: inline-block;
   background: #48A058;
   width: 88%;
-  height: 5px;
+  height: 3px;
   position: absolute;
   top: 0;
   left: 0;
@@ -1295,7 +1748,7 @@ ul.buttons.compact li {
   display: inline-block;
   background: #48A058;
   width: 89%;
-  height: 5px;
+  height: 3px;
   position: absolute;
   top: 0;
   left: 0;
@@ -1305,7 +1758,7 @@ ul.buttons.compact li {
   display: inline-block;
   background: #48A058;
   width: 90%;
-  height: 5px;
+  height: 3px;
   position: absolute;
   top: 0;
   left: 0;
@@ -1315,7 +1768,7 @@ ul.buttons.compact li {
   display: inline-block;
   background: #48A058;
   width: 91%;
-  height: 5px;
+  height: 3px;
   position: absolute;
   top: 0;
   left: 0;
@@ -1325,7 +1778,7 @@ ul.buttons.compact li {
   display: inline-block;
   background: #48A058;
   width: 92%;
-  height: 5px;
+  height: 3px;
   position: absolute;
   top: 0;
   left: 0;
@@ -1335,7 +1788,7 @@ ul.buttons.compact li {
   display: inline-block;
   background: #48A058;
   width: 93%;
-  height: 5px;
+  height: 3px;
   position: absolute;
   top: 0;
   left: 0;
@@ -1345,7 +1798,7 @@ ul.buttons.compact li {
   display: inline-block;
   background: #48A058;
   width: 94%;
-  height: 5px;
+  height: 3px;
   position: absolute;
   top: 0;
   left: 0;
@@ -1355,7 +1808,7 @@ ul.buttons.compact li {
   display: inline-block;
   background: #48A058;
   width: 95%;
-  height: 5px;
+  height: 3px;
   position: absolute;
   top: 0;
   left: 0;
@@ -1365,7 +1818,7 @@ ul.buttons.compact li {
   display: inline-block;
   background: #48A058;
   width: 96%;
-  height: 5px;
+  height: 3px;
   position: absolute;
   top: 0;
   left: 0;
@@ -1375,7 +1828,7 @@ ul.buttons.compact li {
   display: inline-block;
   background: #48A058;
   width: 97%;
-  height: 5px;
+  height: 3px;
   position: absolute;
   top: 0;
   left: 0;
@@ -1385,7 +1838,7 @@ ul.buttons.compact li {
   display: inline-block;
   background: #48A058;
   width: 98%;
-  height: 5px;
+  height: 3px;
   position: absolute;
   top: 0;
   left: 0;
@@ -1395,7 +1848,7 @@ ul.buttons.compact li {
   display: inline-block;
   background: #48A058;
   width: 99%;
-  height: 5px;
+  height: 3px;
   position: absolute;
   top: 0;
   left: 0;
@@ -1405,15 +1858,12 @@ ul.buttons.compact li {
   display: inline-block;
   background: #48A058;
   width: 100%;
-  height: 5px;
+  height: 3px;
   position: absolute;
   top: 0;
   left: 0;
 }
 /* Overrides for the core Foundry CSS */
-.window-content {
-  background: #F8F3F8 !important;
-}
 form button,
 #settings button {
   background: #F8F3F8 !important;
@@ -1424,11 +1874,6 @@ form button,
 }
 h2 {
   border-bottom: none;
-}
-.sheet input[type="text"],
-.sheet input[type="password"],
-.sheet input[type="datetime-local"] {
-  border: dotted;
 }
 .sheet .sheet-header img {
   height: 109px !important;
@@ -1456,8 +1901,6 @@ body {
   -ms-interpolation-mode: nearest-neighbor;
   image-rendering: -webkit-optimize-contrast;
   image-rendering: -moz-crisp-edges;
-  image-rendering: -o-pixelated;
-  image-rendering: pixelated;
 }
 h1,
 h2,
@@ -1539,12 +1982,6 @@ h6 {
     transform: translate(0, 0);
   }
 }
-.level {
-  content: "";
-  width: 35px;
-  background: url("./images/lvl.png") no-repeat !important;
-  background-size: contain !important;
-}
 .pokeball {
   content: "";
   width: 24px;
@@ -1598,14 +2035,14 @@ h6 {
 .hp-info {
   -webkit-box-pack: end;
   -ms-flex-pack: end;
-  justify-content: flex-end;
+  justify-content: center;
   padding-right: 5px;
 }
 .hp-info > input,
 .hp-info > span {
   -webkit-box-flex: 0 !important;
-  -ms-flex: 0 0 50px !important;
-  flex: 0 0 50px !important;
+  -ms-flex: 0 0 40px !important;
+  flex: 0 0 40px !important;
 }
 .hp-info > span {
   text-align: center;
@@ -1616,7 +2053,6 @@ h6 {
 }
 .pokemon-name {
   margin-left: 0 !important;
-  margin-right: -1em;
 }
 .pokemon-header-stats {
   margin-left: 40px !important;
@@ -1646,12 +2082,6 @@ h6 {
 }
 .sheet-header {
   height: 150px;
-  -webkit-box-flex: unset;
-  -ms-flex: unset;
-  flex: unset;
-}
-.sheet-body {
-  height: 250px;
   -webkit-box-flex: unset;
   -ms-flex: unset;
   flex: unset;

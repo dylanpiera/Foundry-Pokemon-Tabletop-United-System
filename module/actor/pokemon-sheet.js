@@ -23,7 +23,7 @@ export class PTUPokemonSheet extends ActorSheet {
     data.dtypes = ["String", "Number", "Boolean"];
     
     // Prepare items.
-    if (this.actor.data.type == 'character') {
+    if (this.actor.data.type == 'pokemon') {
       this._prepareCharacterItems(data);
     }
 

@@ -154,7 +154,10 @@
 
       "money": 0,
 
-      "level": 1,
+      "level": {
+        "milestones": 0,
+        "dexexp": 0
+      },
       "health": {
         "value": 0
       },
@@ -169,6 +172,10 @@
         "goals": "",
         "dreams": "",
         "obsessions": ""
+      },
+
+      "initiative": {
+        "mod": 0
       }
     },
     "pokemon": {
@@ -177,9 +184,13 @@
       "species": "",
       "nickname": "",
       "gender": "",
+      "nature": {
+        "value": ""
+      },
            
-      "level": 5,
-      "exp": 40,
+      "level": {
+        "exp": 40
+      },
       "health": {
         "value": null
       },
@@ -188,7 +199,10 @@
         "primary": "",
         "secondary": ""
       },
-      "nature": ""
+
+      "initiative": {
+        "mod": 0
+      }
     }
   },
   "Item": {

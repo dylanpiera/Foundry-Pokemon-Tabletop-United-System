@@ -1,4 +1,9 @@
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
     padding: 6px 0px;
 }
 
@@ -6,7 +11,7 @@ button {
     font-size: 12px;
 }
 
-#client-settings section.content .submenu > button {
+#client-settings section.content .submenu>button {
     font-size: 10px;
 }
 
@@ -17,11 +22,12 @@ p {
     }
 }
 
-form .form-group > label {
-    font-size:12px;
+form .form-group>label {
+    font-size: 12px;
 }
 
-div#module-management, div#controls-reference {
+div#module-management,
+div#controls-reference {
     font-family: "Signika", sans-serif;
     font-size: 14px;
     font-variant: normal;
@@ -55,178 +61,452 @@ a.item {
 }
 
 #combat {
-    & h3, & h4 {
+
+    & h3,
+    & h4 {
         padding: 0;
     }
 }
 
-.skills {
+.hgss-box {
+    border: black solid 1px;
+    box-shadow: 0px 0px 4px 1px black;
+    background: #E0E8E8;
+    word-break: break-all;
+
+    .hgss-header {
+        padding: 2px 5px;
+        background: #8898A8;
+        display: flex;
+    }
+
+    .hgss-body {
+        padding: 2px 5px;
+        display: flex;
+    }
+}
+
+.name-label {
+    content: "";
+    width: 35px;
+    background: url("./images/pokeball-hgss.png") no-repeat !important;
+    background-size: contain !important;
+    padding-right: 5px;
+}
+
+.level {
+    content: "";
+    width: 26px;
+    background: url("./images/lvl.png") no-repeat !important;
+    background-size: contain !important;
+    margin: 0 5px 0 10px;
+    position: relative;
+    bottom: -8px;
+    left: -12x;
+}
+
+.options .hp {
+    width: 6rem;
+    background: url("./images/hp.png") no-repeat !important;
+    background-size: contain !important;
+    margin: 0 5px 0 0px;
+    position: relative;
+    left: 3px;
+    bottom: -10px;
+    font-weight: bold;
+  }
+
+.window-content {
+    background: #E0E8E8 !important;
+}
+
+.stat-block {
+    border: 1px solid black;
+    box-shadow: 0px 0px 3px 1px;
+    border-radius: 3%;
+}
+
+.panel {
+    &.character {
+        background: #F06058;
+        border-radius: 0 8% 8% 0;
+        justify-content: center;
+        padding: 15px;
+
+
+
+        box-shadow: 0px 0px 3px 1px black;
+        border: black solid 2px
+    }
+}
+
+.sheet-footer {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    padding: 10px 20px;
+    width: 100%;
+
+    .tabs {
+        li {
+            float: left;
+        }
+
+        ul {
+            display: inline;
+        }
+
+        padding-right: 8px;
+    }
+}
+
+.grid {
+    display: grid;
+
+    column-gap: 8px;
+    row-gap: 3px;
+
+    &.character {
+        grid-template:
+            "panel profile"
+            "panel extra"
+            "tabs tabs"
+            / 65% 35%;
+    }
+
+
+
+    &.profile {
+        grid-area: profile;
+
+        &.character {
+            display: grid;
+            grid-template:
+                "nametag"
+                "avatar"
+                "helditem";
+
+            padding-right: 8px;
+        }
+
+        .nametag {
+            grid-area: nametag;
+        }
+
+        .avatar {
+            text-align: center;
+
+            grid-area: avatar;
+
+            & img {
+                max-width: 75%;
+                max-height: auto;
+            }
+        }
+
+        .helditem {
+            grid-area: helditem;
+        }
+    }
+
+    &.panel {
+        grid-area: panel;
+
+        &.character {
+            display: grid;
+            grid-template:
+                "stats"
+                "abilities"
+                "moves";
+
+            background: #F06058;
+            border-radius: 0 8% 8% 0;
+            justify-content: center;
+            padding: 0 10px;
+
+            box-shadow: 1px 1px 10px 2px black;
+            border: black solid 3px
+        }
+
+        .skills {
+            grid-area: stats;
+        }
+
+        .abilities {
+            grid-area: abilities;
+        }
+
+        .moves {
+            grid-area: moves;
+        }
+    }
+
+    &.extra {
+        grid-area: extra;
+
+        padding-right: 8px;
+    }
+}
+
+.no-gutters {
+    margin-right: 0;
+    margin-left: 0;
+
+    >.col,
+    >[class*="col-"] {
+        padding-right: 0;
+        padding-left: 0;
+    }
+}
+
+.stat-block {
+    .row {
+        &.header {
+            text-align: center;
+            background: #E0E8E8;
+            font-weight: bold;
+        }
+
+        .key {
+            &.hp,
+            &.def,
+            &.spdef {
+                background: #788898;
+            }
+    
+            &.atk,
+            &.spatk,
+            &.spd,
+            &.stat-header {
+                background: #8898A8;
+            }
+
+            
+            padding: 12px 0 12px 5px;
+        }
+
+        &.hp,
+        &.def,
+        &.spdef {
+            background: #C8D0D8;
+        }
+
+        &.atk,
+        &.spatk,
+        &.spd {
+            background: #E0E8E8;
+        }
+    }
+}
+
+
+.stats {
     width: 100%;
     align-self: center;
     justify-self: center;
 
+    &.stat-block {
+        background: #607888;
+        border-radius: 2%;
+        padding: 3px;
+    }
 
     &.grid {
         display: grid;
 
-        column-gap: 5px;
+        column-gap: 1px;
         row-gap: 3px;
 
         &.pokemon {
             grid-template:
-            [row1-start] "stats-header base-header mod-header levelUp-header stage-header total-header" 25px [row1-end]
-            [row2-start] "hp hp-base hp-mod hp-levelUp . hp-total" 25px [row2-end]
-            [row3-start] "atk atk-base atk-mod atk-levelUp atk-stage atk-total" 25px [row3-end]
-            [row4-start] "def def-base def-mod def-levelUp def-stage def-total" 25px [row4-end]
-            [row5-start] "spatk spatk-base spatk-mod spatk-levelUp spatk-stage spatk-total" 25px [row5-end]
-            [row6-start] "spdef spdef-base spdef-mod spdef-levelUp spdef-stage spdef-total" 25px [row6-end]
-            [row7-start] "spd spd-base spd-mod spd-levelUp spd-stage spd-total" 25px [row7-end]
-            / 15% 15% 15% 15% 15% 20%;
+                [row1-start] "stats-header base-header mod-header levelUp-header stage-header total-header"25px [row1-end] [row2-start] "hp hp-base hp-mod hp-levelUp . hp-total"25px [row2-end] [row3-start] "atk atk-base atk-mod atk-levelUp atk-stage atk-total"25px [row3-end] [row4-start] "def def-base def-mod def-levelUp def-stage def-total"25px [row4-end] [row5-start] "spatk spatk-base spatk-mod spatk-levelUp spatk-stage spatk-total"25px [row5-end] [row6-start] "spdef spdef-base spdef-mod spdef-levelUp spdef-stage spdef-total"25px [row6-end] [row7-start] "spd spd-base spd-mod spd-levelUp spd-stage spd-total"25px [row7-end] / 15% 15% 15% 15% 15% 25%;
         }
+
         &.player {
             grid-template:
-            [row1-start] "stats-header base-header mod-header levelUp-header total-header" 25px [row1-end]
-            [row2-start] "hp hp-base hp-mod hp-levelUp hp-total" 25px [row2-end]
-            [row3-start] "atk atk-base atk-mod atk-levelUp atk-total" 25px [row3-end]
-            [row4-start] "def def-base def-mod def-levelUp def-total" 25px [row4-end]
-            [row5-start] "spatk spatk-base spatk-mod spatk-levelUp spatk-total" 25px [row5-end]
-            [row6-start] "spdef spdef-base spdef-mod spdef-levelUp spdef-total" 25px [row6-end]
-            [row7-start] "spd spd-base spd-mod spd-levelUp spd-total" 25px [row7-end]
-            / 15% 20% 20% 20% 20%;
+                [row1-start] "stats-header base-header mod-header levelUp-header total-header"25px [row1-end] [row2-start] "hp hp-base hp-mod hp-levelUp hp-total"25px [row2-end] [row3-start] "atk atk-base atk-mod atk-levelUp atk-total"25px [row3-end] [row4-start] "def def-base def-mod def-levelUp def-total"25px [row4-end] [row5-start] "spatk spatk-base spatk-mod spatk-levelUp spatk-total"25px [row5-end] [row6-start] "spdef spdef-base spdef-mod spdef-levelUp spdef-total"25px [row6-end] [row7-start] "spd spd-base spd-mod spd-levelUp spd-total"25px [row7-end] / 15% 20% 20% 20% 25%;
         }
+
+        background: #E0E8E8;
+        border-radius: 2%;
+        padding: 3px 10px;
     }
 
     &.header {
         text-align: center;
+
         &.stats {
             grid-area: stats-header;
         }
+
         &.base {
             grid-area: base-header;
         }
+
         &.mod {
             grid-area: mod-header;
         }
+
         &.levelUp {
             grid-area: levelUp-header;
             font-size: 10px;
         }
+
         &.stage {
             grid-area: stage-header;
         }
+
         &.total {
             grid-area: total-header;
         }
     }
 
-    &.base, &.mod, &.stage, &.total {
+    &.base,
+    &.mod,
+    &.stage,
+    &.total {
         padding: 5px;
     }
 
     &.hp {
         grid-area: hp;
+
         &.base {
             grid-area: hp-base
         }
+
         &.mod {
             grid-area: hp-mod
         }
+
         &.stage {
             grid-area: hp-stage
         }
+
         &.total {
             grid-area: hp-total
         }
+
         &.levelUp {
             grid-area: hp-levelUp
         }
     }
+
     &.atk {
         grid-area: atk;
+
         &.base {
             grid-area: atk-base
         }
+
         &.mod {
             grid-area: atk-mod
         }
+
         &.stage {
             grid-area: atk-stage
         }
+
         &.total {
             grid-area: atk-total
         }
+
         &.levelUp {
             grid-area: atk-levelUp
         }
     }
+
     &.def {
         grid-area: def;
+
         &.base {
             grid-area: def-base
         }
+
         &.mod {
             grid-area: def-mod
         }
+
         &.stage {
             grid-area: def-stage
         }
+
         &.total {
             grid-area: def-total
         }
+
         &.levelUp {
             grid-area: def-levelUp
         }
     }
+
     &.spatk {
         grid-area: spatk;
+
         &.base {
             grid-area: spatk-base
         }
+
         &.mod {
             grid-area: spatk-mod
         }
+
         &.stage {
             grid-area: spatk-stage
         }
+
         &.total {
             grid-area: spatk-total
         }
+
         &.levelUp {
             grid-area: spatk-levelUp
         }
     }
+
     &.spdef {
         grid-area: spdef;
+
         &.base {
             grid-area: spdef-base
         }
+
         &.mod {
             grid-area: spdef-mod
         }
+
         &.stage {
             grid-area: spdef-stage
         }
+
         &.total {
             grid-area: spdef-total
         }
+
         &.levelUp {
             grid-area: spdef-levelUp
         }
     }
+
     &.spd {
         grid-area: spd;
+
         &.base {
             grid-area: spd-base
         }
+
         &.mod {
             grid-area: spd-mod
         }
+
         &.stage {
             grid-area: spd-stage
         }
+
         &.total {
             grid-area: spd-total
         }
+
         &.levelUp {
             grid-area: spd-levelUp
         }

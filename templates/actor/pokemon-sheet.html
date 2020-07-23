@@ -1,79 +1,253 @@
-<form class="{{cssClass}} flexcol framed" autocomplete="off">
-
-    {{!-- Sheet Header --}}
-    <header class="sheet-header">
-        <img class="profile-img" src="{{actor.img}}" data-edit="img" title="{{actor.name}}" height="120" width="120"/>
-        <div class="header-fields">
-            <div class="resources">
-              <div class="pokemon-header-stats stats-flipped">
-                <h2 class="pokemon-name"><input name="name" type="text" value="{{actor.name}}" placeholder="Name"/></h2>
-                <div class="options" style="padding-bottom: 5px;">
-                    <label for="progressBar" class="hp"></label>
-                    <div class="progress-bar p{{data.health.percent}}" id="progressBar"></div>
+<form
+  class="{{cssClass}} container-fluid"
+  autocomplete="off"
+  style="padding-left: unset;"
+>
+  <div class="row justify-content-between" style="height: 86%;">
+    <div class="col-sm-12 col-md-8" style="padding-left: unset;">
+      <div class="panel character h-100">
+        <div class="sheet-body no-hd h-100">
+          <div class="tab details stats h-100" data-group="primary" data-tab="stats"
+          >
+            <div class="d-flex align-items-end flex-column h-100">
+              <div class="w-100 stats stat-block mb-2">
+                <div class="row no-gutters header">
+                  <div class="col-sm-2 pt-2 pb-2 key stat-header">Stats</div>
+                  <div class="col-sm-2 mt-2 mb-2">Base</div>
+                  <div class="col-sm-2 mt-2 mb-2">Mod</div>
+                  <div class="col-sm-2 mt-2 mb-2" style="font-size: 9px;">Level-Up</div>
+                  <div class="col-sm-2 mt-2 mb-2">Stage</div>
+                  <div class="col-sm-2 mt-2 mb-2">Total</div>
                 </div>
-                <div class="resource-content flexrow flex-group-right hp-info">
-                  <input type="text" name="data.health.value" value="{{data.health.value}}" data-dtype="Number"/>
-                  <span> / </span>
-                  <input type="text" name="data.health.max" value="{{data.health.max}}" data-dtype="Number"/>
+                {{#each data.stats as |stat key|}}
+                <div class="row no-gutters {{key}}">
+                  <div class="stats {{key}} col-sm-2 key">
+                    <label for="data.stats.{{key}}.value" class="resource-label"
+                      >{{key}}</label
+                    >
+                  </div>
+                  <div class="stats {{key}} base col-sm-2">
+                    <input
+                      type="text"
+                      name="data.stats.{{key}}.value"
+                      value="{{stat.value}}"
+                      data-dtype="Number"
+                    />
+                  </div>
+                  <div class="stats {{key}} mod col-sm-2">
+                    <input
+                      type="text"
+                      name="data.stats.{{key}}.mod"
+                      value="{{stat.mod}}"
+                      data-dtype="Number"
+                    />
+                  </div>
+                  <div class="stats {{key}} levelUp col-sm-2">
+                    <input
+                      type="text"
+                      name="data.stats.{{key}}.levelUp"
+                      value="{{stat.levelUp}}"
+                      data-dtype="Number"
+                    />
+                  </div>
+                  <div class="stats stage stage col-sm-2">
+                  {{#if (isdefined stat.stage)}}
+                    <input
+                      type="text"
+                      name="data.stats.{{key}}.stage"
+                      value="{{stat.stage}}"
+                      data-dtype="Number"
+                    />
+                    {{/if}}
+                  </div>
+                  <div class="stats {{key}} total col-sm-2">
+                    <input
+                      type="text"
+                      name="data.stats.{{key}}.total"
+                      value="{{stat.total}}"
+                      data-dtype="Number"
+                      disabled
+                    />
+                  </div>
                 </div>
-                <div class="options level-header">
-                    <label for="data.level" class="level"></label>
-                    <input style="display: flex;" type="text" name="data.level" value="{{data.level}}" data-dtype="Number"/>
+                {{/each}}
+              </div>
+              <div class="w-100 level-box mb-2">
+                <div
+                  class="hgss-box"
+                  style="text-align: center; word-break: keep-all;"
+                >
+                  <div class="hgss-header">
+                    <div class="d-flex w-100 mt-1 mb-1">
+                      <div class="col-sm-5">
+                        <label for="data.nature.value">Nature:</label>
+                      </div>
+                      <div class="col-sm-4">
+                        <label for="data.level.exp">Experience:</label>
+                      </div>
+                      <div class="col-sm-3">
+                        <label for="data.level.current">Level:</label>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="hgss-body">
+                    <div class="d-flex w-100 mt-1 mb-1">
+                      <div class="col-sm-5">
+                        <input
+                          name="data.nature.value"
+                          type="text"
+                          value="{{data.nature.value}}"
+                        />
+                      </div>
+                      <div class="col-sm-4">
+                        <input
+                          type="text"
+                          name="data.level.exp"
+                          value="{{data.level.exp}}"
+                          data-dtype="Number"
+                        />
+                      </div>
+                      <div class="col-sm-3">
+                        <input
+                          type="text"
+                          name="data.level.current"
+                          value="{{data.level.current}}"
+                          data-dtype="Number"
+                          disabled
+                        />
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
-          </div>
-        </div>
-    </header>
-
-    {{!-- Sheet Tab Navigation --}}
-    <ul class="sheet-tabs tabs pokemon-nav framed no-hd buttons compact" data-group="primary">
-        <li><button class="item" data-tab="stats">Stats</button></li>
-        <li><button class="item" data-tab="moves">Moves</button></li>
-    </ul>
-
-    {{!-- Sheet Body --}}
-    <section class="sheet-body no-hd">
-
-        {{!-- Stats Tab --}}
-        <div class="tab details pkmn" data-group="primary" data-tab="stats">
-          <div class="skills framed">
-            <div class="skills grid pokemon">
-              <div class="skills header stats">Stats</div>
-              <div class="skills header base">Base</div>
-              <div class="skills header mod">Mod</div>
-              <div class="skills header levelUp">Level-Up</div>
-              <div class="skills header stage">Stage</div>
-              <div class="skills header total">Total</div>
-              {{#each data.stats as |stat key|}}
-                <div class="skills {{key}}"><label for="data.stats.{{key}}.value" class="resource-label">{{key}}</label></div>
-                <div class="skills {{key}} base"><input type="text" name="data.stats.{{key}}.value" value="{{stat.value}}" data-dtype="Number"/></div>
-                <div class="skills {{key}} mod"><input type="text" name="data.stats.{{key}}.mod" value="{{stat.mod}}" data-dtype="Number"/></div>
-                <div class="skills {{key}} levelUp"><input type="text" name="data.stats.{{key}}.levelUp" value="{{stat.levelUp}}" data-dtype="Number"/></div>
-                {{#if (isdefined stat.stage)}}
-                <div class="skills {{key}} stage"><input type="text" name="data.stats.{{key}}.stage" value="{{stat.stage}}" data-dtype="Number"/></div>
-                {{/if}}
-                <div class="skills {{key}} total"><input type="text" name="data.stats.{{key}}.total" value="{{stat.total}}" data-dtype="Number" disabled/></div>
-              {{/each}}
+              <div class="hgss-box mt-auto w-100">
+                <div class="hgss-header">
+                  Skills
+                </div>
+                <div class="hgss-body">
+                  <i>Skills Table</i>
+                </div>
+              </div>
             </div>
           </div>
-          <!--div class="types stats-flipped">
-              <div class="ability flexrow flex-group-center">
-                  <label for="data.type.primary.value" class="resource-label">Type1</label>
-                  <input type="text" name="data.type.primary.value" value="{{data.type.primary.value}}" />
-                  <!-- <span class="ability-mod rollable" data-roll="d20+@abilities.{{key}}.mod" data-label="{{key}}">{{numberFormat ability.mod decimals=0 sign=true}}</span> -->
-                <!--/div>
-                <div class="ability flexrow flex-group-center">
-                    <label for="data.type.secondary.value" class="resource-label">Type2</label>
-                    <input type="text" name="data.type.secondary.value" value="{{data.type.secondary.value}}" />
-                  <!-- <span class="ability-mod rollable" data-roll="d20+@abilities.{{key}}.mod" data-label="{{key}}">{{numberFormat ability.mod decimals=0 sign=true}}</span> -->
-                <!--/div>
-          </div-->
+          <div class="tab details moves" data-group="primary" data-tab="moves">
+            <div class="row">
+              <div class="col">
+                <p>Moves</p>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col">
+                <p>Abilities</p>
+              </div>
+            </div>
+          </div>
+          <div
+            class="tab details feats"
+            data-group="primary"
+            data-tab="pokeedge"
+          >
+            <div class="row">
+              <div class="col">
+                <p>Poké Edges</p>
+              </div>
+            </div>
+          </div>
+            <div
+              class="tab details extra"
+              data-group="primary"
+              data-tab="extra"
+            >
+              <div class="row">
+                <div class="col">
+                  <div class="hgss-box mt-auto w-100" style="text-align: center;">
+                    <div class="hgss-header">
+                      <label for="data.initiative.mod">Initiative Modifier</label>
+                    </div>
+                    <div class="hgss-body">
+                      <input
+                          type="text"
+                          name="data.initiative.mod"
+                          value="{{data.initiative.mod}}"
+                          data-dtype="Number"
+                        />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
-
-        {{!-- Moves Tab --}}
-        <div class="tab moves framed no-hd" data-group="primary" data-tab="moves">
-            
+      </div>
+    <div class="col-sm-12 col-md-4">
+      <div class="d-flex align-items-center flex-column h-100 pt-4">
+        <div class="hgss-box mb-auto">
+          <div class="hgss-header" style="align-items: unset;">
+            <label for="name" class="name-label"></label>
+            <input
+              class="ml-2"
+              name="name"
+              type="text"
+              value="{{actor.name}}"
+              placeholder="Name"
+            />
+          </div>
+          <div class="hgss-body row no-gutters">
+            <div class="options w-100 d-flex">
+              <label for="progressBar" class="hp"></label>
+              <div class="d-flex pt-1 pb-1" style="text-align: center;">
+                <input
+                  class="ml-1 mr-1"
+                  type="text"
+                  name="data.health.value"
+                  value="{{data.health.value}}"
+                  data-dtype="Number"
+                />
+                <span style="font-size: 20px;"> / </span>
+                <input
+                  class="ml-1"
+                  type="text"
+                  name="data.health.max"
+                  value="{{data.health.max}}"
+                  data-dtype="Number"
+                  disabled
+                />
+              </div>
+            </div>
+            <div class="options w-100 pb-1 pt-1">
+              <div
+                class="progress-bar p{{data.health.percent}}"
+                id="progressBar"
+              ></div>
+            </div>
+          </div>
         </div>
-    </section>
+        <div class="avatar m-auto">
+          <img
+            class="profile-img"
+            src="{{actor.img}}"
+            data-edit="img"
+            title="{{actor.name}}"
+          />
+        </div>
+        <div class="hgss-box mt-auto w-100" style="text-align: center;">
+          <div class="hgss-header">
+            <h3 class="m-auto">Item</h3>
+          </div>
+          <div class="hgss-body">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="sheet-footer">
+    <div class="tabs">
+      <ul class="sheet-tabs tabs buttons" data-group="primary">
+        <li><button class="item" data-tab="stats">Stats</button></li>
+        <li><button class="item" data-tab="moves">Moves</button></li>
+        <li><button class="item" data-tab="pokeedge">Poké Edges</button></li>
+        <li><button class="item" data-tab="extra">Extra</button></li>
+      </ul>
+    </div>
+  </div>
 </form>
-

@@ -5,13 +5,14 @@ import { PTUPokemonSheet } from "./actor/pokemon-sheet.js";
 import { PTUItem } from "./item/item.js";
 import { PTUItemSheet } from "./item/item-sheet.js";
 import { measureDistances } from "./canvas.js";
+import { levelProgression } from "./data/level-progression.js";
 
 Hooks.once('init', async function() {
 
   game.ptu = {
     PTUActor,
     PTUItem,
-    rollItemMacro
+    levelProgression
   };
 
   /**
@@ -19,7 +20,7 @@ Hooks.once('init', async function() {
    * @type {String}
    */
   CONFIG.Combat.initiative = {
-    formula: "@stats.spd.total + (1d20 * 0.01)",
+    formula: "@initiative.value + (1d20 * 0.01)",
     decimals: 2
   };
 
