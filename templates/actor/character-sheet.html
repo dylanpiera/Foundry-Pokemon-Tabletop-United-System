@@ -3,7 +3,7 @@
   autocomplete="off"
   style="padding-left: unset;"
 >
-  <div class="row justify-content-between" style="height: 86%;">
+  <div class="row justify-content-between" style="height: 96%;">
     <div class="col-sm-12 col-md-8" style="padding-left: unset;">
       <div class="panel character h-100">
         <div class="sheet-body no-hd h-100">
@@ -102,6 +102,19 @@
           </div>
           <div class="tab details inventory" data-group="primary" data-tab="inventory">
             <div class="row">
+              <div class="col">
+                <div class="hgss-box">
+                  <div class="hgss-header">
+                    <h3>Inventory</h3>
+                  </div>
+                  <div class="hgss-body d-flex justify-content-end">
+                    <label for="data.money" class="mr-1">Money:</label>
+                    <input type="text" name="data.money" value="{{data.money}}" data-dtype="Number"/>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row h-100">
               <div class="col">
                 <p>Inventory</p>
               </div>
