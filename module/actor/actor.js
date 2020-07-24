@@ -51,10 +51,10 @@ export class PTUActor extends Actor {
     // Make modifications to data here. For example:
     for (let [key, value] of Object.entries(data.stats)) {
       let sub = value["value"] + value["mod"] + value["levelUp"];
-      if(value["stage"] != 0 ) {
+      if(value["stage"] > 0 ) {
         value["total"] = Math.floor(sub * value["stage"] * 0.2 + sub);
       } else {
-        value["total"] = sub;
+        value["total"] = Math.ceil(sub * value["stage"] * 0.1 + sub);
       }
     }
 
