@@ -54,7 +54,12 @@ export class PTUActor extends Actor {
       if(value["stage"] > 0 ) {
         value["total"] = Math.floor(sub * value["stage"] * 0.2 + sub);
       } else {
-        value["total"] = Math.ceil(sub * value["stage"] * 0.1 + sub);
+        if(key == "hp") {
+          value["total"] = sub;
+        }
+        else {
+          value["total"] = Math.ceil(sub * value["stage"] * 0.1 + sub);
+        }
       }
     }
 
