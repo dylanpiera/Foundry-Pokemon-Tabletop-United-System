@@ -198,6 +198,9 @@ a.item {
   text-align: center;
   font-weight: bold;
 }
+.skill-block .row {
+  white-space: nowrap;
+}
 .skill-block .row .skill.bgcolor {
   padding: 12px 5px;
 }
@@ -232,9 +235,6 @@ a.item {
 }
 .skill-block .row .skill--Invalid {
   background: #ff0F0Faa;
-}
-.skill-block .row .dice {
-  word-break: keep-all;
 }
 .stat-block .row.header {
   text-align: center;
@@ -716,6 +716,9 @@ a.item {
 }
 .fs-12 {
   font-size: 12px;
+}
+.center-text {
+  text-align: center;
 }
 /* Freeware Font Credits: https://www.fontspace.com/jackster-productions/pokemon-gb */
 @font-face {

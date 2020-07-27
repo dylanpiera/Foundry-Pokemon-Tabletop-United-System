@@ -158,20 +158,65 @@
               data-group="primary"
               data-tab="extra"
             >
-              <div class="row">
-                <div class="col">
-                  <div class="hgss-box mt-auto w-100" style="text-align: center;">
-                    <div class="hgss-header">
-                      <label for="data.initiative.mod">Initiative Modifier</label>
+              <div class="d-flex align-items-end flex-column h-100">
+                <div class="hgss-box mt-auto w-100 mb-2 center-text">
+                  <div class="hgss-header">
+                    <label for="data.initiative.mod">Initiative Modifier</label>
+                  </div>
+                  <div class="hgss-body">
+                    <input
+                        type="text"
+                        name="data.initiative.mod"
+                        value="{{data.initiative.mod}}"
+                        data-dtype="Number"
+                      />
+                  </div>
+                </div>
+                <div class="hgss-box mt-auto w-100 mb-2">
+                  <div class="hgss-header skill skill-block">
+                    <div class="row no-gutters header w-100">
+                      <div class="col-sm-4 pt-2 pb-2">Skill</div>
+                      <div class="col mt-2 mb-2">Mod</div>
+                      <div class="col-sm-3 mt-2 mb-2">Rank</div>
+                      <div class="col-sm-2 mt-2 mb-2">Value</div>
+                      <div class="col mt-2 mb-2">Dice</div>
                     </div>
-                    <div class="hgss-body">
-                      <input
-                          type="text"
-                          name="data.initiative.mod"
-                          value="{{data.initiative.mod}}"
-                          data-dtype="Number"
-                        />
-                    </div>
+                  </div>
+                  <div class="hgss-body p-0">
+                    <div class="w-100 skills skill-block">
+                      {{#each data.skills as |skill key|}}
+                        <div class="row no-gutters {{key}} align-items-center">
+                          <div class="skill {{key}} col-sm-4 bgcolor key type--{{skill.type}} align-self-center">
+                            <label for="data.skills.{{key}}.mod" class="resource-label"
+                              >{{skill.label}}</label>
+                          </div>
+                          <div class="skill {{key}} col pl-1 pr-1 fs-9 center-text">
+                              <input
+                                type="text"
+                                name="data.skills.{{key}}.mod"
+                                value="{{skill.mod}}"
+                                data-dtype="Number"
+                              />
+                          </div>
+                          <div class="skill {{key}} col-sm-3 align-self-center bgcolor skill--{{skill.rank}} center-text">
+                            <label for="data.skills.{{key}}.value" class="resource-label"
+                              >{{skill.rank}}</label>
+                          </div>
+                          <div class="skill {{key}} col pl-1 fs-9 center-text">
+                            <input
+                                type="text"
+                                name="data.skills.{{key}}.value"
+                                value="{{skill.value}}"
+                                data-dtype="Number"
+                              />
+                          </div>
+                          <div class="skill {{key}} col-sm-2 align-self-center bgcolor fs-9 center-text">
+                            <label for="data.skills.{{key}}.value" class="resource-label"
+                              >{{skill.value}}d6{{#if skill.mod}}+{{skill.mod}}{{/if}}</label>
+                          </div>
+                        </div>
+                        {{/each}}
+                  </div>
                   </div>
                 </div>
               </div>

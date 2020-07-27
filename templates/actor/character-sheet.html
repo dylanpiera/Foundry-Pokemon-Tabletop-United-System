@@ -78,7 +78,7 @@
                           <label for="data.skills.{{key}}.mod" class="resource-label"
                             >{{skill.label}}</label>
                         </div>
-                        <div class="skill {{key}} col pl-1 pr-1 fs-9">
+                        <div class="skill {{key}} col pl-1 pr-1 fs-9 center-text">
                             <input
                               type="text"
                               name="data.skills.{{key}}.mod"
@@ -86,11 +86,11 @@
                               data-dtype="Number"
                             />
                         </div>
-                        <div class="skill {{key}} col-sm-3 align-self-center bgcolor skill--{{skill.rank}}" style="text-align: center;">
+                        <div class="skill {{key}} col-sm-3 align-self-center bgcolor skill--{{skill.rank}} center-text">
                           <label for="data.skills.{{key}}.value" class="resource-label"
                             >{{skill.rank}}</label>
                         </div>
-                        <div class="skill {{key}} col pl-1 fs-9" style="text-align: center;">
+                        <div class="skill {{key}} col pl-1 fs-9 center-text">
                           <input
                               type="text"
                               name="data.skills.{{key}}.value"
@@ -98,7 +98,7 @@
                               data-dtype="Number"
                             />
                         </div>
-                        <div class="skill {{key}} col-sm-2 align-self-center bgcolor fs-9 dice" style="text-align: center;">
+                        <div class="skill {{key}} col-sm-2 align-self-center bgcolor fs-9 center-text">
                           <label for="data.skills.{{key}}.value" class="resource-label"
                             >{{skill.value}}d6{{#if skill.mod}}+{{skill.mod}}{{/if}}</label>
                         </div>
