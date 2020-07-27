@@ -129,7 +129,7 @@ a.item {
 .panel {
     &.character {
         background: #F06058;
-        border-radius: 0 8% 8% 0;
+        border-radius: 0 7% 7% 0;
         justify-content: center;
         padding: 15px;
 
@@ -262,6 +262,57 @@ a.item {
     >[class*="col-"] {
         padding-right: 0;
         padding-left: 0;
+    }
+}
+
+.skill-block {
+    .header {
+        text-align: center;
+        font-weight: bold;
+    }
+
+    .row {
+        .skill.bgcolor {
+            padding: 12px 5px;
+        }
+
+        .type--body {
+            background-color: #e06666aa;
+        }
+        .type--mind {
+            background-color: #ffe599aa;
+        }
+        .type--spirit {
+            background-color: #93c47daa;
+        }
+
+        .skill--Pathetic {
+            background: #cfe2f3;   
+        }
+        .skill--Untrained {
+            background: #9fc5e8;   
+        }
+        .skill--Novice {
+            background: #6fa8dc;   
+        }
+        .skill--Adept {
+            background: #3d85c6;   
+        }
+        .skill--Expert {
+            background: #0b5394;   
+            color: #cfe2f3;
+        }
+        .skill--Master {
+            background: #073763;   
+            color: #cfe2f3;
+        }
+        .skill--Invalid {
+            background: #ff0F0Faa;
+        }
+
+        .dice {
+            word-break: keep-all;
+        }
     }
 }
 

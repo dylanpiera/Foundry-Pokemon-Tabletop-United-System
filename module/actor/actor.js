@@ -20,6 +20,18 @@ export class PTUActor extends Actor {
     if (actorData.type === 'pokemon') this._preparePokemonData(actorData);
   }
 
+  _getRank(skillRank) {
+    switch(skillRank) {
+      case 1: return "Pathetic";
+      case 2: return "Untrained";
+      case 3: return "Novice";
+      case 4: return "Adept";
+      case 5: return "Expert";
+      case 6: return "Master";
+      default: return "Invalid";
+    }
+  }
+
   /**
    * Prepare Character type specific data
    */
@@ -29,6 +41,9 @@ export class PTUActor extends Actor {
     // Make modifications to data here. For example:
     for (let [key, value] of Object.entries(data.stats)) {
         value["total"] = value["value"] + value["mod"] + value["levelUp"];      
+    }
+    for (let [key, skill] of Object.entries(data.skills)) {
+      skill["rank"] = this._getRank(skill["value"]);  
     }
     
     data.level.current = data.level.milestones + 1 > 50 ? 50 : data.level.milestones + 1; 
@@ -61,6 +76,9 @@ export class PTUActor extends Actor {
           value["total"] = Math.ceil(sub * value["stage"] * 0.1 + sub);
         }
       }
+    }
+    for (let [key, skill] of Object.entries(data.skills)) {
+      skill["rank"] = this._getRank(skill["value"]);  
     }
 
     let _calcLevel = function(exp, level, json) {

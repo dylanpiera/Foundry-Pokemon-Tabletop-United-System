@@ -6,7 +6,7 @@
   <div class="row justify-content-between" style="height: 96%;">
     <div class="col-sm-12 col-md-8" style="padding-left: unset;">
       <div class="panel character h-100">
-        <div class="sheet-body no-hd h-100">
+        <div class="sheet-body no-hd h-100 pr-2">
           <div class="tab details stats h-100" data-group="primary" data-tab="stats">
             <div class="d-flex align-items-end flex-column h-100">
               <div class="w-100 stats stat-block mb-2">
@@ -60,42 +60,51 @@
                     </div>
                     {{/each}}
               </div>
-              <div class="w-100 level-box mb-2">
-                <div class="hgss-box" style="text-align: center; word-break: keep-all;">
-                  <div class="hgss-header">
-                    <div class="d-flex w-100 mt-1 mb-1">
-                      <div class="col-sm-4">
-                        <label for="data.level.milestones">Milestones:</label>
-                        </div>
-                      <div class="col-sm-4">
-                        <label for="data.level.dexexp">Dexexp:</label>
-                        </div>
-                      <div class="col-sm-4">
-                        <label for="data.level.current">Level:</label>
-                        </div>
-                    </div>
-                  </div>
-                  <div class="hgss-body" >
-                    <div class="d-flex w-100 mt-1 mb-1">
-                      <div class="col-sm-4">
-                        <input type="text" name="data.level.milestones" value="{{data.level.milestones}}" data-dtype="Number"/>
-                      </div>
-                      <div class="col-sm-4">
-                        <input type="text" name="data.level.dexexp" value="{{data.level.dexexp}}" data-dtype="Number"/>
-                      </div>
-                      <div class="col-sm-4">
-                        <input type="text" name="data.level.current" value="{{data.level.current}}" data-dtype="Number" disabled/>
-                      </div>
-                    </div>
+              <div class="hgss-box mt-auto w-100 mb-2">
+                <div class="hgss-header skill skill-block">
+                  <div class="row no-gutters header w-100">
+                    <div class="col-sm-4 pt-2 pb-2">Skill</div>
+                    <div class="col mt-2 mb-2">Mod</div>
+                    <div class="col-sm-3 mt-2 mb-2">Rank</div>
+                    <div class="col-sm-2 mt-2 mb-2">Value</div>
+                    <div class="col mt-2 mb-2">Dice</div>
                   </div>
                 </div>
-              </div>
-              <div class="hgss-box mt-auto w-100">
-                <div class="hgss-header">
-                  Skills
+                <div class="hgss-body p-0">
+                  <div class="w-100 skills skill-block">
+                    {{#each data.skills as |skill key|}}
+                      <div class="row no-gutters {{key}} align-items-center">
+                        <div class="skill {{key}} col-sm-4 bgcolor key type--{{skill.type}} align-self-center">
+                          <label for="data.skills.{{key}}.mod" class="resource-label"
+                            >{{skill.label}}</label>
+                        </div>
+                        <div class="skill {{key}} col pl-1 pr-1 fs-9">
+                            <input
+                              type="text"
+                              name="data.skills.{{key}}.mod"
+                              value="{{skill.mod}}"
+                              data-dtype="Number"
+                            />
+                        </div>
+                        <div class="skill {{key}} col-sm-3 align-self-center bgcolor skill--{{skill.rank}}" style="text-align: center;">
+                          <label for="data.skills.{{key}}.value" class="resource-label"
+                            >{{skill.rank}}</label>
+                        </div>
+                        <div class="skill {{key}} col pl-1 fs-9" style="text-align: center;">
+                          <input
+                              type="text"
+                              name="data.skills.{{key}}.value"
+                              value="{{skill.value}}"
+                              data-dtype="Number"
+                            />
+                        </div>
+                        <div class="skill {{key}} col-sm-2 align-self-center bgcolor fs-9 dice" style="text-align: center;">
+                          <label for="data.skills.{{key}}.value" class="resource-label"
+                            >{{skill.value}}d6{{#if skill.mod}}+{{skill.mod}}{{/if}}</label>
+                        </div>
+                      </div>
+                      {{/each}}
                 </div>
-                <div class="hgss-body">
-                  <i>Skills Table</i>
                 </div>
               </div>
             </div>
@@ -149,9 +158,9 @@
         </div>
       </div>
     </div>
-    <div class="col-sm-12 col-md-4" style="">
+    <div class="col-sm-12 col-md-4">
       <div class="d-flex align-items-center flex-column h-100 pt-4">
-        <div class="hgss-box mb-auto">
+        <div class="hgss-box mb-1">
           <div class="hgss-header" style="align-items: unset;">
             <label for="name" class="name-label"></label>
             <input class="ml-2"
@@ -175,7 +184,7 @@
             </div>
           </div>
         </div>
-        <div class="avatar m-auto">
+        <div class="avatar mb-1 mt-1">
           <img
             class="profile-img"
             src="{{actor.img}}"
@@ -183,7 +192,7 @@
             title="{{actor.name}}"
           />
         </div>
-        <div class="hgss-box mt-auto" style="text-align: center;">
+        <div class="hgss-box mt-1 mb-1" style="text-align: center;">
           <div class="hgss-header">
             <h3 class="m-auto">Action Points</h3>
           </div>
@@ -192,6 +201,48 @@
               <input type="text" name="data.ap.value" value="{{data.ap.value}}" data-dtype="Number"/>
               <span> / </span>
               <input type="text" name="data.ap.total" value="{{data.ap.total}}" data-dtype="Number" disabled/>
+            </div>
+          </div>
+        </div>
+        <div class="w-100 level-box mt-1 mb-1">
+          <div class="hgss-box" style="text-align: center; word-break: keep-all;">
+            <div class="hgss-header">
+              <div class="d-flex w-100 mt-1 mb-1" style="font-size: 11px;">
+                <div class="col-sm-6">
+                  <label for="data.level.milestones">Milestones</label>
+                  </div>
+                <div class="col-sm-6">
+                  <label for="data.level.dexexp">Dexexp</label>
+                  </div>
+              </div>
+            </div>
+            <div class="hgss-body" >
+              <div class="d-flex w-100 mt-1 mb-1">
+                <div class="col-sm-6">
+                  <input type="text" name="data.level.milestones" value="{{data.level.milestones}}" data-dtype="Number"/>
+                </div>
+                <div class="col-sm-6">
+                  <input type="text" name="data.level.dexexp" value="{{data.level.dexexp}}" data-dtype="Number"/>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="w-100 level-box mt-1">
+          <div class="hgss-box" style="text-align: center; word-break: keep-all;">
+            <div class="hgss-header">
+              <div class="d-flex w-100 mt-1 mb-1">
+                <div class="col">
+                  <label for="data.level.current">Level:</label>
+                  </div>
+              </div>
+            </div>
+            <div class="hgss-body" >
+              <div class="d-flex w-100 mt-1 mb-1">
+                <div class="col">
+                  <input type="text" name="data.level.current" value="{{data.level.current}}" data-dtype="Number" disabled/>
+                </div>
+              </div>
             </div>
           </div>
         </div>

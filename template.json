@@ -7,87 +7,104 @@
           "acrobatics": {
             "value": 2,
             "label": "Acrobatics",
-            "modifier": []
+            "modifier": [],
+            "type": "body"
           },
           "athletics": {
             "value": 2,
             "label": "Athletics",
-            "modifier": []
+            "modifier": [],
+            "type": "body"
           },
           "charm": {
             "value": 2,
             "label": "Charm",
-            "modifier": []
+            "modifier": [],
+            "type": "spirit"
           },
           "combat": {
             "value": 2,
             "label": "Combat",
-            "modifier": []
+            "modifier": [],
+            "type": "body"
           },
           "command": {
             "value": 2,
             "label": "Command",
-            "modifier": []
+            "modifier": [],
+            "type": "spirit"
           },
           "generalEd": {
             "value": 2,
-            "label": "General Education",
-            "modifier": []
+            "label": "General Ed",
+            "modifier": [],
+            "type": "mind"
           },
           "medicineEd": {
             "value": 2,
-            "label": "Medicine Education",
-            "modifier": []
+            "label": "Medicine Ed",
+            "modifier": [],
+            "type": "mind"
           },
           "occultEd": {
             "value": 2,
-            "label": "Occult Education",
-            "modifier": []
+            "label": "Occult Ed",
+            "modifier": [],
+            "type": "mind"
           },
           "pokemonEd": {
             "value": 2,
-            "label": "Pokémon Education",
-            "modifier": []
+            "label": "Pokémon Ed",
+            "modifier": [],
+            "type": "mind"
           },
           "techEd": {
             "value": 2,
-            "label": "Technology Education",
-            "modifier": []
+            "label": "Technology Ed",
+            "modifier": [],
+            "type": "mind"
           },
           "focus": {
             "value": 2,
             "label": "Focus",
-            "modifier": []
+            "modifier": [],
+            "type": "spirit"
           }, 
           "guile": {
             "value": 2,
             "label": "Guile",
-            "modifier": []
+            "modifier": [],
+            "type": "mind"
           },
           "intimidation": {
             "value": 2,
             "label": "Intimidation",
-            "modifier": []
+            "modifier": [],
+            "type": "body"
           },
           "intuition": {
             "value": 2,
             "label": "Intuition",
-            "modifier": []
+            "modifier": [],
+            "type": "spirit"
           },
           "perception": {
             "value": 2,
             "label": "Perception",
-            "modifier": []
+            "modifier": [],
+            "type": "mind"
           },
           "stealth": {
             "value": 2,
             "label": "Stealth",
-            "modifier": []
+            "modifier": [],
+            "type": "body"
           },
           "survival": {
             "value": 2,
             "label": "Survival",
-            "modifier": []
+            "modifier": [],
+            "type": "body"
           }
         }
       },
