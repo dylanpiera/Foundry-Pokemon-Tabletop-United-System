@@ -11,7 +11,7 @@ export class PTUPokemonSheet extends ActorSheet {
       template: "systems/ptu/templates/actor/pokemon-sheet.html",
       width: 675,
       height: 675,
-      tabs: [{ navSelector: ".sheet-tabs", contentSelector: ".sheet-body", initial: "skills" }]
+      tabs: [{ navSelector: ".sheet-tabs", contentSelector: ".sheet-body", initial: "stats" }]
     });
   }
 

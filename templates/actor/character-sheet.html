@@ -7,6 +7,7 @@
     <div class="col-sm-12 col-md-8" style="padding-left: unset;">
       <div class="panel character h-100">
         <div class="sheet-body no-hd h-100 pr-2">
+          <!-- STATS -->
           <div class="tab details stats h-100" data-group="primary" data-tab="stats">
             <div class="d-flex align-items-end flex-column h-100">
               <div class="w-100 stats stat-block mb-2">
@@ -132,6 +133,8 @@
               </div>
             </div>
           </div>
+
+          <!-- Inventory -->
           <div class="tab details inventory h-100" data-group="primary" data-tab="inventory">
             <div class="hgss-box h-100">
               <div class="hgss-header">
@@ -152,6 +155,8 @@
               </div>
             </div>
           </div>
+
+          <!-- Feats & Edges -->
           <div class="tab details feats" data-group="primary" data-tab="feats">
             <div class="row">
               <div class="col">
@@ -164,6 +169,8 @@
               </div>
             </div>
           </div>
+
+          <!-- Extra -->
           <div class="tab details extra" data-group="primary" data-tab="extra">
             <div class="row">
               <div class="col">
@@ -171,8 +178,62 @@
               </div>
             </div>
           </div>
+
+          <!-- Biography -->
           <div class="tab details biography h-100" data-group="primary" data-tab="biography">
             <div class="d-flex align-items-end flex-column h-100">
+              <div  class="hgss-box mb-2"
+                    style="text-align: center; word-break: keep-all;">
+                  <div class="hgss-header">
+                    <div class="d-flex w-100 mt-1 mb-1">
+                      <div class="col-sm-3">
+                        <label for="data.age">Age:</label>
+                      </div>
+                      <div class="col-sm-3">
+                        <label for="data.sex">Sex:</label>
+                      </div>
+                      <div class="col-sm-3">
+                        <label for="data.height">Height:</label>
+                      </div>
+                      <div class="col-sm-3">
+                        <label for="data.weight">Weight:</label>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="hgss-body">
+                    <div class="d-flex w-100 mt-1 mb-1">
+                      <div class="col-sm-3">
+                        <input
+                          name="data.age"
+                          type="text"
+                          value="{{data.age}}"
+                          data-dtype="Number"
+                        />
+                      </div>
+                      <div class="col-sm-3">
+                        <input
+                          type="text"
+                          name="data.sex"
+                          value="{{data.sex}}"
+                        />
+                      </div>
+                      <div class="col-sm-3">
+                        <input
+                          type="text"
+                          name="data.height"
+                          value="{{data.height}}"
+                        />
+                      </div>
+                      <div class="col-sm-3">
+                        <input
+                          type="text"
+                          name="data.weight"
+                          value="{{data.weight}}"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
               <div class="hgss-box h-25 w-100 mb-2 red">
                 <div class="hgss-header">
                   <h3>Physical Description</h3>
