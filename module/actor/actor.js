@@ -51,14 +51,15 @@ export class PTUActor extends Actor {
     
     data.level.current = data.level.milestones + 1 > 50 ? 50 : data.level.milestones + 1; 
 
-    data.health.max = 10 + (data.level.current * 2) + (data.stats.hp.total * 3);
+    data.health.total = 10 + (data.level.current * 2) + (data.stats.hp.total * 3);
+    data.health.max = data.health.injuries > 0 ? Math.trunc(data.health.total*(1-((data.modifiers.hardened ? Math.min(data.health.injuries, 5) : data.health.injuries)/10))) : data.health.total;
 
     data.health.percent = Math.round((data.health.value / data.health.max) * 100);
 
     data.ap.total = 5 + Math.floor(data.level.current / 5);
 
-    data.initiative.value = data.stats.spd.total + data.initiative.mod;
-    data.levelUpPoints += data.level.current + 9;
+    data.initiative = {value: data.stats.spd.total + data.modifiers.initiative};
+    data.levelUpPoints += data.level.current + data.modifiers.statPoints + 9;
   }
 
   /**
@@ -115,13 +116,14 @@ export class PTUActor extends Actor {
     
     data.level.current = _calcLevel(data.level.exp, 50, game.ptu.levelProgression);
 
-    data.health.max = 10 + data.level.current + (data.stats.hp.total * 3);
+    data.health.total = 10 + data.level.current + (data.stats.hp.total * 3);
+    data.health.max = data.health.injuries > 0 ? Math.trunc(data.health.total*(1-((data.modifiers.hardened ? Math.min(data.health.injuries, 5) : data.health.injuries)/10))) : data.health.total;
     if(data.health.value === null) data.health.value = data.health.max;
 
     data.health.percent = Math.round((data.health.value / data.health.max) * 100);
 
-    data.initiative.value = data.stats.spd.total + data.initiative.mod;
+    data.initiative = {value: data.stats.spd.total + data.modifiers.initiative};
 
-    data.levelUpPoints += data.level.current + 10;
+    data.levelUpPoints += data.level.current + data.modifiers.statPoints + 10;
   }
 }

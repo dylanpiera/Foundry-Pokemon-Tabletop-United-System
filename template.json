@@ -2,6 +2,13 @@
   "Actor": {
     "types": ["character", "pokemon"],
     "templates": {
+      "modifiers": {
+        "modifiers": {
+          "statPoints": 0,
+          "initiative": 0,
+          "hardened": false
+        }
+      },
       "skills": {
         "skills": {
           "acrobatics": {
@@ -161,7 +168,7 @@
       }
     },
     "character": {
-      "templates": ["stats", "skills"],
+      "templates": ["stats", "skills", "modifiers"],
 
       "name": "",
       "age": 10,
@@ -176,7 +183,8 @@
         "dexexp": 0
       },
       "health": {
-        "value": 0
+        "value": 0,
+        "injuries": 0
       },
       "ap": {
         "value": 5
@@ -189,14 +197,10 @@
         "goals": "",
         "dreams": "",
         "obsessions": ""
-      },
-
-      "initiative": {
-        "mod": 0
       }
     },
     "pokemon": {
-      "templates": ["stats", "skills"],
+      "templates": ["stats", "skills", "modifiers"],
 
       "species": "",
       "nickname": "",
@@ -209,16 +213,13 @@
         "exp": 40
       },
       "health": {
-        "value": null
+        "value": null,
+        "injuries": 0
       },
 
       "type": {
         "primary": "",
         "secondary": ""
-      },
-
-      "initiative": {
-        "mod": 0
       }
     }
   },

@@ -171,69 +171,114 @@
           </div>
 
           <!-- Extra -->
-          <div class="tab details extra" data-group="primary" data-tab="extra">
-            <div class="row">
-              <div class="col">
-                <p>Extra</p>
-              </div>
-            </div>
+          <div class="tab details extra h-100" data-group="primary" data-tab="extra">
+            <!-- Injuries -->
+            <div class="hgss-box mb-2 w-100"
+            style="text-align: center; word-break: keep-all;">
+         <div class="hgss-header">
+           <div class="d-flex w-100 mt-1 mb-1 align-items-center">
+             <div class="col-sm-6">
+               <label for="data.health.injuries">Injuries</label>
+             </div>
+             <div class="col-sm-6">
+               <label for="data.health.total">Total Health <small>Ignoring Injuries</small></label>
+             </div>
+           </div>
+         </div>
+         <div class="hgss-body" style="display: block;">
+           <div class="d-flex w-100 mt-1 mb-1">
+             <div class="col-sm-6">
+               <input
+                 name="data.health.injuries"
+                 type="text"
+                 value="{{data.health.injuries}}"
+                 data-dtype="Number"
+               />
+             </div>
+             <div class="col-sm-6">
+               <input
+                 type="text"
+                 name="data.health.total"
+                 value="{{data.health.total}}"
+                 data-dtype="Number"
+                 disabled
+               />
+             </div>
+           </div>
+           {{#if (or (bigger data.health.injuries 0) (is true data.modifiers.hardened))}}
+             <div class="d-flex w-100 mt-1 mb-1">
+               <ul style="position: relative; left: 15px; width: 96%; line-height: 15px; text-align: start;">
+               {{#if data.modifiers.hardened}}<li>Injuries beyond the 5th do not lower Maximum Hit Points</li>{{/if}}
+               {{#if (and (is true data.modifiers.hardened) (biggerOrEqual data.health.injuries 1))}}<li>+1 to Critical Hit and Effect Range</li>{{/if}}
+               {{#if (and (is true data.modifiers.hardened) (biggerOrEqual data.health.injuries 3))}}<li>+1 Evasion and +5 Initiative</li>{{/if}}
+               {{#if (biggerOrEqual data.health.injuries 5)}}<li>Unable to regain Hit Points from Resting</li>{{/if}}
+               {{#if (and (is true data.modifiers.hardened) (biggerOrEqual data.health.injuries 5))}}<li>+5 Damage Reduction</li>{{/if}}
+               {{#if (and (not true data.modifiers.hardened) (biggerOrEqual data.health.injuries 5))}}<li>Take {{data.health.injuries}} Damage whenever taking a Standard Action during Combat</li>{{/if}}
+               {{#if (and (is true data.modifiers.hardened) (biggerOrEqual data.health.injuries 7))}}<li>Immune to Loss of Hit Points (but not damage) from all effects</li>{{/if}}
+               {{#if (and (is true data.modifiers.hardened) (biggerOrEqual data.health.injuries 9))}}<li>Resist all damage one step further</li>{{/if}}
+               {{#if (and (not true data.modifiers.hardened) (biggerOrEqual data.health.injuries 10))}}<li><b>Death</b></li>{{/if}}
+               </ol>
+             </div>
+           {{/if}}
+         </div>
+       </div>
           </div>
 
           <!-- Biography -->
           <div class="tab details biography h-100" data-group="primary" data-tab="biography">
             <div class="d-flex align-items-end flex-column h-100">
               <div  class="hgss-box mb-2"
-                    style="text-align: center; word-break: keep-all;">
-                  <div class="hgss-header">
-                    <div class="d-flex w-100 mt-1 mb-1">
-                      <div class="col-sm-3">
-                        <label for="data.age">Age:</label>
-                      </div>
-                      <div class="col-sm-3">
-                        <label for="data.sex">Sex:</label>
-                      </div>
-                      <div class="col-sm-3">
-                        <label for="data.height">Height:</label>
-                      </div>
-                      <div class="col-sm-3">
-                        <label for="data.weight">Weight:</label>
-                      </div>
+                  style="text-align: center; word-break: keep-all;">
+                <div class="hgss-header">
+                  <div class="d-flex w-100 mt-1 mb-1">
+                    <div class="col-sm-3">
+                      <label for="data.age">Age:</label>
                     </div>
-                  </div>
-                  <div class="hgss-body">
-                    <div class="d-flex w-100 mt-1 mb-1">
-                      <div class="col-sm-3">
-                        <input
-                          name="data.age"
-                          type="text"
-                          value="{{data.age}}"
-                          data-dtype="Number"
-                        />
-                      </div>
-                      <div class="col-sm-3">
-                        <input
-                          type="text"
-                          name="data.sex"
-                          value="{{data.sex}}"
-                        />
-                      </div>
-                      <div class="col-sm-3">
-                        <input
-                          type="text"
-                          name="data.height"
-                          value="{{data.height}}"
-                        />
-                      </div>
-                      <div class="col-sm-3">
-                        <input
-                          type="text"
-                          name="data.weight"
-                          value="{{data.weight}}"
-                        />
-                      </div>
+                    <div class="col-sm-3">
+                      <label for="data.sex">Sex:</label>
+                    </div>
+                    <div class="col-sm-3">
+                      <label for="data.height">Height:</label>
+                    </div>
+                    <div class="col-sm-3">
+                      <label for="data.weight">Weight:</label>
                     </div>
                   </div>
                 </div>
+                <div class="hgss-body">
+                  <div class="d-flex w-100 mt-1 mb-1">
+                    <div class="col-sm-3">
+                      <input
+                        name="data.age"
+                        type="text"
+                        value="{{data.age}}"
+                        data-dtype="Number"
+                      />
+                    </div>
+                    <div class="col-sm-3">
+                      <input
+                        type="text"
+                        name="data.sex"
+                        value="{{data.sex}}"
+                      />
+                    </div>
+                    <div class="col-sm-3">
+                      <input
+                        type="text"
+                        name="data.height"
+                        value="{{data.height}}"
+                      />
+                    </div>
+                    <div class="col-sm-3">
+                      <input
+                        type="text"
+                        name="data.weight"
+                        value="{{data.weight}}"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
               <div class="hgss-box h-25 w-100 mb-2 red">
                 <div class="hgss-header">
                   <h3>Physical Description</h3>

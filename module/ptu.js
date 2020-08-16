@@ -53,6 +53,16 @@ Hooks.once('init', async function() {
   Handlebars.registerHelper('isdefined', function (value) {
     return value !== undefined;
   });
+  Handlebars.registerHelper('isdefined', function (value) {
+    return value !== undefined;
+  });
+
+  Handlebars.registerHelper("is", function (a, b) {return a == b});
+  Handlebars.registerHelper("bigger", function (a, b) {return a > b});
+  Handlebars.registerHelper("biggerOrEqual", function (a, b) {return a >= b});
+  Handlebars.registerHelper("and", function (a, b) {return a && b});
+  Handlebars.registerHelper("or", function (a, b) {return a || b});
+  Handlebars.registerHelper("not", function (a, b) {return a != b});
 });
 
 Hooks.once("ready", async function() {
