@@ -59,6 +59,23 @@
                       </div>
                     </div>
                     {{/each}}
+                    {{#if data.levelUpPoints}}
+                    <div class="row no-gutters levelUpPoints">
+                      <div class="col-sm-8">
+                        <label for="data.levelUpPoints" class="resource-label">Remaining Level-Up Points:</label
+                        >
+                      </div>
+                      <div class="col">
+                        <input
+                          type="text"
+                          name="data.levelUpPoints"
+                          value="{{data.levelUpPoints}}"
+                          data-dtype="Number"
+                          disabled
+                        />
+                      </div>
+                    </div>
+                    {{/if}}
               </div>
               <div class="hgss-box mt-auto w-100 mb-2">
                 <div class="hgss-header skill skill-block">
