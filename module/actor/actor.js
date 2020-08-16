@@ -39,9 +39,12 @@ export class PTUActor extends Actor {
     const data = actorData.data;
 
     // Make modifications to data here. For example:
+    data.levelUpPoints = 0;
     for (let [key, value] of Object.entries(data.stats)) {
         value["total"] = value["value"] + value["mod"] + value["levelUp"];      
+        data.levelUpPoints -= value["levelUp"];
     }
+
     for (let [key, skill] of Object.entries(data.skills)) {
       skill["rank"] = this._getRank(skill["value"]);  
     }
@@ -55,6 +58,7 @@ export class PTUActor extends Actor {
     data.ap.total = 5 + Math.floor(data.level.current / 5);
 
     data.initiative.value = data.stats.spd.total + data.initiative.mod;
+    data.levelUpPoints += data.level.current + 9;
   }
 
   /**
@@ -64,8 +68,10 @@ export class PTUActor extends Actor {
     const data = actorData.data;
 
     // Make modifications to data here. For example:
+    data.levelUpPoints = 0;
     for (let [key, value] of Object.entries(data.stats)) {
       let sub = value["value"] + value["mod"] + value["levelUp"];
+      data.levelUpPoints -= value["levelUp"];
       if(value["stage"] > 0 ) {
         value["total"] = Math.floor(sub * value["stage"] * 0.2 + sub);
       } else {
@@ -115,5 +121,7 @@ export class PTUActor extends Actor {
     data.health.percent = Math.round((data.health.value / data.health.max) * 100);
 
     data.initiative.value = data.stats.spd.total + data.initiative.mod;
+
+    data.levelUpPoints += data.level.current + 10;
   }
 }

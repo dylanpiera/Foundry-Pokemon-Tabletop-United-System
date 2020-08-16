@@ -98,8 +98,14 @@
                               data-dtype="Number"
                             />
                         </div>
-                        <div class="skill {{key}} col-sm-2 align-self-center bgcolor fs-9 center-text">
-                          <label for="data.skills.{{key}}.value" class="resource-label"
+                        <div class="skill {{key}} col-sm-2 align-self-center bgcolor fs-9 center-text rollable"
+                          data-roll="{{skill.value}}d6{{#if skill.mod}}+{{skill.mod}}{{/if}}"
+                            data-label="{{skill.label}}"
+                        >
+                          <i class="fas fa-dice-d20"></i>
+                          <label 
+                            for="data.skills.{{key}}.value" 
+                            class="resource-label" 
                             >{{skill.value}}d6{{#if skill.mod}}+{{skill.mod}}{{/if}}</label>
                         </div>
                       </div>
@@ -109,23 +115,23 @@
               </div>
             </div>
           </div>
-          <div class="tab details inventory" data-group="primary" data-tab="inventory">
-            <div class="row">
-              <div class="col">
-                <div class="hgss-box">
-                  <div class="hgss-header">
-                    <h3>Inventory</h3>
-                  </div>
-                  <div class="hgss-body d-flex justify-content-end">
+          <div class="tab details inventory h-100" data-group="primary" data-tab="inventory">
+            <div class="hgss-box h-100">
+              <div class="hgss-header">
+                <h3>Inventory</h3>
+              </div>
+              <div class="hgss-body h-100" style="display:block;">
+                <div class="row m-1 w-100 mb-3">
+                  <div class="col align-self-center">
                     <label for="data.money" class="mr-1">Money:</label>
-                    <input type="text" name="data.money" value="{{data.money}}" data-dtype="Number"/>
+                  </div>
+                  <div class="col-sm-9">
+                    <input type="text" name="data.money" value="{{data.money}}" data-dtype="Number">
                   </div>
                 </div>
-              </div>
-            </div>
-            <div class="row h-100">
-              <div class="col">
-                <p>Inventory</p>
+                <div class="row m-1 w-100 justify-content-center">
+                  --items--
+                </div>
               </div>
             </div>
           </div>
@@ -148,10 +154,55 @@
               </div>
             </div>
           </div>
-          <div class="tab details biography" data-group="primary" data-tab="biography">
-            <div class="row">
-              <div class="col">
-                <p>Biography</p>
+          <div class="tab details biography h-100" data-group="primary" data-tab="biography">
+            <div class="d-flex align-items-end flex-column h-100">
+              <div class="hgss-box h-25 w-100 mb-2 red">
+                <div class="hgss-header">
+                  <h3>Physical Description</h3>
+                </div>
+                <div class="hgss-body h-90">
+                  {{editor content=data.biography.physicalDescription target="data.biography.physicalDescription" button=true owner=owner editable=editable}}
+                </div>
+              </div>
+              <div class="hgss-box h-35 w-100 mb-2 yellow">
+                <div class="hgss-header">
+                  <h3>Background Description</h3>
+                </div>
+                <div class="hgss-body h-90">
+                  {{editor content=data.biography.background target="data.biography.background" button=true owner=owner editable=editable}}
+                </div>
+              </div>
+              <div class="hgss-box h-35 w-100 mb-2 purple">
+                <div class="hgss-header">
+                  <h3>Personality</h3>
+                </div>
+                <div class="hgss-body h-90">
+                  {{editor content=data.biography.personality target="data.biography.personality" button=true owner=owner editable=editable}}
+                </div>
+              </div>
+              <div class="hgss-box h-35 w-100 mb-2 green">
+                <div class="hgss-header">
+                  <h3>Goals</h3>
+                </div>
+                <div class="hgss-body h-90">
+                  {{editor content=data.biography.goals target="data.biography.goals" button=true owner=owner editable=editable}}
+                </div>
+              </div>
+              <div class="hgss-box h-35 w-100 mb-2 green">
+                <div class="hgss-header">
+                  <h3>Dreams</h3>
+                </div>
+                <div class="hgss-body h-90">
+                  {{editor content=data.biography.dreams target="data.biography.dreams" button=true owner=owner editable=editable}}
+                </div>
+              </div>
+              <div class="hgss-box h-35 w-100 mb-2 green">
+                <div class="hgss-header">
+                  <h3>Obsessions</h3>
+                </div>
+                <div class="hgss-body h-90">
+                  {{editor content=data.biography.obsessions target="data.biography.obsessions" button=true owner=owner editable=editable}}
+                </div>
               </div>
             </div>
           </div>

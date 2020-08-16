@@ -158,6 +158,10 @@ button, .button {
   cursor: pointer;
 }
 
+button.tox-tbtn:hover::before {
+  content: unset;
+}
+
 button:hover::before, .button:hover::before {
   content: "";
   position: absolute;
@@ -1586,3 +1590,4 @@ h1, h2, h3, h4, h5, h6 {
   font-weight: bold;
   padding-bottom: 10px;
 }
+

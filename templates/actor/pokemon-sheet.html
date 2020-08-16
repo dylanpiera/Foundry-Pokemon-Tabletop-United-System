@@ -71,6 +71,23 @@
                   </div>
                 </div>
                 {{/each}}
+                {{#if data.levelUpPoints}}
+                <div class="row no-gutters levelUpPoints">
+                  <div class="col-sm-8">
+                    <label for="data.levelUpPoints" class="resource-label">Remaining Level-Up Points:</label
+                    >
+                  </div>
+                  <div class="col">
+                    <input
+                      type="text"
+                      name="data.levelUpPoints"
+                      value="{{data.levelUpPoints}}"
+                      data-dtype="Number"
+                      disabled
+                    />
+                  </div>
+                </div>
+                {{/if}}
               </div>
               <div class="w-100 level-box mb-2">
                 <div
@@ -210,7 +227,11 @@
                                 data-dtype="Number"
                               />
                           </div>
-                          <div class="skill {{key}} col-sm-2 align-self-center bgcolor fs-9 center-text">
+                          <div class="skill {{key}} col-sm-2 align-self-center bgcolor fs-9 center-text rollable"
+                            data-roll="{{skill.value}}d6{{#if skill.mod}}+{{skill.mod}}{{/if}}"
+                            data-label="{{skill.label}}"
+                          >
+                          <i class="fas fa-dice-d20"></i>
                             <label for="data.skills.{{key}}.value" class="resource-label"
                               >{{skill.value}}d6{{#if skill.mod}}+{{skill.mod}}{{/if}}</label>
                           </div>
