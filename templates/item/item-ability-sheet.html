@@ -1,14 +1,9 @@
 <form class="{{cssClass}}" autocomplete="off">
     <header class="sheet-header mb-2">
         <div class="itemBox">
-            <div class="content move-grid">
-                Frequency: <span class="readable pokemon p11">{{data.frequency}}</span>
-                DB: <span class="readable pokemon p11">{{data.damageBase}}</span>
-                Category: <span class="readable pokemon p11">{{data.category}}</span> 
-                Type: <span class="readable pokemon p11">{{data.type}}</span> 
-                AC: <span class="readable pokemon p11">{{data.ac}}</span>
-                Range: <span class="readable pokemon p11">{{data.range}}</span>
-                <span>Effect: <span class="readable p11 pokemon">{{{data.effect}}}</span></span>
+            <div class="content">
+                Frequency: <span class="readable pokemon p11">{{data.frequency}}</span><br>
+                Effect: <span class="readable p11 pokemon">{{{data.effect}}}</span>
             </div>
         </div>
     </header>
@@ -45,53 +40,14 @@
                     </div>
 
                     <div class="hgss-header vertical">
-                        <label for="data.type">Type:</label>
+                        <label for="data.tier">Tier:</label>
                     </div>
                     <div class="hgss-body">
                         <input
                             class="ml-2"
-                            name="data.type"
+                            name="data.tier"
                             type="text"
-                            value="{{data.type}}"
-                            placeholder=""
-                        />
-                    </div>
-
-                    <div class="hgss-header vertical">
-                        <label for="data.category">Category:</label>
-                    </div>
-                    <div class="hgss-body">
-                        <input
-                            class="ml-2"
-                            name="data.category"
-                            type="text"
-                            value="{{data.category}}"
-                            placeholder=""
-                        />
-                    </div>
-
-                    <div class="hgss-header vertical">
-                        <label for="data.ac">AC:</label>
-                    </div>
-                    <div class="hgss-body">
-                        <input
-                            class="ml-2"
-                            name="data.ac"
-                            type="text"
-                            value="{{data.ac}}"
-                            placeholder=""
-                        />
-                    </div>
-
-                    <div class="hgss-header vertical">
-                        <label for="data.range">Range:</label>
-                    </div>
-                    <div class="hgss-body">
-                        <input
-                            class="ml-2"
-                            name="data.range"
-                            type="text"
-                            value="{{data.range}}"
+                            value="{{data.tier}}"
                             placeholder=""
                         />
                     </div>
@@ -106,18 +62,6 @@
                             name="data.frequency"
                             type="text"
                             value="{{data.frequency}}"
-                            placeholder=""
-                        />
-                    </div>
-                    <div class="hgss-header mt-1 mb-1" style="padding: 7px 5px;">
-                        <label for="data.damageBase">Damage Base:</label>
-                    </div>
-                    <div class="hgss-body">
-                        <input
-                            class="ml-2"
-                            name="data.damageBase"
-                            type="text"
-                            value="{{data.damageBase}}"
                             placeholder=""
                         />
                     </div>

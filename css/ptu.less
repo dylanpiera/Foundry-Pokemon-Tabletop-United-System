@@ -696,6 +696,15 @@ input[name="data.money"] {
     font-variant: normal;
     font-size: 13px;
 
+    &.p8 {
+        font-size: 8px;
+    }
+    &.p9 {
+        font-size: 9px;
+    }
+    &.p10 {
+        font-size: 10px;
+    }
     &.p11 {
         font-size: 11px;
     }
@@ -839,4 +848,17 @@ input[name="data.money"] {
 .actor .inventory-list .item-controls a.item-create:hover {
     background: #788898cc;
     text-shadow: unset;
+}
+
+.content.move-grid {
+    display: grid;
+    width: 100%;
+    grid-template-columns: repeat(2, 20% 30%);
+    grid-row-gap: 4px;
+    word-break: break-word;
+
+    span:nth-child(7) {
+        grid-column: ~"1 / 5";
+        grid-row: ~"5 / 5";
+    }
 }

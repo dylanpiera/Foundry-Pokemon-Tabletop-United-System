@@ -41,7 +41,7 @@ export class PTUPokemonSheet extends ActorSheet {
     const actorData = sheetData.actor;
 
     // Initialize containers.
-    const gear = [];
+    const abilities = [];
     const moves = [];
 
     // Iterate through items, allocating to containers
@@ -49,18 +49,15 @@ export class PTUPokemonSheet extends ActorSheet {
     for (let i of sheetData.items) {
       let item = i.data;
       i.img = i.img || DEFAULT_TOKEN;
-      // Append to gear.
-      if (i.type === 'item') {
-        gear.push(i);
-      }
-      // Append to moves.
-      else if (i.type === 'move') {
-        moves.push(i);
+
+      switch(i.type) {
+        case 'ability': abilities.push(i); break;
+        case 'move': moves.push(i); break;
       }
     }
 
     // Assign and return
-    actorData.gear = gear;
+    actorData.abilities = abilities;
     actorData.moves = moves;
   }
 

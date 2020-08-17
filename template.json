@@ -247,20 +247,17 @@
     "ability": {
       "templates": ["base"],
       "frequency": "",
-      "action": "",
-      "trigger": "",
-      "target": ""
+      "tier": ""
     },
     "move": {
       "templates": ["base"],
       "type": "",
+      "category": "",
+      "damageBase": "",
       "frequency": "",
       "ac": "",
-      "damageBase": "",
-      "class": "",
       "range": "",
-      "contestType": "",
-      "contestEffect": ""
+      "contestType": ""
     },
     "item": {
       "templates": ["base"],
