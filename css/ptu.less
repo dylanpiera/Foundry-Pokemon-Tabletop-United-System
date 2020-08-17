@@ -665,6 +665,12 @@ input[name="data.money"] {
     background-size: auto 100%;
     position: relative;
 
+    img.content {
+        position:relative;
+        left:60px;
+        top:23px;
+    }
+
     .content {
         position: absolute;
         left: 64px;
@@ -676,6 +682,12 @@ input[name="data.money"] {
         padding-left: 1px;
         padding-right: 5px;
         line-height: 13px;
+
+        &.with-image {
+            max-width: 530px;
+            left: 180px;
+            padding-right: 7px;
+        }
     }
 }
 
@@ -756,6 +768,12 @@ input[name="data.money"] {
                 padding: 0;
                 font-weight: bold;
             }
+        }
+
+        .item-amount {
+            flex: 0 0 70px;
+            align-self: center;
+            margin-right: 5px;
         }
 
         .item-controls {

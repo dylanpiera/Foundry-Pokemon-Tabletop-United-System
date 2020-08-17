@@ -149,8 +149,38 @@
                     <input type="text" name="data.money" value="{{data.money}}" data-dtype="Number">
                   </div>
                 </div>
-                <div class="row m-1 w-100 justify-content-center">
-                  --items--
+                <div class="m-1 w-100 justify-content-center" style="border-top: 1px solid #ffffff13;">
+                  <ol class="inventory-list">
+                    <li class="inventory-header flexrow">
+                      <h3 class="item-name flexrow">Items</h3>
+                      <div class="item-detail item-amount">Quantity</div>
+                      <div class="item-controls">
+                        <a class="item-control item-create" title="Add item" data-type="item"><i class="fas fa-plus-circle" style="margin-right: 3px;"></i><span class="readable">Add</span></a>
+                      </div>
+                    </li>
+                    <ol class="item-list">
+                      {{#each actor.items as | item |}}
+                        <li class="item flexrow" data-item-id="{{item._id}}">
+                          <div class="item-name flexrow">
+                            <h4 title="Toggle Info ({{item.name}})" data-toggle="collapse" data-target="#{{item._id}}-collapse" aria-expanded="false" aria-controls="{{item._id}}-collapse">
+                              <i class="fas fa-info-circle info-icon"></i>
+                              {{item.name}}
+                            </h4>
+                          </div>
+                          <div class="item-detail item-amount">
+                            <input data-item-id="{{item._id}}" data-binding="data.quantity" type="text" value="{{item.data.quantity}}" data-dtype="Number"/>
+                          </div>
+                          <div class="item-controls" style="flex: 0 0 55px; justify-content: center; display:flex;">
+                            <a class="item-control item-edit" title="Edit item"><i class="fas fa-edit"></i></a>
+                            <a class="item-control item-delete" title="Delete item"><i class="fas fa-trash"></i></a>
+                          </div>
+                          <div class="collapse readable lh-16 item-summary" id="{{item._id}}-collapse">
+                            {{item.data.effect}}
+                          </div>
+                        </li>
+                      {{/each}}
+                    </ol>
+                  </ol>
                 </div>
               </div>
             </div>

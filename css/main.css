@@ -506,6 +506,11 @@ input[name="data.money"] {
   background-size: auto 100%;
   position: relative;
 }
+.itemBox img.content {
+  position: relative;
+  left: 60px;
+  top: 23px;
+}
 .itemBox .content {
   position: absolute;
   left: 64px;
@@ -517,6 +522,11 @@ input[name="data.money"] {
   padding-left: 1px;
   padding-right: 5px;
   line-height: 13px;
+}
+.itemBox .content.with-image {
+  max-width: 530px;
+  left: 180px;
+  padding-right: 7px;
 }
 .readable {
   font-family: monospace;
@@ -587,6 +597,11 @@ input[name="data.money"] {
   margin: 0;
   padding: 0;
   font-weight: bold;
+}
+.actor .inventory-list .item-amount {
+  flex: 0 0 70px;
+  align-self: center;
+  margin-right: 5px;
 }
 .actor .inventory-list .item-controls {
   flex: 0 0 55px;

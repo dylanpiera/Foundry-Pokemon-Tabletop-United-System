@@ -43,25 +43,25 @@ export class PTUCharacterSheet extends ActorSheet {
     // Initialize containers.
     const feats = [];
     const edges = [];
+    const items = [];
 
     // Iterate through items, allocating to containers
     // let totalWeight = 0;
     for (let i of sheetData.items) {
       let item = i.data;
       i.img = i.img || DEFAULT_TOKEN;
-      // Append to gear.
-      if (i.type === 'feat') {
-        feats.push(i);
-      }
-      // Append to moves.
-      else if (i.type === 'edge') {
-        edges.push(i);
+
+      switch(i.type) {
+        case 'feat': feats.push(i); break;
+        case 'edge': edges.push(i); break;
+        case 'item': items.push(i); break;
       }
     }
 
     // Assign and return
     actorData.feats = feats;
     actorData.edges = edges;
+    actorData.items = items;
   }
 
   /* -------------------------------------------- */
@@ -82,6 +82,9 @@ export class PTUCharacterSheet extends ActorSheet {
       const item = this.actor.getOwnedItem(li.data("itemId"));
       item.sheet.render(true);
     });
+
+    html.find("input[data-item-id]")
+        .on("change", (e) => this._updateItemField(e));
 
     // Delete Inventory Item
     html.find('.item-delete').click(ev => {
@@ -130,6 +133,26 @@ export class PTUCharacterSheet extends ActorSheet {
     // Finally, create the item!
     console.log(itemData);
     return this.actor.createOwnedItem(itemData);
+  }
+
+  _updateItemField(e) {
+    e.preventDefault();
+
+    const t = e.currentTarget;
+    let value;
+    if ($(t).prop("type") === "checkbox") {
+        value = $(t).prop("checked");
+    } else {
+        value = $(t).val();
+    }
+
+    const id = $(t).data("item-id");
+    const binding = $(t).data("binding");
+
+    const item = this.actor.getOwnedItem(id);
+    const updateParams = {};
+    updateParams[binding] = value;
+    if (item) { item.update(updateParams, {}); }
   }
 
   /**

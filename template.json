@@ -228,7 +228,7 @@
     "templates": {
       "base": {
         "name": "",
-        "origin": "Level-Up",
+        "origin": "",
         "effect": ""
       }
     },
@@ -265,7 +265,7 @@
     "item": {
       "templates": ["base"],
       "quantity": 1,
-      "weight": 0
+      "cost": 0
     }
   }
 }
