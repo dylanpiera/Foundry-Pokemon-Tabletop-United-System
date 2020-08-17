@@ -41,8 +41,8 @@ export class PTUCharacterSheet extends ActorSheet {
     const actorData = sheetData.actor;
 
     // Initialize containers.
-    const gear = [];
-    const moves = [];
+    const feats = [];
+    const edges = [];
 
     // Iterate through items, allocating to containers
     // let totalWeight = 0;
@@ -50,18 +50,18 @@ export class PTUCharacterSheet extends ActorSheet {
       let item = i.data;
       i.img = i.img || DEFAULT_TOKEN;
       // Append to gear.
-      if (i.type === 'item') {
-        gear.push(i);
+      if (i.type === 'feat') {
+        feats.push(i);
       }
       // Append to moves.
-      else if (i.type === 'move') {
-        moves.push(i);
+      else if (i.type === 'edge') {
+        edges.push(i);
       }
     }
 
     // Assign and return
-    actorData.gear = gear;
-    actorData.moves = moves;
+    actorData.feats = feats;
+    actorData.edges = edges;
   }
 
   /* -------------------------------------------- */

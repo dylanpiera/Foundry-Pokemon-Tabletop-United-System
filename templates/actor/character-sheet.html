@@ -157,15 +157,67 @@
           </div>
 
           <!-- Feats & Edges -->
-          <div class="tab details feats" data-group="primary" data-tab="feats">
-            <div class="row">
-              <div class="col">
-                <p>Feats</p>
+          <div class="tab details feats h-100" data-group="primary" data-tab="feats">
+            <div class="hgss-box mb-2 w-100">
+              <div class="hgss-body" style="display: block;">
+                <ol class="inventory-list">
+                  <li class="inventory-header flexrow">
+                    <h3 class="item-name flexrow">Features</h3>
+                    <div class="item-controls">
+                      <a class="item-control item-create" title="Add feat" data-type="feat"><i class="fas fa-plus-circle" style="margin-right: 3px;"></i><span class="readable">Add</span></a>
+                    </div>
+                  </li>
+                  <ol class="item-list">
+                    {{#each actor.feats as | feat |}}
+                      <li class="item flexrow" data-item-id="{{feat._id}}">
+                        <div class="item-name flexrow">
+                          <h4 title="Toggle Info ({{feat.name}})" data-toggle="collapse" data-target="#{{feat._id}}-collapse" aria-expanded="false" aria-controls="{{feat._id}}-collapse">
+                            <i class="fas fa-info-circle info-icon"></i>
+                            {{feat.name}}
+                          </h4>
+                        </div>
+                        <div class="item-controls" style="flex: 0 0 55px; justify-content: center; display:flex;">
+                          <a class="item-control item-edit" title="Edit feat"><i class="fas fa-edit"></i></a>
+                          <a class="item-control item-delete" title="Delete feat"><i class="fas fa-trash"></i></a>
+                        </div>
+                        <div class="collapse readable lh-16 item-summary" id="{{feat._id}}-collapse">
+                          {{feat.data.effect}}
+                        </div>
+                      </li>
+                    {{/each}}
+                  </ol>
+                </ol>
               </div>
             </div>
-            <div class="row">
-              <div class="col">
-                <p>Edges</p>
+            <div class="hgss-box mb-2 w-100">
+              <div class="hgss-body" style="display: block;">
+                <ol class="inventory-list">
+                  <li class="inventory-header flexrow">
+                    <h3 class="item-name flexrow">Edges</h3>
+                    <div class="item-controls">
+                      <a class="item-control item-create" title="Add edge" data-type="edge"><i class="fas fa-plus-circle" style="margin-right: 3px;"></i><span class="readable">Add</span></a>
+                    </div>
+                  </li>
+                  <ol class="item-list">
+                    {{#each actor.edges as | edge |}}
+                      <li class="item flexrow" data-item-id="{{edge._id}}">
+                        <div class="item-name flexrow">
+                          <h4 title="Toggle Info ({{edge.name}})" data-toggle="collapse" data-target="#{{edge._id}}-collapse" aria-expanded="false" aria-controls="{{edge._id}}-collapse">
+                            <i class="fas fa-info-circle info-icon"></i>
+                            {{edge.name}}
+                          </h4>
+                        </div>
+                        <div class="item-controls" style="flex: 0 0 55px; justify-content: center; display:flex;">
+                          <a class="item-control item-edit" title="Edit edge"><i class="fas fa-edit"></i></a>
+                          <a class="item-control item-delete" title="Delete edge"><i class="fas fa-trash"></i></a>
+                        </div>
+                        <div class="collapse readable lh-16 item-summary" id="{{edge._id}}-collapse">
+                          {{edge.data.effect}}
+                        </div>
+                      </li>
+                    {{/each}}
+                  </ol>
+                </ol>
               </div>
             </div>
           </div>

@@ -78,8 +78,8 @@
                         />
                     </div>
                 </div>
-                <div class="hgss-box align-items-center" style="display: grid; grid-template-rows: auto">
-                    <div class="hgss-header mb-1" style="padding: 5px 5px;">
+                <div class="hgss-box align-items-center">
+                    <div class="hgss-header mb-1" style="padding: 6px 5px;">
                         <label for="data.frequency">Frequency:</label>
                     </div>
                     <div class="hgss-body">
@@ -95,7 +95,9 @@
                         <label for="data.effect">Effect:</label>
                     </div>
                     <div class="hgss-body" style="word-break: break-word;">
-                        {{editor content=data.effect target="data.effect" button=true owner=owner editable=editable}}
+                        <textarea
+                            class="ml-2"
+                            name="data.effect">{{data.effect}}</textarea>
                     </div>
                 </div>
             </div>

@@ -515,6 +515,7 @@ input[name="data.money"] {
   max-height: 123px;
   overflow: auto;
   padding-left: 1px;
+  padding-right: 5px;
   line-height: 13px;
 }
 .readable {
@@ -539,6 +540,107 @@ input[name="data.money"] {
 }
 .readable.pokemon {
   font-family: "Pokemon GB";
+}
+.item-effect {
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  word-break: break-word;
+}
+.flexrow > * {
+  flex: 1;
+}
+.flexrow {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+}
+.actor .inventory-list:not(.inventory-header) .item:nth-child(odd) {
+  background: #8898a8b3;
+}
+.actor .inventory-list:not(.inventory-header) .item:nth-child(even) {
+  background: #788898cc;
+}
+.actor .inventory-list {
+  list-style: none;
+  margin: 0;
+  padding: 0 5px;
+  overflow-y: auto;
+}
+.actor .inventory-list .item-summary {
+  padding: 0.5rem;
+  border-top: 1px solid #ffffff13;
+  flex: 0 0 100%;
+}
+.actor .inventory-list .inventory-header {
+  padding-top: 0;
+  border: none;
+  margin: 0 0 0.25rem 0;
+  line-height: 20px;
+  background: transparent;
+  font-weight: bold;
+}
+.actor .inventory-list .inventory-header h3 {
+  margin: 0;
+  padding: 0;
+  font-weight: bold;
+}
+.actor .inventory-list .item-controls {
+  flex: 0 0 55px;
+  justify-content: center;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-self: center;
+}
+.actor .inventory-list .item-controls a {
+  flex: 0 0 18px;
+  font-size: 12px;
+  text-align: center;
+}
+.actor .inventory-list .item-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.actor .inventory-list .item {
+  padding: 0;
+  line-height: 30px;
+  border: none;
+  border-radius: 5px;
+  margin: 2px 0;
+}
+.actor .inventory-list .item .item-name {
+  max-height: unset;
+  cursor: default;
+  flex-wrap: nowrap;
+  overflow: hidden;
+}
+.actor .inventory-list .item .item-name h4 .info-icon {
+  margin-left: 6px;
+  font-size: 14px;
+  transition: color 0.3s ease;
+  position: relative;
+  top: 1px;
+}
+.actor .inventory-list .item .item-name h4:hover .info-icon {
+  color: #00000038;
+}
+.actor .inventory-list .inventory-header .item-controls a.item-create {
+  background: #ffffffa6;
+  border-radius: 5px;
+  font-weight: 400;
+  color: rgba(0, 0, 0, 0.6);
+  line-height: 18px;
+  padding-top: 2px;
+  flex: 0 0 100%;
+}
+.actor .inventory-list .item-controls a.item-create:hover {
+  background: #788898cc;
+  text-shadow: unset;
 }
 .w-25 {
   width: 25% !important;
@@ -837,6 +939,86 @@ input[name="data.money"] {
 }
 .center-text {
   text-align: center;
+}
+.lh-16 {
+  line-height: 16px;
+}
+/* Bootstrap Collapse */
+.fade {
+  opacity: 0;
+  -webkit-transition: opacity 0.15s linear;
+  -o-transition: opacity 0.15s linear;
+  transition: opacity 0.15s linear;
+}
+.fade.in {
+  opacity: 1;
+}
+.collapse {
+  display: none;
+}
+.collapse.in {
+  display: block;
+}
+tr.collapse.in {
+  display: table-row;
+}
+tbody.collapse.in {
+  display: table-row-group;
+}
+.collapsing {
+  position: relative;
+  height: 0;
+  overflow: hidden;
+  -webkit-transition-property: height, visibility;
+  -o-transition-property: height, visibility;
+  transition-property: height, visibility;
+  -webkit-transition-duration: 0.35s;
+  -o-transition-duration: 0.35s;
+  transition-duration: 0.35s;
+  -webkit-transition-timing-function: ease;
+  -o-transition-timing-function: ease;
+  transition-timing-function: ease;
+}
+.clearfix:before,
+.clearfix:after {
+  display: table;
+  content: " ";
+}
+.clearfix:after {
+  clear: both;
+}
+.center-block {
+  display: block;
+  margin-right: auto;
+  margin-left: auto;
+}
+.pull-right {
+  float: right !important;
+}
+.pull-left {
+  float: left !important;
+}
+.hide {
+  display: none !important;
+}
+.show {
+  display: block !important;
+}
+.invisible {
+  visibility: hidden;
+}
+.text-hide {
+  font: 0/0 a;
+  color: transparent;
+  text-shadow: none;
+  background-color: transparent;
+  border: 0;
+}
+.hidden {
+  display: none !important;
+}
+.affix {
+  position: fixed;
 }
 /* The Furnace Macro Sheet Compatability */
 .macro-sheet .form-group.command .furnace-macro-command textarea,

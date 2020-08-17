@@ -12,6 +12,7 @@ Credits to [cswendrowski](https://github.com/cswendrowski) for starting this pro
 - [x] Step 1: Make it playable as a system (basic data, combat tracker & map support)
 - [ ] Step 2: Add every single possible (static) value the Fancy (google) Character Sheet has
 - [ ] Step 3: Add every possible auto calculation the sheet has (derived values)
+- [ ] Step 3.5: Make items drag & sortable
 - [x] Step 4: Add roll buttons (for skills)
 - [ ] Step 5: Make base stats be automatically calculated (aka you put in a mon name and it fills in the blanks)
 - [ ] Step 6: Change abilities from manually over to Foundry Items so you can drag & drop them

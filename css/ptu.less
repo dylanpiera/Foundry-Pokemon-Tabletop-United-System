@@ -703,3 +703,122 @@ input[name="data.money"] {
         font-family: "Pokemon GB";
     }
 }
+
+.item-effect {
+    display: -webkit-box;
+    -webkit-line-clamp: 4;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    word-break: break-word;
+}
+
+.flexrow > * {
+    flex: 1;
+}
+.flexrow {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+}
+
+.actor {
+    .inventory-list:not(.inventory-header) .item:nth-child(odd) {
+        background: #8898a8b3;
+    }
+    .inventory-list:not(.inventory-header) .item:nth-child(even) {
+        background: #788898cc;
+    }
+
+    .inventory-list {
+        list-style: none;
+        margin: 0;
+        padding: 0 5px;
+        overflow-y: auto;
+
+        .item-summary {
+            padding: .5rem;
+            border-top: 1px solid #ffffff13;
+            flex: 0 0 100%;
+        }
+
+        .inventory-header {
+            padding-top: 0;
+            border: none;
+            margin: 0 0 .25rem 0;
+            line-height: 20px;
+            background: transparent;
+            font-weight: bold;
+
+            h3 {
+                margin: 0;
+                padding: 0;
+                font-weight: bold;
+            }
+        }
+
+        .item-controls {
+            flex: 0 0 55px;
+            justify-content: center;
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+            align-self: center;
+
+            a {
+                flex: 0 0 18px;
+                font-size: 12px;
+                text-align: center;
+            }
+        }
+
+        .item-list {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .item {
+            padding: 0;
+            line-height: 30px;
+            border: none; 
+            border-radius: 5px; 
+            margin: 2px 0;
+
+            .item-name {
+                max-height: unset;
+                cursor: default;
+                flex-wrap: nowrap;
+                overflow: hidden;
+
+                h4 .info-icon {
+                    margin-left: 6px;
+                    font-size: 14px;
+                    transition: color .3s ease;
+                    position: relative;
+                    top: 1px;
+                }
+
+                h4:hover .info-icon {
+                    color: #00000038;
+                }
+            }
+        }
+    }
+}
+
+.actor .inventory-list .inventory-header .item-controls a.item-create {
+    background: #ffffffa6;
+    border-radius: 5px;
+    font-weight: 400;
+    color: rgba(0,0,0,.6);
+    line-height: 18px;
+    padding-top: 2px;
+    flex: 0 0 100%;
+}
+
+.actor .inventory-list .item-controls a.item-create:hover {
+    background: #788898cc;
+    text-shadow: unset;
+}
