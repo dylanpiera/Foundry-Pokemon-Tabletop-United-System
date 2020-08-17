@@ -97,7 +97,15 @@ a.item {
   bottom: -10px;
   font-weight: bold;
 }
-.window-content {
+.actor .window-content,
+.edge .window-content,
+.feat .window-content,
+.ability .window-content,
+.item .window-content,
+.move .window-content,
+.form .window-content,
+.token-sheet .window-content,
+.scene-sheet .window-content {
   background: #E0E8E8 !important;
 }
 .stat-block {
@@ -671,6 +679,7 @@ input[name="data.money"] {
   width: 100%;
   grid-template-columns: repeat(2, 20% 30%);
   grid-row-gap: 4px;
+  word-break: break-word;
 }
 .content.move-grid span:nth-child(7) {
   grid-column: 1 / 5;
