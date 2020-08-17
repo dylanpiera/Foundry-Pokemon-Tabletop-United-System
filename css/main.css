@@ -62,6 +62,10 @@ a.item {
   background: #8898A8;
   display: flex;
 }
+.hgss-box .hgss-header.vertical {
+  height: 100%;
+  align-items: center;
+}
 .hgss-box .hgss-body {
   padding: 2px 5px;
   display: flex;
@@ -496,6 +500,46 @@ input[name="data.money"] {
 .hgss-box.green .hgss-header {
   background: #93C47D;
 }
+.itemBox {
+  background: url(/systems/ptu/css/images/item-box.svg);
+  background-repeat: no-repeat;
+  background-size: auto 100%;
+  position: relative;
+}
+.itemBox .content {
+  position: absolute;
+  left: 64px;
+  top: 14px;
+  max-width: 635px;
+  word-break: break-word;
+  max-height: 123px;
+  overflow: auto;
+  padding-left: 1px;
+  line-height: 13px;
+}
+.readable {
+  font-family: monospace;
+  font-variant: normal;
+  font-size: 13px;
+}
+.readable.p11 {
+  font-size: 11px;
+}
+.readable.p12 {
+  font-size: 12px;
+}
+.readable.p14 {
+  font-size: 14px;
+}
+.readable.p15 {
+  font-size: 15px;
+}
+.readable.p16 {
+  font-size: 16px;
+}
+.readable.pokemon {
+  font-family: "Pokemon GB";
+}
 .w-25 {
   width: 25% !important;
 }
@@ -793,6 +837,11 @@ input[name="data.money"] {
 }
 .center-text {
   text-align: center;
+}
+/* The Furnace Macro Sheet Compatability */
+.macro-sheet .form-group.command .furnace-macro-command textarea,
+.macro-sheet .form-group.command .furnace-macro-command code {
+  font-variant: normal;
 }
 /* Freeware Font Credits: https://www.fontspace.com/jackster-productions/pokemon-gb */
 @font-face {

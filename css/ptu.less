@@ -78,6 +78,10 @@ a.item {
         padding: 2px 5px;
         background: #8898A8;
         display: flex;
+        &.vertical {
+            height: 100%;
+            align-items: center;
+        }
     }
 
     .hgss-body {
@@ -572,85 +576,130 @@ a.item {
 .levelUpPoints {
     align-items: center;
     text-align: center;
-  
+
     input {
-      color: white;
+        color: white;
     }
-  }
-  
-  input[name="data.money"] {
+}
+
+input[name="data.money"] {
     background-image: url(/systems/ptu/css/images/Pokémon_Dollar_sign.svg);
     padding-left: 20px;
     background-size: 12px 16px;
     background-repeat: no-repeat;
     background-position: 2px 4px;
-  }
-  
-  .rollable:hover {
+}
+
+.rollable:hover {
     text-shadow: 0 0 10px #ff0000a0;
     cursor: pointer;
-  }
-  
-  .dice-tooltip .dice-rolls .roll {
+}
+
+.dice-tooltip .dice-rolls .roll {
     width: 32px;
     line-height: 23px;
     margin-right: unset;
     background-size: cover;
     font-size: 12px;
-  }
-  
-  .skill.col-sm-2 {
+}
+
+.skill.col-sm-2 {
     padding-left: 15px !important;
-  }
-  .rollable .fa-dice-d20 {
+}
+.rollable .fa-dice-d20 {
     position: absolute;
     left: 3px;
-  }
-  
-  .hgss-body .editor {
+}
+
+.hgss-body .editor {
     width: 100%;
     min-height: 90px;
-  
+
     .editor-content {
-      max-height:200px;
+        max-height:200px;
     }
-  }
-  
-  .editor .tox {
+}
+
+.editor .tox {
     .tox-tbtn {
-      height: 24px;
-      width: 24px;
-      margin-left: 1px;
+        height: 24px;
+        width: 24px;
+        margin-left: 1px;
     }
-  
+
     .tox-tbtn--select {
-      width: auto;
+        width: auto;
     }
-  }
-  
-  .hgss-box {
+}
+
+.hgss-box {
     &.red {
-      background: #EA9999;
-      .hgss-header {
+        background: #EA9999;
+        .hgss-header {
         background: #E06666;
-      }
+        }
     }
     &.yellow {
-      background: #FFE599;
-      .hgss-header {
+        background: #FFE599;
+        .hgss-header {
         background: #FFD966;
-      }
+        }
     }
     &.purple {
-      background: #D5A6BD;
-      .hgss-header {
+        background: #D5A6BD;
+        .hgss-header {
         background: #C27BA0;
-      }
+        }
     }
     &.green {
-      background: #B6D7A8;
-      .hgss-header {
+        background: #B6D7A8;
+        .hgss-header {
         background: #93C47D;
-      }
+        }
     }
-  }
+}
+
+.itemBox {
+    background: url(/systems/ptu/css/images/item-box.svg);
+    background-repeat: no-repeat;
+    background-size: auto 100%;
+    position: relative;
+
+    .content {
+        position: absolute;
+        left: 64px;
+        top: 14px;
+        max-width: 635px;
+        word-break: break-word;
+        max-height: 123px;
+        overflow: auto;
+        padding-left: 1px;
+        padding-right: 5px;
+        line-height: 13px;
+    }
+}
+
+.readable {
+    font-family: monospace;
+    font-variant: normal;
+    font-size: 13px;
+
+    &.p11 {
+        font-size: 11px;
+    }
+    &.p12 {
+        font-size: 12px;
+    }
+    &.p14 {
+        font-size: 14px;
+    }
+    &.p15 {
+        font-size: 15px;
+    }
+    &.p16 {
+        font-size: 16px;
+    }
+    &.pokemon {
+        font-family: "Pokemon GB";
+    }
+}

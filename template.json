@@ -224,34 +224,48 @@
     }
   },
   "Item": {
-    "types": ["item", "ability", "move"],
+    "types": ["feat", "edge", "ability", "move", "item"],
     "templates": {
       "base": {
-        "description": ""
+        "name": "",
+        "origin": "Level-Up",
+        "effect": ""
       }
     },
-    "item": {
+    "feat": {
       "templates": ["base"],
-      "quantity": 1,
-      "weight": 0
+      "prerequisites": "",
+      "frequency": "At Will - Standard Action",
+      "tags": [],
+      "notes": ""
+    },
+    "edge": {
+      "templates": ["base"],
+      "prerequisites": "",
+      "notes": ""
     },
     "ability": {
+      "templates": ["base"],
       "frequency": "",
       "action": "",
       "trigger": "",
-      "target": "",
-      "effect": ""
+      "target": ""
     },
     "move": {
+      "templates": ["base"],
       "type": "",
       "frequency": "",
       "ac": "",
       "damageBase": "",
       "class": "",
       "range": "",
-      "effect": "",
       "contestType": "",
       "contestEffect": ""
+    },
+    "item": {
+      "templates": ["base"],
+      "quantity": 1,
+      "weight": 0
     }
   }
 }

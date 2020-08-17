@@ -4,6 +4,8 @@ import { PTUCharacterSheet } from "./actor/character-sheet.js";
 import { PTUPokemonSheet } from "./actor/pokemon-sheet.js";
 import { PTUItem } from "./item/item.js";
 import { PTUItemSheet } from "./item/item-sheet.js";
+import { PTUEdgeSheet } from "./item/edge-sheet.js";
+import { PTUFeatSheet } from "./item/feat-sheet.js";
 import { measureDistances } from "./canvas.js";
 import { levelProgression } from "./data/level-progression.js";
 
@@ -33,7 +35,9 @@ Hooks.once('init', async function() {
   Actors.registerSheet("ptu", PTUCharacterSheet, { types: ["character"], makeDefault: true });
   Actors.registerSheet("ptu", PTUPokemonSheet, { types: ["pokemon"], makeDefault: true });
   Items.unregisterSheet("core", ItemSheet);
-  Items.registerSheet("ptu", PTUItemSheet, { makeDefault: true });
+  Items.registerSheet("ptu", PTUItemSheet, { types: ["item","ability","move"], makeDefault: true });
+  Items.registerSheet("ptu", PTUEdgeSheet, { types: ["edge"], makeDefault: true });
+  Items.registerSheet("ptu", PTUFeatSheet, { types: ["feat"], makeDefault: true });
 
   // If you need to add Handlebars helpers, here are a few useful examples:
   Handlebars.registerHelper('concat', function() {
