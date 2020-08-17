@@ -15,9 +15,9 @@ Credits to [cswendrowski](https://github.com/cswendrowski) for starting this pro
 - [ ] Step 4: Port over the Pokemon Sheet
 - [ ] Step 5: Add Dropdowns where applicable in Trainer & Pokemon sheets.
 - [ ] Step 6: Add automated to-hit & damage buttons for Moves
-- [ ] Step 7: Add all abilities to a Compendium
-- [ ] Step 7b: ^ for moves
-- [ ] Step 7c: ^ for items
+- [x] Step 7: Add all abilities to a Compendium
+- [x] Step 7b: ^ for moves
+- [x] Step 7c: ^ for items
 - [ ] Step 8: Make base stats be automatically calculated (aka you put in a mon name and it fills in the blanks)
 - [ ] Step 9: Include Natures for Stat Calculation
 - [ ] Step 10/11: Charactermancer (in-foundry character creation & level-up GUI) 

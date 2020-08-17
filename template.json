@@ -230,6 +230,16 @@
         "name": "",
         "origin": "",
         "effect": ""
+      },
+      "interactions": {
+        "sheerForce": false,
+        "toughClaws": false,
+        "technician": false,
+        "reckless": false,
+        "ironFist": false,
+        "megaLauncher": false,
+        "punkRock": false,
+        "strongJaw": false
       }
     },
     "feat": {
@@ -250,7 +260,7 @@
       "tier": ""
     },
     "move": {
-      "templates": ["base"],
+      "templates": ["base", "interactions"],
       "type": "",
       "category": "",
       "damageBase": "",

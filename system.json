@@ -2,7 +2,7 @@
   "name": "ptu",
   "title": "Pokemon Tabletop United",
   "description": "A Pen and Paper Roleplaying Game Set in the World of Pokemon",
-  "version": "0.0.9",
+  "version": "0.0.10",
   "minimumCoreVersion": "0.6.5",
   "compatibleCoreVersion": "0.7.1",
   "templateVersion": 2,
@@ -15,7 +15,43 @@
   "scripts": [
     "css/bootstrap.js"
   ],
-  "packs": [],
+  "packs": [
+    {
+      "label": "abilities",
+      "entity": "Item",
+      "name": "abilities",
+      "path": "packs/abilities.db",
+      "system": "ptu"
+    },
+    {
+      "label": "moves",
+      "entity": "Item",
+      "name": "moves",
+      "path": "packs/moves.db",
+      "system": "ptu"
+    },
+    {
+      "label": "feats",
+      "entity": "Item",
+      "name": "feats",
+      "path": "packs/feats.db",
+      "system": "ptu"
+    },
+    {
+      "label": "edges",
+      "entity": "Item",
+      "name": "edges",
+      "path": "packs/edges.db",
+      "system": "ptu"
+    },
+    {
+      "label": "items",
+      "entity": "Item",
+      "name": "items",
+      "path": "packs/items.db",
+      "system": "ptu"
+    }
+  ],
   "languages": [
     {
       "lang": "en",
