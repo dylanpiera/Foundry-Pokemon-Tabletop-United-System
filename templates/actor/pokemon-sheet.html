@@ -378,6 +378,16 @@
                 </div>
               </div>
             </div>
+            <div class="tab details extra2" data-group="primary" data-tab="extra2">
+              <div class="hgss-box mt-auto w-100" style="text-align: center;">
+                <div class="hgss-header">
+                  <h3 class="m-auto">Item Effect</h3>
+                </div>
+                <div class="hgss-body w-100">
+                  <textarea style="min-height: 100px;" id="itemDescription" disabled>{{itemDescription data.heldItem}}</textarea>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -437,6 +447,13 @@
             <h3 class="m-auto">Item</h3>
           </div>
           <div class="hgss-body">
+            <input
+                class="mt-1"
+                id="heldItemInput"
+                type="text"
+                name="data.heldItem"
+                value="{{data.heldItem}}"
+              />
           </div>
         </div>
       </div>
@@ -447,8 +464,9 @@
         <ul class="sheet-tabs tabs buttons" data-group="primary">
           <li><button class="item" data-tab="stats">Stats</button></li>
           <li><button class="item" data-tab="moves">Moves</button></li>
-          <li><button class="item" data-tab="pokeedge">Poké Edges</button></li>
+          <li><button class="item" data-tab="pokeedge">Capabilities</button></li>
           <li><button class="item" data-tab="extra">Extra</button></li>
+          <li><button class="item" data-tab="extra2">Extra 2</button></li>
         </ul>
       </div>
   </div>

@@ -67,9 +67,19 @@ Hooks.once('init', async function() {
   Handlebars.registerHelper("and", function (a, b) {return a && b});
   Handlebars.registerHelper("or", function (a, b) {return a || b});
   Handlebars.registerHelper("not", function (a, b) {return a != b});
+  Handlebars.registerHelper("itemDescription", function (name) {
+    if(name || 0 !== name.length) {
+      let item = game.ptu.items.find(i => i.name.toLowerCase().includes(name.toLowerCase()));
+      if(item) return item.data.data.effect;
+    }  
+    return "";
+  });
 });
 
 Hooks.once("ready", async function() {
+  // Globally enable items from item compendium
+  game.ptu["items"] = await game.packs.get("ptu.items").getContent();
+  
   // Wait to register hotbar drop hook on ready so that modules could register earlier if they want to
   Hooks.on("hotbarDrop", (bar, data, slot) => createPTUMacro(data, slot));
 });

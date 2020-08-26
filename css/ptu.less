@@ -126,6 +126,10 @@ a.item {
     }
 }
 
+.window-app .window-content {
+    background: #E0E8E8;
+}
+
 .stat-block {
     border: 1px solid black;
     box-shadow: 0px 0px 3px 1px;
@@ -862,5 +866,14 @@ input[name="data.money"] {
     span:nth-child(7) {
         grid-column: ~"1 / 5";
         grid-row: ~"5 / 5";
+    }
+}
+
+.autocomplete-suggestions {
+    font-family: monospace;
+    font-variant: normal;
+    width: 300px !important;
+    .autocomplete-suggestion {
+        display: block !important;
     }
 }

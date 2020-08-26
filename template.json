@@ -208,6 +208,8 @@
       "nature": {
         "value": ""
       },
+
+      "heldItem": "None",
            
       "level": {
         "exp": 40

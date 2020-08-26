@@ -27,6 +27,8 @@ export class PTUPokemonSheet extends ActorSheet {
       this._prepareCharacterItems(data);
     }
 
+    data["compendiumItems"] = game.ptu.items;
+
     return data;
   }
 
@@ -99,6 +101,14 @@ export class PTUPokemonSheet extends ActorSheet {
         li.addEventListener("dragstart", handler, false);
       });
     }
+
+    html.find('#heldItemInput').autocomplete({
+      lookup: game.ptu.items.map(i => i.data.name),
+      autoFocus: true,
+      minLength: 1,
+    })
+
+    
   }
 
   /**
