@@ -8,13 +8,15 @@ import { PTUEdgeSheet } from "./item/edge-sheet.js";
 import { PTUFeatSheet } from "./item/feat-sheet.js";
 import { measureDistances } from "./canvas.js";
 import { levelProgression } from "./data/level-progression.js";
+import { pokemonData } from "./data/species-data.js";
 
 Hooks.once('init', async function() {
 
   game.ptu = {
     PTUActor,
     PTUItem,
-    levelProgression
+    levelProgression,
+    pokemonData
   };
 
   /**
