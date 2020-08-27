@@ -13,6 +13,7 @@
     "css/main.css"
   ],
   "scripts": [
+    "import/jquery-ui.js",
     "css/bootstrap.js"
   ],
   "packs": [

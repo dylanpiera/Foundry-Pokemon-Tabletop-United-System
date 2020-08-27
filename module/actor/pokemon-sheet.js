@@ -102,7 +102,7 @@ export class PTUPokemonSheet extends ActorSheet {
       });
     }
 
-    $('#heldItemInput').autocomplete({
+    html.find('#heldItemInput').autocomplete({
       lookup: game.ptu.items.map(i => i.data.name),
       autoFocus: true,
       minLength: 1,
