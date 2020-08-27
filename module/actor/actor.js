@@ -91,7 +91,7 @@ export class PTUActor extends Actor {
     let _calcLevel = function(exp, level, json) {
       if(exp <= json[1]) {return 1;}
       if(exp >= json[100]) {return 100;}
-  
+
       return _recursiveLevelCalc(exp, level, json);
     }
     let _recursiveLevelCalc = function(exp, level, json) {
@@ -113,6 +113,52 @@ export class PTUActor extends Actor {
       
       return exp == json[level] ? level : level -1;
     }
+
+    let _calcBaseStats = function(specie, nature, stat) {
+      let specieStat = 0;
+
+      // First round, makes sure that the specie is in the DB and returns Human stats if not
+      if( specie != "" ) {
+        specieStat = _fetchSpecieStat(specie, stat);
+      }else{
+        return _returnHumanStats(stat);
+      }
+      if (specieStat == null) {return _returnHumanStats(stat)};
+      
+      // Second Round, nature
+      specieStat += _NatureMods(nature, stat, 0);
+
+      return specieStat;
+    }
+
+    let _fetchSpecieStat = function(specie, stat)  {
+      for (var i  = 0; i < game.ptu.pokemonData.length; i++){
+        if (game.ptu.pokemonData[i]["_id"] === specie.toUpperCase()){
+          return game.ptu.pokemonData[i]["Base Stats"][stat];
+        }
+      }
+      return null;
+    }
+
+    let _returnHumanStats = function(stat){
+      if(stat == "HP") {return 10;}
+      else {return 30;}
+    }
+
+    let _NatureMods = function(nature, stat){
+      if(nature == "") {return 0};
+      if(game.ptu.natureData[nature] == null){return 0};
+
+      if(game.ptu.natureData[nature][0] == stat){
+        if(stat == "HP") {return 1}
+        else {return 2};
+      } else if(game.ptu.natureData[nature][1] == stat) {
+        if(stat == "HP") {return -1}
+        else {return -2};
+      } else {
+        return 0;
+      }
+    }
     
     data.level.current = _calcLevel(data.level.exp, 50, game.ptu.levelProgression);
 
@@ -121,6 +167,14 @@ export class PTUActor extends Actor {
     if(data.health.value === null) data.health.value = data.health.max;
 
     data.health.percent = Math.round((data.health.value / data.health.max) * 100);
+
+    // Stats
+    data.stats.hp.value = _calcBaseStats(data.species, data.nature.value, "HP");
+    data.stats.atk.value = _calcBaseStats(data.species, data.nature.value, "Attack");
+    data.stats.def.value = _calcBaseStats(data.species, data.nature.value, "Defense");
+    data.stats.spatk.value = _calcBaseStats(data.species, data.nature.value, "Special Attack");
+    data.stats.spdef.value = _calcBaseStats(data.species, data.nature.value, "Special Defense");
+    data.stats.spd.value = _calcBaseStats(data.species, data.nature.value, "Speed");
 
     data.initiative = {value: data.stats.spd.total + data.modifiers.initiative};
 

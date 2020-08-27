@@ -9,6 +9,7 @@ import { PTUFeatSheet } from "./item/feat-sheet.js";
 import { measureDistances } from "./canvas.js";
 import { levelProgression } from "./data/level-progression.js";
 import { pokemonData } from "./data/species-data.js";
+import { natureData } from "./data/nature-data.js";
 
 Hooks.once('init', async function() {
 
@@ -16,7 +17,8 @@ Hooks.once('init', async function() {
     PTUActor,
     PTUItem,
     levelProgression,
-    pokemonData
+    pokemonData,
+    natureData
   };
 
   /**
