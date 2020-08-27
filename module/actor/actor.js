@@ -125,5 +125,9 @@ export class PTUActor extends Actor {
     data.initiative = {value: data.stats.spd.total + data.modifiers.initiative};
 
     data.levelUpPoints += data.level.current + data.modifiers.statPoints + 10;
+
+    data.evasion.physical = data.stats.def.value;
+    data.evasion.special = data.stats.spdef.value;
+    data.evasion.speed = data.stats.spd.value;
   }
 }
