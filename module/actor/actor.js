@@ -114,50 +114,25 @@ export class PTUActor extends Actor {
       return exp == json[level] ? level : level -1;
     }
 
-    let _calcBaseStats = function(specie, nature, stat) {
-      let specieStat = 0;
-
-      // First round, makes sure that the specie is in the DB and returns Human stats if not
-      if( specie != "" ) {
-        specieStat = _fetchSpecieStat(specie, stat);
-      }else{
-        return _returnHumanStats(stat);
-      }
-      if (specieStat == null) {return _returnHumanStats(stat)};
-      
-      // Second Round, nature
-      specieStat += _NatureMods(nature, stat, 0);
-
-      return specieStat;
+    let _calcBaseStats = function(specie, nature, statKey) {
+      if( specie != "" ) return _calculateStatWithNature(nature, statKey, _fetchSpecieStat(specie, statKey));
+      return 0;
     }
 
     let _fetchSpecieStat = function(specie, stat)  {
       for (var i  = 0; i < game.ptu.pokemonData.length; i++){
-        if (game.ptu.pokemonData[i]["_id"] === specie.toUpperCase()){
-          return game.ptu.pokemonData[i]["Base Stats"][stat];
-        }
+        if (game.ptu.pokemonData[i]["_id"] === specie.toUpperCase()) return game.ptu.pokemonData[i]["Base Stats"][stat];
       }
-      return null;
+      return 0;
     }
 
-    let _returnHumanStats = function(stat){
-      if(stat == "HP") {return 10;}
-      else {return 30;}
-    }
+    let _calculateStatWithNature = function(nature, statKey, stat){
+      if(nature == "") return stat;
+      if(game.ptu.natureData[nature] == null) return statKey;
 
-    let _NatureMods = function(nature, stat){
-      if(nature == "") {return 0};
-      if(game.ptu.natureData[nature] == null){return 0};
-
-      if(game.ptu.natureData[nature][0] == stat){
-        if(stat == "HP") {return 1}
-        else {return 2};
-      } else if(game.ptu.natureData[nature][1] == stat) {
-        if(stat == "HP") {return -1}
-        else {return -2};
-      } else {
-        return 0;
-      }
+      if(game.ptu.natureData[nature][0] == statKey) stat += statKey == "HP" ? 1 : 2;
+      if(game.ptu.natureData[nature][1] == statKey) stat -= statKey == "HP" ? 1 : 2;
+      return stat;
     }
     
     data.level.current = _calcLevel(data.level.exp, 50, game.ptu.levelProgression);
