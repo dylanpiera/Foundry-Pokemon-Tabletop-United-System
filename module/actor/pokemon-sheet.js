@@ -47,6 +47,7 @@ export class PTUPokemonSheet extends ActorSheet {
     const abilities = [];
     const capabilities = [];
     const moves = [];
+    const edges = [];
 
     // Iterate through items, allocating to containers
     // let totalWeight = 0;
@@ -58,6 +59,7 @@ export class PTUPokemonSheet extends ActorSheet {
         case 'ability': abilities.push(i); break;
         case 'move': moves.push(i); break;
         case 'capability': capabilities.push(i); break;
+        case 'pokeedge': edges.push(i); break;
       }
     }
 
@@ -65,6 +67,7 @@ export class PTUPokemonSheet extends ActorSheet {
     actorData.abilities = abilities;
     actorData.moves = moves;
     actorData.capabilities = capabilities;
+    actorData.edges = edges;
   }
 
   /* -------------------------------------------- */
