@@ -276,6 +276,7 @@
     },
     "pokeedge": {
       "templates": ["base"],
+      "prerequisites": "",
       "cost": 0
     },
     "item": {
