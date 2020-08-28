@@ -10,7 +10,8 @@
   "esmodules": ["module/ptu.js"],
   "styles": [
     "css/ptu.css",
-    "css/main.css"
+    "css/main.css",
+    "import/jquery-ui.css"
   ],
   "scripts": [
     "import/jquery-ui.js",

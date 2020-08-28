@@ -104,7 +104,7 @@ export class PTUPokemonSheet extends ActorSheet {
     }
 
     html.find('#heldItemInput').autocomplete({
-      lookup: game.ptu.items.map(i => i.data.name),
+      source: game.ptu.items.map(i => i.data.name),
       autoFocus: true,
       minLength: 1,
     })
