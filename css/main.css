@@ -69,6 +69,7 @@ a.item {
 .hgss-box .hgss-body {
   padding: 2px 5px;
   display: flex;
+  flex-wrap: wrap;
 }
 .name-label {
   content: "";

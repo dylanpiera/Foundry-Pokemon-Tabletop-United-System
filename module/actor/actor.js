@@ -134,6 +134,12 @@ export class PTUActor extends Actor {
       if(game.ptu.natureData[nature][1] == statKey) stat -= statKey == "HP" ? 1 : 2;
       return stat;
     }
+
+    let _calculateCapabilities = function(species) {
+      //Later also check for PokéEdges for buffs
+      var monData = game.ptu.pokemonData.find(x => x._id === species.toUpperCase());
+      return monData?.Capabilities ?? [];
+    }
     
     data.level.current = _calcLevel(data.level.exp, 50, game.ptu.levelProgression);
 
@@ -154,5 +160,7 @@ export class PTUActor extends Actor {
     data.initiative = {value: data.stats.spd.total + data.modifiers.initiative};
 
     data.levelUpPoints += data.level.current + data.modifiers.statPoints + 10;
+
+    data.capabilities = _calculateCapabilities(data.species);
   }
 }

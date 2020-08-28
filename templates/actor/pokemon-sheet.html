@@ -225,10 +225,47 @@
             data-tab="capability"
           >
             <div class="hgss-box mt-auto w-100">
-              <div class="hgss-body w-100" style="display: block;">
+              <div class="hgss-header">
+                <h3 class="item-name flexrow">Capabilities</h3>
+              </div>
+              <div class="hgss-body readable w-100">
+                {{#each data.capabilities as |capability key|}}
+                  {{#if (and (not key "Other") (not key "Naturewalk"))}}
+                    <div class="col-sm-4 p11">
+                      <label for="data.capabilities.{{key}}">{{key}}:</label>
+                    </div>
+                    <div class="col-sm-2" style="text-align: center;">
+                      <input
+                        type="text"
+                        name="data.capabilities.{{key}}"
+                        value="{{capability}}"
+                        data-dtype="Number"
+                        disabled
+                      />
+                    </div>
+                  {{/if}}
+                {{/each}}
+              </div>
+              {{#if data.capabilities.Naturewalk}}
+                <div class="hgss-body readable w-100">
+                  <div class="col-sm-4 p11">
+                    <label for="data.capabilities.Naturewalk">Naturewalk:</label>
+                  </div>
+                  <div class="col-sm-8" style="text-align: center;">
+                    <input
+                      type="text"
+                      name="data.capabilities.Naturewalk"
+                      value="{{data.capabilities.Naturewalk}}"
+                      data-dtype="Number"
+                      disabled
+                    />
+                  </div>
+                </div>
+              {{/if}}
+              <div class="hgss-body w-100 mt-2" style="display: block;">
                 <ol class="inventory-list">
                   <li class="inventory-header flexrow">
-                    <h3 class="item-name flexrow">Capabilities</h3>
+                    <h3 class="item-name flexrow">Other Capabilities</h3>
                     <div class="item-controls">
                       <a class="item-control item-create" title="Add capability" data-type="capability"><i class="fas fa-plus-circle" style="margin-right: 3px;"></i><span class="readable">Add</span></a>
                     </div>
