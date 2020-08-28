@@ -255,6 +255,38 @@
                 </ol>
               </div>
             </div>
+
+            <div class="hgss-box mt-2 w-100">
+              <div class="hgss-body w-100" style="display: block;">
+                <ol class="inventory-list">
+                  <li class="inventory-header flexrow">
+                    <h3 class="item-name flexrow">Poké Edges</h3>
+                    <div class="item-controls">
+                      <a class="item-control item-create" title="Add pokeedge" data-type="pokeedge"><i class="fas fa-plus-circle" style="margin-right: 3px;"></i><span class="readable">Add</span></a>
+                    </div>
+                  </li>
+                  <ol class="item-list">
+                    {{#each actor.edges as | pokeedge |}}
+                      <li class="item flexrow" data-item-id="{{pokeedge._id}}">
+                        <div class="item-name flexrow">
+                          <h4 title="Toggle Info ({{pokeedge.name}})" data-toggle="collapse" data-target="#{{pokeedge._id}}-collapse" aria-expanded="false" aria-controls="{{pokeedge._id}}-collapse">
+                            <i class="fas fa-info-circle info-icon"></i>
+                            {{pokeedge.name}}
+                          </h4>
+                        </div>
+                        <div class="item-controls" style="flex: 0 0 55px; justify-content: center; display:flex;">
+                          <a class="item-control item-edit" title="Edit pokeedge"><i class="fas fa-edit"></i></a>
+                          <a class="item-control item-delete" title="Delete pokeedge"><i class="fas fa-trash"></i></a>
+                        </div>
+                        <div class="collapse readable lh-16 item-summary" id="{{pokeedge._id}}-collapse">
+                          {{pokeedge.data.effect}}
+                        </div>
+                      </li>
+                    {{/each}}
+                  </ol>
+                </ol>
+              </div>
+            </div>
           </div>
           <div
             class="tab details extra"

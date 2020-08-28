@@ -226,7 +226,7 @@
     }
   },
   "Item": {
-    "types": ["feat", "edge", "ability", "move", "item", "capability"],
+    "types": ["feat", "edge", "ability", "move", "item", "capability", "pokeedge"],
     "templates": {
       "base": {
         "name": "",
@@ -273,6 +273,11 @@
     },
     "capability": {
       "templates": ["base"]
+    },
+    "pokeedge": {
+      "templates": ["base"],
+      "prerequisites": "",
+      "cost": 0
     },
     "item": {
       "templates": ["base"],

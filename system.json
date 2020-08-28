@@ -59,6 +59,13 @@
       "name": "capabilities",
       "path": "packs/capabilities.db",
       "system": "ptu"
+    },
+    {
+      "label": "poke edges",
+      "entity": "Item",
+      "name": "poke-edges",
+      "path": "packs/poke-edges.db",
+      "system": "ptu"
     }
   ],
   "languages": [
