@@ -222,197 +222,223 @@
           <div
             class="tab details feats"
             data-group="primary"
-            data-tab="pokeedge"
+            data-tab="capability"
           >
-            <div class="row">
-              <div class="col">
-                <p>Poké Edges</p>
+            <div class="hgss-box mt-auto w-100" style="text-align: center;">
+              <div class="hgss-body w-100" style="display: block;">
+                <ol class="inventory-list">
+                  <li class="inventory-header flexrow">
+                    <h3 class="item-name flexrow">Capabilities</h3>
+                    <div class="item-controls">
+                      <a class="item-control item-create" title="Add capability" data-type="capability"><i class="fas fa-plus-circle" style="margin-right: 3px;"></i><span class="readable">Add</span></a>
+                    </div>
+                  </li>
+                  <ol class="item-list">
+                    {{#each actor.capabilities as | capability |}}
+                      <li class="item flexrow" data-item-id="{{capability._id}}">
+                        <div class="item-name flexrow">
+                          <h4 title="Toggle Info ({{capability.name}})" data-toggle="collapse" data-target="#{{capability._id}}-collapse" aria-expanded="false" aria-controls="{{capability._id}}-collapse">
+                            <i class="fas fa-info-circle info-icon"></i>
+                            {{capability.name}}
+                          </h4>
+                        </div>
+                        <div class="item-controls" style="flex: 0 0 55px; justify-content: center; display:flex;">
+                          <a class="item-control item-edit" title="Edit capability"><i class="fas fa-edit"></i></a>
+                          <a class="item-control item-delete" title="Delete capability"><i class="fas fa-trash"></i></a>
+                        </div>
+                        <div class="collapse readable lh-16 item-summary" id="{{capability._id}}-collapse">
+                          {{capability.data.effect}}
+                        </div>
+                      </li>
+                    {{/each}}
+                  </ol>
+                </ol>
               </div>
             </div>
           </div>
-            <div
-              class="tab details extra"
-              data-group="primary"
-              data-tab="extra"
-            >
-              <div class="d-flex align-items-end flex-column h-100">
-                <!-- Init & Skill Point Mod -->
-                <div class="hgss-box w-100 mb-2"
-                     style="text-align: center; word-break: keep-all;">
-                  <div class="hgss-header">
-                    <div class="d-flex w-100 mt-1 mb-1">
-                      <div class="col-sm-6">
-                        <label for="data.modifiers.initiative">Initiative Mod</label>
-                      </div>
-                      <div class="col-sm-6">
-                        <label for="data.modifiers.statPoints">Skill Point Mod</label>
-                      </div>
+          <div
+            class="tab details extra"
+            data-group="primary"
+            data-tab="extra"
+          >
+            <div class="d-flex align-items-end flex-column h-100">
+              <!-- Init & Skill Point Mod -->
+              <div class="hgss-box w-100 mb-2"
+                    style="text-align: center; word-break: keep-all;">
+                <div class="hgss-header">
+                  <div class="d-flex w-100 mt-1 mb-1">
+                    <div class="col-sm-6">
+                      <label for="data.modifiers.initiative">Initiative Mod</label>
                     </div>
-                  </div>
-                  <div class="hgss-body">
-                    <div class="d-flex w-100 mt-1 mb-1">
-                      <div class="col-sm-6">
-                        <input
-                          name="data.modifiers.initiative"
-                          type="text"
-                          value="{{data.modifiers.initiative}}"
-                          data-dtype="Number"
-                        />
-                      </div>
-                      <div class="col-sm-6">
-                        <input
-                          type="text"
-                          name="data.modifiers.statPoints"
-                          value="{{data.modifiers.statPoints}}"
-                          data-dtype="Number"
-                        />
-                      </div>
+                    <div class="col-sm-6">
+                      <label for="data.modifiers.statPoints">Skill Point Mod</label>
                     </div>
                   </div>
                 </div>
-
-                <!-- Injuries -->
-                <div class="hgss-box mb-2 w-100"
-                     style="text-align: center; word-break: keep-all;">
-                  <div class="hgss-header">
-                    <div class="d-flex w-100 mt-1 mb-1 align-items-center">
-                      <div class="col-sm-4">
-                        <label for="data.health.injuries">Injuries</label>
-                      </div>
-                      <div class="col-sm-3">
-                        <label for="data.modifiers.hardened">Hardened</label>
-                      </div>
-                      <div class="col-sm-5">
-                        <label for="data.health.total">Total Health <small>Ignoring Injuries</small></label>
-                      </div>
+                <div class="hgss-body">
+                  <div class="d-flex w-100 mt-1 mb-1">
+                    <div class="col-sm-6">
+                      <input
+                        name="data.modifiers.initiative"
+                        type="text"
+                        value="{{data.modifiers.initiative}}"
+                        data-dtype="Number"
+                      />
                     </div>
-                  </div>
-                  <div class="hgss-body" style="display: block;">
-                    <div class="d-flex w-100 mt-1 mb-1">
-                      <div class="col-sm-4">
-                        <input
-                          name="data.health.injuries"
-                          type="text"
-                          value="{{data.health.injuries}}"
-                          data-dtype="Number"
-                        />
-                      </div>
-                      <div class="col-sm-3">
-                        <input
-                          name="data.modifiers.hardened"
-                          type="checkbox"
-                          {{checked data.modifiers.hardened}}
-                        />
-                      </div>
-                      <div class="col-sm-5">
-                        <input
-                          type="text"
-                          name="data.health.total"
-                          value="{{data.health.total}}"
-                          data-dtype="Number"
-                          disabled
-                        />
-                      </div>
+                    <div class="col-sm-6">
+                      <input
+                        type="text"
+                        name="data.modifiers.statPoints"
+                        value="{{data.modifiers.statPoints}}"
+                        data-dtype="Number"
+                      />
                     </div>
-                    {{#if (or (bigger data.health.injuries 0) (is true data.modifiers.hardened))}}
-                      <div class="d-flex w-100 mt-1 mb-1">
-                        <ul style="position: relative; left: 15px; width: 96%; line-height: 15px; text-align: start;">
-                        {{#if data.modifiers.hardened}}<li>Injuries beyond the 5th do not lower Maximum Hit Points</li>{{/if}}
-                        {{#if (and (is true data.modifiers.hardened) (biggerOrEqual data.health.injuries 1))}}<li>+1 to Critical Hit and Effect Range</li>{{/if}}
-                        {{#if (and (is true data.modifiers.hardened) (biggerOrEqual data.health.injuries 3))}}<li>+1 Evasion and +5 Initiative</li>{{/if}}
-                        {{#if (biggerOrEqual data.health.injuries 5)}}<li>Unable to regain Hit Points from Resting</li>{{/if}}
-                        {{#if (and (is true data.modifiers.hardened) (biggerOrEqual data.health.injuries 5))}}<li>+5 Damage Reduction</li>{{/if}}
-                        {{#if (and (not true data.modifiers.hardened) (biggerOrEqual data.health.injuries 5))}}<li>Take {{data.health.injuries}} Damage whenever taking a Standard Action during Combat</li>{{/if}}
-                        {{#if (and (is true data.modifiers.hardened) (biggerOrEqual data.health.injuries 7))}}<li>Immune to Loss of Hit Points (but not damage) from all effects</li>{{/if}}
-                        {{#if (and (is true data.modifiers.hardened) (biggerOrEqual data.health.injuries 9))}}<li>Resist all damage one step further</li>{{/if}}
-                        {{#if (and (not true data.modifiers.hardened) (biggerOrEqual data.health.injuries 10))}}<li><b>Death</b></li>{{/if}}
-                        </ol>
-                      </div>
-                    {{/if}}
                   </div>
                 </div>
+              </div>
 
-                <!-- Skills -->
-                <div class="hgss-box mt-auto w-100 mb-2">
-                  <div class="hgss-header skill skill-block">
-                    <div class="row no-gutters header w-100">
-                      <div class="col-sm-4 pt-2 pb-2">Skill</div>
-                      <div class="col mt-2 mb-2">Mod</div>
-                      <div class="col-sm-3 mt-2 mb-2">Rank</div>
-                      <div class="col-sm-2 mt-2 mb-2">Value</div>
-                      <div class="col mt-2 mb-2">Dice</div>
+              <!-- Injuries -->
+              <div class="hgss-box mb-2 w-100"
+                    style="text-align: center; word-break: keep-all;">
+                <div class="hgss-header">
+                  <div class="d-flex w-100 mt-1 mb-1 align-items-center">
+                    <div class="col-sm-4">
+                      <label for="data.health.injuries">Injuries</label>
+                    </div>
+                    <div class="col-sm-3">
+                      <label for="data.modifiers.hardened">Hardened</label>
+                    </div>
+                    <div class="col-sm-5">
+                      <label for="data.health.total">Total Health <small>Ignoring Injuries</small></label>
                     </div>
                   </div>
-                  <div class="hgss-body p-0">
-                    <div class="w-100 skills skill-block">
-                      {{#each data.skills as |skill key|}}
-                        <div class="row no-gutters {{key}} align-items-center">
-                          <div class="skill {{key}} col-sm-4 bgcolor key type--{{skill.type}} align-self-center">
-                            <label for="data.skills.{{key}}.mod" class="resource-label"
-                              >{{skill.label}}</label>
-                          </div>
-                          <div class="skill {{key}} col pl-1 pr-1 fs-9 center-text">
-                              <input
-                                type="text"
-                                name="data.skills.{{key}}.mod"
-                                value="{{skill.mod}}"
-                                data-dtype="Number"
-                              />
-                          </div>
-                          <div class="skill {{key}} col-sm-3 align-self-center bgcolor skill--{{skill.rank}} center-text">
-                            <label for="data.skills.{{key}}.value" class="resource-label"
-                              >{{skill.rank}}</label>
-                          </div>
-                          <div class="skill {{key}} col pl-1 fs-9 center-text">
-                            <input
-                                type="text"
-                                name="data.skills.{{key}}.value"
-                                value="{{skill.value}}"
-                                data-dtype="Number"
-                              />
-                          </div>
-                          <div class="skill {{key}} col-sm-2 align-self-center bgcolor fs-9 center-text rollable"
-                            data-roll="{{skill.value}}d6{{#if skill.mod}}+{{skill.mod}}{{/if}}"
-                            data-label="{{skill.label}}"
-                          >
-                          <i class="fas fa-dice-d20"></i>
-                            <label for="data.skills.{{key}}.value" class="resource-label"
-                              >{{skill.value}}d6{{#if skill.mod}}+{{skill.mod}}{{/if}}</label>
-                          </div>
+                </div>
+                <div class="hgss-body" style="display: block;">
+                  <div class="d-flex w-100 mt-1 mb-1">
+                    <div class="col-sm-4">
+                      <input
+                        name="data.health.injuries"
+                        type="text"
+                        value="{{data.health.injuries}}"
+                        data-dtype="Number"
+                      />
+                    </div>
+                    <div class="col-sm-3">
+                      <input
+                        name="data.modifiers.hardened"
+                        type="checkbox"
+                        {{checked data.modifiers.hardened}}
+                      />
+                    </div>
+                    <div class="col-sm-5">
+                      <input
+                        type="text"
+                        name="data.health.total"
+                        value="{{data.health.total}}"
+                        data-dtype="Number"
+                        disabled
+                      />
+                    </div>
+                  </div>
+                  {{#if (or (bigger data.health.injuries 0) (is true data.modifiers.hardened))}}
+                    <div class="d-flex w-100 mt-1 mb-1">
+                      <ul style="position: relative; left: 15px; width: 96%; line-height: 15px; text-align: start;">
+                      {{#if data.modifiers.hardened}}<li>Injuries beyond the 5th do not lower Maximum Hit Points</li>{{/if}}
+                      {{#if (and (is true data.modifiers.hardened) (biggerOrEqual data.health.injuries 1))}}<li>+1 to Critical Hit and Effect Range</li>{{/if}}
+                      {{#if (and (is true data.modifiers.hardened) (biggerOrEqual data.health.injuries 3))}}<li>+1 Evasion and +5 Initiative</li>{{/if}}
+                      {{#if (biggerOrEqual data.health.injuries 5)}}<li>Unable to regain Hit Points from Resting</li>{{/if}}
+                      {{#if (and (is true data.modifiers.hardened) (biggerOrEqual data.health.injuries 5))}}<li>+5 Damage Reduction</li>{{/if}}
+                      {{#if (and (not true data.modifiers.hardened) (biggerOrEqual data.health.injuries 5))}}<li>Take {{data.health.injuries}} Damage whenever taking a Standard Action during Combat</li>{{/if}}
+                      {{#if (and (is true data.modifiers.hardened) (biggerOrEqual data.health.injuries 7))}}<li>Immune to Loss of Hit Points (but not damage) from all effects</li>{{/if}}
+                      {{#if (and (is true data.modifiers.hardened) (biggerOrEqual data.health.injuries 9))}}<li>Resist all damage one step further</li>{{/if}}
+                      {{#if (and (not true data.modifiers.hardened) (biggerOrEqual data.health.injuries 10))}}<li><b>Death</b></li>{{/if}}
+                      </ol>
+                    </div>
+                  {{/if}}
+                </div>
+              </div>
+
+              <!-- Skills -->
+              <div class="hgss-box mt-auto w-100 mb-2">
+                <div class="hgss-header skill skill-block">
+                  <div class="row no-gutters header w-100">
+                    <div class="col-sm-4 pt-2 pb-2">Skill</div>
+                    <div class="col mt-2 mb-2">Mod</div>
+                    <div class="col-sm-3 mt-2 mb-2">Rank</div>
+                    <div class="col-sm-2 mt-2 mb-2">Value</div>
+                    <div class="col mt-2 mb-2">Dice</div>
+                  </div>
+                </div>
+                <div class="hgss-body p-0">
+                  <div class="w-100 skills skill-block">
+                    {{#each data.skills as |skill key|}}
+                      <div class="row no-gutters {{key}} align-items-center">
+                        <div class="skill {{key}} col-sm-4 bgcolor key type--{{skill.type}} align-self-center">
+                          <label for="data.skills.{{key}}.mod" class="resource-label"
+                            >{{skill.label}}</label>
                         </div>
-                        {{/each}}
-                  </div>
-                  </div>
+                        <div class="skill {{key}} col pl-1 pr-1 fs-9 center-text">
+                            <input
+                              type="text"
+                              name="data.skills.{{key}}.mod"
+                              value="{{skill.mod}}"
+                              data-dtype="Number"
+                            />
+                        </div>
+                        <div class="skill {{key}} col-sm-3 align-self-center bgcolor skill--{{skill.rank}} center-text">
+                          <label for="data.skills.{{key}}.value" class="resource-label"
+                            >{{skill.rank}}</label>
+                        </div>
+                        <div class="skill {{key}} col pl-1 fs-9 center-text">
+                          <input
+                              type="text"
+                              name="data.skills.{{key}}.value"
+                              value="{{skill.value}}"
+                              data-dtype="Number"
+                            />
+                        </div>
+                        <div class="skill {{key}} col-sm-2 align-self-center bgcolor fs-9 center-text rollable"
+                          data-roll="{{skill.value}}d6{{#if skill.mod}}+{{skill.mod}}{{/if}}"
+                          data-label="{{skill.label}}"
+                        >
+                        <i class="fas fa-dice-d20"></i>
+                          <label for="data.skills.{{key}}.value" class="resource-label"
+                            >{{skill.value}}d6{{#if skill.mod}}+{{skill.mod}}{{/if}}</label>
+                        </div>
+                      </div>
+                      {{/each}}
+                </div>
                 </div>
               </div>
             </div>
-            <div class="tab details extra2" data-group="primary" data-tab="extra2">
-              <div class="hgss-box mt-auto w-100" style="text-align: center;">
-                <div class="hgss-header">
-                  <h3 class="m-auto">Item Effect</h3>
-                </div>
-                <div class="hgss-body w-100">
-                  <textarea style="min-height: 100px;" id="itemDescription" disabled>{{itemDescription data.heldItem}}</textarea>
-                </div>
+          </div>
+          <div class="tab details extra2" data-group="primary" data-tab="extra2">
+            <div class="hgss-box mt-auto w-100" style="text-align: center;">
+              <div class="hgss-header">
+                <h3 class="m-auto">Item Effect</h3>
               </div>
-              <div class="hgss-box mt-1 w-100" style="text-align: center;">
-                <div class="hgss-header">
-                  <h3 class="m-auto">Species</h3>
-                </div>
-                <div class="hgss-body">
-                  <input
-                      class="mt-1"
-                      id="speciesInput"
-                      type="text"
-                      name="data.species"
-                      value="{{data.species}}"
-                    />
-                </div>
+              <div class="hgss-body w-100">
+                <textarea style="min-height: 100px;" id="itemDescription" disabled>{{itemDescription data.heldItem}}</textarea>
+              </div>
+            </div>
+            <div class="hgss-box mt-1 w-100" style="text-align: center;">
+              <div class="hgss-header">
+                <h3 class="m-auto">Species</h3>
+              </div>
+              <div class="hgss-body">
+                <input
+                    class="mt-1"
+                    id="speciesInput"
+                    type="text"
+                    name="data.species"
+                    value="{{data.species}}"
+                  />
               </div>
             </div>
           </div>
         </div>
       </div>
+    </div>
     <div class="col-sm-12 col-md-4">
       <div class="d-flex align-items-center flex-column h-100 pt-4">
         <div class="hgss-box mb-1">
@@ -486,7 +512,7 @@
         <ul class="sheet-tabs tabs buttons" data-group="primary">
           <li><button class="item" data-tab="stats">Stats</button></li>
           <li><button class="item" data-tab="moves">Moves</button></li>
-          <li><button class="item" data-tab="pokeedge">Capabilities</button></li>
+          <li><button class="item" data-tab="capability">Capabilities</button></li>
           <li><button class="item" data-tab="extra">Extra</button></li>
           <li><button class="item" data-tab="extra2">Extra 2</button></li>
         </ul>

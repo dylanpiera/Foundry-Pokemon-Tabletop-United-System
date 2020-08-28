@@ -39,7 +39,7 @@ Hooks.once('init', async function() {
   Actors.registerSheet("ptu", PTUCharacterSheet, { types: ["character"], makeDefault: true });
   Actors.registerSheet("ptu", PTUPokemonSheet, { types: ["pokemon"], makeDefault: true });
   Items.unregisterSheet("core", ItemSheet);
-  Items.registerSheet("ptu", PTUItemSheet, { types: ["item","ability","move"], makeDefault: true });
+  Items.registerSheet("ptu", PTUItemSheet, { types: ["item","ability","move","capability"], makeDefault: true });
   Items.registerSheet("ptu", PTUEdgeSheet, { types: ["edge"], makeDefault: true });
   Items.registerSheet("ptu", PTUFeatSheet, { types: ["feat"], makeDefault: true });
 

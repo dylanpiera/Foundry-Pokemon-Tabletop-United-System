@@ -226,7 +226,7 @@
     }
   },
   "Item": {
-    "types": ["feat", "edge", "ability", "move", "item"],
+    "types": ["feat", "edge", "ability", "move", "item", "capability"],
     "templates": {
       "base": {
         "name": "",
@@ -270,6 +270,9 @@
       "ac": "",
       "range": "",
       "contestType": ""
+    },
+    "capability": {
+      "templates": ["base"]
     },
     "item": {
       "templates": ["base"],
