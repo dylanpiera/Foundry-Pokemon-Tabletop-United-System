@@ -28,6 +28,7 @@ export class PTUPokemonSheet extends ActorSheet {
     }
 
     data["compendiumItems"] = game.ptu.items;
+    data["natures"] = game.ptu.natureData;
 
     return data;
   }

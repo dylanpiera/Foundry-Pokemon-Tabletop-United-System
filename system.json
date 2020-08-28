@@ -6,7 +6,7 @@
   "minimumCoreVersion": "0.6.5",
   "compatibleCoreVersion": "0.7.1",
   "templateVersion": 2,
-  "author": "Dylan Piera, Tymo Wessel, Jeffrey Hollander & Cody Swendrowski",
+  "author": "Dylan Piera, Tymo Wessel, Jeffrey Hollander, Efren A. Mariño & Cody Swendrowski",
   "esmodules": ["module/ptu.js"],
   "styles": [
     "css/ptu.css",

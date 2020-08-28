@@ -111,11 +111,18 @@
                   <div class="hgss-body">
                     <div class="d-flex w-100 mt-1 mb-1">
                       <div class="col-sm-5">
-                        <input
+                        {{#select data.nature.value}}
+                          <select name="data.nature.value">
+                            {{#each natures as | nature key |}}
+                              <option value="{{key}}">{{key}}</option>
+                            {{/each}}
+                          </select>
+                        {{/select}}
+                        <!--input
                           name="data.nature.value"
                           type="text"
                           value="{{data.nature.value}}"
-                        />
+                        /-->
                       </div>
                       <div class="col-sm-4">
                         <input
