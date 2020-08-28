@@ -388,6 +388,20 @@
                   <textarea style="min-height: 100px;" id="itemDescription" disabled>{{itemDescription data.heldItem}}</textarea>
                 </div>
               </div>
+              <div class="hgss-box mt-1 w-100" style="text-align: center;">
+                <div class="hgss-header">
+                  <h3 class="m-auto">Species</h3>
+                </div>
+                <div class="hgss-body">
+                  <input
+                      class="mt-1"
+                      id="speciesInput"
+                      type="text"
+                      name="data.species"
+                      value="{{data.species}}"
+                    />
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -442,20 +456,6 @@
             data-edit="img"
             title="{{actor.name}}"
           />
-        </div>
-        <div class="hgss-box mt-auto w-100" style="text-align: center;">
-          <div class="hgss-header">
-            <h3 class="m-auto">Species</h3>
-          </div>
-          <div class="hgss-body">
-            <input
-                class="mt-1"
-                id="speciesInput"
-                type="text"
-                name="data.species"
-                value="{{data.species}}"
-              />
-          </div>
         </div>
         <div class="hgss-box mt-auto w-100" style="text-align: center;">
           <div class="hgss-header">
