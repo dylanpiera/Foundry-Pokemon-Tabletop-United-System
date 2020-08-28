@@ -52,6 +52,13 @@
       "name": "items",
       "path": "packs/items.db",
       "system": "ptu"
+    },
+    {
+      "label": "capabilities",
+      "entity": "Item",
+      "name": "capabilities",
+      "path": "packs/capabilities.db",
+      "system": "ptu"
     }
   ],
   "languages": [
