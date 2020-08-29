@@ -1,14 +1,9 @@
-<form
-  class="{{cssClass}} container-fluid"
-  autocomplete="off"
-  style="padding-left: unset;"
->
+<form class="{{cssClass}} container-fluid" autocomplete="off" style="padding-left: unset;">
   <div class="row justify-content-between" style="height: 96%;">
     <div class="col-sm-12 col-md-8" style="padding-left: unset;">
       <div class="panel character h-100">
         <div class="sheet-body no-hd h-100">
-          <div class="tab details stats h-100" data-group="primary" data-tab="stats"
-          >
+          <div class="tab details stats h-100" data-group="primary" data-tab="stats">
             <div class="d-flex align-items-end flex-column h-100">
               <div class="w-100 stats stat-block mb-2">
                 <div class="row no-gutters header">
@@ -22,79 +17,43 @@
                 {{#each data.stats as |stat key|}}
                 <div class="row no-gutters {{key}}">
                   <div class="stats {{key}} col-sm-2 key">
-                    <label for="data.stats.{{key}}.value" class="resource-label"
-                      >{{key}}</label
-                    >
+                    <label for="data.stats.{{key}}.value" class="resource-label">{{key}}</label>
                   </div>
                   <div class="stats {{key}} base col-sm-2">
-                    <input
-                      type="text"
-                      name="data.stats.{{key}}.value"
-                      value="{{stat.value}}"
-                      data-dtype="Number"
-                      disabled
-                    />
+                    <input type="text" name="data.stats.{{key}}.value" value="{{stat.value}}" data-dtype="Number"
+                      disabled />
                   </div>
                   <div class="stats {{key}} mod col-sm-2">
-                    <input
-                      type="text"
-                      name="data.stats.{{key}}.mod"
-                      value="{{stat.mod}}"
-                      data-dtype="Number"
-                    />
+                    <input type="text" name="data.stats.{{key}}.mod" value="{{stat.mod}}" data-dtype="Number" />
                   </div>
                   <div class="stats {{key}} levelUp col-sm-2">
-                    <input
-                      type="text"
-                      name="data.stats.{{key}}.levelUp"
-                      value="{{stat.levelUp}}"
-                      data-dtype="Number"
-                    />
+                    <input type="text" name="data.stats.{{key}}.levelUp" value="{{stat.levelUp}}" data-dtype="Number" />
                   </div>
                   <div class="stats stage stage col-sm-2">
-                  {{#if (isdefined stat.stage)}}
-                    <input
-                      type="text"
-                      name="data.stats.{{key}}.stage"
-                      value="{{stat.stage}}"
-                      data-dtype="Number"
-                    />
+                    {{#if (isdefined stat.stage)}}
+                    <input type="text" name="data.stats.{{key}}.stage" value="{{stat.stage}}" data-dtype="Number" />
                     {{/if}}
                   </div>
                   <div class="stats {{key}} total col-sm-2">
-                    <input
-                      type="text"
-                      name="data.stats.{{key}}.total"
-                      value="{{stat.total}}"
-                      data-dtype="Number"
-                      disabled
-                    />
+                    <input type="text" name="data.stats.{{key}}.total" value="{{stat.total}}" data-dtype="Number"
+                      disabled />
                   </div>
                 </div>
                 {{/each}}
                 {{#if data.levelUpPoints}}
                 <div class="row no-gutters levelUpPoints">
                   <div class="col-sm-8">
-                    <label for="data.levelUpPoints" class="resource-label">Remaining Level-Up Points:</label
-                    >
+                    <label for="data.levelUpPoints" class="resource-label">Remaining Level-Up Points:</label>
                   </div>
                   <div class="col">
-                    <input
-                      type="text"
-                      name="data.levelUpPoints"
-                      value="{{data.levelUpPoints}}"
-                      data-dtype="Number"
-                      disabled
-                    />
+                    <input type="text" name="data.levelUpPoints" value="{{data.levelUpPoints}}" data-dtype="Number"
+                      disabled />
                   </div>
                 </div>
                 {{/if}}
               </div>
               <div class="w-100 level-box mb-2">
-                <div
-                  class="hgss-box"
-                  style="text-align: center; word-break: keep-all;"
-                >
+                <div class="hgss-box" style="text-align: center; word-break: keep-all;">
                   <div class="hgss-header">
                     <div class="d-flex w-100 mt-1 mb-1">
                       <div class="col-sm-5">
@@ -112,11 +71,11 @@
                     <div class="d-flex w-100 mt-1 mb-1">
                       <div class="col-sm-5">
                         {{#select data.nature.value}}
-                          <select name="data.nature.value">
-                            {{#each natures as | nature key |}}
-                              <option value="{{key}}">{{key}}</option>
-                            {{/each}}
-                          </select>
+                        <select name="data.nature.value">
+                          {{#each natures as | nature key |}}
+                          <option value="{{key}}">{{key}}</option>
+                          {{/each}}
+                        </select>
                         {{/select}}
                         <!--input
                           name="data.nature.value"
@@ -125,21 +84,11 @@
                         /-->
                       </div>
                       <div class="col-sm-4">
-                        <input
-                          type="text"
-                          name="data.level.exp"
-                          value="{{data.level.exp}}"
-                          data-dtype="Number"
-                        />
+                        <input type="text" name="data.level.exp" value="{{data.level.exp}}" data-dtype="Number" />
                       </div>
                       <div class="col-sm-3">
-                        <input
-                          type="text"
-                          name="data.level.current"
-                          value="{{data.level.current}}"
-                          data-dtype="Number"
-                          disabled
-                        />
+                        <input type="text" name="data.level.current" value="{{data.level.current}}" data-dtype="Number"
+                          disabled />
                       </div>
                     </div>
                   </div>
@@ -151,26 +100,30 @@
                     <li class="inventory-header flexrow">
                       <h3 class="item-name flexrow">Abilities</h3>
                       <div class="item-controls">
-                        <a class="item-control item-create" title="Add ability" data-type="ability"><i class="fas fa-plus-circle" style="margin-right: 3px;"></i><span class="readable">Add</span></a>
+                        <a class="item-control item-create" title="Add ability" data-type="ability"><i
+                            class="fas fa-plus-circle" style="margin-right: 3px;"></i><span
+                            class="readable">Add</span></a>
                       </div>
                     </li>
                     <ol class="item-list">
                       {{#each actor.abilities as | ability |}}
-                        <li class="item flexrow" data-item-id="{{ability._id}}">
-                          <div class="item-name flexrow">
-                            <h4 title="Toggle Info ({{ability.name}})" data-toggle="collapse" data-target="#{{ability._id}}-collapse" aria-expanded="false" aria-controls="{{ability._id}}-collapse">
-                              <i class="fas fa-info-circle info-icon"></i>
-                              {{ability.name}}
-                            </h4>
-                          </div>
-                          <div class="item-controls" style="flex: 0 0 55px; justify-content: center; display:flex;">
-                            <a class="item-control item-edit" title="Edit ability"><i class="fas fa-edit"></i></a>
-                            <a class="item-control item-delete" title="Delete ability"><i class="fas fa-trash"></i></a>
-                          </div>
-                          <div class="collapse readable lh-16 item-summary" id="{{ability._id}}-collapse">
-                            {{ability.data.effect}}
-                          </div>
-                        </li>
+                      <li class="item flexrow" data-item-id="{{ability._id}}">
+                        <div class="item-name flexrow">
+                          <h4 title="Toggle Info ({{ability.name}})" data-toggle="collapse"
+                            data-target="#{{ability._id}}-collapse" aria-expanded="false"
+                            aria-controls="{{ability._id}}-collapse">
+                            <i class="fas fa-info-circle info-icon"></i>
+                            {{ability.name}}
+                          </h4>
+                        </div>
+                        <div class="item-controls" style="flex: 0 0 55px; justify-content: center; display:flex;">
+                          <a class="item-control item-edit" title="Edit ability"><i class="fas fa-edit"></i></a>
+                          <a class="item-control item-delete" title="Delete ability"><i class="fas fa-trash"></i></a>
+                        </div>
+                        <div class="collapse readable lh-16 item-summary" id="{{ability._id}}-collapse">
+                          {{ability.data.effect}}
+                        </div>
+                      </li>
                       {{/each}}
                     </ol>
                   </ol>
@@ -185,108 +138,102 @@
                   <li class="inventory-header flexrow">
                     <h3 class="item-name flexrow">Moves</h3>
                     <div class="item-controls">
-                      <a class="item-control item-create" title="Add move" data-type="move"><i class="fas fa-plus-circle" style="margin-right: 3px;"></i><span class="readable">Add</span></a>
+                      <a class="item-control item-create" title="Add move" data-type="move"><i
+                          class="fas fa-plus-circle" style="margin-right: 3px;"></i><span
+                          class="readable">Add</span></a>
                     </div>
                   </li>
                   <ol class="item-list">
                     {{#each actor.moves as | move |}}
-                      <li class="item flexrow" data-item-id="{{move._id}}">
-                        <div class="item-name flexrow">
-                          <h4 title="Toggle Info ({{move.name}})" data-toggle="collapse" data-target="#{{move._id}}-collapse" aria-expanded="false" aria-controls="{{move._id}}-collapse">
-                            <i class="fas fa-info-circle info-icon"></i>
-                            {{move.name}}
-                          </h4>
+                    <li class="item flexrow" data-item-id="{{move._id}}">
+                      <div class="item-name flexrow">
+                        <h4 title="Toggle Info ({{move.name}})" data-toggle="collapse"
+                          data-target="#{{move._id}}-collapse" aria-expanded="false"
+                          aria-controls="{{move._id}}-collapse">
+                          <i class="fas fa-info-circle info-icon"></i>
+                          {{move.name}}
+                        </h4>
+                      </div>
+                      <div class="item-controls" style="flex: 0 0 55px; justify-content: center; display:flex;">
+                        <a class="item-control item-edit" title="Edit move"><i class="fas fa-edit"></i></a>
+                        <a class="item-control item-delete" title="Delete move"><i class="fas fa-trash"></i></a>
+                      </div>
+                      <div class="collapse readable lh-16 item-summary" id="{{move._id}}-collapse">
+                        <div class="content move-grid">
+                          Frequency: <span class="readable pokemon p8">{{move.data.frequency}}</span>
+                          DB: <span class="readable pokemon p8">{{move.data.damageBase}}</span>
+                          Category: <span class="readable pokemon p8">{{move.data.category}}</span>
+                          Type: <span class="readable pokemon p8">{{move.data.type}}</span>
+                          AC: <span class="readable pokemon p8">{{move.data.ac}}</span>
+                          Range: <span class="readable pokemon p8">{{move.data.range}}</span>
+                          <span>Effect: <span class="readable p8 pokemon">{{{move.data.effect}}}</span></span>
                         </div>
-                        <div class="item-controls" style="flex: 0 0 55px; justify-content: center; display:flex;">
-                          <a class="item-control item-edit" title="Edit move"><i class="fas fa-edit"></i></a>
-                          <a class="item-control item-delete" title="Delete move"><i class="fas fa-trash"></i></a>
-                        </div>
-                        <div class="collapse readable lh-16 item-summary" id="{{move._id}}-collapse">
-                          <div class="content move-grid">
-                            Frequency: <span class="readable pokemon p8">{{move.data.frequency}}</span>
-                            DB: <span class="readable pokemon p8">{{move.data.damageBase}}</span>
-                            Category: <span class="readable pokemon p8">{{move.data.category}}</span> 
-                            Type: <span class="readable pokemon p8">{{move.data.type}}</span> 
-                            AC: <span class="readable pokemon p8">{{move.data.ac}}</span>
-                            Range: <span class="readable pokemon p8">{{move.data.range}}</span>
-                            <span>Effect: <span class="readable p8 pokemon">{{{move.data.effect}}}</span></span>
-                        </div>
-                        </div>
-                      </li>
+                      </div>
+                    </li>
                     {{/each}}
                   </ol>
                 </ol>
               </div>
             </div>
           </div>
-          <div
-            class="tab details feats"
-            data-group="primary"
-            data-tab="capability"
-          >
+          <div class="tab details feats" data-group="primary" data-tab="capability">
             <div class="hgss-box mt-auto w-100">
               <div class="hgss-header">
                 <h3 class="item-name flexrow">Capabilities</h3>
               </div>
               <div class="hgss-body readable w-100">
                 {{#each data.capabilities as |capability key|}}
-                  {{#if (and (not key "Other") (not key "Naturewalk"))}}
-                    <div class="col-sm-4 p11">
-                      <label for="data.capabilities.{{key}}">{{key}}:</label>
-                    </div>
-                    <div class="col-sm-2" style="text-align: center;">
-                      <input
-                        type="text"
-                        name="data.capabilities.{{key}}"
-                        value="{{capability}}"
-                        data-dtype="Number"
-                        disabled
-                      />
-                    </div>
-                  {{/if}}
+                {{#if (and (not key "Other") (not key "Naturewalk"))}}
+                <div class="col-sm-4 p11">
+                  <label for="data.capabilities.{{key}}">{{key}}:</label>
+                </div>
+                <div class="col-sm-2" style="text-align: center;">
+                  <input type="text" name="data.capabilities.{{key}}" value="{{capability}}" data-dtype="Number"
+                    disabled />
+                </div>
+                {{/if}}
                 {{/each}}
               </div>
               {{#if data.capabilities.Naturewalk}}
-                <div class="hgss-body readable w-100">
-                  <div class="col-sm-4 p11">
-                    <label for="data.capabilities.Naturewalk">Naturewalk:</label>
-                  </div>
-                  <div class="col-sm-8" style="text-align: center;">
-                    <input
-                      type="text"
-                      name="data.capabilities.Naturewalk"
-                      value="{{data.capabilities.Naturewalk}}"
-                      data-dtype="Number"
-                      disabled
-                    />
-                  </div>
+              <div class="hgss-body readable w-100">
+                <div class="col-sm-4 p11">
+                  <label for="data.capabilities.Naturewalk">Naturewalk:</label>
                 </div>
+                <div class="col-sm-8" style="text-align: center;">
+                  <input type="text" name="data.capabilities.Naturewalk" value="{{data.capabilities.Naturewalk}}"
+                    data-dtype="Number" disabled />
+                </div>
+              </div>
               {{/if}}
               <div class="hgss-body w-100 mt-2" style="display: block;">
                 <ol class="inventory-list">
                   <li class="inventory-header flexrow">
                     <h3 class="item-name flexrow">Other Capabilities</h3>
                     <div class="item-controls">
-                      <a class="item-control item-create" title="Add capability" data-type="capability"><i class="fas fa-plus-circle" style="margin-right: 3px;"></i><span class="readable">Add</span></a>
+                      <a class="item-control item-create" title="Add capability" data-type="capability"><i
+                          class="fas fa-plus-circle" style="margin-right: 3px;"></i><span
+                          class="readable">Add</span></a>
                     </div>
                   </li>
                   <ol class="item-list">
                     {{#each actor.capabilities as | capability |}}
-                      <li class="item flexrow" data-item-id="{{capability._id}}">
-                        <div class="item-name flexrow">
-                          <h4 title="Toggle Info ({{capability.name}})" data-toggle="collapse" data-target="#{{capability._id}}-collapse" aria-expanded="false" aria-controls="{{capability._id}}-collapse">
-                            <i class="fas fa-info-circle info-icon"></i>
-                            {{capability.name}}
-                          </h4>
-                        </div>
-                        <div class="item-controls" style="flex: 0 0 55px; justify-content: center; display:flex;">
-                          <a class="item-control item-edit" title="Edit capability"><i class="fas fa-edit"></i></a>
-                          <a class="item-control item-delete" title="Delete capability"><i class="fas fa-trash"></i></a>
-                        </div>
-                        <div class="collapse readable lh-16 item-summary" id="{{capability._id}}-collapse">
-                          {{capability.data.effect}}
-                        </div>
-                      </li>
+                    <li class="item flexrow" data-item-id="{{capability._id}}">
+                      <div class="item-name flexrow">
+                        <h4 title="Toggle Info ({{capability.name}})" data-toggle="collapse"
+                          data-target="#{{capability._id}}-collapse" aria-expanded="false"
+                          aria-controls="{{capability._id}}-collapse">
+                          <i class="fas fa-info-circle info-icon"></i>
+                          {{capability.name}}
+                        </h4>
+                      </div>
+                      <div class="item-controls" style="flex: 0 0 55px; justify-content: center; display:flex;">
+                        <a class="item-control item-edit" title="Edit capability"><i class="fas fa-edit"></i></a>
+                        <a class="item-control item-delete" title="Delete capability"><i class="fas fa-trash"></i></a>
+                      </div>
+                      <div class="collapse readable lh-16 item-summary" id="{{capability._id}}-collapse">
+                        {{capability.data.effect}}
+                      </div>
+                    </li>
                     {{/each}}
                   </ol>
                 </ol>
@@ -299,41 +246,40 @@
                   <li class="inventory-header flexrow">
                     <h3 class="item-name flexrow">Poké Edges</h3>
                     <div class="item-controls">
-                      <a class="item-control item-create" title="Add pokeedge" data-type="pokeedge"><i class="fas fa-plus-circle" style="margin-right: 3px;"></i><span class="readable">Add</span></a>
+                      <a class="item-control item-create" title="Add pokeedge" data-type="pokeedge"><i
+                          class="fas fa-plus-circle" style="margin-right: 3px;"></i><span
+                          class="readable">Add</span></a>
                     </div>
                   </li>
                   <ol class="item-list">
                     {{#each actor.edges as | pokeedge |}}
-                      <li class="item flexrow" data-item-id="{{pokeedge._id}}">
-                        <div class="item-name flexrow">
-                          <h4 title="Toggle Info ({{pokeedge.name}})" data-toggle="collapse" data-target="#{{pokeedge._id}}-collapse" aria-expanded="false" aria-controls="{{pokeedge._id}}-collapse">
-                            <i class="fas fa-info-circle info-icon"></i>
-                            {{pokeedge.name}}
-                          </h4>
-                        </div>
-                        <div class="item-controls" style="flex: 0 0 55px; justify-content: center; display:flex;">
-                          <a class="item-control item-edit" title="Edit pokeedge"><i class="fas fa-edit"></i></a>
-                          <a class="item-control item-delete" title="Delete pokeedge"><i class="fas fa-trash"></i></a>
-                        </div>
-                        <div class="collapse readable lh-16 item-summary" id="{{pokeedge._id}}-collapse">
-                          {{pokeedge.data.effect}}
-                        </div>
-                      </li>
+                    <li class="item flexrow" data-item-id="{{pokeedge._id}}">
+                      <div class="item-name flexrow">
+                        <h4 title="Toggle Info ({{pokeedge.name}})" data-toggle="collapse"
+                          data-target="#{{pokeedge._id}}-collapse" aria-expanded="false"
+                          aria-controls="{{pokeedge._id}}-collapse">
+                          <i class="fas fa-info-circle info-icon"></i>
+                          {{pokeedge.name}}
+                        </h4>
+                      </div>
+                      <div class="item-controls" style="flex: 0 0 55px; justify-content: center; display:flex;">
+                        <a class="item-control item-edit" title="Edit pokeedge"><i class="fas fa-edit"></i></a>
+                        <a class="item-control item-delete" title="Delete pokeedge"><i class="fas fa-trash"></i></a>
+                      </div>
+                      <div class="collapse readable lh-16 item-summary" id="{{pokeedge._id}}-collapse">
+                        {{pokeedge.data.effect}}
+                      </div>
+                    </li>
                     {{/each}}
                   </ol>
                 </ol>
               </div>
             </div>
           </div>
-          <div
-            class="tab details extra"
-            data-group="primary"
-            data-tab="extra"
-          >
+          <div class="tab details extra" data-group="primary" data-tab="extra">
             <div class="d-flex align-items-end flex-column h-100">
               <!-- Init & Skill Point Mod -->
-              <div class="hgss-box w-100 mb-2"
-                    style="text-align: center; word-break: keep-all;">
+              <div class="hgss-box w-100 mb-2" style="text-align: center; word-break: keep-all;">
                 <div class="hgss-header">
                   <div class="d-flex w-100 mt-1 mb-1">
                     <div class="col-sm-6">
@@ -347,28 +293,19 @@
                 <div class="hgss-body">
                   <div class="d-flex w-100 mt-1 mb-1">
                     <div class="col-sm-6">
-                      <input
-                        name="data.modifiers.initiative"
-                        type="text"
-                        value="{{data.modifiers.initiative}}"
-                        data-dtype="Number"
-                      />
+                      <input name="data.modifiers.initiative" type="text" value="{{data.modifiers.initiative}}"
+                        data-dtype="Number" />
                     </div>
                     <div class="col-sm-6">
-                      <input
-                        type="text"
-                        name="data.modifiers.statPoints"
-                        value="{{data.modifiers.statPoints}}"
-                        data-dtype="Number"
-                      />
+                      <input type="text" name="data.modifiers.statPoints" value="{{data.modifiers.statPoints}}"
+                        data-dtype="Number" />
                     </div>
                   </div>
                 </div>
               </div>
 
               <!-- Injuries -->
-              <div class="hgss-box mb-2 w-100"
-                    style="text-align: center; word-break: keep-all;">
+              <div class="hgss-box mb-2 w-100" style="text-align: center; word-break: keep-all;">
                 <div class="hgss-header">
                   <div class="d-flex w-100 mt-1 mb-1 align-items-center">
                     <div class="col-sm-4">
@@ -385,44 +322,40 @@
                 <div class="hgss-body" style="display: block;">
                   <div class="d-flex w-100 mt-1 mb-1">
                     <div class="col-sm-4">
-                      <input
-                        name="data.health.injuries"
-                        type="text"
-                        value="{{data.health.injuries}}"
-                        data-dtype="Number"
-                      />
+                      <input name="data.health.injuries" type="text" value="{{data.health.injuries}}"
+                        data-dtype="Number" />
                     </div>
                     <div class="col-sm-3">
-                      <input
-                        name="data.modifiers.hardened"
-                        type="checkbox"
-                        {{checked data.modifiers.hardened}}
-                      />
+                      <input name="data.modifiers.hardened" type="checkbox" {{checked data.modifiers.hardened}} />
                     </div>
                     <div class="col-sm-5">
-                      <input
-                        type="text"
-                        name="data.health.total"
-                        value="{{data.health.total}}"
-                        data-dtype="Number"
-                        disabled
-                      />
+                      <input type="text" name="data.health.total" value="{{data.health.total}}" data-dtype="Number"
+                        disabled />
                     </div>
                   </div>
                   {{#if (or (bigger data.health.injuries 0) (is true data.modifiers.hardened))}}
-                    <div class="d-flex w-100 mt-1 mb-1">
-                      <ul style="position: relative; left: 15px; width: 96%; line-height: 15px; text-align: start;">
-                      {{#if data.modifiers.hardened}}<li>Injuries beyond the 5th do not lower Maximum Hit Points</li>{{/if}}
-                      {{#if (and (is true data.modifiers.hardened) (biggerOrEqual data.health.injuries 1))}}<li>+1 to Critical Hit and Effect Range</li>{{/if}}
-                      {{#if (and (is true data.modifiers.hardened) (biggerOrEqual data.health.injuries 3))}}<li>+1 Evasion and +5 Initiative</li>{{/if}}
-                      {{#if (biggerOrEqual data.health.injuries 5)}}<li>Unable to regain Hit Points from Resting</li>{{/if}}
-                      {{#if (and (is true data.modifiers.hardened) (biggerOrEqual data.health.injuries 5))}}<li>+5 Damage Reduction</li>{{/if}}
-                      {{#if (and (not true data.modifiers.hardened) (biggerOrEqual data.health.injuries 5))}}<li>Take {{data.health.injuries}} Damage whenever taking a Standard Action during Combat</li>{{/if}}
-                      {{#if (and (is true data.modifiers.hardened) (biggerOrEqual data.health.injuries 7))}}<li>Immune to Loss of Hit Points (but not damage) from all effects</li>{{/if}}
-                      {{#if (and (is true data.modifiers.hardened) (biggerOrEqual data.health.injuries 9))}}<li>Resist all damage one step further</li>{{/if}}
-                      {{#if (and (not true data.modifiers.hardened) (biggerOrEqual data.health.injuries 10))}}<li><b>Death</b></li>{{/if}}
+                  <div class="d-flex w-100 mt-1 mb-1">
+                    <ul style="position: relative; left: 15px; width: 96%; line-height: 15px; text-align: start;">
+                      {{#if data.modifiers.hardened}}<li>Injuries beyond the 5th do not lower Maximum Hit Points</li>
+                      {{/if}}
+                      {{#if (and (is true data.modifiers.hardened) (biggerOrEqual data.health.injuries 1))}}<li>+1 to
+                        Critical Hit and Effect Range</li>{{/if}}
+                      {{#if (and (is true data.modifiers.hardened) (biggerOrEqual data.health.injuries 3))}}<li>+1
+                        Evasion and +5 Initiative</li>{{/if}}
+                      {{#if (biggerOrEqual data.health.injuries 5)}}<li>Unable to regain Hit Points from Resting</li>
+                      {{/if}}
+                      {{#if (and (is true data.modifiers.hardened) (biggerOrEqual data.health.injuries 5))}}<li>+5
+                        Damage Reduction</li>{{/if}}
+                      {{#if (and (not true data.modifiers.hardened) (biggerOrEqual data.health.injuries 5))}}<li>Take
+                        {{data.health.injuries}} Damage whenever taking a Standard Action during Combat</li>{{/if}}
+                      {{#if (and (is true data.modifiers.hardened) (biggerOrEqual data.health.injuries 7))}}<li>Immune
+                        to Loss of Hit Points (but not damage) from all effects</li>{{/if}}
+                      {{#if (and (is true data.modifiers.hardened) (biggerOrEqual data.health.injuries 9))}}<li>Resist
+                        all damage one step further</li>{{/if}}
+                      {{#if (and (not true data.modifiers.hardened) (biggerOrEqual data.health.injuries 10))}}<li>
+                        <b>Death</b></li>{{/if}}
                       </ol>
-                    </div>
+                  </div>
                   {{/if}}
                 </div>
               </div>
@@ -441,42 +374,30 @@
                 <div class="hgss-body p-0">
                   <div class="w-100 skills skill-block">
                     {{#each data.skills as |skill key|}}
-                      <div class="row no-gutters {{key}} align-items-center">
-                        <div class="skill {{key}} col-sm-4 bgcolor key type--{{skill.type}} align-self-center">
-                          <label for="data.skills.{{key}}.mod" class="resource-label"
-                            >{{skill.label}}</label>
-                        </div>
-                        <div class="skill {{key}} col pl-1 pr-1 fs-9 center-text">
-                            <input
-                              type="text"
-                              name="data.skills.{{key}}.mod"
-                              value="{{skill.mod}}"
-                              data-dtype="Number"
-                            />
-                        </div>
-                        <div class="skill {{key}} col-sm-3 align-self-center bgcolor skill--{{skill.rank}} center-text">
-                          <label for="data.skills.{{key}}.value" class="resource-label"
-                            >{{skill.rank}}</label>
-                        </div>
-                        <div class="skill {{key}} col pl-1 fs-9 center-text">
-                          <input
-                              type="text"
-                              name="data.skills.{{key}}.value"
-                              value="{{skill.value}}"
-                              data-dtype="Number"
-                            />
-                        </div>
-                        <div class="skill {{key}} col-sm-2 align-self-center bgcolor fs-9 center-text rollable"
-                          data-roll="{{skill.value}}d6{{#if skill.mod}}+{{skill.mod}}{{/if}}"
-                          data-label="{{skill.label}}"
-                        >
-                        <i class="fas fa-dice-d20"></i>
-                          <label for="data.skills.{{key}}.value" class="resource-label"
-                            >{{skill.value}}d6{{#if skill.mod}}+{{skill.mod}}{{/if}}</label>
-                        </div>
+                    <div class="row no-gutters {{key}} align-items-center">
+                      <div class="skill {{key}} col-sm-4 bgcolor key type--{{skill.type}} align-self-center">
+                        <label for="data.skills.{{key}}.mod" class="resource-label">{{skill.label}}</label>
                       </div>
-                      {{/each}}
-                </div>
+                      <div class="skill {{key}} col pl-1 pr-1 fs-9 center-text">
+                        <input type="text" name="data.skills.{{key}}.mod" value="{{skill.mod}}" data-dtype="Number" />
+                      </div>
+                      <div class="skill {{key}} col-sm-3 align-self-center bgcolor skill--{{skill.rank}} center-text">
+                        <label for="data.skills.{{key}}.value" class="resource-label">{{skill.rank}}</label>
+                      </div>
+                      <div class="skill {{key}} col pl-1 fs-9 center-text">
+                        <input type="text" name="data.skills.{{key}}.value" value="{{skill.value}}"
+                          data-dtype="Number" />
+                      </div>
+                      <div class="skill {{key}} col-sm-2 align-self-center bgcolor fs-9 center-text rollable"
+                        data-roll="{{skill.value}}d6{{#if skill.mod}}+{{skill.mod}}{{/if}}"
+                        data-label="{{skill.label}}">
+                        <i class="fas fa-dice-d20"></i>
+                        <label for="data.skills.{{key}}.value"
+                          class="resource-label">{{skill.value}}d6{{#if skill.mod}}+{{skill.mod}}{{/if}}</label>
+                      </div>
+                    </div>
+                    {{/each}}
+                  </div>
                 </div>
               </div>
             </div>
@@ -487,7 +408,8 @@
                 <h3 class="m-auto">Item Effect</h3>
               </div>
               <div class="hgss-body w-100">
-                <textarea style="min-height: 100px;" id="itemDescription" disabled>{{itemDescription data.heldItem}}</textarea>
+                <textarea style="min-height: 100px;" id="itemDescription"
+                  disabled>{{itemDescription data.heldItem}}</textarea>
               </div>
             </div>
             <div class="hgss-box mt-1 w-100" style="text-align: center;">
@@ -495,13 +417,7 @@
                 <h3 class="m-auto">Species</h3>
               </div>
               <div class="hgss-body">
-                <input
-                    class="mt-1"
-                    id="speciesInput"
-                    type="text"
-                    name="data.species"
-                    value="{{data.species}}"
-                  />
+                <input class="mt-1" id="speciesInput" type="text" name="data.species" value="{{data.species}}" />
               </div>
             </div>
           </div>
@@ -513,78 +429,47 @@
         <div class="hgss-box mb-1">
           <div class="hgss-header" style="align-items: unset;">
             <label for="name" class="name-label"></label>
-            <input
-              class="ml-2"
-              name="name"
-              type="text"
-              value="{{actor.name}}"
-              placeholder="Name"
-            />
+            <input class="ml-2" name="name" type="text" value="{{actor.name}}" placeholder="Name" />
           </div>
           <div class="hgss-body row no-gutters">
             <div class="options w-100 d-flex">
               <label for="progressBar" class="hp"></label>
               <div class="d-flex pt-1 pb-1" style="text-align: center;">
-                <input
-                  class="ml-1 mr-1"
-                  type="text"
-                  name="data.health.value"
-                  value="{{data.health.value}}"
-                  data-dtype="Number"
-                />
+                <input class="ml-1 mr-1" type="text" name="data.health.value" value="{{data.health.value}}"
+                  data-dtype="Number" />
                 <span style="font-size: 20px;"> / </span>
-                <input
-                  class="ml-1"
-                  type="text"
-                  name="data.health.max"
-                  value="{{data.health.max}}"
-                  data-dtype="Number"
-                  disabled
-                />
+                <input class="ml-1" type="text" name="data.health.max" value="{{data.health.max}}" data-dtype="Number"
+                  disabled />
               </div>
             </div>
             <div class="options w-100 pb-1 pt-1">
-              <div
-                class="progress-bar p{{data.health.percent}}"
-                id="progressBar"
-              ></div>
+              <div class="progress-bar p{{data.health.percent}}" id="progressBar"></div>
             </div>
           </div>
         </div>
         <div class="avatar mt-1 mb-1">
-          <img
-            class="profile-img"
-            src="{{actor.img}}"
-            data-edit="img"
-            title="{{actor.name}}"
-          />
+          <img class="profile-img" src="{{actor.img}}" data-edit="img" title="{{actor.name}}" />
         </div>
         <div class="hgss-box mt-auto mb-2 w-100" style="text-align: center;">
           <div class="hgss-header">
             <h3 class="m-auto">Item</h3>
           </div>
           <div class="hgss-body">
-            <input
-                class="mt-1"
-                id="heldItemInput"
-                type="text"
-                name="data.heldItem"
-                value="{{data.heldItem}}"
-              />
+            <input class="mt-1" id="heldItemInput" type="text" name="data.heldItem" value="{{data.heldItem}}" />
           </div>
         </div>
       </div>
     </div>
   </div>
-    <div class="sheet-footer">
-      <div class="tabs">
-        <ul class="sheet-tabs tabs buttons" data-group="primary">
-          <li><button class="item" data-tab="stats">Stats</button></li>
-          <li><button class="item" data-tab="moves">Moves</button></li>
-          <li><button class="item" data-tab="capability">Capabilities</button></li>
-          <li><button class="item" data-tab="extra">Extra</button></li>
-          <li><button class="item" data-tab="extra2">Extra 2</button></li>
-        </ul>
-      </div>
+  <div class="sheet-footer">
+    <div class="tabs">
+      <ul class="sheet-tabs tabs buttons" data-group="primary">
+        <li><button class="item" data-tab="stats">Stats</button></li>
+        <li><button class="item" data-tab="moves">Moves</button></li>
+        <li><button class="item" data-tab="capability">Capabilities</button></li>
+        <li><button class="item" data-tab="extra">Extra</button></li>
+        <li><button class="item" data-tab="extra2">Extra 2</button></li>
+      </ul>
+    </div>
   </div>
 </form>

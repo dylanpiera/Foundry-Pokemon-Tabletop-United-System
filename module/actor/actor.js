@@ -132,7 +132,7 @@ export class PTUActor extends Actor {
 
       if(game.ptu.natureData[nature][0] == statKey) stat += statKey == "HP" ? 1 : 2;
       if(game.ptu.natureData[nature][1] == statKey) stat -= statKey == "HP" ? 1 : 2;
-      return stat;
+      return Math.max(stat, 1);
     }
 
     let _calculateCapabilities = function(species) {
