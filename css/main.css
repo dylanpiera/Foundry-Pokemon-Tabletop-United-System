@@ -692,6 +692,9 @@ input[name="data.money"] {
 .ui-autocomplete {
   z-index: 500 !important;
 }
+.error-text {
+  background: #ff000060 !important;
+}
 .w-25 {
   width: 25% !important;
 }

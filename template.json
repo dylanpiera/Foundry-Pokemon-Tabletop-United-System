@@ -210,7 +210,8 @@
       },
 
       "tp": {
-        "value": 0
+        "value": 0,
+        "pep" : {}
       },
 
       "heldItem": "None",

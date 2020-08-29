@@ -8,7 +8,7 @@ export class PTUPokemonSheet extends ActorSheet {
   static get defaultOptions() {
     return mergeObject(super.defaultOptions, {
       classes: ["ptu", "sheet", "actor"],
-      template: "systems/ptu/templates/actor/pokemon-sheet.html",
+      template: "systems/ptu/templates/actor/pokemon-sheet.hbs",
       width: 675,
       height: 675,
       tabs: [{ navSelector: ".sheet-tabs", contentSelector: ".sheet-body", initial: "stats" }]

@@ -8,7 +8,7 @@ export class PTUCharacterSheet extends ActorSheet {
   static get defaultOptions() {
     return mergeObject(super.defaultOptions, {
       classes: ["ptu", "sheet", "actor"],
-      template: "systems/ptu/templates/actor/character-sheet.html",
+      template: "systems/ptu/templates/actor/character-sheet.hbs",
       width: 675,
       height: 675,
       tabs: [{ navSelector: ".sheet-tabs", contentSelector: ".sheet-body", initial: "stats" }]

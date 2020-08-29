@@ -190,13 +190,13 @@
               <div class="hgss-header">
                 <h3 class="item-name flexrow">Capabilities</h3>
               </div>
-              <div class="hgss-body readable w-100">
+              <div class="hgss-body readable w-100 align-items-center" style="white-space: nowrap;">
                 {{#each data.capabilities as |capability key|}}
-                {{#if (and (not key "Other") (not key "Naturewalk"))}}
-                <div class="col-sm-4 p11">
+                {{#if (and (and (not key "Other") (not key "Naturewalk")) (gt capability 0))}}
+                <div class="col-sm-4 p11 mb-1">
                   <label for="data.capabilities.{{key}}">{{key}}:</label>
                 </div>
-                <div class="col-sm-2" style="text-align: center;">
+                <div class="col-sm-2 mb-1" style="text-align: center;">
                   <input type="text" name="data.capabilities.{{key}}" value="{{capability}}" data-dtype="Number"
                     disabled />
                 </div>
@@ -204,7 +204,7 @@
                 {{/each}}
               </div>
               {{#if data.capabilities.Naturewalk}}
-              <div class="hgss-body readable w-100">
+              <div class="hgss-body readable w-100 align-items-center">
                 <div class="col-sm-4 p11">
                   <label for="data.capabilities.Naturewalk">Naturewalk:</label>
                 </div>
@@ -299,6 +299,19 @@
                   <input type="text" name="data.tp.value" value="{{data.tp.value}}" data-dtype="Number"/>
                   <span> / </span>
                   <input type="text" name="data.tp.max" value="{{data.tp.max}}" data-dtype="Number" disabled/>
+                </div>
+              </div>
+            </div>
+            {{else}}
+            <div class="hgss-box mt-2" style="text-align: center;">
+              <div class="hgss-header">
+                <h3 class="m-auto">PokéEdge Points Used:</h3>
+              </div>
+              <div class="hgss-body">
+                <div class="resource-content flexrow flex-group-right hp-info">
+                  <input type="text" {{#if (gt data.tp.pep.value data.tp.pep.max)}}class="error-text"{{/if}} name="data.tp.pep.value" value="{{data.tp.pep.value}}" data-dtype="Number" disabled/>
+                  <span> / </span>
+                  <input type="text" name="data.tp.pep.max" value="{{data.tp.pep.max}}" data-dtype="Number" disabled/>
                 </div>
               </div>
             </div>
@@ -407,11 +420,11 @@
               </div>
             </div>
 
-            <!-- Likes & Dislikes -->
-
             <!-- Vitamins -->
 
             <!-- Digestion Buff -->
+
+            <!-- Likes & Dislikes -->
 
             <!-- Tick/HP Guidelines -->
 
@@ -449,7 +462,7 @@
               <!-- Skill Background -->
               
               <!-- Species + Egg Group + Gender -->
-              <div class="hgss-box mt-1 w-100" style="text-align: center;">
+              <div class="hgss-box mb-2 w-100" style="text-align: center;">
                 <div class="hgss-header">
                   <h3 class="m-auto">Species</h3>
                 </div>

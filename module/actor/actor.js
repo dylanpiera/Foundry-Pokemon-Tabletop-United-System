@@ -120,10 +120,8 @@ export class PTUActor extends Actor {
     }
 
     let _fetchSpecieStat = function(specie, stat)  {
-      for (var i  = 0; i < game.ptu.pokemonData.length; i++){
-        if (game.ptu.pokemonData[i]["_id"] === specie.toUpperCase()) return game.ptu.pokemonData[i]["Base Stats"][stat];
-      }
-      return 0;
+      let monData = game.ptu.pokemonData.find(x => x._id.toLowerCase() === specie.toLowerCase());
+      return monData != null ? monData["Base Stats"][stat] : 0;
     }
 
     let _calculateStatWithNature = function(nature, statKey, stat){
@@ -137,7 +135,7 @@ export class PTUActor extends Actor {
 
     let _calculateCapabilities = function(species) {
       //Later also check for PokéEdges for buffs
-      var monData = game.ptu.pokemonData.find(x => x._id === species.toUpperCase());
+      var monData = game.ptu.pokemonData.find(x => x._id.toLowerCase() === species.toLowerCase());
       return monData?.Capabilities ?? [];
     }
 
@@ -177,6 +175,8 @@ export class PTUActor extends Actor {
     data.levelUpPoints += data.level.current + data.modifiers.statPoints + 10;
 
     data.tp.max = data.level.current > 0 ? Math.floor(data.level.current / 5) : 0;
+    data.tp.pep.value = actorData.items.filter(x => x.type == "pokeedge" && x.data.origin.toLowerCase() != "pusher").length;
+    data.tp.pep.max = data.level.current > 0 ? Math.floor(data.level.current / 10)+1 : 1;
 
     data.evasion = _calculateEvasions(data);
 
