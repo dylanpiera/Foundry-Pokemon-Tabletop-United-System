@@ -1,3 +1,8 @@
+import { CalcLevel } from "./calculations/level-up-calculator.js";
+import { CalculateEvasions } from "./calculations/evasion-calculator.js";
+import { CalculateCapabilities } from "./calculations/capability-calculator.js"; 
+import { CalcBaseStat, CalculateStatTotal } from "./calculations/stats-calculator.js";
+
 /**
  * Extend the base Actor entity by defining a custom roll data structure which is ideal for the Simple system.
  * @extends {Actor}
@@ -69,147 +74,32 @@ export class PTUActor extends Actor {
     const data = actorData.data;
 
     // Make modifications to data here. For example:
-    data.levelUpPoints = 0;
-    for (let [key, value] of Object.entries(data.stats)) {
-      let sub = value["value"] + value["mod"] + value["levelUp"];
-      data.levelUpPoints -= value["levelUp"];
-      if(value["stage"] > 0 ) {
-        value["total"] = Math.floor(sub * value["stage"] * 0.2 + sub);
-      } else {
-        if(key == "hp") {
-          value["total"] = sub;
-        }
-        else {
-          value["total"] = Math.ceil(sub * value["stage"] * 0.1 + sub);
-        }
-      }
-    }
+
+    // Stats
+    data.stats.hp.value = CalcBaseStat(data.species, data.nature.value, "HP");
+    data.stats.atk.value = CalcBaseStat(data.species, data.nature.value, "Attack");
+    data.stats.def.value = CalcBaseStat(data.species, data.nature.value, "Defense");
+    data.stats.spatk.value = CalcBaseStat(data.species, data.nature.value, "Special Attack");
+    data.stats.spdef.value = CalcBaseStat(data.species, data.nature.value, "Special Defense");
+    data.stats.spd.value = CalcBaseStat(data.species, data.nature.value, "Speed");
+
+    var result = CalculateStatTotal(data.levelUpPoints, data.stats);
+    data.stats = result.stats;
+    data.levelUpPoints = result.levelUpPoints;
+
+    // Calc skill rank
     for (let [key, skill] of Object.entries(data.skills)) {
       skill["rank"] = this._getRank(skill["value"]);  
     }
-
-    let _calcLevel = function(exp, level, json) {
-      if(exp <= json[1]) {return 1;}
-      if(exp >= json[100]) {return 100;}
-
-      return _recursiveLevelCalc(exp, level, json);
-    }
-    let _recursiveLevelCalc = function(exp, level, json) {
-      if(exp > json[level]) {
-        return _recursiveLevelCalc(exp, ++level, json)
-      }
-      else {
-        if(json[level] >= exp) {
-          if(json[level-1] >= exp) {
-            if(json[Math.max(Math.floor(level/2),1)]) {
-              return _recursiveLevelCalc(exp, Math.max(Math.floor(level/2),1), json);
-            }
-            else {
-              return _recursiveLevelCalc(exp, level-2, json);
-            }
-          }
-        }
-      }
-      
-      return exp == json[level] ? level : level -1;
-    }
-
-    let _calcBaseStats = function(specie, nature, statKey) {
-      if( specie != "" ) return _calculateStatWithNature(nature, statKey, _fetchSpecieStat(specie, statKey));
-      return 0;
-    }
-
-    let _fetchSpecieStat = function(specie, stat)  {
-      let monData = game.ptu.pokemonData.find(x => x._id.toLowerCase() === specie.toLowerCase());
-      return monData != null ? monData["Base Stats"][stat] : 0;
-    }
-
-    let _calculateStatWithNature = function(nature, statKey, stat){
-      if(nature == "") return stat;
-      if(game.ptu.natureData[nature] == null) return statKey;
-
-      if(game.ptu.natureData[nature][0] == statKey) stat += statKey == "HP" ? 1 : 2;
-      if(game.ptu.natureData[nature][1] == statKey) stat -= statKey == "HP" ? 1 : 2;
-      return Math.max(stat, 1);
-    }
-
-    let _calculateCapabilities = function(species) {
-      let preJson = game.ptu.pokemonData.find(x => x._id.toLowerCase() === species.toLowerCase());
-      if(!preJson) return [];
-      let monData = JSON.parse(JSON.stringify(preJson));
-      if(monData?.Capabilities == null) return [];
-
-      for(let item of actorData.items.values()) {
-        // Abilities
-        if(item.name == "Rocket [Playtest]" && item.type == "ability") monData.Capabilities["Sky"] += 2;
-        if(item.name == "Levitate" && item.type == "ability") {
-          if(monData.Capabilities["Levitate"] > 0) monData.Capabilities["Levitate"] += 2;
-          else monData.Capabilities["Levitate"] += 4;
-        }
-  
-        // Moves
-        if(item.name == "Bounce" && item.type == "move") monData.Capabilities["High Jump"] += 1;
-        if(item.name == "Splash" && item.type == "move") monData.Capabilities["Long Jump"] += 1;
-        if(item.name == "Strength" && item.type == "move") monData.Capabilities["Power"] += 1;
-        if(item.name == "Teleport" && item.type == "move") {
-          if(monData.Capabilities["Teleporter"]) monData.Capabilities["Teleporter"] += 4;
-          else monData.Capabilities["Teleporter"] = 4;
-        }
-        if(item.name == "Dive" && item.type == "move") monData.Capabilities["Swim"] += 3;
-        if(item.name == "Fly" && item.type == "move") monData.Capabilities["Sky"] += 3;
-        if(item.name == "Dig" && item.type == "move") monData.Capabilities["Burrow"] += 3;
-        
-        // Poké Edges
-        if(item.name == "Advanced Mobility (Overland)" && item.type == "pokeedge") monData.Capabilities["Overland"] += 2;
-        if(item.name == "Advanced Mobility (Swim)" && item.type == "pokeedge") monData.Capabilities["Swim"] += 2;
-        if(item.name == "Advanced Mobility (Sky)" && item.type == "pokeedge") {
-          if(monData.Capabilities["Sky"] > 0) monData.Capabilities["Sky"] += 2;
-        }
-        if(item.name == "Advanced Mobility (Burrow)" && item.type == "pokeedge") {
-          if(monData.Capabilities["Burrow"] > 0) monData.Capabilities["Burrow"] += 2;
-        }
-        if(item.name == "Advanced Mobility (Levitate)" && item.type == "pokeedge") {
-          if(monData.Capabilities["Levitate"] > 0) monData.Capabilities["Levitate"] += 2;
-        }
-        if(item.name == "Advanced Mobility (Teleporter)" && item.type == "pokeedge") {
-          if(monData.Capabilities["Teleporter"] > 0) monData.Capabilities["Teleporter"] += 2;
-        }
-      }
-
-
-      return monData?.Capabilities ?? [];
-    }
-
-    let _calculateEvasions = function(data) {
-      let evasion = {
-        "physical": Math.floor(data.stats.def.value / 5),
-        "special": Math.floor(data.stats.spdef.value / 5),
-        "speed": Math.floor(data.stats.spd.value / 5)
-      };
-
-      if(data.modifiers.hardened) {
-        evasion = Object.fromEntries(Object.entries(evasion).map(([key, value]) => [key, value+1]));
-      }
-
-      return evasion;
-    } 
     
     // Calculate Level
-    data.level.current = _calcLevel(data.level.exp, 50, game.ptu.levelProgression);
+    data.level.current = CalcLevel(data.level.exp, 50, game.ptu.levelProgression);
 
     data.health.total = 10 + data.level.current + (data.stats.hp.total * 3);
     data.health.max = data.health.injuries > 0 ? Math.trunc(data.health.total*(1-((data.modifiers.hardened ? Math.min(data.health.injuries, 5) : data.health.injuries)/10))) : data.health.total;
     if(data.health.value === null) data.health.value = data.health.max;
 
     data.health.percent = Math.round((data.health.value / data.health.max) * 100);
-
-    // Stats
-    data.stats.hp.value = _calcBaseStats(data.species, data.nature.value, "HP");
-    data.stats.atk.value = _calcBaseStats(data.species, data.nature.value, "Attack");
-    data.stats.def.value = _calcBaseStats(data.species, data.nature.value, "Defense");
-    data.stats.spatk.value = _calcBaseStats(data.species, data.nature.value, "Special Attack");
-    data.stats.spdef.value = _calcBaseStats(data.species, data.nature.value, "Special Defense");
-    data.stats.spd.value = _calcBaseStats(data.species, data.nature.value, "Speed");
 
     data.initiative = {value: data.stats.spd.total + data.modifiers.initiative};
 
@@ -219,8 +109,13 @@ export class PTUActor extends Actor {
     data.tp.pep.value = actorData.items.filter(x => x.type == "pokeedge" && x.data.origin.toLowerCase() != "pusher").length;
     data.tp.pep.max = data.level.current > 0 ? Math.floor(data.level.current / 10)+1 : 1;
 
-    data.evasion = _calculateEvasions(data);
+    data.evasion = CalculateEvasions(data);
 
-    data.capabilities = _calculateCapabilities(data.species);
+    data.capabilities = CalculateCapabilities(data.species, actorData.items.values());
+
+    /* The Corner of Exceptions */
+
+    // Shedinja will always be a special case.
+    if(data.species.toLowerCase() === "shedinja") data.health.max = 1;
   }
 }
