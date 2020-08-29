@@ -20,7 +20,8 @@
                     <label for="data.stats.{{key}}.value" class="resource-label">{{key}}</label>
                   </div>
                   <div class="stats {{key}} base col-sm-2">
-                    <input type="text" name="data.stats.{{key}}.value" value="{{stat.value}}" data-dtype="Number" />
+                    <input type="text" name="data.stats.{{key}}.value" value="{{stat.value}}" data-dtype="Number"
+                      disabled />
                   </div>
                   <div class="stats {{key}} mod col-sm-2">
                     <input type="text" name="data.stats.{{key}}.mod" value="{{stat.mod}}" data-dtype="Number" />
@@ -69,7 +70,13 @@
                   <div class="hgss-body">
                     <div class="d-flex w-100 mt-1 mb-1">
                       <div class="col-sm-5">
-                        <input name="data.nature.value" type="text" value="{{data.nature.value}}" />
+                        {{#select data.nature.value}}
+                        <select name="data.nature.value">
+                          {{#each natures as | nature key |}}
+                          <option value="{{key}}">{{key}}</option>
+                          {{/each}}
+                        </select>
+                        {{/select}}
                       </div>
                       <div class="col-sm-4">
                         <input type="text" name="data.level.exp" value="{{data.level.exp}}" data-dtype="Number" />
@@ -164,10 +171,103 @@
               </div>
             </div>
           </div>
-          <div class="tab details feats" data-group="primary" data-tab="pokeedge">
-            <div class="row">
-              <div class="col">
-                <p>Poké Edges</p>
+          <div class="tab details feats" data-group="primary" data-tab="capability">
+            <div class="hgss-box mt-auto w-100">
+              <div class="hgss-header">
+                <h3 class="item-name flexrow">Capabilities</h3>
+              </div>
+              <div class="hgss-body readable w-100">
+                {{#each data.capabilities as |capability key|}}
+                {{#if (and (not key "Other") (not key "Naturewalk"))}}
+                <div class="col-sm-4 p11">
+                  <label for="data.capabilities.{{key}}">{{key}}:</label>
+                </div>
+                <div class="col-sm-2" style="text-align: center;">
+                  <input type="text" name="data.capabilities.{{key}}" value="{{capability}}" data-dtype="Number"
+                    disabled />
+                </div>
+                {{/if}}
+                {{/each}}
+              </div>
+              {{#if data.capabilities.Naturewalk}}
+              <div class="hgss-body readable w-100">
+                <div class="col-sm-4 p11">
+                  <label for="data.capabilities.Naturewalk">Naturewalk:</label>
+                </div>
+                <div class="col-sm-8" style="text-align: center;">
+                  <input type="text" name="data.capabilities.Naturewalk" value="{{data.capabilities.Naturewalk}}"
+                    data-dtype="Number" disabled />
+                </div>
+              </div>
+              {{/if}}
+              <div class="hgss-body w-100 mt-2" style="display: block;">
+                <ol class="inventory-list">
+                  <li class="inventory-header flexrow">
+                    <h3 class="item-name flexrow">Other Capabilities</h3>
+                    <div class="item-controls">
+                      <a class="item-control item-create" title="Add capability" data-type="capability"><i
+                          class="fas fa-plus-circle" style="margin-right: 3px;"></i><span
+                          class="readable">Add</span></a>
+                    </div>
+                  </li>
+                  <ol class="item-list">
+                    {{#each actor.capabilities as | capability |}}
+                    <li class="item flexrow" data-item-id="{{capability._id}}">
+                      <div class="item-name flexrow">
+                        <h4 title="Toggle Info ({{capability.name}})" data-toggle="collapse"
+                          data-target="#{{capability._id}}-collapse" aria-expanded="false"
+                          aria-controls="{{capability._id}}-collapse">
+                          <i class="fas fa-info-circle info-icon"></i>
+                          {{capability.name}}
+                        </h4>
+                      </div>
+                      <div class="item-controls" style="flex: 0 0 55px; justify-content: center; display:flex;">
+                        <a class="item-control item-edit" title="Edit capability"><i class="fas fa-edit"></i></a>
+                        <a class="item-control item-delete" title="Delete capability"><i class="fas fa-trash"></i></a>
+                      </div>
+                      <div class="collapse readable lh-16 item-summary" id="{{capability._id}}-collapse">
+                        {{capability.data.effect}}
+                      </div>
+                    </li>
+                    {{/each}}
+                  </ol>
+                </ol>
+              </div>
+            </div>
+
+            <div class="hgss-box mt-2 w-100">
+              <div class="hgss-body w-100" style="display: block;">
+                <ol class="inventory-list">
+                  <li class="inventory-header flexrow">
+                    <h3 class="item-name flexrow">Poké Edges</h3>
+                    <div class="item-controls">
+                      <a class="item-control item-create" title="Add pokeedge" data-type="pokeedge"><i
+                          class="fas fa-plus-circle" style="margin-right: 3px;"></i><span
+                          class="readable">Add</span></a>
+                    </div>
+                  </li>
+                  <ol class="item-list">
+                    {{#each actor.edges as | pokeedge |}}
+                    <li class="item flexrow" data-item-id="{{pokeedge._id}}">
+                      <div class="item-name flexrow">
+                        <h4 title="Toggle Info ({{pokeedge.name}})" data-toggle="collapse"
+                          data-target="#{{pokeedge._id}}-collapse" aria-expanded="false"
+                          aria-controls="{{pokeedge._id}}-collapse">
+                          <i class="fas fa-info-circle info-icon"></i>
+                          {{pokeedge.name}}
+                        </h4>
+                      </div>
+                      <div class="item-controls" style="flex: 0 0 55px; justify-content: center; display:flex;">
+                        <a class="item-control item-edit" title="Edit pokeedge"><i class="fas fa-edit"></i></a>
+                        <a class="item-control item-delete" title="Delete pokeedge"><i class="fas fa-trash"></i></a>
+                      </div>
+                      <div class="collapse readable lh-16 item-summary" id="{{pokeedge._id}}-collapse">
+                        {{pokeedge.data.effect}}
+                      </div>
+                    </li>
+                    {{/each}}
+                  </ol>
+                </ol>
               </div>
             </div>
           </div>
@@ -238,6 +338,8 @@
                     {{/each}}
                   </div>
                 </div>
+
+
               </div>
             </div>
           </div>
@@ -312,29 +414,26 @@
                     {{#if (and (is true data.modifiers.hardened) (biggerOrEqual data.health.injuries 1))}}<li>+1 to
                       Critical Hit and Effect Range</li>{{/if}}
                     {{#if (and (is true data.modifiers.hardened) (biggerOrEqual data.health.injuries 3))}}<li>+1
-                      Evasion
-                      and +5 Initiative</li>{{/if}}
+                      Evasion and +5 Initiative</li>{{/if}}
                     {{#if (biggerOrEqual data.health.injuries 5)}}<li>Unable to regain Hit Points from Resting</li>
                     {{/if}}
                     {{#if (and (is true data.modifiers.hardened) (biggerOrEqual data.health.injuries 5))}}<li>+5
-                      Damage
-                      Reduction</li>{{/if}}
+                      Damage Reduction</li>{{/if}}
                     {{#if (and (not true data.modifiers.hardened) (biggerOrEqual data.health.injuries 5))}}<li>Take
                       {{data.health.injuries}} Damage whenever taking a Standard Action during Combat</li>{{/if}}
                     {{#if (and (is true data.modifiers.hardened) (biggerOrEqual data.health.injuries 7))}}<li>Immune
-                      to
-                      Loss of Hit Points (but not damage) from all effects</li>{{/if}}
+                      to Loss of Hit Points (but not damage) from all effects</li>{{/if}}
                     {{#if (and (is true data.modifiers.hardened) (biggerOrEqual data.health.injuries 9))}}<li>Resist
-                      all
-                      damage one step further</li>{{/if}}
+                      all damage one step further</li>{{/if}}
                     {{#if (and (not true data.modifiers.hardened) (biggerOrEqual data.health.injuries 10))}}<li>
-                      <b>Death</b></li>
-                    {{/if}}
+                      <b>Death</b></li>{{/if}}
                     </ol>
                 </div>
                 {{/if}}
               </div>
             </div>
+
+            <!-- Item Effect -->
             <div class="hgss-box mt-auto w-100" style="text-align: center;">
               <div class="hgss-header">
                 <h3 class="m-auto">Item Effect</h3>
@@ -342,6 +441,16 @@
               <div class="hgss-body w-100">
                 <textarea style="min-height: 100px;" id="itemDescription"
                   disabled>{{itemDescription data.heldItem}}</textarea>
+              </div>
+            </div>
+
+            <!-- Species -->
+            <div class="hgss-box mt-1 w-100" style="text-align: center;">
+              <div class="hgss-header">
+                <h3 class="m-auto">Species</h3>
+              </div>
+              <div class="hgss-body">
+                <input class="mt-1" id="speciesInput" type="text" name="data.species" value="{{data.species}}" />
               </div>
             </div>
           </div>
@@ -374,7 +483,7 @@
         <div class="avatar mt-1 mb-1">
           <img class="profile-img" src="{{actor.img}}" data-edit="img" title="{{actor.name}}" />
         </div>
-        <div class="hgss-box mt-auto w-100" style="text-align: center;">
+        <div class="hgss-box mt-auto mb-2 w-100" style="text-align: center;">
           <div class="hgss-header">
             <h3 class="m-auto">Item</h3>
           </div>
@@ -390,7 +499,7 @@
       <ul class="sheet-tabs tabs buttons" data-group="primary">
         <li><button class="item" data-tab="stats">Stats</button></li>
         <li><button class="item" data-tab="moves">Moves</button></li>
-        <li><button class="item" data-tab="pokeedge">Capabilities</button></li>
+        <li><button class="item" data-tab="capability">Capabilities</button></li>
         <li><button class="item" data-tab="combat">Combat</button></li>
         <li><button class="item" data-tab="extra">Extra</button></li>
       </ul>

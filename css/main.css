@@ -69,18 +69,19 @@ a.item {
 .hgss-box .hgss-body {
   padding: 2px 5px;
   display: flex;
+  flex-wrap: wrap;
 }
 .name-label {
   content: "";
   width: 35px;
-  background: url("./images/pokeball-hgss.png") no-repeat !important;
+  background: url("images/pokeball-hgss.png") no-repeat !important;
   background-size: contain !important;
   padding-right: 5px;
 }
 .level {
   content: "";
   width: 26px;
-  background: url("./images/lvl.png") no-repeat !important;
+  background: url("images/lvl.png") no-repeat !important;
   background-size: contain !important;
   margin: 0 5px 0 10px;
   position: relative;
@@ -89,7 +90,7 @@ a.item {
 }
 .options .hp {
   width: 6rem;
-  background: url("./images/hp.png") no-repeat !important;
+  background: url("images/hp.png") no-repeat !important;
   background-size: contain !important;
   margin: 0 5px 0 0px;
   position: relative;
@@ -131,8 +132,8 @@ a.item {
 .container-fluid > .sheet-footer {
   position: absolute;
   left: 0;
-  bottom: -55px;
-  padding: 10px 20px;
+  bottom: -45px;
+  padding: 0px 20px;
   width: 100%;
 }
 .container-fluid > .sheet-footer .tabs {
@@ -688,12 +689,8 @@ input[name="data.money"] {
   grid-column: 1 / 5;
   grid-row: 5 / 5;
 }
-.autocomplete-suggestions {
-  font-family: monospace;
-  font-variant: normal;
-}
-.autocomplete-suggestions .autocomplete-suggestion {
-  display: block !important;
+.ui-autocomplete {
+  z-index: 500 !important;
 }
 .w-25 {
   width: 25% !important;
@@ -1114,16 +1111,16 @@ h6 {
 }
 .framed {
   position: relative;
-  -o-border-image: url("./images/frame-hd.png") 42 round;
-  border-image: url("./images/frame-hd.png") 42 round;
+  -o-border-image: url("images/frame-hd.png") 42 round;
+  border-image: url("images/frame-hd.png") 42 round;
   border-width: 21px;
   border-style: solid;
   padding: 1em;
   margin: 1em 0 0 0;
 }
 .framed.no-hd {
-  -o-border-image: url("./images/frame.png") 7 round;
-  border-image: url("./images/frame.png") 7 round;
+  -o-border-image: url("images/frame.png") 7 round;
+  border-image: url("images/frame.png") 7 round;
   border-width: 7px;
 }
 .framed.primary {
@@ -1241,12 +1238,12 @@ button.pokemon,
 .button.pokemon {
   text-indent: -1000em;
   width: 100%;
-  background: url("./images/pkmn.png") 1em center no-repeat !important;
+  background: url("images/pkmn.png") 1em center no-repeat !important;
   background-size: contain !important;
 }
 button.pokemon.active,
 .button.pokemon.active {
-  background: url("./images/pkmn-selected.png") 1em center no-repeat !important;
+  background: url("images/pkmn-selected.png") 1em center no-repeat !important;
   background-size: contain !important;
 }
 .sheet-tabs > li > button::before {
@@ -1282,8 +1279,8 @@ ul.buttons.compact li {
 .progress-bar {
   position: relative;
   width: 100%;
-  -o-border-image: url("./images/progress-frame.png") 1 round;
-  border-image: url("./images/progress-frame.png") 1 round;
+  -o-border-image: url("images/progress-frame.png") 1 round;
+  border-image: url("images/progress-frame.png") 1 round;
   border-style: solid;
   background-clip: padding-box;
   height: 9px;
@@ -2307,8 +2304,8 @@ h2 {
 }
 .message {
   position: relative !important;
-  -o-border-image: url("./images/frame.png") 7 round !important;
-  border-image: url("./images/frame.png") 7 round !important;
+  -o-border-image: url("images/frame.png") 7 round !important;
+  border-image: url("images/frame.png") 7 round !important;
   border-width: 7px !important;
   border-style: solid !important;
   padding: 1em !important;
@@ -2417,7 +2414,7 @@ h6 {
   -webkit-box-flex: 0;
   -ms-flex-positive: 0;
   flex-grow: 0;
-  background: url("./images/pokeball.png") no-repeat !important;
+  background: url("images/pokeball.png") no-repeat !important;
   background-size: contain !important;
 }
 .pokeball-spacing {
@@ -2438,7 +2435,7 @@ h6 {
   -webkit-box-flex: 0;
   -ms-flex-positive: 0;
   flex-grow: 0;
-  background: url("./images/pokeball-shaded.png") no-repeat !important;
+  background: url("images/pokeball-shaded.png") no-repeat !important;
   background-size: contain !important;
 }
 .level-header {
@@ -2454,7 +2451,7 @@ h6 {
 .resources .hp {
   content: "";
   width: 30px;
-  background: url("./images/hp.png") no-repeat !important;
+  background: url("images/hp.png") no-repeat !important;
   background-size: contain !important;
 }
 .hp-info {

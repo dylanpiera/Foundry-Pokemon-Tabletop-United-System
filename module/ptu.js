@@ -9,6 +9,7 @@ import { PTUFeatSheet } from "./item/feat-sheet.js";
 import { measureDistances } from "./canvas.js";
 import { levelProgression } from "./data/level-progression.js";
 import { pokemonData } from "./data/species-data.js";
+import { natureData } from "./data/nature-data.js";
 
 Hooks.once('init', async function() {
 
@@ -16,7 +17,8 @@ Hooks.once('init', async function() {
     PTUActor,
     PTUItem,
     levelProgression,
-    pokemonData
+    pokemonData,
+    natureData
   };
 
   /**
@@ -37,7 +39,7 @@ Hooks.once('init', async function() {
   Actors.registerSheet("ptu", PTUCharacterSheet, { types: ["character"], makeDefault: true });
   Actors.registerSheet("ptu", PTUPokemonSheet, { types: ["pokemon"], makeDefault: true });
   Items.unregisterSheet("core", ItemSheet);
-  Items.registerSheet("ptu", PTUItemSheet, { types: ["item","ability","move"], makeDefault: true });
+  Items.registerSheet("ptu", PTUItemSheet, { types: ["item","ability","move","capability", "pokeedge"], makeDefault: true });
   Items.registerSheet("ptu", PTUEdgeSheet, { types: ["edge"], makeDefault: true });
   Items.registerSheet("ptu", PTUFeatSheet, { types: ["feat"], makeDefault: true });
 

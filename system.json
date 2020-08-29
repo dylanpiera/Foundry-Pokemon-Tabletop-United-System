@@ -2,15 +2,16 @@
   "name": "ptu",
   "title": "Pokemon Tabletop United",
   "description": "A Pen and Paper Roleplaying Game Set in the World of Pokemon",
-  "version": "0.0.11",
+  "version": "0.0.12",
   "minimumCoreVersion": "0.6.5",
   "compatibleCoreVersion": "0.7.1",
   "templateVersion": 2,
-  "author": "Dylan Piera, Tymo Wessel, Jeffrey Hollander & Cody Swendrowski",
+  "author": "Dylan Piera, Tymo Wessel, Jeffrey Hollander, Efren A. Mariño & Cody Swendrowski",
   "esmodules": ["module/ptu.js"],
   "styles": [
     "css/ptu.css",
-    "css/main.css"
+    "css/main.css",
+    "import/jquery-ui.css"
   ],
   "scripts": [
     "import/jquery-ui.js",
@@ -50,6 +51,20 @@
       "entity": "Item",
       "name": "items",
       "path": "packs/items.db",
+      "system": "ptu"
+    },
+    {
+      "label": "capabilities",
+      "entity": "Item",
+      "name": "capabilities",
+      "path": "packs/capabilities.db",
+      "system": "ptu"
+    },
+    {
+      "label": "poke edges",
+      "entity": "Item",
+      "name": "poke-edges",
+      "path": "packs/poke-edges.db",
       "system": "ptu"
     }
   ],

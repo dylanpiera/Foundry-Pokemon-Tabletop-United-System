@@ -28,6 +28,7 @@ export class PTUPokemonSheet extends ActorSheet {
     }
 
     data["compendiumItems"] = game.ptu.items;
+    data["natures"] = game.ptu.natureData;
 
     return data;
   }
@@ -44,7 +45,9 @@ export class PTUPokemonSheet extends ActorSheet {
 
     // Initialize containers.
     const abilities = [];
+    const capabilities = [];
     const moves = [];
+    const edges = [];
 
     // Iterate through items, allocating to containers
     // let totalWeight = 0;
@@ -55,12 +58,16 @@ export class PTUPokemonSheet extends ActorSheet {
       switch(i.type) {
         case 'ability': abilities.push(i); break;
         case 'move': moves.push(i); break;
+        case 'capability': capabilities.push(i); break;
+        case 'pokeedge': edges.push(i); break;
       }
     }
 
     // Assign and return
     actorData.abilities = abilities;
     actorData.moves = moves;
+    actorData.capabilities = capabilities;
+    actorData.edges = edges;
   }
 
   /* -------------------------------------------- */
@@ -103,7 +110,7 @@ export class PTUPokemonSheet extends ActorSheet {
     }
 
     html.find('#heldItemInput').autocomplete({
-      lookup: game.ptu.items.map(i => i.data.name),
+      source: game.ptu.items.map(i => i.data.name),
       autoFocus: true,
       minLength: 1,
     })

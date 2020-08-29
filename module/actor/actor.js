@@ -91,7 +91,7 @@ export class PTUActor extends Actor {
     let _calcLevel = function(exp, level, json) {
       if(exp <= json[1]) {return 1;}
       if(exp >= json[100]) {return 100;}
-  
+
       return _recursiveLevelCalc(exp, level, json);
     }
     let _recursiveLevelCalc = function(exp, level, json) {
@@ -113,6 +113,47 @@ export class PTUActor extends Actor {
       
       return exp == json[level] ? level : level -1;
     }
+
+    let _calcBaseStats = function(specie, nature, statKey) {
+      if( specie != "" ) return _calculateStatWithNature(nature, statKey, _fetchSpecieStat(specie, statKey));
+      return 0;
+    }
+
+    let _fetchSpecieStat = function(specie, stat)  {
+      for (var i  = 0; i < game.ptu.pokemonData.length; i++){
+        if (game.ptu.pokemonData[i]["_id"] === specie.toUpperCase()) return game.ptu.pokemonData[i]["Base Stats"][stat];
+      }
+      return 0;
+    }
+
+    let _calculateStatWithNature = function(nature, statKey, stat){
+      if(nature == "") return stat;
+      if(game.ptu.natureData[nature] == null) return statKey;
+
+      if(game.ptu.natureData[nature][0] == statKey) stat += statKey == "HP" ? 1 : 2;
+      if(game.ptu.natureData[nature][1] == statKey) stat -= statKey == "HP" ? 1 : 2;
+      return Math.max(stat, 1);
+    }
+
+    let _calculateCapabilities = function(species) {
+      //Later also check for PokéEdges for buffs
+      var monData = game.ptu.pokemonData.find(x => x._id === species.toUpperCase());
+      return monData?.Capabilities ?? [];
+    }
+
+    let _calculateEvasions = function(data) {
+      let evasion = {
+        "physical": Math.floor(data.stats.def.value / 5),
+        "special": Math.floor(data.stats.spdef.value / 5),
+        "speed": Math.floor(data.stats.spd.value / 5)
+      };
+
+      if(data.modifiers.hardened) {
+        evasion = Object.fromEntries(Object.entries(evasion).map(([key, value]) => [key, value+1]));
+      }
+
+      return evasion;
+    } 
     
     data.level.current = _calcLevel(data.level.exp, 50, game.ptu.levelProgression);
 
@@ -122,12 +163,20 @@ export class PTUActor extends Actor {
 
     data.health.percent = Math.round((data.health.value / data.health.max) * 100);
 
+    // Stats
+    data.stats.hp.value = _calcBaseStats(data.species, data.nature.value, "HP");
+    data.stats.atk.value = _calcBaseStats(data.species, data.nature.value, "Attack");
+    data.stats.def.value = _calcBaseStats(data.species, data.nature.value, "Defense");
+    data.stats.spatk.value = _calcBaseStats(data.species, data.nature.value, "Special Attack");
+    data.stats.spdef.value = _calcBaseStats(data.species, data.nature.value, "Special Defense");
+    data.stats.spd.value = _calcBaseStats(data.species, data.nature.value, "Speed");
+
     data.initiative = {value: data.stats.spd.total + data.modifiers.initiative};
 
     data.levelUpPoints += data.level.current + data.modifiers.statPoints + 10;
 
-    data.evasion.physical = data.stats.def.value;
-    data.evasion.special = data.stats.spdef.value;
-    data.evasion.speed = data.stats.spd.value;
+    data.evasion = _calculateEvasions(data);
+
+    data.capabilities = _calculateCapabilities(data.species);
   }
 }
