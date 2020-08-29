@@ -1,8 +1,8 @@
 export function CalculateEvasions(data) {
     let evasion = {
-        "physical": Math.floor(data.stats.def.value / 5),
-        "special": Math.floor(data.stats.spdef.value / 5),
-        "speed": Math.floor(data.stats.spd.value / 5)
+        "physical": Math.floor(data.stats.def.total / 5),
+        "special": Math.floor(data.stats.spdef.total / 5),
+        "speed": Math.floor(data.stats.spd.total / 5)
     };
 
     let globalMod = 0;

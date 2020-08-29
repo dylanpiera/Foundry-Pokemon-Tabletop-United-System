@@ -17,7 +17,6 @@ function _calculateStatWithNature(nature, statKey, stat) {
 }
 
 export function CalculateStatTotal(levelUpPoints, stats) {
-    levelUpPoints = 0;
     for (let [key, value] of Object.entries(stats)) {
         let sub = value["value"] + value["mod"] + value["levelUp"];
         levelUpPoints -= value["levelUp"];

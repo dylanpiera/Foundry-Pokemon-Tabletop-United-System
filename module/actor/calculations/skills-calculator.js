@@ -25,14 +25,14 @@ export function CalculateSkills(skills, speciesData, pokeEdges) {
     }
 
     for(let edge of pokeEdges) {
-        var key = extractImprovement(edge);
+        var key = ExtractImprovement(edge);
         if(key) skills[ExtractEd(key)].value += 1;
     }
 
     return skills;
 }
 
-function extractImprovement(skill) {
+function ExtractImprovement(skill) {
     if(skill.name.startsWith("Skill Improvement (")) {
         return skill.name.split('(')[1].replace(')',"");   
     }

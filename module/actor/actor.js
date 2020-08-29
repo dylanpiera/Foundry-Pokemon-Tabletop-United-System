@@ -79,7 +79,7 @@ export class PTUActor extends Actor {
     // Calculate Level
     data.level.current = CalcLevel(data.level.exp, 50, game.ptu.levelProgression);
 
-    data.levelUpPoints += data.level.current + data.modifiers.statPoints + 10;
+    data.levelUpPoints = data.level.current + data.modifiers.statPoints + 10;
 
     // Stats
     data.stats.hp.value = CalcBaseStat(speciesData, data.nature.value, "HP");
@@ -109,7 +109,7 @@ export class PTUActor extends Actor {
 
     data.capabilities = CalculateCapabilities(speciesData, actorData.items.values());
 
-    if(speciesData) data.egggroup = speciesData["Breeding Information"]["Egg Group"].join(", ");
+    if(speciesData) data.egggroup = speciesData["Breeding Information"]["Egg Group"].join(" & ");
 
     //TODO: Add skill background
     data.skills = CalculateSkills(data.skills, speciesData, actorData.items.filter(x => x.type == "pokeedge"));
