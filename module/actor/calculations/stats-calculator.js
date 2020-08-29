@@ -1,11 +1,10 @@
 export function CalcBaseStat(specie, nature, statKey) {
-    if (specie != "") return _calculateStatWithNature(nature, statKey, _fetchSpecieStat(specie, statKey));
+    if (specie != null) return _calculateStatWithNature(nature, statKey, _fetchSpecieStat(specie, statKey));
     return 0;
 }
 
 function _fetchSpecieStat(specie, stat) {
-    let monData = game.ptu.pokemonData.find(x => x._id.toLowerCase() === specie.toLowerCase());
-    return monData != null ? monData["Base Stats"][stat] : 0;
+    return specie != null ? specie["Base Stats"][stat] : 0;
 }
 
 function _calculateStatWithNature(nature, statKey, stat) {

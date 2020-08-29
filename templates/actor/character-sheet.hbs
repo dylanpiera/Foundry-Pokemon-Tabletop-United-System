@@ -93,14 +93,14 @@
                     {{#each data.skills as |skill key|}}
                       <div class="row no-gutters {{key}} align-items-center">
                         <div class="skill {{key}} col-sm-4 bgcolor key type--{{skill.type}} align-self-center">
-                          <label for="data.skills.{{key}}.mod" class="resource-label"
+                          <label for="data.skills.{{key}}.modifier" class="resource-label"
                             >{{skill.label}}</label>
                         </div>
                         <div class="skill {{key}} col pl-1 pr-1 fs-9 center-text">
                             <input
                               type="text"
-                              name="data.skills.{{key}}.mod"
-                              value="{{skill.mod}}"
+                              name="data.skills.{{key}}.modifier"
+                              value="{{skill.modifier}}"
                               data-dtype="Number"
                             />
                         </div>
@@ -117,14 +117,14 @@
                             />
                         </div>
                         <div class="skill {{key}} col-sm-2 align-self-center bgcolor fs-9 center-text rollable"
-                          data-roll="{{skill.value}}d6{{#if skill.mod}}+{{skill.mod}}{{/if}}"
+                          data-roll="{{skill.value}}d6{{#if skill.modifier}}+{{skill.modifier}}{{/if}}"
                             data-label="{{skill.label}}"
                         >
                           <i class="fas fa-dice-d20"></i>
                           <label 
                             for="data.skills.{{key}}.value" 
                             class="resource-label" 
-                            >{{skill.value}}d6{{#if skill.mod}}+{{skill.mod}}{{/if}}</label>
+                            >{{skill.value}}d6{{#if skill.modifier}}+{{skill.modifier}}{{/if}}</label>
                         </div>
                       </div>
                       {{/each}}

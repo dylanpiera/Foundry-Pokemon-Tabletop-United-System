@@ -14,103 +14,103 @@
           "acrobatics": {
             "value": 2,
             "label": "Acrobatics",
-            "modifier": [],
+            "modifier": 0,
             "type": "body"
           },
           "athletics": {
             "value": 2,
             "label": "Athletics",
-            "modifier": [],
+            "modifier": 0,
             "type": "body"
           },
           "charm": {
             "value": 2,
             "label": "Charm",
-            "modifier": [],
+            "modifier": 0,
             "type": "spirit"
           },
           "combat": {
             "value": 2,
             "label": "Combat",
-            "modifier": [],
+            "modifier": 0,
             "type": "body"
           },
           "command": {
             "value": 2,
             "label": "Command",
-            "modifier": [],
+            "modifier": 0,
             "type": "spirit"
           },
           "generalEd": {
             "value": 2,
             "label": "General Ed",
-            "modifier": [],
+            "modifier": 0,
             "type": "mind"
           },
           "medicineEd": {
             "value": 2,
             "label": "Medicine Ed",
-            "modifier": [],
+            "modifier": 0,
             "type": "mind"
           },
           "occultEd": {
             "value": 2,
             "label": "Occult Ed",
-            "modifier": [],
+            "modifier": 0,
             "type": "mind"
           },
           "pokemonEd": {
             "value": 2,
             "label": "Pokémon Ed",
-            "modifier": [],
+            "modifier": 0,
             "type": "mind"
           },
           "techEd": {
             "value": 2,
             "label": "Technology Ed",
-            "modifier": [],
+            "modifier": 0,
             "type": "mind"
           },
           "focus": {
             "value": 2,
             "label": "Focus",
-            "modifier": [],
+            "modifier": 0,
             "type": "spirit"
           }, 
           "guile": {
             "value": 2,
             "label": "Guile",
-            "modifier": [],
+            "modifier": 0,
             "type": "mind"
           },
           "intimidation": {
             "value": 2,
             "label": "Intimidation",
-            "modifier": [],
+            "modifier": 0,
             "type": "body"
           },
           "intuition": {
             "value": 2,
             "label": "Intuition",
-            "modifier": [],
+            "modifier": 0,
             "type": "spirit"
           },
           "perception": {
             "value": 2,
             "label": "Perception",
-            "modifier": [],
+            "modifier": 0,
             "type": "mind"
           },
           "stealth": {
             "value": 2,
             "label": "Stealth",
-            "modifier": [],
+            "modifier": 0,
             "type": "body"
           },
           "survival": {
             "value": 2,
             "label": "Survival",
-            "modifier": [],
+            "modifier": 0,
             "type": "body"
           }
         }
@@ -122,7 +122,7 @@
             "mod": 0,
             "levelUp": 0,
             "label": "Hit Points",
-            "modifier": []
+            "modifier": 0
           },
           "atk": {
             "value": 5,
@@ -130,7 +130,7 @@
             "stage": 0,
             "levelUp": 0,
             "label": "Attack",
-            "modifier": []
+            "modifier": 0
           },
           "def": {
             "value": 5,
@@ -138,7 +138,7 @@
             "stage": 0,
             "levelUp": 0,
             "label": "Defense",
-            "modifier": []
+            "modifier": 0
           },
           "spatk": {
             "value": 5,
@@ -146,7 +146,7 @@
             "stage": 0,
             "levelUp": 0,
             "label": "Special Attack",
-            "modifier": []
+            "modifier": 0
           },
           "spdef": {
             "value": 5,
@@ -154,7 +154,7 @@
             "stage": 0,
             "levelUp": 0,
             "label": "Special Defense",
-            "modifier": []
+            "modifier": 0
           },
           "spd": {
             "value": 5,
@@ -162,7 +162,7 @@
             "stage": 0,
             "levelUp": 0,
             "label": "Speed",
-            "modifier": []
+            "modifier": 0
           }
         }
       }
