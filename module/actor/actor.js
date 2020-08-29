@@ -155,6 +155,7 @@ export class PTUActor extends Actor {
       return evasion;
     } 
     
+    // Calculate Level
     data.level.current = _calcLevel(data.level.exp, 50, game.ptu.levelProgression);
 
     data.health.total = 10 + data.level.current + (data.stats.hp.total * 3);
@@ -174,6 +175,8 @@ export class PTUActor extends Actor {
     data.initiative = {value: data.stats.spd.total + data.modifiers.initiative};
 
     data.levelUpPoints += data.level.current + data.modifiers.statPoints + 10;
+
+    data.tp.max = data.level.current > 0 ? Math.floor(data.level.current / 5) : 0;
 
     data.evasion = _calculateEvasions(data);
 

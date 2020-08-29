@@ -132,7 +132,7 @@
               </div>
             </div>
           </div>
-          
+
           <!-- Moves Tab -->
           <div class="tab details moves" data-group="primary" data-tab="moves">
             <!-- Moves -->
@@ -289,6 +289,20 @@
             </div>
 
             <!-- Tutor Points -->
+            {{#if (is "true" (getGameSetting "useTutorPoints"))}}
+            <div class="hgss-box mt-2" style="text-align: center;">
+              <div class="hgss-header">
+                <h3 class="m-auto">Tutor Points</h3>
+              </div>
+              <div class="hgss-body">
+                <div class="resource-content flexrow flex-group-right hp-info">
+                  <input type="text" name="data.tp.value" value="{{data.tp.value}}" data-dtype="Number"/>
+                  <span> / </span>
+                  <input type="text" name="data.tp.max" value="{{data.tp.max}}" data-dtype="Number" disabled/>
+                </div>
+              </div>
+            </div>
+            {{/if}}
           </div>
 
           <!-- Combat Tab -->

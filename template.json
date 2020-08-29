@@ -209,6 +209,10 @@
         "value": ""
       },
 
+      "tp": {
+        "value": 0
+      },
+
       "heldItem": "None",
            
       "level": {

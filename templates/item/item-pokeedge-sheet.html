@@ -38,6 +38,7 @@
                         />
                     </div>
 
+                    {{#if (is "true" (getGameSetting "useTutorPoints"))}}
                     <div class="hgss-header vertical">
                         <label for="data.cost">Cost:</label>
                     </div>
@@ -50,6 +51,7 @@
                             placeholder="0"
                         />
                     </div>
+                    {{/if}}
                 </div>
                 <div class="hgss-box align-items-center">
                     <div class="hgss-header mb-1 " style="padding: 6px 5px;">

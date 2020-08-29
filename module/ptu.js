@@ -78,7 +78,34 @@ Hooks.once('init', async function() {
     }  
     return "";
   });
+  Handlebars.registerHelper("getGameSetting", function(key) { return game.settings.get("ptu",key)});
+
+  // Load System Settings
+  _loadSystemSettings();
 });
+
+/* -------------------------------------------- */
+/*  System Setting Initialization               */
+/* -------------------------------------------- */
+
+function _loadSystemSettings() {
+  game.settings.register("ptu", "useTutorPoints", {
+    name: "Use Tutor Points for Pokémon",
+    hint: "Otherwise use the suggested changes in the 'GM Advice and Suggested Houserules' (see: https://pastebin.com/iDt2Mj0d)",
+    scope: "world",
+    config: true,
+    type: String,
+    choices: {
+      "true": "Use Tutor Points",
+      "false": "Don't use Tutor Points"
+    },
+    default: "true"
+  })
+} 
+
+/* -------------------------------------------- */
+/*  Items Initialization                        */
+/* -------------------------------------------- */
 
 Hooks.once("ready", async function() {
   // Globally enable items from item compendium
