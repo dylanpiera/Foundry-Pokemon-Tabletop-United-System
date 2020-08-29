@@ -1,3 +1,9 @@
+import { CalcLevel } from "./calculations/level-up-calculator.js";
+import { CalculateEvasions } from "./calculations/evasion-calculator.js";
+import { CalculateCapabilities } from "./calculations/capability-calculator.js"; 
+import { CalculateSkills } from "./calculations/skills-calculator.js"; 
+import { CalcBaseStat, CalculateStatTotal } from "./calculations/stats-calculator.js";
+
 /**
  * Extend the base Actor entity by defining a custom roll data structure which is ideal for the Simple system.
  * @extends {Actor}
@@ -68,91 +74,64 @@ export class PTUActor extends Actor {
   _preparePokemonData(actorData) {
     const data = actorData.data;
 
-    // Make modifications to data here. For example:
-    data.levelUpPoints = 0;
-    for (let [key, value] of Object.entries(data.stats)) {
-      let sub = value["value"] + value["mod"] + value["levelUp"];
-      data.levelUpPoints -= value["levelUp"];
-      if(value["stage"] > 0 ) {
-        value["total"] = Math.floor(sub * value["stage"] * 0.2 + sub);
-      } else {
-        if(key == "hp") {
-          value["total"] = sub;
-        }
-        else {
-          value["total"] = Math.ceil(sub * value["stage"] * 0.1 + sub);
-        }
-      }
-    }
-    for (let [key, skill] of Object.entries(data.skills)) {
-      skill["rank"] = this._getRank(skill["value"]);  
-    }
+    const speciesData = GetSpeciesData(data.species);
 
-    let _calcLevel = function(exp, level, json) {
-      if(exp <= json[1]) {return 1;}
-      if(exp >= json[100]) {return 100;}
+    // Calculate Level
+    data.level.current = CalcLevel(data.level.exp, 50, game.ptu.levelProgression);
 
-      return _recursiveLevelCalc(exp, level, json);
-    }
-    let _recursiveLevelCalc = function(exp, level, json) {
-      if(exp > json[level]) {
-        return _recursiveLevelCalc(exp, ++level, json)
-      }
-      else {
-        if(json[level] >= exp) {
-          if(json[level-1] >= exp) {
-            if(json[Math.max(Math.floor(level/2),1)]) {
-              return _recursiveLevelCalc(exp, Math.max(Math.floor(level/2),1), json);
-            }
-            else {
-              return _recursiveLevelCalc(exp, level-2, json);
-            }
-          }
-        }
-      }
-      
-      return exp == json[level] ? level : level -1;
-    }
+    data.levelUpPoints = data.level.current + data.modifiers.statPoints + 10;
 
-    let _calcBaseStats = function(specie, nature, statKey) {
-      if( specie != "" ) return _calculateStatWithNature(nature, statKey, _fetchSpecieStat(specie, statKey));
-      return 0;
-    }
+    // Stats
+    data.stats.hp.value = CalcBaseStat(speciesData, data.nature.value, "HP");
+    data.stats.atk.value = CalcBaseStat(speciesData, data.nature.value, "Attack");
+    data.stats.def.value = CalcBaseStat(speciesData, data.nature.value, "Defense");
+    data.stats.spatk.value = CalcBaseStat(speciesData, data.nature.value, "Special Attack");
+    data.stats.spdef.value = CalcBaseStat(speciesData, data.nature.value, "Special Defense");
+    data.stats.spd.value = CalcBaseStat(speciesData, data.nature.value, "Speed");
 
-    let _fetchSpecieStat = function(specie, stat)  {
-      for (var i  = 0; i < game.ptu.pokemonData.length; i++){
-        if (game.ptu.pokemonData[i]["_id"] === specie.toUpperCase()) return game.ptu.pokemonData[i]["Base Stats"][stat];
-      }
-      return 0;
-    }
-
-    let _calculateStatWithNature = function(nature, statKey, stat){
-      if(nature == "") return stat;
-      if(game.ptu.natureData[nature] == null) return statKey;
-
-      if(game.ptu.natureData[nature][0] == statKey) stat += statKey == "HP" ? 1 : 2;
-      if(game.ptu.natureData[nature][1] == statKey) stat -= statKey == "HP" ? 1 : 2;
-      return stat;
-    }
+    var result = CalculateStatTotal(data.levelUpPoints, data.stats);
+    data.stats = result.stats;
+    data.levelUpPoints = result.levelUpPoints;
     
-    data.level.current = _calcLevel(data.level.exp, 50, game.ptu.levelProgression);
-
     data.health.total = 10 + data.level.current + (data.stats.hp.total * 3);
     data.health.max = data.health.injuries > 0 ? Math.trunc(data.health.total*(1-((data.modifiers.hardened ? Math.min(data.health.injuries, 5) : data.health.injuries)/10))) : data.health.total;
     if(data.health.value === null) data.health.value = data.health.max;
 
     data.health.percent = Math.round((data.health.value / data.health.max) * 100);
 
-    // Stats
-    data.stats.hp.value = _calcBaseStats(data.species, data.nature.value, "HP");
-    data.stats.atk.value = _calcBaseStats(data.species, data.nature.value, "Attack");
-    data.stats.def.value = _calcBaseStats(data.species, data.nature.value, "Defense");
-    data.stats.spatk.value = _calcBaseStats(data.species, data.nature.value, "Special Attack");
-    data.stats.spdef.value = _calcBaseStats(data.species, data.nature.value, "Special Defense");
-    data.stats.spd.value = _calcBaseStats(data.species, data.nature.value, "Speed");
-
     data.initiative = {value: data.stats.spd.total + data.modifiers.initiative};
 
-    data.levelUpPoints += data.level.current + data.modifiers.statPoints + 10;
+    data.tp.max = data.level.current > 0 ? Math.floor(data.level.current / 5) : 0;
+    data.tp.pep.value = actorData.items.filter(x => x.type == "pokeedge" && x.data.origin.toLowerCase() != "pusher").length;
+    data.tp.pep.max = data.level.current > 0 ? Math.floor(data.level.current / 10)+1 : 1;
+
+    data.evasion = CalculateEvasions(data);
+
+    data.capabilities = CalculateCapabilities(speciesData, actorData.items.values());
+
+    if(speciesData) data.egggroup = speciesData["Breeding Information"]["Egg Group"].join(" & ");
+
+    //TODO: Add skill background
+    data.skills = CalculateSkills(data.skills, speciesData, actorData.items.filter(x => x.type == "pokeedge"));
+
+    // Calc skill rank
+    for (let [key, skill] of Object.entries(data.skills)) {
+      skill["rank"] = this._getRank(skill["value"]);  
+    }
+
+    /* The Corner of Exceptions */
+
+    // Shedinja will always be a special case.
+    if(data.species.toLowerCase() === "shedinja") data.health.max = 1;
   }
+
+}
+
+function GetSpeciesData(species) {
+  if(species != "") {
+    let preJson = game.ptu.pokemonData.find(x => x._id.toLowerCase() === species.toLowerCase());
+    if (!preJson) return null;
+    return JSON.parse(JSON.stringify(preJson));
+  }
+  else return null;
 }

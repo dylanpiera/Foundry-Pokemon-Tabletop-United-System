@@ -39,7 +39,7 @@ Hooks.once('init', async function() {
   Actors.registerSheet("ptu", PTUCharacterSheet, { types: ["character"], makeDefault: true });
   Actors.registerSheet("ptu", PTUPokemonSheet, { types: ["pokemon"], makeDefault: true });
   Items.unregisterSheet("core", ItemSheet);
-  Items.registerSheet("ptu", PTUItemSheet, { types: ["item","ability","move"], makeDefault: true });
+  Items.registerSheet("ptu", PTUItemSheet, { types: ["item","ability","move","capability", "pokeedge"], makeDefault: true });
   Items.registerSheet("ptu", PTUEdgeSheet, { types: ["edge"], makeDefault: true });
   Items.registerSheet("ptu", PTUFeatSheet, { types: ["feat"], makeDefault: true });
 
@@ -78,12 +78,39 @@ Hooks.once('init', async function() {
     }  
     return "";
   });
+  Handlebars.registerHelper("getGameSetting", function(key) { return game.settings.get("ptu",key)});
+
+  // Load System Settings
+  _loadSystemSettings();
 });
+
+/* -------------------------------------------- */
+/*  System Setting Initialization               */
+/* -------------------------------------------- */
+
+function _loadSystemSettings() {
+  game.settings.register("ptu", "useTutorPoints", {
+    name: "Use Tutor Points for Pokémon",
+    hint: "Otherwise use the suggested changes in the 'GM Advice and Suggested Houserules' (see: https://pastebin.com/iDt2Mj0d)",
+    scope: "world",
+    config: true,
+    type: String,
+    choices: {
+      "true": "Use Tutor Points",
+      "false": "Don't use Tutor Points"
+    },
+    default: "true"
+  })
+} 
+
+/* -------------------------------------------- */
+/*  Items Initialization                        */
+/* -------------------------------------------- */
 
 Hooks.once("ready", async function() {
   // Globally enable items from item compendium
   game.ptu["items"] = await game.packs.get("ptu.items").getContent();
-  
+
   // Wait to register hotbar drop hook on ready so that modules could register earlier if they want to
   Hooks.on("hotbarDrop", (bar, data, slot) => createPTUMacro(data, slot));
 });

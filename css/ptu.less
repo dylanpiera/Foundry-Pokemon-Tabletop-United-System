@@ -87,6 +87,7 @@ a.item {
     .hgss-body {
         padding: 2px 5px;
         display: flex;
+        flex-wrap: wrap;
     }
 }
 
@@ -158,8 +159,8 @@ a.item {
 .container-fluid > .sheet-footer {
     position: absolute;
     left: 0;
-    bottom: -55px;
-    padding: 10px 20px;
+    bottom: -45px;
+    padding: 0px 20px;
     width: 100%;
 
     .tabs {
@@ -869,11 +870,10 @@ input[name="data.money"] {
     }
 }
 
-.autocomplete-suggestions {
-    font-family: monospace;
-    font-variant: normal;
-    width: 300px !important;
-    .autocomplete-suggestion {
-        display: block !important;
-    }
+.ui-autocomplete {
+    z-index: 500 !important;
+}
+
+.error-text {
+    background: #ff000060 !important;
 }

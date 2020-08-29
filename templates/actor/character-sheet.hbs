@@ -93,14 +93,14 @@
                     {{#each data.skills as |skill key|}}
                       <div class="row no-gutters {{key}} align-items-center">
                         <div class="skill {{key}} col-sm-4 bgcolor key type--{{skill.type}} align-self-center">
-                          <label for="data.skills.{{key}}.mod" class="resource-label"
+                          <label for="data.skills.{{key}}.modifier" class="resource-label"
                             >{{skill.label}}</label>
                         </div>
                         <div class="skill {{key}} col pl-1 pr-1 fs-9 center-text">
                             <input
                               type="text"
-                              name="data.skills.{{key}}.mod"
-                              value="{{skill.mod}}"
+                              name="data.skills.{{key}}.modifier"
+                              value="{{skill.modifier}}"
                               data-dtype="Number"
                             />
                         </div>
@@ -117,14 +117,14 @@
                             />
                         </div>
                         <div class="skill {{key}} col-sm-2 align-self-center bgcolor fs-9 center-text rollable"
-                          data-roll="{{skill.value}}d6{{#if skill.mod}}+{{skill.mod}}{{/if}}"
+                          data-roll="{{skill.value}}d6{{#if skill.modifier}}+{{skill.modifier}}{{/if}}"
                             data-label="{{skill.label}}"
                         >
                           <i class="fas fa-dice-d20"></i>
                           <label 
                             for="data.skills.{{key}}.value" 
                             class="resource-label" 
-                            >{{skill.value}}d6{{#if skill.mod}}+{{skill.mod}}{{/if}}</label>
+                            >{{skill.value}}d6{{#if skill.modifier}}+{{skill.modifier}}{{/if}}</label>
                         </div>
                       </div>
                       {{/each}}
@@ -255,55 +255,87 @@
           <!-- Extra -->
           <div class="tab details extra h-100" data-group="primary" data-tab="extra">
             <!-- Injuries -->
-            <div class="hgss-box mb-2 w-100"
-            style="text-align: center; word-break: keep-all;">
-         <div class="hgss-header">
-           <div class="d-flex w-100 mt-1 mb-1 align-items-center">
-             <div class="col-sm-6">
-               <label for="data.health.injuries">Injuries</label>
-             </div>
-             <div class="col-sm-6">
-               <label for="data.health.total">Total Health <small>Ignoring Injuries</small></label>
-             </div>
-           </div>
-         </div>
-         <div class="hgss-body" style="display: block;">
-           <div class="d-flex w-100 mt-1 mb-1">
-             <div class="col-sm-6">
-               <input
-                 name="data.health.injuries"
-                 type="text"
-                 value="{{data.health.injuries}}"
-                 data-dtype="Number"
-               />
-             </div>
-             <div class="col-sm-6">
-               <input
-                 type="text"
-                 name="data.health.total"
-                 value="{{data.health.total}}"
-                 data-dtype="Number"
-                 disabled
-               />
-             </div>
-           </div>
-           {{#if (or (bigger data.health.injuries 0) (is true data.modifiers.hardened))}}
-             <div class="d-flex w-100 mt-1 mb-1">
-               <ul style="position: relative; left: 15px; width: 96%; line-height: 15px; text-align: start;">
-               {{#if data.modifiers.hardened}}<li>Injuries beyond the 5th do not lower Maximum Hit Points</li>{{/if}}
-               {{#if (and (is true data.modifiers.hardened) (biggerOrEqual data.health.injuries 1))}}<li>+1 to Critical Hit and Effect Range</li>{{/if}}
-               {{#if (and (is true data.modifiers.hardened) (biggerOrEqual data.health.injuries 3))}}<li>+1 Evasion and +5 Initiative</li>{{/if}}
-               {{#if (biggerOrEqual data.health.injuries 5)}}<li>Unable to regain Hit Points from Resting</li>{{/if}}
-               {{#if (and (is true data.modifiers.hardened) (biggerOrEqual data.health.injuries 5))}}<li>+5 Damage Reduction</li>{{/if}}
-               {{#if (and (not true data.modifiers.hardened) (biggerOrEqual data.health.injuries 5))}}<li>Take {{data.health.injuries}} Damage whenever taking a Standard Action during Combat</li>{{/if}}
-               {{#if (and (is true data.modifiers.hardened) (biggerOrEqual data.health.injuries 7))}}<li>Immune to Loss of Hit Points (but not damage) from all effects</li>{{/if}}
-               {{#if (and (is true data.modifiers.hardened) (biggerOrEqual data.health.injuries 9))}}<li>Resist all damage one step further</li>{{/if}}
-               {{#if (and (not true data.modifiers.hardened) (biggerOrEqual data.health.injuries 10))}}<li><b>Death</b></li>{{/if}}
-               </ol>
-             </div>
-           {{/if}}
-         </div>
-       </div>
+            <div class="hgss-box mb-2 w-100" style="text-align: center; word-break: keep-all;">
+              <div class="hgss-header">
+                <div class="d-flex w-100 mt-1 mb-1 align-items-center">
+                  <div class="col-sm-6">
+                    <label for="data.health.injuries">Injuries</label>
+                  </div>
+                  <div class="col-sm-6">
+                    <label for="data.health.total">Total Health <small>Ignoring Injuries</small></label>
+                  </div>
+                </div>
+              </div>
+              <div class="hgss-body" style="display: block;">
+                <div class="d-flex w-100 mt-1 mb-1">
+                  <div class="col-sm-6">
+                    <input
+                      name="data.health.injuries"
+                      type="text"
+                      value="{{data.health.injuries}}"
+                      data-dtype="Number"
+                    />
+                  </div>
+                  <div class="col-sm-6">
+                    <input
+                      type="text"
+                      name="data.health.total"
+                      value="{{data.health.total}}"
+                      data-dtype="Number"
+                      disabled
+                    />
+                  </div>
+                </div>
+                {{#if (or (bigger data.health.injuries 0) (is true data.modifiers.hardened))}}
+                  <div class="d-flex w-100 mt-1 mb-1">
+                    <ul style="position: relative; left: 15px; width: 96%; line-height: 15px; text-align: start;">
+                    {{#if data.modifiers.hardened}}<li>Injuries beyond the 5th do not lower Maximum Hit Points</li>{{/if}}
+                    {{#if (and (is true data.modifiers.hardened) (biggerOrEqual data.health.injuries 1))}}<li>+1 to Critical Hit and Effect Range</li>{{/if}}
+                    {{#if (and (is true data.modifiers.hardened) (biggerOrEqual data.health.injuries 3))}}<li>+1 Evasion and +5 Initiative</li>{{/if}}
+                    {{#if (biggerOrEqual data.health.injuries 5)}}<li>Unable to regain Hit Points from Resting</li>{{/if}}
+                    {{#if (and (is true data.modifiers.hardened) (biggerOrEqual data.health.injuries 5))}}<li>+5 Damage Reduction</li>{{/if}}
+                    {{#if (and (not true data.modifiers.hardened) (biggerOrEqual data.health.injuries 5))}}<li>Take {{data.health.injuries}} Damage whenever taking a Standard Action during Combat</li>{{/if}}
+                    {{#if (and (is true data.modifiers.hardened) (biggerOrEqual data.health.injuries 7))}}<li>Immune to Loss of Hit Points (but not damage) from all effects</li>{{/if}}
+                    {{#if (and (is true data.modifiers.hardened) (biggerOrEqual data.health.injuries 9))}}<li>Resist all damage one step further</li>{{/if}}
+                    {{#if (and (not true data.modifiers.hardened) (biggerOrEqual data.health.injuries 10))}}<li><b>Death</b></li>{{/if}}
+                    </ol>
+                  </div>
+                {{/if}}
+              </div>
+            </div>
+
+            <!-- Capabilities -->
+            <div class="hgss-box w-100" style="display: block;">
+              <div class="hgss-body w-100" style="display: block;">
+                <ol class="inventory-list">
+                  <li class="inventory-header flexrow">
+                    <h3 class="item-name flexrow">Capabilities</h3>
+                    <div class="item-controls">
+                      <a class="item-control item-create" title="Add capability" data-type="capability"><i class="fas fa-plus-circle" style="margin-right: 3px;"></i><span class="readable">Add</span></a>
+                    </div>
+                  </li>
+                  <ol class="item-list">
+                    {{#each actor.capabilities as | capability |}}
+                      <li class="item flexrow" data-item-id="{{capability._id}}">
+                        <div class="item-name flexrow">
+                          <h4 title="Toggle Info ({{capability.name}})" data-toggle="collapse" data-target="#{{capability._id}}-collapse" aria-expanded="false" aria-controls="{{capability._id}}-collapse">
+                            <i class="fas fa-info-circle info-icon"></i>
+                            {{capability.name}}
+                          </h4>
+                        </div>
+                        <div class="item-controls" style="flex: 0 0 55px; justify-content: center; display:flex;">
+                          <a class="item-control item-edit" title="Edit capability"><i class="fas fa-edit"></i></a>
+                          <a class="item-control item-delete" title="Delete capability"><i class="fas fa-trash"></i></a>
+                        </div>
+                        <div class="collapse readable lh-16 item-summary" id="{{capability._id}}-collapse">
+                          {{capability.data.effect}}
+                        </div>
+                      </li>
+                    {{/each}}
+                  </ol>
+                </ol>
+              </div>
+            </div>
           </div>
 
           <!-- Biography -->

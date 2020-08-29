@@ -8,7 +8,7 @@ export class PTUCharacterSheet extends ActorSheet {
   static get defaultOptions() {
     return mergeObject(super.defaultOptions, {
       classes: ["ptu", "sheet", "actor"],
-      template: "systems/ptu/templates/actor/character-sheet.html",
+      template: "systems/ptu/templates/actor/character-sheet.hbs",
       width: 675,
       height: 675,
       tabs: [{ navSelector: ".sheet-tabs", contentSelector: ".sheet-body", initial: "stats" }]
@@ -46,6 +46,7 @@ export class PTUCharacterSheet extends ActorSheet {
     const items = [];
     const abilities = [];
     const moves = [];
+    const capabilities = [];
 
     // Iterate through items, allocating to containers
     // let totalWeight = 0;
@@ -59,6 +60,7 @@ export class PTUCharacterSheet extends ActorSheet {
         case 'item': items.push(i); break;
         case 'abilities': abilities.push(i); break;
         case 'move': moves.push(i); break;
+        case 'capability': capabilities.push(i); break;
       }
     }
 
@@ -68,6 +70,7 @@ export class PTUCharacterSheet extends ActorSheet {
     actorData.items = items;
     actorData.abilities = abilities;
     actorData.moves = moves;
+    actorData.capabilities = capabilities;
   }
 
   /* -------------------------------------------- */

@@ -1,0 +1,368 @@
+[
+  {
+    "name": "Skill Improvement",
+    "effect": "Rank up one skill that is currently at or below its default level for the species. This Edge may be taken multiple times, each time selecting a different skill",
+    "prerequisite": "None",
+    "cost": "1 TP"
+  },
+  {
+    "name": "Skill Improvement (Acrobatics)",
+    "effect": "Rank up Acrobatics if it is at or below its default level for the species.  May not be selected again for Acrobatics.",
+    "prerequisite": "None",
+    "cost": "1 TP"
+  },
+  {
+    "name": "Skill Improvement (Athletics)",
+    "effect": "Rank up Athletics if it is at or below its default level for the species.  May not be selected again for Athletics.",
+    "prerequisite": "None",
+    "cost": "1 TP"
+  },
+  {
+    "name": "Skill Improvement (Charm)",
+    "effect": "Rank up Charm if it is at or below its default level for the species.  May not be selected again for Charm.",
+    "prerequisite": "None",
+    "cost": "1 TP"
+  },
+  {
+    "name": "Skill Improvement (Combat)",
+    "effect": "Rank up Combat if it is at or below its default level for the species.  May not be selected again for Combat.",
+    "prerequisite": "None",
+    "cost": "1 TP"
+  },
+  {
+    "name": "Skill Improvement (Command)",
+    "effect": "Rank up Command if it is at or below its default level for the species.  May not be selected again for Command.",
+    "prerequisite": "None",
+    "cost": "1 TP"
+  },
+  {
+    "name": "Skill Improvement (General Ed)",
+    "effect": "Rank up General Ed if it is at or below its default level for the species.  May not be selected again for General Ed.",
+    "prerequisite": "None",
+    "cost": "1 TP"
+  },
+  {
+    "name": "Skill Improvement (Medicine Ed)",
+    "effect": "Rank up Medicine Ed if it is at or below its default level for the species.  May not be selected again for Medicine Ed.",
+    "prerequisite": "None",
+    "cost": "1 TP"
+  },
+  {
+    "name": "Skill Improvement (Occult Ed)",
+    "effect": "Rank up Occult Ed if it is at or below its default level for the species.  May not be selected again for Occult Ed.",
+    "prerequisite": "None",
+    "cost": "1 TP"
+  },
+  {
+    "name": "Skill Improvement (Pokémon Ed)",
+    "effect": "Rank up Pokémon Ed if it is at or below its default level for the species.  May not be selected again for Pokémon Ed.",
+    "prerequisite": "None",
+    "cost": "1 TP"
+  },
+  {
+    "name": "Skill Improvement (Technology Ed)",
+    "effect": "Rank up Technology Ed if it is at or below its default level for the species.  May not be selected again for Technology Ed.",
+    "prerequisite": "None",
+    "cost": "1 TP"
+  },
+  {
+    "name": "Skill Improvement (Focus)",
+    "effect": "Rank up Focus if it is at or below its default level for the species.  May not be selected again for Focus.",
+    "prerequisite": "None",
+    "cost": "1 TP"
+  },
+  {
+    "name": "Skill Improvement (Guile)",
+    "effect": "Rank up Guile if it is at or below its default level for the species.  May not be selected again for Guile.",
+    "prerequisite": "None",
+    "cost": "1 TP"
+  },
+  {
+    "name": "Skill Improvement (Intimidate)",
+    "effect": "Rank up Intimidate if it is at or below its default level for the species.  May not be selected again for Intimidate.",
+    "prerequisite": "None",
+    "cost": "1 TP"
+  },
+  {
+    "name": "Skill Improvement (Intuition)",
+    "effect": "Rank up Intuition if it is at or below its default level for the species.  May not be selected again for Intuition.",
+    "prerequisite": "None",
+    "cost": "1 TP"
+  },
+  {
+    "name": "Skill Improvement (Perception)",
+    "effect": "Rank up Perception if it is at or below its default level for the species.  May not be selected again for Perception.",
+    "prerequisite": "None",
+    "cost": "1 TP"
+  },
+  {
+    "name": "Skill Improvement (Stealth)",
+    "effect": "Rank up Stealth if it is at or below its default level for the species.  May not be selected again for Stealth.",
+    "prerequisite": "None",
+    "cost": "1 TP"
+  },
+  {
+    "name": "Skill Improvement (Survival)",
+    "effect": "Rank up Survival if it is at or below its default level for the species.  May not be selected again for Survival.",
+    "prerequisite": "None",
+    "cost": "1 TP"
+  },
+  {
+    "name": "Attack Conflict",
+    "effect": "Select Attack or Special Attack. From now on, that Stat does not need to remain higher than Stats it surpasses in Base Relations, and similarly all other Stats surpassed by it do not need to remain lower.",
+    "prerequisite": "None",
+    "cost": "1 TP"
+  },
+  {
+    "name": "Mixed Sweeper Rank 1",
+    "effect": "The user gains 3 Stat Points to distribute freely between HP, Defense, Special Defense, or Speed. These bonus points are treated as if they were \"Level Up\" points and do not alter Base Stats.",
+    "prerequisite": "Level 10, Invested at least 5 Level-Up Stat Points into both Attack and Special Attack",
+    "cost": "1 TP"
+  },
+  {
+    "name": "Mixed Sweeper Rank 2",
+    "effect": "The user gains 3 Stat Points to distribute freely between HP, Defense, Special Defense, or Speed. These bonus points are treated as if they were \"Level Up\" points and do not alter Base Stats.",
+    "prerequisite": "Level 20, Invested at least 10 Level-Up Stat Points into both Attack and Special Attack",
+    "cost": "1 TP"
+  },
+  {
+    "name": "Mixed Sweeper Rank 3",
+    "effect": "The user gains 3 Stat Points to distribute freely between HP, Defense, Special Defense, or Speed. These bonus points are treated as if they were \"Level Up\" points and do not alter Base Stats.",
+    "prerequisite": "Level 40, Invested at least 15 Level-Up Stat Points into both Attack and Special Attack",
+    "cost": "1 TP"
+  },
+  {
+    "name": "Underdog's Strength",
+    "effect": "The user has each of their Base Stats increased by +1. The user may no longer undergo Evolution.",
+    "prerequisite": "Level 15, User is an Underdog Pokémon",
+    "cost": "1 TP"
+  },
+  {
+    "name": "Realized Potential",
+    "effect": "Subtract the user’s Species Base Stat Total from 45. The user gains Bonus Stat Points equal to the remainder. These Stat Points must follow Base Stat Relations as normal. If the user evolves to a species with a Base Stat Total 45 or higher, Realized Potential is removed and the Tutor Points refunded.",
+    "prerequisite": "Level 30, User is an Underdog Pokémon",
+    "cost": "2 TP"
+  },
+  {
+    "name": "Ability Mastery",
+    "effect": "The Pokemon gains an additional Ability, picked from any Ability it could naturally qualify for.",
+    "prerequisite": "Level 60",
+    "cost": "3 TP"
+  },
+  {
+    "name": "Advanced Connection",
+    "effect": "Choose an Ability with the Connection Keyword that the target has; the Connected Move no longer takes up a Move Slot for the user.",
+    "prerequisite": "An Ability with the Connection Keyword",
+    "cost": "1 TP"
+  },
+  {
+    "name": "Accuracy Training",
+    "effect": "Pick a Move with an AC of 3 or higher; the AC of the target Move is permanently lowered by 1. This Poke Edge may be taken up to three times, each time selecting a different Move.",
+    "prerequisite": "Level 20",
+    "cost": "1 TP"
+  },
+  {
+    "name": "Underdog's Lessons",
+    "effect": "Choose a Level-Up Move from one of the user’s Final Evolutions that it can learn at or below its current Level. The user learns that Move as if it were a Level-Up Move and can now learn Moves from TMs, HMs, and Tutoring from the lists of that Final Evolution. Underdog’s Lessons may be taken up to three times but must use the same Final Evolution each time in the case of Pokémon with multiple Final Evolutions.",
+    "prerequisite": "Underdog’s Strength",
+    "cost": "1 TP"
+  },
+  {
+    "name": "Capability Training",
+    "effect": "Increase Power or a Jump Capability by 1. Capability Training may be taken multiple times, each time increasing a different Capability",
+    "prerequisite": "Level 20",
+    "cost": "1 TP"
+  },
+  {
+    "name": "Capability Training (Power)",
+    "effect": "Increase Power Capability by 1.  Capability Training may not be taken again for Power.",
+    "prerequisite": "Level 20",
+    "cost": "1 TP"
+  },
+  {
+    "name": "Capability Training (High Jump)",
+    "effect": "Increase High Jump Capability by 1.  Capability Training may not be taken again for High Jump.",
+    "prerequisite": "Level 20",
+    "cost": "1 TP"
+  },
+  {
+    "name": "Capability Training (Long Jump)",
+    "effect": "Increase Long Jump Capability by 1.  Capability Training may not be taken again for Long Jump.",
+    "prerequisite": "Level 20",
+    "cost": "1 TP"
+  },
+  {
+    "name": "Advanced Mobility",
+    "effect": "Increase one Movement Capability by 2. This Edge may be taken multiple times, but may not be applied more than once to the same Movement Capability.",
+    "prerequisite": "Level 20",
+    "cost": "1 TP"
+  },
+  {
+    "name": "Advanced Mobility (Overland)",
+    "effect": "Increase Overland Movement Capability by 2.  Advanced Mobility may not be taken again for Overland.",
+    "prerequisite": "Level 20",
+    "cost": "1 TP"
+  },
+  {
+    "name": "Advanced Mobility (Sky)",
+    "effect": "Increase Sky Movement Capability by 2.  Advanced Mobility may not be taken again for Sky.",
+    "prerequisite": "Level 20",
+    "cost": "1 TP"
+  },
+  {
+    "name": "Advanced Mobility (Swim)",
+    "effect": "Increase Swim Movement Capability by 2.  Advanced Mobility may not be taken again for Swim.",
+    "prerequisite": "Level 20",
+    "cost": "1 TP"
+  },
+  {
+    "name": "Advanced Mobility (Levitate)",
+    "effect": "Increase Levitate Movement Capability by 2.  Advanced Mobility may not be taken again for Levitate.",
+    "prerequisite": "Level 20",
+    "cost": "1 TP"
+  },
+  {
+    "name": "Advanced Mobility (Burrow)",
+    "effect": "Increase Burrow Movement Capability by 2.  Advanced Mobility may not be taken again for Burrow.",
+    "prerequisite": "Level 20",
+    "cost": "1 TP"
+  },
+  {
+    "name": "Advanced Mobility (Teleporter)",
+    "effect": "Increase Teleporter Movement Capability by 2.  Advanced Mobility may not be taken again for Teleporter.  Does not auto-update.",
+    "prerequisite": "Level 20",
+    "cost": "1 TP"
+  },
+  {
+    "name": "Basic Ranged Attacks",
+    "effect": "Choose one of Firestarter, Fountain, Freezer, Guster, Materializer, or Zapper. Struggle Attacks modified by that Capability may now be made at a range of up to 6 meters. This Poke Edge may be taken multiple times, selecting a different Capability each time.",
+    "prerequisite": "Level 20, one of the Firestarter, Fountain, Freezer, Guster, Materializer, or Zapper Capabilities",
+    "cost": "1 TP"
+  },
+  {
+    "name": "Basic Ranged Attacks (Firestarter)",
+    "effect": "Struggle Attacks modified by Firestarter may now be made at a range of up to 6 meters.",
+    "prerequisite": "Level 20, Firestarter Capability",
+    "cost": "1 TP"
+  },
+  {
+    "name": "Basic Ranged Attacks (Fountain)",
+    "effect": "Struggle Attacks modified by Fountain may now be made at a range of up to 6 meters.",
+    "prerequisite": "Level 20, Fountain Capability",
+    "cost": "1 TP"
+  },
+  {
+    "name": "Basic Ranged Attacks (Freezer)",
+    "effect": "Struggle Attacks modified by Freezer may now be made at a range of up to 6 meters.",
+    "prerequisite": "Level 20, Freezer Capability",
+    "cost": "1 TP"
+  },
+  {
+    "name": "Basic Ranged Attacks (Guster)",
+    "effect": "Struggle Attacks modified by Guster may now be made at a range of up to 6 meters.",
+    "prerequisite": "Level 20, Guster Capability",
+    "cost": "1 TP"
+  },
+  {
+    "name": "Basic Ranged Attacks (Materializer)",
+    "effect": "Struggle Attacks modified by Materializer may now be made at a range of up to 6 meters.",
+    "prerequisite": "Level 20, Materializer Capability",
+    "cost": "1 TP"
+  },
+  {
+    "name": "Basic Ranged Attacks (Zapper)",
+    "effect": "Struggle Attacks modified by Zapper may now be made at a range of up to 6 meters.",
+    "prerequisite": "Level 20, Zapper Capability",
+    "cost": "1 TP"
+  },
+  {
+    "name": "Aura Pulse",
+    "effect": "The Pokemon gains the Aura Pulse Capability",
+    "prerequisite": "Level 30, Aura Reading Capability, owned by a Trainer with Aura Pulse",
+    "cost": "2 TP"
+  },
+  {
+    "name": "Enticing Bait",
+    "effect": "When activating the Alluring Capability, the user adds the higher of its Athletics or Focus Ranks to its d20 roll.",
+    "prerequisite": "Level 20, Alluring Capability",
+    "cost": "1 TP"
+  },
+  {
+    "name": "Extended Invisibility",
+    "effect": "The user may remain Invisible for up to 8 minutes",
+    "prerequisite": "Level 20, Invisibility Capability",
+    "cost": "1 TP"
+  },
+  {
+    "name": "Far Reading",
+    "effect": "The user treats their Focus Rank as 2 higher for the purposes of determining the range of Telepath.",
+    "prerequisite": "Level 20, Telepathy Capability",
+    "cost": "1 TP"
+  },
+  {
+    "name": "Precise Threading",
+    "effect": "The user may use their Threaded Capability at a range of 6 meters and with an AC of 3 rather than 6",
+    "prerequisite": "Level 20, Threaded Capability",
+    "cost": "1 TP"
+  },
+  {
+    "name": "Seismometer",
+    "effect": "The user's Tremorsense range is increased by a number of meters equal to their Perception Rank.",
+    "prerequisite": "Level 20, Tremorsense Capability",
+    "cost": "1 TP"
+  },
+  {
+    "name": "TK Mastery",
+    "effect": "The user treats their Focus Rank as 2 higher for the purposes of the Telekinetic Capability",
+    "prerequisite": "Level 20, Telekinetic Capability",
+    "cost": "1 TP"
+  },
+  {
+    "name": "Trail Sniffer",
+    "effect": "The user gets a bonus to all Perception Rolls to use the Tracker Capability equal to their Focus Rank.",
+    "prerequisite": "Level 20, Tracker Capability",
+    "cost": "1 TP"
+  },
+  {
+    "name": "Digital Avatar",
+    "effect": "The Pokémon may dive into computer systems and networks and gains a 3d6 in Technology Education if it did not previously have a Technology Education Skill.",
+    "prerequisite": "Datajack Augmentation",
+    "cost": "1 TP"
+  },
+  {
+    "name": "Gravity Training",
+    "effect": "The Pokémon gains two steps to allocate in any direction to expand its Gravitic Tolerance capability. If it has none, it may acquire one by allocating steps starting from its Home Gravity.",
+    "prerequisite": "None",
+    "cost": "1 TP"
+  },
+  {
+    "name": "Psychic Navigator",
+    "effect": "Grants the Psychic Navigator Capability.",
+    "prerequisite": "Psychic Type, Level 20",
+    "cost": "2 TP"
+  },
+  {
+    "name": "Vehicle Training",
+    "effect": "The Pokémon may drive vehicles that are appropriately outfitted to the species as a Standard Action.",
+    "prerequisite": "Appropriate Body Type",
+    "cost": "1 TP"
+  },
+  {
+    "name": "Expand Horizons",
+    "effect": "The Pokémon gains 3 Tutor Points. A Pokémon may be targeted by Expand Horizons only once.  Must be the Pokémon of a Mentor with the Expand Horizons feature.",
+    "prerequisite": "Trainer has Mentor & Expand Horizons",
+    "cost": "0 TP"
+  },
+  {
+    "name": "Mixed Power [9-15 Playtest]",
+    "effect": "The user gains the Twisted Power Ability.",
+    "prerequisite": "Level 10, Invested at least 5 Level-Up Stat Points into both Attack and Special Attack",
+    "cost": "2 TP"
+  },
+  {
+    "name": "Twisted Power [2-16 Playtest]",
+    "effect": "The user adds half of their Attack Stat to the damage rolls of their Special Moves; and the user adds half of their Special Attack Stat to the damage of their Physical Moves. This does not change the Damage Class of any attack.",
+    "prerequisite": "Level 10, Invested at least 5 Level-Up Stat Points into both Attack and Special Attack",
+    "cost": "2 TP"
+  }
+]
