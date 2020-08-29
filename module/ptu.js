@@ -110,7 +110,7 @@ function _loadSystemSettings() {
 Hooks.once("ready", async function() {
   // Globally enable items from item compendium
   game.ptu["items"] = await game.packs.get("ptu.items").getContent();
-  
+
   // Wait to register hotbar drop hook on ready so that modules could register earlier if they want to
   Hooks.on("hotbarDrop", (bar, data, slot) => createPTUMacro(data, slot));
 });
