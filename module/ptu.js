@@ -10,6 +10,7 @@ import { measureDistances } from "./canvas.js";
 import { levelProgression } from "./data/level-progression.js";
 import { pokemonData } from "./data/species-data.js";
 import { natureData } from "./data/nature-data.js";
+import { insurgenceData } from "./data/insurgence-species-data.js"
 
 Hooks.once('init', async function() {
 
@@ -103,13 +104,21 @@ function _loadSystemSettings() {
   });
 
   game.settings.register("ptu", "customSpecies", {
-    name: "Custom Species json",
+    name: "Custom Species json (Requires Refresh)",
     hint: "Please specify the path of a custom species file (inside the world directory) if you wish to add Homebrew Pokémon.",
     scope: "world",
     config: true,
     type: String,
-    default: "data/customSpecies.json",
-    onChange: customSpeciesCompendiumInit
+    default: "data/customSpecies.json"
+  });
+
+  game.settings.register("ptu", "insurgenceData", {
+    name: "Pokémon Insurgence Data",
+    hint: "Adds Pokémon Insurgence data to the game based on DataNinja's Homebrew Compilation's Insurgence Data.",
+    scope: "world",
+    config: true,
+    type: Boolean,
+    default: false
   });
 } 
 
@@ -134,6 +143,9 @@ Hooks.once("ready", async function() {
 
   if(game.settings.get("ptu", "customSpecies") != "") {
     await customSpeciesCompendiumInit(game.settings.get("ptu", "customSpecies"));
+  }
+  if(game.settings.get("ptu", "insurgenceData")) {
+    Array.prototype.push.apply(game.ptu["pokemonData"], insurgenceData);
   }
 
   // Wait to register hotbar drop hook on ready so that modules could register earlier if they want to
