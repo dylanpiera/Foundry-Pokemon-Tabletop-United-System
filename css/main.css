@@ -540,6 +540,9 @@ input[name="data.money"] {
   left: 180px;
   padding-right: 7px;
 }
+span.readable {
+  white-space: pre-wrap;
+}
 .readable {
   font-family: monospace;
   font-variant: normal;

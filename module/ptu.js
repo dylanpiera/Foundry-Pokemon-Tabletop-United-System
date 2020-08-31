@@ -10,6 +10,7 @@ import { measureDistances } from "./canvas.js";
 import { levelProgression } from "./data/level-progression.js";
 import { pokemonData } from "./data/species-data.js";
 import { natureData } from "./data/nature-data.js";
+import { insurgenceData } from "./data/insurgence-species-data.js"
 
 Hooks.once('init', async function() {
 
@@ -100,8 +101,37 @@ function _loadSystemSettings() {
       "false": "Don't use Tutor Points"
     },
     default: "true"
-  })
+  });
+
+  game.settings.register("ptu", "customSpecies", {
+    name: "Custom Species json (Requires Refresh)",
+    hint: "Please specify the path of a custom species file (inside the world directory) if you wish to add Homebrew Pokémon.",
+    scope: "world",
+    config: true,
+    type: String,
+    default: "data/customSpecies.json"
+  });
+
+  game.settings.register("ptu", "insurgenceData", {
+    name: "Pokémon Insurgence Data",
+    hint: "Adds Pokémon Insurgence data to the game based on DataNinja's Homebrew Compilation's Insurgence Data.",
+    scope: "world",
+    config: true,
+    type: Boolean,
+    default: false
+  });
 } 
+
+/* -------------------------------------------- */
+/*  Custom Compendium Initialization            */
+/* -------------------------------------------- */
+
+async function customSpeciesCompendiumInit(path) {
+  const result = await fetch(`/worlds/${game.world.name}/${path}`)
+  const content = await result.json();
+
+  Array.prototype.push.apply(game.ptu["pokemonData"], content);
+}
 
 /* -------------------------------------------- */
 /*  Items Initialization                        */
@@ -110,6 +140,13 @@ function _loadSystemSettings() {
 Hooks.once("ready", async function() {
   // Globally enable items from item compendium
   game.ptu["items"] = await game.packs.get("ptu.items").getContent();
+
+  if(game.settings.get("ptu", "customSpecies") != "") {
+    await customSpeciesCompendiumInit(game.settings.get("ptu", "customSpecies"));
+  }
+  if(game.settings.get("ptu", "insurgenceData")) {
+    Array.prototype.push.apply(game.ptu["pokemonData"], insurgenceData);
+  }
 
   // Wait to register hotbar drop hook on ready so that modules could register earlier if they want to
   Hooks.on("hotbarDrop", (bar, data, slot) => createPTUMacro(data, slot));
