@@ -83,6 +83,10 @@ Hooks.once('init', async function() {
 
   // Load System Settings
   _loadSystemSettings();
+
+  if(game.settings.get("ptu", "insurgenceData")) {
+    Array.prototype.push.apply(game.ptu["pokemonData"], insurgenceData);
+  }
 });
 
 /* -------------------------------------------- */
@@ -109,7 +113,7 @@ function _loadSystemSettings() {
     scope: "world",
     config: true,
     type: String,
-    default: "data/customSpecies.json"
+    default: ""
   });
 
   game.settings.register("ptu", "insurgenceData", {
@@ -143,9 +147,6 @@ Hooks.once("ready", async function() {
 
   if(game.settings.get("ptu", "customSpecies") != "") {
     await customSpeciesCompendiumInit(game.settings.get("ptu", "customSpecies"));
-  }
-  if(game.settings.get("ptu", "insurgenceData")) {
-    Array.prototype.push.apply(game.ptu["pokemonData"], insurgenceData);
   }
 
   // Wait to register hotbar drop hook on ready so that modules could register earlier if they want to
