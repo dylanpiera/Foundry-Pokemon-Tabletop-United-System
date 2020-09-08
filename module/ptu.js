@@ -11,12 +11,14 @@ import { levelProgression } from "./data/level-progression.js";
 import { pokemonData } from "./data/species-data.js";
 import { natureData } from "./data/nature-data.js";
 import { insurgenceData } from "./data/insurgence-species-data.js"
+import { PTUPokemonCharactermancer } from './actor/charactermancer-pokemon-form.js'
 
 Hooks.once('init', async function() {
 
   game.ptu = {
     PTUActor,
     PTUItem,
+    PTUPokemonCharactermancer,
     levelProgression,
     pokemonData,
     natureData
@@ -151,6 +153,19 @@ Hooks.once("ready", async function() {
 
   // Wait to register hotbar drop hook on ready so that modules could register earlier if they want to
   Hooks.on("hotbarDrop", (bar, data, slot) => createPTUMacro(data, slot));
+});
+
+/* -------------------------------------------- */
+/*  Charactermancer Initialization              */
+/* -------------------------------------------- */
+
+Hooks.on("createActor", async actor => {
+  if(actor.data.type != "pokemon") return;
+
+  let form = new game.ptu.PTUPokemonCharactermancer(actor, {"submitOnChange": true, "submitOnClose": true});
+  form.render(true)
+
+
 });
 
 /* -------------------------------------------- */
