@@ -11,6 +11,8 @@ import { levelProgression } from "./data/level-progression.js";
 import { pokemonData } from "./data/species-data.js";
 import { natureData } from "./data/nature-data.js";
 import { insurgenceData } from "./data/insurgence-species-data.js"
+import { DbData } from "./data/db-data.js"
+import { PTUPokemonCharactermancer } from './actor/charactermancer-pokemon-form.js'
 
 Hooks.once('init', async function() {
 
@@ -19,7 +21,8 @@ Hooks.once('init', async function() {
     PTUItem,
     levelProgression,
     pokemonData,
-    natureData
+    natureData,
+    DbData
   };
 
   /**
@@ -80,6 +83,12 @@ Hooks.once('init', async function() {
     return "";
   });
   Handlebars.registerHelper("getGameSetting", function(key) { return game.settings.get("ptu",key)});
+  Handlebars.registerHelper("calcDb", function(move) {
+    console.log(move);
+    var db = game.ptu.DbData[move.damageBase]; 
+    if(db) return (move.ownerType[0] == move.type || move.ownerType[1] == move.type) ? db + 2 : db;
+    return 0;
+  });
 
   // Load System Settings
   _loadSystemSettings();

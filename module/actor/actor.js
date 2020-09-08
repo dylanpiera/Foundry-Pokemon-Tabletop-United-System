@@ -92,6 +92,8 @@ export class PTUActor extends Actor {
     var result = CalculateStatTotal(data.levelUpPoints, data.stats);
     data.stats = result.stats;
     data.levelUpPoints = result.levelUpPoints;
+
+    data.type = speciesData?.Type;
     
     data.health.total = 10 + data.level.current + (data.stats.hp.total * 3);
     data.health.max = data.health.injuries > 0 ? Math.trunc(data.health.total*(1-((data.modifiers.hardened ? Math.min(data.health.injuries, 5) : data.health.injuries)/10))) : data.health.total;

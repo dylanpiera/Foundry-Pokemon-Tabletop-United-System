@@ -13,6 +13,13 @@ export class PTUItem extends Item {
     const itemData = this.data;
     const actorData = this.actor ? this.actor.data : {};
     const data = itemData.data;
+
+    if(this.type == "move") {
+      if(actorData?.data?.type) {
+        data.ownerType = actorData.data.type;
+      }
+    }
+
   }
 
   /**
