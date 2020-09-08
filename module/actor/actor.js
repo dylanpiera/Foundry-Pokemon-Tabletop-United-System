@@ -34,6 +34,7 @@ export class PTUActor extends Actor {
       case 4: return "Adept";
       case 5: return "Expert";
       case 6: return "Master";
+      case 8: return "Virtuoso";
       default: return "Invalid";
     }
   }
