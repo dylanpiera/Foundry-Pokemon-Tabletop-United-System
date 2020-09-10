@@ -36,7 +36,9 @@ function _calculateBaseStat(nature, statKey, edges, stat, abilities, level) {
     stat -= statKey == "HP" ? 1 : 2;
 
   // Underdog's Strength
-  if (edges.includes("Underdog's Strength")) stat += 1;
+  for (let edge of Object.entries(edges)) {
+    if (edge[1].name == "Underdog's Strength") stat += 1;
+  }
 
   //Abilities
   for (let ability of Object.entries(abilities)) {
