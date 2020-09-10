@@ -2,7 +2,7 @@ import { CalcLevel } from "./calculations/level-up-calculator.js";
 import { CalculateEvasions } from "./calculations/evasion-calculator.js";
 import { CalculateCapabilities } from "./calculations/capability-calculator.js"; 
 import { CalculateSkills } from "./calculations/skills-calculator.js"; 
-import { CalcBaseStat, CalculateStatTotal } from "./calculations/stats-calculator.js";
+import { CalcBaseStats, CalculateStatTotal } from "./calculations/stats-calculator.js";
 
 /**
  * Extend the base Actor entity by defining a custom roll data structure which is ideal for the Simple system.
@@ -74,23 +74,18 @@ export class PTUActor extends Actor {
    */
   _preparePokemonData(actorData) {
     const data = actorData.data;
-
+    
     const speciesData = GetSpeciesData(data.species);
-
+    
     // Calculate Level
     data.level.current = CalcLevel(data.level.exp, 50, game.ptu.levelProgression);
 
     data.levelUpPoints = data.level.current + data.modifiers.statPoints + 10;
 
     // Stats
-    data.stats.hp.value = CalcBaseStat(speciesData, data.nature.value, "HP");
-    data.stats.atk.value = CalcBaseStat(speciesData, data.nature.value, "Attack");
-    data.stats.def.value = CalcBaseStat(speciesData, data.nature.value, "Defense");
-    data.stats.spatk.value = CalcBaseStat(speciesData, data.nature.value, "Special Attack");
-    data.stats.spdef.value = CalcBaseStat(speciesData, data.nature.value, "Special Defense");
-    data.stats.spd.value = CalcBaseStat(speciesData, data.nature.value, "Speed");
-
-    var result = CalculateStatTotal(data.levelUpPoints, data.stats);
+    data.stats = CalcBaseStats(speciesData, data.nature.value, actorData.items, data.level.current, data.stats);
+    
+    var result = CalculateStatTotal(data.levelUpPoints, data.stats, speciesData["Base Stats"], actorData.items.filter(x => x.type == "pokeedge"));
     data.stats = result.stats;
     data.levelUpPoints = result.levelUpPoints;
     
@@ -114,7 +109,7 @@ export class PTUActor extends Actor {
 
     //TODO: Add skill background
     data.skills = CalculateSkills(data.skills, speciesData, actorData.items.filter(x => x.type == "pokeedge"));
-
+    
     // Calc skill rank
     for (let [key, skill] of Object.entries(data.skills)) {
       skill["rank"] = this._getRank(skill["value"]);  
