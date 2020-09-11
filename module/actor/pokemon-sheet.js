@@ -98,6 +98,7 @@ export class PTUPokemonSheet extends ActorSheet {
 
     // Rollable abilities.
     html.find('.rollable').click(this._onRoll.bind(this));
+    html.find('.rollable.itemInline').click(this._onMoveRoll.bind(this));
 
     // Drag events for macros.
     if (this.actor.owner) {
@@ -163,6 +164,36 @@ export class PTUPokemonSheet extends ActorSheet {
         speaker: ChatMessage.getSpeaker({ actor: this.actor }),
         flavor: label
       });
+    }
+  }
+
+  /**
+   * Handle clickable move rolls.
+   * @param {Event} event   The originating click event
+   * @private
+   */
+  _onMoveRoll(event) {
+    event.preventDefault();
+
+    const element = event.currentTarget;
+    const dataset = element.dataset;
+
+    if (dataset.roll || dataset.type == "Status") {
+      let roll = new Roll("1d20+"+dataset.ac, this.actor.data.data);
+      let label = dataset.label ? `To-Hit for move: ${dataset.label} ` : '';
+      roll.roll().toMessage({
+        speaker: ChatMessage.getSpeaker({ actor: this.actor }),
+        flavor: label
+      });
+
+      if(dataset.type == "Physical" || dataset.type == "Special") {
+        let roll = new Roll(dataset.roll, this.actor.data.data);
+        let label = dataset.label ? `Damage for move: ${dataset.label}` : '';
+        roll.roll().toMessage({
+          speaker: ChatMessage.getSpeaker({ actor: this.actor }),
+          flavor: label
+        });
+      }
     }
   }
 

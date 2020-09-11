@@ -14,6 +14,7 @@ import { natureData } from "./data/nature-data.js";
 import { insurgenceData } from "./data/insurgence-species-data.js"
 import { DbData } from "./data/db-data.js"
 import { PTUPokemonCharactermancer } from './actor/charactermancer-pokemon-form.js'
+import { RollWithDb } from './utils/roll-calculator.js'
 
 Hooks.once('init', function() {
 
@@ -25,7 +26,8 @@ Hooks.once('init', function() {
     pokemonData,
     natureData,
     DbData,
-    GetSpeciesData
+    GetSpeciesData,
+    RollWithDb
   };
 
   /**
@@ -89,15 +91,12 @@ Hooks.once('init', function() {
   Handlebars.registerHelper("calcDb", function(move) {
     return move.stab ? parseInt(move.damageBase) + 2 : move.damageBase;
   });
-  Handlebars.registerHelper("calcDbCalc", function(move) {
-    if(move.category === "Status") return;
-    let bonus = move.category === "Physical" ? move.owner.stats.atk.total : move.owner.stats.spatk.total;
-    let db = game.ptu.DbData[move.stab ? parseInt(move.damageBase) + 2 : move.damageBase];  
-    if(db) return db + " + " + bonus;
-    return -1;
-  });
+  Handlebars.registerHelper("calcDbCalc", _calcMoveDb);
   Handlebars.registerHelper("calcAc", function(move) {
     return -parseInt(move.ac) + parseInt(move.acBonus);
+  });
+  Handlebars.registerHelper("calcMoveDb", function(actorData, move) {
+    return _calcMoveDb(PrepareMoveData(actorData, move));
   });
 
   // Load System Settings
@@ -107,6 +106,26 @@ Hooks.once('init', function() {
     Array.prototype.push.apply(game.ptu["pokemonData"], insurgenceData);
   }
 });
+
+function _calcMoveDb(move) {
+  if(move.category === "Status") return;
+  let bonus = move.category === "Physical" ? move.owner.stats.atk.total : move.owner.stats.spatk.total;
+  let db = game.ptu.DbData[move.stab ? parseInt(move.damageBase) + 2 : move.damageBase];  
+  if(db) return db + " + " + bonus;
+  return -1;
+}
+
+export function PrepareMoveData(actorData, move) {
+  move.owner = { 
+    type: actorData.typing,
+    stats: actorData.stats,
+    acBonus: actorData.modifiers.acBonus
+  };
+
+  move.stab = move.owner?.type && (move.owner.type[0] == move.type || move.owner.type[1] == move.type);
+  move.acBonus = move.owner.acBonus ? move.owner.acBonus : 0; 
+  return move;
+}
 
 /* -------------------------------------------- */
 /*  System Setting Initialization               */

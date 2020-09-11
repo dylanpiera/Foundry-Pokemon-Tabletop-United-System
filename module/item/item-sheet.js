@@ -1,3 +1,5 @@
+import { PrepareMoveData } from '../ptu.js'
+
 /**
  * Extend the basic ItemSheet with some very simple modifications
  * @extends {ItemSheet}
@@ -31,14 +33,7 @@ export class PTUItemSheet extends ItemSheet {
   getData() {
     const data = super.getData();
 
-    data.data.owner = { 
-      type: this.object.options.actor.data.data.typing,
-      stats: this.object.options.actor.data.data.stats,
-      acBonus: this.object.options.actor.data.data.modifiers.acBonus
-    };
-
-    data.data.stab = data.data.owner?.type && (data.data.owner.type[0] == data.data.type || data.data.owner.type[1] == data.data.type);
-    data.data.acBonus = data.data.owner.acBonus ? data.data.owner.acBonus : 0; 
+    data.data = PrepareMoveData(this.object.options.actor.data.data, data.data);
     return data;
   }
 
