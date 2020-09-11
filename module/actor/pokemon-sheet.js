@@ -97,7 +97,7 @@ export class PTUPokemonSheet extends ActorSheet {
     });
 
     // Rollable abilities.
-    html.find('.rollable').click(this._onRoll.bind(this));
+    html.find('.rollable.skill').click(this._onRoll.bind(this));
     html.find('.rollable.itemInline').click(this._onMoveRoll.bind(this));
 
     // Drag events for macros.
