@@ -75,7 +75,7 @@ export class PTUActor extends Actor {
   _preparePokemonData(actorData) {
     const data = actorData.data;
 
-    const speciesData = GetSpeciesData(data.species);
+    const speciesData = game.ptu.GetSpeciesData(data.species);
 
     // Calculate Level
     data.level.current = CalcLevel(data.level.exp, 50, game.ptu.levelProgression);
@@ -94,7 +94,7 @@ export class PTUActor extends Actor {
     data.stats = result.stats;
     data.levelUpPoints = result.levelUpPoints;
 
-    data.type = speciesData?.Type;
+    data.typing = speciesData?.Type;
     
     data.health.total = 10 + data.level.current + (data.stats.hp.total * 3);
     data.health.max = data.health.injuries > 0 ? Math.trunc(data.health.total*(1-((data.modifiers.hardened ? Math.min(data.health.injuries, 5) : data.health.injuries)/10))) : data.health.total;
@@ -126,11 +126,12 @@ export class PTUActor extends Actor {
 
     // Shedinja will always be a special case.
     if(data.species.toLowerCase() === "shedinja") data.health.max = 1;
+
   }
 
 }
 
-function GetSpeciesData(species) {
+export function GetSpeciesData(species) {
   if(species != "") {
     let preJson = game.ptu.pokemonData.find(x => x._id.toLowerCase() === species.toLowerCase());
     if (!preJson) return null;

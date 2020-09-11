@@ -1,5 +1,6 @@
 // Import Modules
 import { PTUActor } from "./actor/actor.js";
+import { GetSpeciesData } from "./actor/actor.js";
 import { PTUCharacterSheet } from "./actor/character-sheet.js";
 import { PTUPokemonSheet } from "./actor/pokemon-sheet.js";
 import { PTUItem } from "./item/item.js";
@@ -14,7 +15,7 @@ import { insurgenceData } from "./data/insurgence-species-data.js"
 import { DbData } from "./data/db-data.js"
 import { PTUPokemonCharactermancer } from './actor/charactermancer-pokemon-form.js'
 
-Hooks.once('init', async function() {
+Hooks.once('init', function() {
 
   game.ptu = {
     PTUActor,
@@ -23,7 +24,8 @@ Hooks.once('init', async function() {
     levelProgression,
     pokemonData,
     natureData,
-    DbData
+    DbData,
+    GetSpeciesData
   };
 
   /**
@@ -85,10 +87,17 @@ Hooks.once('init', async function() {
   });
   Handlebars.registerHelper("getGameSetting", function(key) { return game.settings.get("ptu",key)});
   Handlebars.registerHelper("calcDb", function(move) {
-    console.log(move);
-    var db = game.ptu.DbData[move.damageBase]; 
-    if(db) return (move.ownerType[0] == move.type || move.ownerType[1] == move.type) ? db + 2 : db;
-    return 0;
+    return move.stab ? parseInt(move.damageBase) + 2 : move.damageBase;
+  });
+  Handlebars.registerHelper("calcDbCalc", function(move) {
+    if(move.category === "Status") return;
+    let bonus = move.category === "Physical" ? move.owner.stats.atk.total : move.owner.stats.spatk.total;
+    let db = game.ptu.DbData[move.stab ? parseInt(move.damageBase) + 2 : move.damageBase];  
+    if(db) return db + " + " + bonus;
+    return -1;
+  });
+  Handlebars.registerHelper("calcAc", function(move) {
+    return -parseInt(move.ac) + parseInt(move.acBonus);
   });
 
   // Load System Settings
