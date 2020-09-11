@@ -1,5 +1,6 @@
 // Import Modules
 import { PTUActor } from "./actor/actor.js";
+import { GetSpeciesData } from "./actor/actor.js";
 import { PTUCharacterSheet } from "./actor/character-sheet.js";
 import { PTUPokemonSheet } from "./actor/pokemon-sheet.js";
 import { PTUItem } from "./item/item.js";
@@ -11,9 +12,11 @@ import { levelProgression } from "./data/level-progression.js";
 import { pokemonData } from "./data/species-data.js";
 import { natureData } from "./data/nature-data.js";
 import { insurgenceData } from "./data/insurgence-species-data.js"
+import { DbData } from "./data/db-data.js"
 import { PTUPokemonCharactermancer } from './actor/charactermancer-pokemon-form.js'
+import { RollWithDb } from './utils/roll-calculator.js'
 
-Hooks.once('init', async function() {
+Hooks.once('init', function() {
 
   game.ptu = {
     PTUActor,
@@ -21,7 +24,10 @@ Hooks.once('init', async function() {
     PTUPokemonCharactermancer,
     levelProgression,
     pokemonData,
-    natureData
+    natureData,
+    DbData,
+    GetSpeciesData,
+    RollWithDb
   };
 
   /**
@@ -82,6 +88,16 @@ Hooks.once('init', async function() {
     return "";
   });
   Handlebars.registerHelper("getGameSetting", function(key) { return game.settings.get("ptu",key)});
+  Handlebars.registerHelper("calcDb", function(move) {
+    return move.stab ? parseInt(move.damageBase) + 2 : move.damageBase;
+  });
+  Handlebars.registerHelper("calcDbCalc", _calcMoveDb);
+  Handlebars.registerHelper("calcAc", function(move) {
+    return -parseInt(move.ac) + parseInt(move.acBonus);
+  });
+  Handlebars.registerHelper("calcMoveDb", function(actorData, move) {
+    return _calcMoveDb(PrepareMoveData(actorData, move));
+  });
 
   // Load System Settings
   _loadSystemSettings();
@@ -90,6 +106,26 @@ Hooks.once('init', async function() {
     Array.prototype.push.apply(game.ptu["pokemonData"], insurgenceData);
   }
 });
+
+function _calcMoveDb(move) {
+  if(move.category === "Status") return;
+  let bonus = move.category === "Physical" ? move.owner.stats.atk.total : move.owner.stats.spatk.total;
+  let db = game.ptu.DbData[move.stab ? parseInt(move.damageBase) + 2 : move.damageBase];  
+  if(db) return db + " + " + bonus;
+  return -1;
+}
+
+export function PrepareMoveData(actorData, move) {
+  move.owner = { 
+    type: actorData.typing,
+    stats: actorData.stats,
+    acBonus: actorData.modifiers.acBonus
+  };
+
+  move.stab = move.owner?.type && (move.owner.type[0] == move.type || move.owner.type[1] == move.type);
+  move.acBonus = move.owner.acBonus ? move.owner.acBonus : 0; 
+  return move;
+}
 
 /* -------------------------------------------- */
 /*  System Setting Initialization               */

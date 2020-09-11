@@ -6,7 +6,8 @@
         "modifiers": {
           "statPoints": 0,
           "initiative": 0,
-          "hardened": false
+          "hardened": false,
+          "acBonus": 0
         }
       },
       "skills": {
@@ -222,11 +223,6 @@
       "health": {
         "value": null,
         "injuries": 0
-      },
-
-      "type": {
-        "primary": "",
-        "secondary": ""
       }
     }
   },
@@ -274,7 +270,8 @@
       "frequency": "",
       "ac": "",
       "range": "",
-      "contestType": ""
+      "contestType": "",
+      "stab": false
     },
     "capability": {
       "templates": ["base"]
