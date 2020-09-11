@@ -109,13 +109,14 @@ Hooks.once('init', function() {
 
 function _calcMoveDb(move) {
   if(move.category === "Status") return;
-  let bonus = move.category === "Physical" ? move.owner.stats.atk.total : move.owner.stats.spatk.total;
+  let bonus = move.owner ? move.category === "Physical" ? move.owner.stats.atk.total : move.owner.stats.spatk.total : 0;
   let db = game.ptu.DbData[move.stab ? parseInt(move.damageBase) + 2 : move.damageBase];  
   if(db) return db + " + " + bonus;
   return -1;
 }
 
 export function PrepareMoveData(actorData, move) {
+  if(!actorData) return move;
   move.owner = { 
     type: actorData.typing,
     stats: actorData.stats,

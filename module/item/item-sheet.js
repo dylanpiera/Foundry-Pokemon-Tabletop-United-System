@@ -33,7 +33,7 @@ export class PTUItemSheet extends ItemSheet {
   getData() {
     const data = super.getData();
 
-    data.data = PrepareMoveData(this.object.options.actor.data.data, data.data);
+    data.data = PrepareMoveData(this.object.options.actor?.data?.data, data.data);
     return data;
   }
 
