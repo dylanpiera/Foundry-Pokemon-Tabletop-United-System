@@ -117,7 +117,6 @@ function _calcMoveDb(move, bool = false) {
   if(move.category === "Status") return;
   let bonus = move.owner ? move.category === "Physical" ? move.owner.stats.atk.total : move.owner.stats.spatk.total : 0;
   let db = game.ptu.DbData[move.stab ? parseInt(move.damageBase) + 2 : move.damageBase];  
-  console.log(bool);
   if(db) return db + (bool ? " + " : "#") + bonus;
   return -1;
 }
