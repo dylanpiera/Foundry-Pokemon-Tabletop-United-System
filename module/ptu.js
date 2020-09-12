@@ -95,8 +95,8 @@ Hooks.once('init', function() {
   Handlebars.registerHelper("calcAc", function(move) {
     return -parseInt(move.ac) + parseInt(move.acBonus);
   });
-  Handlebars.registerHelper("calcMoveDb", function (actorData, move) {
-		return _calcMoveDb(PrepareMoveData(actorData, move));
+  Handlebars.registerHelper("calcMoveDb", function (actorData, move, bool = false) {
+		return _calcMoveDb(PrepareMoveData(actorData, move), bool);
   });
   Handlebars.registerHelper("calcCritRange", function (actorData) {
 		return actorData.modifiers.critRange ? actorData.modifiers.critRange : 0;
@@ -113,11 +113,12 @@ Hooks.once('init', function() {
   }
 });
 
-function _calcMoveDb(move) {
+function _calcMoveDb(move, bool = false) {
   if(move.category === "Status") return;
   let bonus = move.owner ? move.category === "Physical" ? move.owner.stats.atk.total : move.owner.stats.spatk.total : 0;
   let db = game.ptu.DbData[move.stab ? parseInt(move.damageBase) + 2 : move.damageBase];  
-  if(db) return db + "#" + bonus;
+  console.log(bool);
+  if(db) return db + (bool ? " + " : "#") + bonus;
   return -1;
 }
 

@@ -150,7 +150,7 @@
                   <ol class="item-list">
                     {{#each actor.moves as | move |}}
                     <li class="item flexrow" data-item-id="{{move._id}}">
-                      <div class="itemInline rollable" data-critrange="{{calcCritRange ../data}}" data-roll="{{calcMoveDb ../data move.data}}" data-label="{{move.name}}" data-ac="{{calcAc move.data}}" data-type="{{move.data.category}}"> 
+                      <div class="itemInline rollable" data-critrange="{{calcCritRange ../data}}" data-roll="{{calcMoveDb ../data move.data false}}" data-label="{{move.name}}" data-ac="{{calcAc move.data}}" data-type="{{move.data.category}}"> 
                         <i class="fas fa-dice-d20" style="position:unset;"></i>
                       </div>
                       <div class="item-name flexrow">
@@ -168,7 +168,7 @@
                       <div class="collapse readable lh-16 item-summary" id="{{move._id}}-collapse">
                         <div class="content move-grid">
                           Frequency: <span class="readable pokemon p8">{{move.data.frequency}}</span>
-                          DB: <span class="readable pokemon p8" style="white-space: nowrap;">{{calcDb move.data}}: {{calcMoveDb ../data move.data}}</span>
+                          DB: <span class="readable pokemon p8" style="white-space: nowrap;">{{calcDb move.data}}: {{calcMoveDb ../data move.data true}}</span>
                           Category: <span class="readable pokemon p8">{{move.data.category}}</span>
                           Type: <span class="readable pokemon p8">{{move.data.type}}</span>
                           AC: <span class="readable pokemon p8">{{move.data.ac}}</span>

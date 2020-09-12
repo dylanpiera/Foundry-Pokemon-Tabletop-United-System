@@ -190,8 +190,14 @@ export class PTUPokemonSheet extends ActorSheet {
 				speaker: ChatMessage.getSpeaker({ actor: this.actor }),
 				flavor: label
 			});
-
-			let diceResult = roll.terms[0].results[0].result;
+			let diceResult = -2;
+			try{
+			    diceResult = roll.terms[0].results[0].result;
+            }
+            catch(err){
+            	console.log("Old system detected, using deprecated rolling...")
+            	diceResult = roll.parts[0].results[0];
+			}
 			if (diceResult === 1) {
 				CONFIG.ChatMessage.entityClass.create({
 					content: `${dataset.label} critically missed!`,

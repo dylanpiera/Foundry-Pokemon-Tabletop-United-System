@@ -3,7 +3,7 @@
         <div class="itemBox">
             <div class="content move-grid">
                 Frequency: <span class="readable pokemon p11">{{data.frequency}}</span>
-                DB: <span class="readable pokemon p11 rollable" data-critrange="{{calcCritRangeMove data}}" data-roll="{{calcDbCalc data}}" data-label="{{item.name}}" data-ac="{{calcAc data}}" data-type="{{data.category}}"> <i class="fas fa-dice-d20" style="position:unset;margin-left:-33px;"></i> {{calcDb data}}: {{calcDbCalc data}} </span>
+                DB: <span class="readable pokemon p11 rollable" data-critrange="{{calcCritRangeMove data}}" data-roll="{{calcDbCalc data false}}" data-label="{{item.name}}" data-ac="{{calcAc data}}" data-type="{{data.category}}"> <i class="fas fa-dice-d20" style="position:unset;margin-left:-33px;"></i> {{calcDb data}}: {{calcDbCalc data true}} </span>
                 Category: <span class="readable pokemon p11">{{data.category}}</span> 
                 Type: <span class="readable pokemon p11">{{data.type}}</span> 
                 AC: <span class="readable pokemon p11">{{data.ac}}</span>
