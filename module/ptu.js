@@ -95,8 +95,14 @@ Hooks.once('init', function() {
   Handlebars.registerHelper("calcAc", function(move) {
     return -parseInt(move.ac) + parseInt(move.acBonus);
   });
-  Handlebars.registerHelper("calcMoveDb", function(actorData, move) {
-    return _calcMoveDb(PrepareMoveData(actorData, move));
+  Handlebars.registerHelper('calcMoveDb', function (actorData, move) {
+		return _calcMoveDb(PrepareMoveData(actorData, move));
+  });
+  Handlebars.registerHelper('calcCritRange', function (actorData) {
+		return actorData.modifiers.critRange ? actorData.modifiers.critRange : 0;
+  });
+  Handlebars.registerHelper('calcCritRangeMove', function (move) {
+    return move.owner ? move.owner.critRange : 0;
   });
 
   // Load System Settings
@@ -109,17 +115,19 @@ Hooks.once('init', function() {
 
 function _calcMoveDb(move) {
   if(move.category === "Status") return;
-  let bonus = move.category === "Physical" ? move.owner.stats.atk.total : move.owner.stats.spatk.total;
+  let bonus = move.owner ? move.category === "Physical" ? move.owner.stats.atk.total : move.owner.stats.spatk.total : 0;
   let db = game.ptu.DbData[move.stab ? parseInt(move.damageBase) + 2 : move.damageBase];  
-  if(db) return db + " + " + bonus;
+  if(db) return db + "#" + bonus;
   return -1;
 }
 
 export function PrepareMoveData(actorData, move) {
+  if(!actorData) return move;
   move.owner = { 
     type: actorData.typing,
     stats: actorData.stats,
-    acBonus: actorData.modifiers.acBonus
+    acBonus: actorData.modifiers.acBonus,
+    critRange: actorData.modifiers.critRange
   };
 
   move.stab = move.owner?.type && (move.owner.type[0] == move.type || move.owner.type[1] == move.type);
