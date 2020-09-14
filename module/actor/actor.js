@@ -26,6 +26,17 @@ export class PTUActor extends Actor {
     if (actorData.type === 'pokemon') this._preparePokemonData(actorData);
   }
 
+  /** @override */
+  static async create(data, options={}) {
+    let actor = await super.create(data, options);
+
+    console.log(actor);
+    if(actor.data.type != "pokemon") return;
+
+    let form = new game.ptu.PTUPokemonCharactermancer(actor, {"submitOnChange": true, "submitOnClose": true});
+    form.render(true)
+  }
+
   _getRank(skillRank) {
     switch(skillRank) {
       case 1: return "Pathetic";

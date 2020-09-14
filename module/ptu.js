@@ -200,19 +200,6 @@ Hooks.once("ready", async function() {
 });
 
 /* -------------------------------------------- */
-/*  Charactermancer Initialization              */
-/* -------------------------------------------- */
-
-Hooks.on("createActor", async actor => {
-  if(actor.data.type != "pokemon") return;
-
-  let form = new game.ptu.PTUPokemonCharactermancer(actor, {"submitOnChange": true, "submitOnClose": true});
-  form.render(true)
-
-
-});
-
-/* -------------------------------------------- */
 /*  Canvas Initialization                       */
 /* -------------------------------------------- */
 
