@@ -117,6 +117,12 @@ a.item {
   box-shadow: 0px 0px 3px 1px;
   border-radius: 3%;
 }
+.panel.gen8character {
+  justify-content: center;
+  padding: 45px 15px 15px 15px;
+  z-index: 10;
+  position: inherit;
+}
 .panel.character {
   background: #F06058;
   border-radius: 0 7% 7% 0;
@@ -601,6 +607,12 @@ span.readable {
 .actor .inventory-list:not(.inventory-header) .item:nth-child(even) {
   background: #788898cc;
 }
+.actor.gen8 .inventory-list:not(.inventory-header) .item:nth-child(odd) {
+  background: linear-gradient(45deg, #ffffffbb, #fff, #ffffffbb);
+}
+.actor.gen8 .inventory-list:not(.inventory-header) .item:nth-child(even) {
+  background: linear-gradient(45deg, #ffffffbb, #fff, #ffffffbb);
+}
 .actor .inventory-list {
   list-style: none;
   margin: 0;
@@ -721,6 +733,31 @@ span.readable {
 .readable.tight {
   line-height: 20px;
   word-break: break-word;
+}
+.actor.gen8 .window-content {
+  padding: 0;
+}
+.actor.gen8 .container-fluid > .sheet-footer {
+  position: absolute;
+  left: 0;
+  top: 27px;
+  padding: 0px 20px;
+  width: 100%;
+  z-index: 20;
+  height: fit-content;
+}
+.actor.gen8 .container-fluid > .sheet-footer .tabs {
+  padding-right: 5px;
+}
+.actor.gen8 .container-fluid > .sheet-footer .tabs li {
+  float: left;
+}
+.actor.gen8 .container-fluid > .sheet-footer .tabs li button {
+  font-size: 9px;
+  background: #ffffff22;
+}
+.actor.gen8 .container-fluid > .sheet-footer .tabs ul {
+  display: inline;
 }
 .w-25 {
   width: 25% !important;

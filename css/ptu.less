@@ -138,6 +138,14 @@ a.item {
 }
 
 .panel {
+  
+    &.gen8character {
+        justify-content: center;
+        padding: 45px 15px 15px 15px;
+        z-index: 10;
+        position: inherit;
+    }
+
     &.character {
         background: #F06058;
         border-radius: 0 7% 7% 0;
@@ -767,6 +775,13 @@ span.readable {
         background: #788898cc;
     }
 
+    &.gen8 .inventory-list:not(.inventory-header) .item:nth-child(odd) {
+        background: linear-gradient(45deg, #ffffffbb, #fff, #ffffffbb);
+    }
+    &.gen8 .inventory-list:not(.inventory-header) .item:nth-child(even) {
+        background: linear-gradient(45deg, #ffffffbb, #fff, #ffffffbb);
+    }
+
     .inventory-list {
         list-style: none;
         margin: 0;
@@ -911,4 +926,37 @@ span.readable {
 .readable.tight {
     line-height: 20px;
     word-break: break-word;
+}
+
+.actor.gen8 {
+    .window-content {
+        padding: 0;
+    }
+
+    .container-fluid > .sheet-footer {
+        position: absolute;
+        left: 0;
+        top: 27px;
+        padding: 0px 20px;
+        width: 100%;
+        z-index: 20;
+        height: fit-content;
+    
+        .tabs {
+            li {
+                float: left;
+
+                button {
+                    font-size: 9px;
+                    background: #ffffff22
+                }
+            }
+    
+            ul {
+                display: inline;
+            }
+    
+            padding-right: 5px;
+        }
+    }
 }

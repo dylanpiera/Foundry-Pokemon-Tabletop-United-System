@@ -6,7 +6,7 @@ export class PTUGen4PokemonSheet extends ActorSheet {
 	/** @override */
 	static get defaultOptions() {
 		return mergeObject(super.defaultOptions, {
-			classes: ['ptu', 'sheet', 'actor'],
+			classes: ['ptu', 'sheet', 'actor', 'gen4'],
 			template: 'systems/ptu/templates/actor/pokemon-sheet-gen4.hbs',
 			width: 675,
 			height: 675,
