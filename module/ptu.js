@@ -2,7 +2,8 @@
 import { PTUActor } from "./actor/actor.js";
 import { GetSpeciesData } from "./actor/actor.js";
 import { PTUCharacterSheet } from "./actor/character-sheet.js";
-import { PTUPokemonSheet } from "./actor/pokemon-sheet.js";
+import { PTUGen4PokemonSheet } from "./actor/pokemon-sheet-gen4.js";
+import { PTUGen8PokemonSheet } from "./actor/pokemon-sheet-gen8.js";
 import { PTUItem } from "./item/item.js";
 import { PTUItemSheet } from "./item/item-sheet.js";
 import { PTUEdgeSheet } from "./item/edge-sheet.js";
@@ -46,7 +47,8 @@ Hooks.once('init', function() {
   // Register sheet application classes
   Actors.unregisterSheet("core", ActorSheet);
   Actors.registerSheet("ptu", PTUCharacterSheet, { types: ["character"], makeDefault: true });
-  Actors.registerSheet("ptu", PTUPokemonSheet, { types: ["pokemon"], makeDefault: true });
+  Actors.registerSheet("ptu", PTUGen4PokemonSheet, { types: ["pokemon"], makeDefault: true });
+  Actors.registerSheet("ptu", PTUGen8PokemonSheet, { types: ["pokemon"], makeDefault: false });
   Items.unregisterSheet("core", ItemSheet);
   Items.registerSheet("ptu", PTUItemSheet, { types: ["item","ability","move","capability", "pokeedge"], makeDefault: true });
   Items.registerSheet("ptu", PTUEdgeSheet, { types: ["edge"], makeDefault: true });

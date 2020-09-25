@@ -886,13 +886,29 @@ span.readable {
     background: #ff000060 !important;
 }
 
-.rollable.itemInline {
-    flex: unset;
-    width: 30px;
-    height: 42px;
-    text-align: center;
-    font-size: 24px;
-    justify-content: center;
-    align-items: center;
-    display: flex;
+.rollable {
+
+    &.gen8move {
+        text-align: center;
+        font-size: 24px;
+        justify-content: center;
+        align-items: center;
+        display: flex;
+    }
+    
+    &.itemInline {
+        flex: unset;
+        width: 30px;
+        height: 42px;
+        text-align: center;
+        font-size: 24px;
+        justify-content: center;
+        align-items: center;
+        display: flex;
+    }
+}
+
+.readable.tight {
+    line-height: 20px;
+    word-break: break-word;
 }

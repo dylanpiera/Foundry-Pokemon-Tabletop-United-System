@@ -701,6 +701,13 @@ span.readable {
 .error-text {
   background: #ff000060 !important;
 }
+.rollable.gen8move {
+  text-align: center;
+  font-size: 24px;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+}
 .rollable.itemInline {
   flex: unset;
   width: 30px;
@@ -710,6 +717,10 @@ span.readable {
   justify-content: center;
   align-items: center;
   display: flex;
+}
+.readable.tight {
+  line-height: 20px;
+  word-break: break-word;
 }
 .w-25 {
   width: 25% !important;

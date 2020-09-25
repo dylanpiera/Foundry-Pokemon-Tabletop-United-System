@@ -2,12 +2,12 @@
  * Extend the basic ActorSheet with some very simple modifications
  * @extends {ActorSheet}
  */
-export class PTUPokemonSheet extends ActorSheet {
+export class PTUGen4PokemonSheet extends ActorSheet {
 	/** @override */
 	static get defaultOptions() {
 		return mergeObject(super.defaultOptions, {
 			classes: ['ptu', 'sheet', 'actor'],
-			template: 'systems/ptu/templates/actor/pokemon-sheet.hbs',
+			template: 'systems/ptu/templates/actor/pokemon-sheet-gen4.hbs',
 			width: 675,
 			height: 675,
 			tabs: [{ navSelector: '.sheet-tabs', contentSelector: '.sheet-body', initial: 'stats' }]
