@@ -117,6 +117,12 @@ a.item {
   box-shadow: 0px 0px 3px 1px;
   border-radius: 3%;
 }
+.panel.gen8character {
+  justify-content: center;
+  padding: 45px 15px 15px 15px;
+  z-index: 10;
+  position: inherit;
+}
 .panel.character {
   background: #F06058;
   border-radius: 0 7% 7% 0;
@@ -601,6 +607,12 @@ span.readable {
 .actor .inventory-list:not(.inventory-header) .item:nth-child(even) {
   background: #788898cc;
 }
+.actor.gen8 .inventory-list:not(.inventory-header) .item:nth-child(odd) {
+  background: linear-gradient(45deg, #ffffffbb, #fff, #ffffffbb);
+}
+.actor.gen8 .inventory-list:not(.inventory-header) .item:nth-child(even) {
+  background: linear-gradient(45deg, #ffffffbb, #fff, #ffffffbb);
+}
 .actor .inventory-list {
   list-style: none;
   margin: 0;
@@ -701,6 +713,13 @@ span.readable {
 .error-text {
   background: #ff000060 !important;
 }
+.rollable.gen8move {
+  text-align: center;
+  font-size: 24px;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+}
 .rollable.itemInline {
   flex: unset;
   width: 30px;
@@ -710,6 +729,92 @@ span.readable {
   justify-content: center;
   align-items: center;
   display: flex;
+}
+.readable.tight {
+  line-height: 20px;
+  word-break: break-word;
+}
+.actor.gen8 .window-content {
+  padding: 0;
+}
+.actor.gen8 .container-fluid > .sheet-footer {
+  position: absolute;
+  left: 0;
+  top: 27px;
+  padding: 0px 20px;
+  width: 100%;
+  z-index: 20;
+  height: fit-content;
+}
+.actor.gen8 .container-fluid > .sheet-footer .tabs {
+  padding-right: 5px;
+}
+.actor.gen8 .container-fluid > .sheet-footer .tabs li {
+  float: left;
+}
+.actor.gen8 .container-fluid > .sheet-footer .tabs li button {
+  font-size: 9px;
+  background: #ffffff22;
+}
+.actor.gen8 .container-fluid > .sheet-footer .tabs ul {
+  display: inline;
+}
+.actor.gen8 .stats.stat-block {
+  background: #fefefe;
+}
+.actor.gen8 .stats.grid {
+  background: #E0E8E8;
+}
+.actor.gen8 .stat-block .row.header {
+  background: #E1ECF2;
+}
+.actor.gen8 .stat-block .row .key.hp,
+.actor.gen8 .stat-block .row .key.def,
+.actor.gen8 .stat-block .row .key.spdef {
+  background: #E6E6E6;
+}
+.actor.gen8 .stat-block .row .key.atk,
+.actor.gen8 .stat-block .row .key.spatk,
+.actor.gen8 .stat-block .row .key.spd,
+.actor.gen8 .stat-block .row .key.stat-header {
+  background: #D3D3D1;
+}
+.actor.gen8 .stat-block .row.hp,
+.actor.gen8 .stat-block .row.def,
+.actor.gen8 .stat-block .row.spdef {
+  background: #FEFEFE;
+}
+.actor.gen8 .stat-block .row.atk,
+.actor.gen8 .stat-block .row.spatk,
+.actor.gen8 .stat-block .row.spd {
+  background: #E1ECF2;
+}
+.actor.gen8 .levelUpPoints input {
+  color: #4b4a44;
+}
+.swsh-box {
+  border: black solid 1px;
+  box-shadow: 0px 0px 4px 1px black;
+  background: #FEFEFE;
+  word-break: break-all;
+}
+.swsh-box .swsh-header {
+  padding: 2px 5px;
+  background: #D3D3D1;
+  display: flex;
+}
+.swsh-box .swsh-header.vertical {
+  height: 100%;
+  align-items: center;
+}
+.swsh-box .swsh-body {
+  padding: 2px 5px;
+  display: flex;
+  flex-wrap: wrap;
+}
+.sidebar-tab .action-buttons button {
+  height: unset;
+  max-height: 50px;
 }
 .w-25 {
   width: 25% !important;

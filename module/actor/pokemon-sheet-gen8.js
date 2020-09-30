@@ -2,13 +2,13 @@
  * Extend the basic ActorSheet with some very simple modifications
  * @extends {ActorSheet}
  */
-export class PTUPokemonSheet extends ActorSheet {
+export class PTUGen8PokemonSheet extends ActorSheet {
 	/** @override */
 	static get defaultOptions() {
 		return mergeObject(super.defaultOptions, {
-			classes: ['ptu', 'sheet', 'actor'],
-			template: 'systems/ptu/templates/actor/pokemon-sheet.hbs',
-			width: 675,
+			classes: ['ptu', 'sheet', 'actor', 'gen8'],
+			template: 'systems/ptu/templates/actor/pokemon-sheet-gen8.hbs',
+			width: 1200,
 			height: 675,
 			tabs: [{ navSelector: '.sheet-tabs', contentSelector: '.sheet-body', initial: 'stats' }]
 		});
@@ -105,7 +105,7 @@ export class PTUPokemonSheet extends ActorSheet {
 
 		// Rollable abilities.
 		html.find('.rollable.skill').click(this._onRoll.bind(this));
-		html.find('.rollable.itemInline').click(this._onMoveRoll.bind(this));
+		html.find('.rollable.gen8move').click(this._onMoveRoll.bind(this));
 
 		// Drag events for macros.
 		if (this.actor.owner) {
