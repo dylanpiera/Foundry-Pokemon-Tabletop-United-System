@@ -665,7 +665,8 @@ span.readable {
   line-height: 30px;
   border: none;
   border-radius: 5px;
-  margin: 2px 0;
+  box-shadow: 0 0 1px black;
+  margin: 5px 0;
 }
 .actor .inventory-list .item .item-name {
   max-height: unset;
@@ -758,6 +759,12 @@ span.readable {
 }
 .actor.gen8 .container-fluid > .sheet-footer .tabs ul {
   display: inline;
+}
+.actor.gen8 .moves .item {
+  text-align: center;
+  align-items: center;
+  box-shadow: unset;
+  margin: 2px 0 !important;
 }
 .actor.gen8 .stats.stat-block {
   background: #fefefe;

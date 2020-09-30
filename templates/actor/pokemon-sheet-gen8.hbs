@@ -401,7 +401,7 @@
                     <h3 class="m-auto">Tutor Points</h3>
                   </div>
                   <div class="swsh-body">
-                    <div class="resource-content flexrow flex-group-right hp-info">
+                    <div class="resource-content flexrow flex-group-right hp-info w-100">
                       <input type="text" name="data.tp.value" value="{{data.tp.value}}" data-dtype="Number"/>
                       <span> / </span>
                       <input type="text" name="data.tp.max" value="{{data.tp.max}}" data-dtype="Number" disabled/>
@@ -414,7 +414,7 @@
                     <h3 class="m-auto">PokéEdge Points Used:</h3>
                   </div>
                   <div class="swsh-body">
-                    <div class="resource-content flexrow flex-group-right hp-info">
+                    <div class="resource-content flexrow flex-group-right hp-info w-100">
                       <input type="text" {{#if (gt data.tp.pep.value data.tp.pep.max)}}class="error-text"{{/if}} name="data.tp.pep.value" value="{{data.tp.pep.value}}" data-dtype="Number" disabled/>
                       <span> / </span>
                       <input type="text" name="data.tp.pep.max" value="{{data.tp.pep.max}}" data-dtype="Number" disabled/>
