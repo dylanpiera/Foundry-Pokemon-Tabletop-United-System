@@ -759,6 +759,59 @@ span.readable {
 .actor.gen8 .container-fluid > .sheet-footer .tabs ul {
   display: inline;
 }
+.actor.gen8 .stats.stat-block {
+  background: #fefefe;
+}
+.actor.gen8 .stats.grid {
+  background: #E0E8E8;
+}
+.actor.gen8 .stat-block .row.header {
+  background: #E1ECF2;
+}
+.actor.gen8 .stat-block .row .key.hp,
+.actor.gen8 .stat-block .row .key.def,
+.actor.gen8 .stat-block .row .key.spdef {
+  background: #E6E6E6;
+}
+.actor.gen8 .stat-block .row .key.atk,
+.actor.gen8 .stat-block .row .key.spatk,
+.actor.gen8 .stat-block .row .key.spd,
+.actor.gen8 .stat-block .row .key.stat-header {
+  background: #D3D3D1;
+}
+.actor.gen8 .stat-block .row.hp,
+.actor.gen8 .stat-block .row.def,
+.actor.gen8 .stat-block .row.spdef {
+  background: #FEFEFE;
+}
+.actor.gen8 .stat-block .row.atk,
+.actor.gen8 .stat-block .row.spatk,
+.actor.gen8 .stat-block .row.spd {
+  background: #E1ECF2;
+}
+.actor.gen8 .levelUpPoints input {
+  color: #4b4a44;
+}
+.swsh-box {
+  border: black solid 1px;
+  box-shadow: 0px 0px 4px 1px black;
+  background: #FEFEFE;
+  word-break: break-all;
+}
+.swsh-box .swsh-header {
+  padding: 2px 5px;
+  background: #D3D3D1;
+  display: flex;
+}
+.swsh-box .swsh-header.vertical {
+  height: 100%;
+  align-items: center;
+}
+.swsh-box .swsh-body {
+  padding: 2px 5px;
+  display: flex;
+  flex-wrap: wrap;
+}
 .w-25 {
   width: 25% !important;
 }

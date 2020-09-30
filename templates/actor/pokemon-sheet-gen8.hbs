@@ -30,9 +30,9 @@
         <div class="sheet-body no-hd h-100">
           <div class="tab details stats h-100" data-group="primary" data-tab="stats">
             <!-- Stats Tab -->
-            <div class="row p-2">
+            <div class="row justify-content-between p-2">
               <!-- Left Col -->
-              <div class="col-sm-12 col-md-8">
+              <div class="col-sm-12 col-md-5">
                 <div class="d-flex align-items-end flex-column h-100">
                   <!-- Stats -->
                   <div class="w-100 stats stat-block mb-2">
@@ -85,8 +85,8 @@
 
                   <!-- Nature + Experience + Level -->
                   <div class="w-100 level-box mb-2">
-                    <div class="hgss-box" style="text-align: center; word-break: keep-all;">
-                      <div class="hgss-header">
+                    <div class="swsh-box" style="text-align: center; word-break: keep-all;">
+                      <div class="swsh-header">
                         <div class="d-flex w-100 mt-1 mb-1">
                           <div class="col-sm-5">
                             <label for="data.nature.value">Nature:</label>
@@ -99,7 +99,7 @@
                           </div>
                         </div>
                       </div>
-                      <div class="hgss-body">
+                      <div class="swsh-body">
                         <div class="d-flex w-100 mt-1 mb-1">
                           <div class="col-sm-5">
                             {{#select data.nature.value}}
@@ -123,8 +123,8 @@
                   </div>
 
                   <!-- Abilities -->
-                  <div class="hgss-box mt-auto w-100">
-                    <div class="hgss-body" style="display: block;">
+                  <div class="swsh-box mt-auto w-100">
+                    <div class="swsh-body" style="display: block;">
                       <ol class="inventory-list">
                         <li class="inventory-header flexrow">
                           <h3 class="item-name flexrow">Abilities</h3>
@@ -163,13 +163,13 @@
 
               <!-- Right Col -->
               <div class="col-sm-12 col-md-4">
-                <div class="d-flex align-items-center flex-column h-100 pt-4">
-                  <div class="hgss-box mb-1">
-                    <div class="hgss-header" style="align-items: unset;">
+                <div class="d-flex align-items-center flex-column h-100">
+                  <div class="swsh-box mb-1">
+                    <div class="swsh-header" style="align-items: unset;">
                       <label for="name" class="name-label"></label>
                       <input class="ml-2" name="name" type="text" value="{{actor.name}}" placeholder="Name" />
                     </div>
-                    <div class="hgss-body row no-gutters">
+                    <div class="swsh-body row no-gutters">
                       <div class="options w-100 d-flex">
                         <label for="progressBar" class="hp"></label>
                         <div class="d-flex pt-1 pb-1" style="text-align: center;">
@@ -188,11 +188,11 @@
                   <div class="avatar mt-1 mb-1">
                     <img class="profile-img" src="{{actor.img}}" data-edit="img" title="{{actor.name}}" />
                   </div>
-                  <div class="hgss-box mt-auto mb-2 w-100" style="text-align: center;">
-                    <div class="hgss-header">
+                  <div class="swsh-box mt-auto mb-2 w-100" style="text-align: center;">
+                    <div class="swsh-header">
                       <h3 class="m-auto">Item</h3>
                     </div>
-                    <div class="hgss-body">
+                    <div class="swsh-body">
                       <input class="mt-1" id="heldItemInput" type="text" name="data.heldItem" value="{{data.heldItem}}" />
                     </div>
                   </div>
@@ -291,11 +291,11 @@
             <div class="row">
               <div class="col">
                 <!-- Capabilities -->
-                <div class="hgss-box mt-auto w-100">
-                  <div class="hgss-header">
+                <div class="swsh-box mt-auto w-100">
+                  <div class="swsh-header">
                     <h3 class="item-name flexrow">Capabilities</h3>
                   </div>
-                  <div class="hgss-body readable w-100 align-items-center" style="white-space: nowrap;">
+                  <div class="swsh-body readable w-100 align-items-center" style="white-space: nowrap;">
                     {{#each data.capabilities as |capability key|}}
                     {{#if (and (and (not key "Other") (not key "Naturewalk")) (gt capability 0))}}
                     <div class="col-sm-4 p11 mb-1">
@@ -309,7 +309,7 @@
                     {{/each}}
                   </div>
                   {{#if data.capabilities.Naturewalk}}
-                  <div class="hgss-body readable w-100 align-items-center">
+                  <div class="swsh-body readable w-100 align-items-center">
                     <div class="col-sm-4 p11">
                       <label for="data.capabilities.Naturewalk">Naturewalk:</label>
                     </div>
@@ -321,7 +321,7 @@
                   {{/if}}
 
                   <!-- Other Capabilities -->
-                  <div class="hgss-body w-100 mt-2" style="display: block;">
+                  <div class="swsh-body w-100 mt-2" style="display: block;">
                     <ol class="inventory-list">
                       <li class="inventory-header flexrow">
                         <h3 class="item-name flexrow">Other Capabilities</h3>
@@ -358,8 +358,8 @@
               </div>
               <div class="col">
                 <!-- Poké Edges-->
-                <div class="hgss-box mt-2 w-100">
-                  <div class="hgss-body w-100" style="display: block;">
+                <div class="swsh-box mt-2 w-100">
+                  <div class="swsh-body w-100" style="display: block;">
                     <ol class="inventory-list">
                       <li class="inventory-header flexrow">
                         <h3 class="item-name flexrow">Poké Edges</h3>
@@ -396,11 +396,11 @@
 
                 <!-- Tutor Points -->
                 {{#if (is "true" (getGameSetting "useTutorPoints"))}}
-                <div class="hgss-box mt-2" style="text-align: center;">
-                  <div class="hgss-header">
+                <div class="swsh-box mt-2" style="text-align: center;">
+                  <div class="swsh-header">
                     <h3 class="m-auto">Tutor Points</h3>
                   </div>
-                  <div class="hgss-body">
+                  <div class="swsh-body">
                     <div class="resource-content flexrow flex-group-right hp-info">
                       <input type="text" name="data.tp.value" value="{{data.tp.value}}" data-dtype="Number"/>
                       <span> / </span>
@@ -409,11 +409,11 @@
                   </div>
                 </div>
                 {{else}}
-                <div class="hgss-box mt-2" style="text-align: center;">
-                  <div class="hgss-header">
+                <div class="swsh-box mt-2" style="text-align: center;">
+                  <div class="swsh-header">
                     <h3 class="m-auto">PokéEdge Points Used:</h3>
                   </div>
-                  <div class="hgss-body">
+                  <div class="swsh-body">
                     <div class="resource-content flexrow flex-group-right hp-info">
                       <input type="text" {{#if (gt data.tp.pep.value data.tp.pep.max)}}class="error-text"{{/if}} name="data.tp.pep.value" value="{{data.tp.pep.value}}" data-dtype="Number" disabled/>
                       <span> / </span>
@@ -431,8 +431,8 @@
             <div class="row">
               <div class="col">
                 <!-- Evasion -->
-                <div class="hgss-box mb-2 w-100" style="text-align: center; word-break: keep-all;">
-                  <div class="hgss-header">
+                <div class="swsh-box mb-2 w-100" style="text-align: center; word-break: keep-all;">
+                  <div class="swsh-header">
                     <div class="d-flex w-100 mt-1 mb-1 align-items-center">
                       <div class="col-sm-4">
                         <label for="data.evasion.physical">Physical<br>Evasion</label>
@@ -445,7 +445,7 @@
                       </div>
                     </div>
                   </div>
-                  <div class="hgss-body" style="display: block;">
+                  <div class="swsh-body" style="display: block;">
                     <div class="d-flex w-100 mt-1 mb-1">
                       <div class="col-sm-4">
                         <input type="text" name="data.evasion.physical" value="{{data.evasion.physical}}" data-dtype="Number"
@@ -464,8 +464,8 @@
                 </div>
 
                 <!-- Injuries -->
-                <div class="hgss-box mb-2 w-100" style="text-align: center; word-break: keep-all;">
-                  <div class="hgss-header">
+                <div class="swsh-box mb-2 w-100" style="text-align: center; word-break: keep-all;">
+                  <div class="swsh-header">
                     <div class="d-flex w-100 mt-1 mb-1 align-items-center">
                       <div class="col-sm-4">
                         <label for="data.health.injuries">Injuries</label>
@@ -478,7 +478,7 @@
                       </div>
                     </div>
                   </div>
-                  <div class="hgss-body" style="display: block;">
+                  <div class="swsh-body" style="display: block;">
                     <div class="d-flex w-100 mt-1 mb-1">
                       <div class="col-sm-4">
                         <input name="data.health.injuries" type="text" value="{{data.health.injuries}}"
@@ -521,11 +521,11 @@
               </div>
               <div class="col">
                 <!-- Item Effect -->
-                <div class="hgss-box mt-auto w-100" style="text-align: center;">
-                  <div class="hgss-header">
+                <div class="swsh-box mt-auto w-100" style="text-align: center;">
+                  <div class="swsh-header">
                     <h3 class="m-auto">Item Effect</h3>
                   </div>
-                  <div class="hgss-body w-100">
+                  <div class="swsh-body w-100">
                     <textarea style="min-height: 100px;" id="itemDescription"
                       disabled>{{itemDescription data.heldItem}}</textarea>
                   </div>
@@ -547,8 +547,8 @@
             <div class="row">
               <div class="col">
                 <!-- Init & Stat Point Mod -->
-                <div class="hgss-box w-100 mb-2" style="text-align: center; word-break: keep-all;">
-                  <div class="hgss-header">
+                <div class="swsh-box w-100 mb-2" style="text-align: center; word-break: keep-all;">
+                  <div class="swsh-header">
                     <div class="d-flex w-100 mt-1 mb-1">
                       <div class="col-sm-6">
                         <label for="data.modifiers.initiative">Initiative Mod</label>
@@ -558,7 +558,7 @@
                       </div>
                     </div>
                   </div>
-                  <div class="hgss-body">
+                  <div class="swsh-body">
                     <div class="d-flex w-100 mt-1 mb-1">
                       <div class="col-sm-6">
                         <input name="data.modifiers.initiative" type="text" value="{{data.modifiers.initiative}}"
@@ -571,8 +571,8 @@
                     </div>
                   </div>
                 </div>
-                <div class="hgss-box w-100 mb-2" style="text-align: center; word-break: keep-all;">
-                  <div class="hgss-header">
+                <div class="swsh-box w-100 mb-2" style="text-align: center; word-break: keep-all;">
+                  <div class="swsh-header">
                     <div class="d-flex w-100 mt-1 mb-1">
                       <div class="col-sm-6">
                         <label for="data.modifiers.acBonus">Accuracy Bonus</label>
@@ -582,7 +582,7 @@
                       </div>
                     </div>
                   </div>
-                  <div class="hgss-body">
+                  <div class="swsh-body">
                     <div class="d-flex w-100 mt-1 mb-1">
                       <div class="col-sm-6">
                         <input type="text" name="data.modifiers.acBonus" value="{{data.modifiers.acBonus}}"
@@ -598,8 +598,8 @@
                 <!-- Skill Background -->
               
                 <!-- Species + Gender -->
-                <div class="hgss-box mb-2 w-100" style="text-align: center; word-break: keep-all;">
-                  <div class="hgss-header">
+                <div class="swsh-box mb-2 w-100" style="text-align: center; word-break: keep-all;">
+                  <div class="swsh-header">
                     <div class="d-flex w-100 mt-1 mb-1 align-items-center">
                       <div class="col-sm-6">
                         <label for="data.species">Species</label>
@@ -609,7 +609,7 @@
                       </div>
                     </div>
                   </div>
-                  <div class="hgss-body" style="display: block;">
+                  <div class="swsh-body" style="display: block;">
                     <div class="d-flex w-100 mt-1 mb-1">
                       <div class="col-sm-6">
                         <input type="text" name="data.species" value="{{data.species}}" data-dtype="String"/>
@@ -622,15 +622,15 @@
                 </div>
 
                 <!-- Egg Group -->
-                <div class="hgss-box mb-2 w-100" style="text-align: center; word-break: keep-all;">
-                  <div class="hgss-header">
+                <div class="swsh-box mb-2 w-100" style="text-align: center; word-break: keep-all;">
+                  <div class="swsh-header">
                     <div class="d-flex w-100 mt-1 mb-1 align-items-center">
                       <div class="col-sm-12">
                         <label for="data.egggroup">Egg Group</label>
                       </div>
                     </div>
                   </div>
-                  <div class="hgss-body" style="display: block;">
+                  <div class="swsh-body" style="display: block;">
                     <div class="d-flex w-100 mt-1 mb-1">
                       <div class="col-sm-12">
                         <input type="text" name="data.egggroup" value="{{data.egggroup}}" data-dtype="String"
@@ -642,8 +642,8 @@
               </div>
               <div class="col">
                 <!-- Skills -->
-                  <div class="hgss-box mt-auto w-100 mb-2">
-                    <div class="hgss-header skill skill-block">
+                  <div class="swsh-box mt-auto w-100 mb-2">
+                    <div class="swsh-header skill skill-block">
                       <div class="row no-gutters header w-100">
                         <div class="col-sm-4 pt-2 pb-2">Skill</div>
                         <div class="col mt-2 mb-2">Mod</div>
@@ -652,7 +652,7 @@
                         <div class="col mt-2 mb-2">Dice</div>
                       </div>
                     </div>
-                    <div class="hgss-body p-0">
+                    <div class="swsh-body p-0">
                       <div class="w-100 skills skill-block">
                         {{#each data.skills as |skill key|}}
                         <div class="row no-gutters {{key}} align-items-center">

@@ -959,4 +959,75 @@ span.readable {
             padding-right: 5px;
         }
     }
+
+    .stats {
+        &.stat-block {
+            background: #fefefe;
+        }
+        &.grid {   
+            background: #E0E8E8;
+        }
+    }
+
+    .stat-block {
+        .row {
+            &.header {
+                background: #E1ECF2;
+            }
+    
+            .key {
+                &.hp,
+                &.def,
+                &.spdef {
+                    background: #E6E6E6;
+                }
+        
+                &.atk,
+                &.spatk,
+                &.spd,
+                &.stat-header {
+                    background: #D3D3D1;
+                }
+            }
+    
+            &.hp,
+            &.def,
+            &.spdef {
+                background: #FEFEFE;
+            }
+    
+            &.atk,
+            &.spatk,
+            &.spd {
+                background: #E1ECF2;
+            }
+        }
+    }
+
+    .levelUpPoints input {
+        color: #4b4a44;
+    }
+}
+
+.swsh-box {
+    border: black solid 1px;
+    box-shadow: 0px 0px 4px 1px black;
+    background: #FEFEFE;
+    word-break: break-all;
+
+    .swsh-header {
+        padding: 2px 5px;
+        background: #D3D3D1;
+        display: flex;
+        &.vertical {
+            height: 100%;
+            align-items: center;
+        }
+    }
+
+    .swsh-body {
+        padding: 2px 5px;
+        display: flex;
+        flex-wrap: wrap;
+    }
 }
