@@ -91,7 +91,7 @@ Hooks.once('init', function() {
   });
   Handlebars.registerHelper("getGameSetting", function(key) { return game.settings.get("ptu",key)});
   Handlebars.registerHelper("calcDb", function(move) {
-    return move.stab ? parseInt(move.damageBase) + 2 : move.damageBase;
+    return (move.damageBase.toString().match(/^[0-9]+$/) != null) ? move.stab ? parseInt(move.damageBase) + 2 : move.damageBase : move.damageBase;
   });
   Handlebars.registerHelper("calcDbCalc", _calcMoveDb);
   Handlebars.registerHelper("calcAc", function(move) {
@@ -118,8 +118,13 @@ Hooks.once('init', function() {
 function _calcMoveDb(move, bool = false) {
   if(move.category === "Status") return;
   let bonus = move.owner ? move.category === "Physical" ? move.owner.stats.atk.total : move.owner.stats.spatk.total : 0;
-  let db = game.ptu.DbData[move.stab ? parseInt(move.damageBase) + 2 : move.damageBase];  
-  if(db) return db + (bool ? " + " : "#") + bonus;
+  if(move.damageBase.toString().match(/^[0-9]+$/) != null) {
+    let db = game.ptu.DbData[move.stab ? parseInt(move.damageBase) + 2 : move.damageBase];  
+    if(db) return db + (bool ? " + " : "#") + bonus;
+    return -1;
+  }
+  let db = game.ptu.DbData[move.damageBase];  
+  if(db) return db;
   return -1;
 }
 

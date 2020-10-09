@@ -823,6 +823,9 @@ span.readable {
   height: unset;
   max-height: 50px;
 }
+.gen8move.rollable[data-ac="NaN"][data-roll=""] {
+  visibility: hidden;
+}
 .w-25 {
   width: 25% !important;
 }

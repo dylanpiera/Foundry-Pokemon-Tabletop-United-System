@@ -184,7 +184,7 @@ export class PTUGen8PokemonSheet extends ActorSheet {
 		const dataset = element.dataset;
 
 		if (dataset.roll || dataset.type == 'Status') {
-			let roll = new Roll('1d20+' + dataset.ac, this.actor.data.data);
+			let roll = new Roll('1d20+' + (parseInt(dataset.ac) || 0), this.actor.data.data);
 			let label = dataset.label ? `To-Hit for move: ${dataset.label} ` : '';
 			roll.roll().toMessage({
 				speaker: ChatMessage.getSpeaker({ actor: this.actor }),
@@ -208,12 +208,13 @@ export class PTUGen8PokemonSheet extends ActorSheet {
 				return;
 			}
 			let isCrit = diceResult >= 20 - dataset.critrange;
+			if(dataset.roll == -1) return;
 
 			if (dataset.type == 'Physical' || dataset.type == 'Special') {
 				let rollData = dataset.roll.split('#');
 				let roll = new Roll(isCrit ? '@roll+@roll+@mod' : '@roll+@mod', {
 					roll: rollData[0],
-					mod: rollData[1]
+					mod: rollData[1] || 0
 				});
 				let label = dataset.label ? `${isCrit ? "Crit damage" : "Damage"} for move: ${dataset.label}` : '';
 				roll.roll().toMessage({
