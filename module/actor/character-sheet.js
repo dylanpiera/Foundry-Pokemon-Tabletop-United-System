@@ -58,7 +58,7 @@ export class PTUCharacterSheet extends ActorSheet {
         case 'feat': feats.push(i); break;
         case 'edge': edges.push(i); break;
         case 'item': items.push(i); break;
-        case 'abilities': abilities.push(i); break;
+        case 'ability': abilities.push(i); break;
         case 'move': moves.push(i); break;
         case 'capability': capabilities.push(i); break;
       }
