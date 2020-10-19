@@ -1,8 +1,4 @@
-<form
-  class="{{cssClass}} container-fluid"
-  autocomplete="off"
-  style="padding-left: unset;"
->
+<form class="{{cssClass}} container-fluid" autocomplete="off">
   <div class="row justify-content-between" style="height: 96%;">
     <div class="col-sm-12 col-md-8" style="padding-left: unset;">
       <div class="panel character h-100">
@@ -130,6 +126,57 @@
                       {{/each}}
                 </div>
                 </div>
+              </div>
+            </div>
+          </div>
+		  
+		  <!-- Moves Tab -->
+          <div class="tab details moves" data-group="primary" data-tab="moves">
+            <!-- Moves -->
+            <div class="hgss-box w-100">
+              <div class="hgss-body" style="display: block;">
+                <ol class="inventory-list">
+                  <li class="inventory-header flexrow">
+                    <h3 class="item-name flexrow">Moves</h3>
+                    <div class="item-controls">
+                      <a class="item-control item-create" title="Add move" data-type="move"><i
+                          class="fas fa-plus-circle" style="margin-right: 3px;"></i><span
+                          class="readable">Add</span></a>
+                    </div>
+                  </li>
+                  <ol class="item-list">
+                    {{#each actor.moves as | move |}}
+                    <li class="item flexrow" data-item-id="{{move._id}}">
+                      <div class="itemInline rollable" data-critrange="{{calcCritRange ../data}}" data-roll="{{calcMoveDb ../data move.data false}}" data-label="{{move.name}}" data-ac="{{calcAc move.data}}" data-type="{{move.data.category}}"> 
+                        <i class="fas fa-dice-d20" style="position:unset;"></i>
+                      </div>
+                      <div class="item-name flexrow">
+                        <h4 title="Toggle Info ({{move.name}})" data-toggle="collapse"
+                          data-target="#{{move._id}}-collapse" aria-expanded="false"
+                          aria-controls="{{move._id}}-collapse">
+                          <i class="fas fa-info-circle info-icon"></i>
+                          {{move.name}}
+                        </h4>
+                      </div>
+                      <div class="item-controls" style="flex: 0 0 55px; justify-content: center; display:flex;">
+                        <a class="item-control item-edit" title="Edit move"><i class="fas fa-edit"></i></a>
+                        <a class="item-control item-delete" title="Delete move"><i class="fas fa-trash"></i></a>
+                      </div>
+                      <div class="collapse readable lh-16 item-summary" id="{{move._id}}-collapse">
+                        <div class="content move-grid">
+                          Frequency: <span class="readable pokemon p8">{{move.data.frequency}}</span>
+                          DB: <span class="readable pokemon p8" style="white-space: nowrap;">{{calcDb move.data}}: {{calcMoveDb ../data move.data true}}</span>
+                          Category: <span class="readable pokemon p8">{{move.data.category}}</span>
+                          Type: <span class="readable pokemon p8">{{move.data.type}}</span>
+                          AC: <span class="readable pokemon p8">{{move.data.ac}}</span>
+                          Range: <span class="readable pokemon p8">{{move.data.range}}</span>
+                          <span>Effect: <span class="readable p8 pokemon">{{{move.data.effect}}}</span></span>
+                        </div>
+                      </div>
+                    </li>
+                    {{/each}}
+                  </ol>
+                </ol>
               </div>
             </div>
           </div>
@@ -331,6 +378,43 @@
                           {{capability.data.effect}}
                         </div>
                       </li>
+                    {{/each}}
+                  </ol>
+                </ol>
+              </div>
+            </div>
+			
+			<!-- Abilities -->
+            <div class="hgss-box mt-auto w-100">
+              <div class="hgss-body" style="display: block;">
+                <ol class="inventory-list">
+                  <li class="inventory-header flexrow">
+                    <h3 class="item-name flexrow">Abilities</h3>
+                    <div class="item-controls">
+                      <a class="item-control item-create" title="Add ability" data-type="ability"><i
+                          class="fas fa-plus-circle" style="margin-right: 3px;"></i><span
+                          class="readable">Add</span></a>
+                    </div>
+                  </li>
+                  <ol class="item-list">
+                    {{#each actor.abilities as | ability |}}
+                    <li class="item flexrow" data-item-id="{{ability._id}}">
+                      <div class="item-name flexrow">
+                        <h4 title="Toggle Info ({{ability.name}})" data-toggle="collapse"
+                          data-target="#{{ability._id}}-collapse" aria-expanded="false"
+                          aria-controls="{{ability._id}}-collapse">
+                          <i class="fas fa-info-circle info-icon"></i>
+                          {{ability.name}}
+                        </h4>
+                      </div>
+                      <div class="item-controls" style="flex: 0 0 55px; justify-content: center; display:flex;">
+                        <a class="item-control item-edit" title="Edit ability"><i class="fas fa-edit"></i></a>
+                        <a class="item-control item-delete" title="Delete ability"><i class="fas fa-trash"></i></a>
+                      </div>
+                      <div class="collapse readable lh-16 item-summary" id="{{ability._id}}-collapse">
+                        {{ability.data.effect}}
+                      </div>
+                    </li>
                     {{/each}}
                   </ol>
                 </ol>
@@ -541,6 +625,7 @@
     <div class="tabs">
       <ul class="sheet-tabs tabs buttons" data-group="primary">
         <li><button class="item" data-tab="stats">Stats</button></li>
+		<li><button class="item" data-tab="moves">Moves</button></li>
         <li><button class="item" data-tab="inventory">Inventory</button></li>
         <li><button class="item" data-tab="feats">Feats</button></li>
         <li><button class="item" data-tab="extra">Extra</button></li>
