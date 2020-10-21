@@ -1,4 +1,5 @@
-export function CalculateSkills(skills, speciesData, pokeEdges) {
+export function CalculateSkills(skills, speciesData, pokeEdges, background) {
+    console.log("hi");
     if (speciesData == null) return skills;
     if (speciesData._id == "ARCEUS") {
         for (let [key, skill] of Object.entries(skills)) {
@@ -27,6 +28,20 @@ export function CalculateSkills(skills, speciesData, pokeEdges) {
     for(let edge of pokeEdges) {
         var key = ExtractImprovement(edge);
         if(key) skills[ExtractEd(key)].value += 1;
+    }
+
+    console.log(background.increased)
+    for(let skill of Object.values(background.increased)) {
+        console.log(skill)
+        console.log(skills[skill])
+        if(skills[skill]) {
+            skills[skill].value += 1;
+        }
+    }
+    for(let skill of Object.values(background.decreased)) {
+        if(skills[skill]) {
+            skills[skill].value -= 1;
+        }
     }
 
     return skills;

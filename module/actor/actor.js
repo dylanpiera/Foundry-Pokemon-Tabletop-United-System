@@ -116,7 +116,7 @@ export class PTUActor extends Actor {
     data.stats.spdef.value = CalcBaseStat(speciesData, data.nature.value, "Special Defense");
     data.stats.spd.value = CalcBaseStat(speciesData, data.nature.value, "Speed");
 
-    var result = CalculateStatTotal(data.levelUpPoints, data.stats);
+    var result = CalculateStatTotal(data.levelUpPoints, data.stats, actorData.items.find(x => x.name.toLowerCase().replace("[playtest]") == "twisted power") != null);
     data.stats = result.stats;
     data.levelUpPoints = result.levelUpPoints;
 
@@ -141,7 +141,7 @@ export class PTUActor extends Actor {
     if(speciesData) data.egggroup = speciesData["Breeding Information"]["Egg Group"].join(" & ");
 
     //TODO: Add skill background
-    data.skills = CalculateSkills(data.skills, speciesData, actorData.items.filter(x => x.type == "pokeedge"));
+    data.skills = CalculateSkills(data.skills, speciesData, actorData.items.filter(x => x.type == "pokeedge"), data.background);
 
     // Calc skill rank
     for (let [key, skill] of Object.entries(data.skills)) {

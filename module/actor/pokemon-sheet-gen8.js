@@ -40,6 +40,8 @@ export class PTUGen8PokemonSheet extends ActorSheet {
 	 * @return {undefined}
 	 */
 	_prepareCharacterItems(sheetData) {
+		sheetData['skills'] = this.actor.data.data.skills
+		
 		const actorData = sheetData.actor;
 
 		// Initialize containers.

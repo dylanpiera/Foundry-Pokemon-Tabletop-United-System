@@ -224,6 +224,19 @@
       "health": {
         "value": null,
         "injuries": 0
+      },
+
+      "background": {
+        "increased": {
+          "one": "",
+          "two": "",
+          "three": ""
+        },
+        "decreased": {
+          "one": "",
+          "two": "",
+          "three": ""
+        }
       }
     }
   },

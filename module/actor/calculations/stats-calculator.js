@@ -16,7 +16,7 @@ function _calculateStatWithNature(nature, statKey, stat) {
     return Math.max(stat, 1);
 }
 
-export function CalculateStatTotal(levelUpPoints, stats) {
+export function CalculateStatTotal(levelUpPoints, stats, hasTwistedPower = false) {
     for (let [key, value] of Object.entries(stats)) {
         let sub = value["value"] + value["mod"] + value["levelUp"];
         levelUpPoints -= value["levelUp"];
@@ -29,6 +29,15 @@ export function CalculateStatTotal(levelUpPoints, stats) {
                 value["total"] = Math.ceil(sub * value["stage"] * 0.1 + sub);
             }
         }
+    }
+
+    if(hasTwistedPower) {
+        let atkTotal = stats.atk.total;
+        let spatkTotal = stats.spatk.total;
+        //if(Math.abs(atkTotal - spatkTotal) <= 5 ) {
+            stats.atk.total += Math.floor(spatkTotal / 2);
+            stats.spatk.total += Math.floor(atkTotal / 2);
+        //}
     }
 
     return {
