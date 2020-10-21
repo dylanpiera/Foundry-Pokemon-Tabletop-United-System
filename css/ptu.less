@@ -111,13 +111,13 @@ a.item {
 }
 
 .options .hp {
-    width: 6rem;
+    width: 3rem;
     background: url("./images/hp.png") no-repeat !important;
     background-size: contain !important;
     margin: 0 5px 0 0px;
     position: relative;
     left: 3px;
-    bottom: -10px;
+    bottom: -4px;
     font-weight: bold;
   }
 
@@ -1080,6 +1080,35 @@ span.readable {
     user-select: text;
 }
 
+.type-img {
+    display: flex;
+    align-items: center;
+    img {
+        height: 20px;
+        border: unset;
+    }
+    span {
+        font-size: 20px;
+        top: -1px;
+        right: -1px;
+        position: relative;
+    }
+}
+
+.gen8 ul.effectiveness-table {
+    list-style: none;
+    display: flex;
+    flex-flow: wrap;
+    width: 100%;
+
+    li {
+        display: flex;
+        margin: 2px;
+        align-items: center;
+        text-align: center;
+        flex: 0 0 32%;
+    }
+}
 /* Forien's Quest Log hidden tab fix */
 #forien-quest-log .quest-log .tab.active {
     display: block !important;

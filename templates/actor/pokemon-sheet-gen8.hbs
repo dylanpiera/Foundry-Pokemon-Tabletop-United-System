@@ -30,7 +30,7 @@
         <div class="sheet-body no-hd h-100">
           <div class="tab details stats h-100" data-group="primary" data-tab="stats">
             <!-- Stats Tab -->
-            <div class="row justify-content-between p-2">
+            <div class="row justify-content-between p-2 h-100">
               <!-- Left Col -->
               <div class="col-sm-12 col-md-5">
                 <div class="d-flex align-items-end flex-column h-100">
@@ -83,51 +83,6 @@
                     {{/if}}
                   </div>
 
-                  <!-- Nature + Experience + Level -->
-                  <div class="w-100 level-box mb-2">
-                    <div class="swsh-box" style="text-align: center; word-break: keep-all;">
-                      <div class="swsh-header">
-                        <div class="d-flex w-100 mt-1 mb-1 align-items-center">
-                          <div class="col-sm-4">
-                            <label for="data.nature.value">Nature:</label>
-                          </div>
-                          <div class="col-sm-3">
-                            <label for="data.level.exp">Experience:</label>
-                          </div>
-                          <div class="col-sm-3">
-                            <label for="till-level-up">Till Next Level:</label>
-                          </div>
-                          <div class="col-sm-2">
-                            <label for="data.level.current">Level:</label>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="swsh-body">
-                        <div class="d-flex w-100 mt-1 mb-1">
-                          <div class="col-sm-4">
-                            {{#select data.nature.value}}
-                            <select name="data.nature.value">
-                              {{#each natures as | nature key |}}
-                              <option value="{{key}}">{{key}}</option>
-                              {{/each}}
-                            </select>
-                            {{/select}}
-                          </div>
-                          <div class="col-sm-3">
-                            <input type="text" name="data.level.exp" value="{{data.level.exp}}" data-dtype="Number" />
-                          </div>
-                          <div class="col-sm-3">
-                            <input type="text" name="till-level-up" value="{{tillNextLevel data.level.current data.level.exp}}" data-dtype="Number" disabled/>
-                          </div>
-                          <div class="col-sm-2">
-                            <input type="text" name="data.level.current" value="{{data.level.current}}" data-dtype="Number"
-                              disabled />
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
                   <!-- Abilities -->
                   <div class="swsh-box mt-auto w-100">
                     <div class="swsh-body" style="display: block;">
@@ -167,10 +122,16 @@
                 </div>
               </div>
 
+              <div class="col-sm-12 col-md-3 align-items-center align-self-center">
+                <div class="avatar">
+                    <img class="profile-img" src="{{actor.img}}" data-edit="img" title="{{actor.name}}" />
+                  </div>
+              </div>
+
               <!-- Right Col -->
               <div class="col-sm-12 col-md-4">
                 <div class="d-flex align-items-center flex-column h-100">
-                  <div class="swsh-box mb-1">
+                  <div class="swsh-box mb-2">
                     <div class="swsh-header" style="align-items: unset;">
                       <label for="name" class="name-label"></label>
                       <input class="ml-2" name="name" type="text" value="{{actor.name}}" placeholder="Name" />
@@ -190,16 +151,131 @@
                         <div class="progress-bar p{{data.health.percent}}" id="progressBar"></div>
                       </div>
                     </div>
-                  </div>
-                  <div class="avatar mt-1 mb-1">
-                    <img class="profile-img" src="{{actor.img}}" data-edit="img" title="{{actor.name}}" />
-                  </div>
-                  <div class="swsh-box mt-auto mb-2 w-100" style="text-align: center;">
+                  </div> 
+
+                  <!-- Type Effectiveness -->
+                  <div class="w-100 swsh-box mt-auto mb-auto">
+                    <div class="swsh-header justify-content-center">
+                      <h3>Typing</h3>
+                    </div>
+                    <div class="swsh-body mt-1 mb-1 justify-content-center">
+                      <span class="type-img">{{{loadTypeImages data.typing}}}</span>
+                    </div>
+                    <!-- Resistances & Weaknesses -->
+                    {{#if (gt data.effectiveness.Weakness.length 0) }}
                     <div class="swsh-header">
-                      <h3 class="m-auto">Item</h3>
+                      <h5>Weaknesses</h5>
                     </div>
                     <div class="swsh-body">
-                      <input class="mt-1" id="heldItemInput" type="text" name="data.heldItem" value="{{data.heldItem}}" />
+                      <ul class="effectiveness-table">
+                      {{#each data.effectiveness.Weakness}}
+                        {{#each this}}
+                          <li><span class="type-img">{{{loadTypeImage @key}}}</span> <span class="ml-1">x{{this}}</span></li>
+                        {{/each}}
+                      {{/each}}
+                      </ul>
+                    </div>
+                    {{/if}}
+                    <!-- Hide regular effective moves, maybe make a setting later -->
+                    {{#if (and (gt data.effectiveness.Normal.length 0) false)}}
+                    <div class="swsh-header">
+                      <h5>Normal</h5>
+                    </div>
+                    <div class="swsh-body">
+                      <ul class="effectiveness-table">
+                      {{#each data.effectiveness.Normal}}
+                        {{#each this}}
+                          <li><span class="type-img">{{{loadTypeImage @key}}}</span> <span class="ml-1">x{{this}}</span></li>
+                        {{/each}}
+                      {{/each}}
+                      </ul>
+                    </div>
+                    {{/if}}
+                    {{#if (gt data.effectiveness.Resistant.length 0) }}
+                    <div class="swsh-header">
+                      <h5>Resistances</h5>
+                    </div>
+                    <div class="swsh-body">
+                      <ul class="effectiveness-table">
+                      {{#each data.effectiveness.Resistant}}
+                        {{#each this}}
+                          <li><span class="type-img">{{{loadTypeImage @key}}}</span> <span class="ml-1">x{{this}}</span></li>
+                        {{/each}}
+                      {{/each}}
+                      </ul>
+                    </div>
+                    {{/if}}
+                    {{#if (gt data.effectiveness.Immune.length 0) }}
+                    <div class="swsh-header">
+                      <h5>Immunities</h5>
+                    </div>
+                    <div class="swsh-body">
+                      <ul class="effectiveness-table">
+                      {{#each data.effectiveness.Immune}}
+                        {{#each this}}
+                          <li><span class="type-img">{{{loadTypeImage @key}}}</span> <span class="ml-1">x{{this}}</span></li>
+                        {{/each}}
+                      {{/each}}
+                      </ul>
+                    </div>
+                    {{/if}}
+                  </div>    
+
+                  <!-- Nature + Experience + Level + Item -->
+                  <div class="w-100 level-box mt-2">
+                    <div class="swsh-box" style="text-align: center; word-break: keep-all;">
+                      <div class="swsh-header">
+                        <div class="d-flex w-100 mt-1 mb-1 align-items-center justify-content-between">
+                          <div class="col-sm-6">
+                            <label for="data.level.exp">Experience:</label>
+                          </div>
+                          <div class="col-sm-5 d-flex align-items-center" style="flex-direction: row;">
+                            <label for="data.level.current">Level:</label>
+                            <input class="ml-2" type="text" name="data.level.current" value="{{data.level.current}}" data-dtype="Number"
+                              disabled />
+                          </div>
+                        </div>
+                      </div>
+                      <div class="swsh-body">
+                        <div class="options w-100 d-flex">
+                          <div class="d-flex w-100 pt-1 pb-1" style="text-align: center;">
+                            <input class="ml-1 mr-1" type="text" name="data.level.exp" value="{{data.level.exp}}"
+                              data-dtype="Number" />
+                            <span style="font-size: 20px;"> / </span>
+                            <input class="ml-1" type="text" name="till-level-up" value="{{data.level.expTillNextLevel}}" data-dtype="Number"
+                              disabled />
+                          </div>
+                        </div>
+                        <div class="options w-100 pb-1 pt-1">
+                          <div class="progress-bar p{{data.level.percent}}" id="progressBar"></div>
+                        </div>
+                      </div>
+                      <div class="swsh-header">
+                        <div class="d-flex w-100 mt-1 mb-1">
+                          <div class="col-sm-6">
+                            <label for="data.nature.value">Nature:</label>
+                          </div>
+                          <div class="col-sm-6">
+                            <label for="data.heldItem">Item</label>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="swsh-body">
+                        <div class="d-flex w-100 mt-1 mb-1">
+                          <div class="col-sm-6">
+                            {{#select data.nature.value}}
+                            <select name="data.nature.value">
+                              {{#each natures as | nature key |}}
+                              <option value="{{key}}">{{key}}</option>
+                              {{/each}}
+                            </select>
+                            {{/select}}
+                          </div>
+                          <div class="col-sm-6">
+                            <input id="heldItemInput" type="text" name="data.heldItem" value="{{data.heldItem}}" />
+                          </div>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>

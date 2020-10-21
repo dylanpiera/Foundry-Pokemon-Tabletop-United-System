@@ -14,6 +14,7 @@ import { pokemonData } from "./data/species-data.js";
 import { natureData } from "./data/nature-data.js";
 import { insurgenceData } from "./data/insurgence-species-data.js"
 import { DbData } from "./data/db-data.js"
+import { TypeEffectiveness } from "./data/effectiveness-data.js"
 import { PTUPokemonCharactermancer } from './actor/charactermancer-pokemon-form.js'
 import { RollWithDb } from './utils/roll-calculator.js'
 
@@ -27,6 +28,7 @@ Hooks.once('init', function() {
     pokemonData,
     natureData,
     DbData,
+    TypeEffectiveness,
     GetSpeciesData,
     RollWithDb
   };
@@ -125,11 +127,14 @@ Hooks.once('init', function() {
     return statUp && !statDown ? "nature-up" : statDown && !statUp ? "nature-down" : "";
   });
 
-  Handlebars.registerHelper("tillNextLevel", function (level, exp) {
-    if(level > 0 && level < 100) {
-      return game.ptu.levelProgression[level+1] - exp;
-    }
-    return "-";
+  Handlebars.registerHelper("loadTypeImages", function (types) {
+    if(!types) return;
+    if(types[1] != "null") return `<img class="mr-1" src="/systems/ptu/css/images/types/${types[0]}IC.webp"><span>/</span><img class="ml-1" src="/systems/ptu/css/images/types/${types[1]}IC.webp">`;
+    return `<img src="/systems/ptu/css/images/types/${types[0]}IC.webp">`;
+  });
+
+  Handlebars.registerHelper("loadTypeImage", function (type) {
+    return `<img src="/systems/ptu/css/images/types/${type}IC.webp">`;
   });
 
   // Load System Settings

@@ -3,6 +3,7 @@ import { CalculateEvasions } from "./calculations/evasion-calculator.js";
 import { CalculateCapabilities } from "./calculations/capability-calculator.js"; 
 import { CalculateSkills } from "./calculations/skills-calculator.js"; 
 import { CalcBaseStat, CalculateStatTotal } from "./calculations/stats-calculator.js";
+import { GetMonEffectiveness } from "./calculations/effectiveness-calculator.js";
 
 /**
  * Extend the base Actor entity by defining a custom roll data structure which is ideal for the Simple system.
@@ -104,6 +105,9 @@ export class PTUActor extends Actor {
 
     data.levelUpPoints = data.level.current + data.modifiers.statPoints + 10;
 
+    data.level.expTillNextLevel = (data.level.current < 100) ? game.ptu.levelProgression[data.level.current+1] : game.ptu.levelProgression[100];
+    data.level.percent = Math.round(((data.level.exp - game.ptu.levelProgression[data.level.current]) / (data.level.expTillNextLevel - game.ptu.levelProgression[data.level.current])) * 100);
+
     // Stats
     data.stats.hp.value = CalcBaseStat(speciesData, data.nature.value, "HP");
     data.stats.atk.value = CalcBaseStat(speciesData, data.nature.value, "Attack");
@@ -143,6 +147,10 @@ export class PTUActor extends Actor {
     for (let [key, skill] of Object.entries(data.skills)) {
       skill["rank"] = this._getRank(skill["value"]);  
     }
+
+    // Calc Type Effectiveness
+    if(data.typing)
+      data.effectiveness = GetMonEffectiveness(data.typing);
 
     /* The Corner of Exceptions */
 
