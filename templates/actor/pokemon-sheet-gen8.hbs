@@ -675,9 +675,6 @@
           <div class="tab details extra" data-group="primary" data-tab="extra">
             <div class="row">
               <div class="col">
-                
-                <!-- Skill Background -->
-              
                 <!-- Species + Gender -->
                 <div class="swsh-box mb-2 w-100" style="text-align: center; word-break: keep-all;">
                   <div class="swsh-header">
@@ -769,6 +766,109 @@
                       <div class="col-sm-6">
                         <input type="text" name="data.modifiers.critRange" value="{{data.modifiers.critRange}}"
                           data-dtype="Number" />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Skill Background -->
+                <div class="swsh-box w-100 mb-2" style="text-align: center;">
+                  <div class="swsh-header">
+                    <div class="d-flex w-100 mt-1 mb-1" style="font-size: 13px; justify-content: center;">
+                        <h3>Skill Background</h3>
+                    </div>
+                  </div>
+                  <div class="swsh-header">
+                    <div class="d-flex w-100 mt-1 mb-1">
+                      <div class="col-sm-4">
+                        <label for="data.background.increased.one">Skill up 1:</label>
+                      </div>
+                      <div class="col-sm-4">
+                        <label for="data.background.increased.two">Skill up 2:</label>
+                      </div>
+                      <div class="col-sm-4">
+                        <label for="data.background.increased.three">Skill up 3:</label>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="swsh-body">
+                    <div class="d-flex w-100 mt-1 mb-1 fs-9">
+                      <div class="col-sm-4">
+                        {{#select data.background.increased.one}}
+                        <select name="data.background.increased.one">
+                          <option value="blank">None</option>
+                          {{#each skills as | skill key |}}
+                          <option value="{{key}}">{{skill.label}}</option>
+                          {{/each}}
+                        </select>
+                        {{/select}}
+                      </div>
+                      <div class="col-sm-4">
+                        {{#select data.background.increased.two}}
+                        <select name="data.background.increased.two">
+                          <option value="blank">None</option>
+                          {{#each skills as | skill key |}}
+                          <option value="{{key}}">{{skill.label}}</option>
+                          {{/each}}
+                        </select>
+                        {{/select}}
+                      </div>
+                      <div class="col-sm-4">
+                        {{#select data.background.increased.three}}
+                        <select name="data.background.increased.three">
+                          <option value="blank">None</option>
+                          {{#each skills as | skill key |}}
+                          <option value="{{key}}">{{skill.label}}</option>
+                          {{/each}}
+                        </select>
+                        {{/select}}
+                      </div>
+                    </div>
+                  </div>
+                  <div class="swsh-header">
+                    <div class="d-flex w-100 mt-1 mb-1">
+                      <div class="col-sm-4">
+                        <label for="data.background.decreased.one">Skill down 1:</label>
+                      </div>
+                      <div class="col-sm-4">
+                        <label for="data.background.decreased.two">Skill down 2:</label>
+                      </div>
+                      <div class="col-sm-4">
+                        <label for="data.background.decreased.three">Skill down 3:</label>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="swsh-body">
+                    <div class="d-flex w-100 mt-1 mb-1 fs-9">
+                      <div class="col-sm-4">
+                        {{#select data.background.decreased.one}}
+                        <select name="data.background.decreased.one">
+                          <option value="blank">None</option>
+                          {{#each skills as | skill key |}}
+                          <option value="{{key}}">{{skill.label}}</option>
+                          {{/each}}
+                        </select>
+                        {{/select}}
+                      </div>
+                      <div class="col-sm-4">
+                        {{#select data.background.decreased.two}}
+                        <select name="data.background.decreased.two">
+                          <option value="blank">None</option>
+                          {{#each skills as | skill key |}}
+                          <option value="{{key}}">{{skill.label}}</option>
+                          {{/each}}
+                        </select>
+                        {{/select}}
+                      </div>
+                      <div class="col-sm-4">
+                        {{#select data.background.decreased.three}}
+                        <select name="data.background.decreased.three">
+                          <option value="blank">None</option>
+                          {{#each skills as | skill key |}}
+                          <option value="{{key}}">{{skill.label}}</option>
+                          {{/each}}
+                        </select>
+                        {{/select}}
                       </div>
                     </div>
                   </div>

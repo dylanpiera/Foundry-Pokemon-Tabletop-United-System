@@ -141,7 +141,7 @@ export class PTUActor extends Actor {
     if(speciesData) data.egggroup = speciesData["Breeding Information"]["Egg Group"].join(" & ");
 
     //TODO: Add skill background
-    data.skills = CalculateSkills(data.skills, speciesData, actorData.items.filter(x => x.type == "pokeedge"));
+    data.skills = CalculateSkills(data.skills, speciesData, actorData.items.filter(x => x.type == "pokeedge"), data.background);
 
     // Calc skill rank
     for (let [key, skill] of Object.entries(data.skills)) {
