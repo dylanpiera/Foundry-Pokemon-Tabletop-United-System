@@ -125,6 +125,13 @@ Hooks.once('init', function() {
     return statUp && !statDown ? "nature-up" : statDown && !statUp ? "nature-down" : "";
   });
 
+  Handlebars.registerHelper("tillNextLevel", function (level, exp) {
+    if(level > 0 && level < 100) {
+      return game.ptu.levelProgression[level+1] - exp;
+    }
+    return "-";
+  });
+
   // Load System Settings
   _loadSystemSettings();
 
