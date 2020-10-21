@@ -17,8 +17,19 @@ export class PTUActor extends Actor {
     super.prepareData();
 
     const actorData = this.data;
-    const data = actorData.data;
-    const flags = actorData.flags;
+
+    if(parseInt(game.data.version.split('.')[1]) <= 6) {
+      console.warn("Using old prepare-data structure")
+      // Make separate methods for each Actor type (character, npc, etc.) to keep
+      // things organized.
+      if (actorData.type === 'character') this._prepareCharacterData(actorData);
+      if (actorData.type === 'pokemon') this._preparePokemonData(actorData);
+    }
+  }
+
+  /** @override */
+  prepareBaseData() {
+    const actorData = this.data;
 
     // Make separate methods for each Actor type (character, npc, etc.) to keep
     // things organized.

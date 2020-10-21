@@ -46,7 +46,7 @@
                     </div>
                     {{#each data.stats as |stat key|}}
                     <div class="row no-gutters {{key}}">
-                      <div class="stats {{key}} col-sm-2 key">
+                      <div class="stats {{key}} col-sm-2 key {{natureCheck ../data.nature.value key}}">
                         <label for="data.stats.{{key}}.value" class="resource-label">{{key}}</label>
                       </div>
                       <div class="stats {{key}} base col-sm-2">

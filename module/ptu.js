@@ -107,6 +107,24 @@ Hooks.once('init', function() {
     return move.owner ? move.owner.critRange : 0;
   });
 
+  function keyToNatureStat(key) {
+    switch (key) {
+      case "hp": return "HP";
+      case "atk": return "Attack";
+      case "def": return "Defense";
+      case "spatk": return "Special Attack";
+      case "spdef": return "Special Defense";
+      case "spd": return "Speed";
+    }
+  }
+
+  Handlebars.registerHelper("natureCheck", function (nature, stat) {
+    let statUp = game.ptu.natureData[nature][0] == keyToNatureStat(stat);
+    let statDown = game.ptu.natureData[nature][1] == keyToNatureStat(stat)
+
+    return statUp && !statDown ? "nature-up" : statDown && !statUp ? "nature-down" : "";
+  });
+
   // Load System Settings
   _loadSystemSettings();
 
