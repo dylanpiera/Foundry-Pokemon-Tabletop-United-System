@@ -116,7 +116,7 @@ export class PTUActor extends Actor {
     data.stats.spdef.value = CalcBaseStat(speciesData, data.nature.value, "Special Defense");
     data.stats.spd.value = CalcBaseStat(speciesData, data.nature.value, "Speed");
 
-    var result = CalculateStatTotal(data.levelUpPoints, data.stats);
+    var result = CalculateStatTotal(data.levelUpPoints, data.stats, actorData.items.find(x => x.name.toLowerCase().replace("[playtest]") == "twisted power") != null);
     data.stats = result.stats;
     data.levelUpPoints = result.levelUpPoints;
 
