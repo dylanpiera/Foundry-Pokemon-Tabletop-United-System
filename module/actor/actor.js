@@ -149,8 +149,7 @@ export class PTUActor extends Actor {
     }
 
     // Calc Type Effectiveness
-    if(data.typing)
-      data.effectiveness = GetMonEffectiveness(data.typing);
+    data.effectiveness = GetMonEffectiveness(actorData);
 
     /* The Corner of Exceptions */
 

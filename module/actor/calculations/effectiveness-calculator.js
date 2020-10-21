@@ -2,9 +2,12 @@ function getTypeEffectiveness(targetType) {
     return duplicate(game.ptu.TypeEffectiveness[targetType])
 }
 
-export function GetMonEffectiveness(typing) {
-    let typeCalc;
+export function GetMonEffectiveness(data) {
     let effectivenesses = {Weakness: [], Normal: [], Resistant: [], Immune: []}
+    if(!data.data.typing) return effectivenesses;
+    let typing = data.data.typing
+    let typeCalc;
+    
     for(let type of typing) {
         if(!typeCalc) typeCalc = getTypeEffectiveness(type); 
         else 
@@ -14,6 +17,70 @@ export function GetMonEffectiveness(typing) {
     }
 
     /** TODO: Add Abilities - See Issue #27 */
+    let abilities = {
+        "Desert Weather": {active: false, execute: function(typeCalc) {return typeCalc;}}, //TODO: Add this ability once we have weather implemented
+        "Cave Crasher": {active: false, execute: function(typeCalc) {typeCalc["Ground"] *= 0.5; typeCalc["Rock"] *= 0.5; return typeCalc;}},
+        "Dry Skin": {active: false, execute: function(typeCalc) {typeCalc["Water"] *= 0; return typeCalc;}},
+        "Storm Drain": {active: false, execute: function(typeCalc) {typeCalc["Water"] *= 0; return typeCalc;}},
+        "Water Absorb": {active: false, execute: function(typeCalc) {typeCalc["Water"] *= 0; return typeCalc;}},
+        "Flash Fire": {active: false, execute: function(typeCalc) {typeCalc["Fire"] *= 0; return typeCalc;}},
+        "Flying Fly Trap": {active: false, execute: function(typeCalc) {typeCalc["Bug"] *= 0.5; typeCalc["Ground"] *= 0.5; return typeCalc;}},
+        "Heatproof": {active: false, execute: function(typeCalc) {typeCalc["Fire"] *= 0.5; return typeCalc;}},
+        "Levitate": {active: false, execute: function(typeCalc) {typeCalc["Ground"] *= 0; return typeCalc;}},
+        "Lightning Rod": {active: false, execute: function(typeCalc) {typeCalc["Electric"] *= 0; return typeCalc;}},
+        "Motor Drive": {active: false, execute: function(typeCalc) {typeCalc["Electric"] *= 0; return typeCalc;}},
+        "Volt Absorb": {active: false, execute: function(typeCalc) {typeCalc["Electric"] *= 0; return typeCalc;}},
+        "Mud Dweller": {active: false, execute: function(typeCalc) {typeCalc["Ground"] *= 0.5; typeCalc["Water"] *= 0.5; return typeCalc;}},
+        "Sap Sipper": {active: false, execute: function(typeCalc) {typeCalc["Grass"] *= 0; return typeCalc;}},
+        "Sun Blanket": {active: false, execute: function(typeCalc) {typeCalc["Fire"] *= 0.5; return typeCalc;}},
+        "Thick Fat": {active: false, execute: function(typeCalc) {typeCalc["Fire"] *= 0.5; typeCalc["Ice"] *= 0.5; return typeCalc;}},
+        "Tochukaso": {active: false, execute: function(typeCalc) {typeCalc["Bug"] *= 0.5; typeCalc["Poison"] *= 0.5; return typeCalc;}},
+        "Windveiled": {active: false, execute: function(typeCalc) {typeCalc["Flying"] *= 0; return typeCalc;}},
+        "Winter's Kiss": {active: false, execute: function(typeCalc) {typeCalc["Ice"] *= 0; return typeCalc;}},
+        "Tolerance": {active: false, execute: function(typeCalc) {
+            for(const [key,value] of Object.entries(typeCalc).filter(x => x[1] < 1)) {
+                typeCalc[key] *= 0.5;
+            }
+            return typeCalc;
+        }},
+        "Filter": {active: false, execute: function(typeCalc) {
+            for(const [key,value] of Object.entries(typeCalc).filter(x => x[1] > 1 && x[1] <= 4)) {
+                typeCalc[key] = value == 2 ? 1.25 : 2;
+            }
+            return typeCalc;
+        }},
+        "Solid Rock": {active: false, execute: function(typeCalc) {
+            for(const [key,value] of Object.entries(typeCalc).filter(x => x[1] > 1 && x[1] <= 4)) {
+                typeCalc[key] = value == 2 ? 1.25 : 2;
+            }
+            return typeCalc;
+        }},
+        "Wonder Guard": {active: false, execute: function(typeCalc) {
+            if(Object.entries(typeCalc).filter(x => x[1] > 1).length == 0) return typeCalc;
+            for(const [key,value] of Object.entries(typeCalc).filter(x => x[1] <= 1)) {
+                typeCalc[key] *= 0;
+            }
+            return typeCalc;
+        }},
+    }
+
+    for(let ability of data.items.filter(x => x.type == "ability")) {
+        for(let key of Object.keys(abilities)) {
+            if(ability.name?.toLowerCase() == "Sun Blanket [Playtest]".toLowerCase()) break;
+            if(ability.name?.toLowerCase() == "Filter [Playtest]".toLowerCase()) break;
+            if(ability.name?.toLowerCase() == "Solid Rock [Playtest]".toLowerCase()) break;
+            if(ability.name?.toLowerCase().replace("[playtest]","").trim() == key.toLowerCase()) {
+                abilities[key].active = true;
+                break;
+            }
+        }
+    }
+
+    for(const [key,value] of Object.entries(abilities).filter(x => x[1].active == true)) {
+        typeCalc = value.execute(typeCalc);
+    }
+
+    console.log(typeCalc);
 
     for(const [typeKey,value] of Object.entries(typeCalc)) {
         if(value < 1) {
@@ -28,7 +95,7 @@ export function GetMonEffectiveness(typing) {
             effectivenesses.Normal.push({[typeKey]: 1});
             continue;
         }
-        if(value >= 2) {
+        if(value > 1) {
             effectivenesses.Weakness.push({[typeKey]: value > 2 ? Math.log2(value) : value == 2 ? 1.5 : value});
             continue;
         }
