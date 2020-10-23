@@ -137,6 +137,15 @@ Hooks.once('init', function() {
     return `<img src="/systems/ptu/css/images/types/${type}IC.webp">`;
   });
 
+  /** If furnace ain't installed... */
+  if(!Object.keys(Handlebars.helpers).includes("divide")) {
+    console.warn("It is recommended to install & enable 'The Furnace' module.")
+
+    Handlebars.registerHelper("divide", (value1, value2) => Number(value1) / Number(value2));
+    Handlebars.registerHelper("multiply", (value1, value2) => Number(value1) * Number(value2));
+    Handlebars.registerHelper("floor", (value) => Math.floor(Number(value)));
+  }
+
   // Load System Settings
   _loadSystemSettings();
 
