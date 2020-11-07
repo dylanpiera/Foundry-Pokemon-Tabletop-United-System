@@ -80,8 +80,6 @@ export function GetMonEffectiveness(data) {
         typeCalc = value.execute(typeCalc);
     }
 
-    console.log(typeCalc);
-
     for(const [typeKey,value] of Object.entries(typeCalc)) {
         if(value < 1) {
             if(value == 0) {

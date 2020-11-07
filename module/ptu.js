@@ -199,13 +199,13 @@ function _loadSystemSettings() {
     default: "true"
   });
 
-  game.settings.register("ptu", "customSpecies", {
-    name: "Custom Species json (Requires Refresh)",
-    hint: "Please specify the path of a custom species file (inside the world directory) if you wish to add Homebrew Pokémon.",
+  game.settings.register("ptu", "nonOwnerCanSeeTabs", {
+    name: "Non-owners can see Sheet Tabs",
+    hint: "Allow players with Limited/Observer permissions to browse tabs in a Pokémon/Trainer's full sheet",
     scope: "world",
     config: true,
-    type: String,
-    default: ""
+    type: Boolean,
+    default: false
   });
 
   game.settings.register("ptu", "insurgenceData", {
@@ -216,6 +216,16 @@ function _loadSystemSettings() {
     type: Boolean,
     default: false
   });
+
+  game.settings.register("ptu", "customSpecies", {
+    name: "Custom Species json (Requires Refresh)",
+    hint: "Please specify the path of a custom species file (inside the world directory) if you wish to add Homebrew Pokémon. [Currently in Beta!]",
+    scope: "world",
+    config: true,
+    type: String,
+    default: ""
+  });
+
 } 
 
 /* -------------------------------------------- */
@@ -254,6 +264,20 @@ Hooks.on("canvasInit", function() {
   SquareGrid.prototype.measureDistances = measureDistances;
 });
 
+/* -------------------------------------------- */
+/*  Allow Limited/Observer permissions          */
+/*  to see in Pokémon Sheet Tabs                */
+/* -------------------------------------------- */
+
+Hooks.on("renderActorSheet", function(sheet,element,settings) {
+  if(game.settings.get("ptu", "nonOwnerCanSeeTabs")){
+    if(settings.cssClass == "locked") {
+        for(let button of $('.sheet-tabs button')) {
+            button.disabled = false;
+        }
+    }
+  }
+});
 
 /* -------------------------------------------- */
 /*  Hotbar Macros                               */
