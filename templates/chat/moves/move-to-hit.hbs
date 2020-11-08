@@ -1,26 +1,71 @@
 {{#if move}}
 <div class="content flexrow pt-1" style="font-variant: normal;">
-    <div class="grid" style="grid-template-columns: repeat(2, auto);justify-items: center;grid-gap: 0px;grid-template-rows: auto;place-items: center;text-align: center;">
-        <span style="grid-column: span 2;padding: 5px;">{{move.name}}</span>
-
-        <span class="type-img" style="padding: 5px; border-top: 1px solid black; width: 100%;">
-            <img src="/systems/ptu/css/images/categories/{{move.category}}.png">
-        </span>
-        <span class="type-img" style="padding: 5px; border-top: 1px solid black; width: 100%;"><img src="/systems/ptu/css/images/types/{{move.type}}IC.webp"></span>
-        {{#if roll}}
-            <div class="dice-roll" style="grid-column: span 2;width: 100%;border-top: 1px solid black;padding: 5px;">
-                <div class="dice-result">
-                    <div class="dice-formula">  
-                        {{#each roll.terms as | term |}}
-                            {{#if term.faces}}
-                                {{#each term.results as |result|}}<span class="roll die d{{term.faces}} {{minMaxDiceCheck result.result term.faces}}">{{result.result}}</span>{{#if @last}}{{else}}+{{/if}}{{/each}}
-                            {{else}}{{term}}{{/if}}
-                        {{/each}}
-                    </div>
-                    <span class="dice-total" style="display: inline-flex;justify-content: space-evenly; align-items: center;width:100%;"><h4 class="num-total">{{roll._total}}</h4><h5>To Hit</h5></span>
+    <div class="swsh-box">
+        <div class="swsh-header" style="border-bottom: 1px solid #00000020; text-align: center;">
+            <div class="d-flex w-100 mt-1 mb-1 justify-content-center">
+                <span style="padding: 5px;">{{move.name}}</span>
+            </div>
+        </div>
+        {{#if verboseChatInfo}}
+        <div class="swsh-header fs-10">
+            <div class="d-flex w-100 mt-1" style="text-align: end;">
+                <div class="col-sm-7" style="align-self: center;">
+                    <label>Type:</label>
+                </div>
+                <div class="col">
+                    <span class="type-img">
+                        <img src="/systems/ptu/css/images/types/{{move.type}}IC.webp">
+                    </span>
                 </div>
             </div>
+        </div>
+        <div class="swsh-header fs-10">
+            <div class="d-flex w-100 mb-1" style="text-align: end;">
+                <div class="col-sm-7" style="align-self: center;">
+                    <label>Category:</label>
+                </div>
+                <div class="col">
+                    <span class="type-img">
+                        <img src="/systems/ptu/css/images/categories/{{move.category}}.png">
+                    </span>
+                </div>
+            </div>
+        </div>
+        {{else}}
+        <div class="swsh-header">
+            <div class="d-flex w-100 mt-1 mb-1">
+                <div class="col"><span class="type-img"><img src="/systems/ptu/css/images/types/{{move.type}}IC.webp"></span></div>
+                <div class="col"><span class="type-img"><img src="/systems/ptu/css/images/categories/{{move.category}}.png"></span></div>
+            </div>
+        </div>
         {{/if}}
+        <div class="swsh-body">
+            {{#if roll}}
+                <div class="dice-roll w-100" style="padding: 10px 5px;">
+                    <div class="dice-result">
+                        <div class="dice-formula">  
+                            {{#each roll.terms as | term |}}
+                                {{#if term.faces}}
+                                    {{#each term.results as |result|}}<span class="roll die d{{term.faces}} {{minMaxDiceCheck result.result term.faces}}">{{result.result}}</span>{{#if @last}}{{else}}+{{/if}}{{/each}}
+                                {{else}}{{term}}{{/if}}
+                            {{/each}}
+                        </div>
+                        <span class="dice-total" style="display: inline-flex;justify-content: space-evenly; align-items: center;width:100%;"><h4 class="num-total">{{roll._total}}</h4><h5>To Hit</h5></span>
+                    </div>
+                </div>
+            {{/if}}
+            {{#if crit}}
+                {{#if (not crit "normal")}}
+                    <div class="d-flex w-100 pt-1 pb-1" style="word-break: break-word;text-align: center;border-top: 1px solid #00000080;padding: 5px;">
+                        {{#if (is crit "hit")}}
+                            <h4>It's a Critical Hit!</h4>
+                        {{else}}
+                            <h4>It's a Critical Miss!</h4>
+                        {{/if}}
+                    </div>
+                {{/if}}
+            {{/if}}
+        </div>
     </div>
 </div>
 {{/if}}

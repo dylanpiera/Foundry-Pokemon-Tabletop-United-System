@@ -193,34 +193,6 @@ export class PTUGen8PokemonSheet extends ActorSheet {
 		const move = this.actor.items.find(x => x._id == dataset.id).data;
 
 		/** Option Callbacks */
-		let PerformFullAttackSeperate = () => {
-			let roll = CalculateAcRoll(move.data, this.actor.data.data);
-			let diceResult = PerformAcRoll(roll, move, this.actor);
-
-			if (diceResult === 1) {
-				CONFIG.ChatMessage.entityClass.create({
-					content: `${move.name} critically missed!`,
-					type: CONST.CHAT_MESSAGE_TYPES.OOC,
-					speaker: ChatMessage.getSpeaker({
-						actor: this.actor
-					}),
-					user: game.user._id
-				});
-				return;
-			}
-			let crit = diceResult >= 20 - this.actor.data.data.modifiers.critRange ? CritOptions.CRIT_HIT : CritOptions.NORMAL;
-
-			let damageRoll = CalculateDmgRoll(move.data, this.actor.data.data, crit);
-			if (!damageRoll) return;
-
-			sendRollMessage(damageRoll, {
-				speaker: ChatMessage.getSpeaker({
-					actor: this.actor
-				}),
-				move: move.data
-			}).then(data => console.log(data));
-		}
-
 		let PerformFullAttack = () => {
 			let acRoll = CalculateAcRoll(move.data, this.actor.data.data);
 			let diceResult = GetDiceResult(acRoll)
@@ -238,32 +210,76 @@ export class PTUGen8PokemonSheet extends ActorSheet {
 				}),
 				move: move.data,
 				damageRoll: damageRoll,
-				templateType: MoveMessageTypes.FULL_ATTACK
+				templateType: MoveMessageTypes.FULL_ATTACK,
+				crit: crit
 			}).then(data => console.log(data));
 		}
 
+		let RollDamage = () => {
+			let PerformDamage = (crit) => {
+				let damageRoll = CalculateDmgRoll(move.data, this.actor.data.data, crit).roll()
+
+				sendRollMessage(damageRoll, {
+					speaker: ChatMessage.getSpeaker({
+						actor: this.actor
+					}),
+					move: move.data,
+					templateType: MoveMessageTypes.DAMAGE,
+					crit: crit
+				}).then(data => console.log(data));
+			}
+
+			let d = new Dialog({
+				title: `${this.actor.data.name}'s ${move.name} Damage`,
+				content: `<div class="pb-1"><p>Is it a Crit?</p></div>`,
+				buttons: {
+					crit: {
+						icon: '<i class="fas fa-bullseye"></i>',
+						label: "Critical Hit!",
+						callback: () => PerformDamage(CritOptions.CRIT_HIT)
+					},
+					normal: {
+						icon: '<i class="fas fa-crosshairs"></i>',
+						label: "Regular Hit",
+						callback: () => PerformDamage(CritOptions.NORMAL)
+					}
+				},
+				default: "normal"
+			});
+			d.position.width = 650;
+			d.position.height = 125;
+			d.render(true)
+		}
+
 		/** Show Dialog */
-		new Dialog({
+		let d = new Dialog({
 			title: `${this.actor.data.name}'s ${move.name}`,
 			content: `<div class="pb-1"><p>Would you like to use move ${move.name} or output the move details?</p></div>`,
 			buttons: {
 				roll: {
 					icon: '<i class="fas fa-dice"></i>',
-					label: "Roll Move (seperate chat messages)",
-					callback: () => PerformFullAttackSeperate()
-				},
-				rollTogether: {
-					icon: '<i class="fas fa-dice"></i>',
-					label: "Roll Move",
+					label: "Perform Move",
 					callback: () => PerformFullAttack()
 				},
 				info: {
 					icon: '<i class="fas fa-info"></i>',
 					label: "Show Details",
 					callback: () => console.log("b")
-				},
-			}
-		}).render(true)
+				}
+			},
+			default: "roll"
+		});
+		if(move.data.category != "Status") {
+			d.data.buttons.rollDamage = {
+				icon: '<i class="fas fa-dice"></i>',
+				label: "Roll Damage",
+				callback: () => RollDamage()
+			};
+		}
+		d.position.width = 650;
+		d.position.height = 125;
+		
+		d.render(true);
 	}
 }
 
@@ -279,19 +295,19 @@ function CalculateAcRoll(moveData, actorData) {
 function CalculateDmgRoll(moveData, actorData, isCrit) {
 	if (moveData.category === "Status") return;
 
-	let bonus = 0;
-	let dbRoll;
 	if (moveData.damageBase.toString().match(/^[0-9]+$/) != null) {
-		dbRoll = game.ptu.DbData[moveData.stab ? parseInt(moveData.damageBase) + 2 : moveData.damageBase];
-		bonus = Math.max(moveData.category === "Physical" ? actorData.stats.atk.total : actorData.stats.spatk.total, 0);
-	} else {
-		dbRoll = game.ptu.DbData[moveData.damageBase];
+		let dbRoll = game.ptu.DbData[moveData.stab ? parseInt(moveData.damageBase) + 2 : moveData.damageBase];
+		let bonus = Math.max(moveData.category === "Physical" ? actorData.stats.atk.total : actorData.stats.spatk.total, 0);
+		if (!dbRoll) return;
+		return new Roll(isCrit == CritOptions.CRIT_HIT ? '@roll+@roll+@bonus' : '@roll+@bonus', {
+			roll: dbRoll,
+			bonus: bonus
+		})
 	}
+	let dbRoll = game.ptu.DbData[moveData.damageBase];
 	if (!dbRoll) return;
-
-	return new Roll(isCrit == CritOptions.CRIT_HIT ? '@roll+@roll+@bonus' : '@roll+@bonus', {
-		roll: dbRoll,
-		bonus: bonus
+	return new Roll('@roll', {
+		roll: dbRoll
 	})
 }
 

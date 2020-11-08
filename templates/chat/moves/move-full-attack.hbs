@@ -54,7 +54,17 @@
                     </div>
                 </div>
             {{/if}}
-            {{log damageRoll}}
+            {{#if crit}}
+                {{#if (not crit "normal")}}
+                    <div class="d-flex w-100 pt-1 pb-1" style="word-break: break-word;text-align: center;border-top: 1px solid #00000080;padding: 5px;">
+                        {{#if (is crit "hit")}}
+                            <h4>It's a Critical Hit!</h4>
+                        {{else}}
+                            <h4>It's a Critical Miss!</h4>
+                        {{/if}}
+                    </div>
+                {{/if}}
+            {{/if}}
             {{#if damageRoll}}
                 <div class="dice-roll w-100" style="border-top: 1px solid #00000080;padding: 10px 5px;">
                     <div class="dice-result">
