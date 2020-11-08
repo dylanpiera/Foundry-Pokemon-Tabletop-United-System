@@ -127,6 +127,10 @@ Hooks.once('init', function() {
     return statUp && !statDown ? "nature-up" : statDown && !statUp ? "nature-down" : "";
   });
 
+  Handlebars.registerHelper("minMaxDiceCheck", function(roll, faces) {
+    return roll == 1 ? "min" : roll == faces ? "max" : "";
+  });
+
   Handlebars.registerHelper("loadTypeImages", function (types) {
     if(!types) return;
     if(types[1] != "null") return `<img class="mr-1" src="/systems/ptu/css/images/types/${types[0]}IC.webp"><span>/</span><img class="ml-1" src="/systems/ptu/css/images/types/${types[1]}IC.webp">`;
@@ -224,6 +228,15 @@ function _loadSystemSettings() {
     config: true,
     type: String,
     default: ""
+  });
+
+  game.settings.register("ptu", "verboseChatInfo", {
+    name: "Verbose Chat Output",
+    hint: "When enabled shows more details in chat messages.",
+    scope: "client",
+    config: true,
+    type: Boolean,
+    default: false
   });
 
 } 

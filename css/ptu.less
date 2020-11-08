@@ -613,7 +613,7 @@ input[name="data.money"] {
     cursor: pointer;
 }
 
-.dice-tooltip .dice-rolls .roll {
+ .dice-rolls .roll {
     width: 32px;
     line-height: 23px;
     margin-right: unset;
@@ -1127,6 +1127,76 @@ span.readable {
     .dice-roll {
         .dice-formula, .dice-total {
             flex: 0 0 100% !important;
+            word-break: break-word !important;
+        }
+    }
+}
+
+/* ----------------------------------------- */
+/*  Dice Tooltip
+/* ----------------------------------------- */
+.dice-formula {
+    .roll {
+        position: relative;
+        min-width: 24px;
+        display: inline-block;
+        background-position: center;
+        line-height: 24px;
+        margin-right: 1px;
+        padding-left: 2px;
+        background-image: url("/icons/svg/d6-grey.svg");
+        background-repeat: no-repeat;
+        background-size: 24px 24px;
+        font-size: 16px;
+        color: #000;
+        font-weight: bold;
+        text-align: center;
+        
+        &.d4 {
+            background-image: url("/icons/svg/d4-grey.svg");
+        }
+        &.d6 {
+            background-image: url("/icons/svg/d6-grey.svg");
+        }
+        &.d8 {
+            background-image: url("/icons/svg/d8-grey.svg");
+        }
+        &.d10 {
+            background-image: url("/icons/svg/d10-grey.svg");
+        }
+        &.d12 {
+            background-image: url("/icons/svg/d12-grey.svg");
+        }
+        &.d20 {
+            background-image: url("/icons/svg/d20-grey.svg");
+        }
+        &.min {
+            color: #aa0200;
+            filter: sepia(0.5) hue-rotate(-60deg);
+        }
+        &.max {
+            color: #18520b;
+            filter: sepia(0.5) hue-rotate(60deg);
+        }
+        &.discarded,
+        &.rerolled {
+            filter: sepia(0.5) contrast(0.75) opacity(0.75);
+        }
+        &.exploded:before {
+            font-size: 8px;
+            font-family: "Font Awesome 5 Free";
+            content: "\f666";
+            position: absolute;
+            top: -8px;
+            right: 0px;
+        }
+        &.success {
+            color: #18520b;
+            filter: sepia(0.5) hue-rotate(60deg);
+        }
+        &.failure {
+            color: #aa0200;
+            filter: sepia(0.5) hue-rotate(-60deg);
         }
     }
 }
