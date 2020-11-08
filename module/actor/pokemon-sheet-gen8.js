@@ -10,7 +10,11 @@ export class PTUGen8PokemonSheet extends ActorSheet {
 			template: 'systems/ptu/templates/actor/pokemon-sheet-gen8.hbs',
 			width: 1200,
 			height: 675,
-			tabs: [{ navSelector: '.sheet-tabs', contentSelector: '.sheet-body', initial: 'stats' }]
+			tabs: [{
+				navSelector: '.sheet-tabs',
+				contentSelector: '.sheet-body',
+				initial: 'stats'
+			}]
 		});
 	}
 
@@ -41,7 +45,7 @@ export class PTUGen8PokemonSheet extends ActorSheet {
 	 */
 	_prepareCharacterItems(sheetData) {
 		sheetData['skills'] = this.actor.data.data.skills
-		
+
 		const actorData = sheetData.actor;
 
 		// Initialize containers.
@@ -168,7 +172,9 @@ export class PTUGen8PokemonSheet extends ActorSheet {
 			let roll = new Roll(dataset.roll, this.actor.data.data);
 			let label = dataset.label ? `Rolling ${dataset.label}` : '';
 			roll.roll().toMessage({
-				speaker: ChatMessage.getSpeaker({ actor: this.actor }),
+				speaker: ChatMessage.getSpeaker({
+					actor: this.actor
+				}),
 				flavor: label
 			});
 		}
@@ -184,46 +190,206 @@ export class PTUGen8PokemonSheet extends ActorSheet {
 
 		const element = event.currentTarget;
 		const dataset = element.dataset;
+		const move = this.actor.items.find(x => x._id == dataset.id).data;
 
-		if (dataset.roll || dataset.type == 'Status') {
-			let roll = new Roll('1d20+' + (parseInt(dataset.ac) || 0), this.actor.data.data);
-			let label = dataset.label ? `To-Hit for move: ${dataset.label} ` : '';
-			roll.roll().toMessage({
-				speaker: ChatMessage.getSpeaker({ actor: this.actor }),
-				flavor: label
-			});
-			let diceResult = -2;
-			try{
-			    diceResult = roll.terms[0].results[0].result;
-            }
-            catch(err){
-            	console.log("Old system detected, using deprecated rolling...")
-            	diceResult = roll.parts[0].results[0];
-			}
-			if (diceResult === 1) {
-				CONFIG.ChatMessage.entityClass.create({
-					content: `${dataset.label} critically missed!`,
-					type: CONST.CHAT_MESSAGE_TYPES.OOC,
-					speaker: ChatMessage.getSpeaker({ actor: this.actor }),
-					user: game.user._id
-				});
-				return;
-			}
-			let isCrit = diceResult >= 20 - dataset.critrange;
-			if(dataset.roll == -1) return;
+		/** Option Callbacks */
+		let PerformFullAttack = () => {
+			let acRoll = CalculateAcRoll(move.data, this.actor.data.data);
+			let diceResult = GetDiceResult(acRoll)
 
-			if (dataset.type == 'Physical' || dataset.type == 'Special') {
-				let rollData = dataset.roll.split('#');
-				let roll = new Roll(isCrit ? '@roll+@roll+@mod' : '@roll+@mod', {
-					roll: rollData[0],
-					mod: rollData[1] || 0
-				});
-				let label = dataset.label ? `${isCrit ? "Crit damage" : "Damage"} for move: ${dataset.label}` : '';
-				roll.roll().toMessage({
-					speaker: ChatMessage.getSpeaker({ actor: this.actor }),
-          			flavor: label
-				});
+			let crit = diceResult === 1 ? CritOptions.CRIT_MISS : diceResult >= 20 - this.actor.data.data.modifiers.critRange ? CritOptions.CRIT_HIT : CritOptions.NORMAL;
+
+			let damageRoll;
+			if(crit != CritOptions.CRIT_MISS) {
+				damageRoll = CalculateDmgRoll(move.data, this.actor.data.data, crit)
+				if(damageRoll) damageRoll.roll();
 			}
+			sendMoveRollMessage(acRoll, {
+				speaker: ChatMessage.getSpeaker({
+					actor: this.actor
+				}),
+				move: move.data,
+				damageRoll: damageRoll,
+				templateType: MoveMessageTypes.FULL_ATTACK,
+				crit: crit
+			}).then(data => console.log(data));
 		}
+
+		let RollDamage = () => {
+			let PerformDamage = (crit) => {
+				let damageRoll = CalculateDmgRoll(move.data, this.actor.data.data, crit).roll()
+
+				sendMoveRollMessage(damageRoll, {
+					speaker: ChatMessage.getSpeaker({
+						actor: this.actor
+					}),
+					move: move.data,
+					templateType: MoveMessageTypes.DAMAGE,
+					crit: crit
+				}).then(data => console.log(data));
+			}
+
+			let d = new Dialog({
+				title: `${this.actor.data.name}'s ${move.name} Damage`,
+				content: `<div class="pb-1"><p>Is it a Crit?</p></div>`,
+				buttons: {
+					crit: {
+						icon: '<i class="fas fa-bullseye"></i>',
+						label: "Critical Hit!",
+						callback: () => PerformDamage(CritOptions.CRIT_HIT)
+					},
+					normal: {
+						icon: '<i class="fas fa-crosshairs"></i>',
+						label: "Regular Hit",
+						callback: () => PerformDamage(CritOptions.NORMAL)
+					}
+				},
+				default: "normal"
+			});
+			d.position.width = 650;
+			d.position.height = 125;
+			d.render(true)
+		}
+
+		/** Show Dialog */
+		let d = new Dialog({
+			title: `${this.actor.data.name}'s ${move.name}`,
+			content: `<div class="pb-1"><p>Would you like to use move ${move.name} or output the move details?</p></div>`,
+			buttons: {
+				roll: {
+					icon: '<i class="fas fa-dice"></i>',
+					label: "Perform Move",
+					callback: () => PerformFullAttack()
+				},
+				info: {
+					icon: '<i class="fas fa-info"></i>',
+					label: "Show Details",
+					callback: () => sendMoveMessage({
+						speaker: ChatMessage.getSpeaker({
+							actor: this.actor
+						}),
+						move: move.data,
+						templateType: MoveMessageTypes.DETAILS
+					}).then(data => console.log(data))
+				}
+			},
+			default: "roll"
+		});
+		if(move.data.category != "Status") {
+			d.data.buttons.rollDamage = {
+				icon: '<i class="fas fa-dice"></i>',
+				label: "Roll Damage",
+				callback: () => RollDamage()
+			};
+		}
+		d.position.width = 650;
+		d.position.height = 125;
+		
+		d.render(true);
 	}
+}
+
+/** Pure Functions */
+
+function CalculateAcRoll(moveData, actorData) {
+	return new Roll('1d20-@ac+@acBonus', {
+		ac: (parseInt(moveData.ac) || 0),
+		acBonus: (parseInt(actorData.modifiers.acBonus) || 0)
+	})
+}
+
+function CalculateDmgRoll(moveData, actorData, isCrit) {
+	if (moveData.category === "Status") return;
+
+	if (moveData.damageBase.toString().match(/^[0-9]+$/) != null) {
+		let dbRoll = game.ptu.DbData[moveData.stab ? parseInt(moveData.damageBase) + 2 : moveData.damageBase];
+		let bonus = Math.max(moveData.category === "Physical" ? actorData.stats.atk.total : actorData.stats.spatk.total, 0);
+		if (!dbRoll) return;
+		return new Roll(isCrit == CritOptions.CRIT_HIT ? '@roll+@roll+@bonus' : '@roll+@bonus', {
+			roll: dbRoll,
+			bonus: bonus
+		})
+	}
+	let dbRoll = game.ptu.DbData[moveData.damageBase];
+	if (!dbRoll) return;
+	return new Roll('@roll', {
+		roll: dbRoll
+	})
+}
+
+function GetDiceResult(roll) {
+	if (!roll._rolled) roll.evaluate();
+
+	let diceResult = -2;
+	try {
+		diceResult = roll.terms[0].results[0].result;
+	} catch (err) {
+		console.log("Old system detected, using deprecated rolling...")
+		diceResult = roll.parts[0].results[0];
+	}
+	return diceResult;
+}
+
+function PerformAcRoll(roll, move, actor) {
+	sendMoveRollMessage(roll, {
+		speaker: ChatMessage.getSpeaker({
+			actor: actor
+		}),
+		move: move.data,
+		templateType: MoveMessageTypes.TO_HIT
+	}).then(_ => console.log(`Rolling to hit for ${actor.name}'s ${move.name}`));
+
+	return GetDiceResult(roll);
+}
+
+async function sendMoveRollMessage(rollData, messageData = {}) {
+	if (!rollData._rolled) rollData.evaluate();
+
+	messageData = mergeObject({
+		user: game.user._id,
+		sound: CONFIG.sounds.dice,
+		templateType: MoveMessageTypes.DAMAGE,
+		verboseChatInfo: game.settings.get("ptu", "verboseChatInfo") ?? false
+	}, messageData);
+
+	messageData.roll = rollData;
+
+	if(!messageData.move) {
+		console.error("Can't display move chat message without move data.")
+		return;
+	}
+	
+	messageData.content = await renderTemplate(`/systems/ptu/templates/chat/moves/move-${messageData.templateType}.hbs`, messageData)
+
+	return ChatMessage.create(messageData, {});
+}
+
+async function sendMoveMessage(messageData = {}) {
+	messageData = mergeObject({
+		user: game.user._id,
+		templateType: MoveMessageTypes.DAMAGE,
+		verboseChatInfo: game.settings.get("ptu", "verboseChatInfo") ?? false
+	}, messageData);
+
+	if(!messageData.move) {
+		console.error("Can't display move chat message without move data.")
+		return;
+	}
+	
+	messageData.content = await renderTemplate(`/systems/ptu/templates/chat/moves/move-${messageData.templateType}.hbs`, messageData)
+
+	return ChatMessage.create(messageData, {});
+}
+
+const MoveMessageTypes = {
+	DAMAGE: 'damage',
+	TO_HIT: 'to-hit',
+	DETAILS: 'details',
+	FULL_ATTACK: 'full-attack'
+}
+
+const CritOptions = {
+	CRIT_MISS: 'miss',
+	NORMAL: 'normal',
+	CRIT_HIT: 'hit'
 }
