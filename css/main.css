@@ -886,6 +886,14 @@ span.readable {
 .ptu header.sheet-header {
   align-items: unset;
 }
+/* Chat CSS */
+.message-content .type-img {
+  justify-content: space-evenly;
+}
+.message-content .dice-roll .dice-formula,
+.message-content .dice-roll .dice-total {
+  flex: 0 0 100% !important;
+}
 /* Forien's Quest Log hidden tab fix */
 #forien-quest-log .quest-log .tab.active {
   display: block !important;

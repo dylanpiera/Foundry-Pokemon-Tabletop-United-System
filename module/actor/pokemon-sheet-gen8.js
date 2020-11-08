@@ -184,46 +184,98 @@ export class PTUGen8PokemonSheet extends ActorSheet {
 
 		const element = event.currentTarget;
 		const dataset = element.dataset;
+		const move = this.actor.items.find(x => x._id == dataset.id).data;
+		console.log(dataset.id, move.data)
 
-		if (dataset.roll || dataset.type == 'Status') {
-			let roll = new Roll('1d20+' + (parseInt(dataset.ac) || 0), this.actor.data.data);
-			let label = dataset.label ? `To-Hit for move: ${dataset.label} ` : '';
-			roll.roll().toMessage({
-				speaker: ChatMessage.getSpeaker({ actor: this.actor }),
-				flavor: label
-			});
+
+		/** Pure Functions */
+		let CalculateAcRoll = function(moveData, actorData) {
+			return new Roll('1d20-@ac+@acBonus', {
+				ac: (parseInt(moveData.ac) || 0),
+				acBonus: (parseInt(actorData.modifiers.acBonus) || 0)
+			})
+		}
+
+		let CalculateDmgRoll = function(moveData, actorData, isCrit) {
+			if(moveData.category === "Status") return;
+			
+			let bonus = 0;
+			let dbRoll;
+			if(moveData.damageBase.toString().match(/^[0-9]+$/) != null) {
+				dbRoll = game.ptu.DbData[moveData.stab ? parseInt(moveData.damageBase) + 2 : moveData.damageBase];  
+				bonus = Math.max(moveData.category === "Physical" ? actorData.stats.atk.total : actorData.stats.spatk.total, 0);
+			}
+			else {
+				dbRoll = game.ptu.DbData[moveData.damageBase];
+			}
+			if(!dbRoll) return;
+			
+			return new Roll(isCrit ? '@roll+@roll+@bonus' : '@roll+@bonus', {
+				roll: dbRoll,
+				bonus: bonus
+			})
+		}
+
+		let GetDiceResult = function(roll) {
 			let diceResult = -2;
 			try{
-			    diceResult = roll.terms[0].results[0].result;
-            }
-            catch(err){
-            	console.log("Old system detected, using deprecated rolling...")
-            	diceResult = roll.parts[0].results[0];
+				diceResult = roll.terms[0].results[0].result;
 			}
-			if (diceResult === 1) {
-				CONFIG.ChatMessage.entityClass.create({
-					content: `${dataset.label} critically missed!`,
-					type: CONST.CHAT_MESSAGE_TYPES.OOC,
-					speaker: ChatMessage.getSpeaker({ actor: this.actor }),
-					user: game.user._id
-				});
-				return;
+			catch(err){
+				console.log("Old system detected, using deprecated rolling...")
+				diceResult = roll.parts[0].results[0];
 			}
-			let isCrit = diceResult >= 20 - dataset.critrange;
-			if(dataset.roll == -1) return;
-
-			if (dataset.type == 'Physical' || dataset.type == 'Special') {
-				let rollData = dataset.roll.split('#');
-				let roll = new Roll(isCrit ? '@roll+@roll+@mod' : '@roll+@mod', {
-					roll: rollData[0],
-					mod: rollData[1] || 0
-				});
-				let label = dataset.label ? `${isCrit ? "Crit damage" : "Damage"} for move: ${dataset.label}` : '';
-				roll.roll().toMessage({
-					speaker: ChatMessage.getSpeaker({ actor: this.actor }),
-          			flavor: label
-				});
-			}
+			return diceResult;
 		}
+
+		let PerformAcRoll = function(roll, move, actor) {
+			roll.roll().toMessage({
+				speaker: ChatMessage.getSpeaker({ actor: actor }),
+				flavor: move.name ? `To-Hit for move: ${move.name} ` : ''
+			});
+
+			return GetDiceResult(roll);
+		}
+
+		/** Executing Code */
+
+		let roll = CalculateAcRoll(move.data, this.actor.data.data);
+		let diceResult = PerformAcRoll(roll, move, this.actor);
+	
+		if (diceResult === 1) {
+			CONFIG.ChatMessage.entityClass.create({
+				content: `${move.name} critically missed!`,
+				type: CONST.CHAT_MESSAGE_TYPES.OOC,
+				speaker: ChatMessage.getSpeaker({ actor: this.actor }),
+				user: game.user._id
+			});
+			return;
+		}
+		let isCrit = diceResult >= 20 - this.actor.data.data.modifiers.critRange;
+		
+		let damageRoll = CalculateDmgRoll(move.data, this.actor.data.data, isCrit);
+		if(!damageRoll) return;
+
+		this.sendRollMessage(damageRoll, {
+			speaker: ChatMessage.getSpeaker({ actor: this.actor }),
+			move: move.data
+		}).then(data => console.log(data));
+	
+	}
+
+	async sendRollMessage(rollData, messageData = {}) {
+		if(!rollData._rolled) rollData.evaluate();
+
+		messageData = mergeObject({
+			user: game.user._id,
+			sound: CONFIG.sounds.dice
+		}, messageData);
+
+		messageData.roll = rollData;
+		
+		console.log(messageData);
+		messageData.content = await renderTemplate("/systems/ptu/templates/chat/move-result.hbs", messageData)
+
+		return ChatMessage.create(messageData, {});
 	}
 }

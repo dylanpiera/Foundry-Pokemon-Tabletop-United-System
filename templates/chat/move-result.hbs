@@ -1,0 +1,54 @@
+{{#if move}}
+<div class="content flexrow pt-1" style="font-variant: normal;">
+    <div class="grid" style="grid-template-columns: repeat(2, auto);justify-items: center;grid-gap: 0px;grid-template-rows: auto;place-items: center;text-align: center;">
+        <span style="grid-column: span 2;padding: 5px;">{{move.name}}</span>
+
+        <span class="type-img" style="padding: 5px; border-top: 1px solid black; width: 100%;">
+            <img src="/systems/ptu/css/images/categories/{{move.category}}.png">
+        </span>
+        <span class="type-img" style="padding: 5px; border-top: 1px solid black; width: 100%;"><img src="/systems/ptu/css/images/types/{{move.type}}IC.webp"></span>
+
+        {{#if roll}}
+            <div class="dice-roll" style="grid-column: span 2;width: 100%;border-top: 1px solid black;padding: 5px;">
+                <div class="dice-result">
+                    <div class="dice-formula">{{roll._formula}}</div>
+                    <div class="dice-tooltip">
+                        {{#if roll.dice}}
+                        {{#each roll.dice as | dice |}}
+                        <section class="tooltip-part">
+                            <div class="dice">
+                                <header class="part-header flexrow">
+                                    <span class="part-formula">{{dice.number}}d{{dice.faces}}</span>
+
+                                    <span class="part-total">{{dice.total}}</span>
+                                </header>
+                                <ol class="dice-rolls">
+                                    {{#each dice.results as |result|}}
+                                    <li class="roll die d{{dice.faces}}">{{result.result}}</li>
+                                    {{/each}}
+                                </ol>
+                            </div>
+                        </section>
+                        {{/each}}
+                        {{/if}}
+                    </div>
+                    {{#if false}}
+                        <div class="dice-formula">
+                        {{#each roll.terms as | term |}}
+                            {{#if term.faces}}
+                                {{#each term.rolls as |result|}}
+                                    <span class="roll die d{{term.faces}}">{{result.result}}</span>
+                                {{/each}}
+                            {{else}}
+                                {{term}}
+                            {{/if}}
+                        {{/each}}
+                        </div>
+                    {{/if}}
+                    <span class="dice-total" style="display: inline-flex;justify-content: space-evenly; align-items: center;width:100%;"><h4 class="num-total">{{roll._total}}</h4><h5>Damage</h5></span>
+                </div>
+            </div>
+        {{/if}}
+    </div>
+</div>
+{{/if}}
