@@ -251,10 +251,31 @@ export class PTUGen8PokemonSheet extends ActorSheet {
 			d.render(true)
 		}
 
+		/** Check for Shortcut */
+		// Instant full roll
+		if(event.shiftKey) {
+			PerformFullAttack();
+			return;
+		}
+		if(event.ctrlKey) {
+			sendMoveMessage({
+				speaker: ChatMessage.getSpeaker({
+					actor: this.actor
+				}),
+				move: move.data,
+				templateType: MoveMessageTypes.DETAILS
+			}).then(data => console.log(data))
+			return;
+		}
+		if(event.altKey) {
+			RollDamage();
+			return;
+		}
+
 		/** Show Dialog */
 		let d = new Dialog({
 			title: `${this.actor.data.name}'s ${move.name}`,
-			content: `<div class="pb-1"><p>Would you like to use move ${move.name} or output the move details?</p></div>`,
+			content: `<div class="pb-1"><p>Would you like to use move ${move.name} or output the move details?</p></div><div><small class="text-muted">Did you know you can skip this dialog box by holding the Shift, Ctrl or Alt key?</small></div>`,
 			buttons: {
 				roll: {
 					icon: '<i class="fas fa-dice"></i>',

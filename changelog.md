@@ -1,3 +1,6 @@
+## 0.0.33 - Shortcuts!
+* Added shortcuts to the move dialog pop-up. By holding down Shift, Ctrl or Alt while clicking on the roll button it will select the different options of the dialog box.
+
 ## 0.0.32 - Move System Overhaul
 * 'To-Hit' and 'Damage' messages now have a custom layout.
 * Added a new dialog when using a Move
