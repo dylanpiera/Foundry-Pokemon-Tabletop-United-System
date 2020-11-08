@@ -131,6 +131,10 @@ Hooks.once('init', function() {
     return roll == 1 ? "min" : roll == faces ? "max" : "";
   });
 
+  Handlebars.registerHelper("hideAcOrDb", function(text) {
+    return text == "" || text == "--";
+  });
+
   Handlebars.registerHelper("loadTypeImages", function (types) {
     if(!types) return;
     if(types[1] != "null") return `<img class="mr-1" src="/systems/ptu/css/images/types/${types[0]}IC.webp"><span>/</span><img class="ml-1" src="/systems/ptu/css/images/types/${types[1]}IC.webp">`;

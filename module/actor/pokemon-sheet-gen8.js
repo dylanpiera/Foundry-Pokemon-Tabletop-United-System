@@ -204,7 +204,7 @@ export class PTUGen8PokemonSheet extends ActorSheet {
 				damageRoll = CalculateDmgRoll(move.data, this.actor.data.data, crit)
 				if(damageRoll) damageRoll.roll();
 			}
-			sendRollMessage(acRoll, {
+			sendMoveRollMessage(acRoll, {
 				speaker: ChatMessage.getSpeaker({
 					actor: this.actor
 				}),
@@ -219,7 +219,7 @@ export class PTUGen8PokemonSheet extends ActorSheet {
 			let PerformDamage = (crit) => {
 				let damageRoll = CalculateDmgRoll(move.data, this.actor.data.data, crit).roll()
 
-				sendRollMessage(damageRoll, {
+				sendMoveRollMessage(damageRoll, {
 					speaker: ChatMessage.getSpeaker({
 						actor: this.actor
 					}),
@@ -264,7 +264,13 @@ export class PTUGen8PokemonSheet extends ActorSheet {
 				info: {
 					icon: '<i class="fas fa-info"></i>',
 					label: "Show Details",
-					callback: () => console.log("b")
+					callback: () => sendMoveMessage({
+						speaker: ChatMessage.getSpeaker({
+							actor: this.actor
+						}),
+						move: move.data,
+						templateType: MoveMessageTypes.DETAILS
+					}).then(data => console.log(data))
 				}
 			},
 			default: "roll"
@@ -325,7 +331,7 @@ function GetDiceResult(roll) {
 }
 
 function PerformAcRoll(roll, move, actor) {
-	sendRollMessage(roll, {
+	sendMoveRollMessage(roll, {
 		speaker: ChatMessage.getSpeaker({
 			actor: actor
 		}),
@@ -336,7 +342,7 @@ function PerformAcRoll(roll, move, actor) {
 	return GetDiceResult(roll);
 }
 
-async function sendRollMessage(rollData, messageData = {}) {
+async function sendMoveRollMessage(rollData, messageData = {}) {
 	if (!rollData._rolled) rollData.evaluate();
 
 	messageData = mergeObject({
@@ -347,6 +353,23 @@ async function sendRollMessage(rollData, messageData = {}) {
 	}, messageData);
 
 	messageData.roll = rollData;
+
+	if(!messageData.move) {
+		console.error("Can't display move chat message without move data.")
+		return;
+	}
+	
+	messageData.content = await renderTemplate(`/systems/ptu/templates/chat/moves/move-${messageData.templateType}.hbs`, messageData)
+
+	return ChatMessage.create(messageData, {});
+}
+
+async function sendMoveMessage(messageData = {}) {
+	messageData = mergeObject({
+		user: game.user._id,
+		templateType: MoveMessageTypes.DAMAGE,
+		verboseChatInfo: game.settings.get("ptu", "verboseChatInfo") ?? false
+	}, messageData);
 
 	if(!messageData.move) {
 		console.error("Can't display move chat message without move data.")
