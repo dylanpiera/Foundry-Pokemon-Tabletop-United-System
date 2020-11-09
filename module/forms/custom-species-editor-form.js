@@ -38,7 +38,7 @@ export class PTUCustomSpeciesEditor extends FormApplication {
       // Update Inventory Item
       html.find('#species-list .item').click((ev) => {
         let mon = game.ptu.customSpeciesData.find(x => x.number == ev.currentTarget.dataset.itemNumber);
-        console.log("Rendering edit sheet for mon: " + mon._id);
+        new game.ptu.PTUCustomMonEditor(mon, {"submitOnChange": false, "submitOnClose": false}).render(true);
       });
     }
   

@@ -14,7 +14,8 @@ export class PTUCustomMonEditor extends FormApplication {
         width: 600,
         height: 650,
         title: this.object ? `Editing ${this.object._id}` : "Creating Custom Species",
-        tabs: [{ navSelector: ".sheet-tabs", contentSelector: ".sheet-body", initial: "stats" }]
+        tabs: [{ navSelector: ".sheet-tabs", contentSelector: ".sheet-body", initial: "stats" }],
+        resizable: true
       });
     }
   
