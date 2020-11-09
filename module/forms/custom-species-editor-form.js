@@ -46,7 +46,25 @@ export class PTUCustomSpeciesEditor extends FormApplication {
     
     async _onMonCreate(event) {
       event.preventDefault();
-      console.log("render create new mon")
+      
+      Dialog.confirm({
+        title: `Import Existing Mon Data?`,
+        content: `<div class="pb-1"><p>Would you like to use an existing (custom) Pokémon as Template?</div>`,
+        yes: () => {
+          Dialog.prompt({
+            title: "Which Species?", 
+            content: '<input type="text" name="species" placeholder="bulbasaur"/>', 
+            callback: (html) => {
+              let species = html.find('input')[0].value;
+              let mon = game.ptu.GetSpeciesData(species);
+              new game.ptu.PTUCustomMonEditor(mon, {"submitOnChange": true, "submitOnClose": true}).render(true);
+            }
+          })
+        },
+        no: () => new game.ptu.PTUCustomMonEditor(null,{"submitOnChange": true, "submitOnClose": true}).render(true),
+        defaultYes: false
+      });
+
     }
 
     /** @override */

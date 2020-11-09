@@ -17,6 +17,7 @@ import { DbData } from "./data/db-data.js"
 import { TypeEffectiveness } from "./data/effectiveness-data.js"
 import { PTUPokemonCharactermancer } from './forms/charactermancer-pokemon-form.js'
 import { PTUCustomSpeciesEditor } from './forms/custom-species-editor-form.js'
+import { PTUCustomMonEditor } from './forms/custom-mon-editor-form.js'
 import { RollWithDb } from './utils/roll-calculator.js'
 
 Hooks.once('init', async function() {
@@ -26,6 +27,7 @@ Hooks.once('init', async function() {
     PTUItem,
     PTUPokemonCharactermancer,
     PTUCustomSpeciesEditor,
+    PTUCustomMonEditor,
     levelProgression,
     pokemonData,
     customSpeciesData: [],
