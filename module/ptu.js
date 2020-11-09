@@ -15,17 +15,20 @@ import { natureData } from "./data/nature-data.js";
 import { insurgenceData } from "./data/insurgence-species-data.js"
 import { DbData } from "./data/db-data.js"
 import { TypeEffectiveness } from "./data/effectiveness-data.js"
-import { PTUPokemonCharactermancer } from './actor/charactermancer-pokemon-form.js'
+import { PTUPokemonCharactermancer } from './forms/charactermancer-pokemon-form.js'
+import { PTUCustomSpeciesEditor } from './forms/custom-species-editor-form.js'
 import { RollWithDb } from './utils/roll-calculator.js'
 
-Hooks.once('init', function() {
+Hooks.once('init', async function() {
 
   game.ptu = {
     PTUActor,
     PTUItem,
     PTUPokemonCharactermancer,
+    PTUCustomSpeciesEditor,
     levelProgression,
     pokemonData,
+    customSpeciesData: [],
     natureData,
     DbData,
     TypeEffectiveness,
@@ -160,6 +163,11 @@ Hooks.once('init', function() {
   if(game.settings.get("ptu", "insurgenceData")) {
     Array.prototype.push.apply(game.ptu["pokemonData"], insurgenceData);
   }
+
+  if(game.settings.get("ptu", "customSpecies") != "") {
+    await customSpeciesInit(game.settings.get("ptu", "customSpecies"));
+  }
+
 });
 
 function _calcMoveDb(move, bool = false) {
@@ -249,12 +257,31 @@ function _loadSystemSettings() {
 /*  Custom Compendium Initialization            */
 /* -------------------------------------------- */
 
-async function customSpeciesCompendiumInit(path) {
+async function customSpeciesInit(path) {
   const result = await fetch(`/worlds/${game.world.name}/${path}`)
   const content = await result.json();
 
-  Array.prototype.push.apply(game.ptu["pokemonData"], content);
+  Array.prototype.push.apply(game.ptu["customSpeciesData"], content);
 }
+
+/* -------------------------------------------- */
+/*  Custom Species Editor Initialization        */
+/* -------------------------------------------- */
+
+Hooks.on("renderSettingsConfig", function() {
+  let element = $('#client-settings .tab[data-tab="system"] .module-header')[0];
+  element.outerHTML = `
+  <div class="d-flex flexrow">
+    ${element.outerHTML}
+    <div class="item-controls flexcol" style="align-self: center;flex: 0 0 30%;">
+      <a class="item-control" id="open-custom-species-editor"><i class="fas fa-edit" style="margin-right: 3px;"></i><span class="readable">Edit Custom Species</span></a>
+    </div>
+  </div>`
+
+  $('#open-custom-species-editor').click(function() { 
+    new game.ptu.PTUCustomSpeciesEditor().render(true);
+  })
+});
 
 /* -------------------------------------------- */
 /*  Items Initialization                        */
@@ -263,10 +290,6 @@ async function customSpeciesCompendiumInit(path) {
 Hooks.once("ready", async function() {
   // Globally enable items from item compendium
   game.ptu["items"] = await game.packs.get("ptu.items").getContent();
-
-  if(game.settings.get("ptu", "customSpecies") != "") {
-    await customSpeciesCompendiumInit(game.settings.get("ptu", "customSpecies"));
-  }
 
   // Wait to register hotbar drop hook on ready so that modules could register earlier if they want to
   Hooks.on("hotbarDrop", (bar, data, slot) => createPTUMacro(data, slot));

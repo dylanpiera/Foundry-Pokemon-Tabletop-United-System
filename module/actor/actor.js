@@ -163,7 +163,10 @@ export class PTUActor extends Actor {
 export function GetSpeciesData(species) {
   if(species != "") {
     let preJson = game.ptu.pokemonData.find(x => x._id.toLowerCase() === species.toLowerCase());
-    if (!preJson) return null;
+    if (!preJson) {
+      preJson = game.ptu.customSpeciesData.find(x => x._id.toLowerCase() === species.toLowerCase());
+      if(!preJson) return null;
+    };
     return JSON.parse(JSON.stringify(preJson));
   }
   else return null;

@@ -1,0 +1,64 @@
+<form
+  class="{{cssClass}} container-fluid"
+  autocomplete="off"
+  style="text-align: center;"
+>
+  <div class="row justify-content-center h-100">
+    {{#if species}}
+      <div class="col-sm-4">
+        <div class="swsh-box h-100 w-100">
+          <div class="swsh-header w-100">
+            <h4>Menu</h4>
+          </div>
+          <div class="swsh-body w-100">
+            <ol class="inventory-list w-100" style="padding: 0;">
+              <li class="item flexrow">
+                <button id="new-mon">New Mon</button>
+              </li>
+            </ol>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-8">
+        <div class="swsh-box h-100 w-100">
+          <div class="swsh-header w-100">
+            <div class="inventory-header flexrow w-100" style="padding: 0 0 0 0.5em">
+                <div class="item-name flexcol align-items-center align-self-center" style="flex: 0 0 45%;">
+                  <h4>Species</h4>
+                </div>
+                <div class="item-name flexcol align-items-center align-self-center" style="flex: 0 0 20%;">
+                  <h4>Id</h4>
+                </div>
+                <div class="item-name flexcol align-items-center align-self-center" style="flex: 0 0 35%;">
+                  <h4>Typing</h4>
+                </div>
+              </div>
+          </div>
+          <div class="swsh-body  w-100">
+            <ol class="inventory-list w-100" id="species-list" style="padding: 0 0 0 0.5em;">
+              {{#each species as |mon|}}
+                <li class="item flexrow" data-item-number="{{mon.number}}">
+                  <div class="item-name flexcol align-items-center align-self-center" style="flex: 0 0 45%; word-break: break-word;">
+                    <h5>
+                      {{mon._id}}
+                    </h5>
+                  </div>
+                  <div class="item-name flexcol align-items-center align-self-center" style="flex: 0 0 20%;">
+                    <span class="readable pokemon p8 tight">{{mon.number}}</span>
+                  </div>
+                  <div class="item-name flexcol align-items-center align-self-center" style="flex: 0 0 35%;">
+                    <span class="readable pokemon p8 tight type-img">{{{loadTypeImages mon.Type}}}</span>
+                  </div>
+                </li>
+              {{/each}}
+            </ol>
+          </div>
+        </div>
+      </div>
+      </div>
+    {{else}}
+      <h3>Please provide a custom species json file in the system settings</h3>
+      <input type="submit" value="Close">
+    {{/if}}
+  </div>
+</form>
