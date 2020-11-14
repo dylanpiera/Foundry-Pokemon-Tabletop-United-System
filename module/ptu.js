@@ -92,8 +92,7 @@ Hooks.once('init', function() {
     return "";
   });
   Handlebars.registerHelper("getGameSetting", function(key) { return game.settings.get("ptu",key)});
-  Handlebars.registerHelper("calcDb", function(actorData, move) {
-    move = PrepareMoveData(actorData, move);
+  Handlebars.registerHelper("calcDb", function(move) {
     return (move.damageBase.toString().match(/^[0-9]+$/) != null) ? move.stab ? parseInt(move.damageBase) + 2 : move.damageBase : move.damageBase;
   });
   Handlebars.registerHelper("calcDbCalc", _calcMoveDb);
@@ -176,18 +175,18 @@ function _calcMoveDb(move, bool = false) {
   return -1;
 }
 
-export function PrepareMoveData(actorData, moveData) {
-  if(!actorData) return moveData;
-  moveData.owner = { 
+export function PrepareMoveData(actorData, move) {
+  if(!actorData) return move;
+  move.owner = { 
     type: actorData.typing,
     stats: actorData.stats,
     acBonus: actorData.modifiers.acBonus,
     critRange: actorData.modifiers.critRange
   };
 
-  moveData.stab = moveData.owner?.type && (moveData.owner.type[0] == moveData.type || moveData.owner.type[1] == moveData.type);
-  moveData.acBonus = moveData.owner.acBonus ? moveData.owner.acBonus : 0; 
-  return moveData;
+  move.stab = move.owner?.type && (move.owner.type[0] == move.type || move.owner.type[1] == move.type);
+  move.acBonus = move.owner.acBonus ? move.owner.acBonus : 0; 
+  return move;
 }
 
 /* -------------------------------------------- */

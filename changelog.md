@@ -1,7 +1,3 @@
-## 0.0.34 - Hotfix: Stab Modifier
-* Fixed stab modifier not applying properly.
-* Update Foundry Version to 0.7.7
-
 ## 0.0.33 - Shortcuts!
 * Added shortcuts to the move dialog pop-up. By holding down Shift, Ctrl or Alt while clicking on the roll button it will select the different options of the dialog box.
 

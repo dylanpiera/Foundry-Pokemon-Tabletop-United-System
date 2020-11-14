@@ -1,5 +1,3 @@
-import {PrepareMoveData} from '../ptu.js'
-
 /**
  * Extend the basic ActorSheet with some very simple modifications
  * @extends {ActorSheet}
@@ -193,7 +191,6 @@ export class PTUGen8PokemonSheet extends ActorSheet {
 		const element = event.currentTarget;
 		const dataset = element.dataset;
 		const move = this.actor.items.find(x => x._id == dataset.id).data;
-		if(move) move.data = PrepareMoveData(this.actor.data.data, move.data);
 
 		/** Option Callbacks */
 		let PerformFullAttack = () => {
@@ -205,7 +202,6 @@ export class PTUGen8PokemonSheet extends ActorSheet {
 			let damageRoll;
 			if(crit != CritOptions.CRIT_MISS) {
 				damageRoll = CalculateDmgRoll(move.data, this.actor.data.data, crit)
-				console.log(move.data, damageRoll)
 				if(damageRoll) damageRoll.roll();
 			}
 			sendMoveRollMessage(acRoll, {
