@@ -1,3 +1,5 @@
+import { PrepareMoveData } from '../ptu.js'
+
 /**
  * Extend the basic ActorSheet with some very simple modifications
  * @extends {ActorSheet}
@@ -81,6 +83,10 @@ export class PTUGen8PokemonSheet extends ActorSheet {
 		actorData.moves = moves;
 		actorData.capabilities = capabilities;
 		actorData.edges = edges;
+
+		for(let move of actorData.moves) {
+			move.data = PrepareMoveData(actorData.data, move.data)
+		}
 	}
 
 	/* -------------------------------------------- */
@@ -191,6 +197,7 @@ export class PTUGen8PokemonSheet extends ActorSheet {
 		const element = event.currentTarget;
 		const dataset = element.dataset;
 		const move = this.actor.items.find(x => x._id == dataset.id).data;
+		move.data = PrepareMoveData(this.actor.data.data, move.data);
 
 		/** Option Callbacks */
 		let PerformFullAttack = () => {
@@ -212,7 +219,7 @@ export class PTUGen8PokemonSheet extends ActorSheet {
 				damageRoll: damageRoll,
 				templateType: MoveMessageTypes.FULL_ATTACK,
 				crit: crit
-			}).then(data => console.log(data));
+			});
 		}
 
 		let RollDamage = () => {
@@ -226,7 +233,7 @@ export class PTUGen8PokemonSheet extends ActorSheet {
 					move: move.data,
 					templateType: MoveMessageTypes.DAMAGE,
 					crit: crit
-				}).then(data => console.log(data));
+				});
 			}
 
 			let d = new Dialog({

@@ -186,13 +186,14 @@ function _calcMoveDb(move, bool = false) {
 }
 
 export function PrepareMoveData(actorData, move) {
-  if(!actorData) return move;
+  if(!actorData || move.prepared) return move;
   move.owner = { 
     type: actorData.typing,
     stats: actorData.stats,
     acBonus: actorData.modifiers.acBonus,
     critRange: actorData.modifiers.critRange
   };
+  move.prepared = true;
 
   move.stab = move.owner?.type && (move.owner.type[0] == move.type || move.owner.type[1] == move.type);
   move.acBonus = move.owner.acBonus ? move.owner.acBonus : 0; 
