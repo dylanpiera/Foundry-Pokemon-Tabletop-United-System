@@ -67,9 +67,9 @@ export class PTUCustomMonEditor extends FormApplication {
           "High": formData["Abilities.High"]?.split(',')?.map(s => s.trim())
         },
         "Evolution": [[1, formData._id.toUpperCase(), "Null", "Null"]],
-        "Height": parseInt(formData.Height),
+        "Height": parseFloat(formData.Height),
         "Size Class": formData["Size Class"].trim(), 
-        "Weight": parseInt(formData.Weight),
+        "Weight": parseFloat(formData.Weight),
         "Breeding Information": {
           "Gender Ratio": parseFloat(formData["Breeding Information.Gender Ratio"]),
           "Egg Group": formData["Breeding Information.Egg Group"]?.split(',')?.map(s => s.trim())

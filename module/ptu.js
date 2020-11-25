@@ -19,6 +19,8 @@ import { PTUPokemonCharactermancer } from './forms/charactermancer-pokemon-form.
 import { PTUCustomSpeciesEditor } from './forms/custom-species-editor-form.js'
 import { PTUCustomMonEditor } from './forms/custom-mon-editor-form.js'
 import { RollWithDb } from './utils/roll-calculator.js'
+import { InitCustomSpecies} from './custom-species.js'
+import CustomSpeciesFolder from './entities/custom-species-folder.js';
 
 Hooks.once('init', async function() {
 
@@ -254,10 +256,19 @@ function _loadSystemSettings() {
     default: false
   });
 
+  game.settings.register("ptu", "hideDebugInfo", {
+    name: "Show Debug Info",
+    hint: "Only for debug purposes. Logs extra debug messages & shows hidden folders/items",
+    scope: "world",
+    config: true,
+    type: Boolean,
+    default: false,
+    onChange: (value) => CustomSpeciesFolder.updateFolderDisplay(value)
+  });
 } 
 
 /* -------------------------------------------- */
-/*  Custom Compendium Initialization            */
+/*  Custom Species Initialization               */
 /* -------------------------------------------- */
 
 async function customSpeciesInit(path) {
@@ -270,6 +281,10 @@ async function customSpeciesInit(path) {
 /* -------------------------------------------- */
 /*  Custom Species Editor Initialization        */
 /* -------------------------------------------- */
+
+Hooks.on('renderJournalDirectory', function() {
+  CustomSpeciesFolder.updateFolderDisplay(game.settings.get("ptu", "hideDebugInfo"));
+})
 
 Hooks.on("renderSettingsConfig", function() {
   let element = $('#client-settings .tab[data-tab="system"] .module-header')[0];
@@ -296,6 +311,8 @@ Hooks.once("ready", async function() {
 
   // Wait to register hotbar drop hook on ready so that modules could register earlier if they want to
   Hooks.on("hotbarDrop", (bar, data, slot) => createPTUMacro(data, slot));
+
+  InitCustomSpecies();
 });
 
 /* -------------------------------------------- */
