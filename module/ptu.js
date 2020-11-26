@@ -272,10 +272,11 @@ function _loadSystemSettings() {
 /* -------------------------------------------- */
 
 async function customSpeciesInit(path) {
-  const result = await fetch(`/worlds/${game.world.name}/${path}`)
-  const content = await result.json();
+  console.warn("Deprecated, will be removed on update.")
+  // const result = await fetch(`/worlds/${game.world.name}/${path}`)
+  // const content = await result.json();
 
-  Array.prototype.push.apply(game.ptu["customSpeciesData"], content);
+  // Array.prototype.push.apply(game.ptu["customSpeciesData"], content);
 }
 
 Hooks.on("updatedCustomSpecies", UpdateCustomSpecies);
@@ -308,13 +309,14 @@ Hooks.on("renderSettingsConfig", function() {
 /* -------------------------------------------- */
 
 Hooks.once("ready", async function() {
+  await InitCustomSpecies();
+
   // Globally enable items from item compendium
   game.ptu["items"] = await game.packs.get("ptu.items").getContent();
 
   // Wait to register hotbar drop hook on ready so that modules could register earlier if they want to
   Hooks.on("hotbarDrop", (bar, data, slot) => createPTUMacro(data, slot));
 
-  InitCustomSpecies();
   game.socket.on("system.ptu", (_) => Hooks.callAll("updatedCustomSpecies"));
 });
 
