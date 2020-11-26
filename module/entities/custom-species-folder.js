@@ -50,4 +50,36 @@ export default class CustomSpeciesFolder {
       $(`[data-folder-id='${CustomSpeciesFolder._dirId}'`).show()
     }
   }
+
+  static findEntry(species) {
+    if(species._journalId === undefined) { 
+      if(parseInt(species)) {
+        let result = game.journal.entities.find(entry => entry.data.name.toLowerCase().includes(species))
+        if(result === undefined) result = game.journal.entities.find(entry => entry.data.content.includes(`"ptuNumber":${species}`));
+        return result;
+      }
+      else {
+        let result = game.journal.entities.find(entry => entry.data.name.toLowerCase().includes(species.toLowerCase()))
+        if(result === undefined) result = game.journal.entities.find(entry => entry.data.content.includes(`"_id":"${species}"`));
+        return result;
+      }
+    }
+    return game.journal.get(species._journalId);
+  }
+
+  static getSpeciesData(species) {
+      let entry = this.findEntry(species);
+      if(entry === undefined) return entry;
+    
+      let json = $(`<p>${entry.data.content}</p>`).text()
+      if(!json) return undefined;
+
+      let speciesData = JSON.parse(json);
+      if(!speciesData._journalId) {
+        speciesData._journalId = entry.data._id;
+        entry.update({content: JSON.stringify(speciesData)})
+      }
+
+      return speciesData;
+  }
 }

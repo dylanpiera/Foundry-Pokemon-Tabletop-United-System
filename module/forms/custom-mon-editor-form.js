@@ -39,15 +39,13 @@ export class PTUCustomMonEditor extends FormApplication {
     
     /** @override */
     async _updateObject(event, formData) {
-        
-        mergeObject(this.object, this.formatFormData(formData));
+      mergeObject(this.object, this.formatFormData(formData));
+      console.log(this.object);
 
-        console.log(this.object);
-        
+      this.object.ptuNumber 
     }
 
     formatFormData(formData) {
-      console.log(formData)
       let formattedData = {
         "_id": formData._id.toUpperCase(),
         "number": this.checkMonId(formData.number[1]),
