@@ -53,6 +53,7 @@ export default class CustomSpeciesFolder {
 
   static findEntry(species) {
     if(species._journalId === undefined) { 
+      if(typeof species === 'object') return undefined;
       if(parseInt(species)) {
         let result = game.journal.entities.find(entry => entry.data.name.toLowerCase().includes(species))
         if(result === undefined) result = game.journal.entities.find(entry => entry.data.content.includes(`"ptuNumber":${species}`));

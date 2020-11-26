@@ -57,11 +57,12 @@ export class PTUCustomSpeciesEditor extends FormApplication {
             callback: (html) => {
               let species = html.find('input')[0].value;
               let mon = game.ptu.GetSpeciesData(species);
-              new game.ptu.PTUCustomMonEditor(mon, {"submitOnChange": true, "submitOnClose": true}).render(true);
+              mon.number = -1; mon._journalId = undefined;
+              new game.ptu.PTUCustomMonEditor(mon, {"submitOnChange": false, "submitOnClose": true}).render(true);
             }
           })
         },
-        no: () => new game.ptu.PTUCustomMonEditor(null,{"submitOnChange": true, "submitOnClose": true}).render(true),
+        no: () => new game.ptu.PTUCustomMonEditor(null,{"submitOnChange": false, "submitOnClose": true}).render(true),
         defaultYes: false
       });
 

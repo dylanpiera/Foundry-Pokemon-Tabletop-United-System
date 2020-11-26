@@ -40,8 +40,15 @@ export class PTUCustomMonEditor extends FormApplication {
     
     /** @override */
     async _updateObject(event, formData) {
+      for(let x of Object.entries(formData)){
+        if(!x[1] && x[1] !== 0) {
+          ui.notifications.notify("Species Data Incomplete, abandonning edits.", "error")
+          return;
+        }
+      }
+
       mergeObject(this.object, this.formatFormData(formData));
-      console.log(this.object);
+      console.log(this.object, formData);
 
       let journalEntry = CustomSpeciesFolder.findEntry(this.object);
       if(journalEntry === undefined) journalEntry = CustomSpeciesFolder.findEntry(this.object.ptuNumber);
