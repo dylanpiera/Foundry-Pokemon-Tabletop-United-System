@@ -8,6 +8,7 @@
   "templateVersion": 2,
   "author": "Dylan Piera, Tymo Wessel, Jeffrey Hollander, Efren A. Mariño & Cody Swendrowski",
   "esmodules": ["module/ptu.js"],
+  "socket": true,
   "styles": [
     "css/ptu.css",
     "css/main.css",

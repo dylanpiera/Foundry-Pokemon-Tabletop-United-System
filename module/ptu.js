@@ -315,6 +315,7 @@ Hooks.once("ready", async function() {
   Hooks.on("hotbarDrop", (bar, data, slot) => createPTUMacro(data, slot));
 
   InitCustomSpecies();
+  game.socket.on("system.ptu", (_) => Hooks.callAll("updatedCustomSpecies"));
 });
 
 /* -------------------------------------------- */
