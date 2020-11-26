@@ -1,4 +1,5 @@
 import {BlankPTUSpecies} from "../data/species-template.js"
+import CustomSpeciesFolder from "../entities/custom-species-folder.js"
 
 /**
  * Extend the basic ActorSheet with some very simple modifications
@@ -42,7 +43,17 @@ export class PTUCustomMonEditor extends FormApplication {
       mergeObject(this.object, this.formatFormData(formData));
       console.log(this.object);
 
-      this.object.ptuNumber 
+      let journalEntry = CustomSpeciesFolder.findEntry(this.object);
+      if(journalEntry === undefined) journalEntry = CustomSpeciesFolder.findEntry(this.object.ptuNumber);
+      if(journalEntry === undefined) {
+        console.log("No entry found for " + this.object._id + " creating new entry");
+        JournalEntry.create({name: this.object.ptuNumber, content: JSON.stringify(this.object), folder: CustomSpeciesFolder._dirId})
+      } else {
+        journalEntry.update({content: JSON.stringify(this.object)});
+      }
+      console.log("Updating Species")
+      Hooks.callAll("updatedCustomSpecies");
+      game.socket.emit("system.ptu", "RefreshCustomSpecies")
     }
 
     formatFormData(formData) {
@@ -52,12 +63,12 @@ export class PTUCustomMonEditor extends FormApplication {
         "ptuNumber": parseInt(this.checkMonId(formData.number[1])),
         "Type": formData.type2 ? [formData.type1, formData.type2] : [formData.type1],
         "Base Stats": {
-          "HP": formData["Base Stats.HP"],
-          "Attack": formData["Base Stats.Attack"],
-          "Defense": formData["Base Stats.Defense"],
-          "Special Attack": formData["Base Stats.Special Attack"],
-          "Special Defense": formData["Base Stats.Special Defense"],
-          "Speed": formData["Base Stats.Speed"],
+          "HP": parseInt(formData["Base Stats.HP"]),
+          "Attack": parseInt(formData["Base Stats.Attack"]),
+          "Defense": parseInt(formData["Base Stats.Defense"]),
+          "Special Attack": parseInt(formData["Base Stats.Special Attack"]),
+          "Special Defense": parseInt(formData["Base Stats.Special Defense"]),
+          "Speed": parseInt(formData["Base Stats.Speed"]),
         },
         "Abilities": {
           "Basic": formData["Abilities.Basic"]?.split(',')?.map(s => s.trim()),

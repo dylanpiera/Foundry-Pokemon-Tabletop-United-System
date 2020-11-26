@@ -317,7 +317,11 @@ Hooks.once("ready", async function() {
   // Wait to register hotbar drop hook on ready so that modules could register earlier if they want to
   Hooks.on("hotbarDrop", (bar, data, slot) => createPTUMacro(data, slot));
 
-  game.socket.on("system.ptu", (_) => Hooks.callAll("updatedCustomSpecies"));
+  game.socket.on("system.ptu", (data) => {
+    if(data == null) return; 
+    console.log("Triggered Socket!", data); 
+    if(data == "RefreshCustomSpecies" || (data == "ReloadGMSpecies" && game.user.isGM)) Hooks.callAll("updatedCustomSpecies"); 
+  });
 });
 
 /* -------------------------------------------- */
