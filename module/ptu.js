@@ -19,7 +19,7 @@ import { PTUPokemonCharactermancer } from './forms/charactermancer-pokemon-form.
 import { PTUCustomSpeciesEditor } from './forms/custom-species-editor-form.js'
 import { PTUCustomMonEditor } from './forms/custom-mon-editor-form.js'
 import { RollWithDb } from './utils/roll-calculator.js'
-import { InitCustomSpecies} from './custom-species.js'
+import { InitCustomSpecies, UpdateCustomSpecies} from './custom-species.js'
 import CustomSpeciesFolder from './entities/custom-species-folder.js';
 
 Hooks.once('init', async function() {
@@ -277,6 +277,8 @@ async function customSpeciesInit(path) {
 
   Array.prototype.push.apply(game.ptu["customSpeciesData"], content);
 }
+
+Hooks.on("updatedCustomSpecies", UpdateCustomSpecies);
 
 /* -------------------------------------------- */
 /*  Custom Species Editor Initialization        */
