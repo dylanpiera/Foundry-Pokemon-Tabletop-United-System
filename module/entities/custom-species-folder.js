@@ -83,4 +83,15 @@ export default class CustomSpeciesFolder {
 
       return speciesData;
   }
+
+  static getAvailableId() {
+    let currentList = game.folders.get(this._dirId).entities.map(x => parseInt(x.name)).sort((a,b) => b-a);
+    if(currentList) {
+      let highest = currentList[0];
+
+      if(highest >= 2000)
+        return highest+1;
+    }
+    return 2000;
+  }
 }

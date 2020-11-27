@@ -2,7 +2,7 @@
  * Extend the basic FormApplication with some very simple modifications
  * @extends {FormApplication}
  */
-export class PTUCustomSpeciesEditor extends FormApplication {
+export class PTUCustomSpeciesEditor extends Application {
 
     /** @override */
     static get defaultOptions() {
@@ -23,7 +23,7 @@ export class PTUCustomSpeciesEditor extends FormApplication {
       const data = super.getData();
       data.dtypes = ["String", "Number", "Boolean"];
   
-      data.species = game.ptu.customSpeciesData;
+      data.species = game.ptu.customSpeciesData.sort((a,b) => a.ptuNumber - b.ptuNumber);
 
       return data;
     }
@@ -38,7 +38,7 @@ export class PTUCustomSpeciesEditor extends FormApplication {
       // Update Inventory Item
       html.find('#species-list .item').click((ev) => {
         let mon = game.ptu.customSpeciesData.find(x => x.number == ev.currentTarget.dataset.itemNumber);
-        new game.ptu.PTUCustomMonEditor(mon, {"submitOnChange": false, "submitOnClose": false}).render(true);
+        new game.ptu.PTUCustomMonEditor(mon, {"submitOnChange": false, "submitOnClose": false, baseApplication: this}).render(true);
       });
     }
   
@@ -58,18 +58,13 @@ export class PTUCustomSpeciesEditor extends FormApplication {
               let species = html.find('input')[0].value;
               let mon = game.ptu.GetSpeciesData(species);
               mon.number = -1; mon._journalId = undefined;
-              new game.ptu.PTUCustomMonEditor(mon, {"submitOnChange": false, "submitOnClose": true}).render(true);
+              new game.ptu.PTUCustomMonEditor(mon, {"submitOnChange": false, "submitOnClose": false, baseApplication: this}).render(true);
             }
           })
         },
-        no: () => new game.ptu.PTUCustomMonEditor(null,{"submitOnChange": false, "submitOnClose": true}).render(true),
+        no: () => new game.ptu.PTUCustomMonEditor(null,{"submitOnChange": false, "submitOnClose": true, baseApplication: this}).render(true),
         defaultYes: false
       });
 
-    }
-
-    /** @override */
-    async _updateObject(event, formData) {
-        console.log("Update Custom Species Dex")
     }
 }

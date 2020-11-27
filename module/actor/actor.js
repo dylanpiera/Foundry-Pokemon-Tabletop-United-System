@@ -164,14 +164,25 @@ export class PTUActor extends Actor {
 
 export function GetSpeciesData(species) {
   if(species != "") {
-    let preJson = game.ptu.pokemonData.find(x => x._id.toLowerCase() === species.toLowerCase());
+    let preJson;
     let extra = {isCustomSpecies: false};
-    if (!preJson) {
-      preJson = game.ptu.customSpeciesData.find(x => x._id.toLowerCase() === species.toLowerCase());
-      if(!preJson) return null;
-      extra.isCustomSpecies = true;
-    };
-    return mergeObject(extra, JSON.parse(JSON.stringify(preJson)));
+    if(parseInt(species)) {
+      preJson = game.ptu.pokemonData.find(x => x.number == species);
+      if (!preJson) {
+        preJson = game.ptu.customSpeciesData.find(x => x.number == species);
+        if(!preJson) return null;
+        extra.isCustomSpecies = true;
+      };
+    }
+    else {
+      preJson = game.ptu.pokemonData.find(x => x._id.toLowerCase() === species.toLowerCase());
+      if (!preJson) {
+        preJson = game.ptu.customSpeciesData.find(x => x._id.toLowerCase() === species.toLowerCase());
+        if(!preJson) return null;
+        extra.isCustomSpecies = true;
+      };
+    }
+    return mergeObject(JSON.parse(JSON.stringify(preJson)), extra);
   }
   else return null;
 }

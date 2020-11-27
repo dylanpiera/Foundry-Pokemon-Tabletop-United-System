@@ -319,7 +319,6 @@ Hooks.once("ready", async function() {
 
   game.socket.on("system.ptu", (data) => {
     if(data == null) return; 
-    console.log("Triggered Socket!", data); 
     if(data == "RefreshCustomSpecies" || (data == "ReloadGMSpecies" && game.user.isGM)) Hooks.callAll("updatedCustomSpecies"); 
   });
 });

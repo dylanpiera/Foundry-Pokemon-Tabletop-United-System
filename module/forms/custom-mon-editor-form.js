@@ -31,7 +31,6 @@ export class PTUCustomMonEditor extends FormApplication {
 
       const data = super.getData();
       data.dtypes = ["String", "Number", "Boolean"];
-
   
       return data;
     }
@@ -41,26 +40,26 @@ export class PTUCustomMonEditor extends FormApplication {
     /** @override */
     async _updateObject(event, formData) {
       for(let x of Object.entries(formData)){
-        if(!x[1] && x[1] !== 0) {
+        if((x[0] != "Capabilities.Naturewalk" && x[0] != "Capabilities.Other") && (!x[1] && x[1] !== 0)) {
           ui.notifications.notify("Species Data Incomplete, abandonning edits.", "error")
           return;
         }
       }
 
       mergeObject(this.object, this.formatFormData(formData));
-      console.log(this.object, formData);
-
+      
       let journalEntry = CustomSpeciesFolder.findEntry(this.object);
       if(journalEntry === undefined) journalEntry = CustomSpeciesFolder.findEntry(this.object.ptuNumber);
       if(journalEntry === undefined) {
-        console.log("No entry found for " + this.object._id + " creating new entry");
-        JournalEntry.create({name: this.object.ptuNumber, content: JSON.stringify(this.object), folder: CustomSpeciesFolder._dirId})
+        console.log("FVTT PTU | No entry found for " + this.object._id + " creating new entry");
+        await JournalEntry.create({name: this.object.ptuNumber, content: JSON.stringify(this.object), folder: CustomSpeciesFolder._dirId})
       } else {
-        journalEntry.update({content: JSON.stringify(this.object)});
+        await journalEntry.update({content: JSON.stringify(this.object)});
       }
-      console.log("Updating Species")
-      Hooks.callAll("updatedCustomSpecies");
-      game.socket.emit("system.ptu", "RefreshCustomSpecies")
+
+      console.log("FVTT PTU | Updating Custom Species")
+      await Hooks.callAll("updatedCustomSpecies", {outdatedApplications: [this.options.baseApplication]});
+      await game.socket.emit("system.ptu", "RefreshCustomSpecies")
     }
 
     formatFormData(formData) {
@@ -137,6 +136,9 @@ export class PTUCustomMonEditor extends FormApplication {
     }
 
     checkMonId(number) {
-      return number;
+      if(CustomSpeciesFolder.findEntry(number)) {
+        return number;
+      }
+      return CustomSpeciesFolder.getAvailableId();
     }
 }
