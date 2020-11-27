@@ -1,0 +1,207 @@
+<form
+  class="{{cssClass}} container-fluid"
+  autocomplete="off"
+  style="text-align: center;"
+>
+<div class="swsh-box mb-2">
+  <div class="d-flex">
+    <div class="swsh-header pt-1 pb-1 w-100">
+      <div class="col">
+        <label for="_id">Species</label>
+      </div>
+      <div class="col">
+        <label for="number">Dex #</label>
+      </div>
+      <div class="col">
+        <label for="type1">Type 1</label>
+      </div>
+      <div class="col">
+        <label for="type2">Type 2</label>
+      </div>
+    </div>
+  </div>
+  <div class="d-flex pt-1 pb-1">
+    <div class="swsh-body w-100">
+      <div class="col">
+        <input required type="text" name="_id" value="{{object._id}}"/>
+      </div>
+      <div class="col">
+        <input type="text" disabled name="number" value="{{object.number}}"/>
+        <input type="hidden" name="number" value="{{object.number}}"/>
+      </div>
+      <div class="col">
+        <input required type="text" name="type1" value="{{object.Type.[0]}}"/>
+      </div>
+      <div class="col">
+        <input required type="text" name="type2" value="{{object.Type.[1]}}"/>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="swsh-box mb-2">
+  <div class="d-flex swsh-header pt-1 pb-1">
+    <div class="col">
+      <label for="Base Stats.HP">Hp</label>
+    </div>
+    <div class="col">
+      <label for="Base Stats.Attack">Atk</label>
+    </div>
+    <div class="col">
+      <label for="Base Stats.Defense">Def</label>
+    </div>
+    <div class="col">
+      <label for="Base Stats.Special Attack">Sp.Atk</label>
+    </div>
+    <div class="col">
+      <label for="Base Stats.Special Defense">Sp.Def</label>
+    </div>
+    <div class="col">
+      <label for="Base Stats.Speed">Speed</label>
+    </div>
+  </div>
+  <div class="d-flex swsh-body pt-1 pb-1">
+    <div class="col">
+      <input required type="text" name="Base Stats.HP" value="{{object.[Base Stats].HP}}"/>
+    </div>
+    <div class="col">
+      <input required type="text" name="Base Stats.Attack" value="{{object.[Base Stats].Attack}}"/>
+    </div>
+    <div class="col">
+      <input required type="text" name="Base Stats.Defense" value="{{object.[Base Stats].Defense}}"/>
+    </div>
+    <div class="col">
+      <input required type="text" name="Base Stats.Special Attack" value="{{object.[Base Stats].[Special Attack]}}"/>
+    </div>
+    <div class="col">
+      <input required type="text" name="Base Stats.Special Defense" value="{{object.[Base Stats].[Special Defense]}}"/>
+    </div>
+    <div class="col">
+      <input required type="text" name="Base Stats.Speed" value="{{object.[Base Stats].Speed}}"/>
+    </div>
+  </div>
+</div>
+<div class="swsh-box mb-2">
+  <div class="d-flex swsh-header pt-1 pb-1">
+    <div class="col">
+      <label for="Abilities.Basic">Basic Abilities</label>
+    </div>
+    <div class="col">
+      <label for="Abilities.Advanced">Advanced Abilities</label>
+    </div>
+    <div class="col">
+      <label for="Abilities.High">High Abilities</label>
+    </div>
+  </div>
+  <div class="d-flex swsh-body pt-1 pb-1">
+    <div class="col">
+      <input required type="text" name="Abilities.Basic" value="{{object.Abilities.Basic}}"/>
+    </div>
+    <div class="col">
+      <input required type="text" name="Abilities.Advanced" value="{{object.Abilities.Advanced}}"/>
+    </div>
+    <div class="col">
+      <input required type="text" name="Abilities.High" value="{{object.Abilities.High}}"/>
+    </div>
+  </div>
+</div><div class="swsh-box mb-2">
+  <div class="d-flex swsh-header pt-1 pb-1">
+    <div class="col">
+      <label for="Height">Height</label>
+    </div>
+    <div class="col">
+      <label for="Size Class">Size Class</label>
+    </div>
+    <div class="col">
+      <label for="Weight">Weight</label>
+    </div>
+  </div>
+  <div class="d-flex swsh-body pt-1 pb-1">
+    <div class="col">
+      <input required step="0.1" type="number" name="Height" value="{{object.Height}}"/>
+    </div>
+    <div class="col">
+      <input required type="text" name="Size Class" value="{{object.[Size Class]}}"/>
+    </div>
+    <div class="col">
+      <input required type="number" name="Weight" value="{{object.Weight}}"/>
+    </div>
+  </div>
+  <div class="d-flex swsh-header pt-1 pb-1">
+    <div class="col">
+      <label for="Breeding Information.Gender Ratio">Gender Ratio</label>
+    </div>
+    <div class="col">
+      <label for="Breeding Information.Egg Group">Egg Group</label>
+    </div>
+  </div>
+  <div class="d-flex swsh-body pt-1 pb-1">
+    <div class="col">
+      <input required type="number" name="Breeding Information.Gender Ratio" value="{{object.[Breeding Information].[Gender Ratio]}}"/>
+    </div>
+    <div class="col">
+      <input required type="text" name="Breeding Information.Egg Group" value="{{object.[Breeding Information].[Egg Group]}}"/>
+    </div>
+  </div>
+  <div class="d-flex swsh-header pt-1 pb-1">
+    <div class="col">
+      <label for="Diet">Diet</label>
+    </div>
+    <div class="col">
+      <label for="Habitat">Habitat</label>
+    </div>
+  </div>
+  <div class="d-flex swsh-body pt-1 pb-1">
+    <div class="col">
+      <input required type="text" name="Diet" value="{{object.Diet}}"/>
+    </div>
+    <div class="col">
+      <input required type="text" name="Habitat" value="{{object.Habitat}}"/>
+    </div>
+  </div>
+</div>
+<div class="swsh-box mb-2">
+  <div class="d-flex swsh-header pt-1 pb-1">
+    <div class="col-sm-6"><h4>Capabilities</h4></div>
+    <div class="col-sm-6"><h4>Skills</h4></div>
+  </div>
+  <div class="d-flex pt-2 pb-1">
+    <div class="col-sm-6">
+      {{#each object.Capabilities as |capability key|}}
+        <div class="d-flex align-items-center pt-1 pb-1">
+          <div class="col-sm-7">
+            <label for="Capabilities.{{key}}">{{key}}</label>
+          </div>
+          <div class="col-sm-5">
+            <input {{#if (not key "Naturewalk")}}required{{/if}} type="text" name="Capabilities.{{key}}" value="{{capability}}"/>
+          </div>
+        </div>
+      {{/each}}
+    </div>
+    <div class="col-sm-6">
+      <div class="d-flex align-items-center">
+        <div class="col-sm-6"><h5>Skill</h5></div>
+        <div class="col-sm-3"><h5>Dice</h5></div>
+        <div class="col-sm-3"><h5>Mod</h5></div>
+      </div>
+      {{#each object.Skills as |skill key|}}
+        <div class="d-flex align-items-center pt-1 pb-1">
+          <div class="col-sm-6">
+            <label for="Skills.{{key}}">{{key}}</label>
+          </div>
+          <div class="col-sm-3">
+            <input required type="number" name="Skills.{{key}}.Dice" value="{{skill.Dice}}"/>
+          </div>
+          <div class="col-sm-3">
+            <input required type="number" name="Skills.{{key}}.Mod" value="{{skill.Mod}}"/>
+          </div>
+        </div>
+      {{/each}}
+    </div>
+  </div>
+</div>
+  <div class="d-flex justify-content-center mt-2">
+    <div class="col-sm-8">
+      <button>Save Changes</button>
+    </div>
+  </div>
+</form>

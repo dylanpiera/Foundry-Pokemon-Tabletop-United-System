@@ -15,17 +15,24 @@ import { natureData } from "./data/nature-data.js";
 import { insurgenceData } from "./data/insurgence-species-data.js"
 import { DbData } from "./data/db-data.js"
 import { TypeEffectiveness } from "./data/effectiveness-data.js"
-import { PTUPokemonCharactermancer } from './actor/charactermancer-pokemon-form.js'
+import { PTUPokemonCharactermancer } from './forms/charactermancer-pokemon-form.js'
+import { PTUCustomSpeciesEditor } from './forms/custom-species-editor-form.js'
+import { PTUCustomMonEditor } from './forms/custom-mon-editor-form.js'
 import { RollWithDb } from './utils/roll-calculator.js'
+import { InitCustomSpecies, UpdateCustomSpecies} from './custom-species.js'
+import CustomSpeciesFolder from './entities/custom-species-folder.js';
 
-Hooks.once('init', function() {
+Hooks.once('init', async function() {
 
   game.ptu = {
     PTUActor,
     PTUItem,
     PTUPokemonCharactermancer,
+    PTUCustomSpeciesEditor,
+    PTUCustomMonEditor,
     levelProgression,
     pokemonData,
+    customSpeciesData: [],
     natureData,
     DbData,
     TypeEffectiveness,
@@ -160,6 +167,11 @@ Hooks.once('init', function() {
   if(game.settings.get("ptu", "insurgenceData")) {
     Array.prototype.push.apply(game.ptu["pokemonData"], insurgenceData);
   }
+
+  if(game.settings.get("ptu", "customSpecies") != "") {
+    await customSpeciesInit(game.settings.get("ptu", "customSpecies"));
+  }
+
 });
 
 function _calcMoveDb(move, bool = false) {
@@ -176,13 +188,14 @@ function _calcMoveDb(move, bool = false) {
 }
 
 export function PrepareMoveData(actorData, move) {
-  if(!actorData) return move;
+  if(!actorData || move.prepared) return move;
   move.owner = { 
     type: actorData.typing,
     stats: actorData.stats,
     acBonus: actorData.modifiers.acBonus,
     critRange: actorData.modifiers.critRange
   };
+  move.prepared = true;
 
   move.stab = move.owner?.type && (move.owner.type[0] == move.type || move.owner.type[1] == move.type);
   move.acBonus = move.owner.acBonus ? move.owner.acBonus : 0; 
@@ -229,7 +242,7 @@ function _loadSystemSettings() {
     name: "Custom Species json (Requires Refresh)",
     hint: "Please specify the path of a custom species file (inside the world directory) if you wish to add Homebrew Pokémon. [Currently in Beta!]",
     scope: "world",
-    config: true,
+    config: false,
     type: String,
     default: ""
   });
@@ -243,33 +256,58 @@ function _loadSystemSettings() {
     default: false
   });
 
+  game.settings.register("ptu", "hideDebugInfo", {
+    name: "Show Debug Info",
+    hint: "Only for debug purposes. Logs extra debug messages & shows hidden folders/items",
+    scope: "world",
+    config: true,
+    type: Boolean,
+    default: false,
+    onChange: (value) => CustomSpeciesFolder.updateFolderDisplay(value)
+  });
 } 
 
 /* -------------------------------------------- */
-/*  Custom Compendium Initialization            */
+/*  Custom Species (Editor) Hooks               */
 /* -------------------------------------------- */
+Hooks.on("updatedCustomSpecies", UpdateCustomSpecies);
 
-async function customSpeciesCompendiumInit(path) {
-  const result = await fetch(`/worlds/${game.world.name}/${path}`)
-  const content = await result.json();
+Hooks.on('renderJournalDirectory', function() {
+  CustomSpeciesFolder.updateFolderDisplay(game.settings.get("ptu", "hideDebugInfo"));
+})
 
-  Array.prototype.push.apply(game.ptu["pokemonData"], content);
-}
+Hooks.on("renderSettingsConfig", function() {
+  let element = $('#client-settings .tab[data-tab="system"] .module-header')[0];
+  element.outerHTML = `
+  <div class="d-flex flexrow">
+    ${element.outerHTML}
+    <div class="item-controls flexcol" style="align-self: center;flex: 0 0 30%;">
+      <a class="item-control" id="open-custom-species-editor"><i class="fas fa-edit" style="margin-right: 3px;"></i><span class="readable">Edit Custom Species</span></a>
+    </div>
+  </div>`
+
+  $('#open-custom-species-editor').click(function() { 
+    new game.ptu.PTUCustomSpeciesEditor().render(true);
+  })
+});
 
 /* -------------------------------------------- */
-/*  Items Initialization                        */
+/*  Items & Custom Species Initialization       */
 /* -------------------------------------------- */
 
 Hooks.once("ready", async function() {
+  await InitCustomSpecies();
+
   // Globally enable items from item compendium
   game.ptu["items"] = await game.packs.get("ptu.items").getContent();
 
-  if(game.settings.get("ptu", "customSpecies") != "") {
-    await customSpeciesCompendiumInit(game.settings.get("ptu", "customSpecies"));
-  }
-
   // Wait to register hotbar drop hook on ready so that modules could register earlier if they want to
   Hooks.on("hotbarDrop", (bar, data, slot) => createPTUMacro(data, slot));
+
+  game.socket.on("system.ptu", (data) => {
+    if(data == null) return; 
+    if(data == "RefreshCustomSpecies" || (data == "ReloadGMSpecies" && game.user.isGM)) Hooks.callAll("updatedCustomSpecies"); 
+  });
 });
 
 /* -------------------------------------------- */

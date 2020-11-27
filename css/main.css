@@ -886,6 +886,19 @@ span.readable {
 .ptu header.sheet-header {
   align-items: unset;
 }
+#species-list.delete:hover > li {
+  background: white;
+  transition: background 0.5s linear, border-radius 0.5s linear;
+}
+#species-list.delete:hover > li:hover {
+  background: #ff000070;
+  box-shadow: 0 0 3px red;
+  border-radius: 5px;
+}
+#species-list .item {
+  padding: 0.3rem 0;
+  margin: 0.3rem 0;
+}
 /* Chat CSS */
 .message-content .type-img {
   justify-content: space-evenly;

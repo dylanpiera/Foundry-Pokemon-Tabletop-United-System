@@ -8,7 +8,7 @@ export class PTUPokemonCharactermancer extends FormApplication {
     static get defaultOptions() {
       return mergeObject(super.defaultOptions, {
         classes: ["ptu", "charactermancer", "pokemon"],
-        template: "systems/ptu/templates/actor/charactermancer-pokemon.hbs",
+        template: "systems/ptu/templates/forms/charactermancer-pokemon.hbs",
         width: 220,
         height: 125,
         title: "Charactermancer",

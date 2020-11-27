@@ -100,6 +100,8 @@ export class PTUActor extends Actor {
 
     const speciesData = game.ptu.GetSpeciesData(data.species);
 
+    data.isCustomSpecies = speciesData?.isCustomSpecies ?? false;
+
     // Calculate Level
     data.level.current = CalcLevel(data.level.exp, 50, game.ptu.levelProgression);
 
@@ -162,9 +164,25 @@ export class PTUActor extends Actor {
 
 export function GetSpeciesData(species) {
   if(species != "") {
-    let preJson = game.ptu.pokemonData.find(x => x._id.toLowerCase() === species.toLowerCase());
-    if (!preJson) return null;
-    return JSON.parse(JSON.stringify(preJson));
+    let preJson;
+    let extra = {isCustomSpecies: false};
+    if(parseInt(species)) {
+      preJson = game.ptu.pokemonData.find(x => x.number == species);
+      if (!preJson) {
+        preJson = game.ptu.customSpeciesData.find(x => x.number == species);
+        if(!preJson) return null;
+        extra.isCustomSpecies = true;
+      };
+    }
+    else {
+      preJson = game.ptu.pokemonData.find(x => x._id.toLowerCase() === species.toLowerCase());
+      if (!preJson) {
+        preJson = game.ptu.customSpeciesData.find(x => x._id.toLowerCase() === species.toLowerCase());
+        if(!preJson) return null;
+        extra.isCustomSpecies = true;
+      };
+    }
+    return mergeObject(JSON.parse(JSON.stringify(preJson)), extra);
   }
   else return null;
 }
