@@ -7,7 +7,7 @@ export async function InitCustomSpecies() {
         
         window.PTUDebugger = {CustomSpeciesFolder};
 
-        migrateOldData();
+        await migrateOldData();
 
         console.log("FVTT PTU | Finalizing Custom Species Initialization")
         Hooks.callAll("updatedCustomSpecies");
