@@ -70,6 +70,8 @@ export class PTUCustomSpeciesEditor extends Application {
     _onEnableDeletion(event) {
       event.preventDefault();
       if(this.toggle) {
+        $("#species-list").removeClass("delete");
+        $("#new-mon").prop("disabled", false);
         $(".custom-species-editor div.item-species").css("flex", "0 0 45%");
         $(".custom-species-editor .delete").addClass("hidden")
         $(".custom-species-editor .alert").addClass("hidden")
@@ -77,6 +79,8 @@ export class PTUCustomSpeciesEditor extends Application {
         $(".custom-species-editor div.item-species").css("flex", "0 0 35%");
         $(".custom-species-editor .delete.hidden").removeClass("hidden")
         $(".custom-species-editor .alert.hidden").removeClass("hidden")
+        $("#species-list").addClass("delete");
+        $("#new-mon").prop("disabled", true);
       }
       this.toggle = !this.toggle;
     }
