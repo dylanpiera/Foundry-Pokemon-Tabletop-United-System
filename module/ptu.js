@@ -242,7 +242,7 @@ function _loadSystemSettings() {
     name: "Custom Species json (Requires Refresh)",
     hint: "Please specify the path of a custom species file (inside the world directory) if you wish to add Homebrew Pokémon. [Currently in Beta!]",
     scope: "world",
-    config: true,
+    config: false,
     type: String,
     default: ""
   });
@@ -268,22 +268,9 @@ function _loadSystemSettings() {
 } 
 
 /* -------------------------------------------- */
-/*  Custom Species Initialization               */
+/*  Custom Species (Editor) Hooks               */
 /* -------------------------------------------- */
-
-async function customSpeciesInit(path) {
-  console.warn("Deprecated, will be removed on update.")
-  // const result = await fetch(`/worlds/${game.world.name}/${path}`)
-  // const content = await result.json();
-
-  // Array.prototype.push.apply(game.ptu["customSpeciesData"], content);
-}
-
 Hooks.on("updatedCustomSpecies", UpdateCustomSpecies);
-
-/* -------------------------------------------- */
-/*  Custom Species Editor Initialization        */
-/* -------------------------------------------- */
 
 Hooks.on('renderJournalDirectory', function() {
   CustomSpeciesFolder.updateFolderDisplay(game.settings.get("ptu", "hideDebugInfo"));
@@ -305,7 +292,7 @@ Hooks.on("renderSettingsConfig", function() {
 });
 
 /* -------------------------------------------- */
-/*  Items Initialization                        */
+/*  Items & Custom Species Initialization       */
 /* -------------------------------------------- */
 
 Hooks.once("ready", async function() {
