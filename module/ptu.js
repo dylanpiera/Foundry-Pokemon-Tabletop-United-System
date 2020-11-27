@@ -168,10 +168,6 @@ Hooks.once('init', async function() {
     Array.prototype.push.apply(game.ptu["pokemonData"], insurgenceData);
   }
 
-  if(game.settings.get("ptu", "customSpecies") != "") {
-    await customSpeciesInit(game.settings.get("ptu", "customSpecies"));
-  }
-
 });
 
 function _calcMoveDb(move, bool = false) {

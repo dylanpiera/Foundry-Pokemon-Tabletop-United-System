@@ -56,12 +56,12 @@ export default class CustomSpeciesFolder {
       if(typeof species === 'object') return undefined;
       if(parseInt(species)) {
         let result = game.journal.entities.find(entry => entry.data.name.toLowerCase().includes(species))
-        if(result === undefined) result = game.journal.entities.find(entry => entry.data.content.includes(`"ptuNumber":${species}`));
+        if(result === undefined) result = game.journal.entities.find(entry => entry?.data?.content?.includes(`"ptuNumber":${species}`));
         return result;
       }
       else {
         let result = game.journal.entities.find(entry => entry.data.name.toLowerCase().includes(species.toLowerCase()))
-        if(result === undefined) result = game.journal.entities.find(entry => entry.data.content.includes(`"_id":"${species}"`));
+        if(result === undefined) result = game.journal.entities.find(entry => entry?.data?.content?.includes(`"_id":"${species}"`));
         return result;
       }
     }

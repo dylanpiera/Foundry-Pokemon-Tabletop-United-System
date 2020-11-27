@@ -1,15 +1,20 @@
 import CustomSpeciesFolder from './entities/custom-species-folder.js'
 
 export async function InitCustomSpecies() {
-    await CustomSpeciesFolder.initializeJournals();
-    CustomSpeciesFolder.updateFolderDisplay(game.settings.get("ptu", "hideDebugInfo"));
-    
-    window.PTUDebugger = {CustomSpeciesFolder};
+    try {
+        await CustomSpeciesFolder.initializeJournals();
+        CustomSpeciesFolder.updateFolderDisplay(game.settings.get("ptu", "hideDebugInfo"));
+        
+        window.PTUDebugger = {CustomSpeciesFolder};
 
-    migrateOldData();
+        migrateOldData();
 
-    console.log("FVTT PTU | Finalizing Custom Species Initialization")
-    Hooks.callAll("updatedCustomSpecies");
+        console.log("FVTT PTU | Finalizing Custom Species Initialization")
+        Hooks.callAll("updatedCustomSpecies");
+    } catch(err) {
+        ui.notifications.notify("There was a system update that requires the GM to login for migrations to happen. Please notify your GM.", "warning")
+        Hooks.once("updatedCustomSpecies", InitCustomSpecies);
+    }
 }
 
 async function migrateOldData() {
