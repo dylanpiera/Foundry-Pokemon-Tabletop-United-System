@@ -1,3 +1,5 @@
+import CustomSpeciesFolder from "../entities/custom-species-folder.js"
+
 /**
  * Extend the basic FormApplication with some very simple modifications
  * @extends {FormApplication}
@@ -24,6 +26,7 @@ export class PTUCustomSpeciesEditor extends Application {
       data.dtypes = ["String", "Number", "Boolean"];
   
       data.species = game.ptu.customSpeciesData.sort((a,b) => a.ptuNumber - b.ptuNumber);
+      this.toggle = false;
 
       return data;
     }
@@ -34,15 +37,49 @@ export class PTUCustomSpeciesEditor extends Application {
 
       // Add Inventory Item
       html.find('#new-mon').click(this._onMonCreate.bind(this));
+      html.find('#delete-mons').click(this._onEnableDeletion.bind(this));
 
       // Update Inventory Item
       html.find('#species-list .item').click((ev) => {
-        let mon = game.ptu.customSpeciesData.find(x => x.number == ev.currentTarget.dataset.itemNumber);
-        new game.ptu.PTUCustomMonEditor(mon, {"submitOnChange": false, "submitOnClose": false, baseApplication: this}).render(true);
+        if(!this.toggle) {
+          let mon = game.ptu.customSpeciesData.find(x => x.number == ev.currentTarget.dataset.itemNumber);
+          new game.ptu.PTUCustomMonEditor(mon, {"submitOnChange": false, "submitOnClose": false, baseApplication: this}).render(true);
+        }
+      });
+
+      html.find('#species-list span.delete').click(async (ev) => {
+        ev.preventDefault();
+        let id = ev.currentTarget.dataset.itemNumber;
+        let entry = CustomSpeciesFolder.findEntry(id);
+        if(!entry) {
+          ui.notifications.notify("Unable to delete mon: " + id, "error");
+          return;
+        }
+        
+        console.log(`FVTT PTU | Deleting mon with ID: ${id}. Data backup:`, JSON.parse(entry.data.content))
+        await entry.delete();
+        
+        console.log("FVTT PTU | Updating Custom Species")
+        await Hooks.callAll("updatedCustomSpecies", {outdatedApplications: [this]});
+        await game.socket.emit("system.ptu", "RefreshCustomSpecies")
       });
     }
   
     /* -------------------------------------------- */
+
+    _onEnableDeletion(event) {
+      event.preventDefault();
+      if(this.toggle) {
+        $(".custom-species-editor div.item-species").css("flex", "0 0 45%");
+        $(".custom-species-editor .delete").addClass("hidden")
+        $(".custom-species-editor .alert").addClass("hidden")
+      } else {
+        $(".custom-species-editor div.item-species").css("flex", "0 0 35%");
+        $(".custom-species-editor .delete.hidden").removeClass("hidden")
+        $(".custom-species-editor .alert.hidden").removeClass("hidden")
+      }
+      this.toggle = !this.toggle;
+    }
     
     async _onMonCreate(event) {
       event.preventDefault();
