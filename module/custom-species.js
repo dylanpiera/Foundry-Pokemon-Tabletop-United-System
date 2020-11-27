@@ -10,10 +10,11 @@ export async function InitCustomSpecies() {
         await migrateOldData();
 
         console.log("FVTT PTU | Finalizing Custom Species Initialization")
-        Hooks.callAll("updatedCustomSpecies");
+        await Hooks.callAll("updatedCustomSpecies");
+        await game.socket.emit("system.ptu", "RefreshCustomSpecies")
     } catch(err) {
-        ui.notifications.notify("There was a system update that requires the GM to login for migrations to happen. Please notify your GM.", "warning")
-        Hooks.once("updatedCustomSpecies", InitCustomSpecies);
+        console.warn("FVTT PTU | Unable to import data as player", err)
+        await ui.notifications.notify("There was a system update that requires the GM to login for migrations to happen. Please notify your GM and refresh after they have joined.", "warning")
     }
 }
 
