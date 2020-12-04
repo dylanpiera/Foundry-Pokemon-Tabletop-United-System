@@ -138,7 +138,7 @@ export class PTUActor extends Actor {
 
     data.evasion = CalculateEvasions(data);
 
-    data.capabilities = CalculateCapabilities(speciesData, actorData.items.values());
+    data.capabilities = CalculateCapabilities(speciesData, actorData.items.values(), data.stats.spd.stage);
 
     if(speciesData) data.egggroup = speciesData["Breeding Information"]["Egg Group"].join(" & ");
 
