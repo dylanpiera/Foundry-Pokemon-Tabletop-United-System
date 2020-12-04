@@ -8,7 +8,12 @@
           "initiative": 0,
           "hardened": false,
           "acBonus": 0,
-          "critRange" : 0
+          "critRange" : 0,
+          "evasion" : {
+            "physical" : 0,
+            "special" : 0,
+            "speed" : 0
+          }
         }
       },
       "skills": {
