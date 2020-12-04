@@ -2,7 +2,7 @@ export function CalculateCapabilities(speciesData, items, speedCombatStages = 0)
     if (speciesData?.Capabilities == null) return [];
     
     if(typeof (speciesData.Capabilities.Overland) === "string") {
-        console.warn("(Custom) Species Data contains faulty values. Converting to integers.")
+        console.warn("FVTT PTU | (Custom) Species Data contains faulty values. Converting to integers.")
         for(let key of Object.keys(speciesData.Capabilities)) {
             if(key == "Weight Class" || key == "Naturewalk" || key == "Other") continue;
             speciesData.Capabilities[key] = parseInt(speciesData.Capabilities[key]) 
@@ -50,7 +50,6 @@ export function CalculateCapabilities(speciesData, items, speedCombatStages = 0)
     if(spcsChanges > 0 || spcsChanges < 0) {
         for(let key of Object.keys(speciesData.Capabilities)) {
             if(key == "High Jump" || key == "Long Jump" || key == "Power" || key == "Weight Class" || key == "Naturewalk" || key == "Other") continue;
-            console.log(key, spcsChanges, speciesData.Capabilities[key])
             if(speciesData.Capabilities[key] > 0) speciesData.Capabilities[key] = Math.max(speciesData.Capabilities[key] + spcsChanges, speciesData.Capabilities[key] > 1 ? 2 : 1)
         }
     }

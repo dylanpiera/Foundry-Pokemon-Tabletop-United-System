@@ -1,7 +1,8 @@
 // Import Modules
 import { PTUActor } from "./actor/actor.js";
 import { GetSpeciesData } from "./actor/actor.js";
-import { PTUCharacterSheet } from "./actor/character-sheet.js";
+import { PTUGen4CharacterSheet } from "./actor/character-sheet-gen4.js";
+import { PTUGen8CharacterSheet } from "./actor/character-sheet-gen8.js";
 import { PTUGen4PokemonSheet } from "./actor/pokemon-sheet-gen4.js";
 import { PTUGen8PokemonSheet } from "./actor/pokemon-sheet-gen8.js";
 import { PTUItem } from "./item/item.js";
@@ -55,7 +56,8 @@ Hooks.once('init', async function() {
 
   // Register sheet application classes
   Actors.unregisterSheet("core", ActorSheet);
-  Actors.registerSheet("ptu", PTUCharacterSheet, { types: ["character"], makeDefault: true });
+  Actors.registerSheet("ptu", PTUGen8CharacterSheet, { types: ["character"], makeDefault: true });
+  Actors.registerSheet("ptu", PTUGen4CharacterSheet, { types: ["character"], makeDefault: false });
   Actors.registerSheet("ptu", PTUGen8PokemonSheet, { types: ["pokemon"], makeDefault: true });
   Actors.registerSheet("ptu", PTUGen4PokemonSheet, { types: ["pokemon"], makeDefault: false });
   Items.unregisterSheet("core", ItemSheet);
