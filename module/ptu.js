@@ -218,6 +218,19 @@ function _loadSystemSettings() {
     default: "true"
   });
 
+  game.settings.register("ptu", "useDexExp", {
+    name: "Use Dex Experience for Trainer Level Calculation",
+    hint: "",
+    scope: "world",
+    config: true,
+    type: String,
+    choices: {
+      "true": "Use Dex Exp",
+      "false": "Don't use Dex Exp"
+    },
+    default: "false"
+  });
+
   game.settings.register("ptu", "nonOwnerCanSeeTabs", {
     name: "Non-owners can see Sheet Tabs",
     hint: "Allow players with Limited/Observer permissions to browse tabs in a Pokémon/Trainer's full sheet",
@@ -248,6 +261,15 @@ function _loadSystemSettings() {
   game.settings.register("ptu", "verboseChatInfo", {
     name: "Verbose Chat Output",
     hint: "When enabled shows more details in chat messages.",
+    scope: "client",
+    config: true,
+    type: Boolean,
+    default: false
+  });
+
+  game.settings.register("ptu", "openByDefault", {
+    name: "Open Collapsables by Default",
+    hint: "Collapsables such as the Feat & Edges list will display their summary by default.",
     scope: "client",
     config: true,
     type: Boolean,

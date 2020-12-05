@@ -83,7 +83,7 @@
                     {{/if}}
                   </div>
 
-                  {{!-- <!-- Abilities -->
+                  <!-- Abilities -->
                   <div class="swsh-box mt-auto w-100">
                     <div class="swsh-body" style="display: block;">
                       <ol class="inventory-list">
@@ -110,15 +110,27 @@
                               <a class="item-control item-edit" title="Edit ability"><i class="fas fa-edit"></i></a>
                               <a class="item-control item-delete" title="Delete ability"><i class="fas fa-trash"></i></a>
                             </div>
-                            <div class="collapse readable lh-16 item-summary" id="{{ability._id}}-collapse">
-                              {{ability.data.effect}}
-                            </div>
+                            {{#if ability.data.snippet}}
+                              <div class="collapse in readable lh-16 item-summary" id="{{ability._id}}-collapse">
+                                <p class="summary">{{{ability.data.snippet}}}</p>
+                              </div>
+                            {{else}}
+                              {{#if (is true (getGameSetting "openByDefault"))}}
+                                <div class="collapse in readable lh-16 item-summary" id="{{ability._id}}-collapse">
+                                  <p class="summary">{{{ability.data.effect}}}</p>
+                                </div>
+                              {{else}}
+                                <div class="collapse readable lh-16 item-summary" id="{{ability._id}}-collapse">
+                                  <p class="summary">{{{ability.data.effect}}}</p>
+                                </div>
+                              {{/if}}
+                            {{/if}}
                           </li>
                           {{/each}}
                         </ol>
                       </ol>
                     </div>
-                  </div> --}}
+                  </div>
                 </div>
               </div>
 
@@ -221,26 +233,79 @@
                     {{/if}}
                   </div>     --}}
 
-                  <!-- Experience + Level + Item -->
-                  <div class="w-100 level-box mt-2">
+                  <!-- Action Points -->
+                  <div class="w-100 level-box mt-auto mb-1">
                     <div class="swsh-box" style="text-align: center; word-break: keep-all;">
                       <div class="swsh-header">
-                        <div class="d-flex w-100 mt-1 mb-1 align-items-center justify-content-between">
-                          <div class="col-sm-6">
-                            <label for="data.level.milestones">Milestones:</label>
-                          </div>
-                          <div class="col-sm-5 d-flex align-items-center" style="flex-direction: row;">
+                        <h3 class="m-auto">Action Points</h3>
+                      </div>
+                      <div class="swsh-body">
+                        <div class="resource-content flexrow flex-group-right hp-info">
+                          <input type="text" name="data.ap.value" value="{{data.ap.value}}" data-dtype="Number"/>
+                          <span> / </span>
+                          <input type="text" name="data.ap.total" value="{{data.ap.total}}" data-dtype="Number" disabled/>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Experience + Level + Item -->
+                  <div class="w-100 level-box mt-1">
+                    <div class="swsh-box" style="text-align: center; word-break: keep-all;">
+                      <div class="swsh-header">
+                        <div class="d-flex w-100 align-items-center justify-content-center">
+                          <div class="col-sm-2">
                             <label for="data.level.current">Level:</label>
+                          </div>
+                          <div class="col-sm-3">
                             <input class="ml-2" type="text" name="data.level.current" value="{{data.level.current}}" data-dtype="Number"
                               disabled />
                           </div>
                         </div>
                       </div>
+                      <div class="swsh-header">
+                        <div class="d-flex w-100 mt-1 mb-1 align-items-center justify-content-between">
+                          {{#if (is "true" (getGameSetting "useDexExp"))}}
+                          <div class="col-sm-4">
+                            <label for="data.level.milestones">Milestones:</label>
+                          </div>
+                          <div class="col-sm-4">
+                            <label for="data.level.dexexp">Dex Exp:</label>
+                          </div>
+                          <div class="col-sm-4">
+                            <label for="data.level.miscexp">Misc Exp:</label>
+                          </div>
+                          {{else}}
+                            <div class="col-sm-6">
+                              <label for="data.level.milestones">Milestones:</label>
+                            </div>
+                            <div class="col-sm-6">
+                              <label for="data.level.miscexp">Misc Exp:</label>
+                            </div>
+                          {{/if}}
+                        </div>
+                      </div>
                       <div class="swsh-body">
                         <div class="options w-100 d-flex">
                           <div class="d-flex w-100 pt-1 pb-1" style="text-align: center;">
-                            <input class="ml-1 mr-1" type="text" name="data.level.milestones" value="{{data.level.milestones}}"
-                              data-dtype="Number" />
+                            {{#if (is "true" (getGameSetting "useDexExp"))}}
+                            <div class="col-sm-4">
+                              <input type="text" name="data.level.milestones" value="{{data.level.milestones}}" data-dtype="Number" />
+                            </div>
+                            <div class="col-sm-4">
+                              <input type="text" name="data.level.dexexp" value="{{data.level.dexexp}}" data-dtype="Number" />
+                            </div>
+                            <div class="col-sm-4">
+                              <input type="text" name="data.level.miscexp" value="{{data.level.miscexp}}" data-dtype="Number" />
+                            </div>
+                            {{else}}
+                              <div class="col-sm-6">
+                                <input type="text" name="data.level.milestones" value="{{data.level.milestones}}" data-dtype="Number" />
+                              </div>
+                              <div class="col-sm-6">
+                                <input type="text" name="data.level.miscexp" value="{{data.level.miscexp}}" data-dtype="Number" />
+                              </div>
+                            {{/if}}
                             {{!-- <span style="font-size: 20px;"> / </span>
                             <input class="ml-1" type="text" name="till-level-up" value="{{data.level.expTillNextLevel}}" data-dtype="Number"
                               disabled /> --}}
@@ -368,145 +433,204 @@
             <!-- Inheritance List -->
           </div>
 
-          <!-- Capabilities & Abilities Tab -->
-          {{!-- <div class="tab details feats" data-group="primary" data-tab="capability">
+          <!-- Features & Edges Tab -->
+          <div class="tab details feats" data-group="primary" data-tab="features">
             <div class="row">
               <div class="col">
-                <!-- Capabilities -->
-                <div class="swsh-box mt-auto w-100">
-                  <div class="swsh-header">
-                    <h3 class="item-name flexrow">Capabilities</h3>
-                  </div>
-                  <div class="swsh-body readable w-100 align-items-center" style="white-space: nowrap;">
-                    {{#each data.capabilities as |capability key|}}
-                    {{#if (and (and (not key "Other") (not key "Naturewalk")) (gt capability 0))}}
-                    <div class="col-sm-4 p11 mb-1">
-                      <label for="data.capabilities.{{key}}">{{key}}:</label>
-                    </div>
-                    <div class="col-sm-2 mb-1" style="text-align: center;">
-                      <input type="text" name="data.capabilities.{{key}}" value="{{capability}}" data-dtype="Number"
-                        disabled />
-                    </div>
-                    {{/if}}
-                    {{/each}}
-                  </div>
-                  {{#if data.capabilities.Naturewalk}}
-                  <div class="swsh-body readable w-100 align-items-center">
-                    <div class="col-sm-4 p11">
-                      <label for="data.capabilities.Naturewalk">Naturewalk:</label>
-                    </div>
-                    <div class="col-sm-8" style="text-align: center;">
-                      <input type="text" name="data.capabilities.Naturewalk" value="{{data.capabilities.Naturewalk}}"
-                        data-dtype="Number" disabled />
-                    </div>
-                  </div>
-                  {{/if}}
-
-                  <!-- Other Capabilities -->
-                  <div class="swsh-body w-100 mt-2" style="display: block;">
-                    <ol class="inventory-list">
-                      <li class="inventory-header flexrow">
-                        <h3 class="item-name flexrow">Other Capabilities</h3>
-                        <div class="item-controls">
-                          <a class="item-control item-create" title="Add capability" data-type="capability"><i
-                              class="fas fa-plus-circle" style="margin-right: 3px;"></i><span
-                              class="readable">Add</span></a>
-                        </div>
-                      </li>
-                      <ol class="item-list">
-                        {{#each actor.capabilities as | capability |}}
-                        <li class="item flexrow" data-item-id="{{capability._id}}">
-                          <div class="item-name flexrow">
-                            <h4 title="Toggle Info ({{capability.name}})" data-toggle="collapse"
-                              data-target="#{{capability._id}}-collapse" aria-expanded="false"
-                              aria-controls="{{capability._id}}-collapse">
-                              <i class="fas fa-info-circle info-icon"></i>
-                              {{capability.name}}
-                            </h4>
-                          </div>
-                          <div class="item-controls" style="flex: 0 0 55px; justify-content: center; display:flex;">
-                            <a class="item-control item-edit" title="Edit capability"><i class="fas fa-edit"></i></a>
-                            <a class="item-control item-delete" title="Delete capability"><i class="fas fa-trash"></i></a>
-                          </div>
-                          <div class="collapse readable lh-16 item-summary" id="{{capability._id}}-collapse">
-                            {{capability.data.effect}}
-                          </div>
-                        </li>
-                        {{/each}}
-                      </ol>
-                    </ol>
-                  </div>
-                </div>
-              </div>
-              <div class="col">
-                <!-- Poké Edges-->
+                <!-- Feats -->
                 <div class="swsh-box mt-2 w-100">
                   <div class="swsh-body w-100" style="display: block;">
                     <ol class="inventory-list">
                       <li class="inventory-header flexrow">
-                        <h3 class="item-name flexrow">Poké Edges</h3>
+                        <h3 class="item-name flexrow">Features</h3>
                         <div class="item-controls">
-                          <a class="item-control item-create" title="Add pokeedge" data-type="pokeedge"><i
+                          <a class="item-control item-create" title="Add feat" data-type="feat"><i
                               class="fas fa-plus-circle" style="margin-right: 3px;"></i><span
                               class="readable">Add</span></a>
                         </div>
                       </li>
                       <ol class="item-list">
-                        {{#each actor.edges as | pokeedge |}}
-                        <li class="item flexrow" data-item-id="{{pokeedge._id}}">
+                        {{#each actor.feats as | feat |}}
+                        <li class="item flexrow" data-item-id="{{feat._id}}">
                           <div class="item-name flexrow">
-                            <h4 title="Toggle Info ({{pokeedge.name}})" data-toggle="collapse"
-                              data-target="#{{pokeedge._id}}-collapse" aria-expanded="false"
-                              aria-controls="{{pokeedge._id}}-collapse">
+                            <h4 title="Toggle Info ({{feat.name}})" data-toggle="collapse"
+                              data-target="#{{feat._id}}-collapse" aria-expanded="false"
+                              aria-controls="{{feat._id}}-collapse">
                               <i class="fas fa-info-circle info-icon"></i>
-                              {{pokeedge.name}}
+                              {{feat.name}}
                             </h4>
                           </div>
                           <div class="item-controls" style="flex: 0 0 55px; justify-content: center; display:flex;">
-                            <a class="item-control item-edit" title="Edit pokeedge"><i class="fas fa-edit"></i></a>
-                            <a class="item-control item-delete" title="Delete pokeedge"><i class="fas fa-trash"></i></a>
+                            <a class="item-control item-edit" title="Edit feat"><i class="fas fa-edit"></i></a>
+                            <a class="item-control item-delete" title="Delete feat"><i class="fas fa-trash"></i></a>
                           </div>
-                          <div class="collapse readable lh-16 item-summary" id="{{pokeedge._id}}-collapse">
-                            {{pokeedge.data.effect}}
-                          </div>
+                          {{#if feat.data.snippet}}
+                            <div class="collapse in readable lh-16 item-summary" id="{{feat._id}}-collapse">
+                              {{#if feat.data.origin}}
+                                <div class="row">
+                                  <div class="col-sm-4">
+                                    <b>Origin:</b>
+                                  </div>
+                                  <div class="col">
+                                    {{feat.data.origin}}
+                                  </div>
+                                </div>
+                              {{/if}}
+                              {{#if feat.data.prerequisites}}
+                                <div class="row">
+                                  <div class="col-sm-4">
+                                    <b>Prerequisites:</b>
+                                  </div>
+                                  <div class="col">
+                                    {{feat.data.prerequisites}}
+                                  </div>
+                                </div>
+                              {{/if}}
+                              {{#if feat.data.tags}}
+                                <div class="row">
+                                  <div class="col-sm-4">
+                                    <b>Tags:</b>
+                                  </div>
+                                  <div class="col">
+                                    {{feat.data.tags}}
+                                  </div>
+                                </div>
+                              {{/if}}
+                              <hr>
+                              <p class="summary">{{{feat.data.snippet}}}</p>
+                            </div>
+                          {{else}}
+                            {{#if (is true (getGameSetting "openByDefault"))}}
+                              <div class="collapse in readable lh-16 item-summary" id="{{feat._id}}-collapse">
+                                {{#if feat.data.origin}}
+                                  <div class="row">
+                                    <div class="col-sm-4">
+                                      <b>Origin:</b>
+                                    </div>
+                                    <div class="col">
+                                      {{feat.data.origin}}
+                                    </div>
+                                  </div>
+                                {{/if}}
+                                {{#if feat.data.prerequisites}}
+                                  <div class="row">
+                                    <div class="col-sm-4">
+                                      <b>Prerequisites:</b>
+                                    </div>
+                                    <div class="col">
+                                      {{feat.data.prerequisites}}
+                                    </div>
+                                  </div>
+                                {{/if}}
+                                {{#if feat.data.tags}}
+                                  <div class="row">
+                                    <div class="col-sm-4">
+                                      <b>Tags:</b>
+                                    </div>
+                                    <div class="col">
+                                      {{feat.data.tags}}
+                                    </div>
+                                  </div>
+                                {{/if}}
+                                <hr>
+                                <p class="summary">{{{feat.data.effect}}}</p>
+                              </div>
+                            {{else}}
+                              <div class="collapse readable lh-16 item-summary" id="{{feat._id}}-collapse">
+                                {{#if feat.data.origin}}
+                                  <div class="row">
+                                    <div class="col-sm-4">
+                                      <b>Origin:</b>
+                                    </div>
+                                    <div class="col">
+                                      {{feat.data.origin}}
+                                    </div>
+                                  </div>
+                                {{/if}}
+                                {{#if feat.data.prerequisites}}
+                                  <div class="row">
+                                    <div class="col-sm-4">
+                                      <b>Prerequisites:</b>
+                                    </div>
+                                    <div class="col">
+                                      {{feat.data.prerequisites}}
+                                    </div>
+                                  </div>
+                                {{/if}}
+                                {{#if feat.data.tags}}
+                                  <div class="row">
+                                    <div class="col-sm-4">
+                                      <b>Tags:</b>
+                                    </div>
+                                    <div class="col">
+                                      {{feat.data.tags}}
+                                    </div>
+                                  </div>
+                                {{/if}}
+                                <hr>
+                                <p class="summary">{{{feat.data.effect}}}</p>
+                              </div>
+                            {{/if}}
+                          {{/if}}
                         </li>
                         {{/each}}
                       </ol>
                     </ol>
                   </div>
                 </div>
-
-                <!-- Tutor Points -->
-                {{#if (is "true" (getGameSetting "useTutorPoints"))}}
-                <div class="swsh-box mt-2" style="text-align: center;">
-                  <div class="swsh-header">
-                    <h3 class="m-auto">Tutor Points</h3>
-                  </div>
-                  <div class="swsh-body">
-                    <div class="resource-content flexrow flex-group-right hp-info w-100">
-                      <input type="text" name="data.tp.value" value="{{data.tp.value}}" data-dtype="Number"/>
-                      <span> / </span>
-                      <input type="text" name="data.tp.max" value="{{data.tp.max}}" data-dtype="Number" disabled/>
-                    </div>
+              </div>
+              <div class="col">
+                <!-- Edges-->
+                <div class="swsh-box mt-2 w-100">
+                  <div class="swsh-body w-100" style="display: block;">
+                    <ol class="inventory-list">
+                      <li class="inventory-header flexrow">
+                        <h3 class="item-name flexrow">Edges</h3>
+                        <div class="item-controls">
+                          <a class="item-control item-create" title="Add Edge" data-type="edge"><i
+                              class="fas fa-plus-circle" style="margin-right: 3px;"></i><span
+                              class="readable">Add</span></a>
+                        </div>
+                      </li>
+                      <ol class="item-list">
+                        {{#each actor.edges as | edge |}}
+                        <li class="item flexrow" data-item-id="{{edge._id}}">
+                          <div class="item-name flexrow">
+                            <h4 title="Toggle Info ({{edge.name}})" data-toggle="collapse"
+                              data-target="#{{edge._id}}-collapse" aria-expanded="false"
+                              aria-controls="{{edge._id}}-collapse">
+                              <i class="fas fa-info-circle info-icon"></i>
+                              {{edge.name}}
+                            </h4>
+                          </div>
+                          <div class="item-controls" style="flex: 0 0 55px; justify-content: center; display:flex;">
+                            <a class="item-control item-edit" title="Edit edge"><i class="fas fa-edit"></i></a>
+                            <a class="item-control item-delete" title="Delete edge"><i class="fas fa-trash"></i></a>
+                          </div>
+                          {{#if edge.data.snippet}}
+                            <div class="collapse in readable lh-16 item-summary" id="{{edge._id}}-collapse">
+                              <p class="summary">{{{edge.data.snippet}}}</p>
+                            </div>
+                          {{else}}
+                            {{#if (is true (getGameSetting "openByDefault"))}}
+                              <div class="collapse in readable lh-16 item-summary" id="{{edge._id}}-collapse">
+                                <p class="summary">{{{edge.data.effect}}}</p>
+                              </div>
+                            {{else}}
+                              <div class="collapse readable lh-16 item-summary" id="{{edge._id}}-collapse">
+                                <p class="summary">{{{edge.data.effect}}}</p>
+                              </div>
+                            {{/if}}
+                          {{/if}}
+                        </li>
+                        {{/each}}
+                      </ol>
+                    </ol>
                   </div>
                 </div>
-                {{else}}
-                <div class="swsh-box mt-2" style="text-align: center;">
-                  <div class="swsh-header">
-                    <h3 class="m-auto">PokéEdge Points Used:</h3>
-                  </div>
-                  <div class="swsh-body">
-                    <div class="resource-content flexrow flex-group-right hp-info w-100">
-                      <input type="text" {{#if (gt data.tp.pep.value data.tp.pep.max)}}class="error-text"{{/if}} name="data.tp.pep.value" value="{{data.tp.pep.value}}" data-dtype="Number" disabled/>
-                      <span> / </span>
-                      <input type="text" name="data.tp.pep.max" value="{{data.tp.pep.max}}" data-dtype="Number" disabled/>
-                    </div>
-                  </div>
-                </div>
-                {{/if}}
               </div>
             </div>
-          </div> --}}
+          </div>
 
           <!-- Combat Tab -->
           {{!-- <div class="tab details combat" data-group="primary" data-tab="combat">
@@ -672,52 +796,9 @@
           </div> --}}
 
           <!-- Extra Tab -->
-          {{!-- <div class="tab details extra" data-group="primary" data-tab="extra">
+          <div class="tab details extra" data-group="primary" data-tab="extra">
             <div class="row">
               <div class="col">
-                <!-- Species + Gender -->
-                <div class="swsh-box mb-2 w-100" style="text-align: center; word-break: keep-all;">
-                  <div class="swsh-header">
-                    <div class="d-flex w-100 mt-1 mb-1 align-items-center">
-                      <div class="col-sm-6">
-                        <label for="data.species">Species</label>
-                      </div>
-                      <div class="col-sm-6">
-                        <label for="data.gender">Gender</label>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="swsh-body" style="display: block;">
-                    <div class="d-flex w-100 mt-1 mb-1">
-                      <div class="col-sm-6">
-                        <input type="text" name="data.species" value="{{data.species}}" data-dtype="String"/>
-                      </div>
-                      <div class="col-sm-6">
-                        <input type="text" name="data.gender" value="{{data.gender}}" data-dtype="String"/>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <!-- Egg Group -->
-                <div class="swsh-box mb-2 w-100" style="text-align: center; word-break: keep-all;">
-                  <div class="swsh-header">
-                    <div class="d-flex w-100 mt-1 mb-1 align-items-center">
-                      <div class="col-sm-12">
-                        <label for="data.egggroup">Egg Group</label>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="swsh-body" style="display: block;">
-                    <div class="d-flex w-100 mt-1 mb-1">
-                      <div class="col-sm-12">
-                        <input type="text" name="data.egggroup" value="{{data.egggroup}}" data-dtype="String"
-                          disabled />
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
                 <!-- Modifiers -->
                 <div class="swsh-box w-100 mb-2" style="text-align: center; word-break: keep-all;">
                   <div class="swsh-header">
@@ -807,7 +888,7 @@
                         <h3>Skill Background</h3>
                     </div>
                   </div>
-                  <div class="swsh-header">
+                  {{!-- <div class="swsh-header">
                     <div class="d-flex w-100 mt-1 mb-1">
                       <div class="col-sm-4">
                         <label for="data.background.increased.one">Skill up 1:</label>
@@ -900,19 +981,19 @@
                         {{/select}}
                       </div>
                     </div>
-                  </div>
+                  </div> --}}
                 </div>
               </div>
               <div class="col">
                 <!-- Skills -->
                   <div class="swsh-box mt-auto w-100 mb-2">
-                    <div class="swsh-header skill skill-block">
+                    <div class="swsh-header skill skill-block" style="padding: 0;">
                       <div class="row no-gutters header w-100">
                         <div class="col-sm-4 pt-2 pb-2">Skill</div>
-                        <div class="col mt-2 mb-2">Mod</div>
+                        <div class="col mt-2 mb-2">Value</div>
                         <div class="col-sm-3 mt-2 mb-2">Rank</div>
-                        <div class="col-sm-2 mt-2 mb-2">Value</div>
-                        <div class="col mt-2 mb-2">Dice</div>
+                        <div class="col mt-2 mb-2">Mod</div>
+                        <div class="col-sm-2 mt-2 mb-2">Dice</div>
                       </div>
                     </div>
                     <div class="swsh-body p-0">
@@ -923,14 +1004,14 @@
                             <label for="data.skills.{{key}}.modifier" class="resource-label">{{skill.label}}</label>
                           </div>
                           <div class="skill {{key}} col pl-1 pr-1 fs-9 center-text">
-                            <input type="text" name="data.skills.{{key}}.modifier" value="{{skill.modifier}}" data-dtype="Number" disabled/>
+                            <input type="text" name="data.skills.{{key}}.value" value="{{skill.value}}"
+                              data-dtype="Number"/>
                           </div>
                           <div class="skill {{key}} col-sm-3 align-self-center bgcolor skill--{{skill.rank}} center-text">
                             <label for="data.skills.{{key}}.value" class="resource-label">{{skill.rank}}</label>
                           </div>
                           <div class="skill {{key}} col pl-1 fs-9 center-text">
-                            <input type="text" name="data.skills.{{key}}.value" value="{{skill.value}}"
-                              data-dtype="Number" disabled/>
+                            <input type="text" name="data.skills.{{key}}.modifier" value="{{skill.modifier}}" data-dtype="Number"/>
                           </div>
                           <div class="skill {{key}} col-sm-2 align-self-center bgcolor fs-9 center-text rollable"
                             data-roll="{{skill.value}}d6{{#if skill.modifier}}+{{skill.modifier}}{{/if}}"
@@ -946,7 +1027,7 @@
                   </div>
               </div>
             </div>
-          </div> --}}
+          </div>
         </div>
       </div>
     </div>
@@ -956,7 +1037,7 @@
       <ul class="sheet-tabs tabs buttons" data-group="primary">
         <li><button class="item" data-tab="stats">Stats</button></li>
         <li><button class="item" data-tab="moves">Moves</button></li>
-        <li><button class="item" data-tab="capability">Capabilities</button></li>
+        <li><button class="item" data-tab="features">Features & Edges</button></li>
         <li><button class="item" data-tab="combat">Combat</button></li>
         <li><button class="item" data-tab="extra">Extra</button></li>
       </ul>

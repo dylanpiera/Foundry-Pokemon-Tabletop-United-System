@@ -187,7 +187,8 @@
 
       "level": {
         "milestones": 0,
-        "dexexp": 0
+        "dexexp": 0,
+        "miscexp": 0
       },
       "health": {
         "value": 0,
@@ -251,7 +252,8 @@
       "base": {
         "name": "",
         "origin": "",
-        "effect": ""
+        "effect": "",
+        "snippet": ""
       },
       "interactions": {
         "sheerForce": false,

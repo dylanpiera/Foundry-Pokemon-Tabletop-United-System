@@ -110,9 +110,21 @@
                               <a class="item-control item-edit" title="Edit ability"><i class="fas fa-edit"></i></a>
                               <a class="item-control item-delete" title="Delete ability"><i class="fas fa-trash"></i></a>
                             </div>
-                            <div class="collapse readable lh-16 item-summary" id="{{ability._id}}-collapse">
-                              {{ability.data.effect}}
-                            </div>
+                            {{#if ability.data.snippet}}
+                              <div class="collapse in readable lh-16 item-summary" id="{{ability._id}}-collapse">
+                                <p class="summary">{{{ability.data.snippet}}}</p>
+                              </div>
+                            {{else}}
+                              {{#if (is true (getGameSetting "openByDefault"))}}
+                                <div class="collapse in readable lh-16 item-summary" id="{{ability._id}}-collapse">
+                                  <p class="summary">{{{ability.data.effect}}}</p>
+                                </div>
+                              {{else}}
+                                <div class="collapse readable lh-16 item-summary" id="{{ability._id}}-collapse">
+                                  <p class="summary">{{{ability.data.effect}}}</p>
+                                </div>
+                              {{/if}}
+                            {{/if}}
                           </li>
                           {{/each}}
                         </ol>
@@ -428,9 +440,21 @@
                             <a class="item-control item-edit" title="Edit capability"><i class="fas fa-edit"></i></a>
                             <a class="item-control item-delete" title="Delete capability"><i class="fas fa-trash"></i></a>
                           </div>
-                          <div class="collapse readable lh-16 item-summary" id="{{capability._id}}-collapse">
-                            {{capability.data.effect}}
-                          </div>
+                          {{#if capability.data.snippet}}
+                            <div class="collapse in readable lh-16 item-summary" id="{{capability._id}}-collapse">
+                              <p class="summary">{{{capability.data.snippet}}}</p>
+                            </div>
+                          {{else}}
+                            {{#if (is true (getGameSetting "openByDefault"))}}
+                              <div class="collapse in readable lh-16 item-summary" id="{{capability._id}}-collapse">
+                                <p class="summary">{{{capability.data.effect}}}</p>
+                              </div>
+                            {{else}}
+                              <div class="collapse readable lh-16 item-summary" id="{{capability._id}}-collapse">
+                                <p class="summary">{{{capability.data.effect}}}</p>
+                              </div>
+                            {{/if}}
+                          {{/if}}
                         </li>
                         {{/each}}
                       </ol>
@@ -466,9 +490,21 @@
                             <a class="item-control item-edit" title="Edit pokeedge"><i class="fas fa-edit"></i></a>
                             <a class="item-control item-delete" title="Delete pokeedge"><i class="fas fa-trash"></i></a>
                           </div>
-                          <div class="collapse readable lh-16 item-summary" id="{{pokeedge._id}}-collapse">
-                            {{pokeedge.data.effect}}
-                          </div>
+                          {{#if pokeedge.data.snippet}}
+                            <div class="collapse in readable lh-16 item-summary" id="{{pokeedge._id}}-collapse">
+                              <p class="summary">{{{pokeedge.data.snippet}}}</p>
+                            </div>
+                          {{else}}
+                            {{#if (is true (getGameSetting "openByDefault"))}}
+                              <div class="collapse in readable lh-16 item-summary" id="{{pokeedge._id}}-collapse">
+                                <p class="summary">{{{pokeedge.data.effect}}}</p>
+                              </div>
+                            {{else}}
+                              <div class="collapse readable lh-16 item-summary" id="{{pokeedge._id}}-collapse">
+                                <p class="summary">{{{pokeedge.data.effect}}}</p>
+                              </div>
+                            {{/if}}
+                          {{/if}}
                         </li>
                         {{/each}}
                       </ol>

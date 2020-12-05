@@ -792,6 +792,7 @@ span.readable {
             padding: .5rem;
             border-top: 1px solid #ffffff13;
             flex: 0 0 100%;
+            overflow: hidden;
         }
 
         .inventory-header {
@@ -1133,6 +1134,15 @@ span.readable {
         padding: 0.3rem 0;
         margin: 0.3rem 0;
     }
+}
+
+p.summary {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+    overflow: hidden;
+    margin: 0;
+    word-break: break-word;
 }
 
 /* Chat CSS */
