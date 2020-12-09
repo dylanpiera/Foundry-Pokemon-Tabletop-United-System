@@ -1,7 +1,8 @@
 // Import Modules
 import { PTUActor } from "./actor/actor.js";
 import { GetSpeciesData } from "./actor/actor.js";
-import { PTUCharacterSheet } from "./actor/character-sheet.js";
+import { PTUGen4CharacterSheet } from "./actor/character-sheet-gen4.js";
+import { PTUGen8CharacterSheet } from "./actor/character-sheet-gen8.js";
 import { PTUGen4PokemonSheet } from "./actor/pokemon-sheet-gen4.js";
 import { PTUGen8PokemonSheet } from "./actor/pokemon-sheet-gen8.js";
 import { PTUItem } from "./item/item.js";
@@ -55,7 +56,8 @@ Hooks.once('init', async function() {
 
   // Register sheet application classes
   Actors.unregisterSheet("core", ActorSheet);
-  Actors.registerSheet("ptu", PTUCharacterSheet, { types: ["character"], makeDefault: true });
+  Actors.registerSheet("ptu", PTUGen8CharacterSheet, { types: ["character"], makeDefault: true });
+  Actors.registerSheet("ptu", PTUGen4CharacterSheet, { types: ["character"], makeDefault: false });
   Actors.registerSheet("ptu", PTUGen8PokemonSheet, { types: ["pokemon"], makeDefault: true });
   Actors.registerSheet("ptu", PTUGen4PokemonSheet, { types: ["pokemon"], makeDefault: false });
   Items.unregisterSheet("core", ItemSheet);
@@ -64,6 +66,9 @@ Hooks.once('init', async function() {
   Items.registerSheet("ptu", PTUFeatSheet, { types: ["feat"], makeDefault: true });
 
   // If you need to add Handlebars helpers, here are a few useful examples:
+  let itemDisplayTemplate = await (await fetch('/systems/ptu/templates/partials/item-display-partial.hbs')).text()
+  Handlebars.registerPartial('item-display', itemDisplayTemplate);
+
   Handlebars.registerHelper("concat", function() {
     var outStr = '';
     for (var arg in arguments) {
@@ -92,6 +97,7 @@ Hooks.once('init', async function() {
   Handlebars.registerHelper("or", function (a, b) {return a || b});
   Handlebars.registerHelper("not", function (a, b) {return a != b});
   Handlebars.registerHelper("itemDescription", function (name) {
+    if(!name) return "";
     if(name || 0 !== name.length) {
       let item = game.ptu.items.find(i => i.name.toLowerCase().includes(name.toLowerCase()));
       if(item) return item.data.data.effect;
@@ -216,6 +222,19 @@ function _loadSystemSettings() {
     default: "true"
   });
 
+  game.settings.register("ptu", "useDexExp", {
+    name: "Use Dex Experience for Trainer Level Calculation",
+    hint: "",
+    scope: "world",
+    config: true,
+    type: String,
+    choices: {
+      "true": "Use Dex Exp",
+      "false": "Don't use Dex Exp"
+    },
+    default: "false"
+  });
+
   game.settings.register("ptu", "nonOwnerCanSeeTabs", {
     name: "Non-owners can see Sheet Tabs",
     hint: "Allow players with Limited/Observer permissions to browse tabs in a Pokémon/Trainer's full sheet",
@@ -246,6 +265,15 @@ function _loadSystemSettings() {
   game.settings.register("ptu", "verboseChatInfo", {
     name: "Verbose Chat Output",
     hint: "When enabled shows more details in chat messages.",
+    scope: "client",
+    config: true,
+    type: Boolean,
+    default: false
+  });
+
+  game.settings.register("ptu", "openByDefault", {
+    name: "Open Collapsables by Default",
+    hint: "Collapsables such as the Feat & Edges list will display their summary by default.",
     scope: "client",
     config: true,
     type: Boolean,

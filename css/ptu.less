@@ -629,7 +629,7 @@ input[name="data.money"] {
     left: 3px;
 }
 
-.hgss-body .editor {
+.hgss-body .editor, .swsh-body .editor {
     width: 100%;
     min-height: 90px;
 
@@ -650,7 +650,7 @@ input[name="data.money"] {
     }
 }
 
-.hgss-box {
+.hgss-box, .swsh-box {
     &.red {
         background: #EA9999;
         .hgss-header {
@@ -792,6 +792,7 @@ span.readable {
             padding: .5rem;
             border-top: 1px solid #ffffff13;
             flex: 0 0 100%;
+            overflow: hidden;
         }
 
         .inventory-header {
@@ -1133,6 +1134,15 @@ span.readable {
         padding: 0.3rem 0;
         margin: 0.3rem 0;
     }
+}
+
+p.summary {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+    overflow: hidden;
+    margin: 0;
+    word-break: break-word;
 }
 
 /* Chat CSS */

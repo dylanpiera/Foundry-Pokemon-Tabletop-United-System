@@ -187,7 +187,8 @@
 
       "level": {
         "milestones": 0,
-        "dexexp": 0
+        "dexexp": 0,
+        "miscexp": 0
       },
       "health": {
         "value": 0,
@@ -204,6 +205,16 @@
         "goals": "",
         "dreams": "",
         "obsessions": ""
+      },
+
+      "background": {
+        "pathetic": {
+          "one": "",
+          "two": "",
+          "three": ""
+        },
+        "novice": "",
+        "adept": ""
       }
     },
     "pokemon": {
@@ -251,7 +262,8 @@
       "base": {
         "name": "",
         "origin": "",
-        "effect": ""
+        "effect": "",
+        "snippet": ""
       },
       "interactions": {
         "sheerForce": false,

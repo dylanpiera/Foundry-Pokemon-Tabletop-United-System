@@ -86,7 +86,8 @@
                   <!-- Abilities -->
                   <div class="swsh-box mt-auto w-100">
                     <div class="swsh-body" style="display: block;">
-                      <ol class="inventory-list">
+                      {{> item-display title="Abilities" type="ability" data=actor.abilities}}
+                      {{!-- <ol class="inventory-list">
                         <li class="inventory-header flexrow">
                           <h3 class="item-name flexrow">Abilities</h3>
                           <div class="item-controls">
@@ -110,13 +111,25 @@
                               <a class="item-control item-edit" title="Edit ability"><i class="fas fa-edit"></i></a>
                               <a class="item-control item-delete" title="Delete ability"><i class="fas fa-trash"></i></a>
                             </div>
-                            <div class="collapse readable lh-16 item-summary" id="{{ability._id}}-collapse">
-                              {{ability.data.effect}}
-                            </div>
+                            {{#if ability.data.snippet}}
+                              <div class="collapse in readable lh-16 item-summary" id="{{ability._id}}-collapse">
+                                <p class="summary">{{{ability.data.snippet}}}</p>
+                              </div>
+                            {{else}}
+                              {{#if (is true (getGameSetting "openByDefault"))}}
+                                <div class="collapse in readable lh-16 item-summary" id="{{ability._id}}-collapse">
+                                  <p class="summary">{{{ability.data.effect}}}</p>
+                                </div>
+                              {{else}}
+                                <div class="collapse readable lh-16 item-summary" id="{{ability._id}}-collapse">
+                                  <p class="summary">{{{ability.data.effect}}}</p>
+                                </div>
+                              {{/if}}
+                            {{/if}}
                           </li>
                           {{/each}}
                         </ol>
-                      </ol>
+                      </ol> --}}
                     </div>
                   </div>
                 </div>
@@ -404,7 +417,8 @@
 
                   <!-- Other Capabilities -->
                   <div class="swsh-body w-100 mt-2" style="display: block;">
-                    <ol class="inventory-list">
+                    {{> item-display title="Other Capabilities" type="capability" data=actor.capabilities}}
+                    {{!-- <ol class="inventory-list">
                       <li class="inventory-header flexrow">
                         <h3 class="item-name flexrow">Other Capabilities</h3>
                         <div class="item-controls">
@@ -428,13 +442,25 @@
                             <a class="item-control item-edit" title="Edit capability"><i class="fas fa-edit"></i></a>
                             <a class="item-control item-delete" title="Delete capability"><i class="fas fa-trash"></i></a>
                           </div>
-                          <div class="collapse readable lh-16 item-summary" id="{{capability._id}}-collapse">
-                            {{capability.data.effect}}
-                          </div>
+                          {{#if capability.data.snippet}}
+                            <div class="collapse in readable lh-16 item-summary" id="{{capability._id}}-collapse">
+                              <p class="summary">{{{capability.data.snippet}}}</p>
+                            </div>
+                          {{else}}
+                            {{#if (is true (getGameSetting "openByDefault"))}}
+                              <div class="collapse in readable lh-16 item-summary" id="{{capability._id}}-collapse">
+                                <p class="summary">{{{capability.data.effect}}}</p>
+                              </div>
+                            {{else}}
+                              <div class="collapse readable lh-16 item-summary" id="{{capability._id}}-collapse">
+                                <p class="summary">{{{capability.data.effect}}}</p>
+                              </div>
+                            {{/if}}
+                          {{/if}}
                         </li>
                         {{/each}}
                       </ol>
-                    </ol>
+                    </ol> --}}
                   </div>
                 </div>
               </div>
@@ -442,7 +468,8 @@
                 <!-- Poké Edges-->
                 <div class="swsh-box mt-2 w-100">
                   <div class="swsh-body w-100" style="display: block;">
-                    <ol class="inventory-list">
+                    {{> item-display title="Poké Edges" type="pokeedge" data=actor.edges}}
+                    {{!-- <ol class="inventory-list">
                       <li class="inventory-header flexrow">
                         <h3 class="item-name flexrow">Poké Edges</h3>
                         <div class="item-controls">
@@ -466,13 +493,25 @@
                             <a class="item-control item-edit" title="Edit pokeedge"><i class="fas fa-edit"></i></a>
                             <a class="item-control item-delete" title="Delete pokeedge"><i class="fas fa-trash"></i></a>
                           </div>
-                          <div class="collapse readable lh-16 item-summary" id="{{pokeedge._id}}-collapse">
-                            {{pokeedge.data.effect}}
-                          </div>
+                          {{#if pokeedge.data.snippet}}
+                            <div class="collapse in readable lh-16 item-summary" id="{{pokeedge._id}}-collapse">
+                              <p class="summary">{{{pokeedge.data.snippet}}}</p>
+                            </div>
+                          {{else}}
+                            {{#if (is true (getGameSetting "openByDefault"))}}
+                              <div class="collapse in readable lh-16 item-summary" id="{{pokeedge._id}}-collapse">
+                                <p class="summary">{{{pokeedge.data.effect}}}</p>
+                              </div>
+                            {{else}}
+                              <div class="collapse readable lh-16 item-summary" id="{{pokeedge._id}}-collapse">
+                                <p class="summary">{{{pokeedge.data.effect}}}</p>
+                              </div>
+                            {{/if}}
+                          {{/if}}
                         </li>
                         {{/each}}
                       </ol>
-                    </ol>
+                    </ol> --}}
                   </div>
                 </div>
 

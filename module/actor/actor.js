@@ -1,6 +1,6 @@
 import { CalcLevel } from "./calculations/level-up-calculator.js";
 import { CalculateEvasions } from "./calculations/evasion-calculator.js";
-import { CalculateCapabilities } from "./calculations/capability-calculator.js"; 
+import { CalculatePokemonCapabilities, CalculateTrainerCapabilities} from "./calculations/capability-calculator.js"; 
 import { CalculateSkills } from "./calculations/skills-calculator.js"; 
 import { CalcBaseStat, CalculateStatTotal } from "./calculations/stats-calculator.js";
 import { GetMonEffectiveness } from "./calculations/effectiveness-calculator.js";
@@ -79,12 +79,15 @@ export class PTUActor extends Actor {
       skill["rank"] = this._getRank(skill["value"]);  
     }
     
-    data.level.current = data.level.milestones + 1 > 50 ? 50 : data.level.milestones + 1; 
+    data.level.current = data.level.milestones + Math.trunc((data.level.dexexp+data.level.miscexp)/10) + 1 > 50 ? 50 : data.level.milestones + Math.trunc((data.level.dexexp+data.level.miscexp)/10) + 1; 
 
     data.health.total = 10 + (data.level.current * 2) + (data.stats.hp.total * 3);
     data.health.max = data.health.injuries > 0 ? Math.trunc(data.health.total*(1-((data.modifiers.hardened ? Math.min(data.health.injuries, 5) : data.health.injuries)/10))) : data.health.total;
 
     data.health.percent = Math.round((data.health.value / data.health.max) * 100);
+
+    data.evasion = CalculateEvasions(data);
+    data.capabilities = CalculateTrainerCapabilities(data.skills, actorData.items, data.stats.spd.stage);
 
     data.ap.total = 5 + Math.floor(data.level.current / 5);
 
@@ -138,7 +141,7 @@ export class PTUActor extends Actor {
 
     data.evasion = CalculateEvasions(data);
 
-    data.capabilities = CalculateCapabilities(speciesData, actorData.items.values(), data.stats.spd.stage);
+    data.capabilities = CalculatePokemonCapabilities(speciesData, actorData.items.values(), data.stats.spd.stage);
 
     if(speciesData) data.egggroup = speciesData["Breeding Information"]["Egg Group"].join(" & ");
 

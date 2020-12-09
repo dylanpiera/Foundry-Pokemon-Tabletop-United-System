@@ -1,3 +1,19 @@
+## 0.0.40 - 0.0.42 - Trainer Sheet
+* Updated the Gen 4 Trainer Sheet to match the Pokémon's Gen 8 Trainer Sheet
+* Added missing elements from gen 4 Trainer Sheet that where present in the Gen 8 Pokémon sheet, such as Moves & Capabilities.
+* Added 'Snippet' as possible field on most items, allowing you to set a small description on feats/abilities etc. to display on your character sheet
+* Added an option always unfold all items in a sheet, see system settings.
+* Added an option to allow or disallow dexexp for trainers, see system settings.
+### Notes
+* Some specific features such as 'Equipment' or 'Augments' etc. are not yet present and will be added later in V2
+* Some classes/feats/etc. may give a player STAB on certain types of moves. This currently isn't supported, however you can manually increase the DB on moves that should have the +2 stab bonus applied.
+* [BREAKING]: With the nearing 1.0 update the gen 4 sheets will be officially deprecated, so I suggest moving over to the new types of sheets if you haven't yet!
+
+## 0.0.39 - Species stats alter stats
+* Speed CS now alter movement capabilities
+* Added Evasion Modifier fields.
+* Fixed bug where advanced mobility didn't properly apply to custom species mons
+
 ## 0.0.35 - 0.0.38 - Custom Species Editor
 ### Features
 * Added new Custom Species Editor which can be found in the System Settings tab next to the system name.
