@@ -79,7 +79,7 @@ export class PTUActor extends Actor {
       skill["rank"] = this._getRank(skill["value"]);  
     }
     
-    data.level.current = data.level.milestones + 1 > 50 ? 50 : data.level.milestones + 1; 
+    data.level.current = data.level.milestones + Math.trunc((data.level.dexexp+data.level.miscexp)/10) + 1 > 50 ? 50 : data.level.milestones + Math.trunc((data.level.dexexp+data.level.miscexp)/10) + 1; 
 
     data.health.total = 10 + (data.level.current * 2) + (data.stats.hp.total * 3);
     data.health.max = data.health.injuries > 0 ? Math.trunc(data.health.total*(1-((data.modifiers.hardened ? Math.min(data.health.injuries, 5) : data.health.injuries)/10))) : data.health.total;

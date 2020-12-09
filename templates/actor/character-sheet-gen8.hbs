@@ -981,6 +981,41 @@
                       </div>
                     </div>
                   </div>
+
+                  <div class="swsh-box mt-auto w-100">
+                  <div class="swsh-header">
+                    <h3 class="item-name flexrow">Capabilities</h3>
+                  </div>
+                  <div class="swsh-body readable w-100 align-items-center" style="white-space: nowrap;">
+                    {{#each data.capabilities as |capability key|}}
+                    {{#if (and (and (not key "Other") (not key "Naturewalk")) (gt capability 0))}}
+                    <div class="col-sm-4 p11 mb-1">
+                      <label for="data.capabilities.{{key}}">{{key}}:</label>
+                    </div>
+                    <div class="col-sm-2 mb-1" style="text-align: center;">
+                      <input type="text" name="data.capabilities.{{key}}" value="{{capability}}" data-dtype="Number"
+                        disabled />
+                    </div>
+                    {{/if}}
+                    {{/each}}
+                  </div>
+                  {{#if data.capabilities.Naturewalk}}
+                  <div class="swsh-body readable w-100 align-items-center">
+                    <div class="col-sm-4 p11">
+                      <label for="data.capabilities.Naturewalk">Naturewalk:</label>
+                    </div>
+                    <div class="col-sm-8" style="text-align: center;">
+                      <input type="text" name="data.capabilities.Naturewalk" value="{{data.capabilities.Naturewalk}}"
+                        data-dtype="Number" disabled />
+                    </div>
+                  </div>
+                  {{/if}}
+
+                  <!-- Other Capabilities -->
+                  <div class="swsh-body w-100 mt-2" style="display: block;">
+                    {{> item-display title="Other Capabilities" type="capability" data=actor.capabilities}}
+                  </div>
+                </div>
                 </div>
               </div>
             </div>
