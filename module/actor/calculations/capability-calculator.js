@@ -1,4 +1,45 @@
-export function CalculateCapabilities(speciesData, items, speedCombatStages = 0) {
+export function CalculateTrainerCapabilities(trainerSkills, items, speedCombatStages) {
+    /**
+     * E29 = Survival
+     * E14 = Athletics
+     * E13 = Acrobatics
+     * 
+     * 
+     */
+
+    let calcOverlandSpeed = function() {
+        if((trainerSkills.survival.value > trainerSkills.athletics.value || trainerSkills.survival.value > trainerSkills.acrobatics.value) && items.filter(x => x.type == "edge").find(x => x.name == "Traveler")) {
+             if(trainerSkills.athletics.value > trainerSkills.acrobatics.value) return Math.floor((trainerSkills.athletics.value + trainerSkills.survival.value)/2);
+             else return Math.floor((trainerSkills.acrobatics.value + trainerSkills.survival.value)/2);
+        }
+        return Math.floor((trainerSkills.athletics.value + trainerSkills.acrobatics.value)/2)
+     }
+
+    let capabilities = {
+        "Overland": Math.max(2, calcOverlandSpeed()) + 3,
+        "Throwing Range": 0,
+        "High Jump": 0,
+        "Long Jump": 0,
+        "Swim": 0,
+        "Power": 0
+    }
+    for(let item of items.values()) {
+        if(item.name == "Plains Runner") capabilities.Overland += 2;
+        if (item.type == "ability" && (item.name == "Sprint" || item.name == "Sprint [Playtest]")) capabilities.Overland += 2;
+    }
+
+    let spcsChanges = speedCombatStages > 0 ? Math.floor(speedCombatStages / 2) : speedCombatStages < 0 ? Math.ceil(speedCombatStages / 2) : 0;
+    if(spcsChanges > 0 || spcsChanges < 0) {
+        for(let key of Object.keys(capabilities)) {
+            if(key == "High Jump" || key == "Long Jump" || key == "Power" || key == "Throwing Range" || key == "Other") continue;
+            if(capabilities[key] > 0) capabilities[key] = Math.max(capabilities[key] + spcsChanges, capabilities[key] > 1 ? 2 : 1)
+        }
+    }
+
+    return capabilities;
+}
+
+export function CalculatePokemonCapabilities(speciesData, items, speedCombatStages = 0) {
     if (speciesData?.Capabilities == null) return [];
     
     if(typeof (speciesData.Capabilities.Overland) === "string") {
@@ -16,6 +57,7 @@ export function CalculateCapabilities(speciesData, items, speedCombatStages = 0)
             if (speciesData.Capabilities["Levitate"] > 0) speciesData.Capabilities["Levitate"] += 2;
             else speciesData.Capabilities["Levitate"] += 4;
         }
+        if (item.type == "ability" && (item.name == "Sprint" || item.name == "Sprint [Playtest]")) speciesData.Capabilities["Overland"] += 2;
 
         // Moves
         if (item.name == "Bounce" && item.type == "move") speciesData.Capabilities["High Jump"] += 1;

@@ -67,7 +67,6 @@ Hooks.once('init', async function() {
 
   // If you need to add Handlebars helpers, here are a few useful examples:
   let itemDisplayTemplate = await (await fetch('/systems/ptu/templates/partials/item-display-partial.hbs')).text()
-  console.log(itemDisplayTemplate)
   Handlebars.registerPartial('item-display', itemDisplayTemplate);
 
   Handlebars.registerHelper("concat", function() {

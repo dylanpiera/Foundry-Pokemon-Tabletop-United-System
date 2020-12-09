@@ -1,6 +1,6 @@
 import { CalcLevel } from "./calculations/level-up-calculator.js";
 import { CalculateEvasions } from "./calculations/evasion-calculator.js";
-import { CalculateCapabilities } from "./calculations/capability-calculator.js"; 
+import { CalculatePokemonCapabilities, CalculateTrainerCapabilities} from "./calculations/capability-calculator.js"; 
 import { CalculateSkills } from "./calculations/skills-calculator.js"; 
 import { CalcBaseStat, CalculateStatTotal } from "./calculations/stats-calculator.js";
 import { GetMonEffectiveness } from "./calculations/effectiveness-calculator.js";
@@ -86,6 +86,7 @@ export class PTUActor extends Actor {
 
     data.health.percent = Math.round((data.health.value / data.health.max) * 100);
 
+    data.capabilities = CalculateTrainerCapabilities(data.skills, actorData.items, data.stats.spd.stage);
     data.ap.total = 5 + Math.floor(data.level.current / 5);
 
     data.initiative = {value: data.stats.spd.total + data.modifiers.initiative};
@@ -138,7 +139,7 @@ export class PTUActor extends Actor {
 
     data.evasion = CalculateEvasions(data);
 
-    data.capabilities = CalculateCapabilities(speciesData, actorData.items.values(), data.stats.spd.stage);
+    data.capabilities = CalculatePokemonCapabilities(speciesData, actorData.items.values(), data.stats.spd.stage);
 
     if(speciesData) data.egggroup = speciesData["Breeding Information"]["Egg Group"].join(" & ");
 
