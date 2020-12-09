@@ -988,7 +988,7 @@
                   </div>
                   <div class="swsh-body readable w-100 align-items-center" style="white-space: nowrap;">
                     {{#each data.capabilities as |capability key|}}
-                    {{#if (and (and (not key "Other") (not key "Naturewalk")) (gt capability 0))}}
+                    {{#if (not key "Other")}}
                     <div class="col-sm-4 p11 mb-1">
                       <label for="data.capabilities.{{key}}">{{key}}:</label>
                     </div>
@@ -999,17 +999,6 @@
                     {{/if}}
                     {{/each}}
                   </div>
-                  {{#if data.capabilities.Naturewalk}}
-                  <div class="swsh-body readable w-100 align-items-center">
-                    <div class="col-sm-4 p11">
-                      <label for="data.capabilities.Naturewalk">Naturewalk:</label>
-                    </div>
-                    <div class="col-sm-8" style="text-align: center;">
-                      <input type="text" name="data.capabilities.Naturewalk" value="{{data.capabilities.Naturewalk}}"
-                        data-dtype="Number" disabled />
-                    </div>
-                  </div>
-                  {{/if}}
 
                   <!-- Other Capabilities -->
                   <div class="swsh-body w-100 mt-2" style="display: block;">

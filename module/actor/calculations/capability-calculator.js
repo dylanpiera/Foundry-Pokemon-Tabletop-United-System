@@ -7,33 +7,59 @@ export function CalculateTrainerCapabilities(trainerSkills, items, speedCombatSt
      * 
      */
 
+    let traveler = items.filter(x => x.type == "edge").find(x => x.name == "Traveler") !== undefined;
+
     let calcOverlandSpeed = function() {
-        if((trainerSkills.survival.value > trainerSkills.athletics.value || trainerSkills.survival.value > trainerSkills.acrobatics.value) && items.filter(x => x.type == "edge").find(x => x.name == "Traveler")) {
+        if((trainerSkills.survival.value > trainerSkills.athletics.value || trainerSkills.survival.value > trainerSkills.acrobatics.value) && traveler) {
              if(trainerSkills.athletics.value > trainerSkills.acrobatics.value) return Math.floor((trainerSkills.athletics.value + trainerSkills.survival.value)/2);
              else return Math.floor((trainerSkills.acrobatics.value + trainerSkills.survival.value)/2);
         }
         return Math.floor((trainerSkills.athletics.value + trainerSkills.acrobatics.value)/2)
      }
 
+    let calcHighJump = function() {
+        if(trainerSkills.survival.value > trainerSkills.acrobatics.value && traveler) {
+            return trainerSkills.survival.value >= 6 ? 2 : trainerSkills.survival.value >= 4 ? 1 : 0;
+        }
+        return trainerSkills.acrobatics.value >= 6 ? 2 : trainerSkills.acrobatics.value >= 4 ? 1 : 0;
+    }
+
+    let calcLongJump = function() {
+        if(trainerSkills.survival.value > trainerSkills.acrobatics.value && traveler) {
+            return Math.trunc(trainerSkills.survival.value/2)
+        }
+        return Math.trunc(trainerSkills.acrobatics.value/2)
+    }
+
     let capabilities = {
         "Overland": Math.max(2, calcOverlandSpeed()) + 3,
-        "Throwing Range": 0,
-        "High Jump": 0,
-        "Long Jump": 0,
+        "Throwing Range": trainerSkills.athletics.value + 4,
+        "High Jump": calcHighJump(),
+        "Long Jump": calcLongJump(),
         "Swim": 0,
         "Power": 0
     }
     for(let item of items.values()) {
         if(item.name == "Plains Runner") capabilities.Overland += 2;
-        if (item.type == "ability" && (item.name == "Sprint" || item.name == "Sprint [Playtest]")) capabilities.Overland += 2;
+        if(item.type == "ability" && (item.name == "Sprint" || item.name == "Sprint [Playtest]")) capabilities.Overland += 2;
+
+        if(item.name == "Acrobat" && item.type == "edge") { 
+            capabilities["High Jump"] += 1;
+            capabilities["Long Jump"] += 1;
+        }
+        if(item.name == "Traceur") capabilities["High Jump"] += 1;
+        if(item.name == "Synthetic Muscle" || item.name == "Upgraded Synthetic Muscle") {
+            capabilities["High Jump"] += 1;
+            capabilities["Long Jump"] += 1;
+            capabilities["Power"] += 2;
+        }
+        if(item.name == "Bounce" && item.type == "move") capabilities["High Jump"] += 1;
+        if(item.name == "Splash" && item.type == "move") capabilities["Long Jump"] += 1;
     }
 
     let spcsChanges = speedCombatStages > 0 ? Math.floor(speedCombatStages / 2) : speedCombatStages < 0 ? Math.ceil(speedCombatStages / 2) : 0;
     if(spcsChanges > 0 || spcsChanges < 0) {
-        for(let key of Object.keys(capabilities)) {
-            if(key == "High Jump" || key == "Long Jump" || key == "Power" || key == "Throwing Range" || key == "Other") continue;
-            if(capabilities[key] > 0) capabilities[key] = Math.max(capabilities[key] + spcsChanges, capabilities[key] > 1 ? 2 : 1)
-        }
+        if(capabilities.overland > 0) capabilities.overland = Math.max(capabilities.overland + spcsChanges, capabilities.overland > 1 ? 2 : 1)
     }
 
     return capabilities;
