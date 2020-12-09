@@ -1,0 +1,151 @@
+<ol class="inventory-list">
+    <li class="inventory-header flexrow">
+        <h3 class="item-name flexrow">{{title}}</h3>
+        <div class="item-controls">
+            <a class="item-control item-create" title="Add {{type}}" data-type="{{type}}"><i
+                class="fas fa-plus-circle" style="margin-right: 3px;"></i><span
+                class="readable">Add</span></a>
+        </div>
+    </li>
+    <ol class="item-list">
+        {{#each data as | obj |}}
+        <li class="item flexrow" data-item-id="{{obj._id}}">
+            <div class="item-name flexrow">
+
+            <h4 title="Toggle Info ({{obj.name}})" data-toggle="collapse"
+            {{#if obj.data.snippet}}
+                data-target=".{{obj._id}}-collapse" aria-expanded="false"
+                aria-controls="{{obj._id}}-collapse {{obj._id}}-snippet-collapse"
+            {{else}}
+                data-target="#{{obj._id}}-collapse" aria-expanded="false"
+                aria-controls="{{obj._id}}-collapse"
+            {{/if}}
+            >
+                <i class="fas fa-info-circle info-icon"></i>
+                {{obj.name}}
+            </h4>
+            </div>
+            {{#if obj.data.quantity}}
+                <div class="item-detail item-amount">
+                    <input data-item-id="{{obj._id}}" data-binding="data.quantity" type="text" value="{{obj.data.quantity}}" data-dtype="Number"/>
+                </div>
+            {{/if}}
+            <div class="item-controls" style="flex: 0 0 55px; justify-content: center; display:flex;">
+            <a class="item-control item-edit" title="Edit {{type}}"><i class="fas fa-edit"></i></a>
+            <a class="item-control item-delete" title="Delete {{type}}"><i class="fas fa-trash"></i></a>
+            </div>
+            {{#if obj.data.snippet}}
+            <div class="collapse readable lh-16 item-summary {{obj._id}}-collapse" id="{{obj._id}}-collapse">
+                {{#if obj.data.origin}}
+                <div class="row">
+                    <div class="col-sm-4">
+                    <b>Origin:</b>
+                    </div>
+                    <div class="col">
+                    {{obj.data.origin}}
+                    </div>
+                </div>
+                {{/if}}
+                {{#if obj.data.prerequisites}}
+                <div class="row">
+                    <div class="col-sm-4">
+                    <b>Prerequisites:</b>
+                    </div>
+                    <div class="col">
+                    {{obj.data.prerequisites}}
+                    </div>
+                </div>
+                {{/if}}
+                {{#if obj.data.tags}}
+                <div class="row">
+                    <div class="col-sm-4">
+                    <b>Tags:</b>
+                    </div>
+                    <div class="col">
+                    {{obj.data.tags}}
+                    </div>
+                </div>
+                {{/if}}
+                <hr>
+                <p class="summary">{{{obj.data.effect}}}</p>
+            </div>
+            <div class="collapse in readable lh-16 item-summary {{obj._id}}-collapse" id="{{obj._id}}-snippet-collapse">
+                <p class="summary">{{{obj.data.snippet}}}</p>
+            </div>
+            {{else}}
+            {{#if (is true (getGameSetting "openByDefault"))}}
+                <div class="collapse in readable lh-16 item-summary" id="{{obj._id}}-collapse">
+                {{#if obj.data.origin}}
+                    <div class="row">
+                    <div class="col-sm-4">
+                        <b>Origin:</b>
+                    </div>
+                    <div class="col">
+                        {{obj.data.origin}}
+                    </div>
+                    </div>
+                {{/if}}
+                {{#if obj.data.prerequisites}}
+                    <div class="row">
+                    <div class="col-sm-4">
+                        <b>Prerequisites:</b>
+                    </div>
+                    <div class="col">
+                        {{obj.data.prerequisites}}
+                    </div>
+                    </div>
+                {{/if}}
+                {{#if obj.data.tags}}
+                    <div class="row">
+                    <div class="col-sm-4">
+                        <b>Tags:</b>
+                    </div>
+                    <div class="col">
+                        {{obj.data.tags}}
+                    </div>
+                    </div>
+                {{/if}}
+                <hr>
+                <p class="summary">{{{obj.data.effect}}}</p>
+                </div>
+            {{else}}
+                <div class="collapse readable lh-16 item-summary" id="{{obj._id}}-collapse">
+                {{#if obj.data.origin}}
+                    <div class="row">
+                    <div class="col-sm-4">
+                        <b>Origin:</b>
+                    </div>
+                    <div class="col">
+                        {{obj.data.origin}}
+                    </div>
+                    </div>
+                {{/if}}
+                {{#if obj.data.prerequisites}}
+                    <div class="row">
+                    <div class="col-sm-4">
+                        <b>Prerequisites:</b>
+                    </div>
+                    <div class="col">
+                        {{obj.data.prerequisites}}
+                    </div>
+                    </div>
+                {{/if}}
+                {{#if obj.data.tags}}
+                    <div class="row">
+                    <div class="col-sm-4">
+                        <b>Tags:</b>
+                    </div>
+                    <div class="col">
+                        {{obj.data.tags}}
+                    </div>
+                    </div>
+                {{/if}}
+                <hr>
+                <p class="summary">{{{obj.data.effect}}}</p>
+                </div>
+            {{/if}}
+            {{/if}}
+        </li>
+    {{/each}}
+    </ol>
+</ol>

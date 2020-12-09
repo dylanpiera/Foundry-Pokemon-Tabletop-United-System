@@ -86,7 +86,8 @@
                   <!-- Abilities -->
                   <div class="swsh-box mt-auto w-100">
                     <div class="swsh-body" style="display: block;">
-                      <ol class="inventory-list">
+                      {{> item-display title="Abilities" type="ability" data=actor.abilities}}
+                      {{!-- <ol class="inventory-list">
                         <li class="inventory-header flexrow">
                           <h3 class="item-name flexrow">Abilities</h3>
                           <div class="item-controls">
@@ -128,7 +129,7 @@
                           </li>
                           {{/each}}
                         </ol>
-                      </ol>
+                      </ol> --}}
                     </div>
                   </div>
                 </div>
@@ -416,7 +417,8 @@
 
                   <!-- Other Capabilities -->
                   <div class="swsh-body w-100 mt-2" style="display: block;">
-                    <ol class="inventory-list">
+                    {{> item-display title="Other Capabilities" type="capability" data=actor.capabilities}}
+                    {{!-- <ol class="inventory-list">
                       <li class="inventory-header flexrow">
                         <h3 class="item-name flexrow">Other Capabilities</h3>
                         <div class="item-controls">
@@ -458,7 +460,7 @@
                         </li>
                         {{/each}}
                       </ol>
-                    </ol>
+                    </ol> --}}
                   </div>
                 </div>
               </div>
@@ -466,7 +468,8 @@
                 <!-- Poké Edges-->
                 <div class="swsh-box mt-2 w-100">
                   <div class="swsh-body w-100" style="display: block;">
-                    <ol class="inventory-list">
+                    {{> item-display title="Poké Edges" type="pokeedge" data=actor.edges}}
+                    {{!-- <ol class="inventory-list">
                       <li class="inventory-header flexrow">
                         <h3 class="item-name flexrow">Poké Edges</h3>
                         <div class="item-controls">
@@ -508,7 +511,7 @@
                         </li>
                         {{/each}}
                       </ol>
-                    </ol>
+                    </ol> --}}
                   </div>
                 </div>
 

@@ -28,13 +28,54 @@
       </div>
       <div class="panel gen8character h-100">
         <div class="sheet-body no-hd h-100">
+          <!-- Stats Tab -->
           <div class="tab details stats h-100" data-group="primary" data-tab="stats">
-            <!-- Stats Tab -->
             <div class="row justify-content-between p-2 h-100">
               <!-- Left Col -->
               <div class="col-sm-12 col-md-5">
                 <div class="d-flex align-items-end flex-column h-100">
-                  <!-- Stats -->
+                  <!-- Skills -->
+                  <div class="swsh-box mt-auto w-100 mb-2">
+                    <div class="swsh-header skill skill-block" style="padding: 0;">
+                      <div class="row no-gutters header w-100">
+                        <div class="col-sm-4 pt-2 pb-2">Skill</div>
+                        <div class="col mt-2 mb-2">Value</div>
+                        <div class="col-sm-3 mt-2 mb-2">Rank</div>
+                        <div class="col mt-2 mb-2">Mod</div>
+                        <div class="col-sm-2 mt-2 mb-2">Dice</div>
+                      </div>
+                    </div>
+                    <div class="swsh-body p-0">
+                      <div class="w-100 skills skill-block">
+                        {{#each data.skills as |skill key|}}
+                        <div class="row no-gutters {{key}} align-items-center">
+                          <div class="skill {{key}} col-sm-4 bgcolor key type--{{skill.type}} align-self-center">
+                            <label for="data.skills.{{key}}.modifier" class="resource-label">{{skill.label}}</label>
+                          </div>
+                          <div class="skill {{key}} col pl-1 pr-1 fs-9 center-text">
+                            <input type="text" name="data.skills.{{key}}.value" value="{{skill.value}}"
+                              data-dtype="Number"/>
+                          </div>
+                          <div class="skill {{key}} col-sm-3 align-self-center bgcolor skill--{{skill.rank}} center-text">
+                            <label for="data.skills.{{key}}.value" class="resource-label">{{skill.rank}}</label>
+                          </div>
+                          <div class="skill {{key}} col pl-1 fs-9 center-text">
+                            <input type="text" name="data.skills.{{key}}.modifier" value="{{skill.modifier}}" data-dtype="Number"/>
+                          </div>
+                          <div class="skill {{key}} col-sm-2 align-self-center bgcolor fs-9 center-text rollable"
+                            data-roll="{{skill.value}}d6{{#if skill.modifier}}+{{skill.modifier}}{{/if}}"
+                            data-label="{{skill.label}}">
+                            <i class="fas fa-dice-d20"></i>
+                            <label for="data.skills.{{key}}.value"
+                              class="resource-label">{{skill.value}}d6{{#if skill.modifier}}+{{skill.modifier}}{{/if}}</label>
+                          </div>
+                        </div>
+                        {{/each}}
+                      </div>
+                    </div>
+                  </div>
+                  
+                  {{!-- <!-- Stats -->
                   <div class="w-100 stats stat-block mb-2">
                     <div class="row no-gutters header">
                       <div class="col-sm-2 pt-2 pb-2 key stat-header">Stats</div>
@@ -81,9 +122,9 @@
                       </div>
                     </div>
                     {{/if}}
-                  </div>
+                  </div> --}}
 
-                  <!-- Abilities -->
+                  {{!-- <!-- Abilities -->
                   <div class="swsh-box mt-auto w-100">
                     <div class="swsh-body" style="display: block;">
                       <ol class="inventory-list">
@@ -130,7 +171,7 @@
                         </ol>
                       </ol>
                     </div>
-                  </div>
+                  </div> --}}
                 </div>
               </div>
 
@@ -165,76 +206,8 @@
                     </div>
                   </div> 
 
-                  {{!-- <!-- Type Effectiveness -->
-                  <div class="w-100 swsh-box mt-auto mb-auto">
-                    <div class="swsh-header justify-content-center">
-                      <h3>Typing</h3>
-                    </div>
-                    <div class="swsh-body mt-1 mb-1 justify-content-center">
-                      <span class="type-img">{{{loadTypeImages data.typing}}}</span>
-                    </div>
-                    <!-- Resistances & Weaknesses -->
-                    {{#if (gt data.effectiveness.Weakness.length 0) }}
-                    <div class="swsh-header">
-                      <h5>Weaknesses</h5>
-                    </div>
-                    <div class="swsh-body">
-                      <ul class="effectiveness-table">
-                      {{#each data.effectiveness.Weakness}}
-                        {{#each this}}
-                          <li><span class="type-img">{{{loadTypeImage @key}}}</span> <span class="ml-1">x{{this}}</span></li>
-                        {{/each}}
-                      {{/each}}
-                      </ul>
-                    </div>
-                    {{/if}}
-                    <!-- Hide regular effective moves, maybe make a setting later -->
-                    {{#if (and (gt data.effectiveness.Normal.length 0) false)}}
-                    <div class="swsh-header">
-                      <h5>Normal</h5>
-                    </div>
-                    <div class="swsh-body">
-                      <ul class="effectiveness-table">
-                      {{#each data.effectiveness.Normal}}
-                        {{#each this}}
-                          <li><span class="type-img">{{{loadTypeImage @key}}}</span> <span class="ml-1">x{{this}}</span></li>
-                        {{/each}}
-                      {{/each}}
-                      </ul>
-                    </div>
-                    {{/if}}
-                    {{#if (gt data.effectiveness.Resistant.length 0) }}
-                    <div class="swsh-header">
-                      <h5>Resistances</h5>
-                    </div>
-                    <div class="swsh-body">
-                      <ul class="effectiveness-table">
-                      {{#each data.effectiveness.Resistant}}
-                        {{#each this}}
-                          <li><span class="type-img">{{{loadTypeImage @key}}}</span> <span class="ml-1">x{{this}}</span></li>
-                        {{/each}}
-                      {{/each}}
-                      </ul>
-                    </div>
-                    {{/if}}
-                    {{#if (gt data.effectiveness.Immune.length 0) }}
-                    <div class="swsh-header">
-                      <h5>Immunities</h5>
-                    </div>
-                    <div class="swsh-body">
-                      <ul class="effectiveness-table">
-                      {{#each data.effectiveness.Immune}}
-                        {{#each this}}
-                          <li><span class="type-img">{{{loadTypeImage @key}}}</span> <span class="ml-1">x{{this}}</span></li>
-                        {{/each}}
-                      {{/each}}
-                      </ul>
-                    </div>
-                    {{/if}}
-                  </div>     --}}
-
                   <!-- Action Points -->
-                  <div class="w-100 level-box mt-auto mb-1">
+                  <div class="w-100 level-box mt-1 mb-1">
                     <div class="swsh-box" style="text-align: center; word-break: keep-all;">
                       <div class="swsh-header">
                         <h3 class="m-auto">Action Points</h3>
@@ -249,8 +222,8 @@
                     </div>
                   </div>
 
-                  <!-- Experience + Level + Item -->
-                  <div class="w-100 level-box mt-1">
+                  <!-- Experience + Level -->
+                  <div class="w-100 level-box mt-1 mb-1">
                     <div class="swsh-box" style="text-align: center; word-break: keep-all;">
                       <div class="swsh-header">
                         <div class="d-flex w-100 align-items-center justify-content-center">
@@ -342,6 +315,177 @@
                         </div>
                       </div> --}}
                     </div>
+                  </div>
+
+                  <!-- (Movement) Capabilities -->
+                  <div class="w-100 mt-auto">
+
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Inventory -->
+          <div class="tab details inventory" data-group="primary" data-tab="inventory">
+            <div class="row">
+              <div class="col">
+                <!-- Items -->
+                <div class="swsh-box mt-2 w-100">
+                  <div class="swsh-body w-100" style="display: block;">
+                    {{> item-display title="Items" type="item" data=actor.items}}
+                    {{!-- <ol class="inventory-list">
+                      <li class="inventory-header flexrow">
+                        <h3 class="item-name flexrow">Items</h3>
+                        <div class="item-controls">
+                          <a class="item-control item-create" title="Add item" data-type="item"><i
+                              class="fas fa-plus-circle" style="margin-right: 3px;"></i><span
+                              class="readable">Add</span></a>
+                        </div>
+                      </li>
+                      <ol class="item-list">
+                        {{#each actor.items as | item |}}
+                        <li class="item flexrow" data-item-id="{{item._id}}">
+                          <div class="item-name flexrow">
+                            <h4 title="Toggle Info ({{item.name}})" data-toggle="collapse"
+                              data-target="#{{item._id}}-collapse" aria-expanded="false"
+                              aria-controls="{{item._id}}-collapse">
+                              <i class="fas fa-info-circle info-icon"></i>
+                              {{item.name}}
+                            </h4>
+                          </div>
+                          <div class="item-detail item-amount">
+                            <input data-item-id="{{item._id}}" data-binding="data.quantity" type="text" value="{{item.data.quantity}}" data-dtype="Number"/>
+                          </div>
+                          <div class="item-controls" style="flex: 0 0 55px; justify-content: center; display:flex;">
+                            <a class="item-control item-edit" title="Edit item"><i class="fas fa-edit"></i></a>
+                            <a class="item-control item-delete" title="Delete item"><i class="fas fa-trash"></i></a>
+                          </div>
+                          {{#if item.data.snippet}}
+                            <div class="collapse in readable lh-16 item-summary" id="{{item._id}}-collapse">
+                              {{#if item.data.origin}}
+                                <div class="row">
+                                  <div class="col-sm-4">
+                                    <b>Origin:</b>
+                                  </div>
+                                  <div class="col">
+                                    {{item.data.origin}}
+                                  </div>
+                                </div>
+                              {{/if}}
+                              {{#if item.data.prerequisites}}
+                                <div class="row">
+                                  <div class="col-sm-4">
+                                    <b>Prerequisites:</b>
+                                  </div>
+                                  <div class="col">
+                                    {{item.data.prerequisites}}
+                                  </div>
+                                </div>
+                              {{/if}}
+                              {{#if item.data.tags}}
+                                <div class="row">
+                                  <div class="col-sm-4">
+                                    <b>Tags:</b>
+                                  </div>
+                                  <div class="col">
+                                    {{item.data.tags}}
+                                  </div>
+                                </div>
+                              {{/if}}
+                              <hr>
+                              <p class="summary">{{{item.data.snippet}}}</p>
+                            </div>
+                          {{else}}
+                            {{#if (is true (getGameSetting "openByDefault"))}}
+                              <div class="collapse in readable lh-16 item-summary" id="{{item._id}}-collapse">
+                                {{#if item.data.origin}}
+                                  <div class="row">
+                                    <div class="col-sm-4">
+                                      <b>Origin:</b>
+                                    </div>
+                                    <div class="col">
+                                      {{item.data.origin}}
+                                    </div>
+                                  </div>
+                                {{/if}}
+                                {{#if item.data.prerequisites}}
+                                  <div class="row">
+                                    <div class="col-sm-4">
+                                      <b>Prerequisites:</b>
+                                    </div>
+                                    <div class="col">
+                                      {{item.data.prerequisites}}
+                                    </div>
+                                  </div>
+                                {{/if}}
+                                {{#if item.data.tags}}
+                                  <div class="row">
+                                    <div class="col-sm-4">
+                                      <b>Tags:</b>
+                                    </div>
+                                    <div class="col">
+                                      {{item.data.tags}}
+                                    </div>
+                                  </div>
+                                {{/if}}
+                                <hr>
+                                <p class="summary">{{{item.data.effect}}}</p>
+                              </div>
+                            {{else}}
+                              <div class="collapse readable lh-16 item-summary" id="{{item._id}}-collapse">
+                                {{#if item.data.origin}}
+                                  <div class="row">
+                                    <div class="col-sm-4">
+                                      <b>Origin:</b>
+                                    </div>
+                                    <div class="col">
+                                      {{item.data.origin}}
+                                    </div>
+                                  </div>
+                                {{/if}}
+                                {{#if item.data.prerequisites}}
+                                  <div class="row">
+                                    <div class="col-sm-4">
+                                      <b>Prerequisites:</b>
+                                    </div>
+                                    <div class="col">
+                                      {{item.data.prerequisites}}
+                                    </div>
+                                  </div>
+                                {{/if}}
+                                {{#if item.data.tags}}
+                                  <div class="row">
+                                    <div class="col-sm-4">
+                                      <b>Tags:</b>
+                                    </div>
+                                    <div class="col">
+                                      {{item.data.tags}}
+                                    </div>
+                                  </div>
+                                {{/if}}
+                                <hr>
+                                <p class="summary">{{{item.data.effect}}}</p>
+                              </div>
+                            {{/if}}
+                          {{/if}}
+                        </li>
+                        {{/each}}
+                      </ol>
+                    </ol> --}}
+                  </div>
+                </div>
+              </div>
+              <div class="col">
+                <div class="swsh-box">
+                  <div class="swsh-header justify-content-center">
+                    <h3 for="data.money" class="mr-1">Money:</h3>
+                  </div>
+                  <div class="swsh-body ml-3 mr-3">
+                    <input type="text" name="data.money" value="{{data.money}}" data-dtype="Number">
+                  </div>
+                  <div class="swsh-body mt-3 justify-content-center">
+                    <h3 style="color:#6c757d;">Inventory Sorting & More Coming Soon!</h3>
                   </div>
                 </div>
               </div>
@@ -440,7 +584,8 @@
                 <!-- Feats -->
                 <div class="swsh-box mt-2 w-100">
                   <div class="swsh-body w-100" style="display: block;">
-                    <ol class="inventory-list">
+                    {{> item-display title="Features" type="feat" data=actor.feats}}
+                    {{!-- <ol class="inventory-list">
                       <li class="inventory-header flexrow">
                         <h3 class="item-name flexrow">Features</h3>
                         <div class="item-controls">
@@ -453,9 +598,16 @@
                         {{#each actor.feats as | feat |}}
                         <li class="item flexrow" data-item-id="{{feat._id}}">
                           <div class="item-name flexrow">
+
                             <h4 title="Toggle Info ({{feat.name}})" data-toggle="collapse"
+                            {{#if feat.data.snippet}}
+                              data-target=".{{feat._id}}-collapse" aria-expanded="false"
+                              aria-controls="{{feat._id}}-collapse {{feat._id}}-snippet-collapse"
+                            {{else}}
                               data-target="#{{feat._id}}-collapse" aria-expanded="false"
-                              aria-controls="{{feat._id}}-collapse">
+                              aria-controls="{{feat._id}}-collapse"
+                            {{/if}}
+                            >
                               <i class="fas fa-info-circle info-icon"></i>
                               {{feat.name}}
                             </h4>
@@ -465,7 +617,7 @@
                             <a class="item-control item-delete" title="Delete feat"><i class="fas fa-trash"></i></a>
                           </div>
                           {{#if feat.data.snippet}}
-                            <div class="collapse in readable lh-16 item-summary" id="{{feat._id}}-collapse">
+                            <div class="collapse readable lh-16 item-summary {{feat._id}}-collapse" id="{{feat._id}}-collapse">
                               {{#if feat.data.origin}}
                                 <div class="row">
                                   <div class="col-sm-4">
@@ -497,6 +649,9 @@
                                 </div>
                               {{/if}}
                               <hr>
+                              <p class="summary">{{{feat.data.effect}}}</p>
+                            </div>
+                            <div class="collapse in readable lh-16 item-summary {{feat._id}}-collapse" id="{{feat._id}}-snippet-collapse">
                               <p class="summary">{{{feat.data.snippet}}}</p>
                             </div>
                           {{else}}
@@ -575,7 +730,7 @@
                         </li>
                         {{/each}}
                       </ol>
-                    </ol>
+                    </ol> --}}
                   </div>
                 </div>
               </div>
@@ -583,7 +738,8 @@
                 <!-- Edges-->
                 <div class="swsh-box mt-2 w-100">
                   <div class="swsh-body w-100" style="display: block;">
-                    <ol class="inventory-list">
+                    {{> item-display title="Edges" type="edge" data=actor.edges}}
+                    {{!-- <ol class="inventory-list">
                       <li class="inventory-header flexrow">
                         <h3 class="item-name flexrow">Edges</h3>
                         <div class="item-controls">
@@ -625,7 +781,7 @@
                         </li>
                         {{/each}}
                       </ol>
-                    </ol>
+                    </ol> --}}
                   </div>
                 </div>
               </div>
@@ -633,8 +789,202 @@
           </div>
 
           <!-- Combat Tab -->
-          {{!-- <div class="tab details combat" data-group="primary" data-tab="combat">
-            <div class="row">
+          <div class="tab details combat h-100" data-group="primary" data-tab="combat">
+            <div class="row justify-content-between p-2 h-100">
+              <!-- Left Col -->
+              <div class="col-sm-12 col-md-5">
+                <div class="d-flex align-items-end flex-column h-100">
+                  <!-- Stats -->
+                  <div class="w-100 stats stat-block mb-2">
+                    <div class="row no-gutters header">
+                      <div class="col-sm-2 pt-2 pb-2 key stat-header">Stats</div>
+                      <div class="col-sm-2 mt-2 mb-2">Base</div>
+                      <div class="col-sm-2 mt-2 mb-2">Mod</div>
+                      <div class="col-sm-2 mt-2 mb-2" style="font-size: 9px;">Level-Up</div>
+                      <div class="col-sm-2 mt-2 mb-2">Stage</div>
+                      <div class="col-sm-2 mt-2 mb-2">Total</div>
+                    </div>
+                    {{#each data.stats as |stat key|}}
+                    <div class="row no-gutters {{key}}">
+                      <div class="stats {{key}} col-sm-2 key">
+                        <label for="data.stats.{{key}}.value" class="resource-label">{{key}}</label>
+                      </div>
+                      <div class="stats {{key}} base col-sm-2">
+                        <input type="text" name="data.stats.{{key}}.value" value="{{stat.value}}" data-dtype="Number"
+                          disabled />
+                      </div>
+                      <div class="stats {{key}} mod col-sm-2">
+                        <input type="text" name="data.stats.{{key}}.mod" value="{{stat.mod}}" data-dtype="Number" />
+                      </div>
+                      <div class="stats {{key}} levelUp col-sm-2">
+                        <input type="text" name="data.stats.{{key}}.levelUp" value="{{stat.levelUp}}" data-dtype="Number" />
+                      </div>
+                      <div class="stats stage stage col-sm-2">
+                        {{#if (isdefined stat.stage)}}
+                        <input type="text" name="data.stats.{{key}}.stage" value="{{stat.stage}}" data-dtype="Number" />
+                        {{/if}}
+                      </div>
+                      <div class="stats {{key}} total col-sm-2">
+                        <input type="text" name="data.stats.{{key}}.total" value="{{stat.total}}" data-dtype="Number"
+                          disabled />
+                      </div>
+                    </div>
+                    {{/each}}
+                    {{#if data.levelUpPoints}}
+                    <div class="row no-gutters levelUpPoints">
+                      <div class="col-sm-8">
+                        <label for="data.levelUpPoints" class="resource-label">Remaining Level-Up Points:</label>
+                      </div>
+                      <div class="col">
+                        <input type="text" name="data.levelUpPoints" value="{{data.levelUpPoints}}" data-dtype="Number"
+                          disabled />
+                      </div>
+                    </div>
+                    {{/if}}
+                  </div>
+
+                  <!-- Abilities -->
+                  <div class="swsh-box mt-auto w-100">
+                    <div class="swsh-body" style="display: block;">
+                      {{> item-display title="Abilities" type="ability" data=actor.abilities}}
+                      {{!-- <ol class="inventory-list">
+                        <li class="inventory-header flexrow">
+                          <h3 class="item-name flexrow">Abilities</h3>
+                          <div class="item-controls">
+                            <a class="item-control item-create" title="Add ability" data-type="ability"><i
+                                class="fas fa-plus-circle" style="margin-right: 3px;"></i><span
+                                class="readable">Add</span></a>
+                          </div>
+                        </li>
+                        <ol class="item-list">
+                          {{#each actor.abilities as | ability |}}
+                          <li class="item flexrow" data-item-id="{{ability._id}}">
+                            <div class="item-name flexrow">
+                              <h4 title="Toggle Info ({{ability.name}})" data-toggle="collapse"
+                                data-target="#{{ability._id}}-collapse" aria-expanded="false"
+                                aria-controls="{{ability._id}}-collapse">
+                                <i class="fas fa-info-circle info-icon"></i>
+                                {{ability.name}}
+                              </h4>
+                            </div>
+                            <div class="item-controls" style="flex: 0 0 55px; justify-content: center; display:flex;">
+                              <a class="item-control item-edit" title="Edit ability"><i class="fas fa-edit"></i></a>
+                              <a class="item-control item-delete" title="Delete ability"><i class="fas fa-trash"></i></a>
+                            </div>
+                            {{#if ability.data.snippet}}
+                              <div class="collapse in readable lh-16 item-summary" id="{{ability._id}}-collapse">
+                                <p class="summary">{{{ability.data.snippet}}}</p>
+                              </div>
+                            {{else}}
+                              {{#if (is true (getGameSetting "openByDefault"))}}
+                                <div class="collapse in readable lh-16 item-summary" id="{{ability._id}}-collapse">
+                                  <p class="summary">{{{ability.data.effect}}}</p>
+                                </div>
+                              {{else}}
+                                <div class="collapse readable lh-16 item-summary" id="{{ability._id}}-collapse">
+                                  <p class="summary">{{{ability.data.effect}}}</p>
+                                </div>
+                              {{/if}}
+                            {{/if}}
+                          </li>
+                          {{/each}}
+                        </ol>
+                      </ol> --}}
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Right Col -->
+              <div class="col-sm-12 col-md-5">
+                <div class="d-flex align-items-center flex-column h-100">
+                  <!-- Item -->
+                  <div class="w-100 level-box mt-1 mb-1">
+                    <div class="swsh-box" style="text-align: center; word-break: keep-all;">
+                      {{!-- <div class="swsh-header">
+                        <div class="d-flex w-100 align-items-center justify-content-center">
+                          <div class="col-sm-2">
+                            <label for="data.level.current">Level:</label>
+                          </div>
+                          <div class="col-sm-3">
+                            <input class="ml-2" type="text" name="data.level.current" value="{{data.level.current}}" data-dtype="Number"
+                              disabled />
+                          </div>
+                        </div>
+                      </div>
+                      <div class="swsh-header">
+                        <div class="d-flex w-100 mt-1 mb-1 align-items-center justify-content-between">
+                          {{#if (is "true" (getGameSetting "useDexExp"))}}
+                          <div class="col-sm-4">
+                            <label for="data.level.milestones">Milestones:</label>
+                          </div>
+                          <div class="col-sm-4">
+                            <label for="data.level.dexexp">Dex Exp:</label>
+                          </div>
+                          <div class="col-sm-4">
+                            <label for="data.level.miscexp">Misc Exp:</label>
+                          </div>
+                          {{else}}
+                            <div class="col-sm-6">
+                              <label for="data.level.milestones">Milestones:</label>
+                            </div>
+                            <div class="col-sm-6">
+                              <label for="data.level.miscexp">Misc Exp:</label>
+                            </div>
+                          {{/if}}
+                        </div>
+                      </div>
+                      <div class="swsh-body">
+                        <div class="options w-100 d-flex">
+                          <div class="d-flex w-100 pt-1 pb-1" style="text-align: center;">
+                            {{#if (is "true" (getGameSetting "useDexExp"))}}
+                            <div class="col-sm-4">
+                              <input type="text" name="data.level.milestones" value="{{data.level.milestones}}" data-dtype="Number" />
+                            </div>
+                            <div class="col-sm-4">
+                              <input type="text" name="data.level.dexexp" value="{{data.level.dexexp}}" data-dtype="Number" />
+                            </div>
+                            <div class="col-sm-4">
+                              <input type="text" name="data.level.miscexp" value="{{data.level.miscexp}}" data-dtype="Number" />
+                            </div>
+                            {{else}}
+                              <div class="col-sm-6">
+                                <input type="text" name="data.level.milestones" value="{{data.level.milestones}}" data-dtype="Number" />
+                              </div>
+                              <div class="col-sm-6">
+                                <input type="text" name="data.level.miscexp" value="{{data.level.miscexp}}" data-dtype="Number" />
+                              </div>
+                            {{/if}}
+                          </div>
+                        </div>
+                      </div> --}}
+                      <div class="swsh-header">
+                        <div class="d-flex w-100 mt-1 mb-1">
+                          <div class="col">
+                            <label for="data.heldItem">Held Item</label>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="swsh-body">
+                        <div class="d-flex w-100 mt-1 mb-1">
+                          <div class="col">
+                            <input id="heldItemInput" type="text" name="data.heldItem" value="{{data.heldItem}}" />
+                          </div>
+                        </div>
+                      </div>
+                      <!-- Item Effect -->
+                      <div class="swsh-header">
+                        <h3 class="m-auto">Item Effect</h3>
+                      </div>
+                      <div class="swsh-body w-100">
+                        <textarea style="min-height: 100px;" id="itemDescription" disabled>{{itemDescription data.heldItem}}</textarea>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            {{!-- <div class="row">
               <div class="col">
                 <!-- Evasion -->
                 <div class="swsh-box mb-2 w-100" style="text-align: center; word-break: keep-all;">
@@ -792,8 +1142,8 @@
                   </div>
                 </div>
               </div>
-            </div>
-          </div> --}}
+            </div> --}}
+          </div>
 
           <!-- Extra Tab -->
           <div class="tab details extra" data-group="primary" data-tab="extra">
@@ -985,46 +1335,62 @@
                 </div>
               </div>
               <div class="col">
-                <!-- Skills -->
-                  <div class="swsh-box mt-auto w-100 mb-2">
-                    <div class="swsh-header skill skill-block" style="padding: 0;">
-                      <div class="row no-gutters header w-100">
-                        <div class="col-sm-4 pt-2 pb-2">Skill</div>
-                        <div class="col mt-2 mb-2">Value</div>
-                        <div class="col-sm-3 mt-2 mb-2">Rank</div>
-                        <div class="col mt-2 mb-2">Mod</div>
-                        <div class="col-sm-2 mt-2 mb-2">Dice</div>
-                      </div>
-                    </div>
-                    <div class="swsh-body p-0">
-                      <div class="w-100 skills skill-block">
-                        {{#each data.skills as |skill key|}}
-                        <div class="row no-gutters {{key}} align-items-center">
-                          <div class="skill {{key}} col-sm-4 bgcolor key type--{{skill.type}} align-self-center">
-                            <label for="data.skills.{{key}}.modifier" class="resource-label">{{skill.label}}</label>
-                          </div>
-                          <div class="skill {{key}} col pl-1 pr-1 fs-9 center-text">
-                            <input type="text" name="data.skills.{{key}}.value" value="{{skill.value}}"
-                              data-dtype="Number"/>
-                          </div>
-                          <div class="skill {{key}} col-sm-3 align-self-center bgcolor skill--{{skill.rank}} center-text">
-                            <label for="data.skills.{{key}}.value" class="resource-label">{{skill.rank}}</label>
-                          </div>
-                          <div class="skill {{key}} col pl-1 fs-9 center-text">
-                            <input type="text" name="data.skills.{{key}}.modifier" value="{{skill.modifier}}" data-dtype="Number"/>
-                          </div>
-                          <div class="skill {{key}} col-sm-2 align-self-center bgcolor fs-9 center-text rollable"
-                            data-roll="{{skill.value}}d6{{#if skill.modifier}}+{{skill.modifier}}{{/if}}"
-                            data-label="{{skill.label}}">
-                            <i class="fas fa-dice-d20"></i>
-                            <label for="data.skills.{{key}}.value"
-                              class="resource-label">{{skill.value}}d6{{#if skill.modifier}}+{{skill.modifier}}{{/if}}</label>
-                          </div>
-                        </div>
-                        {{/each}}
-                      </div>
+                {{!-- <!-- Skills -->
+                <div class="swsh-box mt-auto w-100 mb-2">
+                  <div class="swsh-header skill skill-block" style="padding: 0;">
+                    <div class="row no-gutters header w-100">
+                      <div class="col-sm-4 pt-2 pb-2">Skill</div>
+                      <div class="col mt-2 mb-2">Value</div>
+                      <div class="col-sm-3 mt-2 mb-2">Rank</div>
+                      <div class="col mt-2 mb-2">Mod</div>
+                      <div class="col-sm-2 mt-2 mb-2">Dice</div>
                     </div>
                   </div>
+                  <div class="swsh-body p-0">
+                    <div class="w-100 skills skill-block">
+                      {{#each data.skills as |skill key|}}
+                      <div class="row no-gutters {{key}} align-items-center">
+                        <div class="skill {{key}} col-sm-4 bgcolor key type--{{skill.type}} align-self-center">
+                          <label for="data.skills.{{key}}.modifier" class="resource-label">{{skill.label}}</label>
+                        </div>
+                        <div class="skill {{key}} col pl-1 pr-1 fs-9 center-text">
+                          <input type="text" name="data.skills.{{key}}.value" value="{{skill.value}}"
+                            data-dtype="Number"/>
+                        </div>
+                        <div class="skill {{key}} col-sm-3 align-self-center bgcolor skill--{{skill.rank}} center-text">
+                          <label for="data.skills.{{key}}.value" class="resource-label">{{skill.rank}}</label>
+                        </div>
+                        <div class="skill {{key}} col pl-1 fs-9 center-text">
+                          <input type="text" name="data.skills.{{key}}.modifier" value="{{skill.modifier}}" data-dtype="Number"/>
+                        </div>
+                        <div class="skill {{key}} col-sm-2 align-self-center bgcolor fs-9 center-text rollable"
+                          data-roll="{{skill.value}}d6{{#if skill.modifier}}+{{skill.modifier}}{{/if}}"
+                          data-label="{{skill.label}}">
+                          <i class="fas fa-dice-d20"></i>
+                          <label for="data.skills.{{key}}.value"
+                            class="resource-label">{{skill.value}}d6{{#if skill.modifier}}+{{skill.modifier}}{{/if}}</label>
+                        </div>
+                      </div>
+                      {{/each}}
+                    </div>
+                  </div>
+                </div> --}}
+              </div>
+            </div>
+          </div>
+
+          <!-- Dex -->
+          <div class="tab details dex" data-group="primary" data-tab="dex">
+            <div class="row">
+              <div class="col">
+                <div class="swsh-box mt-2 w-100">
+                  <div class="swsh-body m-2 justify-content-center">
+                    <h3 style="color:#6c757d;">Dex Coming Soon!</h3>
+                  </div>
+                </div>
+              </div>
+              <div class="col">
+                
               </div>
             </div>
           </div>
@@ -1035,11 +1401,13 @@
   <div class="sheet-footer">
     <div class="tabs">
       <ul class="sheet-tabs tabs buttons" data-group="primary">
-        <li><button class="item" data-tab="stats">Stats</button></li>
-        <li><button class="item" data-tab="moves">Moves</button></li>
+        <li><button class="item" data-tab="stats">Skills</button></li>
+        <li><button class="item" data-tab="inventory">Inventory</button></li>
         <li><button class="item" data-tab="features">Features & Edges</button></li>
         <li><button class="item" data-tab="combat">Combat</button></li>
+        <li><button class="item" data-tab="moves">Moves</button></li>
         <li><button class="item" data-tab="extra">Extra</button></li>
+        <li><button class="item" data-tab="dex">Dex</button></li>
       </ul>
     </div>
   </div>

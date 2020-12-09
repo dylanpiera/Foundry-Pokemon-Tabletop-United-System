@@ -66,6 +66,10 @@ Hooks.once('init', async function() {
   Items.registerSheet("ptu", PTUFeatSheet, { types: ["feat"], makeDefault: true });
 
   // If you need to add Handlebars helpers, here are a few useful examples:
+  let itemDisplayTemplate = await (await fetch('/systems/ptu/templates/partials/item-display-partial.hbs')).text()
+  console.log(itemDisplayTemplate)
+  Handlebars.registerPartial('item-display', itemDisplayTemplate);
+
   Handlebars.registerHelper("concat", function() {
     var outStr = '';
     for (var arg in arguments) {
@@ -94,6 +98,7 @@ Hooks.once('init', async function() {
   Handlebars.registerHelper("or", function (a, b) {return a || b});
   Handlebars.registerHelper("not", function (a, b) {return a != b});
   Handlebars.registerHelper("itemDescription", function (name) {
+    if(!name) return "";
     if(name || 0 !== name.length) {
       let item = game.ptu.items.find(i => i.name.toLowerCase().includes(name.toLowerCase()));
       if(item) return item.data.data.effect;

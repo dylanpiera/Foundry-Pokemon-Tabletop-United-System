@@ -104,6 +104,9 @@ export class PTUGen8CharacterSheet extends ActorSheet {
 			li.slideUp(200, () => this.render(false));
 		});
 
+		html.find("input[data-item-id]")
+        .on("change", (e) => this._updateItemField(e));
+
 		// Rollable abilities.
 		html.find('.rollable.skill').click(this._onRoll.bind(this));
 		html.find('.rollable.gen8move').click(this._onMoveRoll.bind(this));
@@ -152,6 +155,26 @@ export class PTUGen8CharacterSheet extends ActorSheet {
 		console.log(itemData);
 		return this.actor.createOwnedItem(itemData);
 	}
+
+	_updateItemField(e) {
+		e.preventDefault();
+	
+		const t = e.currentTarget;
+		let value;
+		if ($(t).prop("type") === "checkbox") {
+			value = $(t).prop("checked");
+		} else {
+			value = $(t).val();
+		}
+	
+		const id = $(t).data("item-id");
+		const binding = $(t).data("binding");
+	
+		const item = this.actor.getOwnedItem(id);
+		const updateParams = {};
+		updateParams[binding] = value;
+		if (item) { item.update(updateParams, {}); }
+	  }
 
 	/**
 	 * Handle clickable rolls.
