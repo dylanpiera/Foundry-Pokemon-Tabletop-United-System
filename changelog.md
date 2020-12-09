@@ -1,3 +1,7 @@
+## 0.0.43 - Custom Species Editor Bugfix
+* Fixed error when creating a new mon from a blank slate
+* Fixed display error with Naturewalk
+
 ## 0.0.40 - 0.0.42 - Trainer Sheet
 * Updated the Gen 4 Trainer Sheet to match the Pokémon's Gen 8 Trainer Sheet
 * Added missing elements from gen 4 Trainer Sheet that where present in the Gen 8 Pokémon sheet, such as Moves & Capabilities.

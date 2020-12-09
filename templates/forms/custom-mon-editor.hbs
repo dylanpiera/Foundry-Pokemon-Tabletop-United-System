@@ -172,7 +172,7 @@
             <label for="Capabilities.{{key}}">{{key}}</label>
           </div>
           <div class="col-sm-5">
-            <input {{#if (not key "Naturewalk")}}required{{/if}} type="text" name="Capabilities.{{key}}" value="{{capability}}"/>
+            <input {{#if (and (not key "Naturewalk") (not key "Other"))}}required{{/if}} type="text" name="Capabilities.{{key}}" value="{{capability}}"/>
           </div>
         </div>
       {{/each}}

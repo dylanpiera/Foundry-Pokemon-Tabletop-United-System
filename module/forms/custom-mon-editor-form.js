@@ -132,12 +132,16 @@ export class PTUCustomMonEditor extends FormApplication {
         }
       }
 
+      if(formattedData["Capabilities"]["Naturewalk"] == false) formattedData["Capabilities"]["Naturewalk"] = []
+
       return formattedData;
     }
 
     checkMonId(number) {
-      if(CustomSpeciesFolder.findEntry(number)) {
-        return number;
+      if(number) {
+        if(CustomSpeciesFolder.findEntry(number)) {
+          return number;
+        }
       }
       return CustomSpeciesFolder.getAvailableId();
     }
