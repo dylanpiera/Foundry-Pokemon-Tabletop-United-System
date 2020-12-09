@@ -205,6 +205,16 @@
         "goals": "",
         "dreams": "",
         "obsessions": ""
+      },
+
+      "background": {
+        "pathetic": {
+          "one": "",
+          "two": "",
+          "three": ""
+        },
+        "novice": "",
+        "adept": ""
       }
     },
     "pokemon": {
