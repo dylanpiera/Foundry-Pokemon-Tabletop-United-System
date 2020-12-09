@@ -997,6 +997,10 @@ p.summary {
 #forien-quest-log .quest-log .tab.active {
   display: block !important;
 }
+/* Firefox Fix */
+.sheet-footer {
+  height: 0;
+}
 .w-25 {
   width: 25% !important;
 }

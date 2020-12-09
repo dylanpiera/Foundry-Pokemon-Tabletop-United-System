@@ -1,3 +1,6 @@
+## 0.0.45 - Firefox Support
+* Fixed an issue with the Sheet-Footer making it so Firefox users can't interact with any sheet.
+
 ## 0.0.44 - Padding!
 * Quick Padding fix to all items.
 
