@@ -1,3 +1,6 @@
+## 0.0.44 - Padding!
+* Quick Padding fix to all items.
+
 ## 0.0.43 - Custom Species Editor Bugfix
 * Fixed error when creating a new mon from a blank slate
 * Fixed display error with Naturewalk
