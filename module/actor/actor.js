@@ -68,6 +68,8 @@ export class PTUActor extends Actor {
   _prepareCharacterData(actorData) {
     const data = actorData.data;
 
+    let dexExpEnabled = "true" == game.settings.get("ptu", "useDexExp") ?? false;
+
     // Make modifications to data here. For example:
     data.levelUpPoints = 0;
     for (let [key, value] of Object.entries(data.stats)) {
@@ -78,8 +80,14 @@ export class PTUActor extends Actor {
     for (let [key, skill] of Object.entries(data.skills)) {
       skill["rank"] = this._getRank(skill["value"]);  
     }
-    data.level.dexexp = actorData.items.filter(x => x.type == "dexentry" && x.data.owned).length;
-    data.level.current = data.level.milestones + Math.trunc((data.level.dexexp+data.level.miscexp)/10) + 1 > 50 ? 50 : data.level.milestones + Math.trunc((data.level.dexexp+data.level.miscexp)/10) + 1; 
+    if(dexExpEnabled) {
+      data.level.dexexp = actorData.items.filter(x => x.type == "dexentry" && x.data.owned).length;
+      data.level.current = data.level.milestones + Math.trunc((data.level.dexexp+data.level.miscexp)/10) + 1 > 50 ? 50 : data.level.milestones + Math.trunc((data.level.dexexp+data.level.miscexp)/10) + 1; 
+    }
+    else {
+      data.level.current = data.level.milestones + Math.trunc(data.level.miscexp/10) + 1 > 50 ? 50 : data.level.milestones + Math.trunc(data.level.miscexp/10) + 1; 
+    }
+    console.log(dexExpEnabled, data.level)
 
     data.health.total = 10 + (data.level.current * 2) + (data.stats.hp.total * 3);
     data.health.max = data.health.injuries > 0 ? Math.trunc(data.health.total*(1-((data.modifiers.hardened ? Math.min(data.health.injuries, 5) : data.health.injuries)/10))) : data.health.total;
