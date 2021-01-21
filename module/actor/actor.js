@@ -20,11 +20,58 @@ export class PTUActor extends Actor {
     const actorData = this.data;
 
     if(parseInt(game.data.version.split('.')[1]) <= 6) {
-      console.warn("Using old prepare-data structure")
+      console.warn("FVTT PTU | Using old prepare-data structure")
       // Make separate methods for each Actor type (character, npc, etc.) to keep
       // things organized.
       if (actorData.type === 'character') this._prepareCharacterData(actorData);
       if (actorData.type === 'pokemon') this._preparePokemonData(actorData);
+    }
+  }
+
+  /** @override */
+  async modifyTokenAttribute(attribute, value, isDelta=false, isBar=true) {
+    console.log("FVTT PTU | ", attribute, value, isDelta, isBar);
+    
+    const current = getProperty(this.data.data, attribute);
+    if (isBar) {
+      if(attribute == "health") {
+        const temp = current.temp;
+        if (isDelta) {
+          if(value < 0 && Number(temp.value) > 0) {
+            temp.value = Number(temp.value) + value;
+            if(temp.value >= 0) return this.update({[`data.${attribute}.temp.value`]: temp.value});
+
+            let totalValue = Number(current.value) + temp.value;
+            value = Math.clamped(0, totalValue, current.max);
+          }
+          else {
+            let totalValue = Number(current.value) + value;
+            value = Math.clamped(0, totalValue, current.max);
+            if(totalValue > value) {
+              temp.value = totalValue - value;
+              temp.max = temp.value;
+            }
+          }
+        } else {
+          if(value > current.max) {
+            temp.value = value - current.max;
+            temp.max = temp.value;
+            value = current.max;
+          }
+        }
+        console.log("FVTT PTU | Updating Character HP with args:", this, {oldValue: current.value, newValue: value, tempHp: temp })
+        return this.update({[`data.${attribute}.value`]: value, [`data.${attribute}.temp.value`]: temp.value, [`data.${attribute}.temp.max`]: temp.max});
+      }
+      else {
+        if (isDelta) {
+          let totalValue = Number(current.value) + value;
+          value = Math.clamped(0, totalValue, current.max);
+        }
+        return this.update({[`data.${attribute}.value`]: value});
+      }
+    } else {
+      if ( isDelta ) value = Number(current) + value;
+      return this.update({[`data.${attribute}`]: value});
     }
   }
 
