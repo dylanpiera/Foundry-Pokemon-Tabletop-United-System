@@ -2,7 +2,7 @@
   "name": "ptu",
   "title": "Pokemon Tabletop United",
   "description": "A Pen and Paper Roleplaying Game Set in the World of Pokemon",
-  "version": "0.0.50",
+  "version": "0.1.0",
   "minimumCoreVersion": "0.6.5",
   "compatibleCoreVersion": "0.7.9",
   "templateVersion": 2,
@@ -88,9 +88,9 @@
   "primaryTokenAttribute": "health",
   "secondaryTokenAttribute": "exp",
   "url": "https://github.com/dylanpiera/Foundry-Pokemon-Tabletop-United-System",
-  "manifest": "https://github.com/dylanpiera/Foundry-Pokemon-Tabletop-United-System/releases/latest/download/system.json",
-  "changelog": "https://github.com/dylanpiera/Foundry-Pokemon-Tabletop-United-System/raw/master/changelog.md",
-  "download": "https://github.com/dylanpiera/Foundry-Pokemon-Tabletop-United-System/releases/latest/download/system.zip",
+  "manifest": "https://github.com/dylanpiera/Foundry-Pokemon-Tabletop-United-System/raw/development/system.json",
+  "changelog": "https://github.com/dylanpiera/Foundry-Pokemon-Tabletop-United-System/raw/development/changelog.md",
+  "download": "https://github.com/dylanpiera/Foundry-Pokemon-Tabletop-United-System/archive/development.zip",
   "initiative": "",
   "license": "LICENSE.txt"
 }
