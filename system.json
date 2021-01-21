@@ -67,6 +67,13 @@
       "name": "poke-edges",
       "path": "packs/poke-edges.db",
       "system": "ptu"
+    },
+    {
+      "label": "dex entries",
+      "entity": "Item",
+      "name": "dex-entries",
+      "path": "packs/dex-entries.db",
+      "system": "ptu"
     }
   ],
   "languages": [
