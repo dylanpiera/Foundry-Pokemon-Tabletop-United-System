@@ -24,7 +24,7 @@ import { InitCustomSpecies, UpdateCustomSpecies} from './custom-species.js'
 import { ChangeLog } from './forms/changelog-form.js'
 import CustomSpeciesFolder from './entities/custom-species-folder.js'
 
-export const LATEST_VERSION = "1.0.1";
+export const LATEST_VERSION = "1.0.0";
 
 Hooks.once('init', async function() {
 
