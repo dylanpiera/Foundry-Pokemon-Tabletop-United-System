@@ -115,7 +115,7 @@ a.item {
   position: relative;
 }
 .move-col span {
-  max-height: 7rem;
+  max-height: 7.5rem;
   overflow-y: auto;
   overflow-x: hidden;
   margin: 4px 0;
