@@ -87,8 +87,7 @@ export class PTUActor extends Actor {
     else {
       data.level.current = data.level.milestones + Math.trunc(data.level.miscexp/10) + 1 > 50 ? 50 : data.level.milestones + Math.trunc(data.level.miscexp/10) + 1; 
     }
-    console.log(dexExpEnabled, data.level)
-
+    
     data.health.total = 10 + (data.level.current * 2) + (data.stats.hp.total * 3);
     data.health.max = data.health.injuries > 0 ? Math.trunc(data.health.total*(1-((data.modifiers.hardened ? Math.min(data.health.injuries, 5) : data.health.injuries)/10))) : data.health.total;
 
