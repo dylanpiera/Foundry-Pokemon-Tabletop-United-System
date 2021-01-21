@@ -1,3 +1,6 @@
+## 0.0.50 - Scrollable Move Effects
+* Move effects may now show up with scrollbars if their effect text is deemed too long.
+
 ## 0.0.49 - Temporary HP
 * Added Temporary HP field to Character Sheet
 * Token HP bar calculations automatically use Temp HP

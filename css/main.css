@@ -114,6 +114,12 @@ a.item {
   left: 30%;
   position: relative;
 }
+.move-col span {
+  max-height: 7rem;
+  overflow-y: auto;
+  overflow-x: hidden;
+  margin: 4px 0;
+}
 .actor .window-content,
 .edge .window-content,
 .feat .window-content,
