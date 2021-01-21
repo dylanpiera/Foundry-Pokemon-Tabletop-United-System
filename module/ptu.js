@@ -285,7 +285,7 @@ function _loadSystemSettings() {
     scope: "client",
     config: false,
     type: Object,
-    default: ""
+    default:{} 
   })
 
   game.settings.register("ptu", "hideDebugInfo", {
