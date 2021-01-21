@@ -21,7 +21,10 @@ import { PTUCustomSpeciesEditor } from './forms/custom-species-editor-form.js'
 import { PTUCustomMonEditor } from './forms/custom-mon-editor-form.js'
 import { RollWithDb } from './utils/roll-calculator.js'
 import { InitCustomSpecies, UpdateCustomSpecies} from './custom-species.js'
-import CustomSpeciesFolder from './entities/custom-species-folder.js';
+import { ChangeLog } from './forms/changelog-form.js'
+import CustomSpeciesFolder from './entities/custom-species-folder.js'
+
+export const LATEST_VERSION = "0.0.51";
 
 Hooks.once('init', async function() {
 
@@ -277,6 +280,14 @@ function _loadSystemSettings() {
     default: false
   });
 
+  game.settings.register("ptu", "dismissedVersion", {
+    name: "Current Dismissed Version",
+    scope: "client",
+    config: false,
+    type: Object,
+    default: ""
+  })
+
   game.settings.register("ptu", "hideDebugInfo", {
     name: "Show Debug Info",
     hint: "Only for debug purposes. Logs extra debug messages & shows hidden folders/items",
@@ -357,6 +368,31 @@ Hooks.once("ready", async function() {
     if(data == null) return; 
     if(data == "RefreshCustomSpecies" || (data == "ReloadGMSpecies" && game.user.isGM)) Hooks.callAll("updatedCustomSpecies"); 
   });
+
+  /** Display Changelog */
+  if(game.settings.get("ptu", "dismissedVersion")[game.userId] !== LATEST_VERSION) {
+  // Create a script tag, set its source
+    var scriptTag = document.createElement("script"),
+        filePath = "https://cdn.jsdelivr.net/npm/marked/marked.min.js";
+
+    // And listen to it
+    scriptTag.onload = async function(loadEvent) {
+      new ChangeLog(await(await fetch("/systems/ptu/changelog.md")).text()).render(true);
+    }
+
+    // Make sure this file actually loads instead of a cached version
+    // Add a timestamp onto the URL (i.e. file.js?bust=12345678)
+    var cacheBuster = "";
+
+    cacheBuster = "?bust=" + new Date().getTime();
+
+    // Set the type of file and where it can be found
+    scriptTag.type = "text/javascript";
+    scriptTag.src = filePath + cacheBuster;
+
+    // Finally add it to the <head>
+    document.getElementsByTagName("head")[0].appendChild(scriptTag);  
+  }
 });
 
 /* -------------------------------------------- */
