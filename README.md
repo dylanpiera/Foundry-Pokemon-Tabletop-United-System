@@ -29,3 +29,6 @@ and much more...
 
 ## How to Install
 You can import the manifest with the folowing url: `https://github.com/dylanpiera/Foundry-Pokemon-Tabletop-United-System/raw/master/system.json`
+
+## Special Thanks:
+https://www.theworldofpokemon.com/ for their amazing pokedex entries 

@@ -2,9 +2,9 @@
   "name": "ptu",
   "title": "Pokemon Tabletop United",
   "description": "A Pen and Paper Roleplaying Game Set in the World of Pokemon",
-  "version": "0.0.45",
+  "version": "0.0.48",
   "minimumCoreVersion": "0.6.5",
-  "compatibleCoreVersion": "0.7.8",
+  "compatibleCoreVersion": "0.7.9",
   "templateVersion": 2,
   "author": "Dylan Piera, Tymo Wessel, Jeffrey Hollander, Efren A. Mariño & Cody Swendrowski",
   "esmodules": ["module/ptu.js"],
@@ -66,6 +66,13 @@
       "entity": "Item",
       "name": "poke-edges",
       "path": "packs/poke-edges.db",
+      "system": "ptu"
+    },
+    {
+      "label": "dex entries",
+      "entity": "Item",
+      "name": "dex-entries",
+      "path": "packs/dex-entries.db",
       "system": "ptu"
     }
   ],

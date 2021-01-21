@@ -61,7 +61,7 @@ Hooks.once('init', async function() {
   Actors.registerSheet("ptu", PTUGen8PokemonSheet, { types: ["pokemon"], makeDefault: true });
   Actors.registerSheet("ptu", PTUGen4PokemonSheet, { types: ["pokemon"], makeDefault: false });
   Items.unregisterSheet("core", ItemSheet);
-  Items.registerSheet("ptu", PTUItemSheet, { types: ["item","ability","move","capability", "pokeedge"], makeDefault: true });
+  Items.registerSheet("ptu", PTUItemSheet, { types: ["item","ability","move","capability", "pokeedge","dexentry"], makeDefault: true });
   Items.registerSheet("ptu", PTUEdgeSheet, { types: ["edge"], makeDefault: true });
   Items.registerSheet("ptu", PTUFeatSheet, { types: ["feat"], makeDefault: true });
 
@@ -83,9 +83,6 @@ Hooks.once('init', async function() {
     return str.toLowerCase();
   });
 
-  Handlebars.registerHelper("isdefined", function (value) {
-    return value !== undefined;
-  });
   Handlebars.registerHelper("isdefined", function (value) {
     return value !== undefined;
   });
@@ -299,6 +296,34 @@ Hooks.on("updatedCustomSpecies", UpdateCustomSpecies);
 Hooks.on('renderJournalDirectory', function() {
   CustomSpeciesFolder.updateFolderDisplay(game.settings.get("ptu", "hideDebugInfo"));
 })
+
+/** DexEntry on Pokemon Sheet updates Species Data */
+Hooks.on('dropActorSheetData', function(actor, sheet, itemDropData, ){
+  if(actor.data.type != "pokemon") return true;
+
+  let updateActorBasedOnSpeciesItem = function(item) {
+    if(item.data.data.id) {
+      console.log(`FVTT PTU | Updating Species based on Dex Drop (${actor.data.data.species} -> ${item.data.data.id})`)
+      actor.update({"data.species": item.data.data.id}).then(x => console.log("FVTT PTU | Finished Updating Species based on Dex Drop"));
+    }
+    else if(item.data.name) {
+      console.log(`FVTT PTU | Updating Species based on Dex Drop (${actor.data.data.species} -> ${item.data.name})`)
+      actor.update({"data.species": item.data.name}).then(x => console.log("FVTT PTU | Finished Updating Species based on Dex Drop"));
+    }
+  }
+
+  if(itemDropData.pack) {
+    if(itemDropData.pack != "ptu.dex-entries") {return true;}
+    Item.fromDropData(itemDropData).then(updateActorBasedOnSpeciesItem);
+  }
+  else {
+    let item = game.items.get(itemDropData.id);
+    if(item.data.type != "dexentry") return true;
+    updateActorBasedOnSpeciesItem(item);
+  }
+
+  return false;
+});
 
 Hooks.on("renderSettingsConfig", function() {
   let element = $('#client-settings .tab[data-tab="system"] .module-header')[0];

@@ -54,13 +54,16 @@ export class PTUGen8CharacterSheet extends ActorSheet {
 		const abilities = [];
 		const moves = [];
 		const capabilities = [];
+		const dex = {
+			seen: [],
+			owned: []
+		}
 
 		// Iterate through items, allocating to containers
 		// let totalWeight = 0;
 		for (let i of sheetData.items) {
 			let item = i.data;
 			i.img = i.img || DEFAULT_TOKEN;
-
 			switch(i.type) {
 				case 'feat': feats.push(i); break;
 				case 'edge': edges.push(i); break;
@@ -68,6 +71,10 @@ export class PTUGen8CharacterSheet extends ActorSheet {
 				case 'ability': abilities.push(i); break;
 				case 'move': moves.push(i); break;
 				case 'capability': capabilities.push(i); break;
+				case 'dexentry': 
+					if(i.data.owned) dex.owned.push(i);
+					else dex.seen.push(i); 
+					break;
 			}
 		}
 
@@ -78,6 +85,7 @@ export class PTUGen8CharacterSheet extends ActorSheet {
 		actorData.abilities = abilities;
 		actorData.moves = moves;
 		actorData.capabilities = capabilities;
+		actorData.dex = dex;
 	}
 
 	/* -------------------------------------------- */
@@ -107,7 +115,10 @@ export class PTUGen8CharacterSheet extends ActorSheet {
 		});
 
 		html.find("input[data-item-id]")
-        .on("change", (e) => this._updateItemField(e));
+		.on("change", (e) => this._updateItemField(e));
+		
+		// html.find("input[data-item-id][type=checkbox]")
+		// .on("change", (e) => this._updateDexItem(e))
 
 		// Rollable abilities.
 		html.find('.rollable.skill').click(this._onRoll.bind(this));
@@ -172,11 +183,12 @@ export class PTUGen8CharacterSheet extends ActorSheet {
 		const id = $(t).data("item-id");
 		const binding = $(t).data("binding");
 	
+		
 		const item = this.actor.getOwnedItem(id);
 		const updateParams = {};
 		updateParams[binding] = value;
 		if (item) { item.update(updateParams, {}); }
-	  }
+	}
 
 	/**
 	 * Handle clickable rolls.

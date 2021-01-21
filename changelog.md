@@ -1,3 +1,11 @@
+## 0.0.46 - 0.0.48 - Pokedex Support
+* Added the Dex tab to Trainer Sheets
+* Added a new Compendium with Dex Entries to provide bonus flavor to your game. (Source: https://www.theworldofpokemon.com/)
+* Automated DexEXP based on amount of owned mons in your dex.
+* Added Digestion Buff field to Trainers & Pokémon
+* Added a quick way to change your species using the new dex entries!
+  * Drag & Drop a dex entry ontop of a Pokémon sheet to update your mons species to that of the dex entry's
+
 ## 0.0.45 - Firefox Support
 * Fixed an issue with the Sheet-Footer making it so Firefox users can't interact with any sheet.
 

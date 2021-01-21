@@ -641,14 +641,29 @@
                 </div>
               </div>
               <div class="col">
-                <!-- Item Effect -->
                 <div class="swsh-box mt-auto w-100" style="text-align: center;">
+                  <!-- Item Effect -->
                   <div class="swsh-header">
                     <h3 class="m-auto">Item Effect</h3>
                   </div>
                   <div class="swsh-body w-100">
                     <textarea style="min-height: 100px;" id="itemDescription"
                       disabled>{{itemDescription data.heldItem}}</textarea>
+                  </div>
+                  <!-- Digestion Buff -->
+                  <div class="swsh-header">
+                    <div class="d-flex w-100 mt-1 mb-1">
+                      <div class="col">
+                        <label for="data.digestionBuff">Digestion Buff</label>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="swsh-body">
+                    <div class="d-flex w-100 mt-1 mb-1">
+                      <div class="col">
+                        <input id="digestionBuffInput" type="text" name="data.digestionBuff" value="{{data.digestionBuff}}" />
+                      </div>
+                    </div>
                   </div>
                 </div>
 
