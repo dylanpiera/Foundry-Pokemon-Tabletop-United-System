@@ -78,7 +78,7 @@ export class PTUActor extends Actor {
     for (let [key, skill] of Object.entries(data.skills)) {
       skill["rank"] = this._getRank(skill["value"]);  
     }
-    
+    data.level.dexexp = actorData.items.filter(x => x.type == "dexentry" && x.data.owned).length;
     data.level.current = data.level.milestones + Math.trunc((data.level.dexexp+data.level.miscexp)/10) + 1 > 50 ? 50 : data.level.milestones + Math.trunc((data.level.dexexp+data.level.miscexp)/10) + 1; 
 
     data.health.total = 10 + (data.level.current * 2) + (data.stats.hp.total * 3);

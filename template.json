@@ -172,10 +172,13 @@
             "modifier": 0
           }
         }
+      },
+      "shared": {
+        "digestionBuff": ""
       }
     },
     "character": {
-      "templates": ["stats", "skills", "modifiers"],
+      "templates": ["stats", "skills", "modifiers", "shared"],
 
       "name": "",
       "age": 10,
@@ -187,7 +190,6 @@
 
       "level": {
         "milestones": 0,
-        "dexexp": 0,
         "miscexp": 0
       },
       "health": {
@@ -218,7 +220,7 @@
       }
     },
     "pokemon": {
-      "templates": ["stats", "skills", "modifiers"],
+      "templates": ["stats", "skills", "modifiers","shared"],
 
       "species": "",
       "nickname": "",
@@ -257,7 +259,7 @@
     }
   },
   "Item": {
-    "types": ["feat", "edge", "ability", "move", "item", "capability", "pokeedge"],
+    "types": ["feat", "edge", "ability", "move", "item", "capability", "pokeedge","dexentry"],
     "templates": {
       "base": {
         "name": "",
@@ -275,6 +277,11 @@
         "punkRock": false,
         "strongJaw": false
       }
+    },
+    "dexentry": {
+      "id": 0,
+      "entry": "",
+      "owned": false
     },
     "feat": {
       "templates": ["base"],

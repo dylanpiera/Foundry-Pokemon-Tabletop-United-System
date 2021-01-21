@@ -266,7 +266,7 @@
                               <input type="text" name="data.level.milestones" value="{{data.level.milestones}}" data-dtype="Number" />
                             </div>
                             <div class="col-sm-4">
-                              <input type="text" name="data.level.dexexp" value="{{data.level.dexexp}}" data-dtype="Number" />
+                              <input type="text" name="data.level.dexexp" value="{{data.level.dexexp}}" data-dtype="Number" disabled/>
                             </div>
                             <div class="col-sm-4">
                               <input type="text" name="data.level.miscexp" value="{{data.level.miscexp}}" data-dtype="Number" />
@@ -1092,9 +1092,23 @@
                       <div class="swsh-body w-100">
                         <textarea style="min-height: 100px;" id="itemDescription" disabled>{{itemDescription data.heldItem}}</textarea>
                       </div>
+                      <!-- Digestion Buff -->
+                      <div class="swsh-header">
+                        <div class="d-flex w-100 mt-1 mb-1">
+                          <div class="col">
+                            <label for="data.digestionBuff">Digestion Buff</label>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="swsh-body">
+                        <div class="d-flex w-100 mt-1 mb-1">
+                          <div class="col">
+                            <input id="digestionBuffInput" type="text" name="data.digestionBuff" value="{{data.digestionBuff}}" />
+                          </div>
+                        </div>
+                      </div>
                     </div>
                   </div>
-                  
                 </div>
               </div>
             </div>
@@ -1549,15 +1563,21 @@
           <!-- Dex -->
           <div class="tab details dex" data-group="primary" data-tab="dex">
             <div class="row">
+              <!-- Seen -->
               <div class="col">
                 <div class="swsh-box mt-2 w-100">
-                  <div class="swsh-body m-2 justify-content-center">
-                    <h3 style="color:#6c757d;">Dex Coming Soon!</h3>
+                  <div class="swsh-body w-100" style="display: block;">
+                    {{> item-display title="Seen" type="dexentry" data=actor.dex.seen}}
                   </div>
                 </div>
               </div>
+              <!-- Owned -->
               <div class="col">
-                
+                <div class="swsh-box mt-2 w-100">
+                  <div class="swsh-body w-100" style="display: block;">
+                    {{> item-display title="Owned" type="dexentry" data=actor.dex.owned}}
+                  </div>
+                </div>
               </div>
             </div>
           </div>

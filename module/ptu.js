@@ -61,7 +61,7 @@ Hooks.once('init', async function() {
   Actors.registerSheet("ptu", PTUGen8PokemonSheet, { types: ["pokemon"], makeDefault: true });
   Actors.registerSheet("ptu", PTUGen4PokemonSheet, { types: ["pokemon"], makeDefault: false });
   Items.unregisterSheet("core", ItemSheet);
-  Items.registerSheet("ptu", PTUItemSheet, { types: ["item","ability","move","capability", "pokeedge"], makeDefault: true });
+  Items.registerSheet("ptu", PTUItemSheet, { types: ["item","ability","move","capability", "pokeedge","dexentry"], makeDefault: true });
   Items.registerSheet("ptu", PTUEdgeSheet, { types: ["edge"], makeDefault: true });
   Items.registerSheet("ptu", PTUFeatSheet, { types: ["feat"], makeDefault: true });
 
@@ -83,9 +83,6 @@ Hooks.once('init', async function() {
     return str.toLowerCase();
   });
 
-  Handlebars.registerHelper("isdefined", function (value) {
-    return value !== undefined;
-  });
   Handlebars.registerHelper("isdefined", function (value) {
     return value !== undefined;
   });
