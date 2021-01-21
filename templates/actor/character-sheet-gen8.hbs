@@ -200,6 +200,14 @@
                             disabled />
                         </div>
                       </div>
+                      <div class="options w-100 d-flex">
+                        <div class="temp-hp"><label for="temp-hp">temp</label></div>
+                        <div class="d-flex pt-1 pb-1" style="text-align: center;">
+                          <input class="ml-1 mr-1" type="text" name="data.health.temp.value" value="{{data.health.temp.value}}" data-dtype="Number">
+                          <span style="font-size: 20px;"> / </span>
+                          <input class="ml-1" type="text" name="data.health.temp.max" value="{{data.health.temp.max}}" data-dtype="Number">
+                        </div>
+                      </div>
                       <div class="options w-100 pb-1 pt-1">
                         <div class="progress-bar p{{data.health.percent}}" id="progressBar"></div>
                       </div>

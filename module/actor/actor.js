@@ -43,6 +43,8 @@ export class PTUActor extends Actor {
 
             let totalValue = Number(current.value) + temp.value;
             value = Math.clamped(0, totalValue, current.max);
+            temp.value = 0;
+            temp.max = 0;
           }
           else {
             let totalValue = Number(current.value) + value;
