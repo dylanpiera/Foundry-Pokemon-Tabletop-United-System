@@ -1,3 +1,10 @@
+## 0.0.49 - Temporary HP
+* Added Temporary HP field to Character Sheet
+* Token HP bar calculations automatically use Temp HP
+  * f.e: If your Max HP is 50, and you set it to 60, it will set your HP to 50 and give you 10 Temp HP
+  * or: If you have 50 HP, 5 Temp HP & apply -7HP to your token health bar, your Temp HP is set to 0, and your current HP set to 48.
+  * NOTE: While Temp HP is used in token bar calculations, Temp HP can't currently be displayed on a token, only in the char sheet.
+
 ## 0.0.46 - 0.0.48 - Pokedex Support
 * Added the Dex tab to Trainer Sheets
 * Added a new Compendium with Dex Entries to provide bonus flavor to your game. (Source: https://www.theworldofpokemon.com/)

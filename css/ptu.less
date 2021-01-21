@@ -119,7 +119,24 @@ a.item {
     left: 3px;
     bottom: -4px;
     font-weight: bold;
+    min-width: 32px;
   }
+.options .temp-hp {
+    text-orientation: upright;
+    writing-mode: vertical-lr;
+    width: 3rem;
+    margin: 0 5px 0 0px;
+    position: relative;
+    left: 3px;
+    bottom: -4px;
+    font-size: 8px;
+    min-width: 32px;
+
+    label[for="temp-hp"] {
+        left: 30%;
+        position: relative;
+    }
+}
 
 .actor, .edge, .feat, .ability, .item, .move, .form, .token-sheet, .scene-sheet {
     .window-content {
