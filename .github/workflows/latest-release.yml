@@ -33,17 +33,3 @@ jobs:
         token: ${{ secrets.GITHUB_TOKEN }}
         artifacts: './system.json,./system.zip'
         tag: ${{ steps.get-version.outputs.version }}
-
-    # Update the 'latest' release
-    - name: Create Release
-      id: create_latest_release
-      uses: ncipollo/release-action@v1
-      if: endsWith(github.ref, 'master')
-      with:
-        allowUpdates: true
-        name: Latest
-        draft: false
-        prerelease: false
-        token: ${{ secrets.GITHUB_TOKEN }}
-        artifacts: './system.json, ./system.zip'
-        tag: latest
