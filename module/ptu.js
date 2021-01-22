@@ -24,7 +24,7 @@ import { InitCustomSpecies, UpdateCustomSpecies} from './custom-species.js'
 import { ChangeLog } from './forms/changelog-form.js'
 import CustomSpeciesFolder from './entities/custom-species-folder.js'
 
-export const LATEST_VERSION = "1.0.1";
+export const LATEST_VERSION = "1.0.2";
 
 Hooks.once('init', async function() {
 
@@ -285,7 +285,7 @@ function _loadSystemSettings() {
     scope: "client",
     config: false,
     type: Object,
-    default: ""
+    default: {}
   })
 
   game.settings.register("ptu", "hideDebugInfo", {
@@ -313,13 +313,13 @@ Hooks.on('dropActorSheetData', function(actor, sheet, itemDropData, ){
   if(actor.data.type != "pokemon") return true;
 
   let updateActorBasedOnSpeciesItem = function(item) {
-    if(item.data.data.id) {
-      console.log(`FVTT PTU | Updating Species based on Dex Drop (${actor.data.data.species} -> ${item.data.data.id})`)
-      actor.update({"data.species": item.data.data.id}).then(x => console.log("FVTT PTU | Finished Updating Species based on Dex Drop"));
-    }
-    else if(item.data.name) {
+    if(item.data.name) {
       console.log(`FVTT PTU | Updating Species based on Dex Drop (${actor.data.data.species} -> ${item.data.name})`)
       actor.update({"data.species": item.data.name}).then(x => console.log("FVTT PTU | Finished Updating Species based on Dex Drop"));
+    }
+    else if(item.data.data.id) {
+      console.log(`FVTT PTU | Updating Species based on Dex Drop (${actor.data.data.species} -> ${item.data.data.id})`)
+      actor.update({"data.species": item.data.data.id}).then(x => console.log("FVTT PTU | Finished Updating Species based on Dex Drop"));
     }
   }
 
