@@ -120,11 +120,6 @@ export class PTUActor extends Actor {
     let dexExpEnabled = "true" == game.settings.get("ptu", "useDexExp") ?? false;
 
     // Make modifications to data here. For example:
-    data.levelUpPoints = 0;
-    for (let [key, value] of Object.entries(data.stats)) {
-        value["total"] = value["value"] + value["mod"] + value["levelUp"];      
-        data.levelUpPoints -= value["levelUp"];
-    }
 
     for (let [key, skill] of Object.entries(data.skills)) {
       skill["rank"] = this._getRank(skill["value"]);  
@@ -136,6 +131,11 @@ export class PTUActor extends Actor {
     else {
       data.level.current = data.level.milestones + Math.trunc(data.level.miscexp/10) + 1 > 50 ? 50 : data.level.milestones + Math.trunc(data.level.miscexp/10) + 1; 
     }
+
+    data.levelUpPoints = data.level.current + data.modifiers.statPoints + 9;
+    var result = CalculateStatTotal(data.levelUpPoints, data.stats, actorData.items.find(x => x.name.toLowerCase().replace("[playtest]") == "twisted power") != null);
+    data.stats = result.stats;
+    data.levelUpPoints = result.levelUpPoints;
     
     data.health.total = 10 + (data.level.current * 2) + (data.stats.hp.total * 3);
     data.health.max = data.health.injuries > 0 ? Math.trunc(data.health.total*(1-((data.modifiers.hardened ? Math.min(data.health.injuries, 5) : data.health.injuries)/10))) : data.health.total;
@@ -148,7 +148,6 @@ export class PTUActor extends Actor {
     data.ap.total = 5 + Math.floor(data.level.current / 5);
 
     data.initiative = {value: data.stats.spd.total + data.modifiers.initiative};
-    data.levelUpPoints += data.level.current + data.modifiers.statPoints + 9;
   }
 
   /**
