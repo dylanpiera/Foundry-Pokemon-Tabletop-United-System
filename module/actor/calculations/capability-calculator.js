@@ -132,7 +132,7 @@ export function CalculatePokemonCapabilities(speciesData, items, speedCombatStag
     if (speciesData?.Capabilities == null) return [];
 
     if (typeof (speciesData.Capabilities.Overland) === "string") {
-        console.warn("FVTT PTU | (Custom) Species Data contains faulty values. Converting to integers.")
+        console.warn("FVTT PTU | (Custom) Species Data contains faulty values. Converting to integers.", speciesData._id, speciesData.number)
         for (let key of Object.keys(speciesData.Capabilities)) {
             if (key == "Weight Class" || key == "Naturewalk" || key == "Other") continue;
             speciesData.Capabilities[key] = parseInt(speciesData.Capabilities[key])

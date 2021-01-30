@@ -1,6 +1,11 @@
 # Welcome to the Beta!
 Hey there! You are on the Beta Branch. If you ever have any feedback please do share with us over on [Github](https://github.com/dylanpiera/Foundry-Pokemon-Tabletop-United-System/issues) or [Discord](https://discord.gg/fE3w59q)
 
+## 1.0.4 - Custom Species - Infinite Loop Fix
+- Fixed an issue that caused an infinite background reload job to happen when loading custom species, affecting performance greatly.
+- NOTE: If a player logs into foundry without a DM present, custom species won't load until a DM logs in.
+  - This ain't intended but as of now no fix has been found to this issue. See [Issue #57](https://github.com/dylanpiera/Foundry-Pokemon-Tabletop-United-System/issues/57)
+
 ## 1.0.3 - Trainer Stat Stages
 - Fixed Trainer's their Stat Stages not applying properly.
 

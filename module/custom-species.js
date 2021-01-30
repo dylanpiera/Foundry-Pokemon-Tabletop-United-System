@@ -72,7 +72,5 @@ export async function UpdateCustomSpecies(data) {
     await game.actors.filter(x => x.data.type === "pokemon" && (x.data.data.isCustomSpecies || x.data.data.typing === undefined)).forEach(async (x) => {
         if(x.permission >= 3)
             await x.update({timestamp: Date.now()})
-        else 
-            await game.socket.emit("system.ptu", "ReloadGMSpecies")
     })
 }
