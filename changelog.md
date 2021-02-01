@@ -1,3 +1,32 @@
+## 1.1.0 - QoL & Bugfixes
+### Quality of Live Changes
+- Dex Drag & Drop now uses the mon's Name instead of the mon's National Dex ID.
+- Added Snippet option for Move Effects
+  - Full Effects show on hover.
+- Added 2 new options for DMs to pick how they want move rolls to display in the chat
+  - Combat Roll Preference: Choose whether the move effect should be displayed when rolling To-Hit/Damage.
+    - Show damage situationally (if the hit is a crit it displays as such, and vice-versa)
+    - Always roll normal
+    - Always roll Crit
+    - Always roll both
+  - Combat Description Preference: Choose whether the move effect should be displayed when rolling To-Hit/Damage.
+    - Don't show move effects
+    - Show move snippet data, or nothing
+    - Show move snippet data, or full effect
+    - Show full effect
+- Updated settings menu font to be more readable.
+- Added font accessability option.
+
+### Bug Fixes
+- Fixed Dex Entries not being editable
+- Fixed Stages not applying properly to Trainer Stats
+- Fixed an issue that caused an infinite background reload job to happen when loading custom species, affecting performance greatly.
+  - NOTE: If a player logs into foundry without a DM present, custom species won't load until a DM logs in.
+
+### Modding Tool Updates
+- Actor now loads all data on [prepareDerivedData]. Making it possible to apply Active Effects to actor stats.
+- Effectiveness now has an easy to use [All] property for use in Macros
+
 ## 1.0.0 - Version 1!
 - Added automated release cycle
   - There is a beta branch available, for more info see [README.md](https://github.com/dylanpiera/Foundry-Pokemon-Tabletop-United-System/blob/master/README.md)

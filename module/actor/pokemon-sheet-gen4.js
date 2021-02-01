@@ -1,3 +1,5 @@
+import { debug, log } from "../ptu.js";
+
 /**
  * Extend the basic ActorSheet with some very simple modifications
  * @extends {ActorSheet}
@@ -148,7 +150,7 @@ export class PTUGen4PokemonSheet extends ActorSheet {
 		delete itemData.data['type'];
 
 		// Finally, create the item!
-		console.log(itemData);
+		debug("Created new item",itemData);
 		return this.actor.createOwnedItem(itemData);
 	}
 
@@ -195,7 +197,7 @@ export class PTUGen4PokemonSheet extends ActorSheet {
 			    diceResult = roll.terms[0].results[0].result;
             }
             catch(err){
-            	console.log("Old system detected, using deprecated rolling...")
+            	log("Old system detected, using deprecated rolling...")
             	diceResult = roll.parts[0].results[0];
 			}
 			if (diceResult === 1) {

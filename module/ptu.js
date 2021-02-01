@@ -24,7 +24,12 @@ import { InitCustomSpecies, UpdateCustomSpecies} from './custom-species.js'
 import { ChangeLog } from './forms/changelog-form.js'
 import CustomSpeciesFolder from './entities/custom-species-folder.js'
 
-export const LATEST_VERSION = "1.0.0";
+export let debug = (...args) => {if (game.settings.get("ptu", "showDebugInfo") ?? false) console.log("DEBUG: FVTT PTU | ", ...args)};
+export let log = (...args) => console.log("FVTT PTU | ", ...args);
+export let warn = (...args) => console.warn("FVTT PTU | ", ...args);
+export let error = (...args) => console.error("FVTT PTU | ", ...args)
+
+export const LATEST_VERSION = "1.1.0";
 
 Hooks.once('init', async function() {
 
@@ -160,7 +165,7 @@ Hooks.once('init', async function() {
 
   /** If furnace ain't installed... */
   if(!Object.keys(Handlebars.helpers).includes("divide")) {
-    console.warn("It is recommended to install & enable 'The Furnace' module.")
+    warn("It is recommended to install & enable 'The Furnace' module.")
 
     Handlebars.registerHelper("divide", (value1, value2) => Number(value1) / Number(value2));
     Handlebars.registerHelper("multiply", (value1, value2) => Number(value1) * Number(value2));
@@ -262,6 +267,36 @@ function _loadSystemSettings() {
     default: ""
   });
 
+  game.settings.register("ptu", "combatRollPreference", {
+    name: "Combat Roll Preference",
+    hint: "Choose whether crits should always be rolled, or only when the to-hit is an actual crit.",
+    scope: "world",
+    config: true,
+    type: String,
+    choices: {
+      "situational": "Show damage situationally",
+      "always-normal": "Always roll normal damage",
+      "always-crit": "Always roll crit damage",
+      "both": "Always roll both"
+    },
+    default: "situational"
+  });
+
+  game.settings.register("ptu", "combatDescPreference", {
+    name: "Combat Description Preference",
+    hint: "Choose whether the move effect should be displayed when rolling To-Hit/Damage.",
+    scope: "world",
+    config: true,
+    type: String,
+    choices: {
+      "none": "Don't show move effect",
+      "snippet": "Show move snippet, or nothing if unset",
+      "snippet-or-full": "Show move snippet, or full effect if unset",
+      "show": "Show full effect"
+    },
+    default: "snippet"
+  });
+
   game.settings.register("ptu", "verboseChatInfo", {
     name: "Verbose Chat Output",
     hint: "When enabled shows more details in chat messages.",
@@ -285,10 +320,20 @@ function _loadSystemSettings() {
     scope: "client",
     config: false,
     type: Object,
-    default:{} 
+    default: {}
   })
 
-  game.settings.register("ptu", "hideDebugInfo", {
+  game.settings.register("ptu", "accessability", {
+    name: "Font Accessability",
+    hint: "Set global font to 'Sans-Serif'. Please be aware that the system is not visually tested with this option enabled.",
+    scope: "client",
+    config: true,
+    type: Boolean,
+    default: false,
+    onChange: (enabled) => setAccessabilityFont(enabled)
+  });
+
+  game.settings.register("ptu", "showDebugInfo", {
     name: "Show Debug Info",
     hint: "Only for debug purposes. Logs extra debug messages & shows hidden folders/items",
     scope: "world",
@@ -305,7 +350,7 @@ function _loadSystemSettings() {
 Hooks.on("updatedCustomSpecies", UpdateCustomSpecies);
 
 Hooks.on('renderJournalDirectory', function() {
-  CustomSpeciesFolder.updateFolderDisplay(game.settings.get("ptu", "hideDebugInfo"));
+  CustomSpeciesFolder.updateFolderDisplay(game.settings.get("ptu", "showDebugInfo"));
 })
 
 /** DexEntry on Pokemon Sheet updates Species Data */
@@ -313,13 +358,13 @@ Hooks.on('dropActorSheetData', function(actor, sheet, itemDropData, ){
   if(actor.data.type != "pokemon") return true;
 
   let updateActorBasedOnSpeciesItem = function(item) {
-    if(item.data.data.id) {
-      console.log(`FVTT PTU | Updating Species based on Dex Drop (${actor.data.data.species} -> ${item.data.data.id})`)
-      actor.update({"data.species": item.data.data.id}).then(x => console.log("FVTT PTU | Finished Updating Species based on Dex Drop"));
+    if(item.data.name) {
+      log(`Updating Species based on Dex Drop (${actor.data.data.species} -> ${item.data.name})`)
+      actor.update({"data.species": item.data.name}).then(x => log("Finished Updating Species based on Dex Drop"));
     }
-    else if(item.data.name) {
-      console.log(`FVTT PTU | Updating Species based on Dex Drop (${actor.data.data.species} -> ${item.data.name})`)
-      actor.update({"data.species": item.data.name}).then(x => console.log("FVTT PTU | Finished Updating Species based on Dex Drop"));
+    else if(item.data.data.id) {
+      log(`Updating Species based on Dex Drop (${actor.data.data.species} -> ${item.data.data.id})`)
+      actor.update({"data.species": item.data.data.id}).then(x => log("Finished Updating Species based on Dex Drop"));
     }
   }
 
@@ -357,6 +402,8 @@ Hooks.on("renderSettingsConfig", function() {
 
 Hooks.once("ready", async function() {
   await InitCustomSpecies();
+
+  setAccessabilityFont(game.settings.get("ptu", "accessability"));
 
   // Globally enable items from item compendium
   game.ptu["items"] = await game.packs.get("ptu.items").getContent();
@@ -467,4 +514,12 @@ function rollItemMacro(itemName) {
 
   // Trigger the item roll
   return item.roll();
+}
+
+function setAccessabilityFont(enabled) {
+  if(enabled) {
+    document.querySelector(':root').style.setProperty('--pkmnFontStyle', 'sans-serif')
+  } else {
+    document.querySelector(':root').style.setProperty('--pkmnFontStyle', 'Pokemon GB')
+  }
 }

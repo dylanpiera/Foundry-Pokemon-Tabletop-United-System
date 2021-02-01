@@ -25,7 +25,6 @@ export class ChangeLog extends FormApplication {
     const data = super.getData();
     data.dtypes = ["String", "Number", "Boolean"];
 
-    console.log("FVTT PTU | ",{raw: this.object.replace(/[\r]/g,""), md: marked(this.object.replace(/[\r]/g,""))});
     data.text = marked(this.object.replace(/[\r]/g,""));
 
     return data;

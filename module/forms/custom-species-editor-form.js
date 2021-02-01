@@ -1,4 +1,5 @@
 import CustomSpeciesFolder from "../entities/custom-species-folder.js"
+import { log } from "../ptu.js";
 
 /**
  * Extend the basic FormApplication with some very simple modifications
@@ -56,10 +57,10 @@ export class PTUCustomSpeciesEditor extends Application {
           return;
         }
         
-        console.log(`FVTT PTU | Deleting mon with ID: ${id}. Data backup:`, JSON.parse(entry.data.content))
+        log(`Deleting mon with ID: ${id}. Data backup:`, JSON.parse(entry.data.content))
         await entry.delete();
         
-        console.log("FVTT PTU | Updating Custom Species")
+        log("Updating Custom Species")
         await Hooks.callAll("updatedCustomSpecies", {outdatedApplications: [this]});
         await game.socket.emit("system.ptu", "RefreshCustomSpecies")
       });

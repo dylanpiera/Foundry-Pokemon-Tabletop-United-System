@@ -1,3 +1,7 @@
+:root {
+    --pkmnFontStyle: "Pokemon GB";
+}
+
 h1,
 h2,
 h3,
@@ -768,7 +772,7 @@ span.readable {
         font-size: 16px;
     }
     &.pokemon {
-        font-family: "Pokemon GB";
+        font-family: var(--pkmnFontStyle);
     }
 }
 
@@ -1275,6 +1279,56 @@ p.summary {
         padding-left: 1.5em;
     }
 }
+
+.move-effect {
+    span {
+        display: block;
+    }
+
+    overflow: hidden !important;
+    .show-until-hover {
+        display: block;
+    }
+    .hide-until-hover {
+        display: none;
+    }
+
+    &:hover { 
+        .show-until-hover {
+            display: none;
+        }
+        .hide-until-hover {
+            display: block;
+        }
+    }
+}
+
+/* Readable Game Settings */
+.settings-list {
+    p.notes {
+    font-family: monospace;
+    font-variant: normal;
+    font-size: 12px;
+    }
+
+    .form-group {
+        padding: 6px 0;
+        border-top: solid 1px lightgray;
+
+        &:nth-child(1) {
+            border-top: unset;
+        }
+
+        label {
+            font-family: monospace;
+            font-variant: normal;
+            font-weight: bolder;
+            font-size: 13px;
+            line-height: 16px;
+        }
+    }
+}
+
 
 /* MD CSS */
 .md h1, .md h2, .md h3, .md h4, .md h5, .md h6 {

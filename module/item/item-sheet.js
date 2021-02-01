@@ -1,4 +1,4 @@
-import { PrepareMoveData } from '../ptu.js';
+import { PrepareMoveData, warn } from '../ptu.js';
 
 /**
  * Extend the basic ItemSheet with some very simple modifications
@@ -90,7 +90,7 @@ export class PTUItemSheet extends ItemSheet {
 			    diceResult = roll.terms[0].results[0].result;
             }
             catch(err){
-            	console.log("Old system detected, using deprecated rolling...")
+            	warn("Old system detected, using deprecated rolling...")
             	diceResult = roll.parts[0].results[0];
 			}
 			if (diceResult === 1) {

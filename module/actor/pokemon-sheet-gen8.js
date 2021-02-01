@@ -1,4 +1,4 @@
-import { PrepareMoveData } from '../ptu.js'
+import { debug, error, log, PrepareMoveData, warn } from '../ptu.js'
 
 /**
  * Extend the basic ActorSheet with some very simple modifications
@@ -160,7 +160,7 @@ export class PTUGen8PokemonSheet extends ActorSheet {
 		delete itemData.data['type'];
 
 		// Finally, create the item!
-		console.log(itemData);
+		debug("Created new item",itemData);
 		return this.actor.createOwnedItem(itemData);
 	}
 
@@ -206,10 +206,24 @@ export class PTUGen8PokemonSheet extends ActorSheet {
 
 			let crit = diceResult === 1 ? CritOptions.CRIT_MISS : diceResult >= 20 - this.actor.data.data.modifiers.critRange ? CritOptions.CRIT_HIT : CritOptions.NORMAL;
 
-			let damageRoll;
+			let damageRoll, critRoll;
 			if(crit != CritOptions.CRIT_MISS) {
-				damageRoll = CalculateDmgRoll(move.data, this.actor.data.data, crit)
+				switch(game.settings.get("ptu", "combatRollPreference")) {
+					case "situational":
+						if(crit == CritOptions.CRIT_HIT) critRoll = CalculateDmgRoll(move.data, this.actor.data.data, crit);
+						else damageRoll = CalculateDmgRoll(move.data, this.actor.data.data, crit);
+					break;
+					case "both":
+						damageRoll = CalculateDmgRoll(move.data, this.actor.data.data, CritOptions.NORMAL);
+					case "always-crit":
+						critRoll = CalculateDmgRoll(move.data, this.actor.data.data, CritOptions.CRIT_HIT);
+					break;
+					case "always-normal":
+						damageRoll = CalculateDmgRoll(move.data, this.actor.data.data, CritOptions.NORMAL);
+					break;
+				}
 				if(damageRoll) damageRoll.roll();
+				if(critRoll) critRoll.roll();
 			}
 			sendMoveRollMessage(acRoll, {
 				speaker: ChatMessage.getSpeaker({
@@ -217,6 +231,7 @@ export class PTUGen8PokemonSheet extends ActorSheet {
 				}),
 				move: move.data,
 				damageRoll: damageRoll,
+				critRoll: critRoll,
 				templateType: MoveMessageTypes.FULL_ATTACK,
 				crit: crit
 			});
@@ -271,7 +286,7 @@ export class PTUGen8PokemonSheet extends ActorSheet {
 				}),
 				move: move.data,
 				templateType: MoveMessageTypes.DETAILS
-			}).then(data => console.log(data))
+			}).then(data => debug(data))
 			return;
 		}
 		if(event.altKey) {
@@ -298,7 +313,7 @@ export class PTUGen8PokemonSheet extends ActorSheet {
 						}),
 						move: move.data,
 						templateType: MoveMessageTypes.DETAILS
-					}).then(data => console.log(data))
+					}).then(data => debug(data))
 				}
 			},
 			default: "roll"
@@ -352,7 +367,7 @@ function GetDiceResult(roll) {
 	try {
 		diceResult = roll.terms[0].results[0].result;
 	} catch (err) {
-		console.log("Old system detected, using deprecated rolling...")
+		warn("Old system detected, using deprecated rolling...")
 		diceResult = roll.parts[0].results[0];
 	}
 	return diceResult;
@@ -365,7 +380,7 @@ function PerformAcRoll(roll, move, actor) {
 		}),
 		move: move.data,
 		templateType: MoveMessageTypes.TO_HIT
-	}).then(_ => console.log(`Rolling to hit for ${actor.name}'s ${move.name}`));
+	}).then(_ => log(`Rolling to hit for ${actor.name}'s ${move.name}`));
 
 	return GetDiceResult(roll);
 }
@@ -377,13 +392,15 @@ async function sendMoveRollMessage(rollData, messageData = {}) {
 		user: game.user._id,
 		sound: CONFIG.sounds.dice,
 		templateType: MoveMessageTypes.DAMAGE,
-		verboseChatInfo: game.settings.get("ptu", "verboseChatInfo") ?? false
+		verboseChatInfo: game.settings.get("ptu", "verboseChatInfo") ?? false,
+		crp: game.settings.get("ptu", "combatRollPreference"),
+		cdp: game.settings.get("ptu", "combatDescPreference"),
 	}, messageData);
 
 	messageData.roll = rollData;
 
 	if(!messageData.move) {
-		console.error("Can't display move chat message without move data.")
+		error("Can't display move chat message without move data.")
 		return;
 	}
 	
@@ -400,7 +417,7 @@ async function sendMoveMessage(messageData = {}) {
 	}, messageData);
 
 	if(!messageData.move) {
-		console.error("Can't display move chat message without move data.")
+		error("Can't display move chat message without move data.")
 		return;
 	}
 	
