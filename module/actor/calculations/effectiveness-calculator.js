@@ -3,7 +3,7 @@ function getTypeEffectiveness(targetType) {
 }
 
 export function GetMonEffectiveness(data) {
-    let effectivenesses = {Weakness: [], Normal: [], Resistant: [], Immune: []}
+    let effectivenesses = {Weakness: [], Normal: [], Resistant: [], Immune: [], All: []}
     if(!data.data.typing) return effectivenesses;
     let typing = data.data.typing
     let typeCalc;
@@ -86,20 +86,26 @@ export function GetMonEffectiveness(data) {
         if(value < 1) {
             if(value == 0) {
                 effectivenesses.Immune.push({[typeKey]: 0});
+                effectivenesses.All.push([typeKey, 0])
                 continue;
             }
             effectivenesses.Resistant.push({[typeKey]: value});
+            effectivenesses.All.push([typeKey, value])
             continue;
         }
         if(value == 1) {
             effectivenesses.Normal.push({[typeKey]: 1});
+            effectivenesses.All.push([typeKey, 1])
             continue;
         }
         if(value > 1) {
             effectivenesses.Weakness.push({[typeKey]: value > 2 ? Math.log2(value) : value == 2 ? 1.5 : value});
+            effectivenesses.All.push([typeKey, value > 2 ? Math.log2(value) : value == 2 ? 1.5 : value])
             continue;
         }
     }
     
+    effectivenesses.All = Object.fromEntries(effectivenesses.All);
+
     return effectivenesses;
 }

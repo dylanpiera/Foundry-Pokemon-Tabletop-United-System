@@ -24,7 +24,12 @@ import { InitCustomSpecies, UpdateCustomSpecies} from './custom-species.js'
 import { ChangeLog } from './forms/changelog-form.js'
 import CustomSpeciesFolder from './entities/custom-species-folder.js'
 
-export const LATEST_VERSION = "1.0.4";
+export let debug = (...args) => {if (CONFIG.debug.hooks) console.log("DEBUG: FVTT PTU | ", ...args)};
+export let log = (...args) => console.log("FVTT PTU | ", ...args);
+export let warn = (...args) => console.warn("FVTT PTU | ", ...args);
+export let error = (...args) => console.error("FVTT PTU | ", ...args)
+
+export const LATEST_VERSION = "1.0.5";
 
 Hooks.once('init', async function() {
 
@@ -260,6 +265,36 @@ function _loadSystemSettings() {
     config: false,
     type: String,
     default: ""
+  });
+
+  game.settings.register("ptu", "combatRollPreference", {
+    name: "Choose whether crits should always be rolled, or only when the to-hit is an actual crit.",
+    hint: "",
+    scope: "world",
+    config: true,
+    type: String,
+    choices: {
+      "situational": "Show damage situationally",
+      "always-normal": "Always roll normal damage",
+      "always-crit": "Always roll crit damage",
+      "both": "Always roll both"
+    },
+    default: "situational"
+  });
+
+  game.settings.register("ptu", "combatDescPreference", {
+    name: "Choose whether the move effect should be displayed when rolling To-Hit/Damage.",
+    hint: "",
+    scope: "world",
+    config: true,
+    type: String,
+    choices: {
+      "none": "Don't show move effect",
+      "snippet": "Show move snippet, or nothing if unset",
+      "snippet-or-full": "Show move snippet, or full effect if unset",
+      "show": "Show full effect"
+    },
+    default: "snippet"
   });
 
   game.settings.register("ptu", "verboseChatInfo", {

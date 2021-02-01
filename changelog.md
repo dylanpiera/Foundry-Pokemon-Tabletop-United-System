@@ -1,6 +1,26 @@
 # Welcome to the Beta!
 Hey there! You are on the Beta Branch. If you ever have any feedback please do share with us over on [Github](https://github.com/dylanpiera/Foundry-Pokemon-Tabletop-United-System/issues) or [Discord](https://discord.gg/fE3w59q)
 
+## 1.0.5 - QoL Update
+- Added Snippet option for Move Effects
+  - Unlike other snippets, move effect snippets will show the full effect on hover.
+- Added 2 new options for DMs to pick how they want move rolls to display in the chat
+  - The first lets you pick when the system should display critical damage. 
+    - Situational, if the hit is a crit it displays as such.
+    - Always normal
+    - Always Crit
+    - Always show both
+  - The second allows you to pick whether you want the move effect to be displayed every time.
+    - Don't show move effects
+    - Show move snippet data, or nothing
+    - Show move snippet data, or full effect
+    - Show full effect
+
+### Modding Tool Updates
+- Actor now loads all data on `prepareDerivedData`. Making it possible to apply Active Effects to actor stats.
+- Effectiveness now has an easy to use `All` property for use in Macros
+
+
 ## 1.0.4 - Custom Species - Infinite Loop Fix
 - Fixed an issue that caused an infinite background reload job to happen when loading custom species, affecting performance greatly.
 - NOTE: If a player logs into foundry without a DM present, custom species won't load until a DM logs in.

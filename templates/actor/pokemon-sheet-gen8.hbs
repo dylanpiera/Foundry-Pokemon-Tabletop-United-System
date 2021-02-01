@@ -375,7 +375,14 @@
                     <span class="readable pokemon p8 tight">{{move.data.range}}</span>
                   </div>
                   <div class="item-name flexcol move-col" style="flex: 0 0 20%;">
-                    <span class="readable pokemon p8 tight">{{move.data.effect}}</span>
+                    <span class="move-effect">
+                      {{#if move.data.snippet}}
+                        <span class="show-until-hover readable pokemon p8 tight">{{move.data.snippet}}</span>
+                        <span class="hide-until-hover readable pokemon p8 tight">{{move.data.effect}}</span>
+                      {{else}}
+                        <span class="readable pokemon p8 tight">{{move.data.effect}}</span>
+                      {{/if}}
+                    </span>
                   </div>
                   <div class="item-controls" style="flex: 0 0 5%; justify-content: center; display:flex;">
                     <a class="item-control item-edit" title="Edit move"><i class="fas fa-edit"></i></a>

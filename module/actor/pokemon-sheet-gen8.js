@@ -206,10 +206,24 @@ export class PTUGen8PokemonSheet extends ActorSheet {
 
 			let crit = diceResult === 1 ? CritOptions.CRIT_MISS : diceResult >= 20 - this.actor.data.data.modifiers.critRange ? CritOptions.CRIT_HIT : CritOptions.NORMAL;
 
-			let damageRoll;
+			let damageRoll, critRoll;
 			if(crit != CritOptions.CRIT_MISS) {
-				damageRoll = CalculateDmgRoll(move.data, this.actor.data.data, crit)
+				switch(game.settings.get("ptu", "combatRollPreference")) {
+					case "situational":
+						if(crit == CritOptions.CRIT_HIT) critRoll = CalculateDmgRoll(move.data, this.actor.data.data, crit);
+						else damageRoll = CalculateDmgRoll(move.data, this.actor.data.data, crit);
+					break;
+					case "both":
+						damageRoll = CalculateDmgRoll(move.data, this.actor.data.data, CritOptions.NORMAL);
+					case "always-crit":
+						critRoll = CalculateDmgRoll(move.data, this.actor.data.data, CritOptions.CRIT_HIT);
+					break;
+					case "always-normal":
+						damageRoll = CalculateDmgRoll(move.data, this.actor.data.data, CritOptions.NORMAL);
+					break;
+				}
 				if(damageRoll) damageRoll.roll();
+				if(critRoll) critRoll.roll();
 			}
 			sendMoveRollMessage(acRoll, {
 				speaker: ChatMessage.getSpeaker({
@@ -217,6 +231,7 @@ export class PTUGen8PokemonSheet extends ActorSheet {
 				}),
 				move: move.data,
 				damageRoll: damageRoll,
+				critRoll: critRoll,
 				templateType: MoveMessageTypes.FULL_ATTACK,
 				crit: crit
 			});
@@ -377,7 +392,9 @@ async function sendMoveRollMessage(rollData, messageData = {}) {
 		user: game.user._id,
 		sound: CONFIG.sounds.dice,
 		templateType: MoveMessageTypes.DAMAGE,
-		verboseChatInfo: game.settings.get("ptu", "verboseChatInfo") ?? false
+		verboseChatInfo: game.settings.get("ptu", "verboseChatInfo") ?? false,
+		crp: game.settings.get("ptu", "combatRollPreference"),
+		cdp: game.settings.get("ptu", "combatDescPreference"),
 	}, messageData);
 
 	messageData.roll = rollData;

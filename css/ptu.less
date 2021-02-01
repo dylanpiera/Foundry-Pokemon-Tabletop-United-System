@@ -1276,6 +1276,29 @@ p.summary {
     }
 }
 
+.move-effect {
+    span {
+        display: block;
+    }
+
+    overflow-y: hidden !important;
+    .show-until-hover {
+        display: block;
+    }
+    .hide-until-hover {
+        display: none;
+    }
+
+    &:hover { 
+        .show-until-hover {
+            display: none;
+        }
+        .hide-until-hover {
+            display: block;
+        }
+    }
+}
+
 /* MD CSS */
 .md h1, .md h2, .md h3, .md h4, .md h5, .md h6 {
     border-bottom: 0.5px solid lightgray;

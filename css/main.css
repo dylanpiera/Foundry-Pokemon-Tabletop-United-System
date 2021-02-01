@@ -1031,6 +1031,24 @@ p.summary {
   width: auto;
   padding-left: 1.5em;
 }
+.move-effect {
+  overflow-y: hidden !important;
+}
+.move-effect span {
+  display: block;
+}
+.move-effect .show-until-hover {
+  display: block;
+}
+.move-effect .hide-until-hover {
+  display: none;
+}
+.move-effect:hover .show-until-hover {
+  display: none;
+}
+.move-effect:hover .hide-until-hover {
+  display: block;
+}
 /* MD CSS */
 .md h1,
 .md h2,

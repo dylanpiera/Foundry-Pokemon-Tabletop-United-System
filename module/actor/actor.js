@@ -78,7 +78,7 @@ export class PTUActor extends Actor {
   }
 
   /** @override */
-  prepareBaseData() {
+  prepareDerivedData() {
     const actorData = this.data;
 
     // Make separate methods for each Actor type (character, npc, etc.) to keep
