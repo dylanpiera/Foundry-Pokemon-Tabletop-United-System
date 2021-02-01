@@ -1,3 +1,7 @@
+:root {
+    --pkmnFontStyle: "Pokemon GB";
+}
+
 h1,
 h2,
 h3,
@@ -768,7 +772,7 @@ span.readable {
         font-size: 16px;
     }
     &.pokemon {
-        font-family: "Pokemon GB";
+        font-family: var(--pkmnFontStyle);
     }
 }
 
@@ -1298,6 +1302,23 @@ p.summary {
         }
     }
 }
+
+/* Readable Game Settings */
+.settings-list {
+    p.notes {
+    font-family: monospace;
+    font-variant: normal;
+    font-size: 12px;
+    }
+
+    .form-group label {
+        font-family: monospace;
+        font-variant: normal;
+        font-weight: bolder;
+        font-size: 13px;
+    }
+}
+
 
 /* MD CSS */
 .md h1, .md h2, .md h3, .md h4, .md h5, .md h6 {

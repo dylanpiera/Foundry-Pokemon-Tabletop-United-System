@@ -1,7 +1,7 @@
 # Welcome to the Beta!
 Hey there! You are on the Beta Branch. If you ever have any feedback please do share with us over on [Github](https://github.com/dylanpiera/Foundry-Pokemon-Tabletop-United-System/issues) or [Discord](https://discord.gg/fE3w59q)
 
-## 1.0.5 - QoL Update
+## 1.0.5 - 1.0.6 - QoL Update
 - Added Snippet option for Move Effects
   - Unlike other snippets, move effect snippets will show the full effect on hover.
 - Added 2 new options for DMs to pick how they want move rolls to display in the chat
@@ -15,10 +15,12 @@ Hey there! You are on the Beta Branch. If you ever have any feedback please do s
     - Show move snippet data, or nothing
     - Show move snippet data, or full effect
     - Show full effect
+- Updated settings menu font to be more readable.
+- Added font accessability option.
 
 ### Modding Tool Updates
-- Actor now loads all data on `prepareDerivedData`. Making it possible to apply Active Effects to actor stats.
-- Effectiveness now has an easy to use `All` property for use in Macros
+- Actor now loads all data on [prepareDerivedData]. Making it possible to apply Active Effects to actor stats.
+- Effectiveness now has an easy to use [All] property for use in Macros
 
 
 ## 1.0.4 - Custom Species - Infinite Loop Fix

@@ -1,4 +1,7 @@
 @import "bootstrap-grid.css";
+:root {
+  --pkmnFontStyle: "Pokemon GB";
+}
 h1,
 h2,
 h3,
@@ -614,7 +617,7 @@ span.readable {
   font-size: 16px;
 }
 .readable.pokemon {
-  font-family: "Pokemon GB";
+  font-family: var(--pkmnFontStyle);
 }
 .item-effect {
   display: -webkit-box;
@@ -1048,6 +1051,18 @@ p.summary {
 }
 .move-effect:hover .hide-until-hover {
   display: block;
+}
+/* Readable Game Settings */
+.settings-list p.notes {
+  font-family: monospace;
+  font-variant: normal;
+  font-size: 12px;
+}
+.settings-list .form-group label {
+  font-family: monospace;
+  font-variant: normal;
+  font-weight: bolder;
+  font-size: 13px;
 }
 /* MD CSS */
 .md h1,
@@ -1595,7 +1610,7 @@ a.button:active {
 button,
 .button {
   position: relative;
-  font-family: "Pokemon GB";
+  font-family: var(--pkmnFontStyle);
   background: none;
   border: none;
   padding: 0 0 0 1em;
@@ -2697,7 +2712,7 @@ h2 {
   background: #F8F3F8 !important;
 }
 body {
-  font-family: "Pokemon GB";
+  font-family: var(--pkmnFontStyle);
   font-variant: small-caps;
   font-smooth: never;
   -webkit-font-smoothing: none;

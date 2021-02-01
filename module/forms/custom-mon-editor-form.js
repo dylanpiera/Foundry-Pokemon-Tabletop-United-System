@@ -1,5 +1,6 @@
 import {BlankPTUSpecies} from "../data/species-template.js"
 import CustomSpeciesFolder from "../entities/custom-species-folder.js"
+import { log } from "../ptu.js";
 
 /**
  * Extend the basic ActorSheet with some very simple modifications
@@ -51,13 +52,13 @@ export class PTUCustomMonEditor extends FormApplication {
       let journalEntry = CustomSpeciesFolder.findEntry(this.object);
       if(journalEntry === undefined) journalEntry = CustomSpeciesFolder.findEntry(this.object.ptuNumber);
       if(journalEntry === undefined) {
-        console.log("FVTT PTU | No entry found for " + this.object._id + " creating new entry");
+        log("No entry found for " + this.object._id + " creating new entry");
         await JournalEntry.create({name: this.object.ptuNumber, content: JSON.stringify(this.object), folder: CustomSpeciesFolder._dirId})
       } else {
         await journalEntry.update({content: JSON.stringify(this.object)});
       }
 
-      console.log("FVTT PTU | Updating Custom Species")
+      log("Updating Custom Species")
       await Hooks.callAll("updatedCustomSpecies", {outdatedApplications: [this.options.baseApplication]});
       await game.socket.emit("system.ptu", "RefreshCustomSpecies")
     }

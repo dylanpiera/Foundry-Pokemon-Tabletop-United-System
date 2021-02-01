@@ -1,3 +1,5 @@
+import { debug } from "../ptu.js";
+
 /**
  * Extend the basic ActorSheet with some very simple modifications
  * @extends {ActorSheet}
@@ -140,7 +142,7 @@ export class PTUGen4CharacterSheet extends ActorSheet {
     delete itemData.data["type"];
 
     // Finally, create the item!
-    console.log(itemData);
+    debug("Created new item",itemData);
     return this.actor.createOwnedItem(itemData);
   }
 

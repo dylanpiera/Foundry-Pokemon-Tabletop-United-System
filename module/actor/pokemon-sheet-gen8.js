@@ -1,4 +1,4 @@
-import { PrepareMoveData } from '../ptu.js'
+import { debug, error, log, PrepareMoveData, warn } from '../ptu.js'
 
 /**
  * Extend the basic ActorSheet with some very simple modifications
@@ -160,7 +160,7 @@ export class PTUGen8PokemonSheet extends ActorSheet {
 		delete itemData.data['type'];
 
 		// Finally, create the item!
-		console.log(itemData);
+		debug("Created new item",itemData);
 		return this.actor.createOwnedItem(itemData);
 	}
 
@@ -286,7 +286,7 @@ export class PTUGen8PokemonSheet extends ActorSheet {
 				}),
 				move: move.data,
 				templateType: MoveMessageTypes.DETAILS
-			}).then(data => console.log(data))
+			}).then(data => debug(data))
 			return;
 		}
 		if(event.altKey) {
@@ -313,7 +313,7 @@ export class PTUGen8PokemonSheet extends ActorSheet {
 						}),
 						move: move.data,
 						templateType: MoveMessageTypes.DETAILS
-					}).then(data => console.log(data))
+					}).then(data => debug(data))
 				}
 			},
 			default: "roll"
@@ -367,7 +367,7 @@ function GetDiceResult(roll) {
 	try {
 		diceResult = roll.terms[0].results[0].result;
 	} catch (err) {
-		console.log("Old system detected, using deprecated rolling...")
+		warn("Old system detected, using deprecated rolling...")
 		diceResult = roll.parts[0].results[0];
 	}
 	return diceResult;
@@ -380,7 +380,7 @@ function PerformAcRoll(roll, move, actor) {
 		}),
 		move: move.data,
 		templateType: MoveMessageTypes.TO_HIT
-	}).then(_ => console.log(`Rolling to hit for ${actor.name}'s ${move.name}`));
+	}).then(_ => log(`Rolling to hit for ${actor.name}'s ${move.name}`));
 
 	return GetDiceResult(roll);
 }
@@ -400,7 +400,7 @@ async function sendMoveRollMessage(rollData, messageData = {}) {
 	messageData.roll = rollData;
 
 	if(!messageData.move) {
-		console.error("Can't display move chat message without move data.")
+		error("Can't display move chat message without move data.")
 		return;
 	}
 	
@@ -417,7 +417,7 @@ async function sendMoveMessage(messageData = {}) {
 	}, messageData);
 
 	if(!messageData.move) {
-		console.error("Can't display move chat message without move data.")
+		error("Can't display move chat message without move data.")
 		return;
 	}
 	

@@ -4,6 +4,7 @@ import { CalculatePokemonCapabilities, CalculateTrainerCapabilities} from "./cal
 import { CalculateSkills } from "./calculations/skills-calculator.js"; 
 import { CalcBaseStat, CalculateStatTotal } from "./calculations/stats-calculator.js";
 import { GetMonEffectiveness } from "./calculations/effectiveness-calculator.js";
+import { warn, debug } from '../ptu.js' 
 
 /**
  * Extend the base Actor entity by defining a custom roll data structure which is ideal for the Simple system.
@@ -20,7 +21,7 @@ export class PTUActor extends Actor {
     const actorData = this.data;
 
     if(parseInt(game.data.version.split('.')[1]) <= 6) {
-      console.warn("FVTT PTU | Using old prepare-data structure")
+      warn("Using old prepare-data structure")
       // Make separate methods for each Actor type (character, npc, etc.) to keep
       // things organized.
       if (actorData.type === 'character') this._prepareCharacterData(actorData);
@@ -30,7 +31,7 @@ export class PTUActor extends Actor {
 
   /** @override */
   async modifyTokenAttribute(attribute, value, isDelta=false, isBar=true) {
-    console.log("FVTT PTU | ", attribute, value, isDelta, isBar);
+    debug("Modifying Token Attribute",attribute, value, isDelta, isBar);
     
     const current = getProperty(this.data.data, attribute);
     if (isBar) {
@@ -61,7 +62,7 @@ export class PTUActor extends Actor {
             value = current.max;
           }
         }
-        console.log("FVTT PTU | Updating Character HP with args:", this, {oldValue: current.value, newValue: value, tempHp: temp })
+        debug("Updating Character HP with args:", this, {oldValue: current.value, newValue: value, tempHp: temp })
         return this.update({[`data.${attribute}.value`]: value, [`data.${attribute}.temp.value`]: temp.value, [`data.${attribute}.temp.max`]: temp.max});
       }
       else {
@@ -91,7 +92,7 @@ export class PTUActor extends Actor {
   static async create(data, options={}) {
     let actor = await super.create(data, options);
 
-    console.log(actor);
+    debug("Creating new actor with data:",actor);
     if(actor.data.type != "pokemon") return;
 
     let form = new game.ptu.PTUPokemonCharactermancer(actor, {"submitOnChange": true, "submitOnClose": true});
