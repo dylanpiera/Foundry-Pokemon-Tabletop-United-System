@@ -1,6 +1,15 @@
 # Welcome to the Beta!
 Hey there! You are on the Beta Branch. If you ever have any feedback please do share with us over on [Github](https://github.com/dylanpiera/Foundry-Pokemon-Tabletop-United-System/issues) or [Discord](https://discord.gg/fE3w59q)
 
+## 1.1.2 - Automated Combat Alpha Tools
+- **[EXPERIMENTAL!]** 
+Added a 'Deal Damage' button to Attack Chat Messages, which applies the damage of that move to all selected tokens.
+- Also added an Undo button for the applied damage.
+
+**Note:** 
+- As people seem to have been making macros for this, I thought I'd directly implement it into the system, even if 'Fully' Automated Combat is only set for V3.
+- Version 1.1.3 will feature flat damage modifiers & flat damage reduction modifiers to tie into this system.
+
 ## 1.1.1 - Version 1.1 Release - Beta Branch
 - Fixed Snippet not working properly on Trainer Sheet (Already present in 1.1.0) 
 

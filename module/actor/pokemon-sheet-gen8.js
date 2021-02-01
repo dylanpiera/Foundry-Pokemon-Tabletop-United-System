@@ -193,7 +193,6 @@ export class PTUGen8PokemonSheet extends ActorSheet {
 	 */
 	_onMoveRoll(event) {
 		event.preventDefault();
-
 		const element = event.currentTarget;
 		const dataset = element.dataset;
 		const move = this.actor.items.find(x => x._id == dataset.id).data;
@@ -286,7 +285,7 @@ export class PTUGen8PokemonSheet extends ActorSheet {
 				}),
 				move: move.data,
 				templateType: MoveMessageTypes.DETAILS
-			}).then(data => debug(data))
+			})
 			return;
 		}
 		if(event.altKey) {
@@ -313,7 +312,7 @@ export class PTUGen8PokemonSheet extends ActorSheet {
 						}),
 						move: move.data,
 						templateType: MoveMessageTypes.DETAILS
-					}).then(data => debug(data))
+					})
 				}
 			},
 			default: "roll"
@@ -406,7 +405,7 @@ async function sendMoveRollMessage(rollData, messageData = {}) {
 	
 	messageData.content = await renderTemplate(`/systems/ptu/templates/chat/moves/move-${messageData.templateType}.hbs`, messageData)
 
-	return ChatMessage.create(messageData, {});
+	return ChatMessage.create(messageData, {})
 }
 
 async function sendMoveMessage(messageData = {}) {

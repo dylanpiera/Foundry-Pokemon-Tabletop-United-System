@@ -22,6 +22,7 @@ import { PTUCustomMonEditor } from './forms/custom-mon-editor-form.js'
 import { RollWithDb } from './utils/roll-calculator.js'
 import { InitCustomSpecies, UpdateCustomSpecies} from './custom-species.js'
 import { ChangeLog } from './forms/changelog-form.js'
+import { applyDamageToTargets, undoDamageToTargets }  from './combat/damage-calc-tools.js'
 import CustomSpeciesFolder from './entities/custom-species-folder.js'
 
 export let debug = (...args) => {if (game.settings.get("ptu", "showDebugInfo") ?? false) console.log("DEBUG: FVTT PTU | ", ...args)};
@@ -29,7 +30,7 @@ export let log = (...args) => console.log("FVTT PTU | ", ...args);
 export let warn = (...args) => console.warn("FVTT PTU | ", ...args);
 export let error = (...args) => console.error("FVTT PTU | ", ...args)
 
-export const LATEST_VERSION = "1.1.1";
+export const LATEST_VERSION = "1.1.2";
 
 Hooks.once('init', async function() {
 
@@ -46,7 +47,11 @@ Hooks.once('init', async function() {
     DbData,
     TypeEffectiveness,
     GetSpeciesData,
-    RollWithDb
+    RollWithDb,
+    combat: {
+      applyDamageToTargets,
+      undoDamageToTargets
+    }
   };
 
   /**

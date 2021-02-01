@@ -94,6 +94,13 @@
                     </div>
                 </div>
             {{/if}}
+            {{#if (or damageRoll critRoll)}}
+                <div class="w-100 p-2" style="border-top:1px solid #00000080;/* padding:10px 5px */">
+                    <button class="apply-damage-button" data-reg-damage="{{damageRoll._total}}" data-crit-damage="{{critRoll._total}}" data-type="{{move.type}}" data-category="{{move.category}}" data-move-name="{{move.name}}">
+                        Apply Damage
+                    </button>
+                </div>
+            {{/if}}
         </div>
     
     {{#if (not cdp "none")}}
