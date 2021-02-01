@@ -1,6 +1,9 @@
 # Welcome to the Beta!
 Hey there! You are on the Beta Branch. If you ever have any feedback please do share with us over on [Github](https://github.com/dylanpiera/Foundry-Pokemon-Tabletop-United-System/issues) or [Discord](https://discord.gg/fE3w59q)
 
+## 1.1.1 - Version 1.1 Release - Beta Branch
+- Fixed Snippet not working properly on Trainer Sheet (Already present in 1.1.0) 
+
 ## 1.0.5 - 1.0.6 - QoL Update
 - Added Snippet option for Move Effects
   - Unlike other snippets, move effect snippets will show the full effect on hover.

@@ -1035,7 +1035,7 @@ p.summary {
   padding-left: 1.5em;
 }
 .move-effect {
-  overflow-y: hidden !important;
+  overflow: hidden !important;
 }
 .move-effect span {
   display: block;
