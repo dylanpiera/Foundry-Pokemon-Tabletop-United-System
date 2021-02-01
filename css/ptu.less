@@ -1311,11 +1311,21 @@ p.summary {
     font-size: 12px;
     }
 
-    .form-group label {
-        font-family: monospace;
-        font-variant: normal;
-        font-weight: bolder;
-        font-size: 13px;
+    .form-group {
+        padding: 6px 0;
+        border-top: solid 1px lightgray;
+
+        &:nth-child(1) {
+            border-top: unset;
+        }
+
+        label {
+            font-family: monospace;
+            font-variant: normal;
+            font-weight: bolder;
+            font-size: 13px;
+            line-height: 16px;
+        }
     }
 }
 
