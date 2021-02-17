@@ -36,7 +36,7 @@ export class PTUActor extends Actor {
     const current = getProperty(this.data.data, attribute);
     if (isBar) {
       if(attribute == "health") {
-        const temp = current.temp;
+        const temp = duplicate(current.temp);
         if (isDelta) {
           if(value < 0 && Number(temp.value) > 0) {
             temp.value = Number(temp.value) + value;
