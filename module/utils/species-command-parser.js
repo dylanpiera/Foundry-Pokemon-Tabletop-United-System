@@ -12,6 +12,8 @@ export function CreateMonParser(input, andCreate = false) {
     if(!commands["generate"]) {ui.notifications.notify("Missing required param [generate]", "error");return;}
     if(!commands["pokemon"] && !commands["random"]) {ui.notifications.notify("Missing required param [pokemon] or [random]", "error");return;}
     if(!commands["level"]) {ui.notifications.notify("Missing required param [level]", "error");return;}
+    if(!commands["stats"]) {ui.notifications.notify("Missing required param [stats]", "error");return;}
+    if(commands["stats"] != "random" && commands["stats"] != "weighted" && commands["stats"] != "basestats") {ui.notifications.notify("Required param [stats] has invalid value. Allowed values: random, weighted, basestats", "error");return;}
 
     if(isNaN(commands["generate"])) {
         let range = commands["generate"].split("-");
@@ -136,6 +138,7 @@ async function createMons(commandData) {
     for(let a of actors) {
         game.ptu.monGenerator.ApplyEvolution(a).then(async (r) => {
             debug("Applied correct evolution to Actor", r, a)
+            game.ptu.monGenerator.StatDistributions.ApplyLevelUpPoints(a, commandData["stats"], commandData["statrng%"] ? commandData["statrng%"] : 0.1).then((r) => debug("Applied stat distribution to Actor", r, a))
             game.ptu.monGenerator.GiveRandomAbilities(a).then((r) => debug("Added Abilities to Actor", r, a));
             game.ptu.monGenerator.GiveLatestMoves(a).then((r) => debug("Added moves to Actor", r, a));
             let updates = {img: "", name: ""};

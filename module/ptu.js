@@ -29,6 +29,7 @@ import { GetRandomNature } from './utils/random-nature-generator.js'
 import { GiveRandomAbilities } from './utils/random-abilities-generator.js'
 import { GiveLatestMoves } from './utils/latest-moves-generator.js'
 import { ApplyEvolution } from './utils/calculate-evolution.js'
+import { DistributeStatsWeighted, DistributeStatsRandomly, DistributeByBaseStats, BaseStatsWithNature, ApplyLevelUpPoints } from './utils/calculate-stat-distribution.js'
 
 export let debug = (...args) => {if (game.settings.get("ptu", "showDebugInfo") ?? false) console.log("DEBUG: FVTT PTU | ", ...args)};
 export let log = (...args) => console.log("FVTT PTU | ", ...args);
@@ -58,7 +59,14 @@ Hooks.once('init', async function() {
       GetRandomNature,
       GiveRandomAbilities,
       GiveLatestMoves,
-      ApplyEvolution
+      ApplyEvolution,
+      StatDistributions: {
+        DistributeStatsWeighted,
+        DistributeStatsRandomly,
+        DistributeByBaseStats,
+        BaseStatsWithNature,
+        ApplyLevelUpPoints
+      }
     },
     combat: {
       applyDamageToTargets,
