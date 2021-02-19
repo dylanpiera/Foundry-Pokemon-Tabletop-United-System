@@ -129,15 +129,27 @@ async function createMons(commandData) {
             "data.nature.value": game.ptu.monGenerator.GetRandomNature()
         });
         if(commandData["folder"]) preparedData[i]["folder"] = commandData["folder"].id;
-        if(commandData["imgpath"]) {
-            let img = await GetSpeciesArt(commandData["pokemon"][i], commandData["imgpath"], commandData["imgext"] ? commandData["imgext"] : ".png");
-            if(img) preparedData[i]["img"] = img;
-        }
     }
 
     let actors = await game.ptu.PTUActor.create(preparedData, {noCharactermancer: true});
+    if(!Array.isArray(actors)) actors = [actors];
     for(let a of actors) {
-        game.ptu.monGenerator.GiveRandomAbilities(a).then((r) => debug("Added Abilities to Actor", r, a));
-        game.ptu.monGenerator.GiveLatestMoves(a).then((r) => debug("Added moves to Actor", r, a));
+        game.ptu.monGenerator.ApplyEvolution(a).then(async (r) => {
+            debug("Applied correct evolution to Actor", r, a)
+            game.ptu.monGenerator.GiveRandomAbilities(a).then((r) => debug("Added Abilities to Actor", r, a));
+            game.ptu.monGenerator.GiveLatestMoves(a).then((r) => debug("Added moves to Actor", r, a));
+            let updates = {img: "", name: ""};
+            if(commandData["imgpath"]) {
+                let imgPath = await GetSpeciesArt(game.ptu.GetSpeciesData(a.data.data.species), commandData["imgpath"], commandData["imgext"] ? commandData["imgext"] : ".png");
+                if(imgPath) updates.img = imgPath;
+            }
+            if(!a.data.name.includes(a.data.data.species)) {
+                updates.name = `${a.data.data.species} ${a.data.name.split(" ")[1]}`
+            }
+            if(updates.img || updates.name) {
+                a.update({img: updates.img ? updates.img : a.data.img, name: updates.name ? updates.name : a.data.name})
+            }
+        })
+
     }
 }
