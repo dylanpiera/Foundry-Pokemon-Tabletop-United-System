@@ -3,19 +3,19 @@
   autocomplete="off"
   style="text-align: center;"
 >
-  <div class="row justify-content-center">
-    <div class="col-sm-10">
+  <div class="d-flex align-items-end flex-column h-100">
+    <div class="w-100 justify-content-center mb-2">
       <label for="data.species">Species:</label>
     </div>
-  </div>
-  <div class="row justify-content-center mt-2">
-    <div class="col-sm-10">
-      <input type="text" name="data.species" value="{{object.name}}"/>
+    <div class="w-100 justify-content-center mb-2">
+      <input style="width: 60%;" id="speciesField" type="text" name="data.species" value="{{#if object.data.species}}{{object.data.species}}{{else}}{{object.name}}{{/if}}"/>
     </div>
-  </div>
-  <div class="row justify-content-center mt-2">
-    <div class="col-sm-8">
+    <div class="w-100 justify-content-center mb-2">
+      <p id="speciesFieldTooltip">{{#if selectedSpecies}}Selected: {{selectedSpecies._id}} with ID: {{selectedSpecies.number}}{{/if}}</p>
+    </div>
+    <div class="w-100 justify-content-center mt-auto">
       <input type="submit" value="Submit!"/>
     </div>
   </div>
 </form>
+{{log this}}

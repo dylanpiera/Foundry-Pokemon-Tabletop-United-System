@@ -92,6 +92,22 @@ export class PTUGen8PokemonSheet extends ActorSheet {
 	/* -------------------------------------------- */
 
 	/** @override */
+	_getHeaderButtons() {
+		let buttons = super._getHeaderButtons();
+
+		buttons.unshift({
+			label: "Charactermancer",
+			class: "open-charactermancer",
+			icon: "fas fa-edit",
+			onclick: () => new game.ptu.PTUPokemonCharactermancer(this.actor, {"submitOnChange": false, "submitOnClose": true}).render(true)
+		});
+
+		return buttons;
+	}
+
+	/* -------------------------------------------- */
+
+	/** @override */
 	activateListeners(html) {
 		super.activateListeners(html);
 
