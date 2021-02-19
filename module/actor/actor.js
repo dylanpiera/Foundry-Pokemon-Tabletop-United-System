@@ -43,13 +43,13 @@ export class PTUActor extends Actor {
             if(temp.value >= 0) return this.update({[`data.${attribute}.temp.value`]: temp.value});
 
             let totalValue = Number(current.value) + temp.value;
-            value = Math.clamped(0, totalValue, current.max);
+            value = Math.clamped(current.max*-1, totalValue, current.max);
             temp.value = 0;
             temp.max = 0;
           }
           else {
             let totalValue = Number(current.value) + value;
-            value = Math.clamped(0, totalValue, current.max);
+            value = Math.clamped(current.max*-1, totalValue, current.max);
             if(totalValue > value) {
               temp.value = totalValue - value;
               temp.max = temp.value;
