@@ -24,6 +24,7 @@ import { InitCustomSpecies, UpdateCustomSpecies} from './custom-species.js'
 import { ChangeLog } from './forms/changelog-form.js'
 import { applyDamageToTargets, undoDamageToTargets }  from './combat/damage-calc-tools.js'
 import CustomSpeciesFolder from './entities/custom-species-folder.js'
+import { CreateMonParser } from './utils/species-command-parser.js'
 
 export let debug = (...args) => {if (game.settings.get("ptu", "showDebugInfo") ?? false) console.log("DEBUG: FVTT PTU | ", ...args)};
 export let log = (...args) => console.log("FVTT PTU | ", ...args);
@@ -48,6 +49,7 @@ Hooks.once('init', async function() {
     TypeEffectiveness,
     GetSpeciesData,
     RollWithDb,
+    CreateMonParser,
     combat: {
       applyDamageToTargets,
       undoDamageToTargets
