@@ -1,6 +1,18 @@
 # Welcome to the Beta!
 Hey there! You are on the Beta Branch. If you ever have any feedback please do share with us over on [Github](https://github.com/dylanpiera/Foundry-Pokemon-Tabletop-United-System/issues) or [Discord](https://discord.gg/fE3w59q)
 
+## 1.1.3 - DM Pokemon Generation
+### New Features
+- Charactermancer's Species field now autocompletes.
+- **Big Change!** DM Quick-Pokemon Generation
+
+DMs can now quickly generate Pokémon for random encounters using the chat! For more info see the [wiki](https://github.com/dylanpiera/Foundry-Pokemon-Tabletop-United-System/wiki/Pokemon-Generation-using-Chat-Commands).
+
+### Bug Fixes
+- Damage Undo button now remembers Temp HP.
+- HP can now go into the negatives, for all your taskmaster needs.
+- Temp HP Calculations are now applied properly to Token Actors as well.
+
 ## 1.1.2 - Automated Combat Alpha Tools
 - **[EXPERIMENTAL!]** 
 Added a 'Deal Damage' button to Attack Chat Messages, which applies the damage of that move to all selected tokens.

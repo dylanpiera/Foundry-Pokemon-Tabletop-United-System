@@ -24,13 +24,19 @@ import { InitCustomSpecies, UpdateCustomSpecies} from './custom-species.js'
 import { ChangeLog } from './forms/changelog-form.js'
 import { applyDamageToTargets, undoDamageToTargets }  from './combat/damage-calc-tools.js'
 import CustomSpeciesFolder from './entities/custom-species-folder.js'
+import { CreateMonParser } from './utils/species-command-parser.js'
+import { GetRandomNature } from './utils/random-nature-generator.js'
+import { GiveRandomAbilities } from './utils/random-abilities-generator.js'
+import { GiveLatestMoves } from './utils/latest-moves-generator.js'
+import { ApplyEvolution } from './utils/calculate-evolution.js'
+import { DistributeStatsWeighted, DistributeStatsRandomly, DistributeByBaseStats, BaseStatsWithNature, ApplyLevelUpPoints } from './utils/calculate-stat-distribution.js'
 
 export let debug = (...args) => {if (game.settings.get("ptu", "showDebugInfo") ?? false) console.log("DEBUG: FVTT PTU | ", ...args)};
 export let log = (...args) => console.log("FVTT PTU | ", ...args);
 export let warn = (...args) => console.warn("FVTT PTU | ", ...args);
 export let error = (...args) => console.error("FVTT PTU | ", ...args)
 
-export const LATEST_VERSION = "1.1.2";
+export const LATEST_VERSION = "1.1.3";
 
 Hooks.once('init', async function() {
 
@@ -48,6 +54,20 @@ Hooks.once('init', async function() {
     TypeEffectiveness,
     GetSpeciesData,
     RollWithDb,
+    monGenerator: {
+      CreateMonParser,
+      GetRandomNature,
+      GiveRandomAbilities,
+      GiveLatestMoves,
+      ApplyEvolution,
+      StatDistributions: {
+        DistributeStatsWeighted,
+        DistributeStatsRandomly,
+        DistributeByBaseStats,
+        BaseStatsWithNature,
+        ApplyLevelUpPoints
+      }
+    },
     combat: {
       applyDamageToTargets,
       undoDamageToTargets
