@@ -93,10 +93,12 @@ export class PTUActor extends Actor {
     let actor = await super.create(data, options);
 
     debug("Creating new actor with data:",actor);
-    if(options?.noCharactermancer || actor.data.type != "pokemon") return;
+    if(options?.noCharactermancer || actor.data.type != "pokemon") return actor;
 
     let form = new game.ptu.PTUPokemonCharactermancer(actor, {"submitOnChange": false, "submitOnClose": true});
     form.render(true)
+
+    return actor;
   }
 
   _getRank(skillRank) {

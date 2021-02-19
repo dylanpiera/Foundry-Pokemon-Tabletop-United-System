@@ -25,6 +25,9 @@ import { ChangeLog } from './forms/changelog-form.js'
 import { applyDamageToTargets, undoDamageToTargets }  from './combat/damage-calc-tools.js'
 import CustomSpeciesFolder from './entities/custom-species-folder.js'
 import { CreateMonParser } from './utils/species-command-parser.js'
+import { GetRandomNature } from './utils/random-nature-generator.js'
+import { GiveRandomAbilities } from './utils/random-abilities-generator.js'
+import { GiveLatestMoves } from './utils/latest-moves-generator.js'
 
 export let debug = (...args) => {if (game.settings.get("ptu", "showDebugInfo") ?? false) console.log("DEBUG: FVTT PTU | ", ...args)};
 export let log = (...args) => console.log("FVTT PTU | ", ...args);
@@ -49,7 +52,12 @@ Hooks.once('init', async function() {
     TypeEffectiveness,
     GetSpeciesData,
     RollWithDb,
-    CreateMonParser,
+    monGenerator: {
+      CreateMonParser,
+      GetRandomNature,
+      GiveRandomAbilities,
+      GiveLatestMoves
+    },
     combat: {
       applyDamageToTargets,
       undoDamageToTargets

@@ -1,6 +1,7 @@
-import { debug, log } from "../ptu.js";
+import { debug, log } from "../ptu.js"
+import { getRandomIntInclusive, lpad} from './generic-helpers.js'
 
-export function CreateMonParser(input) {
+export function CreateMonParser(input, andCreate = false) {
     debug(input)
     let commands = []; 
     for(let line of input.split("\n")) {
@@ -72,6 +73,7 @@ export function CreateMonParser(input) {
     }
 
     debug(`Generating ${commands["generate"]} pokemon using species: ${commands["pokemon"].map(x => x._id).join(",")} with levels: ${commands["level"].join(",")} ${(commands["folder"] ? `in folder ${commands["folder"].name}` : "")}`);
+    if(andCreate) createMons(commands);
     return commands;
 }
 
@@ -101,7 +103,7 @@ function handleChatMessage(chatlog, messageText, chatData) {
     if(matchString.includes(commandKey) && game.user.isGM) {
         shouldCancel = true;
         
-        let result = game.ptu.CreateMonParser(messageText.replace("/ptug","").trimStart());
+        let result = CreateMonParser(messageText.replace("/ptug","").trimStart());
         if(result) {
             ui.notifications.notify(`Generating ${result["generate"]} pokemon using species: ${result["pokemon"].map(x => x._id).join(",")} with levels: ${result["level"].join(",")}`, "info")
 
@@ -123,7 +125,8 @@ async function createMons(commandData) {
             name: `${commandData["pokemon"][i]._id} #${i+1}`,
             type: "pokemon",
             "data.species": commandData["pokemon"][i]._id,
-            "data.level.exp": game.ptu.levelProgression[commandData["level"][i]]
+            "data.level.exp": game.ptu.levelProgression[commandData["level"][i]],
+            "data.nature.value": game.ptu.monGenerator.GetRandomNature()
         });
         if(commandData["folder"]) preparedData[i]["folder"] = commandData["folder"].id;
         if(commandData["imgpath"]) {
@@ -132,18 +135,9 @@ async function createMons(commandData) {
         }
     }
 
-    game.ptu.PTUActor.create(preparedData, {noCharactermancer: true});
-}
-
-/* -- Helper Functions -- */
-
-function getRandomIntInclusive(min, max) {
-    min = Math.ceil(min);
-    max = Math.floor(max);
-    return Math.floor(Math.random() * (max - min + 1) + min); //The maximum is inclusive and the minimum is inclusive
-}
-
-function lpad(value, padding) {
-    var zeroes = new Array(padding+1).join("0");
-    return (zeroes + value).slice(-padding);
+    let actors = await game.ptu.PTUActor.create(preparedData, {noCharactermancer: true});
+    for(let a of actors) {
+        game.ptu.monGenerator.GiveRandomAbilities(a).then((r) => debug("Added Abilities to Actor", r, a));
+        game.ptu.monGenerator.GiveLatestMoves(a).then((r) => debug("Added moves to Actor", r, a));
+    }
 }
