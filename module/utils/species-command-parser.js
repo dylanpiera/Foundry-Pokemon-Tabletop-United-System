@@ -75,11 +75,21 @@ export function CreateMonParser(input) {
     return commands;
 }
 
-function getRandomIntInclusive(min, max) {
-    min = Math.ceil(min);
-    max = Math.floor(max);
-    return Math.floor(Math.random() * (max - min + 1) + min); //The maximum is inclusive and the minimum is inclusive
+export async function GetSpeciesArt(mon, basePath, type = ".png") {
+    let result = await fetch(basePath+mon._id+type);
+    if(result.status === 404) {
+        result = await fetch(basePath+mon._id.toLowerCase()+type);
+    }
+    if(result.status === 404) {
+        result = await fetch(basePath+lpad(mon.number, 3)+type);
+    }
+    if(result.status === 404) {
+        return undefined;
+    }
+    return result.url;
 }
+
+/* -- Non-Export Functions -- */
 
 function handleChatMessage(chatlog, messageText, chatData) {
     var matchString = messageText.toLowerCase();
@@ -106,7 +116,7 @@ Hooks.on("chatMessage", (chatlog, messageText, chatData) => {
     return handleChatMessage(chatlog, messageText, chatData);
 });
 
-function createMons(commandData) {
+async function createMons(commandData) {
     let preparedData = [];
     for(let i = 0; i < commandData["generate"]; i++) {
         preparedData.push({
@@ -114,9 +124,26 @@ function createMons(commandData) {
             type: "pokemon",
             "data.species": commandData["pokemon"][i]._id,
             "data.level.exp": game.ptu.levelProgression[commandData["level"][i]]
-        })
+        });
         if(commandData["folder"]) preparedData[i]["folder"] = commandData["folder"].id;
+        if(commandData["imgpath"]) {
+            let img = await GetSpeciesArt(commandData["pokemon"][i], commandData["imgpath"], commandData["imgext"] ? commandData["imgext"] : ".png");
+            if(img) preparedData[i]["img"] = img;
+        }
     }
 
     game.ptu.PTUActor.create(preparedData, {noCharactermancer: true});
+}
+
+/* -- Helper Functions -- */
+
+function getRandomIntInclusive(min, max) {
+    min = Math.ceil(min);
+    max = Math.floor(max);
+    return Math.floor(Math.random() * (max - min + 1) + min); //The maximum is inclusive and the minimum is inclusive
+}
+
+function lpad(value, padding) {
+    var zeroes = new Array(padding+1).join("0");
+    return (zeroes + value).slice(-padding);
 }
