@@ -8,9 +8,10 @@
             </div>
             <div class="swsh-body">
                 {{#each data as |info id|}}
+                {{log info}}
                     <div class="d-flex flex-row" style="flex: 0 0 100%; align-items: center; {{#if @last}}{{else}}border-bottom: 1px solid lightgray;{{/if}}">
                         <span class="fs-9" style="flex: 0 0 70%; word-break:break-word;">{{info.name}} took {{info.damage}} damage</span>
-                        <button class="undo-damage-button fs-10" data-target="{{id}}" data-damage="{{info.damage}}" style="flex: 0 0 30%;">
+                        <button class="undo-damage-button fs-10" data-target="{{id}}" data-damage="{{info.damage}}" data-old-temp="{{info.old.temp}}" data-old-value="{{info.old.value}}" style="flex: 0 0 30%;">
                             undo
                         </button>
                     </div>
