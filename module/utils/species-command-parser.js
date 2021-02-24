@@ -104,7 +104,7 @@ function handleChatMessage(chatlog, messageText, chatData) {
 
     if(matchString.includes(commandKey) && game.user.isGM) {
         shouldCancel = true;
-        
+              
         let result = CreateMonParser(messageText.replace("/ptug","").trimStart());
         if(result) {
             ui.notifications.notify(`Generating ${result["generate"]} pokemon using species: ${result["pokemon"].map(x => x._id).join(",")} with levels: ${result["level"].join(",")}`, "info")
@@ -121,6 +121,9 @@ Hooks.on("chatMessage", (chatlog, messageText, chatData) => {
 });
 
 async function createMons(commandData) {
+    await game.ptu.cache.GetOrCreateCachedItem("abilities", () => game.packs.get("ptu.abilities").getContent());
+    await game.ptu.cache.GetOrCreateCachedItem("moves", () => game.packs.get("ptu.moves").getContent());
+
     let preparedData = [];
     for(let i = 0; i < commandData["generate"]; i++) {
         preparedData.push({
