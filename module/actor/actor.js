@@ -4,7 +4,7 @@ import { CalculatePokemonCapabilities, CalculateTrainerCapabilities} from "./cal
 import { CalculateSkills } from "./calculations/skills-calculator.js"; 
 import { CalcBaseStat, CalculateStatTotal } from "./calculations/stats-calculator.js";
 import { GetMonEffectiveness } from "./calculations/effectiveness-calculator.js";
-import { warn, debug } from '../ptu.js' 
+import { warn, debug, log } from '../ptu.js' 
 
 /**
  * Extend the base Actor entity by defining a custom roll data structure which is ideal for the Simple system.
@@ -237,7 +237,20 @@ export function GetSpeciesData(species) {
       };
     }
     else {
-      preJson = game.ptu.pokemonData.find(x => x._id.toLowerCase() === species.toLowerCase());
+      if(species.toLowerCase().includes("oricorio-")) {
+        preJson = GetSpeciesData(741);
+        let getOricorioType = () => {
+          switch (species.toLowerCase().split("-")[1]) {
+            case "baile": return "Fire";
+            case "pom pom":case "pompom": return "Electric";
+            case "pau": case "pa'u": case "pa`u": return "Psychic";
+            case "sensu": return "Ghost";
+            default: return "Special";
+          } 
+        }
+        preJson["Type"][0] = getOricorioType();
+      }
+      else preJson = game.ptu.pokemonData.find(x => x._id.toLowerCase() === species.toLowerCase());
       if (!preJson) {
         preJson = game.ptu.customSpeciesData.find(x => x._id.toLowerCase() === species.toLowerCase());
         if(!preJson) return null;

@@ -9,6 +9,7 @@ export function GetMonEffectiveness(data) {
     let typeCalc;
     
     for(let type of typing) {
+        if(type === "Special") continue;
         if(!typeCalc) typeCalc = getTypeEffectiveness(type); 
         else 
             for(const [typeKey,effectiveness] of Object.entries(getTypeEffectiveness(type))) {

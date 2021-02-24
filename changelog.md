@@ -1,6 +1,10 @@
 # Welcome to the Beta!
 Hey there! You are on the Beta Branch. If you ever have any feedback please do share with us over on [Github](https://github.com/dylanpiera/Foundry-Pokemon-Tabletop-United-System/issues) or [Discord](https://discord.gg/fE3w59q)
 
+## 1.1.4 - Oricorio Fix
+- Add all Oricorio Forms for Species Calculation
+- Removed errors when using 'base' Oricorio.
+
 ## 1.1.3 - DM Pokemon Generation
 ### New Features
 - Charactermancer's Species field now autocompletes.
