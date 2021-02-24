@@ -1,3 +1,4 @@
+import { GetOrCreateCachedItem } from './cache-helper.js';
 import { getRandomIntInclusive } from './generic-helpers.js'
 
 export async function GiveRandomAbilities(actor) {
@@ -33,7 +34,8 @@ export async function GiveRandomAbilities(actor) {
         }
     }
 
-    let allAbilities = await game.packs.get("ptu.abilities").getContent();
+    let allAbilities = await game.ptu.cache.GetOrCreateCachedItem("abilities", () => game.packs.get("ptu.abilities").getContent());
+
     let newAbilities = [];
     for(let name of abilityNames) {
         let a = allAbilities.find(x => x.name == name);
