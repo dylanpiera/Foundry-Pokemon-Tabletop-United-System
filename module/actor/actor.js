@@ -87,6 +87,16 @@ export class PTUActor extends Actor {
     // things organized.
     if (actorData.type === 'character') this._prepareCharacterData(actorData);
     if (actorData.type === 'pokemon') this._preparePokemonData(actorData);
+
+    /** Depricated Data Handler */
+    if(actorData.type === 'character' && actorData.data.skills.intimidation) {
+      let skills = duplicate(actorData.data.skills);
+      skills.intimidate.value = skills.intimidation.value;
+      skills.intimidate.modifier = skills.intimidation.modifier;
+      delete skills.intimidation;
+      log(`PC ${this.name} with old 'Intimidation' skill found, updating to 'Intimidate' skill.`)
+      setTimeout(() => this.update({'data.skills': skills, 'data.skills.-=intimidation': null}), 1000);
+    }
   }
 
   /** @override */

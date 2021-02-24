@@ -90,9 +90,9 @@
             "modifier": 0,
             "type": "mind"
           },
-          "intimidation": {
+          "intimidate": {
             "value": 2,
-            "label": "Intimidation",
+            "label": "Intimidate",
             "modifier": 0,
             "type": "body"
           },
