@@ -30,6 +30,7 @@ import { GiveRandomAbilities } from './utils/random-abilities-generator.js'
 import { GiveLatestMoves } from './utils/latest-moves-generator.js'
 import { ApplyEvolution } from './utils/calculate-evolution.js'
 import { DistributeStatsWeighted, DistributeStatsRandomly, DistributeByBaseStats, BaseStatsWithNature, ApplyLevelUpPoints } from './utils/calculate-stat-distribution.js'
+import { GetOrCreateCachedItem } from './utils/cache-helper.js'
 
 export let debug = (...args) => {if (game.settings.get("ptu", "showDebugInfo") ?? false) console.log("DEBUG: FVTT PTU | ", ...args)};
 export let log = (...args) => console.log("FVTT PTU | ", ...args);
@@ -71,6 +72,9 @@ Hooks.once('init', async function() {
     combat: {
       applyDamageToTargets,
       undoDamageToTargets
+    },
+    cache: {
+      GetOrCreateCachedItem
     }
   };
 

@@ -5,7 +5,7 @@ export async function GiveLatestMoves(actor) {
     let speciesData = game.ptu.GetSpeciesData(species);
     if(!speciesData) return;
 
-    let moves = await game.packs.get("ptu.moves").getContent();
+    let moves = await game.ptu.cache.GetOrCreateCachedItem("moves", () => game.packs.get("ptu.moves").getContent());
     let levelUpMoves = speciesData["Level Up Move List"].filter(x => x.Level <= level);
     let evoMoves = speciesData["Level Up Move List"].filter(x => x.Level == "Evo");
 
