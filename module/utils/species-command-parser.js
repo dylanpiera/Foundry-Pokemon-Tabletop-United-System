@@ -88,6 +88,9 @@ export async function GetSpeciesArt(mon, basePath, type = ".png") {
         result = await fetch(basePath+lpad(mon.number, 3)+type);
     }
     if(result.status === 404) {
+        result = await fetch(basePath+lpad(mon.number, 4)+type);
+    }
+    if(result.status === 404) {
         return undefined;
     }
     return result.url;
