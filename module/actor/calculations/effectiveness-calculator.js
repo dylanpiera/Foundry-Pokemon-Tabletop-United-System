@@ -17,6 +17,10 @@ export function GetMonEffectiveness(data) {
             }
     }
 
+    if(!game.settings.get("ptu", "uraniumData")) {
+        delete typeCalc["Nuclear"];
+    }
+
     /** TODO: Add Abilities - See Issue #27 */
     let abilities = {
         "Desert Weather": {active: false, execute: function(typeCalc) {return typeCalc;}}, //TODO: Add this ability once we have weather implemented

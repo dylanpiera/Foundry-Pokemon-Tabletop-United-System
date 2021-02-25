@@ -30,7 +30,7 @@ export function CreateMonParser(input, andCreate = false) {
         }
     }
     else {
-        let table = game.tables.getName(commands["random"].toLowerCase());
+        let table = game.tables.getName(commands["random"]);
         if(!table) {ui.notifications.notify("Couldn't find a table with name " + commands["random"], "error");return;}
         
         let mons = table.data.results.map(x => {return {mon: x.text, weight: x.weight};}).flatMap(x => {

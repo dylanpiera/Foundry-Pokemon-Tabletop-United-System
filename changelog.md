@@ -1,6 +1,10 @@
 # Welcome to the Beta!
 Hey there! You are on the Beta Branch. If you ever have any feedback please do share with us over on [Github](https://github.com/dylanpiera/Foundry-Pokemon-Tabletop-United-System/issues) or [Discord](https://discord.gg/fE3w59q)
 
+## 1.1.7 - Extra Fangame Content
+- Added Sage & Uranium Fangame Dexes as optional species sources.
+- Added Nuclear Type (Only when Uranium Data is enabled)
+
 ## 1.1.5 - 1.1.6 - Generator Performance Fix
 - Fixed Generator not working properly when working on lower-end PCs or with higher-amount of simultanious generations.
 - Fixed the Intimidate skill being spelled as "Intimidation".

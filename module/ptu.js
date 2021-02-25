@@ -13,7 +13,7 @@ import { measureDistances } from "./canvas.js";
 import { levelProgression } from "./data/level-progression.js";
 import { pokemonData } from "./data/species-data.js";
 import { natureData } from "./data/nature-data.js";
-import { insurgenceData } from "./data/insurgence-species-data.js"
+import { insurgenceData, sageData, uraniumData } from "./data/fangame-species-data.js"
 import { DbData } from "./data/db-data.js"
 import { TypeEffectiveness } from "./data/effectiveness-data.js"
 import { PTUPokemonCharactermancer } from './forms/charactermancer-pokemon-form.js'
@@ -37,7 +37,7 @@ export let log = (...args) => console.log("FVTT PTU | ", ...args);
 export let warn = (...args) => console.warn("FVTT PTU | ", ...args);
 export let error = (...args) => console.error("FVTT PTU | ", ...args)
 
-export const LATEST_VERSION = "1.1.6";
+export const LATEST_VERSION = "1.1.7";
 
 Hooks.once('init', async function() {
 
@@ -207,6 +207,12 @@ Hooks.once('init', async function() {
   if(game.settings.get("ptu", "insurgenceData")) {
     Array.prototype.push.apply(game.ptu["pokemonData"], insurgenceData);
   }
+  if(game.settings.get("ptu", "sageData")) {
+    Array.prototype.push.apply(game.ptu["pokemonData"], sageData);
+  }
+  if(game.settings.get("ptu", "uraniumData")) {
+    Array.prototype.push.apply(game.ptu["pokemonData"], uraniumData);
+  }
 
 });
 
@@ -281,6 +287,22 @@ function _loadSystemSettings() {
   game.settings.register("ptu", "insurgenceData", {
     name: "Pokémon Insurgence Data",
     hint: "Adds Pokémon Insurgence data to the game based on DataNinja's Homebrew Compilation's Insurgence Data.",
+    scope: "world",
+    config: true,
+    type: Boolean,
+    default: false
+  });
+  game.settings.register("ptu", "sageData", {
+    name: "Pokémon Sage Data",
+    hint: "Adds Pokémon Sage data to the game based on DataNinja's Homebrew Compilation's Sage Data.",
+    scope: "world",
+    config: true,
+    type: Boolean,
+    default: false
+  });
+  game.settings.register("ptu", "uraniumData", {
+    name: "Pokémon Uranium Data",
+    hint: "Adds Pokémon Uranium data to the game based on DataNinja's Homebrew Compilation's Uranium Data.",
     scope: "world",
     config: true,
     type: Boolean,
