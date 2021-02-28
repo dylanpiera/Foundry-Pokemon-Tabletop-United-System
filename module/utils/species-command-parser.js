@@ -145,6 +145,7 @@ async function createMons(commandData) {
         game.ptu.monGenerator.ApplyEvolution(a).then(async (r) => {
             debug("Applied correct evolution to Actor", r, a)
             game.ptu.monGenerator.StatDistributions.ApplyLevelUpPoints(a, commandData["stats"], commandData["statrng%"] ? (commandData["statrng%"] < 1 ? commandData["statrng%"] : commandData["statrng%"] * 0.01) : 0.1).then((r) => debug("Applied stat distribution to Actor", r, a))
+            game.ptu.monGenerator.GiveCapabilities(a).then((r) => debug("Added Other Capabilities to Actor", r, a));
             game.ptu.monGenerator.GiveRandomAbilities(a).then((r) => debug("Added Abilities to Actor", r, a));
             game.ptu.monGenerator.GiveLatestMoves(a).then((r) => debug("Added moves to Actor", r, a));
             let updates = {img: "", name: ""};
