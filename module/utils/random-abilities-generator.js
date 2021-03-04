@@ -38,7 +38,7 @@ export async function GiveRandomAbilities(actor) {
 
     let newAbilities = [];
     for(let name of abilityNames) {
-        let a = allAbilities.find(x => x.name == name);
+        let a = allAbilities.find(x => x.name.includes(name));
         if(a) newAbilities.push(a);
     }
         
