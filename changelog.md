@@ -1,6 +1,21 @@
 # Welcome to the Beta!
 Hey there! You are on the Beta Branch. If you ever have any feedback please do share with us over on [Github](https://github.com/dylanpiera/Foundry-Pokemon-Tabletop-United-System/issues) or [Discord](https://discord.gg/fE3w59q)
 
+## 1.1.11 - More Mon Generation & QoL Improvements
+### Generator Changes
+- Generator now creates a folder instead of dumping everything in the root folder, if the folder doesn't exist
+- You can now set a default image directory for the Generator to use in System Settings
+- Instead of typing the `/ptug` command you can now also drag-and-drop a Dex Entry onto the canvas, instantly creating a token of the requested mon.
+- Fixed Token data not being updated after evolutions.
+
+### QoL Changes
+- Added a 'Owner' field on mon sheets that allows you to link your mons to your character sheet.
+  - Also added an 'Open Owner' button if an owner has been selected.
+  - Owners is purely meant for trainers at the moment, and therefore will only show PCs as options that the Owner of the mon also owns.
+- Added a Shiny field for all your capture calc needs.
+- Add 'Notes' to Character & Pokemon sheets, for your own record keeping!
+- Added system settings in regards to Audio for Module usage.
+
 ## 1.1.10 - Items to Chat & Missing Content
 - Added missing Fan-Game content to Compendium
 - Added 'Send to Chat' button to all items

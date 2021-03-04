@@ -35,6 +35,22 @@ export class PTUGen8CharacterSheet extends ActorSheet {
 		return data;
 	}
 
+	/** @override */
+	_getHeaderButtons() {
+		let buttons = super._getHeaderButtons();
+
+		if (this.actor.owner) {
+			buttons.unshift({
+				label: "Notes",
+				class: "open-notes",
+				icon: "fas fa-edit",
+				onclick: () => new game.ptu.PTUCharacterNotesForm(this.actor, {"submitOnClose": true}).render(true)
+			});
+		}
+
+		return buttons;
+	}
+
 	/**
 	 * Organize and classify Items for Character sheets.
 	 *

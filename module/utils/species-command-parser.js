@@ -1,7 +1,7 @@
 import { debug, log } from "../ptu.js"
 import { getRandomIntInclusive, lpad} from './generic-helpers.js'
 
-export function CreateMonParser(input, andCreate = false) {
+export async function CreateMonParser(input, andCreate = false) {
     debug(input)
     let commands = []; 
     for(let line of input.split("\n")) {
@@ -14,6 +14,8 @@ export function CreateMonParser(input, andCreate = false) {
     if(!commands["level"]) {ui.notifications.notify("Missing required param [level]", "error");return;}
     if(!commands["stats"]) {ui.notifications.notify("Missing required param [stats]", "error");return;}
     if(commands["stats"] != "random" && commands["stats"] != "weighted" && commands["stats"] != "basestats") {ui.notifications.notify("Required param [stats] has invalid value. Allowed values: random, weighted, basestats", "error");return;}
+    if(!commands["imgpath"]) {commands["imgpath"] = game.settings.get("ptu", "defaultPokemonImageDirectory");}
+
 
     if(isNaN(commands["generate"])) {
         let range = commands["generate"].split("-");
@@ -64,14 +66,12 @@ export function CreateMonParser(input, andCreate = false) {
     }
 
     if(commands["folder"]) {
-        let folder = game.folders.getName(commands["folder"]);
+        let folder = game.folders.filter(x => x.type == "Actor").find(x => x.name == commands["folder"]);
         if(!folder) {
-            ui.notifications.notify("Couldn't find folder, placing it in root.", "warning")
-            commands["folder"] = false;
+            ui.notifications.notify("Couldn't find folder, creating it.", "warning")
+            folder = await Folder.create({name: commands["folder"], type: 'Actor', parent: null});
         }
-        else {
-            commands["folder"] = folder;
-        }
+        commands["folder"] = folder;
     }
 
     debug(`Generating ${commands["generate"]} pokemon using species: ${commands["pokemon"].map(x => x._id).join(",")} with levels: ${commands["level"].join(",")} ${(commands["folder"] ? `in folder ${commands["folder"].name}` : "")}`);
@@ -98,7 +98,7 @@ export async function GetSpeciesArt(mon, basePath, type = ".png") {
 
 /* -- Non-Export Functions -- */
 
-function handleChatMessage(chatlog, messageText, chatData) {
+async function handleChatMessage(chatlog, messageText, chatData) {
     var matchString = messageText.toLowerCase();
     let commandKey = "/ptug"; 
 
@@ -108,7 +108,7 @@ function handleChatMessage(chatlog, messageText, chatData) {
     if(matchString.includes(commandKey) && game.user.isGM) {
         shouldCancel = true;
               
-        let result = CreateMonParser(messageText.replace("/ptug","").trimStart());
+        let result = await CreateMonParser(messageText.replace("/ptug","").trimStart());
         if(result) {
             ui.notifications.notify(`Generating ${result["generate"]} pokemon using species: ${result["pokemon"].map(x => x._id).join(",")} with levels: ${result["level"].join(",")}`, "info")
 
@@ -119,8 +119,8 @@ function handleChatMessage(chatlog, messageText, chatData) {
     return !shouldCancel;
 }
 
-Hooks.on("chatMessage", (chatlog, messageText, chatData) => {
-    return handleChatMessage(chatlog, messageText, chatData);
+Hooks.on("chatMessage", async (chatlog, messageText, chatData) => {
+    return await handleChatMessage(chatlog, messageText, chatData);
 });
 
 async function createMons(commandData) {
@@ -173,14 +173,99 @@ async function createMons(commandData) {
         await a.update({
             "data.gender": gender,
             img: updates.img ? updates.img : a.data.img, 
-            name: updates.name ? updates.name : a.data.name
+            name: updates.name ? updates.name : a.data.name,
+            "token.name": updates.name ? updates.name : a.data.name
         })
         
     }
     Hooks.call("ptu.finishedGeneratingMons", commandData, actors)
+    return actors;
 }
 
 Hooks.on("ptu.finishedGeneratingMons", function(commandData, actors) {
     debug("Calling ptu.finishedGeneratingMons hook with args:"); 
     debug(commandData, actors);
 })
+
+Hooks.on("dropCanvasData", (canvas, update) => {
+    if(update.pack == "ptu.dex-entries")
+    {
+        update.item = game.packs.get("ptu.dex-entries").index.find(x => x._id === update.id)
+    }
+    else {
+        let item = game.items.get(update.id);
+        if(item) update.item = item;
+    }
+    if(update.item)
+        new game.ptu.PTUDexDragOptions(update, {"submitOnChange": false, "submitOnClose": true}).render(true);
+});
+
+export async function FinishDexDragPokemonCreation(formData, update)
+{
+    let species_name = update["item"].name;
+
+    let drop_coordinates_x = update["x"];
+    let drop_coordinates_y = update["y"];
+
+    console.log(formData["data.level"]);
+    let level = parseInt(formData["data.level"]);
+
+    let commands = []; 
+
+    commands["generate"] = 1;
+
+    commands["pokemon"] = [];
+    let mon = game.ptu.GetSpeciesData(species_name);
+    commands["pokemon"].push(mon);
+
+    commands["level"] = [];
+    commands["level"].push(level);
+
+    commands["stats"] = "weighted";
+
+    let folder_name = "Dex Drag-in"
+    
+    let folder = game.folders.filter(x => x.type == "Actor").find(x => x.name == folder_name)
+    if(!folder) {
+        ui.notifications.notify("Couldn't find Dex Drag-in folder, creating it.", "warning")
+        folder = await Folder.create({name: folder_name, type: 'Actor', parent: null});
+    }
+    commands["folder"] = folder;
+
+    commands["imgpath"] = game.settings.get("ptu", "defaultPokemonImageDirectory");
+
+    debug(`Generating ${commands["generate"]} pokemon using species: ${commands["pokemon"].map(x => x._id).join(",")} with levels: ${commands["level"].join(",")} ${(commands["folder"] ? `in folder ${commands["folder"].name}` : "")}`);
+
+    let new_actor = (await createMons(commands))[0];
+
+    let protoToken = await Token.fromActor(new_actor);
+    
+    protoToken.data.x = drop_coordinates_x;
+    protoToken.data.y = drop_coordinates_y;
+
+    let size = game.ptu.GetSpeciesData(new_actor.data.data.species)["Size Class"]
+    
+    let size_categories = {
+        "Small": {width: 1, height: 1},
+        "Medium": {width: 1, height: 1},
+        "Large": {width: 2, height: 2},
+        "Huge": {width: 3, height: 3},
+        "Gigantic": {width: 4, height: 4}
+    }
+
+    protoToken.data.width = size_categories[size]["width"];
+    protoToken.data.height = size_categories[size]["height"];
+    protoToken.data.actorLink = true;
+    protoToken.data.displayBars = 20;
+    protoToken.data.displayName=  40; 
+    protoToken.data.bar1.attribute = "health";
+    protoToken.scene = game.scenes.viewed;
+
+    let placedTokenData = await game.scenes.viewed.createEmbeddedEntity("Token",protoToken.data);
+
+    let currentSpecies = game.ptu.GetSpeciesData(new_actor.data.data.species)._id;
+
+    game.ptu.PlayPokemonCry(currentSpecies);
+    
+    return placedTokenData;
+}
