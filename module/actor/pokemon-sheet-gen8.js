@@ -244,6 +244,7 @@ export class PTUGen8PokemonSheet extends ActorSheet {
 				speaker: ChatMessage.getSpeaker({
 					actor: this.actor
 				}),
+				name: move.name,
 				move: move.data,
 				damageRoll: damageRoll,
 				critRoll: critRoll,
@@ -260,6 +261,7 @@ export class PTUGen8PokemonSheet extends ActorSheet {
 					speaker: ChatMessage.getSpeaker({
 						actor: this.actor
 					}),
+					name: move.name,
 					move: move.data,
 					templateType: MoveMessageTypes.DAMAGE,
 					crit: crit
@@ -299,6 +301,7 @@ export class PTUGen8PokemonSheet extends ActorSheet {
 				speaker: ChatMessage.getSpeaker({
 					actor: this.actor
 				}),
+				name: move.name,
 				move: move.data,
 				templateType: MoveMessageTypes.DETAILS
 			})
@@ -326,6 +329,7 @@ export class PTUGen8PokemonSheet extends ActorSheet {
 						speaker: ChatMessage.getSpeaker({
 							actor: this.actor
 						}),
+						name: move.name,
 						move: move.data,
 						templateType: MoveMessageTypes.DETAILS
 					})
@@ -393,6 +397,7 @@ function PerformAcRoll(roll, move, actor) {
 		speaker: ChatMessage.getSpeaker({
 			actor: actor
 		}),
+		name: move.name,
 		move: move.data,
 		templateType: MoveMessageTypes.TO_HIT
 	}).then(_ => log(`Rolling to hit for ${actor.name}'s ${move.name}`));
