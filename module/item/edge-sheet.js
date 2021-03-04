@@ -1,3 +1,5 @@
+import { sendItemMessage } from './item-sheet.js'
+
 /**
  * Extend the basic ItemSheet with some very simple modifications
  * @extends {ItemSheet}
@@ -45,6 +47,25 @@ export class PTUEdgeSheet extends ItemSheet {
   }
 
   /* -------------------------------------------- */
+
+  /** @override */
+	_getHeaderButtons() {
+		let buttons = super._getHeaderButtons();
+
+		buttons.unshift({
+			label: "Send to Chat",
+			class: ".to-chat",
+			icon: "fas fa-comment",
+			onclick: () => sendItemMessage({
+        item: this.object.data,
+        speaker: ChatMessage.getSpeaker({
+          actor: this.actor
+        })
+      })
+		});
+
+		return buttons;
+	}
 
   /** @override */
   activateListeners(html) {
