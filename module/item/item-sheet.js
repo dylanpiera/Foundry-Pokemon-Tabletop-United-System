@@ -1,4 +1,5 @@
-import { PrepareMoveData, warn } from '../ptu.js';
+import { PrepareMoveData, warn, debug } from '../ptu.js';
+import { sendMoveMessage } from '../actor/pokemon-sheet-gen8.js'
 
 /**
  * Extend the basic ItemSheet with some very simple modifications
@@ -64,6 +65,49 @@ export class PTUItemSheet extends ItemSheet {
 
 		// Rollable entries.
 		html.find('.rollable').click(this._onRoll.bind(this));
+
+		html.find('.to-chat').click(this._toChat.bind(this));
+	}
+
+	/** @override */
+	_getHeaderButtons() {
+		let buttons = super._getHeaderButtons();
+
+		buttons.unshift({
+			label: "Send to Chat",
+			class: ".to-chat",
+			icon: "fas fa-comment",
+			onclick: () => this._toChat()
+		});
+
+		return buttons;
+	}
+
+	/**
+	 * Handle To Chat call.
+	 * @private
+	 */
+	_toChat() {
+		debug(this.object);
+
+		switch(this.object.data.type) {
+			case "move":
+				return sendMoveMessage({
+					speaker: ChatMessage.getSpeaker({
+						actor: this.actor
+					}),
+					name: this.object.name,
+					move: this.object.data.data,
+					templateType: 'details'
+				});
+			default: 
+				return sendItemMessage({
+					speaker: ChatMessage.getSpeaker({
+						actor: this.actor
+					}),
+					item: this.object.data
+				});
+		}
 	}
 
 	/**
@@ -118,4 +162,22 @@ export class PTUItemSheet extends ItemSheet {
 			}
 		}
 	}
+}
+
+export async function sendItemMessage(messageData = {}) {
+	messageData = mergeObject({
+		user: game.user._id,
+	}, messageData);
+
+	if(!messageData.item) {
+		error("Can't display item chat message without item data.")
+		return;
+	}
+
+	if(!Hooks.call("ptu.preSendItemToChat", messageData)) return;
+	
+	messageData.content = await renderTemplate(`/systems/ptu/templates/chat/item.hbs`, messageData)
+
+	Hooks.call("ptu.SendItemToChat", duplicate(messageData));
+	return ChatMessage.create(messageData, {});
 }

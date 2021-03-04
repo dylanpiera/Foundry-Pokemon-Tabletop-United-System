@@ -308,7 +308,7 @@ export class PTUGen8PokemonSheet extends ActorSheet {
 			return;
 		}
 		if(event.altKey) {
-			RollDamage();
+			if (move.data.category !== "Status") RollDamage();
 			return;
 		}
 
@@ -424,12 +424,16 @@ async function sendMoveRollMessage(rollData, messageData = {}) {
 		return;
 	}
 	
+	if(!Hooks.call("ptu.preSendMoveToChat", messageData)) return;
+
 	messageData.content = await renderTemplate(`/systems/ptu/templates/chat/moves/move-${messageData.templateType}.hbs`, messageData)
+
+	Hooks.call("ptu.SendMoveToChat", duplicate(messageData));
 
 	return ChatMessage.create(messageData, {})
 }
 
-async function sendMoveMessage(messageData = {}) {
+export async function sendMoveMessage(messageData = {}) {
 	messageData = mergeObject({
 		user: game.user._id,
 		templateType: MoveMessageTypes.DAMAGE,
@@ -440,8 +444,12 @@ async function sendMoveMessage(messageData = {}) {
 		error("Can't display move chat message without move data.")
 		return;
 	}
+
+	if(!Hooks.call("ptu.preSendMoveToChat", messageData)) return;
 	
 	messageData.content = await renderTemplate(`/systems/ptu/templates/chat/moves/move-${messageData.templateType}.hbs`, messageData)
+
+	Hooks.call("ptu.SendMoveToChat", duplicate(messageData));
 
 	return ChatMessage.create(messageData, {});
 }
