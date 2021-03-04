@@ -1,7 +1,7 @@
 import { debug, log } from "../ptu.js"
 import { getRandomIntInclusive, lpad} from './generic-helpers.js'
 
-export function CreateMonParser(input, andCreate = false) {
+export async function CreateMonParser(input, andCreate = false) {
     debug(input)
     let commands = []; 
     for(let line of input.split("\n")) {
@@ -64,14 +64,12 @@ export function CreateMonParser(input, andCreate = false) {
     }
 
     if(commands["folder"]) {
-        let folder = game.folders.getName(commands["folder"]);
+        let folder = game.folders.filter(x => x.type == "Actor").find(x => x.name == commands["folder"]);
         if(!folder) {
-            ui.notifications.notify("Couldn't find folder, placing it in root.", "warning")
-            commands["folder"] = false;
+            ui.notifications.notify("Couldn't find folder, creating it.", "warning")
+            folder = await Folder.create({name: commands["folder"], type: 'Actor', parent: null});
         }
-        else {
-            commands["folder"] = folder;
-        }
+        commands["folder"] = folder;
     }
 
     debug(`Generating ${commands["generate"]} pokemon using species: ${commands["pokemon"].map(x => x._id).join(",")} with levels: ${commands["level"].join(",")} ${(commands["folder"] ? `in folder ${commands["folder"].name}` : "")}`);
@@ -98,7 +96,7 @@ export async function GetSpeciesArt(mon, basePath, type = ".png") {
 
 /* -- Non-Export Functions -- */
 
-function handleChatMessage(chatlog, messageText, chatData) {
+async function handleChatMessage(chatlog, messageText, chatData) {
     var matchString = messageText.toLowerCase();
     let commandKey = "/ptug"; 
 
@@ -108,7 +106,7 @@ function handleChatMessage(chatlog, messageText, chatData) {
     if(matchString.includes(commandKey) && game.user.isGM) {
         shouldCancel = true;
               
-        let result = CreateMonParser(messageText.replace("/ptug","").trimStart());
+        let result = await CreateMonParser(messageText.replace("/ptug","").trimStart());
         if(result) {
             ui.notifications.notify(`Generating ${result["generate"]} pokemon using species: ${result["pokemon"].map(x => x._id).join(",")} with levels: ${result["level"].join(",")}`, "info")
 
@@ -119,8 +117,8 @@ function handleChatMessage(chatlog, messageText, chatData) {
     return !shouldCancel;
 }
 
-Hooks.on("chatMessage", (chatlog, messageText, chatData) => {
-    return handleChatMessage(chatlog, messageText, chatData);
+Hooks.on("chatMessage", async (chatlog, messageText, chatData) => {
+    return await handleChatMessage(chatlog, messageText, chatData);
 });
 
 async function createMons(commandData) {
