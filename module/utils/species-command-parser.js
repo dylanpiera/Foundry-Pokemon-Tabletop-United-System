@@ -98,7 +98,7 @@ export async function GetSpeciesArt(mon, basePath, type = ".png") {
 
 /* -- Non-Export Functions -- */
 
-async function handleChatMessage(chatlog, messageText, chatData) {
+function handleChatMessage(chatlog, messageText, chatData) {
     var matchString = messageText.toLowerCase();
     let commandKey = "/ptug"; 
 
@@ -108,19 +108,20 @@ async function handleChatMessage(chatlog, messageText, chatData) {
     if(matchString.includes(commandKey) && game.user.isGM) {
         shouldCancel = true;
               
-        let result = await CreateMonParser(messageText.replace("/ptug","").trimStart());
-        if(result) {
-            ui.notifications.notify(`Generating ${result["generate"]} pokemon using species: ${result["pokemon"].map(x => x._id).join(",")} with levels: ${result["level"].join(",")}`, "info")
-
-            createMons(result);
-        }
+        CreateMonParser(messageText.replace("/ptug","").trimStart()).then(result => {
+            if(result) {
+                ui.notifications.notify(`Generating ${result["generate"]} pokemon using species: ${result["pokemon"].map(x => x._id).join(",")} with levels: ${result["level"].join(",")}`, "info")
+    
+                createMons(result);
+            }
+        });
     }
 
     return !shouldCancel;
 }
 
-Hooks.on("chatMessage", async (chatlog, messageText, chatData) => {
-    return await handleChatMessage(chatlog, messageText, chatData);
+Hooks.on("chatMessage", (chatlog, messageText, chatData) => {
+    return handleChatMessage(chatlog, messageText, chatData);
 });
 
 async function createMons(commandData) {
