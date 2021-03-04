@@ -142,31 +142,45 @@ async function createMons(commandData) {
     let actors = await game.ptu.PTUActor.create(preparedData, {noCharactermancer: true});
     if(!Array.isArray(actors)) actors = [actors];
     for(let a of actors) {
-        game.ptu.monGenerator.ApplyEvolution(a).then(async (r) => {
-            debug("Applied correct evolution to Actor", r, a)
-            game.ptu.monGenerator.StatDistributions.ApplyLevelUpPoints(a, commandData["stats"], commandData["statrng%"] ? (commandData["statrng%"] < 1 ? commandData["statrng%"] : commandData["statrng%"] * 0.01) : 0.1).then((r) => debug("Applied stat distribution to Actor", r, a))
-            game.ptu.monGenerator.GiveCapabilities(a).then((r) => debug("Added Other Capabilities to Actor", r, a));
-            game.ptu.monGenerator.GiveRandomAbilities(a).then((r) => debug("Added Abilities to Actor", r, a));
-            game.ptu.monGenerator.GiveLatestMoves(a).then((r) => debug("Added moves to Actor", r, a));
-            let updates = {img: "", name: ""};
-            if(commandData["imgpath"]) {
-                let imgPath = await GetSpeciesArt(game.ptu.GetSpeciesData(a.data.data.species), commandData["imgpath"], commandData["imgext"] ? commandData["imgext"] : ".png");
-                if(imgPath) updates.img = imgPath;
-            }
-            if(!a.data.name.includes(a.data.data.species)) {
-                updates.name = `${a.data.data.species} ${a.data.name.split(" ")[1]}`
-            }
-            
-            let gender = game.ptu.GetSpeciesData(a.data.data.species)["Breeding Information"]["Gender Ratio"];
-            if(gender === -1) gender = "Genderless";
-            else gender = gender * 10 > getRandomIntInclusive(0, 1000) ? "Male" : "Female";
-            
-            a.update({
-                "data.gender": gender,
-                img: updates.img ? updates.img : a.data.img, 
-                name: updates.name ? updates.name : a.data.name
-            })
-        })
+        let r = await game.ptu.monGenerator.ApplyEvolution(a);
+        debug("Applied correct evolution to Actor", r[0], a);
+        
+        let promises = [];
+        promises.push(game.ptu.monGenerator.StatDistributions.ApplyLevelUpPoints(a, commandData["stats"], commandData["statrng%"] ? (commandData["statrng%"] < 1 ? commandData["statrng%"] : commandData["statrng%"] * 0.01) : 0.1));
+        promises.push(game.ptu.monGenerator.GiveCapabilities(a));
+        promises.push(game.ptu.monGenerator.GiveRandomAbilities(a));
+        promises.push(game.ptu.monGenerator.GiveLatestMoves(a));
 
+        r = await Promise.all(promises);
+        debug("Applied stat distribution to Actor", r[0], a);
+        debug("Added Other Capabilities to Actor", r[1], a);
+        debug("Added Abilities to Actor", r[2], a);
+        debug("Added moves to Actor", r[3], a);
+        
+        let updates = {img: "", name: ""};
+        if(commandData["imgpath"]) {
+            let imgPath = await GetSpeciesArt(game.ptu.GetSpeciesData(a.data.data.species), commandData["imgpath"], commandData["imgext"] ? commandData["imgext"] : ".png");
+            if(imgPath) updates.img = imgPath;
+        }
+        if(!a.data.name.includes(a.data.data.species)) {
+            updates.name = `${a.data.data.species} ${a.data.name.split(" ")[1]}`
+        }
+        
+        let gender = game.ptu.GetSpeciesData(a.data.data.species)["Breeding Information"]["Gender Ratio"];
+        if(gender === -1) gender = "Genderless";
+        else gender = gender * 10 > getRandomIntInclusive(0, 1000) ? "Male" : "Female";
+        
+        await a.update({
+            "data.gender": gender,
+            img: updates.img ? updates.img : a.data.img, 
+            name: updates.name ? updates.name : a.data.name
+        })
+        
     }
+    Hooks.call("ptu.finishedGeneratingMons", commandData, actors)
 }
+
+Hooks.on("ptu.finishedGeneratingMons", function(commandData, actors) {
+    debug("Calling ptu.finishedGeneratingMons hook with args:"); 
+    debug(commandData, actors);
+})
