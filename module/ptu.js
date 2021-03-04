@@ -20,6 +20,7 @@ import { PTUPokemonCharactermancer } from './forms/charactermancer-pokemon-form.
 import { PTUDexDragOptions } from './forms/dex-drag-options-form.js'
 import { PTUCustomSpeciesEditor } from './forms/custom-species-editor-form.js'
 import { PTUCustomMonEditor } from './forms/custom-mon-editor-form.js'
+import { PTUCharacterNotesForm } from './forms/character-notes-form.js'
 import { RollWithDb } from './utils/roll-calculator.js'
 import { InitCustomSpecies, UpdateCustomSpecies} from './custom-species.js'
 import { ChangeLog } from './forms/changelog-form.js'
@@ -51,6 +52,7 @@ Hooks.once('init', async function() {
     PTUDexDragOptions,
     PTUCustomSpeciesEditor,
     PTUCustomMonEditor,
+    PTUCharacterNotesForm,
     levelProgression,
     pokemonData,
     customSpeciesData: [],

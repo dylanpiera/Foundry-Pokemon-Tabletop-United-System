@@ -174,7 +174,8 @@
         }
       },
       "shared": {
-        "digestionBuff": ""
+        "digestionBuff": "",
+        "notes": ""
       }
     },
     "character": {
@@ -255,7 +256,10 @@
           "two": "",
           "three": ""
         }
-      }
+      },
+
+      "owner": "",
+      "shiny": false
     }
   },
   "Item": {
