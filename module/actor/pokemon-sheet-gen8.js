@@ -126,6 +126,13 @@ export class PTUGen8PokemonSheet extends ActorSheet {
 				icon: "fas fa-edit",
 				onclick: () => new game.ptu.PTUPokemonCharactermancer(this.actor, {"submitOnChange": false, "submitOnClose": true}).render(true)
 			});
+
+			buttons.unshift({
+				label: "Notes",
+				class: "open-notes",
+				icon: "fas fa-edit",
+				onclick: () => new game.ptu.PTUCharacterNotesForm(this.actor, {"submitOnClose": true}).render(true)
+			});
 		}
 
 		if(this.actor.data.data.owner) {
