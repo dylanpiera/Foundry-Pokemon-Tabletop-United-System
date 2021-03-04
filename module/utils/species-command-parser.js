@@ -233,9 +233,7 @@ export async function FinishDexDragPokemonCreation(formData, update)
 
     debug(`Generating ${commands["generate"]} pokemon using species: ${commands["pokemon"].map(x => x._id).join(",")} with levels: ${commands["level"].join(",")} ${(commands["folder"] ? `in folder ${commands["folder"].name}` : "")}`);
 
-    let new_actors = await createMons(commands);
-
-    let new_actor = new_actors[0];
+    let new_actor = (await createMons(commands))[0];
 
     let protoToken = await Token.fromActor(new_actor);
     
@@ -254,10 +252,11 @@ export async function FinishDexDragPokemonCreation(formData, update)
 
     protoToken.data.width = size_categories[size]["width"];
     protoToken.data.height = size_categories[size]["height"];
-
-    let viewedScene = game.scenes.viewed;
-
-    protoToken.scene = viewedScene;
+    protoToken.data.actorLink = true;
+    protoToken.data.displayBars = 20;
+    protoToken.data.displayName=  40; 
+    protoToken.data.bar1.attribute = "health";
+    protoToken.scene = game.scenes.viewed;
 
     let placedTokenData = await viewedScene.createEmbeddedEntity("Token",protoToken.data);
 
