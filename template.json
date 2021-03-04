@@ -257,7 +257,8 @@
         }
       },
 
-      "owner": ""
+      "owner": "",
+      "shiny": false
     }
   },
   "Item": {
