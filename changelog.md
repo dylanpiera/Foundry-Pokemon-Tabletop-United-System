@@ -1,3 +1,38 @@
+## 1.2.0 - Combat Automation, Pokemon Generation & Much more!
+### Combat Automation
+- Added a 'Deal Damage' button to Attack Chat Messages, which applies the damage of that move to all selected tokens.
+  - Also added an Undo button for the applied damage.
+
+### Pokemon Generation
+- **Big Change!** DM Quick-Pokemon Generation
+
+DMs can now quickly generate Pokémon for random encounters using the chat! For more info see the [wiki](https://github.com/dylanpiera/Foundry-Pokemon-Tabletop-United-System/wiki/Pokemon-Generation-using-Chat-Commands).
+- This also works by Dragging & Dropping dex entries right into the battle field! Creating tokens where needed.
+
+### Quality of Live Improvements
+- Charactermancer Species field now has Autocomplete.
+- Added a 'Send to Chat' button to all items.
+- Added a 'Owner' field on mon sheets that allows you to link your mons to your character sheet.
+  - Also added an 'Open Owner' button if an owner has been selected.
+  - Owners is purely meant for trainers at the moment, and therefore will only show PCs as options that the Owner of the mon also owns.
+- Added a Shiny field for all your capture calc needs.
+- Add 'Notes' to Character & Pokemon sheets, for your own record keeping!
+- Added Sage & Uranium Fangame Dexes as well as all their suplemental moves/abilities/etc.
+- Added system settings in regards to Audio for Module usage.
+
+### Bugfixes
+- HP can now go into the negatives, for all your taskmaster needs.
+- Temp HP Calculations are now applied properly to Token Actors as well.
+- Added all Oricorio Forms
+- Fixed Overland Capability calculation, you weaklings are now properly weak.
+- Fixed the Intimidate skill for attempting to be a Noun.
+- Fixed custom moves not displaying a name in chat.
+
+### API Changes:
+- Added easy caching of data using `game.ptu.cache.GetOrCreateCachedItem()`
+- Added `ptu.finishedGeneratingMons` hook
+- Added `ptu.preSendItemToChat` & `ptu.SendItemToChat` hooks as well as variants for moves.
+
 ## 1.1.0 - QoL & Bugfixes
 ### Quality of Live Changes
 - Dex Drag & Drop now uses the mon's Name instead of the mon's National Dex ID.

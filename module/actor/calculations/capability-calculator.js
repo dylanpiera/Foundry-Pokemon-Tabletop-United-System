@@ -113,7 +113,7 @@ export function CalculateTrainerCapabilities(trainerSkills, items, speedCombatSt
     }
 
     let capabilities = {
-        "Overland": Math.max(2, calcOverlandSpeed()) + 3 + mods["Overland"],
+        "Overland": Math.max(2, calcOverlandSpeed() + 3) + mods["Overland"],
         "Throwing Range": trainerSkills.athletics.value + 4 + mods["Throwing Range"],
         "High Jump": calcHighJump() + mods["High Jump"],
         "Long Jump": calcLongJump() + mods["Long Jump"],

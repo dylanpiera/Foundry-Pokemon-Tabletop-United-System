@@ -35,6 +35,30 @@ export class PTUGen8PokemonSheet extends ActorSheet {
 		data['compendiumItems'] = game.ptu.items;
 		data['natures'] = game.ptu.natureData;
 
+		data['owners'] = [];
+		let findActors = (key) => {
+			if(key == "default") return;
+
+			let char = game.users.get(key).character
+			if(char) {
+				data['owners'].push(char);
+				return;
+			}
+
+			let pcs = game.actors.filter(x => (x.data.permission[key] >= 3 || x.data.permission.default >= 3) && x.data.type == "character");
+			if(pcs && !game.users.get(key).isGM) data["owners"] = data['owners'].concat(pcs);
+		}
+
+
+		if(this.actor.data.permission.default >= 3) {
+			for(let key of game.users.map(x => x.id)) findActors(key);
+		}
+		else {
+			for(let [key, level] of Object.entries(this.actor.data.permission)) {
+				if(level >= 3) findActors(key);
+			}
+		}
+
 		return data;
 	}
 
@@ -87,6 +111,40 @@ export class PTUGen8PokemonSheet extends ActorSheet {
 		for(let move of actorData.moves) {
 			move.data = PrepareMoveData(actorData.data, move.data)
 		}
+	}
+
+	/* -------------------------------------------- */
+
+	/** @override */
+	_getHeaderButtons() {
+		let buttons = super._getHeaderButtons();
+
+		if (this.actor.owner) {
+			buttons.unshift({
+				label: "Charactermancer",
+				class: "open-charactermancer",
+				icon: "fas fa-edit",
+				onclick: () => new game.ptu.PTUPokemonCharactermancer(this.actor, {"submitOnChange": false, "submitOnClose": true}).render(true)
+			});
+
+			buttons.unshift({
+				label: "Notes",
+				class: "open-notes",
+				icon: "fas fa-edit",
+				onclick: () => new game.ptu.PTUCharacterNotesForm(this.actor, {"submitOnClose": true}).render(true)
+			});
+		}
+
+		if(this.actor.data.data.owner) {
+			buttons.unshift({
+				label: "Open Owner",
+				class: "open-owner",
+				icon: "fas fa-user",
+				onclick: () => game.actors.get(this.actor.data.data.owner).sheet.render(true)
+			});
+		}
+
+		return buttons;
 	}
 
 	/* -------------------------------------------- */
@@ -193,7 +251,6 @@ export class PTUGen8PokemonSheet extends ActorSheet {
 	 */
 	_onMoveRoll(event) {
 		event.preventDefault();
-
 		const element = event.currentTarget;
 		const dataset = element.dataset;
 		const move = this.actor.items.find(x => x._id == dataset.id).data;
@@ -229,6 +286,7 @@ export class PTUGen8PokemonSheet extends ActorSheet {
 				speaker: ChatMessage.getSpeaker({
 					actor: this.actor
 				}),
+				name: move.name,
 				move: move.data,
 				damageRoll: damageRoll,
 				critRoll: critRoll,
@@ -245,6 +303,7 @@ export class PTUGen8PokemonSheet extends ActorSheet {
 					speaker: ChatMessage.getSpeaker({
 						actor: this.actor
 					}),
+					name: move.name,
 					move: move.data,
 					templateType: MoveMessageTypes.DAMAGE,
 					crit: crit
@@ -284,13 +343,14 @@ export class PTUGen8PokemonSheet extends ActorSheet {
 				speaker: ChatMessage.getSpeaker({
 					actor: this.actor
 				}),
+				name: move.name,
 				move: move.data,
 				templateType: MoveMessageTypes.DETAILS
-			}).then(data => debug(data))
+			})
 			return;
 		}
 		if(event.altKey) {
-			RollDamage();
+			if (move.data.category !== "Status") RollDamage();
 			return;
 		}
 
@@ -311,9 +371,10 @@ export class PTUGen8PokemonSheet extends ActorSheet {
 						speaker: ChatMessage.getSpeaker({
 							actor: this.actor
 						}),
+						name: move.name,
 						move: move.data,
 						templateType: MoveMessageTypes.DETAILS
-					}).then(data => debug(data))
+					})
 				}
 			},
 			default: "roll"
@@ -378,6 +439,7 @@ function PerformAcRoll(roll, move, actor) {
 		speaker: ChatMessage.getSpeaker({
 			actor: actor
 		}),
+		name: move.name,
 		move: move.data,
 		templateType: MoveMessageTypes.TO_HIT
 	}).then(_ => log(`Rolling to hit for ${actor.name}'s ${move.name}`));
@@ -404,12 +466,16 @@ async function sendMoveRollMessage(rollData, messageData = {}) {
 		return;
 	}
 	
+	if(!Hooks.call("ptu.preSendMoveToChat", messageData)) return;
+
 	messageData.content = await renderTemplate(`/systems/ptu/templates/chat/moves/move-${messageData.templateType}.hbs`, messageData)
 
-	return ChatMessage.create(messageData, {});
+	Hooks.call("ptu.SendMoveToChat", duplicate(messageData));
+
+	return ChatMessage.create(messageData, {})
 }
 
-async function sendMoveMessage(messageData = {}) {
+export async function sendMoveMessage(messageData = {}) {
 	messageData = mergeObject({
 		user: game.user._id,
 		templateType: MoveMessageTypes.DAMAGE,
@@ -420,8 +486,12 @@ async function sendMoveMessage(messageData = {}) {
 		error("Can't display move chat message without move data.")
 		return;
 	}
+
+	if(!Hooks.call("ptu.preSendMoveToChat", messageData)) return;
 	
 	messageData.content = await renderTemplate(`/systems/ptu/templates/chat/moves/move-${messageData.templateType}.hbs`, messageData)
+
+	Hooks.call("ptu.SendMoveToChat", duplicate(messageData));
 
 	return ChatMessage.create(messageData, {});
 }
@@ -438,3 +508,14 @@ const CritOptions = {
 	NORMAL: 'normal',
 	CRIT_HIT: 'hit'
 }
+
+Hooks.on("ptu.preSendMoveToChat", function(messageData) {
+    debug("Calling ptu.preSendMoveToChat hook with args:"); 
+	debug(messageData);
+	return true;
+})
+Hooks.on("ptu.SendMoveToChat", function(messageData) {
+    debug("Calling ptu.SendMoveToChat hook with args:"); 
+	debug(messageData);
+	return true;
+})

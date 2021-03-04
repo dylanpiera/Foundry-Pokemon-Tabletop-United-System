@@ -9,11 +9,16 @@ export function GetMonEffectiveness(data) {
     let typeCalc;
     
     for(let type of typing) {
+        if(type === "Special") continue;
         if(!typeCalc) typeCalc = getTypeEffectiveness(type); 
         else 
             for(const [typeKey,effectiveness] of Object.entries(getTypeEffectiveness(type))) {
                 typeCalc[typeKey] *= effectiveness;
             }
+    }
+
+    if(!game.settings.get("ptu", "uraniumData")) {
+        delete typeCalc["Nuclear"];
     }
 
     /** TODO: Add Abilities - See Issue #27 */

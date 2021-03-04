@@ -4,7 +4,7 @@ import { CalculatePokemonCapabilities, CalculateTrainerCapabilities} from "./cal
 import { CalculateSkills } from "./calculations/skills-calculator.js"; 
 import { CalcBaseStat, CalculateStatTotal } from "./calculations/stats-calculator.js";
 import { GetMonEffectiveness } from "./calculations/effectiveness-calculator.js";
-import { warn, debug } from '../ptu.js' 
+import { warn, debug, log } from '../ptu.js' 
 
 /**
  * Extend the base Actor entity by defining a custom roll data structure which is ideal for the Simple system.
@@ -36,20 +36,21 @@ export class PTUActor extends Actor {
     const current = getProperty(this.data.data, attribute);
     if (isBar) {
       if(attribute == "health") {
-        const temp = current.temp;
+        const temp = duplicate(current.temp);
         if (isDelta) {
           if(value < 0 && Number(temp.value) > 0) {
             temp.value = Number(temp.value) + value;
             if(temp.value >= 0) return this.update({[`data.${attribute}.temp.value`]: temp.value});
 
             let totalValue = Number(current.value) + temp.value;
-            value = Math.clamped(0, totalValue, current.max);
+            value = Math.clamped(totalValue, Math.min(-50, current.max*-2), current.max);
             temp.value = 0;
             temp.max = 0;
           }
           else {
             let totalValue = Number(current.value) + value;
-            value = Math.clamped(0, totalValue, current.max);
+            debug(totalValue, Math.min(-50, current.max*-2), current.max);
+            value = Math.clamped(totalValue, Math.min(-50, current.max*-2), current.max);
             if(totalValue > value) {
               temp.value = totalValue - value;
               temp.max = temp.value;
@@ -86,6 +87,16 @@ export class PTUActor extends Actor {
     // things organized.
     if (actorData.type === 'character') this._prepareCharacterData(actorData);
     if (actorData.type === 'pokemon') this._preparePokemonData(actorData);
+
+    /** Depricated Data Handler */
+    if(actorData.type === 'character' && actorData.data.skills.intimidation) {
+      let skills = duplicate(actorData.data.skills);
+      skills.intimidate.value = skills.intimidation.value;
+      skills.intimidate.modifier = skills.intimidation.modifier;
+      delete skills.intimidation;
+      log(`PC ${this.name} with old 'Intimidation' skill found, updating to 'Intimidate' skill.`)
+      setTimeout(() => this.update({'data.skills': skills, 'data.skills.-=intimidation': null}), 1000);
+    }
   }
 
   /** @override */
@@ -93,10 +104,12 @@ export class PTUActor extends Actor {
     let actor = await super.create(data, options);
 
     debug("Creating new actor with data:",actor);
-    if(actor.data.type != "pokemon") return;
+    if(options?.noCharactermancer || actor.data.type != "pokemon") return actor;
 
-    let form = new game.ptu.PTUPokemonCharactermancer(actor, {"submitOnChange": true, "submitOnClose": true});
+    let form = new game.ptu.PTUPokemonCharactermancer(actor, {"submitOnChange": false, "submitOnClose": true});
     form.render(true)
+
+    return actor;
   }
 
   _getRank(skillRank) {
@@ -234,7 +247,20 @@ export function GetSpeciesData(species) {
       };
     }
     else {
-      preJson = game.ptu.pokemonData.find(x => x._id.toLowerCase() === species.toLowerCase());
+      if(species.toLowerCase().includes("oricorio-")) {
+        preJson = GetSpeciesData(741);
+        let getOricorioType = () => {
+          switch (species.toLowerCase().split("-")[1]) {
+            case "baile": return "Fire";
+            case "pom pom":case "pompom": return "Electric";
+            case "pau": case "pa'u": case "pa`u": return "Psychic";
+            case "sensu": return "Ghost";
+            default: return "Special";
+          } 
+        }
+        preJson["Type"][0] = getOricorioType();
+      }
+      else preJson = game.ptu.pokemonData.find(x => x._id.toLowerCase() === species.toLowerCase());
       if (!preJson) {
         preJson = game.ptu.customSpeciesData.find(x => x._id.toLowerCase() === species.toLowerCase());
         if(!preJson) return null;
