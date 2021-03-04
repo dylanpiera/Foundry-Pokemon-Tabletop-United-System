@@ -1,6 +1,11 @@
 # Welcome to the Beta!
 Hey there! You are on the Beta Branch. If you ever have any feedback please do share with us over on [Github](https://github.com/dylanpiera/Foundry-Pokemon-Tabletop-United-System/issues) or [Discord](https://discord.gg/fE3w59q)
 
+## 1.1.10 - Items to Chat & Missing Content
+- Added missing Fan-Game content to Compendium
+- Added 'Send to Chat' button to all items
+- Fixed custom moves not displaying their name in chat.
+
 ## 1.1.9 - Mon Generator Improvements
 - Added 'Other' Capabilities to the Generator
 - Added 'ptu.finishedGeneratingMons' hook for API usage.

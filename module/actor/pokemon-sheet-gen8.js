@@ -244,6 +244,7 @@ export class PTUGen8PokemonSheet extends ActorSheet {
 				speaker: ChatMessage.getSpeaker({
 					actor: this.actor
 				}),
+				name: move.name,
 				move: move.data,
 				damageRoll: damageRoll,
 				critRoll: critRoll,
@@ -260,6 +261,7 @@ export class PTUGen8PokemonSheet extends ActorSheet {
 					speaker: ChatMessage.getSpeaker({
 						actor: this.actor
 					}),
+					name: move.name,
 					move: move.data,
 					templateType: MoveMessageTypes.DAMAGE,
 					crit: crit
@@ -299,13 +301,14 @@ export class PTUGen8PokemonSheet extends ActorSheet {
 				speaker: ChatMessage.getSpeaker({
 					actor: this.actor
 				}),
+				name: move.name,
 				move: move.data,
 				templateType: MoveMessageTypes.DETAILS
 			})
 			return;
 		}
 		if(event.altKey) {
-			RollDamage();
+			if (move.data.category !== "Status") RollDamage();
 			return;
 		}
 
@@ -326,6 +329,7 @@ export class PTUGen8PokemonSheet extends ActorSheet {
 						speaker: ChatMessage.getSpeaker({
 							actor: this.actor
 						}),
+						name: move.name,
 						move: move.data,
 						templateType: MoveMessageTypes.DETAILS
 					})
@@ -393,6 +397,7 @@ function PerformAcRoll(roll, move, actor) {
 		speaker: ChatMessage.getSpeaker({
 			actor: actor
 		}),
+		name: move.name,
 		move: move.data,
 		templateType: MoveMessageTypes.TO_HIT
 	}).then(_ => log(`Rolling to hit for ${actor.name}'s ${move.name}`));
@@ -419,12 +424,16 @@ async function sendMoveRollMessage(rollData, messageData = {}) {
 		return;
 	}
 	
+	if(!Hooks.call("ptu.preSendMoveToChat", messageData)) return;
+
 	messageData.content = await renderTemplate(`/systems/ptu/templates/chat/moves/move-${messageData.templateType}.hbs`, messageData)
+
+	Hooks.call("ptu.SendMoveToChat", duplicate(messageData));
 
 	return ChatMessage.create(messageData, {})
 }
 
-async function sendMoveMessage(messageData = {}) {
+export async function sendMoveMessage(messageData = {}) {
 	messageData = mergeObject({
 		user: game.user._id,
 		templateType: MoveMessageTypes.DAMAGE,
@@ -435,8 +444,12 @@ async function sendMoveMessage(messageData = {}) {
 		error("Can't display move chat message without move data.")
 		return;
 	}
+
+	if(!Hooks.call("ptu.preSendMoveToChat", messageData)) return;
 	
 	messageData.content = await renderTemplate(`/systems/ptu/templates/chat/moves/move-${messageData.templateType}.hbs`, messageData)
+
+	Hooks.call("ptu.SendMoveToChat", duplicate(messageData));
 
 	return ChatMessage.create(messageData, {});
 }
@@ -453,3 +466,14 @@ const CritOptions = {
 	NORMAL: 'normal',
 	CRIT_HIT: 'hit'
 }
+
+Hooks.on("ptu.preSendMoveToChat", function(messageData) {
+    debug("Calling ptu.preSendMoveToChat hook with args:"); 
+	debug(messageData);
+	return true;
+})
+Hooks.on("ptu.SendMoveToChat", function(messageData) {
+    debug("Calling ptu.SendMoveToChat hook with args:"); 
+	debug(messageData);
+	return true;
+})
