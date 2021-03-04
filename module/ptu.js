@@ -405,7 +405,7 @@ function _loadSystemSettings() {
 
   game.settings.register("ptu", "defaultPokemonImageDirectory", {
     name: "Default Pokemon Image Directory",
-    hint: "This will play a Pokemon's cry when it is drag-and-dropped from the pokedex compendium",
+    hint: "The directory where the user can upload image files (named as the pokedex number of the species) to be used as the default images when generating pokemon.",
     scope: "world",
     config: true,
     type: DirectoryPicker.Directory,
@@ -414,7 +414,7 @@ function _loadSystemSettings() {
 
   game.settings.register("ptu", "playPokemonCriesOnDrop", {
     name: "Play Pokemon Cry when dragged from Dex",
-    hint: "This will play a Pokemon's cry when it is drag-and-dropped from the pokedex compendium",
+    hint: "This will play a Pokemon's cry when it is drag-and-dropped from the pokedex compendium.",
     scope: "world",
     config: true,
     type: Boolean,
