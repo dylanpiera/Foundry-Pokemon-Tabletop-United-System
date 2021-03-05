@@ -1,6 +1,10 @@
 # Welcome to the Beta!
 Hey there! You are on the Beta Branch. If you ever have any feedback please do share with us over on [Github](https://github.com/dylanpiera/Foundry-Pokemon-Tabletop-United-System/issues) or [Discord](https://discord.gg/fE3w59q)
 
+## 1.2.2 - Bugfix
+- Fixed Custom Species Art not taking priority over regular art when selected by ID
+- Fixed Custom Moves, Abilities & Capabilities not being loaded when they are turned on for Character Generation.
+
 ## 1.2.1 - Version 1.2 Release - Beta Branch
 
 ## 1.1.12 - Bugfix

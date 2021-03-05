@@ -1,5 +1,6 @@
 import { debug, log } from "../ptu.js"
 import { getRandomIntInclusive, lpad} from './generic-helpers.js'
+import { GetOrCacheAbilities, GetOrCacheCapabilities, GetOrCacheMoves} from './cache-helper.js'
 
 export async function CreateMonParser(input, andCreate = false) {
     debug(input)
@@ -80,15 +81,15 @@ export async function CreateMonParser(input, andCreate = false) {
 }
 
 export async function GetSpeciesArt(mon, basePath, type = ".png") {
-    let result = await fetch(basePath+mon._id+type);
-    if(result.status === 404) {
-        result = await fetch(basePath+mon._id.toLowerCase()+type);
-    }
+    let result = await fetch(basePath+lpad(mon.number, 4)+type);
     if(result.status === 404) {
         result = await fetch(basePath+lpad(mon.number, 3)+type);
     }
     if(result.status === 404) {
-        result = await fetch(basePath+lpad(mon.number, 4)+type);
+        result = await fetch(basePath+mon._id+type);
+    }
+    if(result.status === 404) {
+        result = await fetch(basePath+mon._id.toLowerCase()+type);
     }
     if(result.status === 404) {
         return undefined;
@@ -125,8 +126,9 @@ Hooks.on("chatMessage", (chatlog, messageText, chatData) => {
 });
 
 async function createMons(commandData) {
-    await game.ptu.cache.GetOrCreateCachedItem("abilities", () => game.packs.get("ptu.abilities").getContent());
-    await game.ptu.cache.GetOrCreateCachedItem("moves", () => game.packs.get("ptu.moves").getContent());
+    await GetOrCacheAbilities();
+    await GetOrCacheCapabilities();
+    await GetOrCacheMoves();
 
     let preparedData = [];
     for(let i = 0; i < commandData["generate"]; i++) {
@@ -144,7 +146,7 @@ async function createMons(commandData) {
     if(!Array.isArray(actors)) actors = [actors];
     for(let a of actors) {
         let r = await game.ptu.monGenerator.ApplyEvolution(a);
-        debug("Applied correct evolution to Actor", r[0], a);
+        debug("Applied correct evolution to Actor", r, a);
         
         let promises = [];
         promises.push(game.ptu.monGenerator.StatDistributions.ApplyLevelUpPoints(a, commandData["stats"], commandData["statrng%"] ? (commandData["statrng%"] < 1 ? commandData["statrng%"] : commandData["statrng%"] * 0.01) : 0.1));
