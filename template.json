@@ -13,7 +13,8 @@
             "physical" : 0,
             "special" : 0,
             "speed" : 0
-          }
+          },
+          "saveChecks": 0
         }
       },
       "skills": {
@@ -259,7 +260,26 @@
       },
 
       "owner": "",
-      "shiny": false
+      "shiny": false,
+
+      "training": {
+        "agility": {
+          "trained": false,
+          "ordered": false
+        },
+        "focused": {
+          "trained": false,
+          "ordered": false
+        },
+        "hardened": {
+          "trained": false,
+          "ordered": false
+        },
+        "inspired": {
+          "trained": false,
+          "ordered": false
+        }
+      }
     }
   },
   "Item": {

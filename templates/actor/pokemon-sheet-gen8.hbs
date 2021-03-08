@@ -610,7 +610,7 @@
                         <label for="data.modifiers.hardened">Hardened</label>
                       </div>
                       <div class="col-sm-5">
-                        <label for="data.health.total">Total Health <small>Ignoring Injuries</small></label>
+                        <label for="data.health.total">Total Health<br><small>Ignoring Injuries</small></label>
                       </div>
                     </div>
                   </div>
@@ -654,6 +654,66 @@
                     {{/if}}
                   </div>
                 </div>
+
+                <!-- Training + Save Checks -->
+                <div class="d-flex mb-2 w-100">
+                  <div class="col-sm-8" style="padding-left: unset;">
+                    <div class="swsh-box w-100 h-100" style="text-align: center; word-break: keep-all;">
+                      <div class="swsh-header" style="height: 40px;">
+                        <div class="d-flex w-100 mt-1 mb-1 align-items-center">
+                          <div class="col-sm-6">
+                            <label for="data.training">Training</label>
+                          </div>
+                          <div class="col-sm-3">
+                            <label for="data.training.trained">Trained</label>
+                          </div>
+                          <div class="col-sm-3">
+                            <label for="data.training.ordered">Ordered</label>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="swsh-body" style="display: block;">
+                        {{#each data.training as |training key|}}
+                          <div class="d-flex w-100 mt-1 mb-1">
+                            <div class="col-sm-6" style="padding: unset;">
+                              <p>{{capitalizeFirst key}} Training</p>
+                            </div>
+                            <div class="col-sm-3">
+                              <input name="data.training.{{key}}.trained" type="checkbox" {{checked training.trained}} />
+                            </div>
+                            <div class="col-sm-3">
+                              <input name="data.training.{{key}}.ordered" type="checkbox" {{checked training.ordered}} />
+                            </div>
+                          </div>
+                        {{/each}}
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-sm-4" style="padding-right: unset;">
+                    <div class="swsh-box d-flex flex-column w-100 h-100" style="text-align: center; word-break: keep-all;">
+                      <div class="swsh-header" style="height: 51px;">
+                        <div class="d-flex w-100 mt-1 mb-1 align-items-center">
+                          <div class="col-sm-12">
+                            <label for="data.modifiers.saveChecks">Save Checks Modifier</label>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="swsh-body d-flex flex-column h-100" style="display: block;">
+                        <div class="d-flex w-100 mt-auto mb-auto">
+                          <div class="col-sm-12">
+                            <input name="data.modifiers.saveChecks" type="text" value="{{data.health.injuries}}" data-dtype="Number" />
+                          </div>
+                        </div>
+                        <div class="d-flex w-100 mt-auto mb-auto">
+                          <div class="col-sm-12">
+                            <button class="btn">Make Save</button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
               </div>
               <div class="col">
                 <div class="swsh-box mt-auto w-100" style="text-align: center;">
