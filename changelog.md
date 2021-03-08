@@ -1,6 +1,9 @@
 # Welcome to the Beta!
 Hey there! You are on the Beta Branch. If you ever have any feedback please do share with us over on [Github](https://github.com/dylanpiera/Foundry-Pokemon-Tabletop-United-System/issues) or [Discord](https://discord.gg/fE3w59q)
 
+## 1.2.6 - Fixed Img Generator
+- Generated Img Path now use a relative path instead of absolute.
+
 ## 1.2.4 - 1.2.5 - Training, Save Checks & Temp HP Bar
 - Automatically modify initiative of actors in Combat when their initative modifier or speed stat changes.
 - Added Training options to the Combat Tab that automatically add (invisible) modifiers where necessary
