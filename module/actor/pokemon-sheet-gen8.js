@@ -176,6 +176,7 @@ export class PTUGen8PokemonSheet extends ActorSheet {
 		// Rollable abilities.
 		html.find('.rollable.skill').click(this._onRoll.bind(this));
 		html.find('.rollable.gen8move').click(this._onMoveRoll.bind(this));
+		html.find('.rollable.save').click(this._onSaveRoll.bind(this));
 
 		// Drag events for macros.
 		if (this.actor.owner) {
@@ -233,6 +234,8 @@ export class PTUGen8PokemonSheet extends ActorSheet {
 		const dataset = element.dataset;
 
 		if (dataset.roll) {
+			let mod = (this.actor.data.data.training?.focused?.trained ? this.actor.data.data.training?.critical ? 6 : 2 : 0) + (this.actor.data.data.training?.focused?.ordered ? 2 : 0);
+			if(mod > 0) dataset.roll += `+${mod}`;
 			let roll = new Roll(dataset.roll, this.actor.data.data);
 			let label = dataset.label ? `Rolling ${dataset.label}` : '';
 			roll.roll().toMessage({
@@ -242,6 +245,25 @@ export class PTUGen8PokemonSheet extends ActorSheet {
 				flavor: label
 			});
 		}
+	}
+
+	/**
+	 * Handle clickable rolls.
+	 * @param {Event} event   The originating click event
+	 * @private
+	 */
+	_onSaveRoll(event) {
+		event.preventDefault();
+		
+		let mod = (this.actor.data.data.training?.inspired?.trained ? this.actor.data.data.training?.critical ? 6 : 2 : 0) + (this.actor.data.data.training?.inspired?.ordered ? 2 : 0) + this.actor.data.data.modifiers.saveChecks;
+		let roll = new Roll("1d20 + @mod", {mod: mod});
+		let label = 'Rolling Save Check';
+		roll.roll().toMessage({
+			speaker: ChatMessage.getSpeaker({
+				actor: this.actor
+			}),
+			flavor: label
+		});
 	}
 
 	/**
@@ -261,7 +283,7 @@ export class PTUGen8PokemonSheet extends ActorSheet {
 			let acRoll = CalculateAcRoll(move.data, this.actor.data.data);
 			let diceResult = GetDiceResult(acRoll)
 
-			let crit = diceResult === 1 ? CritOptions.CRIT_MISS : diceResult >= 20 - this.actor.data.data.modifiers.critRange ? CritOptions.CRIT_HIT : CritOptions.NORMAL;
+			let crit = diceResult === 1 ? CritOptions.CRIT_MISS : (diceResult >= 20 - this.actor.data.data.modifiers.critRange - (this.actor.data.data.training?.brutal?.trained ? this.actor.data.data.training?.critical ? 3 : 1 : 0) - (this.actor.data.data.training?.brutal?.ordered ? 1 : 0)) ? CritOptions.CRIT_HIT : CritOptions.NORMAL;
 
 			let damageRoll, critRoll;
 			if(crit != CritOptions.CRIT_MISS) {
@@ -398,7 +420,7 @@ export class PTUGen8PokemonSheet extends ActorSheet {
 function CalculateAcRoll(moveData, actorData) {
 	return new Roll('1d20-@ac+@acBonus', {
 		ac: (parseInt(moveData.ac) || 0),
-		acBonus: (parseInt(actorData.modifiers.acBonus) || 0)
+		acBonus: (parseInt(actorData.modifiers.acBonus) || 0) + (actorData.training?.focused?.trained ? actorData.training?.critical ? 3 : 1 : 0) + (actorData.training?.focused?.ordered ? 1 : 0)
 	})
 }
 

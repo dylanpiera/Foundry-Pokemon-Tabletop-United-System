@@ -43,7 +43,7 @@ export let log = (...args) => console.log("FVTT PTU | ", ...args);
 export let warn = (...args) => console.warn("FVTT PTU | ", ...args);
 export let error = (...args) => console.error("FVTT PTU | ", ...args)
 
-export const LATEST_VERSION = "1.2.3";
+export const LATEST_VERSION = "1.2.4";
 
 Hooks.once('init', async function() {
 
@@ -749,6 +749,38 @@ class DirectoryPicker extends FilePicker {
     $(html).find("footer button").text("Select Directory");
   }
 }
+
+// Automatically update Initiative if Speed / Init Mod changes
+Hooks.on("updateActor", function(actor, change, isDiff, actorId) {
+  if(change?.data?.modifiers?.initiative !== undefined || change?.data?.stats?.spd?.mod !== undefined || change?.data?.stats?.spd?.stage !== undefined
+    || change?.data?.stats?.spd?.levelUp !== undefined || change?.data?.training?.agility?.trained !== undefined || change?.data?.training?.agility?.ordered !== undefined
+    || change?.data?.training?.critical !== undefined) {
+      if(!game.combats.active) return;
+
+      let c = game.combats.active.combatants.find(x => x.actor?._id == actor._id)
+      if(!c) return;
+      let init = actor.data.data.initiative.value;
+      let tieBreaker = Number((c.initiative+"").split(".")[1]) * 0.01;
+
+      game.combats.active.setInitiative(c._id, init+tieBreaker);
+    }
+});
+
+Hooks.on("updateToken", function(scene, token, change, isDiff, actorId) {
+  if(change?.actorData?.data?.modifiers?.initiative !== undefined || change?.actorData?.data?.stats?.spd?.mod !== undefined || change?.actorData?.data?.stats?.spd?.stage !== undefined
+    || change?.actorData?.data?.stats?.spd?.levelUp !== undefined || change?.actorData?.data?.training?.agility?.trained !== undefined || change?.actorData?.data?.training?.agility?.ordered !== undefined
+    || change?.actorData?.data?.training?.critical !== undefined)
+  {
+    if(!game.combats.active) return;
+
+    let c = game.combats.active.combatants.find(x => x.tokenId == token._id)
+    if(!c) return;
+    let init = canvas.tokens.get(token._id).actor.data.data.initiative.value;
+    let tieBreaker = Number((c.initiative+"").split(".")[1]) * 0.01;
+
+    game.combats.active.setInitiative(c._id, init+tieBreaker);
+  }  
+});
 
 // this s hooked in, we don't use all the data, so lets stop eslint complaining
 // eslint-disable-next-line no-unused-vars
