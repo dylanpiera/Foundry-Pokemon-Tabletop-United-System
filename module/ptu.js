@@ -43,7 +43,7 @@ export let log = (...args) => console.log("FVTT PTU | ", ...args);
 export let warn = (...args) => console.warn("FVTT PTU | ", ...args);
 export let error = (...args) => console.error("FVTT PTU | ", ...args)
 
-export const LATEST_VERSION = "1.2.4";
+export const LATEST_VERSION = "1.2.5";
 
 Hooks.once('init', async function() {
 

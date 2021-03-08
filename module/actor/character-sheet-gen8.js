@@ -139,6 +139,7 @@ export class PTUGen8CharacterSheet extends ActorSheet {
 		// Rollable abilities.
 		html.find('.rollable.skill').click(this._onRoll.bind(this));
 		html.find('.rollable.gen8move').click(this._onMoveRoll.bind(this));
+		html.find('.rollable.save').click(this._onSaveRoll.bind(this));
 
 		// Drag events for macros.
 		if (this.actor.owner) {
@@ -226,6 +227,25 @@ export class PTUGen8CharacterSheet extends ActorSheet {
 				flavor: label
 			});
 		}
+	}
+
+	/**
+	 * Handle clickable rolls.
+	 * @param {Event} event   The originating click event
+	 * @private
+	 */
+	_onSaveRoll(event) {
+		event.preventDefault();
+		
+		let mod = this.actor.data.data.modifiers.saveChecks ?? 0;
+		let roll = new Roll("1d20 + @mod", {mod: mod});
+		let label = 'Rolling Save Check';
+		roll.roll().toMessage({
+			speaker: ChatMessage.getSpeaker({
+				actor: this.actor
+			}),
+			flavor: label
+		});
 	}
 
 	/**
