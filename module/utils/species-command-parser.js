@@ -126,61 +126,19 @@ Hooks.on("chatMessage", (chatlog, messageText, chatData) => {
 });
 
 async function createMons(commandData) {
-    await GetOrCacheAbilities();
-    await GetOrCacheCapabilities();
-    await GetOrCacheMoves();
-
-    let preparedData = [];
+    let options = [];
     for(let i = 0; i < commandData["generate"]; i++) {
-        preparedData.push({
-            name: `${commandData["pokemon"][i]._id} #${i+1}`,
-            type: "pokemon",
-            "data.species": commandData["pokemon"][i]._id,
-            "data.level.exp": game.ptu.levelProgression[commandData["level"][i]],
-            "data.nature.value": game.ptu.monGenerator.GetRandomNature()
+        options.push({
+            exists: false,
+            species: commandData["pokemon"][i]._id,
+            exp: game.ptu.levelProgression[commandData["level"][i]],
         });
-        if(commandData["folder"]) preparedData[i]["folder"] = commandData["folder"].id;
+        if(commandData["folder"]) options[i]["folder"] = commandData["folder"].name;
     }
 
-    let actors = await game.ptu.PTUActor.create(preparedData, {noCharactermancer: true});
-    if(!Array.isArray(actors)) actors = [actors];
-    for(let a of actors) {
-        let r = await game.ptu.monGenerator.ApplyEvolution(a);
-        debug("Applied correct evolution to Actor", r, a);
-        
-        let promises = [];
-        promises.push(game.ptu.monGenerator.StatDistributions.ApplyLevelUpPoints(a, commandData["stats"], commandData["statrng%"] ? (commandData["statrng%"] < 1 ? commandData["statrng%"] : commandData["statrng%"] * 0.01) : 0.1));
-        promises.push(game.ptu.monGenerator.GiveCapabilities(a));
-        promises.push(game.ptu.monGenerator.GiveRandomAbilities(a));
-        promises.push(game.ptu.monGenerator.GiveLatestMoves(a));
-
-        r = await Promise.all(promises);
-        debug("Applied stat distribution to Actor", r[0], a);
-        debug("Added Other Capabilities to Actor", r[1], a);
-        debug("Added Abilities to Actor", r[2], a);
-        debug("Added moves to Actor", r[3], a);
-        
-        let updates = {img: "", name: ""};
-        if(commandData["imgpath"]) {
-            let imgPath = await GetSpeciesArt(game.ptu.GetSpeciesData(a.data.data.species), commandData["imgpath"], commandData["imgext"] ? commandData["imgext"] : ".png");
-            if(imgPath) updates.img = imgPath;
-        }
-        if(!a.data.name.includes(a.data.data.species)) {
-            updates.name = `${a.data.data.species} ${a.data.name.split(" ")[1]}`
-        }
-        
-        let gender = game.ptu.GetSpeciesData(a.data.data.species)["Breeding Information"]["Gender Ratio"];
-        if(gender === -1) gender = "Genderless";
-        else gender = gender * 10 > getRandomIntInclusive(0, 1000) ? "Male" : "Female";
-        
-        await a.update({
-            "data.gender": gender,
-            img: updates.img ? updates.img : a.data.img, 
-            name: updates.name ? updates.name : a.data.name,
-            "token.name": updates.name ? updates.name : a.data.name
-        })
-        
-    }
+    let actors = [];
+    for(let option of options) actors.push(await game.ptu.monGenerator.ActorGenerator.Create(option));
+    
     Hooks.call("ptu.finishedGeneratingMons", commandData, actors)
     return actors;
 }
