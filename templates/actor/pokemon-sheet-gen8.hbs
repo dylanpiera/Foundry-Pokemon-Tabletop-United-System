@@ -674,18 +674,28 @@
                       </div>
                       <div class="swsh-body" style="display: block;">
                         {{#each data.training as |training key|}}
-                          <div class="d-flex w-100 mt-1 mb-1">
+                          {{#if (is key "critical")}}{{else}}
+                            <div class="d-flex w-100 mt-1 mb-1">
+                              <div class="col-sm-6" style="padding: unset;">
+                                <p>{{capitalizeFirst key}} Training</p>
+                              </div>
+                              <div class="col-sm-3">
+                                <input name="data.training.{{key}}.trained" type="checkbox" {{checked training.trained}} />
+                              </div>
+                              <div class="col-sm-3">
+                                <input name="data.training.{{key}}.ordered" type="checkbox" {{checked training.ordered}} />
+                              </div>
+                            </div>
+                          {{/if}}
+                        {{/each}}
+                        <div class="d-flex w-100 mt-1 mb-1">
                             <div class="col-sm-6" style="padding: unset;">
-                              <p>{{capitalizeFirst key}} Training</p>
+                              <p>Critical Moment?</p>
                             </div>
-                            <div class="col-sm-3">
-                              <input name="data.training.{{key}}.trained" type="checkbox" {{checked training.trained}} />
-                            </div>
-                            <div class="col-sm-3">
-                              <input name="data.training.{{key}}.ordered" type="checkbox" {{checked training.ordered}} />
+                            <div class="col-sm-6">
+                              <input name="data.training.critical" type="checkbox" {{checked data.training.critical}} />
                             </div>
                           </div>
-                        {{/each}}
                       </div>
                     </div>
                   </div>
