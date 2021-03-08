@@ -750,6 +750,16 @@ class DirectoryPicker extends FilePicker {
   }
 }
 
+// Allow players to reroll their initiative by clicking on it
+Hooks.on("renderCombatTracker", function() {
+  $('.combatant').each(function () {
+      let cid = $(this).data("combatant-id")
+      $(this).find(".token-initiative").on("click", function() {
+          game.combats.active.rollInitiative(cid)
+      });
+  })
+});
+
 // this s hooked in, we don't use all the data, so lets stop eslint complaining
 // eslint-disable-next-line no-unused-vars
 Hooks.on("renderSettingsConfig", (app, html, user) => {
