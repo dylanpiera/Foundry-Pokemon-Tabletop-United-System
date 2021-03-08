@@ -88,7 +88,7 @@ function executeApplyDamageToTargets(targets, data, damage, isFlat = false) {
 		}
 
         log(`Dealing ${actualDamage} damage to ${target.name}`); 
-        appliedDamage[target.actor.data._id] = {name: target.actor.data.name, damage: actualDamage, old: {value: duplicate(target.actor.data.data.health.value), temp: duplicate(target.actor.data.data.health.temp.value)}};
+        appliedDamage[target.actor.data._id] = {name: target.actor.data.name, damage: actualDamage, old: {value: duplicate(target.actor.data.data.health.value), temp: duplicate(target.actor.data.data.tempHp.value)}};
         target.actor.modifyTokenAttribute("health", actualDamage*-1, true, true);
     }
     displayAppliedDamageToTargets({data: appliedDamage, move: data.moveName});
@@ -118,6 +118,6 @@ export function undoDamageToTargets(event) {
 
     
     log(`FVTT PTU | Undoing ${data.damage} damage to ${actor.data.name} - Old HP: ${data.oldHp} - Old Temp: ${data.oldTempHp}`); 
-    actor.update({"data.health.value": data.oldHp, "data.health.temp.value": data.oldTempHp, "data.health.temp.max": data.oldTempHp})
+    actor.update({"data.health.value": data.oldHp, "data.tempHp.value": data.oldTempHp, "data.tempHp.max": data.oldTempHp})
     //actor.modifyTokenAttribute("health", data.damage, true, true);    
 }

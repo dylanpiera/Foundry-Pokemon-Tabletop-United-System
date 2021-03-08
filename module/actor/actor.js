@@ -33,14 +33,14 @@ export class PTUActor extends Actor {
   async modifyTokenAttribute(attribute, value, isDelta=false, isBar=true) {
     debug("Modifying Token Attribute",attribute, value, isDelta, isBar);
     
-    const current = getProperty(this.data.data, attribute);
+    const current = duplicate(getProperty(this.data.data, attribute));
     if (isBar) {
       if(attribute == "health") {
-        const temp = duplicate(current.temp);
+        const temp = duplicate(getProperty(this.data.data, "tempHp"));
         if (isDelta) {
           if(value < 0 && Number(temp.value) > 0) {
             temp.value = Number(temp.value) + value;
-            if(temp.value >= 0) return this.update({[`data.${attribute}.temp.value`]: temp.value});
+            if(temp.value >= 0) return this.update({[`data.tempHp.value`]: temp.value});
 
             let totalValue = Number(current.value) + temp.value;
             value = Math.clamped(totalValue, Math.min(-50, current.max*-2), current.max);
@@ -64,13 +64,14 @@ export class PTUActor extends Actor {
           }
         }
         debug("Updating Character HP with args:", this, {oldValue: current.value, newValue: value, tempHp: temp })
-        return this.update({[`data.${attribute}.value`]: value, [`data.${attribute}.temp.value`]: temp.value, [`data.${attribute}.temp.max`]: temp.max});
+        return this.update({[`data.${attribute}.value`]: value, [`data.tempHp.value`]: temp.value, [`data.tempHp.max`]: temp.max});
       }
       else {
         if (isDelta) {
           let totalValue = Number(current.value) + value;
           value = Math.clamped(0, totalValue, current.max);
         }
+        if(attribute == "tempHp") return this.update({[`data.${attribute}.value`]: value, [`data.${attribute}.max`]: value});
         return this.update({[`data.${attribute}.value`]: value});
       }
     } else {

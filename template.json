@@ -175,7 +175,11 @@
       },
       "shared": {
         "digestionBuff": "",
-        "notes": ""
+        "notes": "",
+        "tempHp": {
+          "value": null,
+          "max": null
+        }
       }
     },
     "character": {
