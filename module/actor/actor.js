@@ -202,7 +202,7 @@ export class PTUActor extends Actor {
 
     data.health.percent = Math.round((data.health.value / data.health.max) * 100);
 
-    data.initiative = {value: data.stats.spd.total + data.modifiers.initiative};
+    data.initiative = {value: data.stats.spd.total + data.modifiers.initiative + (data.training?.agility?.trained ? data.training?.critical ? 12 : 4 : 0) + (data.training?.agility?.ordered ? 4 : 0)};
 
     data.tp.max = (data.level.current > 0 ? Math.floor(data.level.current / 5) : 0) + 1;
     data.tp.pep.value = actorData.items.filter(x => x.type == "pokeedge" && x.data.origin.toLowerCase() != "pusher").length;
@@ -210,7 +210,7 @@ export class PTUActor extends Actor {
 
     data.evasion = CalculateEvasions(data);
 
-    data.capabilities = CalculatePokemonCapabilities(speciesData, actorData.items.values(), data.stats.spd.stage);
+    data.capabilities = CalculatePokemonCapabilities(speciesData, actorData.items.values(), data.stats.spd.stage, data.training);
 
     if(speciesData) data.egggroup = speciesData["Breeding Information"]["Egg Group"].join(" & ");
 
