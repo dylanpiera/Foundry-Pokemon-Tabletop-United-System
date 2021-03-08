@@ -233,6 +233,8 @@ export class PTUGen8PokemonSheet extends ActorSheet {
 		const dataset = element.dataset;
 
 		if (dataset.roll) {
+			let mod = (this.actor.data.data.training?.focused?.trained ? this.actor.data.data.training?.critical ? 6 : 2 : 0) + (this.actor.data.data.training?.focused?.ordered ? 2 : 0);
+			if(mod > 0) dataset.roll += `+${mod}`;
 			let roll = new Roll(dataset.roll, this.actor.data.data);
 			let label = dataset.label ? `Rolling ${dataset.label}` : '';
 			roll.roll().toMessage({
@@ -398,7 +400,7 @@ export class PTUGen8PokemonSheet extends ActorSheet {
 function CalculateAcRoll(moveData, actorData) {
 	return new Roll('1d20-@ac+@acBonus', {
 		ac: (parseInt(moveData.ac) || 0),
-		acBonus: (parseInt(actorData.modifiers.acBonus) || 0)
+		acBonus: (parseInt(actorData.modifiers.acBonus) || 0) + (actorData.training?.focused?.trained ? actorData.training?.critical ? 3 : 1 : 0) + (actorData.training?.focused?.ordered ? 1 : 0)
 	})
 }
 
