@@ -168,42 +168,18 @@ export async function FinishDexDragPokemonCreation(formData, update)
     let drop_coordinates_x = update["x"];
     let drop_coordinates_y = update["y"];
 
-    console.log(formData["data.level"]);
+    debug(update["x"], update["y"]);
     let level = parseInt(formData["data.level"]);
 
-    let commands = []; 
+    let new_actor = await game.ptu.monGenerator.ActorGenerator.Create({
+        exists: false,
+        species: species_name,
+        exp: game.ptu.levelProgression[level],
+        folder: "Dex Drag-in"
+    })
 
-    commands["generate"] = 1;
-
-    commands["pokemon"] = [];
-    let mon = game.ptu.GetSpeciesData(species_name);
-    commands["pokemon"].push(mon);
-
-    commands["level"] = [];
-    commands["level"].push(level);
-
-    commands["stats"] = "weighted";
-
-    let folder_name = "Dex Drag-in"
+    let protoToken = {data: {bar1: {}}}; //await Token.fromActor(new_actor);
     
-    let folder = game.folders.filter(x => x.type == "Actor").find(x => x.name == folder_name)
-    if(!folder) {
-        ui.notifications.notify("Couldn't find Dex Drag-in folder, creating it.", "warning")
-        folder = await Folder.create({name: folder_name, type: 'Actor', parent: null});
-    }
-    commands["folder"] = folder;
-
-    commands["imgpath"] = game.settings.get("ptu", "defaultPokemonImageDirectory");
-
-    debug(`Generating ${commands["generate"]} pokemon using species: ${commands["pokemon"].map(x => x._id).join(",")} with levels: ${commands["level"].join(",")} ${(commands["folder"] ? `in folder ${commands["folder"].name}` : "")}`);
-
-    let new_actor = (await createMons(commands))[0];
-
-    let protoToken = await Token.fromActor(new_actor);
-    
-    protoToken.data.x = drop_coordinates_x;
-    protoToken.data.y = drop_coordinates_y;
-
     let size = game.ptu.GetSpeciesData(new_actor.data.data.species)["Size Class"]
     
     let size_categories = {
@@ -220,12 +196,16 @@ export async function FinishDexDragPokemonCreation(formData, update)
     protoToken.data.displayBars = 20;
     protoToken.data.displayName=  40; 
     protoToken.data.bar1.attribute = "health";
-    protoToken.scene = game.scenes.viewed;
+    
+    new_actor = await new_actor.update({"token": protoToken.data});
 
-    let placedTokenData = await game.scenes.viewed.createEmbeddedEntity("Token",protoToken.data);
+    protoToken.scene = game.scenes.viewed;
+    protoToken.data.x = Math.floor(drop_coordinates_x / game.scenes.viewed.data.grid) * game.scenes.viewed.data.grid;
+    protoToken.data.y = Math.floor(drop_coordinates_y / game.scenes.viewed.data.grid) * game.scenes.viewed.data.grid;
+
+    let placedTokenData = await game.scenes.viewed.createEmbeddedEntity("Token", (await Token.fromActor(new_actor, protoToken.data)).data);
 
     let currentSpecies = game.ptu.GetSpeciesData(new_actor.data.data.species)._id;
-
     game.ptu.PlayPokemonCry(currentSpecies);
     
     return placedTokenData;
