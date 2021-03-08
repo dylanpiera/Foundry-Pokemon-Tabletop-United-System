@@ -1,6 +1,13 @@
 # Welcome to the Beta!
 Hey there! You are on the Beta Branch. If you ever have any feedback please do share with us over on [Github](https://github.com/dylanpiera/Foundry-Pokemon-Tabletop-United-System/issues) or [Discord](https://discord.gg/fE3w59q)
 
+## 1.2.3 - Mon Generator Update
+- Changed the Generator to batch apply, saving on a lot of database calls.
+- Dex Drag & Drop now centers to the square the mon is dropped into.
+
+***Note:*** This update is also testing to see if the 'Mysterious Disappearance' glitch that can occur when generating pokemon. Being that after a refresh sometimes Items (like moves, abilities etc.) or other Data is missing from the actor.
+As well as players being unable to edit the mon when granted permission without refreshing their browser.
+
 ## 1.2.2 - Bugfix
 - Fixed Custom Species Art not taking priority over regular art when selected by ID
 - Fixed Custom Moves, Abilities & Capabilities not being loaded when they are turned on for Character Generation.

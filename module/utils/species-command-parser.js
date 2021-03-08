@@ -126,61 +126,19 @@ Hooks.on("chatMessage", (chatlog, messageText, chatData) => {
 });
 
 async function createMons(commandData) {
-    await GetOrCacheAbilities();
-    await GetOrCacheCapabilities();
-    await GetOrCacheMoves();
-
-    let preparedData = [];
+    let options = [];
     for(let i = 0; i < commandData["generate"]; i++) {
-        preparedData.push({
-            name: `${commandData["pokemon"][i]._id} #${i+1}`,
-            type: "pokemon",
-            "data.species": commandData["pokemon"][i]._id,
-            "data.level.exp": game.ptu.levelProgression[commandData["level"][i]],
-            "data.nature.value": game.ptu.monGenerator.GetRandomNature()
+        options.push({
+            exists: false,
+            species: commandData["pokemon"][i]._id,
+            exp: game.ptu.levelProgression[commandData["level"][i]],
         });
-        if(commandData["folder"]) preparedData[i]["folder"] = commandData["folder"].id;
+        if(commandData["folder"]) options[i]["folder"] = commandData["folder"].name;
     }
 
-    let actors = await game.ptu.PTUActor.create(preparedData, {noCharactermancer: true});
-    if(!Array.isArray(actors)) actors = [actors];
-    for(let a of actors) {
-        let r = await game.ptu.monGenerator.ApplyEvolution(a);
-        debug("Applied correct evolution to Actor", r, a);
-        
-        let promises = [];
-        promises.push(game.ptu.monGenerator.StatDistributions.ApplyLevelUpPoints(a, commandData["stats"], commandData["statrng%"] ? (commandData["statrng%"] < 1 ? commandData["statrng%"] : commandData["statrng%"] * 0.01) : 0.1));
-        promises.push(game.ptu.monGenerator.GiveCapabilities(a));
-        promises.push(game.ptu.monGenerator.GiveRandomAbilities(a));
-        promises.push(game.ptu.monGenerator.GiveLatestMoves(a));
-
-        r = await Promise.all(promises);
-        debug("Applied stat distribution to Actor", r[0], a);
-        debug("Added Other Capabilities to Actor", r[1], a);
-        debug("Added Abilities to Actor", r[2], a);
-        debug("Added moves to Actor", r[3], a);
-        
-        let updates = {img: "", name: ""};
-        if(commandData["imgpath"]) {
-            let imgPath = await GetSpeciesArt(game.ptu.GetSpeciesData(a.data.data.species), commandData["imgpath"], commandData["imgext"] ? commandData["imgext"] : ".png");
-            if(imgPath) updates.img = imgPath;
-        }
-        if(!a.data.name.includes(a.data.data.species)) {
-            updates.name = `${a.data.data.species} ${a.data.name.split(" ")[1]}`
-        }
-        
-        let gender = game.ptu.GetSpeciesData(a.data.data.species)["Breeding Information"]["Gender Ratio"];
-        if(gender === -1) gender = "Genderless";
-        else gender = gender * 10 > getRandomIntInclusive(0, 1000) ? "Male" : "Female";
-        
-        await a.update({
-            "data.gender": gender,
-            img: updates.img ? updates.img : a.data.img, 
-            name: updates.name ? updates.name : a.data.name,
-            "token.name": updates.name ? updates.name : a.data.name
-        })
-        
-    }
+    let actors = [];
+    for(let option of options) actors.push(await game.ptu.monGenerator.ActorGenerator.Create(option));
+    
     Hooks.call("ptu.finishedGeneratingMons", commandData, actors)
     return actors;
 }
@@ -210,42 +168,18 @@ export async function FinishDexDragPokemonCreation(formData, update)
     let drop_coordinates_x = update["x"];
     let drop_coordinates_y = update["y"];
 
-    console.log(formData["data.level"]);
+    debug(update["x"], update["y"]);
     let level = parseInt(formData["data.level"]);
 
-    let commands = []; 
+    let new_actor = await game.ptu.monGenerator.ActorGenerator.Create({
+        exists: false,
+        species: species_name,
+        exp: game.ptu.levelProgression[level],
+        folder: "Dex Drag-in"
+    })
 
-    commands["generate"] = 1;
-
-    commands["pokemon"] = [];
-    let mon = game.ptu.GetSpeciesData(species_name);
-    commands["pokemon"].push(mon);
-
-    commands["level"] = [];
-    commands["level"].push(level);
-
-    commands["stats"] = "weighted";
-
-    let folder_name = "Dex Drag-in"
+    let protoToken = {data: {bar1: {}}}; //await Token.fromActor(new_actor);
     
-    let folder = game.folders.filter(x => x.type == "Actor").find(x => x.name == folder_name)
-    if(!folder) {
-        ui.notifications.notify("Couldn't find Dex Drag-in folder, creating it.", "warning")
-        folder = await Folder.create({name: folder_name, type: 'Actor', parent: null});
-    }
-    commands["folder"] = folder;
-
-    commands["imgpath"] = game.settings.get("ptu", "defaultPokemonImageDirectory");
-
-    debug(`Generating ${commands["generate"]} pokemon using species: ${commands["pokemon"].map(x => x._id).join(",")} with levels: ${commands["level"].join(",")} ${(commands["folder"] ? `in folder ${commands["folder"].name}` : "")}`);
-
-    let new_actor = (await createMons(commands))[0];
-
-    let protoToken = await Token.fromActor(new_actor);
-    
-    protoToken.data.x = drop_coordinates_x;
-    protoToken.data.y = drop_coordinates_y;
-
     let size = game.ptu.GetSpeciesData(new_actor.data.data.species)["Size Class"]
     
     let size_categories = {
@@ -262,12 +196,16 @@ export async function FinishDexDragPokemonCreation(formData, update)
     protoToken.data.displayBars = 20;
     protoToken.data.displayName=  40; 
     protoToken.data.bar1.attribute = "health";
-    protoToken.scene = game.scenes.viewed;
+    
+    new_actor = await new_actor.update({"token": protoToken.data});
 
-    let placedTokenData = await game.scenes.viewed.createEmbeddedEntity("Token",protoToken.data);
+    protoToken.scene = game.scenes.viewed;
+    protoToken.data.x = Math.floor(drop_coordinates_x / game.scenes.viewed.data.grid) * game.scenes.viewed.data.grid;
+    protoToken.data.y = Math.floor(drop_coordinates_y / game.scenes.viewed.data.grid) * game.scenes.viewed.data.grid;
+
+    let placedTokenData = await game.scenes.viewed.createEmbeddedEntity("Token", (await Token.fromActor(new_actor, protoToken.data)).data);
 
     let currentSpecies = game.ptu.GetSpeciesData(new_actor.data.data.species)._id;
-
     game.ptu.PlayPokemonCry(currentSpecies);
     
     return placedTokenData;
