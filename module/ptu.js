@@ -750,14 +750,29 @@ class DirectoryPicker extends FilePicker {
   }
 }
 
-// Allow players to reroll their initiative by clicking on it
-Hooks.on("renderCombatTracker", function() {
-  $('.combatant').each(function () {
-      let cid = $(this).data("combatant-id")
-      $(this).find(".token-initiative").on("click", function() {
-          game.combats.active.rollInitiative(cid)
-      });
-  })
+// Automatically update Initiative if Speed / Init Mod changes
+Hooks.on("updateActor", function(actor, change, isDiff, actorId) {
+  if(!(change?.data?.modifiers?.initiative >= 0) && !(change?.data?.stats?.spd?.mod >= 0)
+  && !(change?.data?.stats?.spd?.stage >= 0) && !(change?.data?.stats?.spd?.levelUp >= 0)) return;
+  if(!game.combats.active) return;
+
+  let init = actor.data.data.initiative.value;
+  let c = game.combats.active.combatants.find(x => x.actor._id == actor._id)
+  let tieBreaker = Number((c.initiative+"").split(".")[1]) * 0.01;
+
+  game.combats.active.setInitiative(c._id, init+tieBreaker);
+});
+
+Hooks.on("updateToken", function(scene, token, change, isDiff, actorId) {
+  if(!(change?.actorData?.data?.modifiers?.initiative >= 0) && (!(change?.actorData?.data?.stats?.spd?.mod >= 0))
+  && (!(change?.actorData?.data?.stats?.spd?.stage >= 0)) && (!(change?.actorData?.data?.stats?.spd?.levelUp >= 0))) return;
+  if(!game.combats.active) return;
+
+  let init = canvas.tokens.get(token._id).actor.data.data.initiative.value;
+  let c = game.combats.active.combatants.find(x => x.tokenId == token._id)
+  let tieBreaker = Number((c.initiative+"").split(".")[1]) * 0.01;
+
+  game.combats.active.setInitiative(c._id, init+tieBreaker);
 });
 
 // this s hooked in, we don't use all the data, so lets stop eslint complaining
