@@ -1337,6 +1337,100 @@ p.summary {
     }
 }
 
+.charactermancer {
+     .window-content {
+        padding: unset;
+    }
+
+    .container-fluid {
+        text-align: center;
+        padding: unset;
+        position: relative;
+    }
+
+    .content {
+        //padding: 1rem;
+        z-index: 5;
+        position: inherit;
+    }
+
+    .bar {
+        background-color: #272727;
+        color: white;
+        font-size: 22px;
+        font-weight: bold;
+        padding: 0.75rem;
+    }
+
+    input {
+        background-color: #999;
+        color: black;
+        border-color: #666;
+        height: auto;
+        padding: 0.5rem;
+
+    }
+
+    #preview-img img {
+        width: 100%;
+        max-height: 404px;
+        border-bottom: 0;
+    }
+
+    .typing {
+        min-height: 45px;
+        margin-top: -2px;
+    }
+
+    #levelContainer, #levelExpContainer {
+        display: inline-block;
+        position: relative;
+        width: 100%;
+
+        #levelField {
+            padding-left: 3.5rem;
+        }
+
+        #levelExpField {
+            padding-right: 1rem;
+        }
+
+        #levelPrefix {
+            position: absolute;
+            top: 9px;
+            color: #111;
+            padding-left: 5px;
+            width:fit-content;
+            pointer-events: none;
+        }
+
+        #levelExpSuffix {
+            position: absolute;
+            top: 9px;
+            color: #111;
+            padding-right: 5px;
+            width:fit-content;
+            pointer-events: none;
+        }
+    }
+
+    .box {
+        h5 {
+            text-decoration: underline;
+        }
+        border: solid 2px #666;
+        background-color: #999;
+        color: #666;
+        padding: 0.1rem;
+    }
+
+    #evolutionContainer {
+        select {
+            max-width: 99px;
+            margin-left: -2px;
+        }
+    }
+}
 
 /* MD CSS */
 .md h1, .md h2, .md h3, .md h4, .md h5, .md h6 {

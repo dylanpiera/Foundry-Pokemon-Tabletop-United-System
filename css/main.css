@@ -1078,6 +1078,86 @@ p.summary {
   font-size: 13px;
   line-height: 16px;
 }
+.charactermancer .window-content {
+  padding: unset;
+}
+.charactermancer .container-fluid {
+  text-align: center;
+  padding: unset;
+  position: relative;
+}
+.charactermancer .content {
+  z-index: 5;
+  position: inherit;
+}
+.charactermancer .bar {
+  background-color: #272727;
+  color: white;
+  font-size: 22px;
+  font-weight: bold;
+  padding: 0.75rem;
+}
+.charactermancer input {
+  background-color: #999;
+  color: black;
+  border-color: #666;
+  height: auto;
+  padding: 0.5rem;
+}
+.charactermancer #preview-img img {
+  width: 100%;
+  max-height: 404px;
+  border-bottom: 0;
+}
+.charactermancer .typing {
+  min-height: 45px;
+  margin-top: -2px;
+}
+.charactermancer #levelContainer,
+.charactermancer #levelExpContainer {
+  display: inline-block;
+  position: relative;
+  width: 100%;
+}
+.charactermancer #levelContainer #levelField,
+.charactermancer #levelExpContainer #levelField {
+  padding-left: 3.5rem;
+}
+.charactermancer #levelContainer #levelExpField,
+.charactermancer #levelExpContainer #levelExpField {
+  padding-right: 1rem;
+}
+.charactermancer #levelContainer #levelPrefix,
+.charactermancer #levelExpContainer #levelPrefix {
+  position: absolute;
+  top: 9px;
+  color: #111;
+  padding-left: 5px;
+  width: fit-content;
+  pointer-events: none;
+}
+.charactermancer #levelContainer #levelExpSuffix,
+.charactermancer #levelExpContainer #levelExpSuffix {
+  position: absolute;
+  top: 9px;
+  color: #111;
+  padding-right: 5px;
+  width: fit-content;
+  pointer-events: none;
+}
+.charactermancer .box {
+  border: solid 2px #666;
+  background-color: #999;
+  color: #666;
+  padding: 0.1rem;
+}
+.charactermancer .box h5 {
+  text-decoration: underline;
+}
+.charactermancer #evolutionContainer select {
+  max-width: 99px;
+  margin-left: -2px;
+}
 /* MD CSS */
 .md h1,
 .md h2,

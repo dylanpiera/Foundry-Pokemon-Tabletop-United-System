@@ -118,6 +118,8 @@ Hooks.once('init', async function() {
   let itemDisplayTemplate = await (await fetch('/systems/ptu/templates/partials/item-display-partial.hbs')).text()
   Handlebars.registerPartial('item-display', itemDisplayTemplate);
 
+  fetch('/systems/ptu/templates/partials/charactermancer-evolution-partial.hbs').then(r => r.text().then(template => Handlebars.registerPartial('cm-evolution', template)))
+
   Handlebars.registerHelper("concat", function() {
     var outStr = '';
     for (var arg in arguments) {

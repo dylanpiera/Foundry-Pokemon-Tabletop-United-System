@@ -81,18 +81,18 @@ export async function CreateMonParser(input, andCreate = false) {
 }
 
 export async function GetSpeciesArt(mon, basePath, type = ".png") {
-    let path = basePath+lpad(mon.number, 4)+type;
+    let path = basePath+lpad(mon?.number, 4)+type;
     let result = await fetch(path);
     if(result.status === 404) {
-        path = basePath+lpad(mon.number, 3)+type;
+        path = basePath+lpad(mon?.number, 3)+type;
         result = await fetch(path);
     }
     if(result.status === 404) {
-        path = basePath+mon._id+type;
+        path = basePath+mon?._id+type;
         result = await fetch(path);
     }
     if(result.status === 404) {
-        path = basePath+mon._id.toLowerCase()+type;
+        path = basePath+mon?._id?.toLowerCase()+type;
         result = await fetch(path);
     }
     if(result.status === 404) {
