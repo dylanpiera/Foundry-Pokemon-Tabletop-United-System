@@ -13,7 +13,7 @@ export class PTUPokemonCharactermancer extends FormApplication {
   /** @override */
   static get defaultOptions() {
     return mergeObject(super.defaultOptions, {
-      classes: ["ptu", "charactermancer", "pokemon"],
+      classes: ["ptu", "charactermancer", "pokemon", "gen8"],
       template: "systems/ptu/templates/forms/charactermancer-pokemon.hbs",
       width: 452,
       height: 1050,
@@ -30,15 +30,16 @@ export class PTUPokemonCharactermancer extends FormApplication {
 
   /** @override */
   getData() {
-    debug(this)
+    debug("Sheet: ",this)
 
     const data = super.getData();
     data.dtypes = ["String", "Number", "Boolean"];
 
+    data['natures'] = game.ptu.natureData;
+
     this.allSpecies = game.ptu.pokemonData.map(x => {return {number: x.ptuNumber, name: x._id}}).concat(game.ptu.customSpeciesData.map(x => {return {number: x.ptuNumber, name: x._id}}));
     this.speciesData = game.ptu.GetSpeciesData(this.object.data.data.species ? this.object.data.data.species : this.object.name);
-    debug(this.object, this.object.data.species ? this.object.data.species : this.object.name);
-
+    
     data.selectedSpecies = this.speciesData;
 
     this._calcStages();
@@ -220,10 +221,11 @@ export class PTUPokemonCharactermancer extends FormApplication {
       transformXPText();
     })
 
-
+    $('#natureSelect').change(ref._updateNature);
 
     this._updateArt();
     this._updateTyping();
+    this._updateNature();
     setTimeout(this._transformText, 50)
     levelBar.attr("class", `progress-bar p${this.object.data.data.level.current}`)
   }
@@ -240,6 +242,7 @@ export class PTUPokemonCharactermancer extends FormApplication {
     this._updateArt();
     this._updateTyping();
     this._calcStages();
+    this._updateNature();
     setTimeout(this._transformText, 50)
   }
 
@@ -248,6 +251,32 @@ export class PTUPokemonCharactermancer extends FormApplication {
     $('#levelExpSuffix').css("right", `${($('#levelExpField').width()/2)-($('#levelExpInvis').width())-(300/(Math.pow($('#levelExpInvis').width(), 1.1)))}px`)
     $('#levelInvis').text($('#levelField').val())
     $('#levelPrefix').css("right", `${($('#levelField').width()/2)+($('#levelInvis').width())+7}px`)
+  }
+
+  _updateNature() {
+    let down = $('#natureDown');
+    let up = $('#natureUp');
+
+    let nature = $('#natureSelect').val();
+    debug(down, up, nature);
+
+    let nd = game.ptu.natureData[nature]
+    if(!nd) return;
+    
+    let getShortName = (stat) => {
+        switch(stat) {
+          case "HP": return "HP";
+          case "Attack": return "ATK";
+          case "Defense": return "DEF";
+          case "Special Attack": return "SPATK";
+          case "Special Defense": return "SPDEF";
+          case "Speed": return "SPD";
+      }
+    }
+
+    up.val("+"+getShortName(nd[0]));
+    down.val("-"+getShortName(nd[1]));
+
   }
 
   async _calcStages(refreshData = true) {

@@ -81,7 +81,26 @@
       </div>
     </div>
     <div class="tab details stats" data-group="primary" data-tab="stats">
-      <p>Nothing here yet!</p>
+      <div class="w-100 justify-content-center mb-3 bar mt-3">
+        <label for="data.nature.value">Nature</label>
+      </div>
+      <div class="d-flex w-100 pl-1 pr-1">
+        <div class="col-sm-3 justify-content-center mb-2" style="padding-right: unset;">
+          <input id="natureDown" class="nature-down" type="text" value="">
+        </div>
+        <div class="col-sm-6 justify-content-center mb-2" style="padding 0 5px;">
+          {{#select object.data.nature.value}}
+            <select id="natureSelect" name="data.nature.value">
+              {{#each natures as | nature key |}}
+                <option value="{{key}}">{{key}}</option>
+              {{/each}}
+            </select>
+          {{/select}}
+        </div>
+        <div class="col-sm-3 justify-content-center mb-2" style="padding-left: unset;">
+          <input id="natureUp" class="nature-up" type="text" value="">
+        </div>
+      </div>
     </div>
   </div>
   <div class="sheet-footer" style="display:none;">

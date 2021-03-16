@@ -869,13 +869,23 @@ span.readable {
 .gen8move.rollable[data-ac="NaN"][data-roll=""] {
   visibility: hidden;
 }
-.gen8 .stats .nature-up {
+.gen8 .nature-up {
   color: #b27d94;
   font-weight: bold;
 }
-.gen8 .stats .nature-down {
+.charactermancer.gen8 .nature-up {
+  background-color: #CC9999;
+  color: black;
+  text-transform: uppercase;
+}
+.gen8 .nature-down {
   color: #98c7c9;
   font-weight: bold;
+}
+.charactermancer.gen8 .nature-down {
+  background-color: #99CCCC;
+  color: black;
+  text-transform: uppercase;
 }
 .gen8 select {
   width: calc(100% - 2px);
@@ -1097,11 +1107,12 @@ p.summary {
   font-weight: bold;
   padding: 0.75rem;
 }
-.charactermancer input {
+.charactermancer input,
+.charactermancer select {
   background-color: #999;
   color: black;
   border-color: #666;
-  height: auto;
+  height: 100%;
   padding: 0.5rem;
 }
 .charactermancer #preview-img img {

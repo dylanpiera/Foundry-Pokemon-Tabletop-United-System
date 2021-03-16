@@ -1087,14 +1087,26 @@ span.readable {
     visibility: hidden;
 }
 
-.gen8 .stats {
+.gen8 {
     .nature-up {
         color: #b27d94;
         font-weight: bold;
+
+        .charactermancer& {
+            background-color: #CC9999;
+            color: black;
+            text-transform: uppercase;
+        }
     }
     .nature-down {
         color: #98c7c9;
         font-weight: bold;
+
+        .charactermancer& {
+            background-color: #99CCCC;
+            color: black;
+            text-transform: uppercase;
+        }
     }
 }
 
@@ -1362,11 +1374,11 @@ p.summary {
         padding: 0.75rem;
     }
 
-    input {
+    input, select {
         background-color: #999;
         color: black;
         border-color: #666;
-        height: auto;
+        height: 100%;
         padding: 0.5rem;
 
     }
