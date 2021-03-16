@@ -9,37 +9,43 @@ import { excavateObj, dataFromPath } from '../utils/generic-helpers.js';
  */
 export class PTUPokemonCharactermancer extends FormApplication {
 
-    /** @override */
-    static get defaultOptions() {
-      return mergeObject(super.defaultOptions, {
-        classes: ["ptu", "charactermancer", "pokemon"],
-        template: "systems/ptu/templates/forms/charactermancer-pokemon.hbs",
-        width: 452,
-        height: 1050,
-        title: "Charactermancer",
-        tabs: [{ navSelector: ".sheet-tabs", contentSelector: ".sheet-body", initial: "stats" }]
-      });
-    }
-  
-    /* -------------------------------------------- */
-  
-    /** @override */
-    getData() {
-      const data = super.getData();
-      data.dtypes = ["String", "Number", "Boolean"];
+  /** @override */
+  static get defaultOptions() {
+    return mergeObject(super.defaultOptions, {
+      classes: ["ptu", "charactermancer", "pokemon"],
+      template: "systems/ptu/templates/forms/charactermancer-pokemon.hbs",
+      width: 452,
+      height: 1050,
+      title: "Charactermancer",
+      tabs: [{ navSelector: ".sheet-tabs", contentSelector: ".sheet-body", initial: "stats" }]
+    });
+  }
 
-      this.allSpecies = game.ptu.pokemonData.map(x => {return {number: x.ptuNumber, name: x._id}}).concat(game.ptu.customSpeciesData.map(x => {return {number: x.ptuNumber, name: x._id}}));
-      this.speciesData = game.ptu.GetSpeciesData(this.object.data.data.species ? this.object.data.data.species : this.object.name);
-      debug(this.object, this.object.data.species ? this.object.data.species : this.object.name);
+  /* -------------------------------------------- */
 
-      data.selectedSpecies = this.speciesData;
+  /** @override */
+  getData() {
+    const data = super.getData();
+    data.dtypes = ["String", "Number", "Boolean"];
 
-      this._calcStages();
-      data.stages = this.stages;
-      return data;
-    }
+    this.allSpecies = game.ptu.pokemonData.map(x => {return {number: x.ptuNumber, name: x._id}}).concat(game.ptu.customSpeciesData.map(x => {return {number: x.ptuNumber, name: x._id}}));
+    this.speciesData = game.ptu.GetSpeciesData(this.object.data.data.species ? this.object.data.data.species : this.object.name);
+    debug(this.object, this.object.data.species ? this.object.data.species : this.object.name);
 
-    /** @override */
+    data.selectedSpecies = this.speciesData;
+
+    this._calcStages();
+    data.stages = this.stages;
+    return data;
+  }
+
+  /** @override */
+  render(options) {
+    if($('.charactermancer').length > 0) return;
+    super.render(options);
+  }
+
+  /** @override */
 	async activateListeners(html) {
     super.activateListeners(html);
     const ref = this;
@@ -50,7 +56,7 @@ export class PTUPokemonCharactermancer extends FormApplication {
     if(flag) {
       this.d = new Dialog({
         title: "Backup Data Found!",
-        content: "<p class='pb-2 pt-1'>It seems you didn't properly close the Charactermancer the last time you used it.<br>Would you like us to import your old data or delete it?</p>",
+        content: "<p class='readable pb-2 pt-1'>It seems you didn't properly close the Charactermancer the last time you used it.<br>Would you like us to import your old data or delete it?</p>",
         buttons: {
           one: {
             label: "Delete Data",
@@ -73,8 +79,14 @@ export class PTUPokemonCharactermancer extends FormApplication {
             }
           }
         },
-        render: html => html.parent().parent().css('box-shadow', '0 0 100px 20px #ff0000d0')
+        render: html => html.parent().parent().css('box-shadow', '0 0 15px 5px #ff0000d0'),
+        close: html => {
+          $('.charactermancer').css('pointer-events', 'unset')
+          $('.charactermancer').css('-webkit-filter', 'unset')
+        }
       })
+      $('.charactermancer').css('pointer-events', 'none')
+      $('.charactermancer').css('-webkit-filter', 'grayscale(1)')
       this.d.render(true);
     }
 
