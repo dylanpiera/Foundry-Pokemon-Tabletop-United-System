@@ -204,6 +204,10 @@ Hooks.once('init', async function() {
     return `<img src="/systems/ptu/css/images/types/${type}IC.webp">`;
   });
 
+  Handlebars.registerHelper("isGm", function () {
+    return game.user.isGM;
+  })
+
   /** If furnace ain't installed... */
   if(!Object.keys(Handlebars.helpers).includes("divide")) {
     warn("It is recommended to install & enable 'The Furnace' module.")

@@ -266,6 +266,7 @@
 
       "owner": "0",
       "shiny": false,
+      "loyalty": 3,
 
       "training": {
         "agility": {
