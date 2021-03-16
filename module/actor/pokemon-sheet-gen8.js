@@ -127,7 +127,7 @@ export class PTUGen8PokemonSheet extends ActorSheet {
 				label: "Charactermancer",
 				class: "open-charactermancer",
 				icon: "fas fa-edit",
-				onclick: () => new game.ptu.PTUPokemonCharactermancer(this.actor, {"submitOnChange": false, "submitOnClose": true}).render(true)
+				onclick: () => new game.ptu.PTUPokemonCharactermancer(this.actor, {"submitOnChange": false, "submitOnClose": false}).render(true)
 			});
 
 			buttons.unshift({

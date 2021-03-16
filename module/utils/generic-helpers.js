@@ -10,3 +10,21 @@ export function lpad(value, padding) {
     var zeroes = new Array(padding+1).join("0");
     return (zeroes + value).slice(-padding);
 }
+
+export function excavateObj(input, basePath = "") {
+    let arr = [];
+    
+    for(let obj of Object.entries(input)) {
+        if(typeof obj[1] === "object") {
+            arr = arr.concat(excavateObj(obj[1], basePath + obj[0] + "."));
+        }
+        else arr.push(basePath + obj[0]);
+    }
+    return arr;
+}
+
+export function dataFromPath(obj, path, rec = false) {
+    let loc = rec ? path : path.split('.');
+    if(loc.length > 1) return dataFromPath(obj[loc[0]], loc.slice(1), true)
+    return obj[loc[0]];
+}

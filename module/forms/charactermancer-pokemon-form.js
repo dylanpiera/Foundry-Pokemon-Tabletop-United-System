@@ -1,6 +1,7 @@
 import { log, debug } from "../ptu.js";
 import { GetSpeciesArt } from "../utils/species-command-parser.js";
 import { CalcLevel } from '../actor/calculations/level-up-calculator.js';
+import { excavateObj, dataFromPath } from '../utils/generic-helpers.js';
 
 /**
  * Extend the basic ActorSheet with some very simple modifications
@@ -41,8 +42,56 @@ export class PTUPokemonCharactermancer extends FormApplication {
     /** @override */
 	async activateListeners(html) {
     super.activateListeners(html);
-    
     const ref = this;
+
+    /** Backup Logic */
+
+    let flag = this.object.getFlag("ptu", "cmbackup");
+    if(flag) {
+      this.d = new Dialog({
+        title: "Backup Data Found!",
+        content: "<p class='pb-2 pt-1'>It seems you didn't properly close the Charactermancer the last time you used it.<br>Would you like us to import your old data or delete it?</p>",
+        buttons: {
+          one: {
+            label: "Delete Data",
+            icon: '<i class="fas fa-trash"></i>',
+            callback: async () => {
+              await ref.object.setFlag("ptu", "cmbackup", null);
+              log(ref.object.getFlag("ptu", "cmbackup"));
+            }
+          },
+          two: {
+            label: "Import Data",
+            icon: '<i class="fas fa-file-import"></i>',
+            callback: () => {
+              let paths = excavateObj(flag);
+              log(flag, paths);
+              for(let path of paths) {
+                $(`[name="${path}"]`).val(dataFromPath(flag, path))
+              }
+              ref._refreshAll();
+            }
+          }
+        },
+        render: html => html.parent().parent().css('box-shadow', '0 0 100px 20px #ff0000d0')
+      })
+      this.d.render(true);
+    }
+
+    /** Button Logic */
+
+    html.find('.btn').click(function(event) {
+      event.preventDefault();
+      if(event.screenX == 0 && event.screenY == 0) return;
+      let opt = event.target.dataset.value
+
+      switch(opt) {
+        case "submit": ref.submit(); ref.close(); return;
+        case "next": log("Next"); return;
+      }
+    });
+
+    /** Page 1 Implementation */
 
     let speciesField = html.find('#speciesField');
     let speciesIdField = html.find('#speciesIdField');
@@ -120,9 +169,30 @@ export class PTUPokemonCharactermancer extends FormApplication {
 
     this._updateArt();
     this._updateTyping();
-    setTimeout(transformXPText, 50)
-    setTimeout(transformLevelText, 50)
+    setTimeout(this._transformText, 50)
     levelBar.attr("class", `progress-bar p${this.object.data.data.level.current}`)
+  }
+
+  _refreshAll() {
+    let mon = $('#speciesField').val();
+    if(!isNaN(mon)) this.speciesData = game.ptu.GetSpeciesData(parseInt(mon));
+      else this.speciesData = game.ptu.GetSpeciesData(mon);
+
+    if(this.speciesData) {
+      if(Number($('#speciesIdField').val()) != Number(this.speciesData.number)) $('#speciesIdField').val(Number(this.speciesData.number));
+    }
+
+    this._updateArt();
+    this._updateTyping();
+    this._calcStages();
+    setTimeout(this._transformText, 50)
+  }
+
+  _transformText() {
+    $('#levelExpInvis').text($('#levelExpField').val())
+    $('#levelExpSuffix').css("right", `${($('#levelExpField').width()/2)-($('#levelExpInvis').width())-(300/(Math.pow($('#levelExpInvis').width(), 1.1)))}px`)
+    $('#levelInvis').text($('#levelField').val())
+    $('#levelPrefix').css("right", `${($('#levelField').width()/2)+($('#levelInvis').width())+7}px`)
   }
 
   async _calcStages(refreshData = true) {
@@ -202,5 +272,18 @@ export class PTUPokemonCharactermancer extends FormApplication {
   /** @override */
   async _updateObject(event, formData) {
     await this.object.update(formData);
+  }
+
+  /** @override */
+  async close(options) {
+    if(this.d) {
+      this.d?.close();
+    }
+    await super.close(options);
+    log(options, options === undefined, this.object.getFlag("ptu", "cmbackup"));
+    if(options === undefined)
+      await this.object.setFlag("ptu", "cmbackup", this._getSubmitData());
+    else
+      await this.object.setFlag("ptu", "cmbackup", null);
   }
 }
