@@ -58,7 +58,10 @@ export class PTUGen8PokemonSheet extends ActorSheet {
 				if(level >= 3) findActors(key);
 			}
 		}
-
+		if(data['owners'].length == 0) {
+			data['owners'] = data['owners'].concat(game.actors.filter(x => !x.hasPlayerOwner && x.data.type == "character"));
+			data['canBeWild'] = true;
+		}
 		return data;
 	}
 

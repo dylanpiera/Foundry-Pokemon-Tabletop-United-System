@@ -1078,6 +1078,11 @@ p.summary {
   font-size: 13px;
   line-height: 16px;
 }
+.loyalty,
+.loyalty input {
+  font-style: italic;
+  color: gray;
+}
 /* MD CSS */
 .md h1,
 .md h2,

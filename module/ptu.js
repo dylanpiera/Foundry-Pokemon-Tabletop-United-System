@@ -43,7 +43,7 @@ export let log = (...args) => console.log("FVTT PTU | ", ...args);
 export let warn = (...args) => console.warn("FVTT PTU | ", ...args);
 export let error = (...args) => console.error("FVTT PTU | ", ...args)
 
-export const LATEST_VERSION = "1.2.6";
+export const LATEST_VERSION = "1.2.7";
 
 Hooks.once('init', async function() {
 
@@ -204,6 +204,10 @@ Hooks.once('init', async function() {
     return `<img src="/systems/ptu/css/images/types/${type}IC.webp">`;
   });
 
+  Handlebars.registerHelper("isGm", function () {
+    return game.user.isGM;
+  })
+
   /** If furnace ain't installed... */
   if(!Object.keys(Handlebars.helpers).includes("divide")) {
     warn("It is recommended to install & enable 'The Furnace' module.")
@@ -211,6 +215,7 @@ Hooks.once('init', async function() {
     Handlebars.registerHelper("divide", (value1, value2) => Number(value1) / Number(value2));
     Handlebars.registerHelper("multiply", (value1, value2) => Number(value1) * Number(value2));
     Handlebars.registerHelper("floor", (value) => Math.floor(Number(value)));
+    Handlebars.registerHelper("capitalizeFirst", (e) => {return"string"!=typeof e?e:e.charAt(0).toUpperCase()+e.slice(1)});
   }
 
   // Load System Settings

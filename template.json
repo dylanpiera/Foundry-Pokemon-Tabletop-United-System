@@ -14,7 +14,8 @@
             "special" : 0,
             "speed" : 0
           },
-          "saveChecks": 0
+          "saveChecks": 0,
+          "effectRange": 0
         }
       },
       "skills": {
@@ -263,8 +264,9 @@
         }
       },
 
-      "owner": "",
+      "owner": "0",
       "shiny": false,
+      "loyalty": 3,
 
       "training": {
         "agility": {

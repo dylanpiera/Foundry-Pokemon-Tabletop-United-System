@@ -1,6 +1,13 @@
 # Welcome to the Beta!
 Hey there! You are on the Beta Branch. If you ever have any feedback please do share with us over on [Github](https://github.com/dylanpiera/Foundry-Pokemon-Tabletop-United-System/issues) or [Discord](https://discord.gg/fE3w59q)
 
+## 1.2.7 - Bonus Fields
+- Re-added 'imgpath' param to `/ptug` command.
+- Owner field now also works for GM pokemon.
+- Re-remvoed 'The Furnace' dependency :|
+- Added field for Effect Range bonus.
+- Added GM Only loyalty field.
+
 ## 1.2.6 - Fixed Img Generator
 - Generated Img Path now use a relative path instead of absolute.
 
