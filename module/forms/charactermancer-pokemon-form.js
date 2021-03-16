@@ -3,6 +3,7 @@ import { GetSpeciesArt } from "../utils/species-command-parser.js";
 import { CalcLevel } from '../actor/calculations/level-up-calculator.js';
 import { CheckStage } from '../utils/calculate-evolution.js';
 import { excavateObj, dataFromPath } from '../utils/generic-helpers.js';
+import { CalcBaseStat, CalculateStatTotal } from "../actor/calculations/stats-calculator.js";
 
 /**
  * Extend the basic ActorSheet with some very simple modifications
@@ -42,8 +43,27 @@ export class PTUPokemonCharactermancer extends FormApplication {
     
     data.selectedSpecies = this.speciesData;
 
+    data.level = this.object.data.data.level.current;
+    data.levelUpPoints = this.object.data.data.modifiers.statPoints + 10 + data.level;
+    data.nature = this.object.data.data.nature;
+
+    // Stats
+    data.stats = this.object.data.data.stats;
+    data.stats.hp.value = CalcBaseStat(data.selectedSpecies, data.nature.value, "HP");
+    data.stats.atk.value = CalcBaseStat(data.selectedSpecies, data.nature.value, "Attack");
+    data.stats.def.value = CalcBaseStat(data.selectedSpecies, data.nature.value, "Defense");
+    data.stats.spatk.value = CalcBaseStat(data.selectedSpecies, data.nature.value, "Special Attack");
+    data.stats.spdef.value = CalcBaseStat(data.selectedSpecies, data.nature.value, "Special Defense");
+    data.stats.spd.value = CalcBaseStat(data.selectedSpecies, data.nature.value, "Speed");
+
+    var result = CalculateStatTotal(data.levelUpPoints, data.stats);
+    data.stats = result.stats;
+
     this._calcStages();
     data.stages = this.stages;
+
+    this.data = data;
+    debug(this.data)
     return data;
   }
 
@@ -221,7 +241,19 @@ export class PTUPokemonCharactermancer extends FormApplication {
       transformXPText();
     })
 
-    $('#natureSelect').change(ref._updateNature);
+    $('#natureSelect').change(ref._updateNature.bind(ref));
+
+    $('.charactermancer .stats.levelUp input').change(function () {
+      let e = $(this);
+      let key = e.data().key
+
+      ref.data.stats[key].levelUp = Number(e.val());
+      ref._reCalcStats();
+      // let base = Number(e.parent().parent().children('.base').children('input').val());
+      // let levelUp = Number(e.val());
+      // let total = e.parent().parent().children('.total').children('input');
+      // total.val(base + levelUp);
+  })
 
     this._updateArt();
     this._updateTyping();
@@ -244,6 +276,38 @@ export class PTUPokemonCharactermancer extends FormApplication {
     this._calcStages();
     this._updateNature();
     setTimeout(this._transformText, 50)
+    levelBar.attr("class", `progress-bar p${this.object.data.data.level.current}`)
+  }
+
+  _reCalcStats() {
+    this.data.levelUpPoints = this.object.data.data.modifiers.statPoints + 10 + this.data.level;
+    this.data.stats = this.object.data.data.stats;
+    this.data.stats.hp.value = CalcBaseStat(this.data.selectedSpecies, this.data.nature.value, "HP");
+    this.data.stats.atk.value = CalcBaseStat(this.data.selectedSpecies, this.data.nature.value, "Attack");
+    this.data.stats.def.value = CalcBaseStat(this.data.selectedSpecies, this.data.nature.value, "Defense");
+    this.data.stats.spatk.value = CalcBaseStat(this.data.selectedSpecies, this.data.nature.value, "Special Attack");
+    this.data.stats.spdef.value = CalcBaseStat(this.data.selectedSpecies, this.data.nature.value, "Special Defense");
+    this.data.stats.spd.value = CalcBaseStat(this.data.selectedSpecies, this.data.nature.value, "Speed");
+
+    var result = CalculateStatTotal(this.data.levelUpPoints, this.data.stats);
+    this.data.stats = result.stats;
+    this.data.levelUpPoints = result.levelUpPoints;
+    
+    for(let key of Object.keys(this.data.stats)) this._updateStat(key);
+  }
+
+  _updateStat(key) {
+    let baseValue = this.data.stats[key].value;
+    let base = $(`.charactermancer .stats.${key}.base input`);
+    let levelUp = $(`.charactermancer .stats.${key}.levelUp input`);
+    let total = $(`.charactermancer .stats.${key}.total input`);
+    let levelUpPoints = $('.charactermancer input[name="data.levelUpPoints"]');
+
+    if(base && levelUp && total) {
+      if(Number(base.val()) != baseValue) base.val(Number(baseValue));
+      levelUpPoints.val(Number(this.data.levelUpPoints));
+      total.val(Number(base.val()) + Number(levelUp.val()));
+    }
   }
 
   _transformText() {
@@ -258,10 +322,12 @@ export class PTUPokemonCharactermancer extends FormApplication {
     let up = $('#natureUp');
 
     let nature = $('#natureSelect').val();
-    debug(down, up, nature);
 
     let nd = game.ptu.natureData[nature]
     if(!nd) return;
+
+    debug(this);
+    this.data.nature.value = nature;
     
     let getShortName = (stat) => {
         switch(stat) {
@@ -277,6 +343,24 @@ export class PTUPokemonCharactermancer extends FormApplication {
     up.val("+"+getShortName(nd[0]));
     down.val("-"+getShortName(nd[1]));
 
+    let stats = {
+      hp: $('.charactermancer .bar.hp'),
+      atk: $('.charactermancer .bar.atk'),
+      def: $('.charactermancer .bar.def'),
+      spatk: $('.charactermancer .bar.spatk'),
+      spdef: $('.charactermancer .bar.spdef'),
+      spd: $('.charactermancer .bar.spd'),
+    }
+    
+    for(let [key, value] of Object.entries(stats)) {
+        value.children().children(".nature-up").removeClass("nature-up");
+        value.children().children(".nature-down").removeClass("nature-down");
+    
+        let cur = Handlebars.helpers.natureCheck(nature, key);
+        if(cur) value.children().children(".key").addClass(cur);
+    }
+
+    this._reCalcStats();
   }
 
   async _calcStages(refreshData = true) {

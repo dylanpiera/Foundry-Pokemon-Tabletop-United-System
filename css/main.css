@@ -869,23 +869,23 @@ span.readable {
 .gen8move.rollable[data-ac="NaN"][data-roll=""] {
   visibility: hidden;
 }
-.gen8 .nature-up {
-  color: #b27d94;
-  font-weight: bold;
-}
-.charactermancer.gen8 .nature-up {
+.gen8.charactermancer input.nature-up {
   background-color: #CC9999;
   color: black;
   text-transform: uppercase;
 }
-.gen8 .nature-down {
-  color: #98c7c9;
-  font-weight: bold;
-}
-.charactermancer.gen8 .nature-down {
+.gen8.charactermancer input.nature-down {
   background-color: #99CCCC;
   color: black;
   text-transform: uppercase;
+}
+.gen8 .nature-up {
+  color: #b27d94;
+  font-weight: bold;
+}
+.gen8 .nature-down {
+  color: #98c7c9;
+  font-weight: bold;
 }
 .gen8 select {
   width: calc(100% - 2px);
@@ -1107,6 +1107,24 @@ p.summary {
   font-weight: bold;
   padding: 0.75rem;
 }
+.charactermancer .bar.hp {
+  background: #272727;
+  background: linear-gradient(90deg, #272727 0%, #272727 72%, #1b3d1b 100%);
+}
+.charactermancer .bar.atk,
+.charactermancer .bar.def {
+  background: #272727;
+  background: linear-gradient(90deg, #272727 0%, #272727 72%, #3D3D3D 100%);
+}
+.charactermancer .bar.spatk,
+.charactermancer .bar.spdef {
+  background: #272727;
+  background: linear-gradient(90deg, #272727 0%, #272727 72%, #3D2E1B 100%);
+}
+.charactermancer .bar.spd {
+  background: #272727;
+  background: linear-gradient(90deg, #272727 0%, #272727 72%, #3D3C1B 100%);
+}
 .charactermancer input,
 .charactermancer select {
   background-color: #999;
@@ -1114,6 +1132,29 @@ p.summary {
   border-color: #666;
   height: 100%;
   padding: 0.5rem;
+}
+.charactermancer input.no-box,
+.charactermancer select.no-box {
+  border: unset;
+  background: unset;
+  color: white;
+}
+.charactermancer input.no-box:focus,
+.charactermancer select.no-box:focus {
+  box-shadow: unset;
+}
+.charactermancer .stats.key {
+  flex: 1 0 30%;
+  text-align: start;
+}
+.charactermancer .stats.base {
+  flex: 0 1 20%;
+}
+.charactermancer .stats.levelUp {
+  flex: 0 1 20%;
+}
+.charactermancer .stats.total {
+  flex: 1 0 25%;
 }
 .charactermancer #preview-img img {
   width: 100%;

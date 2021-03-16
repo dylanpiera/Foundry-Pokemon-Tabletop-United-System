@@ -1088,25 +1088,26 @@ span.readable {
 }
 
 .gen8 {
-    .nature-up {
-        color: #b27d94;
-        font-weight: bold;
-
-        .charactermancer& {
+    &.charactermancer input {
+        &.nature-up {
             background-color: #CC9999;
             color: black;
             text-transform: uppercase;
         }
-    }
-    .nature-down {
-        color: #98c7c9;
-        font-weight: bold;
-
-        .charactermancer& {
+        &.nature-down {
             background-color: #99CCCC;
             color: black;
             text-transform: uppercase;
         }
+    }
+
+    .nature-up {
+        color: #b27d94;
+        font-weight: bold;
+    }
+    .nature-down {
+        color: #98c7c9;
+        font-weight: bold;
     }
 }
 
@@ -1372,6 +1373,24 @@ p.summary {
         font-size: 22px;
         font-weight: bold;
         padding: 0.75rem;
+
+        &.hp {
+            background: rgb(39,39,39);
+            background: linear-gradient(90deg, rgba(39,39,39,1) 0%, rgba(39,39,39,1) 72%, rgba(27,61,27,1) 100%);
+        }
+        &.atk, &.def {
+            background: rgb(39,39,39);
+            background: linear-gradient(90deg, rgba(39,39,39,1) 0%, rgba(39,39,39,1) 72%, #3D3D3D 100%);
+        }
+        &.spatk, &.spdef {
+            background: rgb(39,39,39);
+            background: linear-gradient(90deg, rgba(39,39,39,1) 0%, rgba(39,39,39,1) 72%, #3D2E1B 100%);
+        }
+        &.spd {
+            background: rgb(39,39,39);
+            background: linear-gradient(90deg, rgba(39,39,39,1) 0%, rgba(39,39,39,1) 72%, #3D3C1B 100%);
+        }
+        
     }
 
     input, select {
@@ -1381,6 +1400,30 @@ p.summary {
         height: 100%;
         padding: 0.5rem;
 
+        &.no-box {
+            border: unset;
+            background: unset;
+            color: white;
+            &:focus {
+                box-shadow: unset;
+            }
+        }
+    }
+
+    .stats {
+        &.key {
+            flex: 1 0 30%;
+            text-align: start;
+        }
+        &.base {
+            flex: 0 1 20%;
+        }
+        &.levelUp {
+            flex: 0 1 20%;
+        }
+        &.total {
+            flex: 1 0 25%;
+        }
     }
 
     #preview-img img {
