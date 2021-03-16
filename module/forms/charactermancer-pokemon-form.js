@@ -1,6 +1,7 @@
 import { log, debug } from "../ptu.js";
 import { GetSpeciesArt } from "../utils/species-command-parser.js";
 import { CalcLevel } from '../actor/calculations/level-up-calculator.js';
+import { CheckStage } from '../utils/calculate-evolution.js';
 import { excavateObj, dataFromPath } from '../utils/generic-helpers.js';
 
 /**
@@ -17,7 +18,11 @@ export class PTUPokemonCharactermancer extends FormApplication {
       width: 452,
       height: 1050,
       title: "Charactermancer",
-      tabs: [{ navSelector: ".sheet-tabs", contentSelector: ".sheet-body", initial: "stats" }]
+      tabs: [{ 
+        navSelector: ".sheet-tabs", 
+        contentSelector: ".sheet-body", 
+        initial: "species" 
+      }]
     });
   }
 
@@ -25,6 +30,8 @@ export class PTUPokemonCharactermancer extends FormApplication {
 
   /** @override */
   getData() {
+    debug(this)
+
     const data = super.getData();
     data.dtypes = ["String", "Number", "Boolean"];
 
@@ -63,7 +70,6 @@ export class PTUPokemonCharactermancer extends FormApplication {
             icon: '<i class="fas fa-trash"></i>',
             callback: async () => {
               await ref.object.setFlag("ptu", "cmbackup", null);
-              log(ref.object.getFlag("ptu", "cmbackup"));
             }
           },
           two: {
@@ -71,7 +77,6 @@ export class PTUPokemonCharactermancer extends FormApplication {
             icon: '<i class="fas fa-file-import"></i>',
             callback: () => {
               let paths = excavateObj(flag);
-              log(flag, paths);
               for(let path of paths) {
                 $(`[name="${path}"]`).val(dataFromPath(flag, path))
               }
@@ -90,6 +95,14 @@ export class PTUPokemonCharactermancer extends FormApplication {
       this.d.render(true);
     }
 
+    /** Page 1 Implementation */
+
+    let speciesField = html.find('#speciesField');
+    let speciesIdField = html.find('#speciesIdField');
+    let levelField = html.find('#levelField');
+    let levelExpField = html.find('#levelExpField');
+    let levelBar = html.find('#levelBar');
+
     /** Button Logic */
 
     html.find('.btn').click(function(event) {
@@ -99,17 +112,47 @@ export class PTUPokemonCharactermancer extends FormApplication {
 
       switch(opt) {
         case "submit": ref.submit(); ref.close(); return;
-        case "next": log("Next"); return;
+        case "species-next": 
+          let species = CheckStage(Number(levelField.val()), ref.speciesData)
+          if(species.number != ref.speciesData.number) {
+            debug("Evolution detected!", ref.speciesData._id, species._id);
+
+            this.d = new Dialog({
+              title: "Evolution Detected!",
+              content: `<p class='readable pb-2 pt-1'>Wow! It looks like ${ref.object.name} is about to evolve into<br><br><b>${species._id}</b>!<br><br>Will you let it?</p>`,
+              buttons: {
+                one: {
+                  label: "Stop Evolution",
+                  // icon: '<i class="fas fa-times"></i>',
+                },
+                two: {
+                  label: "Evolve",
+                  // icon: '<i class="fas fa-plus"></i>',
+                  callback: () => {
+                    ref.speciesData = species;
+                    speciesField.val(species._id)
+                    speciesIdField.val(Number(species.number))
+                    ref._refreshAll();
+                  }
+                }
+              },
+              //render: html => html.parent().parent().css('box-shadow', '0 0 15px 5px #ff0000d0'),
+              close: html => setTimeout(function () {
+                $('.charactermancer').css('pointer-events', 'unset');
+                $('.charactermancer').css('-webkit-filter', 'unset');
+                ref._tabs[0].activate("stats");
+              }, 100)
+            })
+            $('.charactermancer').css('pointer-events', 'none')
+            $('.charactermancer').css('-webkit-filter', 'grayscale(1)')
+            this.d.render(true);
+          }
+          else {
+            ref._tabs[0].activate("stats")
+          }         
+          return;
       }
     });
-
-    /** Page 1 Implementation */
-
-    let speciesField = html.find('#speciesField');
-    let speciesIdField = html.find('#speciesIdField');
-    let levelField = html.find('#levelField');
-    let levelExpField = html.find('#levelExpField');
-    let levelBar = html.find('#levelBar');
 
     speciesField.autocomplete({
 			source: this.allSpecies.map(x => x.name),
@@ -292,7 +335,6 @@ export class PTUPokemonCharactermancer extends FormApplication {
       this.d?.close();
     }
     await super.close(options);
-    log(options, options === undefined, this.object.getFlag("ptu", "cmbackup"));
     if(options === undefined)
       await this.object.setFlag("ptu", "cmbackup", this._getSubmitData());
     else
