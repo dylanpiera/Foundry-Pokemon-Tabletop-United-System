@@ -112,7 +112,7 @@ export class ActorGenerator {
         }
         await GetOrCacheAbilities(); await GetOrCacheMoves(); await GetOrCacheCapabilities();
 
-        await ag.Generate().PrepareArt();
+        await ag.Generate().PrepareArt(options.imgpath ?? undefined);
         debug("Generating an actor using the following generator",ag);
         return await ag.ApplyChanges();
     }

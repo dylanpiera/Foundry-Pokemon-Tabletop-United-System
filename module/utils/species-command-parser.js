@@ -136,6 +136,7 @@ async function createMons(commandData) {
             exists: false,
             species: commandData["pokemon"][i]._id,
             exp: game.ptu.levelProgression[commandData["level"][i]],
+            imgpath: commandData["imgpath"]
         });
         if(commandData["folder"]) options[i]["folder"] = commandData["folder"].name;
     }

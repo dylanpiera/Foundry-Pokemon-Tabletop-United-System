@@ -840,6 +840,7 @@
                       <div class="col-sm-4">
                         {{#select data.owner}}
                             <select name="data.owner">
+                              {{#if canBeWild}}<option value="0">Wild</option>{{/if}}
                               {{#each owners as | actor |}}
                               <option value="{{actor._id}}">{{actor.name}}</option>
                               {{/each}}
@@ -852,27 +853,57 @@
 
                 <!-- Egg Group -->
                 <div class="swsh-box mb-2 w-100" style="text-align: center; word-break: keep-all;">
-                  <div class="swsh-header">
-                    <div class="d-flex w-100 mt-1 mb-1 align-items-center">
-                      <div class="col-sm-8">
-                        <label for="data.egggroup">Egg Group</label>
-                      </div>
-                      <div class="col-sm-4">
-                        <label for="data.owner">Shiny</label>
+                  {{#if (isGm)}}
+                    <div class="swsh-header">
+                      <div class="d-flex w-100 mt-1 mb-1 align-items-center">
+                        <div class="col-sm-6">
+                          <label for="data.egggroup">Egg Group</label>
+                        </div>
+                        <div class="col-sm-3">
+                          <label for="data.owner">Shiny</label>
+                        </div>
+                        <div class="col-sm-3 loyalty">
+                          <label for="data.loyalty">Loyalty<br><small>gm only</small></label>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                  <div class="swsh-body" style="display: block;">
-                    <div class="d-flex w-100 mt-1 mb-1">
-                      <div class="col-sm-8">
-                        <input type="text" name="data.egggroup" value="{{data.egggroup}}" data-dtype="String"
-                          disabled />
-                      </div>
-                      <div class="col-sm-4">
+                    <div class="swsh-body" style="display: block;">
+                      <div class="d-flex w-100 mt-1 mb-1">
+                        <div class="col-sm-6">
+                          <input type="text" name="data.egggroup" value="{{data.egggroup}}" data-dtype="String"
+                            disabled />
+                        </div>
+                        <div class="col-sm-3">
                           <input name="data.shiny" type="checkbox" {{checked data.shiny}} />
+                        </div>
+                        <div class="col-sm-3 loyalty">
+                          <input name="data.loyalty" type="text" data-dtype="Number" value="{{data.loyalty}}"/>
+                        </div>
                       </div>
                     </div>
-                  </div>
+                  {{else}}
+                    <div class="swsh-header">
+                      <div class="d-flex w-100 mt-1 mb-1 align-items-center">
+                        <div class="col-sm-8">
+                          <label for="data.egggroup">Egg Group {{isGm}}</label>
+                        </div>
+                        <div class="col-sm-4">
+                          <label for="data.owner">Shiny</label>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="swsh-body" style="display: block;">
+                      <div class="d-flex w-100 mt-1 mb-1">
+                        <div class="col-sm-8">
+                          <input type="text" name="data.egggroup" value="{{data.egggroup}}" data-dtype="String"
+                            disabled />
+                        </div>
+                        <div class="col-sm-4">
+                            <input name="data.shiny" type="checkbox" {{checked data.shiny}} />
+                        </div>
+                      </div>
+                    </div>
+                  {{/if}}
                 </div>
 
                 <!-- Modifiers -->
@@ -906,26 +937,55 @@
                   </div>
                   <div class="swsh-header pt-1">
                     <div class="d-flex w-100 mt-1 mb-1">
-                      <div class="col-sm-6">
+                      <div class="col-sm-4">
                         <label for="data.modifiers.acBonus">Accuracy Bonus</label>
                       </div>
-                      <div class="col-sm-6">
+                      <div class="col-sm-4 fs-10">
                         <label for="data.modifiers.critRange">Crit Range Bonus</label>
+                      </div>
+                      <div class="col-sm-4 fs-10">
+                        <label for="data.modifiers.effectRange">Effect Range Bonus</label>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="swsh-body">
+                    <div class="d-flex w-100 mt-1 mb-1">
+                      <div class="col-sm-4">
+                        <input type="text" name="data.modifiers.acBonus" value="{{data.modifiers.acBonus}}"
+                          data-dtype="Number" />
+                      </div>
+                      <div class="col-sm-4">
+                        <input type="text" name="data.modifiers.critRange" value="{{data.modifiers.critRange}}"
+                          data-dtype="Number" />
+                      </div>
+                      <div class="col-sm-4">
+                        <input type="text" name="data.modifiers.effectRange" value="{{data.modifiers.effectRange}}"
+                          data-dtype="Number" />
+                      </div>
+                    </div>
+                  </div>
+                  {{!-- <div class="swsh-header pt-1">
+                    <div class="d-flex w-100 mt-1 mb-1">
+                      <div class="col-sm-6">
+                        <label for="data.modifiers.effectRange">Effect Range Bonus</label>
+                      </div>
+                      <div class="col-sm-6">
+                        <label for="data.modifiers."></label>
                       </div>
                     </div>
                   </div>
                   <div class="swsh-body">
                     <div class="d-flex w-100 mt-1 mb-1">
                       <div class="col-sm-6">
-                        <input type="text" name="data.modifiers.acBonus" value="{{data.modifiers.acBonus}}"
+                        <input type="text" name="data.modifiers.effectRange" value="{{data.modifiers.effectRange}}"
                           data-dtype="Number" />
                       </div>
                       <div class="col-sm-6">
-                        <input type="text" name="data.modifiers.critRange" value="{{data.modifiers.critRange}}"
-                          data-dtype="Number" />
+                        <!--input type="text" name="data.modifiers." value="{{data.modifiers.critRange}}"
+                          data-dtype="Number" /-->
                       </div>
                     </div>
-                  </div>
+                  </div> --}}
                   <div class="swsh-header pt-1">
                     <div class="d-flex w-100 mt-1 mb-1">
                       <div class="col-sm-4">
