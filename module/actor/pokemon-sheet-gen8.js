@@ -62,6 +62,12 @@ export class PTUGen8PokemonSheet extends ActorSheet {
 			data['owners'] = data['owners'].concat(game.actors.filter(x => !x.hasPlayerOwner && x.data.type == "character"));
 			data['canBeWild'] = true;
 		}
+
+		if(!data['owners'].includes(this.actor.data.data.owner)) {
+			if(this.isEditable)
+				this.actor.update({"data.owner": data['canBeWild'] ? "0" : data['owners'][0]?._id})
+		}
+
 		return data;
 	}
 
