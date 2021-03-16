@@ -211,6 +211,7 @@ Hooks.once('init', async function() {
     Handlebars.registerHelper("divide", (value1, value2) => Number(value1) / Number(value2));
     Handlebars.registerHelper("multiply", (value1, value2) => Number(value1) * Number(value2));
     Handlebars.registerHelper("floor", (value) => Math.floor(Number(value)));
+    Handlebars.registerHelper("capitalizeFirst", (e) => {return"string"!=typeof e?e:e.charAt(0).toUpperCase()+e.slice(1)});
   }
 
   // Load System Settings
