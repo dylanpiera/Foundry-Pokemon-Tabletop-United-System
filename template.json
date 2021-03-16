@@ -14,7 +14,8 @@
             "special" : 0,
             "speed" : 0
           },
-          "saveChecks": 0
+          "saveChecks": 0,
+          "effectRange": 0
         }
       },
       "skills": {
