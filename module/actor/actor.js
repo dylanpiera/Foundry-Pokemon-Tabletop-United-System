@@ -201,7 +201,6 @@ export class PTUActor extends Actor {
    */
   _preparePokemonData(actorData) {
     const data = actorData.data;
-    const effects = duplicate(actorData.effects);
 
     const speciesData = game.ptu.GetSpeciesData(data.species);
 
@@ -239,6 +238,9 @@ export class PTUActor extends Actor {
 
     data.initiative = {value: data.stats.spd.total + data.modifiers.initiative + (data.training?.agility?.trained ? data.training?.critical ? 12 : 4 : 0) + (data.training?.agility?.ordered ? 4 : 0)};
     if(actorData.flags?.ptu?.is_paralyzed) data.initiative.value = Math.floor(data.initiative.value * 0.5);
+    if(data.modifiers.flinch_count?.value > 0) { 
+      data.initiative.value -= (data.modifiers.flinch_count.value * 5);
+    }
     Hooks.call("updateInitiative", this);
 
     data.tp.max = (data.level.current > 0 ? Math.floor(data.level.current / 5) : 0) + 1;

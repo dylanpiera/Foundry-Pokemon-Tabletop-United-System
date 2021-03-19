@@ -769,7 +769,7 @@ Hooks.on("updateInitiative", function(actor) {
   let init = actor.data.data.initiative.value;
   let tieBreaker = Number((c.initiative+"").split(".")[1]) * 0.01;
   if(init+tieBreaker != c.initiative) {
-    game.combats.active.setInitiative(c._id, init+tieBreaker);
+    game.combats.active.setInitiative(c._id, init >= 0 ? init+tieBreaker : (Math.abs(init)+tieBreaker)*-1);
   }
 
   return true;
