@@ -130,7 +130,7 @@ export function CalculateTrainerCapabilities(trainerSkills, items, speedCombatSt
     return capabilities;
 }
 
-export function CalculatePokemonCapabilities(speciesData, items, speedCombatStages = 0, training = {}) {
+export function CalculatePokemonCapabilities(speciesData, items, speedCombatStages = 0, training = {}, ptuFlags = undefined) {
     if (speciesData?.Capabilities == null) return [];
 
     if (typeof (speciesData.Capabilities.Overland) === "string") {
@@ -180,10 +180,19 @@ export function CalculatePokemonCapabilities(speciesData, items, speedCombatStag
     }
 
     let spcsChanges = speedCombatStages > 0 ? Math.floor(speedCombatStages / 2) : speedCombatStages < 0 ? Math.ceil(speedCombatStages / 2) : 0;
+    let isSlowed = ptuFlags?.is_slowed;
     // if (spcsChanges > 0 || spcsChanges < 0) {
         for (let key of Object.keys(speciesData.Capabilities)) {
-            if (key == "High Jump" || key == "Long Jump" || key == "Power" || key == "Weight Class" || key == "Naturewalk" || key == "Other") continue;
-            if (speciesData.Capabilities[key] > 0) speciesData.Capabilities[key] = Math.max(speciesData.Capabilities[key] + spcsChanges + (training?.agility?.trained ? training?.critical ? 3 : 1 : 0) + (training?.agility?.ordered ? 1 : 0), speciesData.Capabilities[key] > 1 ? 2 : 1)
+            if (key == "High Jump" || key == "Long Jump") {
+                continue; 
+                // If High & Long Jump should be halved by slowed move continue statement to end of this if statement.
+                if(isSlowed) speciesData.Capabilities[key] = Math.max(1, Math.floor(speciesData.Capabilities[key] * 0.5));
+            };
+            if (key == "Power" || key == "Weight Class" || key == "Naturewalk" || key == "Other") continue;
+            if (speciesData.Capabilities[key] > 0) {
+                speciesData.Capabilities[key] = Math.max(speciesData.Capabilities[key] + spcsChanges + (training?.agility?.trained ? training?.critical ? 3 : 1 : 0) + (training?.agility?.ordered ? 1 : 0), speciesData.Capabilities[key] > 1 ? 2 : 1)
+                if(isSlowed) speciesData.Capabilities[key] = Math.max(1, Math.floor(speciesData.Capabilities[key] * 0.5));
+            }
         }
     // }
 

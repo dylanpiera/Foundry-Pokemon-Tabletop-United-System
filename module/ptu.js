@@ -37,6 +37,7 @@ import { DistributeStatsWeighted, DistributeStatsRandomly, DistributeByBaseStats
 import { GetOrCreateCachedItem } from './utils/cache-helper.js'
 import { ActorGenerator } from './utils/actor-generator.js'
 import { GetOrCacheAbilities, GetOrCacheCapabilities, GetOrCacheMoves} from './utils/cache-helper.js'
+import {Afflictions} from './combat/effects/afflictions.js'
 
 export let debug = (...args) => {if (game.settings.get("ptu", "showDebugInfo") ?? false) console.log("DEBUG: FVTT PTU | ", ...args)};
 export let log = (...args) => console.log("FVTT PTU | ", ...args);
@@ -546,6 +547,10 @@ Hooks.once("ready", async function() {
     // Finally add it to the <head>
     document.getElementsByTagName("head")[0].appendChild(scriptTag);  
   }
+
+  /** Combat Initialization */
+  CONFIG.statusEffects = Afflictions;
+  CONFIG.Combat.defeatedStatusId = Afflictions[0].id;
 });
 
 /* -------------------------------------------- */
@@ -756,36 +761,21 @@ class DirectoryPicker extends FilePicker {
 }
 
 // Automatically update Initiative if Speed / Init Mod changes
-Hooks.on("updateActor", function(actor, change, isDiff, actorId) {
-  if(change?.data?.modifiers?.initiative !== undefined || change?.data?.stats?.spd?.mod !== undefined || change?.data?.stats?.spd?.stage !== undefined
-    || change?.data?.stats?.spd?.levelUp !== undefined || change?.data?.training?.agility?.trained !== undefined || change?.data?.training?.agility?.ordered !== undefined
-    || change?.data?.training?.critical !== undefined) {
-      if(!game.combats.active) return;
+Hooks.on("updateInitiative", function(actor) {
+  if(!game.combats?.active) return;
 
-      let c = game.combats.active.combatants.find(x => x.actor?._id == actor._id)
-      if(!c) return;
-      let init = actor.data.data.initiative.value;
-      let tieBreaker = Number((c.initiative+"").split(".")[1]) * 0.01;
-
-      game.combats.active.setInitiative(c._id, init+tieBreaker);
-    }
-});
-
-Hooks.on("updateToken", function(scene, token, change, isDiff, actorId) {
-  if(change?.actorData?.data?.modifiers?.initiative !== undefined || change?.actorData?.data?.stats?.spd?.mod !== undefined || change?.actorData?.data?.stats?.spd?.stage !== undefined
-    || change?.actorData?.data?.stats?.spd?.levelUp !== undefined || change?.actorData?.data?.training?.agility?.trained !== undefined || change?.actorData?.data?.training?.agility?.ordered !== undefined
-    || change?.actorData?.data?.training?.critical !== undefined)
-  {
-    if(!game.combats.active) return;
-
-    let c = game.combats.active.combatants.find(x => x.tokenId == token._id)
-    if(!c) return;
-    let init = canvas.tokens.get(token._id).actor.data.data.initiative.value;
-    let tieBreaker = Number((c.initiative+"").split(".")[1]) * 0.01;
-
+  let c = game.combats.active.combatants.find(x => x.actor?._id == actor._id)
+  if(!c) return;
+  let init = actor.data.data.initiative.value;
+  let tieBreaker = Number((c.initiative+"").split(".")[1]) * 0.01;
+  if(init+tieBreaker != c.initiative) {
     game.combats.active.setInitiative(c._id, init+tieBreaker);
-  }  
-});
+  }
+
+  return true;
+}) 
+
+
 
 // this s hooked in, we don't use all the data, so lets stop eslint complaining
 // eslint-disable-next-line no-unused-vars
