@@ -1,4 +1,10 @@
-export function CalculateEvasions(data) {
+export function CalculateEvasions(data, ptuFlags) {
+    if(ptuFlags?.is_vulnerable) return {
+        "physical": 0,
+        "special": 0,
+        "speed": 0
+    };
+    
     let evasion = {
         "physical": Math.max(Math.min(Math.floor(data.stats.def.total / 5),6) + data.modifiers.evasion.physical, 0),
         "special": Math.max(Math.min(Math.floor(data.stats.spdef.total / 5),6) + data.modifiers.evasion.special, 0),
@@ -10,6 +16,8 @@ export function CalculateEvasions(data) {
     if (data.modifiers.hardened && data.health.injuries >= 3) globalMod++;
 
     if(globalMod != 0) evasion = Object.fromEntries(Object.entries(evasion).map(([key, value]) => [key, value + globalMod]));
+
+    if(ptuFlags?.is_stuck) evasion.speed = 0;
 
     return evasion;
 }
