@@ -179,6 +179,7 @@ export class PTUActor extends Actor {
     }
 
     data.levelUpPoints = data.level.current + data.modifiers.statPoints + 9;
+    data.stats = CalculatePoisonedCondition(duplicate(data.stats), actorData.flags?.ptu);
     var result = CalculateStatTotal(data.levelUpPoints, data.stats, actorData.items.find(x => x.name.toLowerCase().replace("[playtest]") == "twisted power") != null);
     data.stats = result.stats;
     data.levelUpPoints = result.levelUpPoints;
@@ -188,12 +189,17 @@ export class PTUActor extends Actor {
 
     data.health.percent = Math.round((data.health.value / data.health.max) * 100);
 
-    data.evasion = CalculateEvasions(data);
-    data.capabilities = CalculateTrainerCapabilities(data.skills, actorData.items, data.stats.spd.stage);
+    data.evasion = CalculateEvasions(data, actorData.flags?.ptu);
+    data.capabilities = CalculateTrainerCapabilities(data.skills, actorData.items, data.stats.spd.stage, actorData.flags?.ptu);
 
     data.ap.total = 5 + Math.floor(data.level.current / 5);
 
     data.initiative = {value: data.stats.spd.total + data.modifiers.initiative};
+    if(actorData.flags?.ptu?.is_paralyzed) data.initiative.value = Math.floor(data.initiative.value * 0.5);
+    if(data.modifiers.flinch_count?.value > 0) { 
+      data.initiative.value -= (data.modifiers.flinch_count.value * 5);
+    }
+    Hooks.call("updateInitiative", this);
   }
 
   /**

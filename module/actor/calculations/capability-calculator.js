@@ -1,6 +1,6 @@
 import { warn } from "../../ptu.js";
 
-export function CalculateTrainerCapabilities(trainerSkills, items, speedCombatStages) {
+export function CalculateTrainerCapabilities(trainerSkills, items, speedCombatStages, ptuFlags) {
     let mods = {
         "Traveler": false,
         "Deep Diver": false,
@@ -122,7 +122,10 @@ export function CalculateTrainerCapabilities(trainerSkills, items, speedCombatSt
 
     let spcsChanges = speedCombatStages > 0 ? Math.floor(speedCombatStages / 2) : speedCombatStages < 0 ? Math.ceil(speedCombatStages / 2) : 0;
     if (spcsChanges > 0 || spcsChanges < 0) {
-        if (capabilities["Overland"] > 0) capabilities["Overland"] = Math.max(capabilities["Overland"] + spcsChanges, capabilities["Overland"] > 1 ? 2 : 1)
+        if (capabilities["Overland"] > 0) { 
+            capabilities["Overland"] = Math.max(capabilities["Overland"] + spcsChanges, capabilities["Overland"] > 1 ? 2 : 1)
+            if(ptuFlags?.is_slowed) capabilities["Overland"] = Math.max(1, Math.floor(scapabilities["Overland"] * 0.5));
+        }
     }
 
     capabilities["Swim"] = (mods["Deep Diver"] ? capabilities["Overland"] : Math.trunc(capabilities["Overland"] / 2)) + mods["Swim"]
