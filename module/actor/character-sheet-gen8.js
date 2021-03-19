@@ -263,7 +263,7 @@ export class PTUGen8CharacterSheet extends ActorSheet {
 
 		/** Option Callbacks */
 		let PerformFullAttack = () => {
-			let acRoll = CalculateAcRoll(move.data, this.actor.data.data);
+			let acRoll = CalculateAcRoll(move.data, this.actor.data);
 			let diceResult = GetDiceResult(acRoll)
 
 			let crit = diceResult === 1 ? CritOptions.CRIT_MISS : diceResult >= 20 - this.actor.data.data.modifiers.critRange ? CritOptions.CRIT_HIT : CritOptions.NORMAL;
@@ -381,10 +381,10 @@ export class PTUGen8CharacterSheet extends ActorSheet {
 
 /** Pure Functions */
 
-function CalculateAcRoll(moveData, actorData) {
+function CalculateAcRoll(moveData, actor) {
 	return new Roll('1d20-@ac+@acBonus', {
 		ac: (parseInt(moveData.ac) || 0),
-		acBonus: (parseInt(actorData.modifiers.acBonus) || 0)
+		acBonus: (actor.flags?.ptu?.is_blind ? actor.flags?.ptu?.is_totally_blind ? -10 : -6 : 0) + (parseInt(actor.data.modifiers.acBonus) || 0)
 	})
 }
 

@@ -15,7 +15,11 @@
             "speed" : 0
           },
           "saveChecks": 0,
-          "effectRange": 0
+          "effectRange": 0,
+          "flinch_count": {
+            "value": 0,
+            "keys": []
+          }
         }
       },
       "skills": {

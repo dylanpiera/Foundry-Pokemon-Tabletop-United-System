@@ -1,6 +1,26 @@
 # Welcome to the Beta!
 Hey there! You are on the Beta Branch. If you ever have any feedback please do share with us over on [Github](https://github.com/dylanpiera/Foundry-Pokemon-Tabletop-United-System/issues) or [Discord](https://discord.gg/fE3w59q)
 
+## 1.2.8 - Status Effects!
+- Added Status Afflictions to the system as token effects
+- Some effects have automated effects, for more info see the following list:
+> **Burn**: -2 def cs
+> **Frozen:** become vulnerable
+> **Paralysis:** half init
+> **Poison:** -2 spdef cs*
+> **Flinch:** Apply stacking -5 initiative penalty (reapply flinch to token to increase flinch stacks), become vulnerable, flinch stacks reset when combat ends. 
+> **Sleep:** become vulnerable
+> **Faint:** become vulnerable
+> **Blind:** become vulnerable, -6 accuracy
+> **Total Blind:** become blind, -4 accuracy (ergo total of -10)
+> **Slowed:** half movement
+> **Stuck:** speed evasion = 0
+> **Tripped:** become vulnerable
+> **Vulnerable:** evasion = 0
+- Fixed the requirement to close a character sheet for owner field to update
+- Added a debug tab to sheets that show active effects and their modifiers.
+  - This is currently purely a view, but will later be expended to allow manual editing of custom effects
+
 ## 1.2.7 - Bonus Fields
 - Re-added 'imgpath' param to `/ptug` command.
 - Owner field now also works for GM pokemon.
