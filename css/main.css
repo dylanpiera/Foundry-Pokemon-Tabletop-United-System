@@ -654,6 +654,9 @@ span.readable {
 .actor.gen8 .inventory-list:not(.inventory-header) .item:nth-child(even) {
   background: linear-gradient(45deg, #ffffffbb, #fff, #ffffffbb);
 }
+.actor .effects .inventory-list {
+  width: 100%;
+}
 .actor .inventory-list {
   list-style: none;
   margin: 0;
