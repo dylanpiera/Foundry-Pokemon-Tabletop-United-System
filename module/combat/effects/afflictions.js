@@ -82,24 +82,35 @@ export const Afflictions = [
 
 Hooks.on("applyActiveEffect", function(actorData, change) {
     if(change.key == "data.modifiers.flinch_count") {
-        let actor = game.actors?.get(actorData._id)
-        if(!actor?.data) return;
+        let actor;
 
+        if(actorData.isToken) {
+            actor = canvas?.tokens?.get(actorData.token.id)?.actor;
+            if(!actor?.data) return;
+        }
+        else {
+            actor = game.actors?.get(actorData._id)
+            if(!actor?.data) return;
+        }
         let count = duplicate(actor.data).data.modifiers.flinch_count;
         
         if(count.keys.includes(change.effect.data._id)) return;
         count.keys.push(change.effect.data._id);
         count.value++;
 
+        
         actor.update({"data.modifiers.flinch_count": count});    
     }
 })
 
-Hooks.on("deleteCombat", function(combat, options, id)  {
-    combat.combatants.forEach(c => {
+Hooks.on("deleteCombat", async function(combat, options, id)  {
+    for(let c of combat.combatants) {
         if(c.actor.data.data.modifiers.flinch_count.value > 0) {
             log(`Reseting ${c.actor.name} (${c.actor._id})'s flinch count.`)
-            c.actor.update({"data.modifiers.flinch_count": {value: 0, keys: []}})
+            let flinches = c.actor.effects.filter(x => x.data.label == "Flinch")
+            for(let flinch of flinches) await flinch.delete();
+
+            await c.actor.update({"data.modifiers.flinch_count": {value: 0, keys: []}})
         }
-    });
+    }
 });
