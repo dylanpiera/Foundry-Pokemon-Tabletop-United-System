@@ -263,7 +263,8 @@ export class PTUGen8PokemonSheet extends ActorSheet {
 	 */
 	_onSaveRoll(event) {
 		event.preventDefault();
-		
+		if(event.screenX == 0 && event.screenY == 0) return;
+
 		let mod = (this.actor.data.data.training?.inspired?.trained ? this.actor.data.data.training?.critical ? 6 : 2 : 0) + (this.actor.data.data.training?.inspired?.ordered ? 2 : 0) + this.actor.data.data.modifiers.saveChecks;
 		let roll = new Roll("1d20 + @mod", {mod: mod});
 		let label = 'Rolling Save Check';

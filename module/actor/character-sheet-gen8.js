@@ -236,6 +236,7 @@ export class PTUGen8CharacterSheet extends ActorSheet {
 	 */
 	_onSaveRoll(event) {
 		event.preventDefault();
+		if(event.screenX == 0 && event.screenY == 0) return;
 		
 		let mod = this.actor.data.data.modifiers.saveChecks ?? 0;
 		let roll = new Roll("1d20 + @mod", {mod: mod});

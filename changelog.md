@@ -1,6 +1,10 @@
 # Welcome to the Beta!
 Hey there! You are on the Beta Branch. If you ever have any feedback please do share with us over on [Github](https://github.com/dylanpiera/Foundry-Pokemon-Tabletop-United-System/issues) or [Discord](https://discord.gg/fE3w59q)
 
+## 1.2.9 - Hotfix Save Checks
+- No longer roll save checks when pressing enter / return
+- Item placeholder is updated to better reflect the system
+
 ## 1.2.8 - Status Effects!
 - Added Status Afflictions to the system as token effects
 - Some effects have automated effects, for more info see the following list:
