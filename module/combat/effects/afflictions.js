@@ -114,3 +114,18 @@ Hooks.on("deleteCombat", async function(combat, options, id)  {
         }
     }
 });
+
+// Set combat details on active effects for duration based calculations like Badly Poisoned
+Hooks.on("preCreateActiveEffect", function(actor,effect,options,id) {
+    if(game.combats.active) {
+        effect.duration = {
+            startRound: game.combats.active.current?.round, 
+            startTurn: game.combats.active.current?.turn,
+            combat: game.combats.active.id
+        }
+        effect["flags.ptu.roundsElapsed"] = 0;
+    }
+    else {
+        effect["flags.ptu.roundsElapsed"] = -1;
+    }
+})
