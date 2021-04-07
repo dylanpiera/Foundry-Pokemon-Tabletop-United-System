@@ -37,72 +37,16 @@ import { DistributeStatsWeighted, DistributeStatsRandomly, DistributeByBaseStats
 import { GetOrCreateCachedItem } from './utils/cache-helper.js'
 import { ActorGenerator } from './utils/actor-generator.js'
 import { GetOrCacheAbilities, GetOrCacheCapabilities, GetOrCacheMoves} from './utils/cache-helper.js'
+import {Afflictions} from './combat/effects/afflictions.js'
 
 export let debug = (...args) => {if (game.settings.get("ptu", "showDebugInfo") ?? false) console.log("DEBUG: FVTT PTU | ", ...args)};
 export let log = (...args) => console.log("FVTT PTU | ", ...args);
 export let warn = (...args) => console.warn("FVTT PTU | ", ...args);
 export let error = (...args) => console.error("FVTT PTU | ", ...args)
 
-export const LATEST_VERSION = "1.2.7";
+export const LATEST_VERSION = "1.2.10";
 
-Hooks.once('init', async function() {
-
-  game.ptu = {
-    PTUActor,
-    PTUItem,
-    PTUPokemonCharactermancer,
-    PTUDexDragOptions,
-    PTUCustomSpeciesEditor,
-    PTUCustomMonEditor,
-    PTUCharacterNotesForm,
-    levelProgression,
-    pokemonData,
-    customSpeciesData: [],
-    natureData,
-    DbData,
-    TypeEffectiveness,
-    GetSpeciesData,
-    RollWithDb,
-    PlayPokemonCry,
-    FinishDexDragPokemonCreation,
-    monGenerator: {
-      ActorGenerator,
-      CreateMonParser,
-      GetRandomNature,
-      GiveRandomAbilities,
-      GiveLatestMoves,
-      ApplyEvolution,
-      GiveCapabilities,
-      StatDistributions: {
-        DistributeStatsWeighted,
-        DistributeStatsRandomly,
-        DistributeByBaseStats,
-        BaseStatsWithNature,
-        ApplyLevelUpPoints
-      }
-    },
-    combat: {
-      applyDamageToTargets,
-      undoDamageToTargets
-    },
-    cache: {
-      GetOrCreateCachedItem
-    }
-  };
-
-  /**
-   * Set an initiative formula for the system
-   * @type {String}
-   */
-  CONFIG.Combat.initiative = {
-    formula: "@initiative.value + (1d20 * 0.01)",
-    decimals: 2
-  };
-
-  // Define custom Entity classes
-  CONFIG.Actor.entityClass = PTUActor;
-  CONFIG.Item.entityClass = PTUItem;
-
+function registerSheets() {
   // Register sheet application classes
   Actors.unregisterSheet("core", ActorSheet);
   Actors.registerSheet("ptu", PTUGen8CharacterSheet, { types: ["character"], makeDefault: true });
@@ -113,12 +57,14 @@ Hooks.once('init', async function() {
   Items.registerSheet("ptu", PTUItemSheet, { types: ["item","ability","move","capability", "pokeedge","dexentry"], makeDefault: true });
   Items.registerSheet("ptu", PTUEdgeSheet, { types: ["edge"], makeDefault: true });
   Items.registerSheet("ptu", PTUFeatSheet, { types: ["feat"], makeDefault: true });
+}
 
-  // If you need to add Handlebars helpers, here are a few useful examples:
+async function registerHandlebars() {
   let itemDisplayTemplate = await (await fetch('/systems/ptu/templates/partials/item-display-partial.hbs')).text()
   Handlebars.registerPartial('item-display', itemDisplayTemplate);
 
   fetch('/systems/ptu/templates/partials/charactermancer-evolution-partial.hbs').then(r => r.text().then(template => Handlebars.registerPartial('cm-evolution', template)))
+  fetch('/systems/ptu/templates/partials/active-effects.hbs').then(r => r.text().then(template => Handlebars.registerPartial('active-effects', template)));
 
   Handlebars.registerHelper("concat", function() {
     var outStr = '';
@@ -220,6 +166,85 @@ Hooks.once('init', async function() {
     Handlebars.registerHelper("capitalizeFirst", (e) => {return"string"!=typeof e?e:e.charAt(0).toUpperCase()+e.slice(1)});
   }
 
+  function _calcMoveDb(move, bool = false) {
+    if(move.category === "Status") return;
+    let bonus = move.owner ? move.category === "Physical" ? move.owner.stats.atk.total : move.owner.stats.spatk.total : 0;
+    if(move.damageBase.toString().match(/^[0-9]+$/) != null) {
+      let db = game.ptu.DbData[move.stab ? parseInt(move.damageBase) + 2 : move.damageBase];  
+      if(db) return db + (bool ? " + " : "#") + bonus;
+      return -1;
+    }
+    let db = game.ptu.DbData[move.damageBase];  
+    if(db) return db;
+    return -1;
+  }
+}
+
+Hooks.once('init', async function() {
+
+  game.ptu = {
+    PTUActor,
+    PTUItem,
+    PTUPokemonCharactermancer,
+    PTUDexDragOptions,
+    PTUCustomSpeciesEditor,
+    PTUCustomMonEditor,
+    PTUCharacterNotesForm,
+    levelProgression,
+    pokemonData,
+    customSpeciesData: [],
+    natureData,
+    DbData,
+    TypeEffectiveness,
+    GetSpeciesData,
+    RollWithDb,
+    PlayPokemonCry,
+    FinishDexDragPokemonCreation,
+    monGenerator: {
+      ActorGenerator,
+      CreateMonParser,
+      GetRandomNature,
+      GiveRandomAbilities,
+      GiveLatestMoves,
+      ApplyEvolution,
+      GiveCapabilities,
+      StatDistributions: {
+        DistributeStatsWeighted,
+        DistributeStatsRandomly,
+        DistributeByBaseStats,
+        BaseStatsWithNature,
+        ApplyLevelUpPoints
+      }
+    },
+    combat: {
+      applyDamageToTargets,
+      undoDamageToTargets
+    },
+    cache: {
+      GetOrCreateCachedItem
+    }
+  };
+
+  /**
+   * Set an initiative formula for the system
+   * @type {String}
+   */
+  CONFIG.Combat.initiative = {
+    formula: "@initiative.value + (1d20 * 0.01)",
+    decimals: 2
+  };
+
+  // Define custom Entity classes
+  CONFIG.Actor.entityClass = PTUActor;
+  CONFIG.Item.entityClass = PTUItem;
+
+  // Register sheet application classes
+  registerSheets();
+
+  // If you need to add Handlebars helpers, here are a few useful examples:
+  await registerHandlebars();
+  
+
   // Load System Settings
   _loadSystemSettings();
 
@@ -234,19 +259,6 @@ Hooks.once('init', async function() {
   }
 
 });
-
-function _calcMoveDb(move, bool = false) {
-  if(move.category === "Status") return;
-  let bonus = move.owner ? move.category === "Physical" ? move.owner.stats.atk.total : move.owner.stats.spatk.total : 0;
-  if(move.damageBase.toString().match(/^[0-9]+$/) != null) {
-    let db = game.ptu.DbData[move.stab ? parseInt(move.damageBase) + 2 : move.damageBase];  
-    if(db) return db + (bool ? " + " : "#") + bonus;
-    return -1;
-  }
-  let db = game.ptu.DbData[move.damageBase];  
-  if(db) return db;
-  return -1;
-}
 
 export function PrepareMoveData(actorData, move) {
   if(!actorData || move.prepared) return move;
@@ -548,6 +560,10 @@ Hooks.once("ready", async function() {
     // Finally add it to the <head>
     document.getElementsByTagName("head")[0].appendChild(scriptTag);  
   }
+
+  /** Combat Initialization */
+  CONFIG.statusEffects = Afflictions;
+  CONFIG.Combat.defeatedStatusId = Afflictions[0].id;
 });
 
 /* -------------------------------------------- */
@@ -758,36 +774,21 @@ class DirectoryPicker extends FilePicker {
 }
 
 // Automatically update Initiative if Speed / Init Mod changes
-Hooks.on("updateActor", function(actor, change, isDiff, actorId) {
-  if(change?.data?.modifiers?.initiative !== undefined || change?.data?.stats?.spd?.mod !== undefined || change?.data?.stats?.spd?.stage !== undefined
-    || change?.data?.stats?.spd?.levelUp !== undefined || change?.data?.training?.agility?.trained !== undefined || change?.data?.training?.agility?.ordered !== undefined
-    || change?.data?.training?.critical !== undefined) {
-      if(!game.combats.active) return;
+Hooks.on("updateInitiative", function(actor) {
+  if(!game.combats?.active) return;
 
-      let c = game.combats.active.combatants.find(x => x.actor?._id == actor._id)
-      if(!c) return;
-      let init = actor.data.data.initiative.value;
-      let tieBreaker = Number((c.initiative+"").split(".")[1]) * 0.01;
+  let c = game.combats.active.combatants.find(x => x.actor?._id == actor._id)
+  if(!c) return;
+  let init = actor.data.data.initiative.value;
+  let tieBreaker = Number((c.initiative+"").split(".")[1]) * 0.01;
+  if(init+tieBreaker != c.initiative) {
+    game.combats.active.setInitiative(c._id, init >= 0 ? init+tieBreaker : (Math.abs(init)+tieBreaker)*-1);
+  }
 
-      game.combats.active.setInitiative(c._id, init+tieBreaker);
-    }
-});
+  return true;
+}) 
 
-Hooks.on("updateToken", function(scene, token, change, isDiff, actorId) {
-  if(change?.actorData?.data?.modifiers?.initiative !== undefined || change?.actorData?.data?.stats?.spd?.mod !== undefined || change?.actorData?.data?.stats?.spd?.stage !== undefined
-    || change?.actorData?.data?.stats?.spd?.levelUp !== undefined || change?.actorData?.data?.training?.agility?.trained !== undefined || change?.actorData?.data?.training?.agility?.ordered !== undefined
-    || change?.actorData?.data?.training?.critical !== undefined)
-  {
-    if(!game.combats.active) return;
 
-    let c = game.combats.active.combatants.find(x => x.tokenId == token._id)
-    if(!c) return;
-    let init = canvas.tokens.get(token._id).actor.data.data.initiative.value;
-    let tieBreaker = Number((c.initiative+"").split(".")[1]) * 0.01;
-
-    game.combats.active.setInitiative(c._id, init+tieBreaker);
-  }  
-});
 
 // this s hooked in, we don't use all the data, so lets stop eslint complaining
 // eslint-disable-next-line no-unused-vars

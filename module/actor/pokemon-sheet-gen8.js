@@ -62,6 +62,12 @@ export class PTUGen8PokemonSheet extends ActorSheet {
 			data['owners'] = data['owners'].concat(game.actors.filter(x => !x.hasPlayerOwner && x.data.type == "character"));
 			data['canBeWild'] = true;
 		}
+
+		if(!data['owners'].includes(this.actor.data.data.owner)) {
+			if(this.isEditable)
+				this.actor.update({"data.owner": data['canBeWild'] ? "0" : data['owners'][0]?._id})
+		}
+
 		return data;
 	}
 
@@ -257,7 +263,8 @@ export class PTUGen8PokemonSheet extends ActorSheet {
 	 */
 	_onSaveRoll(event) {
 		event.preventDefault();
-		
+		if(event.screenX == 0 && event.screenY == 0) return;
+
 		let mod = (this.actor.data.data.training?.inspired?.trained ? this.actor.data.data.training?.critical ? 6 : 2 : 0) + (this.actor.data.data.training?.inspired?.ordered ? 2 : 0) + this.actor.data.data.modifiers.saveChecks;
 		let roll = new Roll("1d20 + @mod", {mod: mod});
 		let label = 'Rolling Save Check';
@@ -283,7 +290,7 @@ export class PTUGen8PokemonSheet extends ActorSheet {
 
 		/** Option Callbacks */
 		let PerformFullAttack = () => {
-			let acRoll = CalculateAcRoll(move.data, this.actor.data.data);
+			let acRoll = CalculateAcRoll(move.data, this.actor.data);
 			let diceResult = GetDiceResult(acRoll)
 
 			let crit = diceResult === 1 ? CritOptions.CRIT_MISS : (diceResult >= 20 - this.actor.data.data.modifiers.critRange - (this.actor.data.data.training?.brutal?.trained ? this.actor.data.data.training?.critical ? 3 : 1 : 0) - (this.actor.data.data.training?.brutal?.ordered ? 1 : 0)) ? CritOptions.CRIT_HIT : CritOptions.NORMAL;
@@ -420,10 +427,11 @@ export class PTUGen8PokemonSheet extends ActorSheet {
 
 /** Pure Functions */
 
-function CalculateAcRoll(moveData, actorData) {
+function CalculateAcRoll(moveData, actor) {
 	return new Roll('1d20-@ac+@acBonus', {
 		ac: (parseInt(moveData.ac) || 0),
-		acBonus: (parseInt(actorData.modifiers.acBonus) || 0) + (actorData.training?.focused?.trained ? actorData.training?.critical ? 3 : 1 : 0) + (actorData.training?.focused?.ordered ? 1 : 0)
+		acBonus: (actor.flags?.ptu?.is_blind ? actor.flags?.ptu?.is_totally_blind ? -10 : -6 : 0) + 
+		(parseInt(actor.data.modifiers.acBonus) || 0) + (actor.data.training?.focused?.trained ? actor.data.training?.critical ? 3 : 1 : 0) + (actor.data.training?.focused?.ordered ? 1 : 0)
 	})
 }
 
