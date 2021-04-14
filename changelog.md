@@ -1,6 +1,18 @@
 # Welcome to the Beta!
 Hey there! You are on the Beta Branch. If you ever have any feedback please do share with us over on [Github](https://github.com/dylanpiera/Foundry-Pokemon-Tabletop-United-System/issues) or [Discord](https://discord.gg/fE3w59q)
 
+## 1.2.11 - Charactermancer Alpha & AE Tab
+- Updated Active Effects tab to be fully operational without having to use code.
+- Added alpha version of the new Charactermancer. Currently implemented:
+  - Species / Id selection
+  - Exp / Level calculation
+  - Evolution Detection based on Level
+  - Nature Selection
+  - Stat Selection based on Level
+  - Data Restore upon improper closing
+
+The Charactermancer update has been in development for a long time, and while I'm not happy with the current implementation, it does *work*. So for now do enjoy the functionality it has to offer while I work on re-doing it and giving it all features down the line!
+
 ## 1.2.10 - Status Affliction Api Update
 - Added extra data to Status Affliction for Developer use.
 

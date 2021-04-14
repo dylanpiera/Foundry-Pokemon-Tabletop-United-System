@@ -730,7 +730,14 @@ span.readable {
 .actor .inventory-list .item .item-name h4:hover .info-icon {
   color: #00000038;
 }
-.actor .inventory-list .inventory-header .item-controls a.item-create {
+.actor .inventory-list .inventory-header .item-controls a.item-create,
+.effect-header a.item-create,
+.actor .inventory-list .inventory-header .item-controls a.effect-edit,
+.effect-header a.effect-edit,
+.actor .inventory-list .inventory-header .item-controls a.effect-delete,
+.effect-header a.effect-delete,
+.actor .inventory-list .inventory-header .item-controls a.effect-create,
+.effect-header a.effect-create {
   background: #ffffffa6;
   border-radius: 5px;
   font-weight: 400;
@@ -738,6 +745,18 @@ span.readable {
   line-height: 18px;
   padding-top: 2px;
   flex: 0 0 100%;
+}
+.effect-header .item-controls {
+  flex: 0 0 55px;
+  justify-content: center;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-self: center;
+}
+.effect-header .item-controls a {
+  font-size: 12px;
+  text-align: center;
 }
 .actor .inventory-list .item-controls a.item-create:hover {
   background: #788898cc;
@@ -872,11 +891,21 @@ span.readable {
 .gen8move.rollable[data-ac="NaN"][data-roll=""] {
   visibility: hidden;
 }
-.gen8 .stats .nature-up {
+.gen8.charactermancer input.nature-up {
+  background-color: #CC9999;
+  color: black;
+  text-transform: uppercase;
+}
+.gen8.charactermancer input.nature-down {
+  background-color: #99CCCC;
+  color: black;
+  text-transform: uppercase;
+}
+.gen8 .nature-up {
   color: #b27d94;
   font-weight: bold;
 }
-.gen8 .stats .nature-down {
+.gen8 .nature-down {
   color: #98c7c9;
   font-weight: bold;
 }
@@ -1081,6 +1110,128 @@ p.summary {
   font-size: 13px;
   line-height: 16px;
 }
+.charactermancer .window-content {
+  padding: unset;
+}
+.charactermancer .container-fluid {
+  text-align: center;
+  padding: unset;
+  position: relative;
+}
+.charactermancer .content {
+  z-index: 5;
+  position: inherit;
+}
+.charactermancer .bar {
+  background-color: #272727;
+  color: white;
+  font-size: 22px;
+  font-weight: bold;
+  padding: 0.75rem;
+}
+.charactermancer .bar.hp {
+  background: #272727;
+  background: linear-gradient(90deg, #272727 0%, #272727 72%, #1b3d1b 100%);
+}
+.charactermancer .bar.atk,
+.charactermancer .bar.def {
+  background: #272727;
+  background: linear-gradient(90deg, #272727 0%, #272727 72%, #3D3D3D 100%);
+}
+.charactermancer .bar.spatk,
+.charactermancer .bar.spdef {
+  background: #272727;
+  background: linear-gradient(90deg, #272727 0%, #272727 72%, #3D2E1B 100%);
+}
+.charactermancer .bar.spd {
+  background: #272727;
+  background: linear-gradient(90deg, #272727 0%, #272727 72%, #3D3C1B 100%);
+}
+.charactermancer input,
+.charactermancer select {
+  background-color: #999;
+  color: black;
+  border-color: #666;
+  height: 100%;
+  padding: 0.5rem;
+}
+.charactermancer input.no-box,
+.charactermancer select.no-box {
+  border: unset;
+  background: unset;
+  color: white;
+}
+.charactermancer input.no-box:focus,
+.charactermancer select.no-box:focus {
+  box-shadow: unset;
+}
+.charactermancer .stats.key {
+  flex: 1 0 30%;
+  text-align: start;
+}
+.charactermancer .stats.base {
+  flex: 0 1 20%;
+}
+.charactermancer .stats.levelUp {
+  flex: 0 1 20%;
+}
+.charactermancer .stats.total {
+  flex: 1 0 25%;
+}
+.charactermancer #preview-img img {
+  width: 100%;
+  max-height: 404px;
+  border-bottom: 0;
+}
+.charactermancer .typing {
+  min-height: 45px;
+  margin-top: -2px;
+}
+.charactermancer #levelContainer,
+.charactermancer #levelExpContainer {
+  display: inline-block;
+  position: relative;
+  width: 100%;
+}
+.charactermancer #levelContainer #levelField,
+.charactermancer #levelExpContainer #levelField {
+  padding-left: 3.5rem;
+}
+.charactermancer #levelContainer #levelExpField,
+.charactermancer #levelExpContainer #levelExpField {
+  padding-right: 1rem;
+}
+.charactermancer #levelContainer #levelPrefix,
+.charactermancer #levelExpContainer #levelPrefix {
+  position: absolute;
+  top: 9px;
+  color: #111;
+  padding-left: 5px;
+  width: fit-content;
+  pointer-events: none;
+}
+.charactermancer #levelContainer #levelExpSuffix,
+.charactermancer #levelExpContainer #levelExpSuffix {
+  position: absolute;
+  top: 9px;
+  color: #111;
+  padding-right: 5px;
+  width: fit-content;
+  pointer-events: none;
+}
+.charactermancer .box {
+  border: solid 2px #666;
+  background-color: #999;
+  color: #666;
+  padding: 0.1rem;
+}
+.charactermancer .box h5 {
+  text-decoration: underline;
+}
+.charactermancer #evolutionContainer select {
+  max-width: 99px;
+  margin-left: -2px;
+}
 .loyalty,
 .loyalty input {
   font-style: italic;
@@ -1112,6 +1263,9 @@ p.summary {
 /* Firefox Fix */
 .sheet-footer {
   height: 0;
+}
+.no-shadow {
+  box-shadow: none;
 }
 .w-25 {
   width: 25% !important;
@@ -1641,19 +1795,6 @@ button,
 }
 button.tox-tbtn:hover::before {
   content: unset;
-}
-button:hover::before,
-.button:hover::before {
-  content: "";
-  position: absolute;
-  top: 7px;
-  left: 1px;
-  width: 2px;
-  height: 2px;
-  font-size: 2px;
-  color: #181010;
-  -webkit-box-shadow: 1em 0em 0 #181010, 2em 0em 0 #181010, 1em 1em 0 #181010, 2em 1em 0 #181010, 3em 1em 0 #181010, 1em 2em 0 #181010, 2em 2em 0 #181010, 3em 2em 0 #181010, 4em 2em 0 #181010, 1em 3em 0 #181010, 2em 3em 0 #181010, 3em 3em 0 #181010, 4em 3em 0 #181010, 5em 3em 0 #181010, 1em 4em 0 #181010, 2em 4em 0 #181010, 3em 4em 0 #181010, 4em 4em 0 #181010, 1em 5em 0 #181010, 2em 5em 0 #181010, 3em 5em 0 #181010, 1em 6em 0 #181010, 2em 6em 0 #181010;
-  box-shadow: 1em 0em 0 #181010, 2em 0em 0 #181010, 1em 1em 0 #181010, 2em 1em 0 #181010, 3em 1em 0 #181010, 1em 2em 0 #181010, 2em 2em 0 #181010, 3em 2em 0 #181010, 4em 2em 0 #181010, 1em 3em 0 #181010, 2em 3em 0 #181010, 3em 3em 0 #181010, 4em 3em 0 #181010, 5em 3em 0 #181010, 1em 4em 0 #181010, 2em 4em 0 #181010, 3em 4em 0 #181010, 4em 4em 0 #181010, 1em 5em 0 #181010, 2em 5em 0 #181010, 3em 5em 0 #181010, 1em 6em 0 #181010, 2em 6em 0 #181010;
 }
 button.pokemon,
 .button.pokemon {
@@ -2923,11 +3064,17 @@ h6 {
 .header-fields {
   height: 150px;
 }
-.sheet-header {
+.sheet:not(.active-effect-sheet) .sheet-header {
   height: 150px;
   -webkit-box-flex: unset;
   -ms-flex: unset;
   flex: unset;
+}
+.active-effect-sheet form {
+  padding-bottom: 2rem;
+}
+.active-effect-sheet .sheet-footer button {
+  margin-top: 0.5rem;
 }
 .item-header {
   font-weight: bold;

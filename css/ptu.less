@@ -910,14 +910,30 @@ span.readable {
     }
 }
 
-.actor .inventory-list .inventory-header .item-controls a.item-create {
-    background: #ffffffa6;
-    border-radius: 5px;
-    font-weight: 400;
-    color: rgba(0,0,0,.6);
-    line-height: 18px;
-    padding-top: 2px;
-    flex: 0 0 100%;
+.actor .inventory-list .inventory-header .item-controls, .effect-header {
+    a.item-create, a.effect-edit, a.effect-delete, a.effect-create {
+        background: #ffffffa6;
+        border-radius: 5px;
+        font-weight: 400;
+        color: rgba(0,0,0,.6);
+        line-height: 18px;
+        padding-top: 2px;
+        flex: 0 0 100%;
+    }
+}
+
+.effect-header .item-controls{
+    flex: 0 0 55px;
+    justify-content: center;
+    display:flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-self: center;
+
+    a {
+        font-size: 12px;
+        text-align: center;
+    }
 }
 
 .actor .inventory-list .item-controls a.item-create:hover {
@@ -1093,7 +1109,20 @@ span.readable {
     visibility: hidden;
 }
 
-.gen8 .stats {
+.gen8 {
+    &.charactermancer input {
+        &.nature-up {
+            background-color: #CC9999;
+            color: black;
+            text-transform: uppercase;
+        }
+        &.nature-down {
+            background-color: #99CCCC;
+            color: black;
+            text-transform: uppercase;
+        }
+    }
+
     .nature-up {
         color: #b27d94;
         font-weight: bold;
@@ -1343,11 +1372,147 @@ p.summary {
     }
 }
 
+.charactermancer {
+     .window-content {
+        padding: unset;
+    }
+
+    .container-fluid {
+        text-align: center;
+        padding: unset;
+        position: relative;
+    }
+
+    .content {
+        //padding: 1rem;
+        z-index: 5;
+        position: inherit;
+    }
+
+    .bar {
+        background-color: #272727;
+        color: white;
+        font-size: 22px;
+        font-weight: bold;
+        padding: 0.75rem;
+
+        &.hp {
+            background: rgb(39,39,39);
+            background: linear-gradient(90deg, rgba(39,39,39,1) 0%, rgba(39,39,39,1) 72%, rgba(27,61,27,1) 100%);
+        }
+        &.atk, &.def {
+            background: rgb(39,39,39);
+            background: linear-gradient(90deg, rgba(39,39,39,1) 0%, rgba(39,39,39,1) 72%, #3D3D3D 100%);
+        }
+        &.spatk, &.spdef {
+            background: rgb(39,39,39);
+            background: linear-gradient(90deg, rgba(39,39,39,1) 0%, rgba(39,39,39,1) 72%, #3D2E1B 100%);
+        }
+        &.spd {
+            background: rgb(39,39,39);
+            background: linear-gradient(90deg, rgba(39,39,39,1) 0%, rgba(39,39,39,1) 72%, #3D3C1B 100%);
+        }
+        
+    }
+
+    input, select {
+        background-color: #999;
+        color: black;
+        border-color: #666;
+        height: 100%;
+        padding: 0.5rem;
+
+        &.no-box {
+            border: unset;
+            background: unset;
+            color: white;
+            &:focus {
+                box-shadow: unset;
+            }
+        }
+    }
+
+    .stats {
+        &.key {
+            flex: 1 0 30%;
+            text-align: start;
+        }
+        &.base {
+            flex: 0 1 20%;
+        }
+        &.levelUp {
+            flex: 0 1 20%;
+        }
+        &.total {
+            flex: 1 0 25%;
+        }
+    }
+
+    #preview-img img {
+        width: 100%;
+        max-height: 404px;
+        border-bottom: 0;
+    }
+
+    .typing {
+        min-height: 45px;
+        margin-top: -2px;
+    }
+
+    #levelContainer, #levelExpContainer {
+        display: inline-block;
+        position: relative;
+        width: 100%;
+
+        #levelField {
+            padding-left: 3.5rem;
+        }
+
+        #levelExpField {
+            padding-right: 1rem;
+        }
+
+        #levelPrefix {
+            position: absolute;
+            top: 9px;
+            color: #111;
+            padding-left: 5px;
+            width:fit-content;
+            pointer-events: none;
+        }
+
+        #levelExpSuffix {
+            position: absolute;
+            top: 9px;
+            color: #111;
+            padding-right: 5px;
+            width:fit-content;
+            pointer-events: none;
+        }
+    }
+
+    .box {
+        h5 {
+            text-decoration: underline;
+        }
+        border: solid 2px #666;
+        background-color: #999;
+        color: #666;
+        padding: 0.1rem;
+    }
+
+    #evolutionContainer {
+        select {
+            max-width: 99px;
+            margin-left: -2px;
+        }
+    }
+}
+
 .loyalty, .loyalty input {
     font-style: italic;
     color: gray;
 }
-
 
 /* MD CSS */
 .md h1, .md h2, .md h3, .md h4, .md h5, .md h6 {
@@ -1373,4 +1538,8 @@ p.summary {
 /* Firefox Fix */
 .sheet-footer {
     height: 0;
+}
+
+.no-shadow {
+    box-shadow: none;
 }

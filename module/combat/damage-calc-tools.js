@@ -97,7 +97,9 @@ function executeApplyDamageToTargets(targets, data, damage, isFlat = false) {
 async function displayAppliedDamageToTargets(appliedDamage) {
     let messageData = {
         user: game.user._id,
-        content: await renderTemplate("/systems/ptu/templates/chat/automation/applied-damage.hbs", appliedDamage)
+        content: await renderTemplate("/systems/ptu/templates/chat/automation/applied-damage.hbs", appliedDamage),
+        type: CONST.CHAT_MESSAGE_TYPES.WHISPER, 
+        whisper: game.users.filter(x => x.isGM)
     }
 
     return ChatMessage.create(messageData, {});
