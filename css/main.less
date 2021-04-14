@@ -1580,11 +1580,21 @@ h1, h2, h3, h4, h5, h6 {
   height: 150px;
 }
 
-.sheet-header {
+.sheet:not(.active-effect-sheet) .sheet-header {
   height: 150px;
   -webkit-box-flex: unset;
   -ms-flex: unset;
   flex: unset;
+}
+
+.active-effect-sheet {
+  form {
+    padding-bottom: 2rem;
+  }
+
+  .sheet-footer button {
+    margin-top: 0.5rem;
+  }
 }
 
 .item-header {

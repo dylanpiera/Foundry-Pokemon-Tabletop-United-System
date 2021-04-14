@@ -15,7 +15,7 @@ export function excavateObj(input, basePath = "") {
     let arr = [];
     
     for(let obj of Object.entries(input)) {
-        if(typeof obj[1] === "object") {
+        if(obj[1] !== null && typeof obj[1] === "object") {
             arr = arr.concat(excavateObj(obj[1], basePath + obj[0] + "."));
         }
         else arr.push(basePath + obj[0]);

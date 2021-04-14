@@ -910,14 +910,30 @@ span.readable {
     }
 }
 
-.actor .inventory-list .inventory-header .item-controls a.item-create {
-    background: #ffffffa6;
-    border-radius: 5px;
-    font-weight: 400;
-    color: rgba(0,0,0,.6);
-    line-height: 18px;
-    padding-top: 2px;
-    flex: 0 0 100%;
+.actor .inventory-list .inventory-header .item-controls, .effect-header {
+    a.item-create, a.effect-edit, a.effect-delete, a.effect-create {
+        background: #ffffffa6;
+        border-radius: 5px;
+        font-weight: 400;
+        color: rgba(0,0,0,.6);
+        line-height: 18px;
+        padding-top: 2px;
+        flex: 0 0 100%;
+    }
+}
+
+.effect-header .item-controls{
+    flex: 0 0 55px;
+    justify-content: center;
+    display:flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-self: center;
+
+    a {
+        font-size: 12px;
+        text-align: center;
+    }
 }
 
 .actor .inventory-list .item-controls a.item-create:hover {
@@ -1522,4 +1538,8 @@ p.summary {
 /* Firefox Fix */
 .sheet-footer {
     height: 0;
+}
+
+.no-shadow {
+    box-shadow: none;
 }

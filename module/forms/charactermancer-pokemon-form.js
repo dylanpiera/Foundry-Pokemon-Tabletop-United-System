@@ -97,8 +97,11 @@ export class PTUPokemonCharactermancer extends FormApplication {
             label: "Import Data",
             icon: '<i class="fas fa-file-import"></i>',
             callback: () => {
+              debug("TEST", flag)
               let paths = excavateObj(flag);
+              debug("TEST", paths)
               for(let path of paths) {
+                debug("TEST", path, dataFromPath(flag, path))
                 $(`[name="${path}"]`).val(dataFromPath(flag, path))
               }
               ref._refreshAll();
@@ -122,7 +125,6 @@ export class PTUPokemonCharactermancer extends FormApplication {
     let speciesIdField = html.find('#speciesIdField');
     let levelField = html.find('#levelField');
     let levelExpField = html.find('#levelExpField');
-    let levelBar = html.find('#levelBar');
 
     /** Button Logic */
 
@@ -218,24 +220,24 @@ export class PTUPokemonCharactermancer extends FormApplication {
     };
 
     levelField.keyup(async function(event) {
-      ref.level = Number(event.target.value);
-      if(isNaN(ref.level)) return;
-      ref.exp = game.ptu.levelProgression[ref.level]
-      if(Number(levelExpField.val()) != ref.exp) {
-        levelExpField.val(ref.exp);
+      ref.data.level = Number(event.target.value);
+      if(isNaN(ref.data.level)) return;
+      ref.data.exp = game.ptu.levelProgression[ref.data.level]
+      if(Number(levelExpField.val()) != ref.data.exp) {
+        levelExpField.val(ref.data.exp);
         transformXPText();
       }
-      levelBar.attr("class", `progress-bar p${ref.level}`)
+      $('#levelBar').attr("class", `progress-bar p${ref.data.level}`)
       transformLevelText();
     })
 
     levelExpField.keyup(async function(event) {
-      ref.exp = Number(event.target.value);
-      if(isNaN(ref.exp)) return;
-      ref.level = CalcLevel(ref.exp, 50, game.ptu.levelProgression)
-      if(Number(levelField.val()) != ref.level) {
-        levelField.val(ref.level);
-        levelBar.attr("class", `progress-bar p${ref.level}`)
+      ref.data.exp = Number(event.target.value);
+      if(isNaN(ref.data.exp)) return;
+      ref.data.level = CalcLevel(ref.data.exp, 50, game.ptu.levelProgression)
+      if(Number(levelField.val()) != ref.data.level) {
+        levelField.val(ref.data.level);
+        $('#levelBar').attr("class", `progress-bar p${ref.data.level}`)
         transformLevelText();
       }
       transformXPText();
@@ -258,8 +260,9 @@ export class PTUPokemonCharactermancer extends FormApplication {
     this._updateArt();
     this._updateTyping();
     this._updateNature();
+    levelField.val(this.data.level);
     setTimeout(this._transformText, 50)
-    levelBar.attr("class", `progress-bar p${this.object.data.data.level.current}`)
+    $('#levelBar').attr("class", `progress-bar p${this.object.data.data.level.current}`)
   }
 
   _refreshAll() {
@@ -276,7 +279,7 @@ export class PTUPokemonCharactermancer extends FormApplication {
     this._calcStages();
     this._updateNature();
     setTimeout(this._transformText, 50)
-    levelBar.attr("class", `progress-bar p${this.object.data.data.level.current}`)
+    $('#levelBar').attr("class", `progress-bar p${this.object.data.data.level.current}`)
   }
 
   _reCalcStats() {

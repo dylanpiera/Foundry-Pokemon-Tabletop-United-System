@@ -730,7 +730,14 @@ span.readable {
 .actor .inventory-list .item .item-name h4:hover .info-icon {
   color: #00000038;
 }
-.actor .inventory-list .inventory-header .item-controls a.item-create {
+.actor .inventory-list .inventory-header .item-controls a.item-create,
+.effect-header a.item-create,
+.actor .inventory-list .inventory-header .item-controls a.effect-edit,
+.effect-header a.effect-edit,
+.actor .inventory-list .inventory-header .item-controls a.effect-delete,
+.effect-header a.effect-delete,
+.actor .inventory-list .inventory-header .item-controls a.effect-create,
+.effect-header a.effect-create {
   background: #ffffffa6;
   border-radius: 5px;
   font-weight: 400;
@@ -738,6 +745,18 @@ span.readable {
   line-height: 18px;
   padding-top: 2px;
   flex: 0 0 100%;
+}
+.effect-header .item-controls {
+  flex: 0 0 55px;
+  justify-content: center;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-self: center;
+}
+.effect-header .item-controls a {
+  font-size: 12px;
+  text-align: center;
 }
 .actor .inventory-list .item-controls a.item-create:hover {
   background: #788898cc;
@@ -1244,6 +1263,9 @@ p.summary {
 /* Firefox Fix */
 .sheet-footer {
   height: 0;
+}
+.no-shadow {
+  box-shadow: none;
 }
 .w-25 {
   width: 25% !important;
@@ -3055,11 +3077,17 @@ h6 {
 .header-fields {
   height: 150px;
 }
-.sheet-header {
+.sheet:not(.active-effect-sheet) .sheet-header {
   height: 150px;
   -webkit-box-flex: unset;
   -ms-flex: unset;
   flex: unset;
+}
+.active-effect-sheet form {
+  padding-bottom: 2rem;
+}
+.active-effect-sheet .sheet-footer button {
+  margin-top: 0.5rem;
 }
 .item-header {
   font-weight: bold;

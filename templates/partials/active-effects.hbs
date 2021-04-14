@@ -1,7 +1,17 @@
 {{#each actor.effects as |effect|}}
-<div class="swsh-box mb-2 w-100">
-    <div class="swsh-header pl-2">
-        <h3>{{effect.label}}</h3>
+<div class="swsh-box mb-2 w-100 no-shadow">
+    <div class="swsh-header pl-2 effect-header">
+        <h3 style="flex: 1 0 50%">{{effect.label}}</h3>
+        <div class="item-controls pr-1 flexcol" style="flex: 0 0 7%;">
+            <a class="item-control effect-edit" data-id="{{effect._id}}" title="Edit Effect"><i
+                class="fas fa-edit" style="margin-right: 3px;"></i><span
+                class="readable">Edit</span></a>
+        </div>
+        <div class="item-controls flexcol" style="flex: 0 0 7%;">
+            <a class="item-control effect-delete" data-id="{{effect._id}}" title="Delete Effect"><i
+                class="fas fa-trash" style="margin-right: 3px;"></i><span
+                class="readable">Delete</span></a>
+        </div>
     </div>
     <div class="swsh-body w-100">
         <ol class="inventory-list">
@@ -18,15 +28,10 @@
             <div class="item-name flexcol align-items-center align-self-center" style="flex: 1 0 5%;">
                 <h4>Priority</h4>
             </div>
-            <div class="item-controls flexcol" style="flex: 0 0 5%;">
-                {{!-- <a class="item-control item-create" title="Add Change" data-type="change"><i
-                    class="fas fa-plus-circle" style="margin-right: 3px;"></i><span
-                    class="readable">Add</span></a> --}}
-            </div>
             </li>
             <ol class="item-list">
             {{#each effect.changes as | change |}}
-            <li class="item flexrow" data-item-id="{{move._id}}">
+            <li class="item flexrow" data-item-id="{{change.key}}">
                 <div class="item-name flexcol align-items-center align-self-center" style="flex: 1 0 12%;">
                 <h4> 
                     {{change.key}}
@@ -40,10 +45,6 @@
                 </div>
                 <div class="item-name flexcol align-items-center align-self-center" style="flex: 1 0 5%;">
                     <span class="readable pokemon p8 tight">{{change.priority}}</span>
-                </div>
-                <div class="item-controls" style="flex: 0 0 5%; justify-content: center; display:flex;">
-                    {{!-- <a class="item-control item-edit" title="Edit effect"><i class="fas fa-edit"></i></a>
-                    <a class="item-control item-delete" title="Delete effect"><i class="fas fa-trash"></i></a> --}}
                 </div>
             </li>
             {{/each}}
