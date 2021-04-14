@@ -136,6 +136,7 @@ export class PTUPokemonCharactermancer extends FormApplication {
       switch(opt) {
         case "submit": ref.submit(); ref.close(); return;
         case "species-next": 
+          $('.btn[data-value="species-next"]').attr('disabled', true)
           let species = CheckStage(Number(levelField.val()), ref.speciesData)
           if(species.number != ref.speciesData.number) {
             debug("Evolution detected!", ref.speciesData._id, species._id);
@@ -169,10 +170,9 @@ export class PTUPokemonCharactermancer extends FormApplication {
             $('.charactermancer').css('pointer-events', 'none')
             $('.charactermancer').css('-webkit-filter', 'grayscale(1)')
             this.d.render(true);
+            return;
           }
-          else {
-            ref._tabs[0].activate("stats")
-          }         
+          ref._tabs[0].activate("stats")
           return;
       }
     });
