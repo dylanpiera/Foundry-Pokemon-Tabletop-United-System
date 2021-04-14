@@ -156,6 +156,13 @@ async function registerHandlebars() {
     return game.user.isGM;
   })
 
+  Handlebars.registerHelper("toReadableEffectMode", function(effectId) {
+    return Object.entries(CONST.ACTIVE_EFFECT_MODES).reduce((obj, e) => {
+      obj[e[1]] = game.i18n.localize("EFFECT.MODE_"+e[0]);
+      return obj;
+    }, {})[effectId]
+  })
+
   /** If furnace ain't installed... */
   if(!Object.keys(Handlebars.helpers).includes("divide")) {
     warn("It is recommended to install & enable 'The Furnace' module.")
