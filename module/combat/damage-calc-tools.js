@@ -84,7 +84,7 @@ function executeApplyDamageToTargets(targets, data, damage, isFlat = false) {
 		else {
 			let defense = data.category == "Special" ? target.actor.data.data.stats.spdef.total : target.actor.data.data.stats.def.total;
 
-			actualDamage = Math.max(0, Math.floor((damage - parseInt(defense)) * target.actor.data.data.effectiveness.All[data.type]))
+			actualDamage = Math.max(1, Math.floor((damage - parseInt(defense)) * target.actor.data.data.effectiveness.All[data.type]))
 		}
 
         log(`Dealing ${actualDamage} damage to ${target.name}`); 

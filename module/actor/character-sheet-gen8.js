@@ -278,6 +278,7 @@ export class PTUGen8CharacterSheet extends ActorSheet {
 				speaker: ChatMessage.getSpeaker({
 					actor: this.actor
 				}),
+				name: move.name,
 				move: move.data,
 				damageRoll: damageRoll,
 				templateType: MoveMessageTypes.FULL_ATTACK,
@@ -293,6 +294,7 @@ export class PTUGen8CharacterSheet extends ActorSheet {
 					speaker: ChatMessage.getSpeaker({
 						actor: this.actor
 					}),
+					name: move.name,
 					move: move.data,
 					templateType: MoveMessageTypes.DAMAGE,
 					crit: crit
@@ -426,6 +428,7 @@ function PerformAcRoll(roll, move, actor) {
 		speaker: ChatMessage.getSpeaker({
 			actor: actor
 		}),
+		name: move.name,
 		move: move.data,
 		templateType: MoveMessageTypes.TO_HIT
 	}).then(_ => log(`Rolling to hit for ${actor.name}'s ${move.name}`));
