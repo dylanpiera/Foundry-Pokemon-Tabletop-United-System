@@ -245,6 +245,9 @@ Hooks.once('init', async function() {
   CONFIG.Actor.entityClass = PTUActor;
   CONFIG.Item.entityClass = PTUItem;
 
+  // Custom Combat Settings
+  CONFIG.Combat.defeatedStatusId = "effect.other.fainted";
+
   // Register sheet application classes
   registerSheets();
 
