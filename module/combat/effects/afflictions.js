@@ -103,18 +103,6 @@ Hooks.on("applyActiveEffect", function(actorData, change) {
     }
 })
 
-Hooks.on("deleteCombat", async function(combat, options, id)  {
-    for(let c of combat.combatants) {
-        if(c.actor.data.data.modifiers.flinch_count.value > 0) {
-            log(`Reseting ${c.actor.name} (${c.actor._id})'s flinch count.`)
-            let flinches = c.actor.effects.filter(x => x.data.label == "Flinch")
-            for(let flinch of flinches) await flinch.delete();
-
-            await c.actor.update({"data.modifiers.flinch_count": {value: 0, keys: []}})
-        }
-    }
-});
-
 // Set combat details on active effects for duration based calculations like Badly Poisoned
 Hooks.on("preCreateActiveEffect", function(actor,effect,options,id) {
     if(game.combats.active) {

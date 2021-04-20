@@ -38,6 +38,7 @@ import { GetOrCreateCachedItem } from './utils/cache-helper.js'
 import { ActorGenerator } from './utils/actor-generator.js'
 import { GetOrCacheAbilities, GetOrCacheCapabilities, GetOrCacheMoves} from './utils/cache-helper.js'
 import {Afflictions} from './combat/effects/afflictions.js'
+import PTUCombat from './combat/combat.js'
 
 export let debug = (...args) => {if (game.settings.get("ptu", "showDebugInfo") ?? false) console.log("DEBUG: FVTT PTU | ", ...args)};
 export let log = (...args) => console.log("FVTT PTU | ", ...args);
@@ -227,6 +228,7 @@ Hooks.once('init', async function() {
       applyDamageToTargets,
       undoDamageToTargets
     },
+    combats: new Map(),
     cache: {
       GetOrCreateCachedItem
     }
@@ -387,6 +389,15 @@ function _loadSystemSettings() {
       "show": "Show full effect"
     },
     default: "snippet"
+  });
+
+  game.settings.register("ptu", "leagueBattleInvertTrainerInitiative", {
+    name: "League Battle Initiative",
+    hint: "Invert Trainer Initative during League Battles",
+    scope: "world",
+    config: true,
+    type: Boolean,
+    default: true
   });
 
   game.settings.register("ptu", "verboseChatInfo", {
@@ -574,6 +585,8 @@ Hooks.once("ready", async function() {
   /** Combat Initialization */
   CONFIG.statusEffects = Afflictions;
   CONFIG.Combat.defeatedStatusId = Afflictions[0].id;
+
+  PTUCombat.Initialize();
 });
 
 /* -------------------------------------------- */
