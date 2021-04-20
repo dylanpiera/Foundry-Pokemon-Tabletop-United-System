@@ -60,6 +60,9 @@ export default class PTUCombat {
         const ref = this;
         this.hooks = new Map();
 
+        this.hooks.set("endTurn", new Map());
+        this.hooks.set("endRound", new Map());
+
         this.hooks.set("createCombatant", Hooks.on("createCombatant", this._onCreateCombatant.bind(ref)));
         this.hooks.set("updateCombatant", Hooks.on("updateCombatant", this._onUpdateCombatant.bind(ref)));
         this.hooks.set("renderCombatTracker", Hooks.on("renderCombatTracker", this._onRenderCombatTracker.bind(ref)));
@@ -92,7 +95,7 @@ export default class PTUCombat {
     }
 
     _onRenderCombatTracker(tracker, htmlElement, sender) {
-        if(tracker.combat.id != this.combat.id) return;
+        if(tracker.combat?.id != this.combat.id) return;
         
         const settingsButton = $(htmlElement).children("header").children("nav").children('[data-control="trackerSettings"]');
         settingsButton.off();
@@ -117,13 +120,55 @@ export default class PTUCombat {
 
     /** Methods */
 
+    addEndOfRoundEffect(effectFn) {
+        if(typeof effectFn !== 'function') return false;
+        const id = randomID();
+        const ref = this;
+
+        this.hooks.get("endRound").set(id, Hooks.on("endRound", (combat, ...args) => {
+            if(combat.id != ref.combat.id) return;
+            effectFn.bind(ref, combat, ...args)();
+        }));
+
+        return id;
+    }
+
+    removeEndOfRoundEffect(id) {
+        const hookId = this.hooks.get("endRound").get(id);
+        if(!hookId) return false;
+
+        Hooks.off("endRound", hookId);
+        return this.hooks.get("endRound").delete(id);
+    }
+
+    addEndOfTurnEffect(effectFn) {
+        if(typeof effectFn !== 'function') return false;
+        const id = randomID();
+        const ref = this;
+
+        this.hooks.get("endTurn").set(id, Hooks.on("endTurn", (combat, ...args) => {
+            if(combat.id != ref.combat.id) return;
+            effectFn.bind(ref, combat, ...args)();
+        }));
+
+        return id;
+    }
+
+    removeEndOfTurnEffect(id) {
+        const hookId = this.hooks.get("endTurn").get(id);
+        if(!hookId) return false;
+
+        Hooks.off("endTurn", hookId);
+        return this.hooks.get("endTurn").delete(id);
+    }
+
     _endOfTurnHook(changes, sender) {
         const {round, turn} = changes;
         const lastTurn = duplicate(this.data.lastTurn);
         let hasChanged = {turn: false, round: false};
         let options = {diff: true, turn: {}, round: {}};
 
-        if(typeof round !== undefined) {
+        if(typeof round !== 'undefined') {
             // If going back in round order
             if(this.data.lastTurn.round - round > 0) {
                 options.round.direction = CONFIG.PTUCombat.DirectionOptions.BACKWARDS
@@ -141,7 +186,7 @@ export default class PTUCombat {
                 hasChanged.round = true;
             }
         }
-        if(typeof turn !== undefined) {
+        if(typeof turn !== 'undefined') {
             if(options.round.direction === CONFIG.PTUCombat.DirectionOptions.BACKWARDS) {
                 options.turn.direction = CONFIG.PTUCombat.DirectionOptions.BACKWARDS
             }
@@ -207,7 +252,8 @@ export default class PTUCombat {
     /** Destructor */
     async destroy(andDeleteCombat = true) {
         this.hooks.forEach((hook, id) => {
-            Hooks.off(hook, id);
+            if(Array.isArray(id)) id.forEach((_, value) => Hooks.off(hook, value));
+            else Hooks.off(hook, id);
         })
 
         if(andDeleteCombat) await this.combat.delete();
