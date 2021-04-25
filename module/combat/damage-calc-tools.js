@@ -72,7 +72,11 @@ export function applyDamageToTargets(event) {
 	}
 }
 
-function executeApplyDamageToTargets(targets, data, damage, isFlat = false) {
+export async function ApplyFlatDamage(targets, sourceName, damage) {
+    return executeApplyDamageToTargets(targets, {moveName: sourceName}, damage, true)
+}
+
+async function executeApplyDamageToTargets(targets, data, damage, isFlat = false) {
     let appliedDamage = {};
 	for(let target of targets) {
 		if(target.actor.data.permission[game.userId] < 3) continue;
@@ -89,9 +93,9 @@ function executeApplyDamageToTargets(targets, data, damage, isFlat = false) {
 
         log(`Dealing ${actualDamage} damage to ${target.name}`); 
         appliedDamage[target.actor.data._id] = {name: target.actor.data.name, damage: actualDamage, old: {value: duplicate(target.actor.data.data.health.value), temp: duplicate(target.actor.data.data.tempHp.value)}};
-        target.actor.modifyTokenAttribute("health", actualDamage*-1, true, true);
+        await target.actor.modifyTokenAttribute("health", actualDamage*-1, true, true);
     }
-    displayAppliedDamageToTargets({data: appliedDamage, move: data.moveName});
+    await displayAppliedDamageToTargets({data: appliedDamage, move: data.moveName});
 }
 
 async function displayAppliedDamageToTargets(appliedDamage) {

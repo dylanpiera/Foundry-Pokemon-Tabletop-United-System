@@ -1,4 +1,5 @@
 import { debug, log } from "../../ptu.js";
+import { ApplyFlatDamage } from '../damage-calc-tools.js';
 
 export const Afflictions = [
     {id: "effect.other.fainted", label: "Fainted", icon: 'icons/svg/skull.svg', changes: [
@@ -98,7 +99,26 @@ export const EffectFns = new Map([
         debug("Poison Trigger!");
 
         /** Actually apply Affliction */
-        
+        const actor = lastCombatant.actor;
+
+        let applyPoison = async () => {
+            debug("Applying Poison");
+            const token = canvas.tokens.get(lastCombatant.tokenId);
+            await ApplyFlatDamage([token], "Poison", actor.data.data.health.tick);
+        }
+
+        const actions_taken = actor.data.flags.ptu?.actions_taken; 
+        if(actions_taken?.standard) {
+            await applyPoison();
+        }
+        else {
+            await Dialog.confirm({
+                title: `${lastCombatant.name}'s Poison`,
+                content: `<p>Has ${lastCombatant.name} taken a Standard Action this turn?</p><p><small class="muted-text">Aka, should they take Poison damage?</small></p>`,
+                yes: async () => await applyPoison(),
+                defaultYes: false
+            })
+        }
 
         /** If affliction can only be triggered once per turn, make sure it shows as applied. */
         await combat.update({[`flags.ptu.applied.${tokenId}.${effect}`]: true})
