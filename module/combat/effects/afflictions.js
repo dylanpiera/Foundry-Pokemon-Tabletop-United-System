@@ -96,13 +96,11 @@ function IsSameTokenAndNotAlreadyApplied(effect, tokenId, combat, lastCombatant)
 export const EffectFns = new Map([
     ["poisoned", async function(tokenId, combat, lastCombatant, roundData, options, sender, effect){
         if(!IsSameTokenAndNotAlreadyApplied(effect, tokenId, combat, lastCombatant)) return;
-        debug("Poison Trigger!");
 
         /** Actually apply Affliction */
         const actor = lastCombatant.actor;
 
         let applyPoison = async () => {
-            debug("Applying Poison");
             const token = canvas.tokens.get(lastCombatant.tokenId);
             await ApplyFlatDamage([token], "Poison", actor.data.data.health.tick);
         }
@@ -125,13 +123,11 @@ export const EffectFns = new Map([
     }], 
     ["badly_poisoned", async function(tokenId, combat, lastCombatant, roundData, options, sender, effect){
         if(!IsSameTokenAndNotAlreadyApplied(effect, tokenId, combat, lastCombatant)) return;
-        debug("Badly Poisoned Trigger!");
 
         /** Actually apply Affliction */
         const actor = lastCombatant.actor;
 
         let applyPoison = async () => {
-            debug("Applying Toxic Poison");
             const token = canvas.tokens.get(lastCombatant.tokenId);
             const badly_poisoned_effect = token.actor.effects.find(x => x.data.label == "Badly Poisoned");
             await ApplyFlatDamage([token], "Toxic Damage", (5 * badly_poisoned_effect.data.flags.ptu?.roundsElapsed) + 5);
@@ -154,6 +150,33 @@ export const EffectFns = new Map([
         /** If affliction can only be triggered once per turn, make sure it shows as applied. */
         await combat.update({[`flags.ptu.applied.${tokenId}.${effect}`]: true, [`flags.ptu.applied.${tokenId}.poisoned`]: true})
     }],
+    ["burned", async function(tokenId, combat, lastCombatant, roundData, options, sender, effect){
+        if(!IsSameTokenAndNotAlreadyApplied(effect, tokenId, combat, lastCombatant)) return;
+
+        /** Actually apply Affliction */
+        const actor = lastCombatant.actor;
+
+        let applyBurn = async () => {
+            const token = canvas.tokens.get(lastCombatant.tokenId);
+            await ApplyFlatDamage([token], "Burn", actor.data.data.health.tick);
+        }
+
+        const actions_taken = actor.data.flags.ptu?.actions_taken; 
+        if(actions_taken?.standard) {
+            await applyBurn();
+        }
+        else {
+            await Dialog.confirm({
+                title: `${lastCombatant.name}'s Burn`,
+                content: `<p>Has ${lastCombatant.name} taken a Standard Action this turn?</p><p><small class="muted-text">Aka, should they take Burn damage?</small></p>`,
+                yes: async () => await applyBurn(),
+                defaultYes: false
+            })
+        }
+
+        /** If affliction can only be triggered once per turn, make sure it shows as applied. */
+        await combat.update({[`flags.ptu.applied.${tokenId}.${effect}`]: true})
+    }], 
     ["confused", async function(tokenId, combat, lastCombatant, roundData, options, sender, effect){
         if(!IsSameTokenAndNotAlreadyApplied(effect, tokenId, combat, lastCombatant)) return;
         debug("Confusion Trigger!");
