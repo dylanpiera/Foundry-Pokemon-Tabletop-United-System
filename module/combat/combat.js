@@ -53,7 +53,7 @@ export default class PTUCombat {
             lastTurn: {round: combat.round, turn: combat.turn}
         }
 
-        this._initHooks(backupData.hooks);
+        this._initHooks();
 
         // Final Initialization Steps
         this._onRenderCombatTracker(game.combats.apps[0], $('section#combat'));
@@ -65,7 +65,6 @@ export default class PTUCombat {
         const combat = this.combat;
         const data = {
             data: Object.fromEntries(Object.entries(this.data).filter(x => !x[0].startsWith('_'))),
-            hooks: JSON.stringify(this.hooks, replacer)
         };
 
         return combat.setFlag("ptu", "PTUCombatData", data);
@@ -79,28 +78,26 @@ export default class PTUCombat {
 
         return {
             data: data.data,
-            hooks: JSON.parse(data.hooks,reviver)
         }
     }
 
-    _initHooks(backupDataHooks = undefined) {
+    _initHooks() {
         const ref = this;
         this.hooks = new Map();
 
         this.hooks.set("endTurn", new Map());
         this.hooks.set("endRound", new Map());
-        // If hooks were saved before hand...
-        if(backupDataHooks) {
-            for(let erHook of backupDataHooks.get("endRound").values()) this.addEndOfRoundEffect(erHook.tokenId, erHook.effect);
-            for(let etHook of backupDataHooks.get("endTurn").values()) this.addEndOfTurnEffect(etHook.tokenId, etHook.effect);
-        }
+
+        this.addEndOfRoundEffect(this._onEndOfRound);
+        this.addEndOfTurnEffect(this._onEndOfTurn);
 
         this.hooks.set("createCombatant", Hooks.on("createCombatant", this._onCreateCombatant.bind(ref)));
         this.hooks.set("updateCombatant", Hooks.on("updateCombatant", this._onUpdateCombatant.bind(ref)));
         this.hooks.set("renderCombatTracker", Hooks.on("renderCombatTracker", this._onRenderCombatTracker.bind(ref)));
         this.hooks.set("updateCombat", Hooks.on("updateCombat", this._onUpdateCombat.bind(ref)))
         this.hooks.set("preDeleteCombat", Hooks.on("preDeleteCombat", this._onDelete.bind(ref)));
-        this.hooks.set("resetAtEndOfRound", Hooks.on("endRound", this._onEndOfRound.bind(ref)))
+        
+        //this.hooks.set("resetAtEndOfRound", Hooks.on("endRound", this._onEndOfRound.bind(ref)))
     }
 
     /** Hooks */
@@ -162,70 +159,64 @@ export default class PTUCombat {
         await combat.unsetFlag("ptu", "applied");
     }
 
+    async _onEndOfTurn(combat, combatant, lastTurn, options, sender) {
+        if(combat.id != this.combat.id) return;
+
+        if(!combatant.actor.data.flags.ptu) return;
+        
+        const afflictions = Object.keys(combatant.actor.data.flags.ptu).filter(x => x.startsWith("is_")).map(x => x.slice(3));
+        if(afflictions.length == 0) return;
+
+        for(let affliction of afflictions) {
+            const effect = EffectFns.get(affliction); 
+            if(!effect) continue;
+
+            await effect(combatant.tokenId, combat, combatant, lastTurn, options, sender, affliction);
+        }
+    }
+
     /** Methods */
 
-    async addEndOfRoundEffect(tokenId, effectKey) {
-        const effect = EffectFns.get(effectKey);
-        if(!effect) return false;
-        
+    addEndOfRoundEffect(effectFn) {
+        if(typeof effectFn !== 'function') return false;
         const id = randomID();
         const ref = this;
 
-        this.hooks.get("endRound").set(id, {
-            id: Hooks.on("endRound", (combat, ...args) => {
-                if(combat.id != ref.combat.id) return;
-                effect.bind(ref, tokenId, combat, ...args, effectKey)();
-            }),
-            tokenId,
-            effect: effectKey
-        });
-
-        await this._saveData();
+        this.hooks.get("endRound").set(id, Hooks.on("endRound", (combat, ...args) => {
+            if(combat.id != ref.combat.id) return;
+            effectFn.bind(ref, combat, ...args)();
+        }));
 
         return id;
     }
 
-    async removeEndOfRoundEffect(id) {
+    removeEndOfRoundEffect(id) {
         const hookId = this.hooks.get("endRound").get(id);
         if(!hookId) return false;
 
         Hooks.off("endRound", hookId);
-        const result = this.hooks.get("endRound").delete(id);
-
-        await this._saveData();
-        return result;
+        return this.hooks.get("endRound").delete(id);
     }
 
-    async addEndOfTurnEffect(tokenId, effectKey) {
-        const effect = EffectFns.get(effectKey);
-        if(!effect) return false;
-
+    addEndOfTurnEffect(effectFn) {
+        if(typeof effectFn !== 'function') return false;
         const id = randomID();
         const ref = this;
 
-        this.hooks.get("endTurn").set(id, {
-            id: Hooks.on("endTurn", (combat, ...args) => {
-                if(combat.id != ref.combat.id) return;
-                effect.bind(ref, tokenId, combat, ...args, effectKey)();
-            }),
-            tokenId,
-            effect: effectKey
-        });
-
-        await this._saveData();
+        this.hooks.get("endTurn").set(id, Hooks.on("endTurn", (combat, ...args) => {
+            if(combat.id != ref.combat.id) return;
+            effectFn.bind(ref, combat, ...args)();
+        }));
 
         return id;
     }
 
-    async removeEndOfTurnEffect(id) {
+    removeEndOfTurnEffect(id) {
         const hookId = this.hooks.get("endTurn").get(id);
         if(!hookId) return false;
 
         Hooks.off("endTurn", hookId);
-        const result = this.hooks.get("endTurn").delete(id);
-
-        await this._saveData();
-        return result;
+        return this.hooks.get("endTurn").delete(id);
     }
 
     _endOfTurnHook(changes, sender) {
@@ -324,7 +315,7 @@ export default class PTUCombat {
     /** Destructor */
     async destroy(andDeleteCombat = true) {
         this.hooks.forEach((hook, id) => {
-            if(Array.isArray(id)) id.forEach((_, value) => Hooks.off(hook, value.id));
+            if(Array.isArray(id)) id.forEach((_, value) => Hooks.off(hook, value));
             else Hooks.off(hook, id);
         })
 
