@@ -128,10 +128,31 @@ export const EffectFns = new Map([
         debug("Badly Poisoned Trigger!");
 
         /** Actually apply Affliction */
+        const actor = lastCombatant.actor;
+
+        let applyPoison = async () => {
+            debug("Applying Toxic Poison");
+            const token = canvas.tokens.get(lastCombatant.tokenId);
+            const badly_poisoned_effect = token.actor.effects.find(x => x.data.label == "Badly Poisoned");
+            await ApplyFlatDamage([token], "Toxic Damage", (5 * badly_poisoned_effect.data.flags.ptu?.roundsElapsed) + 5);
+        }
+
+        const actions_taken = actor.data.flags.ptu?.actions_taken; 
+        if(actions_taken?.standard) {
+            await applyPoison();
+        }
+        else {
+            await Dialog.confirm({
+                title: `${lastCombatant.name}'s Toxic`,
+                content: `<p>Has ${lastCombatant.name} taken a Standard Action this turn?</p><p><small class="muted-text">Aka, should they take Toxic damage?</small></p>`,
+                yes: async () => await applyPoison(),
+                defaultYes: false
+            })
+        }
         
 
         /** If affliction can only be triggered once per turn, make sure it shows as applied. */
-        await combat.update({[`flags.ptu.applied.${tokenId}.${effect}`]: true})
+        await combat.update({[`flags.ptu.applied.${tokenId}.${effect}`]: true, [`flags.ptu.applied.${tokenId}.poisoned`]: true})
     }],
     ["confused", async function(tokenId, combat, lastCombatant, roundData, options, sender, effect){
         if(!IsSameTokenAndNotAlreadyApplied(effect, tokenId, combat, lastCombatant)) return;

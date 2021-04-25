@@ -97,7 +97,6 @@ export default class PTUCombat {
         this.hooks.set("updateCombat", Hooks.on("updateCombat", this._onUpdateCombat.bind(ref)))
         this.hooks.set("preDeleteCombat", Hooks.on("preDeleteCombat", this._onDelete.bind(ref)));
         
-        //this.hooks.set("resetAtEndOfRound", Hooks.on("endRound", this._onEndOfRound.bind(ref)))
     }
 
     /** Hooks */
@@ -168,10 +167,20 @@ export default class PTUCombat {
         if(afflictions.length == 0) return;
 
         for(let affliction of afflictions) {
+            //Do not deal double poison damage
+            if(affliction == "poisoned") {
+                if(afflictions.includes("badly_poisoned")) continue;
+            }
+
             const effect = EffectFns.get(affliction); 
             if(!effect) continue;
 
-            await effect(combatant.tokenId, combat, combatant, lastTurn, options, sender, affliction);
+            await effect(combatant.tokenId, this.combat, combatant, lastTurn, options, sender, affliction);
+        }
+
+        for(let effect of combatant.actor.effects) {
+            const val = (duplicate(effect.data.flags).ptu?.roundsElapsed ?? 0) + 1;
+            await effect.update({"flags.ptu.roundsElapsed": val});
         }
     }
 
