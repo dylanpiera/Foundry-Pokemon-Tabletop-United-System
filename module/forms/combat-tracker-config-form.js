@@ -21,13 +21,13 @@ import { log } from "../ptu.js";
 
   /** @override */
   getData() {
-    const data = super.getData();
+    const data = {};
     data.dtypes = ["String", "Number", "Boolean"];
 
     data.settings = game.settings.get("core", Combat.CONFIG_SETTING);
     data.attributeChoices = this.getAttributeChoices();
 
-    data.options = {leagueBattle: this.object?.data?.options?.leagueBattle};
+    data.options = {leagueBattle: this.object?.getFlag("ptu", "leagueBattle")};
 
     return data;
   }
@@ -44,10 +44,8 @@ import { log } from "../ptu.js";
       skipDefeated: formData.skipDefeated
     });
     
-    if(object) {
-      await this.object.update({
-        'options.leagueBattle': formData.leagueBattle
-      })
+    if(this.object) {
+      await this.object.setFlag("ptu", "leagueBattle", formData.leagueBattle);
     }
     
     return result;

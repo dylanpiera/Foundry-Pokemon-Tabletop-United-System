@@ -136,7 +136,7 @@ export default class PTUCombat {
         const ref = this;
         settingsButton.on("click", function(event) {
             event.preventDefault();
-            new PTUCombatTrackerConfig(ref).render(true);
+            new PTUCombatTrackerConfig(ref.combat).render(true);
         })
     }
 
@@ -291,7 +291,7 @@ export default class PTUCombat {
 
     async _updateLeagueInitiative(token) {
         if(!game.settings.get("ptu", "leagueBattleInvertTrainerInitiative")) return;
-        if(!this.options?.leagueBattle) return;
+        if(!this.flags?.ptu?.leagueBattle) return;
         
         const combatant = this.combat.getCombatantByToken(token.tokenId);
         if(!combatant) return;
@@ -315,6 +315,10 @@ export default class PTUCombat {
 
     get options() {
         return this.data.options;
+    }
+
+    get flags() {
+        return this.combat.data.flags
     }
 
     /** Destructor */
