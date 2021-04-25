@@ -39,6 +39,7 @@ import { ActorGenerator } from './utils/actor-generator.js'
 import { GetOrCacheAbilities, GetOrCacheCapabilities, GetOrCacheMoves} from './utils/cache-helper.js'
 import {Afflictions} from './combat/effects/afflictions.js'
 import PTUCombat from './combat/combat.js'
+import Api from './api/api.js'
 
 export let debug = (...args) => {if (game.settings.get("ptu", "showDebugInfo") ?? false) console.log("DEBUG: FVTT PTU | ", ...args)};
 export let log = (...args) => console.log("FVTT PTU | ", ...args);
@@ -231,7 +232,8 @@ Hooks.once('init', async function() {
     combats: new Map(),
     cache: {
       GetOrCreateCachedItem
-    }
+    },
+    api: new Api()
   };
 
   /**

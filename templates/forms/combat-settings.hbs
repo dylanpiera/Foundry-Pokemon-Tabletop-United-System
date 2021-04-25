@@ -22,6 +22,12 @@
         <p class="notes">{{localize 'COMBAT.SkipDefeatedHint'}}</p>
     </div>
 
+    <div class="form-group">
+        <label>League Battle?</label>
+        <input type="checkbox" name="leagueBattle" {{checked options.leagueBattle}} data-dtype="Boolean"/>
+        <p class="notes">If enabled in settings, setting a battle to League Battle mode will automatically sort players in inverted order.</p>
+    </div>
+
     <button type="submit" name="submit">
         <i class="fas fa-save"></i> {{localize 'COMBAT.SettingsSave'}}
     </button>

@@ -80,6 +80,51 @@ export const Afflictions = [
     ]},
 ];
 
+function IsSameTokenAndNotAlreadyApplied(effect, tokenId, combat, lastCombatant) {
+    if(tokenId !== lastCombatant.tokenId) return false;
+    
+    const flag = combat.getFlag("ptu", `applied`);
+    // If the effect has already been applied, skip.
+    if(flag) {
+        if(flag[tokenId]) return !flag[tokenId][effect];
+    }
+    
+    return true;
+}
+
+export const EffectFns = new Map([
+    ["poisoned", async function(tokenId, combat, lastCombatant, roundData, options, sender, effect){
+        if(!IsSameTokenAndNotAlreadyApplied(effect, tokenId, combat, lastCombatant)) return;
+        debug("Poison Trigger!");
+
+        /** Actually apply Affliction */
+        
+
+        /** If affliction can only be triggered once per turn, make sure it shows as applied. */
+        await combat.update({[`flags.ptu.applied.${tokenId}.${effect}`]: true})
+    }], 
+    ["badly_poisoned", async function(tokenId, combat, lastCombatant, roundData, options, sender, effect){
+        if(!IsSameTokenAndNotAlreadyApplied(effect, tokenId, combat, lastCombatant)) return;
+        debug("Badly Poisoned Trigger!");
+
+        /** Actually apply Affliction */
+        
+
+        /** If affliction can only be triggered once per turn, make sure it shows as applied. */
+        await combat.update({[`flags.ptu.applied.${tokenId}.${effect}`]: true})
+    }],
+    ["confused", async function(tokenId, combat, lastCombatant, roundData, options, sender, effect){
+        if(!IsSameTokenAndNotAlreadyApplied(effect, tokenId, combat, lastCombatant)) return;
+        debug("Confusion Trigger!");
+
+        /** Actually apply Affliction */
+        
+
+        /** If affliction can only be triggered once per turn, make sure it shows as applied. */
+        await combat.update({[`flags.ptu.applied.${tokenId}.${effect}`]: true})
+    }], 
+]);
+
 Hooks.on("applyActiveEffect", function(actorData, change) {
     if(change.key == "data.modifiers.flinch_count") {
         let actor;
