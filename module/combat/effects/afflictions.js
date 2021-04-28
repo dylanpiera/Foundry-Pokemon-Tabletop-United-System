@@ -318,6 +318,8 @@ export const EffectFns = new Map([
         debug("Paralysis Trigger!");
 
         /** Actually apply Affliction */
+        const isErrata = game.settings.get("ptu", "errata");
+
         const actor = lastCombatant.actor;
 
         const saveCheck = await actor.sheet._onSaveRoll();
@@ -325,7 +327,7 @@ export const EffectFns = new Map([
         roll._total = roll.total;
         let messageData = {};
         
-        if(roll.total >= CONFIG.PTUCombat.DC.PARALYZED) {
+        if(roll.total >= isErrata ? CONFIG.PTUCombat.DC.PARALYZED : CONFIG.PTUCombat.DC.PARALYZED_PRE_ERRATA) {
             messageData = {
                 title: `${actor.name}'s<br>Paralysis Save!`,
                 roll: roll,
@@ -340,9 +342,10 @@ export const EffectFns = new Map([
                 description: `Save Failed!`,
                 success: false
             }
-
-            const aeAffliction = new ActiveEffect(mergeObject(CONFIG.statusEffects.find(x => x.id == "effect.other.vulnerable"), {duration: {rounds: 1, turns: 0}}), actor);
-            await actor.createEmbeddedEntity("ActiveEffect", aeAffliction.data);           
+            if(isErrata) {
+                const aeAffliction = new ActiveEffect(mergeObject(CONFIG.statusEffects.find(x => x.id == "effect.other.vulnerable"), {duration: {rounds: 1, turns: 0}}), actor);
+                await actor.createEmbeddedEntity("ActiveEffect", aeAffliction.data);           
+            }
         }
         const content = await renderTemplate('/systems/ptu/templates/chat/save-check.hbs', messageData);
         await saveCheck.update({content: content});

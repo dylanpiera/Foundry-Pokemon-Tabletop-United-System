@@ -16,6 +16,7 @@ CONFIG.PTUCombat = {
     },
     DC: {
         PARALYZED: 11,
+        PARALYZED_PRE_ERRATA: 5,
         FROZEN: 16,
         FROZEN_FIRE_MOD: -5,
         FROZEN_HAIL_MOD: 2,
