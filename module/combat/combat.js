@@ -22,6 +22,7 @@ CONFIG.PTUCombat = {
         FROZEN_SUNNY_MOD: -4,
         INFATUATION: 16,
         RAGE: 15,
+        SLEEP: 16,
     }
 }
 
@@ -383,6 +384,10 @@ export default class PTUCombat {
             //Do not deal double poison damage
             if(affliction == "poisoned") {
                 if(afflictions.includes("badly_poisoned")) continue;
+            }
+
+            if(affliction == "raging" || affliction == "infatuated" || affliction == "confused") {
+                if(afflictions.includes("sleeping")) continue;
             }
 
             const effect = EffectFns.get(affliction); 
