@@ -182,9 +182,69 @@ export const EffectFns = new Map([
         debug("Confusion Trigger!");
 
         /** Actually apply Affliction */
-        
+        const actor = lastCombatant.actor;
 
+        let applyConfusion = async (type) => {
+            const token = canvas.tokens.get(lastCombatant.tokenId);
+            switch(type) {
+                case 3: {
+                    const dmg = Math.floor(Number(actor.data.data.stats.atk.total)/2);
+                    await ApplyFlatDamage([token], "Confusion Damage", dmg);
+                    return;
+                }
+                case 2: {
+                    const dmg = Math.floor(Number(actor.data.data.stats.spatk.total)/2);
+                    await ApplyFlatDamage([token], "Confusion Damage", dmg);
+                    return;
+                }
+                case 1: {
+                    const dmg = Number(actor.data.data.health.tick);
+                    await ApplyFlatDamage([token], "Confusion Damage", dmg);
+                    return;
+                }
+            }
+        }
+
+        const actions_taken = actor.data.flags.ptu?.actions_taken; 
+        if(actions_taken?.attacked?.physical || actions_taken?.attacked?.special || actions_taken?.attacked?.status) {
+            if(actions_taken?.attacked?.physical) await applyConfusion(CONFIG.PTUCombat.Attack.PHYSICAL);
+            if(actions_taken?.attacked?.special) await applyConfusion(CONFIG.PTUCombat.Attack.SPECIAL);
+            if(actions_taken?.attacked?.status) await applyConfusion(CONFIG.PTUCombat.Attack.STATUS);
+        }
+        else {
+            await new Promise((resolve, reject) => {
+                const dialog = new Dialog({
+                    title: `{name}'s Confusion`,
+                    content: `<p>Did {name} use any move? If so which type?</p>`,
+                    buttons: {
+                        Phsyical: {
+                            label: "Physical",
+                            callback: async () => {await applyConfusion(CONFIG.PTUCombat.Attack.PHYSICAL); resolve(CONFIG.PTUCombat.Attack.PHYSICAL)}
+                        },
+                        Special: {
+                            label: "Special",
+                            callback: async () => {await applyConfusion(CONFIG.PTUCombat.Attack.SPECIAL); resolve(CONFIG.PTUCombat.Attack.SPECIAL)}
+                        },
+                        Status: {
+                            label: "Status",
+                            callback: async () => {await applyConfusion(CONFIG.PTUCombat.Attack.STATUS); resolve(CONFIG.PTUCombat.Attack.STATUS)}
+                        },
+                        None: {
+                            label: "No Attack",
+                            callback: () => resolve(CONFIG.PTUCombat.Attack.NONE)
+                        }
+                    },
+                    default: "None",
+                    close: () => reject
+                }, 
+                {
+                    width: 600,
+                });
+                dialog.render(true);
+            })
+        }
         /** If affliction can only be triggered once per turn, make sure it shows as applied. */
+        debug("Confusion applying flag")
         await combat.update({[`flags.ptu.applied.${tokenId}.${effect}`]: true})
     }], 
 ]);

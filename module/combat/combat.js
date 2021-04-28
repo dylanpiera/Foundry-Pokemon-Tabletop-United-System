@@ -7,6 +7,12 @@ CONFIG.PTUCombat = {
         BACKWARDS: -1,
         UNCHANGED: 0,
         FORWARD: 1
+    },
+    Attack: {
+        PHYSICAL: 3,
+        SPECIAL: 2,
+        STATUS: 1,
+        NONE: 0
     }
 }
 
@@ -25,7 +31,7 @@ Hooks.on("deleteCombat", async function(combat, options, id)  {
 Hooks.on("createCombat", initializeNewPTUCombat);
 
 function initializeNewPTUCombat(newCombat, options, sender) {
-    if(!game.ptu.api.isMainGM()) return;
+    if(!game.ptu.api.isMainGM() || game.ptu.disableCombatAutomation) return;
 
     const combat = game.combats.get(newCombat.id);
     if(!combat) {
@@ -160,9 +166,11 @@ export default class PTUCombat {
 
     async _onEndOfTurn(combat, combatant, lastTurn, options, sender) {
         if(combat.id != this.combat.id) return;
-
         if(!combatant.actor.data.flags.ptu) return;
         
+        // Only worry about effects if the combat has started
+        if(!combat.started) return;
+
         const afflictions = Object.keys(combatant.actor.data.flags.ptu).filter(x => x.startsWith("is_")).map(x => x.slice(3));
         if(afflictions.length == 0) return;
 
