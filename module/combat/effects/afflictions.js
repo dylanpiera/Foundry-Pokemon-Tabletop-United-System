@@ -183,6 +183,35 @@ export const EffectFns = new Map([
         if(options.round.direction == CONFIG.PTUCombat.DirectionOptions.FORWARD) return; // If new round already started don't register EoT effect.
         await combat.update({[`flags.ptu.applied.${tokenId}.${effect}`]: true})
     }], 
+    ["cursed", async function(tokenId, combat, lastCombatant, roundData, options, sender, effect, isStartOfTurn){
+        if(isStartOfTurn) return;
+        if(!IsSameTokenAndNotAlreadyApplied(effect, tokenId, combat, lastCombatant)) return;
+
+        /** Actually apply Affliction */
+        const actor = lastCombatant.actor;
+
+        let applyCurse = async () => {
+            const token = canvas.tokens.get(lastCombatant.tokenId);
+            await ApplyFlatDamage([token], "Curse", actor.data.data.health.tick * 2);
+        }
+
+        const actions_taken = actor.data.flags.ptu?.actions_taken; 
+        if(actions_taken?.standard) {
+            await applyCurse();
+        }
+        else {
+            await Dialog.confirm({
+                title: `${lastCombatant.name}'s Curse`,
+                content: `<p>Has ${lastCombatant.name} taken a Standard Action this turn?</p><p><small class="muted-text">Aka, should they take Curse damage?</small></p>`,
+                yes: async () => await applyCurse(),
+                defaultYes: false
+            })
+        }
+
+        /** If affliction can only be triggered once per turn, make sure it shows as applied. */
+        if(options.round.direction == CONFIG.PTUCombat.DirectionOptions.FORWARD) return; // If new round already started don't register EoT effect.
+        await combat.update({[`flags.ptu.applied.${tokenId}.${effect}`]: true})
+    }],
     ["confused", async function(tokenId, combat, lastCombatant, roundData, options, sender, effect, isStartOfTurn){
         if(isStartOfTurn) return;
         if(!IsSameTokenAndNotAlreadyApplied(effect, tokenId, combat, lastCombatant)) return;
@@ -324,16 +353,21 @@ Hooks.on("preCreateActiveEffect", function(actor,effect,options,id) {
 })
 
 Hooks.on("preUpdateToken", function(scene, tokenData, changes, options, sender) {
+    // Only continue if effects have been changed
     if(!changes.actorData?.effects) return;    
 
+    // Take a snapshot of the current tokenData before changes are applied
     const data = duplicate(tokenData);
     
     if(data.actorData.effects) {
+        // If a new effect is added
         if(data.actorData.effects.length < changes.actorData.effects.length) {
+            // Apply preCreate effect changes
             applyPreCreateActiveEffectChanges(changes.actorData.effects[changes.actorData.effects.length-1], false);
         }
     }
     else {
+        // If first effect, apply changes to that.
         applyPreCreateActiveEffectChanges(changes.actorData.effects[0], false);
     }
 });
