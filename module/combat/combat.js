@@ -15,7 +15,11 @@ CONFIG.PTUCombat = {
         NONE: 0
     },
     DC: {
-        PARALYZED: 11
+        PARALYZED: 11,
+        FROZEN: 16,
+        FROZEN_FIRE_MOD: -5,
+        FROZEN_HAIL_MOD: 2,
+        FROZEN_SUNNY_MOD: -4
     }
 }
 

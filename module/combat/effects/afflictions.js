@@ -297,7 +297,7 @@ export const EffectFns = new Map([
         roll._total = roll.total;
         let messageData = {};
         
-        if(roll.total > CONFIG.PTUCombat.DC.PARALYZED) {
+        if(roll.total >= CONFIG.PTUCombat.DC.PARALYZED) {
             messageData = {
                 title: `${actor.name}'s<br>Paralysis Save!`,
                 roll: roll,
@@ -320,6 +320,47 @@ export const EffectFns = new Map([
         await saveCheck.update({content: content});
 
         /** If affliction can only be triggered once per turn, make sure it shows as applied. */
+        await combat.update({[`flags.ptu.applied.${tokenId}.${effect}`]: true})
+    }],
+    ["frozen", async function(tokenId, combat, lastCombatant, roundData, options, sender, effect, isStartOfTurn){
+        if(isStartOfTurn) return;
+        if(!IsSameTokenAndNotAlreadyApplied(effect, tokenId, combat, lastCombatant)) return;
+        debug("Paralysis Trigger!");
+
+        /** Actually apply Affliction */
+        const actor = lastCombatant.actor;
+
+        const saveCheck = await actor.sheet._onSaveRoll();
+        const roll = JSON.parse(saveCheck.data.roll);
+        roll._total = roll.total;
+        let messageData = {};
+
+        //TODO: Add Sun/Hail check
+        const DC = actor.data.data.typing.includes("Fire") ? CONFIG.PTUCombat.DC.FROZEN + CONFIG.PTUCombat.DC.FROZEN_FIRE_MOD : CONFIG.PTUCombat.DC.FROZEN;
+        
+        if(roll.total >= DC) {
+            messageData = {
+                title: `${actor.name}'s<br>Frozen Save!`,
+                roll: roll,
+                description: `Save Success!<br>${actor.name} Thawed Out!`,
+                success: true
+            }
+
+            await actor.effects.find(x => x.data.label == Handlebars.helpers.capitalizeFirst(effect)).delete();
+        }
+        else {
+            messageData = {
+                title: `${actor.name}'s<br>Frozen Save!`,
+                roll: roll,
+                description: `Save Failed!`,
+                success: false
+            }        
+        }
+        const content = await renderTemplate('/systems/ptu/templates/chat/save-check.hbs', messageData);
+        await saveCheck.update({content: content});
+
+        /** If affliction can only be triggered once per turn, make sure it shows as applied. */
+        if(options.round.direction == CONFIG.PTUCombat.DirectionOptions.FORWARD) return; // If new round already started don't register EoT effect.
         await combat.update({[`flags.ptu.applied.${tokenId}.${effect}`]: true})
     }],
 ]);
