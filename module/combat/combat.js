@@ -391,6 +391,10 @@ export default class PTUCombat {
                 if(afflictions.includes("sleeping")) continue;
             }
 
+            if(affliction == "badly_sleeping") {
+                if(!afflictions.includes("sleeping")) continue;
+            }
+
             const effect = EffectFns.get(affliction); 
             if(!effect) continue;
 

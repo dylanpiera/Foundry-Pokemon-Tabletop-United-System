@@ -495,6 +495,8 @@ export const EffectFns = new Map([
             }
 
             await actor.effects.find(x => x.data.label == "Sleep").delete();
+            const bad_sleep = actor.effects.find(x => x.data.label == "BadSleep");
+            if(bad_sleep) await bad_sleep.delete();
         }
         else {
             messageData = {
@@ -506,6 +508,21 @@ export const EffectFns = new Map([
         }
         const content = await renderTemplate('/systems/ptu/templates/chat/save-check.hbs', messageData);
         await saveCheck.update({content: content});
+
+        /** If affliction can only be triggered once per turn, make sure it shows as applied. */
+        if(options.round.direction == CONFIG.PTUCombat.DirectionOptions.FORWARD) return; // If new round already started don't register EoT effect.
+        await combat.update({[`flags.ptu.applied.${tokenId}.${effect}`]: true})
+    }],
+    ["badly_sleeping", async function(tokenId, combat, lastCombatant, roundData, options, sender, effect, isStartOfTurn){
+        if(isStartOfTurn) return;
+        if(!IsSameTokenAndNotAlreadyApplied(effect, tokenId, combat, lastCombatant)) return;
+        debug("Bad Sleep Trigger!");
+
+        /** Actually apply Affliction */
+        const actor = lastCombatant.actor;
+
+        const token = canvas.tokens.get(lastCombatant.tokenId);
+        await ApplyFlatDamage([token], "Nightmare (Bad Sleep)", actor.data.data.health.tick * 2);
 
         /** If affliction can only be triggered once per turn, make sure it shows as applied. */
         if(options.round.direction == CONFIG.PTUCombat.DirectionOptions.FORWARD) return; // If new round already started don't register EoT effect.
