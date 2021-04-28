@@ -1056,6 +1056,12 @@ p.summary {
   color: #aa0200;
   filter: sepia(0.5) hue-rotate(-60deg);
 }
+.success {
+  color: #18520b;
+}
+.failure {
+  color: #aa0200;
+}
 .changelog div {
   word-break: break-word;
 }

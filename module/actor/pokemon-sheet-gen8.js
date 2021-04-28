@@ -285,19 +285,27 @@ export class PTUGen8PokemonSheet extends ActorSheet {
 	 * @param {Event} event   The originating click event
 	 * @private
 	 */
-	_onSaveRoll(event) {
+	async _onSaveRoll(event = new Event('void')) {
 		event.preventDefault();
 		if(event.screenX == 0 && event.screenY == 0) return;
 
 		let mod = (this.actor.data.data.training?.inspired?.trained ? this.actor.data.data.training?.critical ? 6 : 2 : 0) + (this.actor.data.data.training?.inspired?.ordered ? 2 : 0) + this.actor.data.data.modifiers.saveChecks;
 		let roll = new Roll("1d20 + @mod", {mod: mod});
-		let label = 'Rolling Save Check';
-		roll.roll().toMessage({
-			speaker: ChatMessage.getSpeaker({
-				actor: this.actor
-			}),
-			flavor: label
-		});
+		
+		roll.roll();
+
+		const messageData = {
+			title: `${this.actor.name}'s<br>Save Check`,
+			user: game.user._id,
+			sound: CONFIG.sounds.dice,
+			templateType: 'save',
+			roll: roll,
+			description: `Save check of ${roll._total}!`
+		}
+
+		messageData.content = await renderTemplate('/systems/ptu/templates/chat/save-check.hbs', messageData);
+
+		return ChatMessage.create(messageData, {});
 	}
 
 	/**

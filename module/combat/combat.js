@@ -13,6 +13,9 @@ CONFIG.PTUCombat = {
         SPECIAL: 2,
         STATUS: 1,
         NONE: 0
+    },
+    DC: {
+        PARALYZED: 11
     }
 }
 
@@ -92,17 +95,18 @@ export default class PTUCombat {
         this.hooks = new Map();
 
         this.hooks.set("endTurn", new Map());
+        this.hooks.set("startTurn", new Map());
         this.hooks.set("endRound", new Map());
 
         this.addEndOfRoundEffect(this._onEndOfRound);
         this.addEndOfTurnEffect(this._onEndOfTurn);
+        this.addStartOfTurnEffect(this._onStartOfTurn);
 
         this.hooks.set("createCombatant", Hooks.on("createCombatant", this._onCreateCombatant.bind(ref)));
         this.hooks.set("updateCombatant", Hooks.on("updateCombatant", this._onUpdateCombatant.bind(ref)));
         this.hooks.set("renderCombatTracker", Hooks.on("renderCombatTracker", this._onRenderCombatTracker.bind(ref)));
         this.hooks.set("updateCombat", Hooks.on("updateCombat", this._onUpdateCombat.bind(ref)))
         this.hooks.set("preDeleteCombat", Hooks.on("preDeleteCombat", this._onDelete.bind(ref)));
-        
     }
 
     /** Hooks */
@@ -171,25 +175,51 @@ export default class PTUCombat {
         // Only worry about effects if the combat has started
         if(!combat.started) return;
 
-        const afflictions = Object.keys(combatant.actor.data.flags.ptu).filter(x => x.startsWith("is_")).map(x => x.slice(3));
-        if(afflictions.length == 0) return;
-
-        for(let affliction of afflictions) {
-            //Do not deal double poison damage
-            if(affliction == "poisoned") {
-                if(afflictions.includes("badly_poisoned")) continue;
-            }
-
-            const effect = EffectFns.get(affliction); 
-            if(!effect) continue;
-
-            await effect(combatant.tokenId, this.combat, combatant, lastTurn, options, sender, affliction);
-        }
+        await this._handleAfflictions(combat, combatant, lastTurn, options, sender, false)
 
         for(let effect of combatant.actor.effects) {
+            if(options.turn.direction == CONFIG.PTUCombat.DirectionOptions.FORWARD) {
+                const curRound = (options.round.direction == CONFIG.PTUCombat.DirectionOptions.FORWARD) ? lastTurn.round : combat.round;
+                const startRound = effect.data.duration?.startRound;
+                debug((startRound - curRound), effect.data.duration?.rounds * -1);
+                if((startRound - curRound) <= (effect.data.duration?.rounds * -1)) {
+                    if(effect.data.duration?.turns > 0)  {
+                        await effect.delete();
+                        continue;
+                    }
+                }
+            }
+
             const val = (duplicate(effect.data.flags).ptu?.roundsElapsed ?? 0) + 1;
+
+            if(effect.data.duration?.rounds > 0 || effect.data.duration?.turns > 0 ) {
+                const roundDiff = lastTurn.round - effect.data.duration?.startRound;
+
+            }
             await effect.update({"flags.ptu.roundsElapsed": val});
         }
+    }
+
+    async _onStartOfTurn(combat, combatant, lastTurn, options, sender) {
+        if(combat.id != this.combat.id) return;
+        if(!combatant.actor.data.flags.ptu) return;
+        
+        // Only worry about effects if the combat has started
+        if(!combat.started) return;
+
+        if(options.turn.direction == CONFIG.PTUCombat.DirectionOptions.FORWARD) {
+            for(let effect of combatant.actor.effects) {
+                const curRound = combat.round;
+                const startRound = effect.data.duration?.startRound;
+                debug((startRound - curRound), effect.data.duration?.rounds * -1);
+                if((startRound - curRound) <= (effect.data.duration?.rounds * -1)) {
+                    if(effect.data.duration?.turns > 0) continue; // Needs to be removed at end of turn
+                    await effect.delete();
+                }
+            }
+        }
+
+        await this._handleAfflictions(combat, combatant, lastTurn, options, sender, true)
     }
 
     /** Methods */
@@ -234,6 +264,27 @@ export default class PTUCombat {
 
         Hooks.off("endTurn", hookId);
         return this.hooks.get("endTurn").delete(id);
+    }
+
+    addStartOfTurnEffect(effectFn) {
+        if(typeof effectFn !== 'function') return false;
+        const id = randomID();
+        const ref = this;
+
+        this.hooks.get("startTurn").set(id, Hooks.on("startTurn", (combat, ...args) => {
+            if(combat.id != ref.combat.id) return;
+            effectFn.bind(ref, combat, ...args)();
+        }));
+
+        return id;
+    }
+
+    removeStartOfTurnEffect(id) {
+        const hookId = this.hooks.get("startTurn").get(id);
+        if(!hookId) return false;
+
+        Hooks.off("startTurn", hookId);
+        return this.hooks.get("startTurn").delete(id);
     }
 
     _endOfTurnHook(changes, sender) {
@@ -294,6 +345,13 @@ export default class PTUCombat {
             
             if(hasChanged.turn) Hooks.call("endTurn", this.combat, combatant, lastTurn, options, sender);
             if(hasChanged.round) Hooks.call("endRound", this.combat, combatant, lastTurn, options, sender);
+            
+            // Start Turn hook
+            if(hasChanged.turn) {
+                const newCombatant = this.combat.turns[turn];
+                const ref = this; 
+                setTimeout(() => Hooks.call("startTurn", ref.combat, newCombatant, {round, turn}, options, sender), 100);
+            }
         }
     }
 
@@ -309,6 +367,23 @@ export default class PTUCombat {
         if(decimal == 0) return;
         debug("test")
         await this.combat.setInitiative(combatant._id, 1000 - combatant.actor.data.data.initiative.value + decimal);
+    }
+
+    async _handleAfflictions(combat, combatant, lastTurn, options, sender, isStartOfTurn) {
+        const afflictions = Object.keys(combatant.actor.data.flags.ptu).filter(x => x.startsWith("is_")).map(x => x.slice(3));
+        if(afflictions.length == 0) return;
+
+        for(let affliction of afflictions) {
+            //Do not deal double poison damage
+            if(affliction == "poisoned") {
+                if(afflictions.includes("badly_poisoned")) continue;
+            }
+
+            const effect = EffectFns.get(affliction); 
+            if(!effect) continue;
+
+            await effect(combatant.tokenId, this.combat, combatant, lastTurn, options, sender, affliction, isStartOfTurn);
+        }
     }
 
     /** Getters & Setters */
