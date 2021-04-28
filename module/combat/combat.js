@@ -20,7 +20,8 @@ CONFIG.PTUCombat = {
         FROZEN_FIRE_MOD: -5,
         FROZEN_HAIL_MOD: 2,
         FROZEN_SUNNY_MOD: -4,
-        INFATUATION: 16
+        INFATUATION: 16,
+        RAGE: 15,
     }
 }
 

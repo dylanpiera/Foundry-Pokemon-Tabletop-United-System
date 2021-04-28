@@ -403,6 +403,46 @@ export const EffectFns = new Map([
         if(options.round.direction == CONFIG.PTUCombat.DirectionOptions.FORWARD) return; // If new round already started don't register EoT effect.
         await combat.update({[`flags.ptu.applied.${tokenId}.${effect}`]: true})
     }],
+    ["raging", async function(tokenId, combat, lastCombatant, roundData, options, sender, effect, isStartOfTurn){
+        if(isStartOfTurn) return;
+        if(!IsSameTokenAndNotAlreadyApplied(effect, tokenId, combat, lastCombatant)) return;
+        debug("Rage Trigger!");
+
+        /** Actually apply Affliction */
+        const actor = lastCombatant.actor;
+
+        const saveCheck = await actor.sheet._onSaveRoll();
+        const roll = JSON.parse(saveCheck.data.roll);
+        roll._total = roll.total;
+        let messageData = {};
+
+        const DC = CONFIG.PTUCombat.DC.RAGE;
+        
+        if(roll.total >= DC) {
+            messageData = {
+                title: `${actor.name}'s<br>Rage Save!`,
+                roll: roll,
+                description: `Save Success!<br>${actor.name} calmed down!`,
+                success: true
+            }
+
+            await actor.effects.find(x => x.data.label == "Rage").delete();
+        }
+        else {
+            messageData = {
+                title: `${actor.name}'s<br>Rage Save!`,
+                roll: roll,
+                description: `Save Failed!`,
+                success: false
+            }        
+        }
+        const content = await renderTemplate('/systems/ptu/templates/chat/save-check.hbs', messageData);
+        await saveCheck.update({content: content});
+
+        /** If affliction can only be triggered once per turn, make sure it shows as applied. */
+        if(options.round.direction == CONFIG.PTUCombat.DirectionOptions.FORWARD) return; // If new round already started don't register EoT effect.
+        await combat.update({[`flags.ptu.applied.${tokenId}.${effect}`]: true})
+    }],
 ]);
 
 Hooks.on("applyActiveEffect", function(actorData, change) {
