@@ -438,6 +438,15 @@ function _loadSystemSettings() {
     onChange: (enabled) => setAccessabilityFont(enabled)
   });
 
+  game.settings.register("ptu", "errata", {
+    name: "PTU Errata",
+    hint: "The FVTT PTU System has been created using the latest Community Erratas in mind. If you would like to disable some of the errata's changes, specifically when it comes to automation, you can disable this option.",
+    scope: "world",
+    config: true,
+    type: Boolean,
+    default: true,
+  });
+
   game.settings.register("ptu", "showDebugInfo", {
     name: "Show Debug Info",
     hint: "Only for debug purposes. Logs extra debug messages & shows hidden folders/items",

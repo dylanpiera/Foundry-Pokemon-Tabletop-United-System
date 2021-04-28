@@ -22,9 +22,13 @@ CONFIG.PTUCombat = {
         FROZEN_HAIL_MOD: 2,
         FROZEN_SUNNY_MOD: -4,
         INFATUATION: 16,
+        INFATUATION_AFFLICTED: 10,
+        INFATUATION_NORMAL: 18,
         RAGE: 15,
         SLEEP: 16,
         CONFUSED: 16,
+        CONFUSED_HIT_ITSELF: 8,
+        CONFUSED_NORMAL: 15,
     }
 }
 

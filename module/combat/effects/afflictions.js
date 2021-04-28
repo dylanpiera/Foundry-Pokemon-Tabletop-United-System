@@ -213,12 +213,16 @@ export const EffectFns = new Map([
         await combat.update({[`flags.ptu.applied.${tokenId}.${effect}`]: true})
     }],
     ["confused", async function(tokenId, combat, lastCombatant, roundData, options, sender, effect, isStartOfTurn){
-        if(isStartOfTurn) return;
+        const isErrata = game.settings.get("ptu", "errata");
+        
+        if(isErrata && isStartOfTurn) return;
+        if(!isErrata && !isStartOfTurn) return;
         if(!IsSameTokenAndNotAlreadyApplied(effect, tokenId, combat, lastCombatant)) return;
         debug("Confusion Trigger!");
 
         /** Actually apply Affliction */
         const actor = lastCombatant.actor;
+
 
         let applyConfusion = async (type) => {
             const token = canvas.tokens.get(lastCombatant.tokenId);
@@ -241,43 +245,45 @@ export const EffectFns = new Map([
             }
         }
 
-        const actions_taken = actor.data.flags.ptu?.actions_taken; 
-        if(actions_taken?.attacked?.physical || actions_taken?.attacked?.special || actions_taken?.attacked?.status) {
-            if(actions_taken?.attacked?.physical) await applyConfusion(CONFIG.PTUCombat.Attack.PHYSICAL);
-            if(actions_taken?.attacked?.special) await applyConfusion(CONFIG.PTUCombat.Attack.SPECIAL);
-            if(actions_taken?.attacked?.status) await applyConfusion(CONFIG.PTUCombat.Attack.STATUS);
-        }
-        else {
-            await new Promise((resolve, reject) => {
-                const dialog = new Dialog({
-                    title: `${actor.name}'s Confusion`,
-                    content: `<p>Did ${actor.name} use any move? If so which type?</p>`,
-                    buttons: {
-                        Phsyical: {
-                            label: "Physical",
-                            callback: async () => {await applyConfusion(CONFIG.PTUCombat.Attack.PHYSICAL); resolve(CONFIG.PTUCombat.Attack.PHYSICAL)}
+        if(isErrata) {
+            const actions_taken = actor.data.flags.ptu?.actions_taken; 
+            if(actions_taken?.attacked?.physical || actions_taken?.attacked?.special || actions_taken?.attacked?.status) {
+                if(actions_taken?.attacked?.physical) await applyConfusion(CONFIG.PTUCombat.Attack.PHYSICAL);
+                if(actions_taken?.attacked?.special) await applyConfusion(CONFIG.PTUCombat.Attack.SPECIAL);
+                if(actions_taken?.attacked?.status) await applyConfusion(CONFIG.PTUCombat.Attack.STATUS);
+            }
+            else {
+                await new Promise((resolve, reject) => {
+                    const dialog = new Dialog({
+                        title: `${actor.name}'s Confusion`,
+                        content: `<p>Did ${actor.name} use any move? If so which type?</p>`,
+                        buttons: {
+                            Phsyical: {
+                                label: "Physical",
+                                callback: async () => {await applyConfusion(CONFIG.PTUCombat.Attack.PHYSICAL); resolve(CONFIG.PTUCombat.Attack.PHYSICAL)}
+                            },
+                            Special: {
+                                label: "Special",
+                                callback: async () => {await applyConfusion(CONFIG.PTUCombat.Attack.SPECIAL); resolve(CONFIG.PTUCombat.Attack.SPECIAL)}
+                            },
+                            Status: {
+                                label: "Status",
+                                callback: async () => {await applyConfusion(CONFIG.PTUCombat.Attack.STATUS); resolve(CONFIG.PTUCombat.Attack.STATUS)}
+                            },
+                            None: {
+                                label: "No Attack",
+                                callback: () => resolve(CONFIG.PTUCombat.Attack.NONE)
+                            }
                         },
-                        Special: {
-                            label: "Special",
-                            callback: async () => {await applyConfusion(CONFIG.PTUCombat.Attack.SPECIAL); resolve(CONFIG.PTUCombat.Attack.SPECIAL)}
-                        },
-                        Status: {
-                            label: "Status",
-                            callback: async () => {await applyConfusion(CONFIG.PTUCombat.Attack.STATUS); resolve(CONFIG.PTUCombat.Attack.STATUS)}
-                        },
-                        None: {
-                            label: "No Attack",
-                            callback: () => resolve(CONFIG.PTUCombat.Attack.NONE)
-                        }
-                    },
-                    default: "None",
-                    close: () => reject
-                }, 
-                {
-                    width: 600,
-                });
-                dialog.render(true);
-            })
+                        default: "None",
+                        close: () => reject
+                    }, 
+                    {
+                        width: 600,
+                    });
+                    dialog.render(true);
+                })
+            }
         }
 
         const saveCheck = await actor.sheet._onSaveRoll();
@@ -285,25 +291,55 @@ export const EffectFns = new Map([
         roll._total = roll.total;
         let messageData = {};
 
-        const DC = CONFIG.PTUCombat.DC.CONFUSED;
+        if(isErrata) {
+            const DC = CONFIG.PTUCombat.DC.CONFUSED;
         
-        if(roll.total >= DC) {
-            messageData = {
-                title: `${actor.name}'s<br>Confused Save!`,
-                roll: roll,
-                description: `Save Success!<br>${actor.name} is no longer Confused!`,
-                success: true
-            }
+            if(roll.total >= DC) {
+                messageData = {
+                    title: `${actor.name}'s<br>Confused Save!`,
+                    roll: roll,
+                    description: `Save Success!<br>${actor.name} is no longer Confused!`,
+                    success: true
+                }
 
-            await actor.effects.find(x => x.data.label == "Confused").delete();
+                await actor.effects.find(x => x.data.label == "Confused").delete();
+            }
+            else {
+                messageData = {
+                    title: `${actor.name}'s<br>Confused Save!`,
+                    roll: roll,
+                    description: `Save Failed!`,
+                    success: false
+                }        
+            }
         }
         else {
-            messageData = {
-                title: `${actor.name}'s<br>Confused Save!`,
-                roll: roll,
-                description: `Save Failed!`,
-                success: false
-            }        
+            if(roll.total <= CONFIG.PTUCombat.DC.CONFUSED_HIT_ITSELF) {
+                messageData = {
+                    title: `${actor.name}'s<br>Confused Save!`,
+                    roll: roll,
+                    description: `${actor.name} hits itself in confusion!<br><small>${actor.name} must use a typeless struggle against itself.</small>`,
+                    success: false
+                }   
+            }
+            else if(roll.total > CONFIG.PTUCombat.DC.CONFUSED_HIT_ITSELF && roll.total <= CONFIG.PTUCombat.DC.CONFUSED_NORMAL){
+                messageData = {
+                    title: `${actor.name}'s<br>Confused Save!`,
+                    roll: roll,
+                    description: `${actor.name} may act normally.`,
+                    success: true
+                }        
+            }
+            else {
+                messageData = {
+                    title: `${actor.name}'s<br>Confused Save!`,
+                    roll: roll,
+                    description: `Save Success!<br>${actor.name} is no longer Confused!`,
+                    success: true
+                }
+    
+                await actor.effects.find(x => x.data.label == "Confused").delete();
+            }
         }
         const content = await renderTemplate('/systems/ptu/templates/chat/save-check.hbs', messageData);
         await saveCheck.update({content: content});
@@ -401,31 +437,62 @@ export const EffectFns = new Map([
 
         /** Actually apply Affliction */
         const actor = lastCombatant.actor;
+        const isErrata = game.settings.get("ptu", "errata");
 
         const saveCheck = await actor.sheet._onSaveRoll();
         const roll = JSON.parse(saveCheck.data.roll);
         roll._total = roll.total;
         let messageData = {};
 
-        const DC = CONFIG.PTUCombat.DC.INFATUATION;
-        
-        if(roll.total >= DC) {
-            messageData = {
-                title: `${actor.name}'s<br>Infatuation Save!`,
-                roll: roll,
-                description: `Save Success!<br>${actor.name} got back to it's senses!`,
-                success: true
-            }
+        if(isErrata) {
+            const DC = CONFIG.PTUCombat.DC.INFATUATION;
+            
+            if(roll.total >= DC) {
+                messageData = {
+                    title: `${actor.name}'s<br>Infatuation Save!`,
+                    roll: roll,
+                    description: `Save Success!<br>${actor.name} got back to it's senses!`,
+                    success: true
+                }
 
-            await actor.effects.find(x => x.data.label == "Infatuation").delete();
+                await actor.effects.find(x => x.data.label == "Infatuation").delete();
+            }
+            else {
+                messageData = {
+                    title: `${actor.name}'s<br>Infatuation Save!`,
+                    roll: roll,
+                    description: `Save Failed!`,
+                    success: false
+                }        
+            }
         }
         else {
-            messageData = {
-                title: `${actor.name}'s<br>Infatuation Save!`,
-                roll: roll,
-                description: `Save Failed!`,
-                success: false
-            }        
+            if(roll.total < CONFIG.PTUCombat.DC.INFATUATION_AFFLICTED) {
+                messageData = {
+                    title: `${actor.name}'s<br>Infatuation Save!`,
+                    roll: roll,
+                    description: `Save Failed!`,
+                    success: false
+                }        
+            }
+            else if(roll.total > CONFIG.PTUCombat.DC.INFATUATION_AFFLICTED && roll.total <= CONFIG.PTUCombat.DC.INFATUATION_NORMAL) {
+                messageData = {
+                    title: `${actor.name}'s<br>Infatuation Save!`,
+                    roll: roll,
+                    description: `Save Success!<br>${actor.name} may act normally!`,
+                    success: true
+                }
+            }
+            else {
+                messageData = {
+                    title: `${actor.name}'s<br>Infatuation Save!`,
+                    roll: roll,
+                    description: `Save Success!<br>${actor.name} got back to it's senses!`,
+                    success: true
+                }
+    
+                await actor.effects.find(x => x.data.label == "Infatuation").delete();
+            }
         }
         const content = await renderTemplate('/systems/ptu/templates/chat/save-check.hbs', messageData);
         await saveCheck.update({content: content});
@@ -535,6 +602,8 @@ export const EffectFns = new Map([
 
 Hooks.on("applyActiveEffect", function(actorData, change) {
     if(change.key == "data.modifiers.flinch_count") {
+        const isErrata = game.settings.get("ptu", "errata");
+        if(!isErrata) return;
         let actor;
 
         if(actorData.isToken) {
