@@ -23,6 +23,7 @@ CONFIG.PTUCombat = {
         INFATUATION: 16,
         RAGE: 15,
         SLEEP: 16,
+        CONFUSED: 16,
     }
 }
 

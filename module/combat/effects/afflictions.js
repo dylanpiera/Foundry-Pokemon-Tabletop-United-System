@@ -248,7 +248,6 @@ export const EffectFns = new Map([
             if(actions_taken?.attacked?.status) await applyConfusion(CONFIG.PTUCombat.Attack.STATUS);
         }
         else {
-
             await new Promise((resolve, reject) => {
                 const dialog = new Dialog({
                     title: `${actor.name}'s Confusion`,
@@ -280,6 +279,35 @@ export const EffectFns = new Map([
                 dialog.render(true);
             })
         }
+
+        const saveCheck = await actor.sheet._onSaveRoll();
+        const roll = JSON.parse(saveCheck.data.roll);
+        roll._total = roll.total;
+        let messageData = {};
+
+        const DC = CONFIG.PTUCombat.DC.CONFUSED;
+        
+        if(roll.total >= DC) {
+            messageData = {
+                title: `${actor.name}'s<br>Confused Save!`,
+                roll: roll,
+                description: `Save Success!<br>${actor.name} is no longer Confused!`,
+                success: true
+            }
+
+            await actor.effects.find(x => x.data.label == "Confused").delete();
+        }
+        else {
+            messageData = {
+                title: `${actor.name}'s<br>Confused Save!`,
+                roll: roll,
+                description: `Save Failed!`,
+                success: false
+            }        
+        }
+        const content = await renderTemplate('/systems/ptu/templates/chat/save-check.hbs', messageData);
+        await saveCheck.update({content: content});
+
         /** If affliction can only be triggered once per turn, make sure it shows as applied. */
         if(options.round.direction == CONFIG.PTUCombat.DirectionOptions.FORWARD) return; // If new round already started don't register EoT effect.
         await combat.update({[`flags.ptu.applied.${tokenId}.${effect}`]: true})
