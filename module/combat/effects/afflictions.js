@@ -79,6 +79,12 @@ export const Afflictions = [
     {id: "effect.other.vulnerable", label: "Vulnerable", icon: 'icons/svg/degen.svg', changes: [
         {key: "flags.ptu.is_vulnerable", value: true, mode: CONST.ACTIVE_EFFECT_MODES.OVERRIDE, priority: 50}
     ]},
+    {id: "effect.other.tagged", label: "Tagged", icon: 'icons/svg/target.svg', changes: [
+        {key: "flags.ptu.is_tagged", value: true, mode: CONST.ACTIVE_EFFECT_MODES.OVERRIDE, priority: 50}
+    ]},
+    {id: "effect.other.cheered", label: "Cheered", icon: 'icons/svg/sun.svg', changes: [
+        {key: "flags.ptu.is_tagged", value: true, mode: CONST.ACTIVE_EFFECT_MODES.OVERRIDE, priority: 50}
+    ]},
 ];
 
 function IsSameTokenAndNotAlreadyApplied(effect, tokenId, combat, lastCombatant) {
@@ -363,7 +369,7 @@ export const EffectFns = new Map([
         roll._total = roll.total;
         let messageData = {};
         
-        if(roll.total >= isErrata ? CONFIG.PTUCombat.DC.PARALYZED : CONFIG.PTUCombat.DC.PARALYZED_PRE_ERRATA) {
+        if(roll.total >= (isErrata ? CONFIG.PTUCombat.DC.PARALYZED : CONFIG.PTUCombat.DC.PARALYZED_PRE_ERRATA)) {
             messageData = {
                 title: `${actor.name}'s<br>Paralysis Save!`,
                 roll: roll,
