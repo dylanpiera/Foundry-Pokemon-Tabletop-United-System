@@ -81,6 +81,13 @@
       "name": "fan-game-content",
       "path": "packs/fan-game-content.db",
       "system": "ptu"
+    },
+    {
+      "label": "habitats",
+      "entity": "RollTable",
+      "name": "habitats",
+      "path": "packs/habitats.db",
+      "system": "ptu"
     }
   ],
   "languages": [

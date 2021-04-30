@@ -239,16 +239,18 @@
                 </div>
             </div>
 
-            <h3><strong>Tutor Movelist</strong></h3>
-            <div class='container'>
-                <div class='row'>
-                    <div class='col'>
-                        {{#each speciesData.[Tutor Move List] as |move|}}
-                            {{move}}{{#unless @last}},{{/unless}}
-                        {{/each}}
+            {{#if speciesData.[Tutor Move List]}}
+                <h3><strong>Tutor Movelist</strong></h3>
+                <div class='container'>
+                    <div class='row'>
+                        <div class='col'>
+                            {{#each speciesData.[Tutor Move List] as |move|}}
+                                {{move}}{{#unless @last}},{{/unless}}
+                            {{/each}}
+                        </div>
                     </div>
                 </div>
-            </div>
+            {{/if}}
 
             {{#if speciesData.[Egg Move List]}}
                 <h3><strong>Egg Movelist</strong></h3>
@@ -263,16 +265,18 @@
                 </div>
             {{/if}}
 
-            <h3><strong>TM Movelist</strong></h3>
-            <div class='container'>
-                <div class='row'>
-                    <div class='col'>
-                        {{#each speciesData.[TM Move List] as |TM|}}
-                            {{TM}} {{tmName TM}}{{#unless @last}},{{/unless}}
-                        {{/each}}
+            {{#if speciesData.[TM Move List]}}
+                <h3><strong>TM Movelist</strong></h3>
+                <div class='container'>
+                    <div class='row'>
+                        <div class='col'>
+                            {{#each speciesData.[TM Move List] as |TM|}}
+                                {{TM}} {{tmName TM}}{{#unless @last}},{{/unless}}
+                            {{/each}}
+                        </div>
                     </div>
                 </div>
-            </div>
+            {{/if}}
         </div>
     </div>
 </div>
