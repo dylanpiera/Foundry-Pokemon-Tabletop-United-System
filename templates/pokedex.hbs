@@ -171,7 +171,7 @@
                 {{/each}}
                 {{#each speciesData.Abilities.Advanced as |ability|}}
                     <div class='row'>
-                        <div class='col'>
+                        <div class='col-6' style="white-space: nowrap">
                             <strong>Advanced Ability #{{inc @index}}:</strong> 
                         </div>
                         <div class='col'>
@@ -194,10 +194,16 @@
             <h3><strong>Capabilities</strong></h3>
             <div class='container'>
                 <div class='row'>
-                    <div class='col'>
+                    <div class='col pokedexflex'>
                         {{#each speciesData.Capabilities as |value key|}}
-                            <span>{{key}}: {{value}}{{#unless @last}},{{/unless}}</span>
+                            {{#unless (or (is key "Other") (is key "Naturewalk"))}}
+                                {{#if value}}
+                                    <span><b>{{key}}</b>: {{value}}{{#unless @last}},{{/unless}}</span>
+                                {{/if}}
+                            {{/unless}}
                         {{/each}}
+                        {{#if speciesData.Capabilities.Naturewalk}}<span style="flex: 1 0 100%;"><b>Naturewalk</b>: {{#each speciesData.Capabilities.Naturewalk as |value|}}{{value}}{{#unless @last}}, {{/unless}}{{/each}}</span>{{/if}}
+                        {{#if speciesData.Capabilities.Other}}<span style="flex: 1 0 100%;"><b>Other</b>: {{#each speciesData.Capabilities.Other as |value|}}{{value}}{{#unless @last}}, {{/unless}}{{/each}}</span>{{/if}}
                     </div>
                 </div>
             </div>
@@ -205,9 +211,9 @@
             <h3><strong>Skills</strong></h3>
             <div class='container'>
                 <div class='row'>
-                    <div class='col'>
+                    <div class='col pokedexflex'>
                         {{#each speciesData.Skills as |value key|}}
-                            <span>{{key}}: {{value.Dice}}d6{{#if value.Mod}}+{{value.Mod}}{{/if}}{{#unless @last}},{{/unless}}</span>
+                            <span><b>{{key}}</b>: {{value.Dice}}d6{{#if value.Mod}}+{{value.Mod}}{{/if}}{{#unless @last}},{{/unless}}</span>
                         {{/each}}
                     </div>
                 </div>

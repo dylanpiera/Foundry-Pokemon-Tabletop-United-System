@@ -6,12 +6,12 @@ export default async function RenderDex(species) {
     const imageBasePath = game.settings.get("ptu", "defaultPokemonImageDirectory");
 
     let d2 = new Dialog({
-        title: "Pokédex information (updated) for " + speciesData._id.toLowerCase(),
+        title: "Pokédex information for " + speciesData._id.toLowerCase(),
         content: await renderTemplate('/systems/ptu/templates/pokedex.hbs', {img: await game.ptu.monGenerator.GetSpeciesArt(speciesData, imageBasePath),speciesData}),
         buttons: {}
     });
     d2.position.width = 800;
-    d2.position.height = 800;
+    d2.position.height = 900;
     d2.render(true);
 
 }

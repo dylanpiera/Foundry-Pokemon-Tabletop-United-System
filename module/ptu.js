@@ -753,6 +753,10 @@ function _onPokedexMacro() {
   const permSetting = game.settings.get("ptu", "dex-permission");
   for(let token of game.user.targets.size > 0 ? game.user.targets.values() : canvas.tokens.controlled) {
     if(token.actor.data.type != "pokemon") continue;
+    if(game.user.isGM) {
+      game.ptu.renderDex(token.actor.data.data.species)
+      continue;
+    }
 
     switch(permSetting) {
       case 1: { // Never
