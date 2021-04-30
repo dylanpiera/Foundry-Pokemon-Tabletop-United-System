@@ -302,6 +302,15 @@ export function PrepareMoveData(actorData, move) {
 /* -------------------------------------------- */
 
 function _loadSystemSettings() {
+  game.settings.register("ptu", "errata", {
+    name: "PTU Errata",
+    hint: "The FVTT PTU System has been created using the latest Community Erratas in mind. If you would like to disable some of the errata's changes, specifically when it comes to automation, you can disable this option.",
+    scope: "world",
+    config: true,
+    type: Boolean,
+    default: true,
+  });
+
   game.settings.register("ptu", "useTutorPoints", {
     name: "Use Tutor Points for Pokémon",
     hint: "Otherwise use the suggested changes in the 'GM Advice and Suggested Houserules' (see: https://pastebin.com/iDt2Mj0d)",
@@ -353,40 +362,6 @@ function _loadSystemSettings() {
     default: 1
   })
 
-  game.settings.register("ptu", "insurgenceData", {
-    name: "Pokémon Insurgence Data",
-    hint: "Adds Pokémon Insurgence data to the game based on DataNinja's Homebrew Compilation's Insurgence Data.",
-    scope: "world",
-    config: true,
-    type: Boolean,
-    default: false
-  });
-  game.settings.register("ptu", "sageData", {
-    name: "Pokémon Sage Data",
-    hint: "Adds Pokémon Sage data to the game based on DataNinja's Homebrew Compilation's Sage Data.",
-    scope: "world",
-    config: true,
-    type: Boolean,
-    default: false
-  });
-  game.settings.register("ptu", "uraniumData", {
-    name: "Pokémon Uranium Data",
-    hint: "Adds Pokémon Uranium data to the game based on DataNinja's Homebrew Compilation's Uranium Data.",
-    scope: "world",
-    config: true,
-    type: Boolean,
-    default: false
-  });
-
-  game.settings.register("ptu", "customSpecies", {
-    name: "Custom Species json (Requires Refresh)",
-    hint: "Please specify the path of a custom species file (inside the world directory) if you wish to add Homebrew Pokémon. [Currently in Beta!]",
-    scope: "world",
-    config: false,
-    type: String,
-    default: ""
-  });
-
   game.settings.register("ptu", "combatRollPreference", {
     name: "Combat Roll Preference",
     hint: "Choose whether crits should always be rolled, or only when the to-hit is an actual crit.",
@@ -417,6 +392,15 @@ function _loadSystemSettings() {
     default: "snippet"
   });
 
+  game.settings.register("ptu", "defaultPokemonImageDirectory", {
+    name: "Default Pokemon Image Directory",
+    hint: "The directory where the user can upload image files (named as the pokedex number of the species) to be used as the default images when generating pokemon.",
+    scope: "world",
+    config: true,
+    type: DirectoryPicker.Directory,
+    default: "Gen4-Art/",
+  });
+
   game.settings.register("ptu", "leagueBattleInvertTrainerInitiative", {
     name: "League Battle Initiative",
     hint: "Invert Trainer Initative during League Battles",
@@ -444,14 +428,6 @@ function _loadSystemSettings() {
     default: false
   });
 
-  game.settings.register("ptu", "dismissedVersion", {
-    name: "Current Dismissed Version",
-    scope: "client",
-    config: false,
-    type: Object,
-    default: {}
-  })
-
   game.settings.register("ptu", "accessability", {
     name: "Font Accessability",
     hint: "Set global font to 'Sans-Serif'. Please be aware that the system is not visually tested with this option enabled.",
@@ -462,14 +438,49 @@ function _loadSystemSettings() {
     onChange: (enabled) => setAccessabilityFont(enabled)
   });
 
-  game.settings.register("ptu", "errata", {
-    name: "PTU Errata",
-    hint: "The FVTT PTU System has been created using the latest Community Erratas in mind. If you would like to disable some of the errata's changes, specifically when it comes to automation, you can disable this option.",
+  game.settings.register("ptu", "insurgenceData", {
+    name: "Pokémon Insurgence Data",
+    hint: "Adds Pokémon Insurgence data to the game based on DataNinja's Homebrew Compilation's Insurgence Data.",
     scope: "world",
     config: true,
     type: Boolean,
-    default: true,
+    default: false
   });
+
+  game.settings.register("ptu", "sageData", {
+    name: "Pokémon Sage Data",
+    hint: "Adds Pokémon Sage data to the game based on DataNinja's Homebrew Compilation's Sage Data.",
+    scope: "world",
+    config: true,
+    type: Boolean,
+    default: false
+  });
+
+  game.settings.register("ptu", "uraniumData", {
+    name: "Pokémon Uranium Data",
+    hint: "Adds Pokémon Uranium data to the game based on DataNinja's Homebrew Compilation's Uranium Data.",
+    scope: "world",
+    config: true,
+    type: Boolean,
+    default: false
+  });
+
+  game.settings.register("ptu", "customSpecies", {
+    name: "Custom Species json (Requires Refresh)",
+    hint: "Please specify the path of a custom species file (inside the world directory) if you wish to add Homebrew Pokémon. [Currently in Beta!]",
+    scope: "world",
+    config: false,
+    type: String,
+    default: ""
+  });
+
+  game.settings.register("ptu", "dismissedVersion", {
+    name: "Current Dismissed Version",
+    scope: "client",
+    config: false,
+    type: Object,
+    default: {}
+  })
 
   game.settings.register("ptu", "showDebugInfo", {
     name: "Show Debug Info",
@@ -479,15 +490,6 @@ function _loadSystemSettings() {
     type: Boolean,
     default: false,
     onChange: (value) => CustomSpeciesFolder.updateFolderDisplay(value)
-  });
-
-  game.settings.register("ptu", "defaultPokemonImageDirectory", {
-    name: "Default Pokemon Image Directory",
-    hint: "The directory where the user can upload image files (named as the pokedex number of the species) to be used as the default images when generating pokemon.",
-    scope: "world",
-    config: true,
-    type: DirectoryPicker.Directory,
-    default: "Gen4-Art/",
   });
 
   game.settings.register("ptu", "playPokemonCriesOnDrop", {
