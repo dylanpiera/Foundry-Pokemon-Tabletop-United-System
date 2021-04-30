@@ -41,13 +41,14 @@ import {Afflictions} from './combat/effects/afflictions.js'
 import PTUCombat from './combat/combat.js'
 import Api from './api/api.js'
 import RenderDex from './utils/pokedex.js'
+import TMsData from './data/tm-data.js'
 
 export let debug = (...args) => {if (game.settings.get("ptu", "showDebugInfo") ?? false) console.log("DEBUG: FVTT PTU | ", ...args)};
 export let log = (...args) => console.log("FVTT PTU | ", ...args);
 export let warn = (...args) => console.warn("FVTT PTU | ", ...args);
 export let error = (...args) => console.error("FVTT PTU | ", ...args)
 
-export const LATEST_VERSION = "1.2.12";
+export const LATEST_VERSION = "1.2.13";
 
 function registerSheets() {
   // Register sheet application classes
@@ -168,6 +169,8 @@ async function registerHandlebars() {
 
   Handlebars.registerHelper("inc", function(num) {return Number(num)+1})
 
+  Handlebars.registerHelper("tmName", function(tmNum) {return game.ptu.TMsData.get(tmNum)});
+
   /** If furnace ain't installed... */
   if(!Object.keys(Handlebars.helpers).includes("divide")) {
     warn("It is recommended to install & enable 'The Furnace' module.")
@@ -211,6 +214,7 @@ Hooks.once('init', async function() {
     customSpeciesData: [],
     natureData,
     DbData,
+    TMsData,
     TypeEffectiveness,
     GetSpeciesData,
     RollWithDb,

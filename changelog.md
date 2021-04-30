@@ -1,8 +1,13 @@
 # Welcome to the Beta!
 Hey there! You are on the Beta Branch. If you ever have any feedback please do share with us over on [Github](https://github.com/dylanpiera/Foundry-Pokemon-Tabletop-United-System/issues) or [Discord](https://discord.gg/fE3w59q)
 
-## 1.2.12 - Status & Combat Automation
+## 1.2.13 - Quality of Life
+- Added Habitat Rolltables Compendium
+- Fixed some habitats having typos in them
+- Added 'game.ptu.TMsData' for easy conversion between TM number and move name.
+- Show TM name as well as number, instead of just number, in Pokédex
 
+## 1.2.12 - Status & Combat Automation
 - Added Drag & Drop Macro support for Moves & the Pokédex Item for Trainers.
 - Added game setting to control Pokédex Item's behavior.
 - Changed Settings order to be more organized
