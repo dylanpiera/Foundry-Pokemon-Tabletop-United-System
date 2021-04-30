@@ -123,11 +123,29 @@ export class PTUGen8CharacterSheet extends ActorSheet {
 			item.sheet.render(true);
 		});
 
+		// Update Effect
+		html.find('.effect-edit').click((ev) => {
+			ev.preventDefault();
+			const button = ev.currentTarget;
+			const effectId = button.dataset.id;
+			const effect = this.actor.effects.get(effectId);
+			effect.sheet.render(true);
+		});
+
 		// Delete Inventory Item
 		html.find('.item-delete').click((ev) => {
 			const li = $(ev.currentTarget).parents('.item');
 			this.actor.deleteOwnedItem(li.data('itemId'));
 			li.slideUp(200, () => this.render(false));
+		});
+
+		// Delete Effect
+		html.find('.effect-delete').click((ev) => {
+			const button = ev.currentTarget;
+			const effectId = button.dataset.id;
+			const effect = this.actor.effects.get(effectId);
+			$(ev.currentTarget).parents('.swsh-box').slideUp(200, () => this.render(false));
+			setTimeout(() => effect.delete(), 150);
 		});
 
 		html.find("input[data-item-id]")
@@ -182,6 +200,12 @@ export class PTUGen8CharacterSheet extends ActorSheet {
 		};
 		// Remove the type from the dataset since it's in the itemData.type prop.
 		delete itemData.data['type'];
+
+		if(itemData.type === "ActiveEffect") {
+			// Finally, create the effect!
+			debug("Created new effect",itemData);
+			return this.actor.createEmbeddedEntity(itemData.type, itemData);
+		}
 
 		// Finally, create the item!
 		debug("Created new item",itemData);

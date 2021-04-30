@@ -1628,7 +1628,19 @@
 
           <!-- Effects Tab -->
           <div class="tab details effects" data-group="primary" data-tab="effects">
-            {{> "active-effects"}}
+            <div class="h-100 swsh-box">
+              <div class="swsh-header pl-2 effect-header">
+                <h3 style="flex: 1 1 50%">Active Effects</h3>
+                <div class="item-controls pr-1 flexcol" style="flex: 0 0 7%;">
+                  <a class="item-control item-create" data-type="ActiveEffect" title="Add Effect"><i
+                      class="fas fa-plus-circle" style="margin-right: 3px;"></i><span
+                      class="readable">Add</span></a>
+              </div>
+              </div>
+              <div class="swsh-body pt-3 p-2">
+                {{> "active-effects"}}
+              </div>
+            </div>
           </div>
         </div>
       </div>

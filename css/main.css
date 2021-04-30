@@ -1246,6 +1246,10 @@ p.summary {
 .window-app .window-content {
   background: linear-gradient(45deg, #ECDBEB, #DFFFFE);
 }
+header.effect-change.effects-header.flexrow > div {
+  text-align: center;
+  white-space: nowrap;
+}
 /* MD CSS */
 .md h1,
 .md h2,
