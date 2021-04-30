@@ -26,7 +26,7 @@ import { InitCustomSpecies, UpdateCustomSpecies} from './custom-species.js'
 import { ChangeLog } from './forms/changelog-form.js'
 import { applyDamageToTargets, undoDamageToTargets }  from './combat/damage-calc-tools.js'
 import CustomSpeciesFolder from './entities/custom-species-folder.js'
-import { CreateMonParser } from './utils/species-command-parser.js'
+import { CreateMonParser, GetSpeciesArt } from './utils/species-command-parser.js'
 import { FinishDexDragPokemonCreation } from './utils/species-command-parser.js'
 import { GetRandomNature } from './utils/random-nature-generator.js'
 import { GiveRandomAbilities } from './utils/random-abilities-generator.js'
@@ -40,6 +40,7 @@ import { GetOrCacheAbilities, GetOrCacheCapabilities, GetOrCacheMoves} from './u
 import {Afflictions} from './combat/effects/afflictions.js'
 import PTUCombat from './combat/combat.js'
 import Api from './api/api.js'
+import RenderDex from './utils/pokedex.js'
 
 export let debug = (...args) => {if (game.settings.get("ptu", "showDebugInfo") ?? false) console.log("DEBUG: FVTT PTU | ", ...args)};
 export let log = (...args) => console.log("FVTT PTU | ", ...args);
@@ -165,6 +166,8 @@ async function registerHandlebars() {
     }, {})[effectId]
   })
 
+  Handlebars.registerHelper("inc", function(num) {return Number(num)+1})
+
   /** If furnace ain't installed... */
   if(!Object.keys(Handlebars.helpers).includes("divide")) {
     warn("It is recommended to install & enable 'The Furnace' module.")
@@ -194,6 +197,8 @@ Hooks.once('init', async function() {
   game.ptu = {
     rollItemMacro,
     moveMacro: _onMoveMacro,
+    pokedexMacro: _onPokedexMacro,
+    renderDex: RenderDex,
     PTUActor,
     PTUItem,
     PTUPokemonCharactermancer,
@@ -225,7 +230,8 @@ Hooks.once('init', async function() {
         DistributeByBaseStats,
         BaseStatsWithNature,
         ApplyLevelUpPoints
-      }
+      },
+      GetSpeciesArt
     },
     combat: {
       applyDamageToTargets,
@@ -330,6 +336,22 @@ function _loadSystemSettings() {
     type: Boolean,
     default: false
   });
+
+  game.settings.register("ptu", "dex-permission", {
+    name: "Pokédex Permission",
+    hint: "The required permission for a player to be able to see a Pokédex entry",
+    scope: "world",
+    config: true,
+    type: Number,
+    choices: {
+      1: "Disable Pokédex",
+      2: "Only on owned Tokens",
+      3: "Only on owned Mons (checks trainer's dex tab)",
+      4: "GM Prompt (**NOT YET IMPLEMENTED**)",
+      5: "Always allow Pokédex", 
+    },
+    default: 1
+  })
 
   game.settings.register("ptu", "insurgenceData", {
     name: "Pokémon Insurgence Data",
@@ -703,9 +725,12 @@ function rollItemMacro(actorId, itemId, sceneId, tokenId) {
       return game.ptu.moveMacro(actor, isTokenActor ? item : item.data);
     }
     case 'item': {
+      if(item.data.name == "Pokédex") {
+        game.ptu.pokedexMacro();
+      }
+
       return;
     }
-
     default: return ui.notifications.warn(`I'm sorry, macro support has yet to be added for '${item.type}s'`)
   }
 
@@ -722,6 +747,45 @@ function rollItemMacro(actorId, itemId, sceneId, tokenId) {
 
 function _onMoveMacro(actor, item) {
   return actor.sheet._onMoveRoll(new Event(''), {actor, item});;
+}
+
+function _onPokedexMacro() {
+  const permSetting = game.settings.get("ptu", "dex-permission");
+  for(let token of game.user.targets.size > 0 ? game.user.targets.values() : canvas.tokens.controlled) {
+    if(token.actor.data.type != "pokemon") continue;
+
+    switch(permSetting) {
+      case 1: { // Never
+        return ui.notifications.info("DM has turned off the Pokedex.");
+      }
+      case 2: { // Only owned tokens
+        if(!token.owner) {
+          ui.notifications.warn("Only owned tokens can be identified by the Pokédex.");
+          continue;
+        }
+        
+        game.ptu.renderDex(token.actor.data.data.species);
+        break;
+      }
+      case 3: { // Only owned mons
+        if(!game.user.character) return ui.notifications.warn("Please make sure you have a trainer as your Selected Player Character");
+
+        if(!game.user.character.itemTypes.dexentry.some(entry => entry.data.name == game.ptu.GetSpeciesData(token.actor.data.data.species)?._id?.toLowerCase() && entry.data.data.owned)) {
+          ui.notifications.warn("Only owned species can be identified by the Pokédex.");
+          continue;
+        }
+        game.ptu.renderDex(token.actor.data.data.species)
+        break;
+      }
+      case 4: { // GM Prompt
+        return ui.notifications.warn("The GM prompt feature has yet to be implemented. Please ask your DM to change to a different Dex Permission Setting");
+      }
+      case 5: { // Always
+        game.ptu.renderDex(token.actor.data.data.species)
+        break;
+      }
+    }
+  }
 }
 
 function setAccessabilityFont(enabled) {
@@ -755,7 +819,7 @@ export async function PlayPokemonCry(species)
     }
 }
 
-class DirectoryPicker extends FilePicker {
+export default class DirectoryPicker extends FilePicker {
   constructor(options = {}) {
     super(options);
   }
@@ -872,12 +936,8 @@ Hooks.on("updateInitiative", function(actor) {
   return true;
 }) 
 
-
-
 // this s hooked in, we don't use all the data, so lets stop eslint complaining
 // eslint-disable-next-line no-unused-vars
 Hooks.on("renderSettingsConfig", (app, html, user) => {
   DirectoryPicker.processHtml(html);
 });
-
-export default DirectoryPicker;
