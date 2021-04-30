@@ -26,7 +26,7 @@ import { InitCustomSpecies, UpdateCustomSpecies} from './custom-species.js'
 import { ChangeLog } from './forms/changelog-form.js'
 import { applyDamageToTargets, undoDamageToTargets }  from './combat/damage-calc-tools.js'
 import CustomSpeciesFolder from './entities/custom-species-folder.js'
-import { CreateMonParser } from './utils/species-command-parser.js'
+import { CreateMonParser, GetSpeciesArt } from './utils/species-command-parser.js'
 import { FinishDexDragPokemonCreation } from './utils/species-command-parser.js'
 import { GetRandomNature } from './utils/random-nature-generator.js'
 import { GiveRandomAbilities } from './utils/random-abilities-generator.js'
@@ -38,13 +38,16 @@ import { GetOrCreateCachedItem } from './utils/cache-helper.js'
 import { ActorGenerator } from './utils/actor-generator.js'
 import { GetOrCacheAbilities, GetOrCacheCapabilities, GetOrCacheMoves} from './utils/cache-helper.js'
 import {Afflictions} from './combat/effects/afflictions.js'
+import PTUCombat from './combat/combat.js'
+import Api from './api/api.js'
+import RenderDex from './utils/pokedex.js'
 
 export let debug = (...args) => {if (game.settings.get("ptu", "showDebugInfo") ?? false) console.log("DEBUG: FVTT PTU | ", ...args)};
 export let log = (...args) => console.log("FVTT PTU | ", ...args);
 export let warn = (...args) => console.warn("FVTT PTU | ", ...args);
 export let error = (...args) => console.error("FVTT PTU | ", ...args)
 
-export const LATEST_VERSION = "1.2.11";
+export const LATEST_VERSION = "1.2.12";
 
 function registerSheets() {
   // Register sheet application classes
@@ -163,6 +166,8 @@ async function registerHandlebars() {
     }, {})[effectId]
   })
 
+  Handlebars.registerHelper("inc", function(num) {return Number(num)+1})
+
   /** If furnace ain't installed... */
   if(!Object.keys(Handlebars.helpers).includes("divide")) {
     warn("It is recommended to install & enable 'The Furnace' module.")
@@ -190,6 +195,10 @@ async function registerHandlebars() {
 Hooks.once('init', async function() {
 
   game.ptu = {
+    rollItemMacro,
+    moveMacro: _onMoveMacro,
+    pokedexMacro: _onPokedexMacro,
+    renderDex: RenderDex,
     PTUActor,
     PTUItem,
     PTUPokemonCharactermancer,
@@ -221,15 +230,18 @@ Hooks.once('init', async function() {
         DistributeByBaseStats,
         BaseStatsWithNature,
         ApplyLevelUpPoints
-      }
+      },
+      GetSpeciesArt
     },
     combat: {
       applyDamageToTargets,
       undoDamageToTargets
     },
+    combats: new Map(),
     cache: {
       GetOrCreateCachedItem
-    }
+    },
+    api: new Api()
   };
 
   /**
@@ -244,6 +256,9 @@ Hooks.once('init', async function() {
   // Define custom Entity classes
   CONFIG.Actor.entityClass = PTUActor;
   CONFIG.Item.entityClass = PTUItem;
+
+  // Custom Combat Settings
+  CONFIG.Combat.defeatedStatusId = "effect.other.fainted";
 
   // Register sheet application classes
   registerSheets();
@@ -287,6 +302,15 @@ export function PrepareMoveData(actorData, move) {
 /* -------------------------------------------- */
 
 function _loadSystemSettings() {
+  game.settings.register("ptu", "errata", {
+    name: "PTU Errata",
+    hint: "The FVTT PTU System has been created using the latest Community Erratas in mind. If you would like to disable some of the errata's changes, specifically when it comes to automation, you can disable this option.",
+    scope: "world",
+    config: true,
+    type: Boolean,
+    default: true,
+  });
+
   game.settings.register("ptu", "useTutorPoints", {
     name: "Use Tutor Points for Pokémon",
     hint: "Otherwise use the suggested changes in the 'GM Advice and Suggested Houserules' (see: https://pastebin.com/iDt2Mj0d)",
@@ -322,39 +346,21 @@ function _loadSystemSettings() {
     default: false
   });
 
-  game.settings.register("ptu", "insurgenceData", {
-    name: "Pokémon Insurgence Data",
-    hint: "Adds Pokémon Insurgence data to the game based on DataNinja's Homebrew Compilation's Insurgence Data.",
+  game.settings.register("ptu", "dex-permission", {
+    name: "Pokédex Permission",
+    hint: "The required permission for a player to be able to see a Pokédex entry",
     scope: "world",
     config: true,
-    type: Boolean,
-    default: false
-  });
-  game.settings.register("ptu", "sageData", {
-    name: "Pokémon Sage Data",
-    hint: "Adds Pokémon Sage data to the game based on DataNinja's Homebrew Compilation's Sage Data.",
-    scope: "world",
-    config: true,
-    type: Boolean,
-    default: false
-  });
-  game.settings.register("ptu", "uraniumData", {
-    name: "Pokémon Uranium Data",
-    hint: "Adds Pokémon Uranium data to the game based on DataNinja's Homebrew Compilation's Uranium Data.",
-    scope: "world",
-    config: true,
-    type: Boolean,
-    default: false
-  });
-
-  game.settings.register("ptu", "customSpecies", {
-    name: "Custom Species json (Requires Refresh)",
-    hint: "Please specify the path of a custom species file (inside the world directory) if you wish to add Homebrew Pokémon. [Currently in Beta!]",
-    scope: "world",
-    config: false,
-    type: String,
-    default: ""
-  });
+    type: Number,
+    choices: {
+      1: "Disable Pokédex",
+      2: "Only on owned Tokens",
+      3: "Only on owned Mons (checks trainer's dex tab)",
+      4: "GM Prompt (**NOT YET IMPLEMENTED**)",
+      5: "Always allow Pokédex", 
+    },
+    default: 1
+  })
 
   game.settings.register("ptu", "combatRollPreference", {
     name: "Combat Roll Preference",
@@ -386,6 +392,24 @@ function _loadSystemSettings() {
     default: "snippet"
   });
 
+  game.settings.register("ptu", "defaultPokemonImageDirectory", {
+    name: "Default Pokemon Image Directory",
+    hint: "The directory where the user can upload image files (named as the pokedex number of the species) to be used as the default images when generating pokemon.",
+    scope: "world",
+    config: true,
+    type: DirectoryPicker.Directory,
+    default: "Gen4-Art/",
+  });
+
+  game.settings.register("ptu", "leagueBattleInvertTrainerInitiative", {
+    name: "League Battle Initiative",
+    hint: "Invert Trainer Initative during League Battles",
+    scope: "world",
+    config: true,
+    type: Boolean,
+    default: true
+  });
+
   game.settings.register("ptu", "verboseChatInfo", {
     name: "Verbose Chat Output",
     hint: "When enabled shows more details in chat messages.",
@@ -404,14 +428,6 @@ function _loadSystemSettings() {
     default: false
   });
 
-  game.settings.register("ptu", "dismissedVersion", {
-    name: "Current Dismissed Version",
-    scope: "client",
-    config: false,
-    type: Object,
-    default: {}
-  })
-
   game.settings.register("ptu", "accessability", {
     name: "Font Accessability",
     hint: "Set global font to 'Sans-Serif'. Please be aware that the system is not visually tested with this option enabled.",
@@ -422,6 +438,50 @@ function _loadSystemSettings() {
     onChange: (enabled) => setAccessabilityFont(enabled)
   });
 
+  game.settings.register("ptu", "insurgenceData", {
+    name: "Pokémon Insurgence Data",
+    hint: "Adds Pokémon Insurgence data to the game based on DataNinja's Homebrew Compilation's Insurgence Data.",
+    scope: "world",
+    config: true,
+    type: Boolean,
+    default: false
+  });
+
+  game.settings.register("ptu", "sageData", {
+    name: "Pokémon Sage Data",
+    hint: "Adds Pokémon Sage data to the game based on DataNinja's Homebrew Compilation's Sage Data.",
+    scope: "world",
+    config: true,
+    type: Boolean,
+    default: false
+  });
+
+  game.settings.register("ptu", "uraniumData", {
+    name: "Pokémon Uranium Data",
+    hint: "Adds Pokémon Uranium data to the game based on DataNinja's Homebrew Compilation's Uranium Data.",
+    scope: "world",
+    config: true,
+    type: Boolean,
+    default: false
+  });
+
+  game.settings.register("ptu", "customSpecies", {
+    name: "Custom Species json (Requires Refresh)",
+    hint: "Please specify the path of a custom species file (inside the world directory) if you wish to add Homebrew Pokémon. [Currently in Beta!]",
+    scope: "world",
+    config: false,
+    type: String,
+    default: ""
+  });
+
+  game.settings.register("ptu", "dismissedVersion", {
+    name: "Current Dismissed Version",
+    scope: "client",
+    config: false,
+    type: Object,
+    default: {}
+  })
+
   game.settings.register("ptu", "showDebugInfo", {
     name: "Show Debug Info",
     hint: "Only for debug purposes. Logs extra debug messages & shows hidden folders/items",
@@ -430,15 +490,6 @@ function _loadSystemSettings() {
     type: Boolean,
     default: false,
     onChange: (value) => CustomSpeciesFolder.updateFolderDisplay(value)
-  });
-
-  game.settings.register("ptu", "defaultPokemonImageDirectory", {
-    name: "Default Pokemon Image Directory",
-    hint: "The directory where the user can upload image files (named as the pokedex number of the species) to be used as the default images when generating pokemon.",
-    scope: "world",
-    config: true,
-    type: DirectoryPicker.Directory,
-    default: "Gen4-Art/",
   });
 
   game.settings.register("ptu", "playPokemonCriesOnDrop", {
@@ -571,6 +622,8 @@ Hooks.once("ready", async function() {
   /** Combat Initialization */
   CONFIG.statusEffects = Afflictions;
   CONFIG.Combat.defeatedStatusId = Afflictions[0].id;
+
+  PTUCombat.Initialize();
 });
 
 /* -------------------------------------------- */
@@ -609,18 +662,36 @@ Hooks.on("renderActorSheet", function(sheet,element,settings) {
  * @returns {Promise}
  */
 async function createPTUMacro(data, slot) {
+  if (data.type == "Actor") {
+    const actor = game.actors.get(data.id);
+    const command = `game.actors.get("${data.id}").sheet.render(true)`;
+    let macro = game.macros.entities.find(m => (m.name === actor.name) && (m.command === command));
+    if (!macro) {
+      macro = await Macro.create({
+        name: actor.name,
+        type: "script",
+        img: actor.img,
+        command: command,
+        flags: { "ptu.actorMacro": true }
+      });
+    }
+    game.user.assignHotbarMacro(macro, slot);
+    return false;
+  }
+
   if (data.type !== "Item") return;
   if (!("data" in data)) return ui.notifications.warn("You can only create macro buttons for owned Items");
   const item = data.data;
+  const actor = game.actors.get(data.actorId);
 
   // Create the macro command
-  const command = `game.ptu.rollItemMacro("${item.name}");`;
-  let macro = game.macros.entities.find(m => (m.name === item.name) && (m.command === command));
+  const command = `game.ptu.rollItemMacro("${data.actorId}","${item._id}","${data.sceneId}", "${data.tokenId}");`;
+  let macro = game.macros.entities.find(m => (m.name === `${actor.name}'s ${item.name}`) && (m.command === command));
   if (!macro) {
     macro = await Macro.create({
-      name: item.name,
+      name: `${actor.name}'s ${item.name}`,
       type: "script",
-      img: item.img,
+      img: item.type == 'move' && item.img === "icons/svg/mystery-man.svg" ? `/systems/ptu/css/images/types2/${item.data.type}IC_Icon.png`: item.img,
       command: command,
       flags: { "ptu.itemMacro": true }
     });
@@ -630,21 +701,97 @@ async function createPTUMacro(data, slot) {
 }
 
 /**
- * Create a Macro from an Item drop.
- * Get an existing item macro if one exists, otherwise create a new one.
- * @param {string} itemName
+ * Handle item macro.
+ * @param {string} actorId
+ * @param {string} itemId
  * @return {Promise}
  */
-function rollItemMacro(itemName) {
-  const speaker = ChatMessage.getSpeaker();
-  let actor;
-  if (speaker.token) actor = game.actors.tokens[speaker.token];
-  if (!actor) actor = game.actors.get(speaker.actor);
-  const item = actor ? actor.items.find(i => i.name === itemName) : null;
-  if (!item) return ui.notifications.warn(`Your controlled Actor does not have an item named ${itemName}`);
+function rollItemMacro(actorId, itemId, sceneId, tokenId) {
+  const isTokenActor = sceneId && sceneId != "null" && tokenId && tokenId != "null";
+  const actor = game.actors.get(actorId);
+  let actorData = duplicate(actor.data);
+  
+  if(isTokenActor) {
+    const token = game.scenes.get(sceneId)?.data?.tokens?.find(x => x?._id == tokenId);
+    if(!token) return ui.notifications.warn(`Scene or token no longer exists. Macro is invalid.`);
+    actorData = mergeObject(actorData, token.actorData);
+  }
 
-  // Trigger the item roll
-  return item.roll();
+  if(!actor) return ui.notifications.warn(`Couldn't find actor with ID ${actorId}`);
+
+  const item = (isTokenActor && actorData.items) ? actorData.items.find(x => x._id == itemId) : actor.items.get(itemId);
+  if(!item) return ui.notifications.warn(`Actor ${actor.name} doesn't have an item with ID ${itemId}`);
+
+  switch(item.type) {
+    case 'move': {
+      return game.ptu.moveMacro(actor, isTokenActor ? item : item.data);
+    }
+    case 'item': {
+      if(item.data.name == "Pokédex") {
+        game.ptu.pokedexMacro();
+      }
+
+      return;
+    }
+    default: return ui.notifications.warn(`I'm sorry, macro support has yet to be added for '${item.type}s'`)
+  }
+
+  // const speaker = ChatMessage.getSpeaker();
+  // let actor;
+  // if (speaker.token) actor = game.actors.tokens[speaker.token];
+  // if (!actor) actor = game.actors.get(speaker.actor);
+  // const item = actor ? actor.items.find(i => i.name === itemName) : null;
+  // if (!item) return ui.notifications.warn(`Your controlled Actor does not have an item named ${itemName}`);
+
+  // // Trigger the item roll
+  // return item.roll();
+}
+
+function _onMoveMacro(actor, item) {
+  return actor.sheet._onMoveRoll(new Event(''), {actor, item});;
+}
+
+function _onPokedexMacro() {
+  const permSetting = game.settings.get("ptu", "dex-permission");
+  for(let token of game.user.targets.size > 0 ? game.user.targets.values() : canvas.tokens.controlled) {
+    if(token.actor.data.type != "pokemon") continue;
+    if(game.user.isGM) {
+      game.ptu.renderDex(token.actor.data.data.species)
+      continue;
+    }
+
+    switch(permSetting) {
+      case 1: { // Never
+        return ui.notifications.info("DM has turned off the Pokedex.");
+      }
+      case 2: { // Only owned tokens
+        if(!token.owner) {
+          ui.notifications.warn("Only owned tokens can be identified by the Pokédex.");
+          continue;
+        }
+        
+        game.ptu.renderDex(token.actor.data.data.species);
+        break;
+      }
+      case 3: { // Only owned mons
+        if(!game.user.character) return ui.notifications.warn("Please make sure you have a trainer as your Selected Player Character");
+
+        if(!game.user.character.itemTypes.dexentry.some(entry => entry.data.name == game.ptu.GetSpeciesData(token.actor.data.data.species)?._id?.toLowerCase() && entry.data.data.owned)) {
+          ui.notifications.warn("Only owned species can be identified by the Pokédex.");
+          continue;
+        }
+        game.ptu.renderDex(token.actor.data.data.species)
+        break;
+      }
+      case 4: { // GM Prompt
+        return ui.notifications.warn("The GM prompt feature has yet to be implemented. Please ask your DM to change to a different Dex Permission Setting");
+      }
+      case 5: { // Always
+        game.ptu.renderDex(token.actor.data.data.species)
+        break;
+      }
+    }
+  }
 }
 
 function setAccessabilityFont(enabled) {
@@ -678,7 +825,7 @@ export async function PlayPokemonCry(species)
     }
 }
 
-class DirectoryPicker extends FilePicker {
+export default class DirectoryPicker extends FilePicker {
   constructor(options = {}) {
     super(options);
   }
@@ -795,12 +942,8 @@ Hooks.on("updateInitiative", function(actor) {
   return true;
 }) 
 
-
-
 // this s hooked in, we don't use all the data, so lets stop eslint complaining
 // eslint-disable-next-line no-unused-vars
 Hooks.on("renderSettingsConfig", (app, html, user) => {
   DirectoryPicker.processHtml(html);
 });
-
-export default DirectoryPicker;

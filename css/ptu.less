@@ -1300,6 +1300,15 @@ p.summary {
     }
 }
 
+.success {
+    color: #18520b;
+    //filter: sepia(0.5) hue-rotate(60deg);
+}
+.failure {
+    color: #aa0200;
+    //filter: sepia(0.5) hue-rotate(-60deg);
+}
+
 .changelog {
 
     div {
@@ -1514,6 +1523,10 @@ p.summary {
     color: gray;
 }
 
+.window-app .window-content {
+    background: linear-gradient(45deg, #ECDBEB, #DFFFFE);
+}
+
 /* MD CSS */
 .md h1, .md h2, .md h3, .md h4, .md h5, .md h6 {
     border-bottom: 0.5px solid lightgray;
@@ -1542,4 +1555,14 @@ p.summary {
 
 .no-shadow {
     box-shadow: none;
+}
+
+.pokedexflex {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+
+    & > span {
+        flex: 1 1 50%;
+    }
 }

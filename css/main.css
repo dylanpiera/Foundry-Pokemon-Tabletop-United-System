@@ -1056,6 +1056,12 @@ p.summary {
   color: #aa0200;
   filter: sepia(0.5) hue-rotate(-60deg);
 }
+.success {
+  color: #18520b;
+}
+.failure {
+  color: #aa0200;
+}
 .changelog div {
   word-break: break-word;
 }
@@ -1237,6 +1243,9 @@ p.summary {
   font-style: italic;
   color: gray;
 }
+.window-app .window-content {
+  background: linear-gradient(45deg, #ECDBEB, #DFFFFE);
+}
 /* MD CSS */
 .md h1,
 .md h2,
@@ -1266,6 +1275,14 @@ p.summary {
 }
 .no-shadow {
   box-shadow: none;
+}
+.pokedexflex {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+.pokedexflex > span {
+  flex: 1 1 50%;
 }
 .w-25 {
   width: 25% !important;

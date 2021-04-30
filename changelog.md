@@ -1,6 +1,29 @@
 # Welcome to the Beta!
 Hey there! You are on the Beta Branch. If you ever have any feedback please do share with us over on [Github](https://github.com/dylanpiera/Foundry-Pokemon-Tabletop-United-System/issues) or [Discord](https://discord.gg/fE3w59q)
 
+## 1.2.12 - Status & Combat Automation
+
+- Added Drag & Drop Macro support for Moves & the Pokédex Item for Trainers.
+- Added game setting to control Pokédex Item's behavior.
+- Changed Settings order to be more organized
+- Added 2 token conditions (Tag & Cheered) without effects, so users can keep track of these conditions more easily.
+
+### Combat Changes:
+- Added LeagueBattle property to battles, which can be set in the PTU Combat Settings Menu.
+  - PTU Combat Setings menu replaces Foundry's Combat Settings Menu.
+  - League Battles will automatically fix Trainer's initiative order. *Will require a re-roll if players already rolled.*
+- Status Effects with Start of Turn or End of Turn effects now automatically trigger in Combat.
+  - This includes things like Sleep Checks automatically removing the sleep conditon.
+- Added game setting for pre-errata effect handling.
+  - **NOTE:** Only semi-supported. Mostly disables the system's automation and gives appropriate messages where possible.
+- Fixed 'Skip Defeated' option not working properly.
+
+### API: 
+- Added a PTU Combat Tracker, which will reside in 'game.ptu.combats'.
+  - **NOTE:** the PTU Combat Tracker only runs __client side__ on the GMs machine. 
+- Added 'turnEnd' 'turnStart' and 'roundEnd' hooks.
+- Active Effects now automatically update their 'roundsElapsed' flag, and are automatically deleted based on their 'duration.round' and 'duration.turns' properties.
+
 ## 1.2.11 - Charactermancer Alpha & AE Tab
 - Updated Active Effects tab to be fully operational without having to use code.
 - Added alpha version of the new Charactermancer. Currently implemented:
@@ -41,7 +64,7 @@ The Charactermancer update has been in development for a long time, and while I'
   - This is currently purely a view, but will later be expended to allow manual editing of custom effects
 
 ## 1.2.7 - Bonus Fields
-- Re-added 'imgpath' param to `/ptug` command.
+- Re-added 'imgpath' param to '/ptug' command.
 - Owner field now also works for GM pokemon.
 - Re-remvoed 'The Furnace' dependency :|
 - Added field for Effect Range bonus.
@@ -56,7 +79,7 @@ The Charactermancer update has been in development for a long time, and while I'
 - Add Save Checks to Combat Tab
 - Made Temp HP bar available as Token Bar
 
-- **API BREAKING**: `data.health.temp` has now moved to `data.tempHp` 
+- **API BREAKING**: 'data.health.temp' has now moved to 'data.tempHp' 
 
 ## 1.2.3 - Mon Generator Update
 - Changed the Generator to batch apply, saving on a lot of database calls.
@@ -78,7 +101,7 @@ As well as players being unable to edit the mon when granted permission without 
 ### Generator Changes
 - Generator now creates a folder instead of dumping everything in the root folder, if the folder doesn't exist
 - You can now set a default image directory for the Generator to use in System Settings
-- Instead of typing the `/ptug` command you can now also drag-and-drop a Dex Entry onto the canvas, instantly creating a token of the requested mon.
+- Instead of typing the '/ptug' command you can now also drag-and-drop a Dex Entry onto the canvas, instantly creating a token of the requested mon.
 - Fixed Token data not being updated after evolutions.
 
 ### QoL Changes
@@ -107,7 +130,7 @@ As well as players being unable to edit the mon when granted permission without 
 - Fixed Generator not working properly when working on lower-end PCs or with higher-amount of simultanious generations.
 - Fixed the Intimidate skill being spelled as "Intimidation".
 - Fixed overland capability calculation.
-- *Api Change:* Added easy caching of data using `game.ptu.cache.GetOrCreateCachedItem()`
+- *Api Change:* Added easy caching of data using 'game.ptu.cache.GetOrCreateCachedItem()'
 
 ## 1.1.4 - Oricorio Fix
 - Add all Oricorio Forms for Species Calculation

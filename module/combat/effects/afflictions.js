@@ -1,4 +1,5 @@
 import { debug, log } from "../../ptu.js";
+import { ApplyFlatDamage } from '../damage-calc-tools.js';
 
 export const Afflictions = [
     {id: "effect.other.fainted", label: "Fainted", icon: 'icons/svg/skull.svg', changes: [
@@ -78,10 +79,537 @@ export const Afflictions = [
     {id: "effect.other.vulnerable", label: "Vulnerable", icon: 'icons/svg/degen.svg', changes: [
         {key: "flags.ptu.is_vulnerable", value: true, mode: CONST.ACTIVE_EFFECT_MODES.OVERRIDE, priority: 50}
     ]},
+    {id: "effect.other.tagged", label: "Tagged", icon: 'icons/svg/target.svg', changes: [
+        {key: "flags.ptu.is_tagged", value: true, mode: CONST.ACTIVE_EFFECT_MODES.OVERRIDE, priority: 50}
+    ]},
+    {id: "effect.other.cheered", label: "Cheered", icon: 'icons/svg/sun.svg', changes: [
+        {key: "flags.ptu.is_tagged", value: true, mode: CONST.ACTIVE_EFFECT_MODES.OVERRIDE, priority: 50}
+    ]},
 ];
+
+function IsSameTokenAndNotAlreadyApplied(effect, tokenId, combat, lastCombatant) {
+    if(tokenId !== lastCombatant.tokenId) return false;
+    
+    const flag = combat.getFlag("ptu", `applied`);
+    // If the effect has already been applied, skip.
+    if(flag) {
+        if(flag[tokenId]) return !flag[tokenId][effect];
+    }
+    
+    return true;
+}
+
+export const EffectFns = new Map([
+    ["poisoned", async function(tokenId, combat, lastCombatant, roundData, options, sender, effect, isStartOfTurn){
+        if(isStartOfTurn) return;
+        if(!IsSameTokenAndNotAlreadyApplied(effect, tokenId, combat, lastCombatant)) return;
+
+        /** Actually apply Affliction */
+        const actor = lastCombatant.actor;
+
+        let applyPoison = async () => {
+            const token = canvas.tokens.get(lastCombatant.tokenId);
+            await ApplyFlatDamage([token], "Poison", actor.data.data.health.tick);
+        }
+
+        const actions_taken = actor.data.flags.ptu?.actions_taken; 
+        if(actions_taken?.standard) {
+            await applyPoison();
+        }
+        else {
+            await Dialog.confirm({
+                title: `${lastCombatant.name}'s Poison`,
+                content: `<p>Has ${lastCombatant.name} taken a Standard Action this turn?</p><p><small class="muted-text">Aka, should they take Poison damage?</small></p>`,
+                yes: async () => await applyPoison(),
+                defaultYes: false
+            })
+        }
+
+        /** If affliction can only be triggered once per turn, make sure it shows as applied. */
+        if(options.round.direction == CONFIG.PTUCombat.DirectionOptions.FORWARD) return; // If new round already started don't register EoT effect.
+        await combat.update({[`flags.ptu.applied.${tokenId}.${effect}`]: true})
+    }], 
+    ["badly_poisoned", async function(tokenId, combat, lastCombatant, roundData, options, sender, effect, isStartOfTurn){
+        if(isStartOfTurn) return;
+        if(!IsSameTokenAndNotAlreadyApplied(effect, tokenId, combat, lastCombatant)) return;
+
+        /** Actually apply Affliction */
+        const actor = lastCombatant.actor;
+
+        let applyPoison = async () => {
+            const token = canvas.tokens.get(lastCombatant.tokenId);
+            const badly_poisoned_effect = token.actor.effects.find(x => x.data.label == "Badly Poisoned");
+            await ApplyFlatDamage([token], "Toxic Damage", (5 * badly_poisoned_effect.data.flags.ptu?.roundsElapsed) + 5);
+        }
+
+        const actions_taken = actor.data.flags.ptu?.actions_taken; 
+        if(actions_taken?.standard) {
+            await applyPoison();
+        }
+        else {
+            await Dialog.confirm({
+                title: `${lastCombatant.name}'s Toxic`,
+                content: `<p>Has ${lastCombatant.name} taken a Standard Action this turn?</p><p><small class="muted-text">Aka, should they take Toxic damage?</small></p>`,
+                yes: async () => await applyPoison(),
+                defaultYes: false
+            })
+        }
+        
+
+        /** If affliction can only be triggered once per turn, make sure it shows as applied. */
+        if(options.round.direction == CONFIG.PTUCombat.DirectionOptions.FORWARD) return; // If new round already started don't register EoT effect.
+        await combat.update({[`flags.ptu.applied.${tokenId}.${effect}`]: true, [`flags.ptu.applied.${tokenId}.poisoned`]: true})
+    }],
+    ["burned", async function(tokenId, combat, lastCombatant, roundData, options, sender, effect, isStartOfTurn){
+        if(isStartOfTurn) return;
+        if(!IsSameTokenAndNotAlreadyApplied(effect, tokenId, combat, lastCombatant)) return;
+
+        /** Actually apply Affliction */
+        const actor = lastCombatant.actor;
+
+        let applyBurn = async () => {
+            const token = canvas.tokens.get(lastCombatant.tokenId);
+            await ApplyFlatDamage([token], "Burn", actor.data.data.health.tick);
+        }
+
+        const actions_taken = actor.data.flags.ptu?.actions_taken; 
+        if(actions_taken?.standard) {
+            await applyBurn();
+        }
+        else {
+            await Dialog.confirm({
+                title: `${lastCombatant.name}'s Burn`,
+                content: `<p>Has ${lastCombatant.name} taken a Standard Action this turn?</p><p><small class="muted-text">Aka, should they take Burn damage?</small></p>`,
+                yes: async () => await applyBurn(),
+                defaultYes: false
+            })
+        }
+
+        /** If affliction can only be triggered once per turn, make sure it shows as applied. */
+        if(options.round.direction == CONFIG.PTUCombat.DirectionOptions.FORWARD) return; // If new round already started don't register EoT effect.
+        await combat.update({[`flags.ptu.applied.${tokenId}.${effect}`]: true})
+    }], 
+    ["cursed", async function(tokenId, combat, lastCombatant, roundData, options, sender, effect, isStartOfTurn){
+        if(isStartOfTurn) return;
+        if(!IsSameTokenAndNotAlreadyApplied(effect, tokenId, combat, lastCombatant)) return;
+
+        /** Actually apply Affliction */
+        const actor = lastCombatant.actor;
+
+        let applyCurse = async () => {
+            const token = canvas.tokens.get(lastCombatant.tokenId);
+            await ApplyFlatDamage([token], "Curse", actor.data.data.health.tick * 2);
+        }
+
+        const actions_taken = actor.data.flags.ptu?.actions_taken; 
+        if(actions_taken?.standard) {
+            await applyCurse();
+        }
+        else {
+            await Dialog.confirm({
+                title: `${lastCombatant.name}'s Curse`,
+                content: `<p>Has ${lastCombatant.name} taken a Standard Action this turn?</p><p><small class="muted-text">Aka, should they take Curse damage?</small></p>`,
+                yes: async () => await applyCurse(),
+                defaultYes: false
+            })
+        }
+
+        /** If affliction can only be triggered once per turn, make sure it shows as applied. */
+        if(options.round.direction == CONFIG.PTUCombat.DirectionOptions.FORWARD) return; // If new round already started don't register EoT effect.
+        await combat.update({[`flags.ptu.applied.${tokenId}.${effect}`]: true})
+    }],
+    ["confused", async function(tokenId, combat, lastCombatant, roundData, options, sender, effect, isStartOfTurn){
+        const isErrata = game.settings.get("ptu", "errata");
+        
+        if(isErrata && isStartOfTurn) return;
+        if(!isErrata && !isStartOfTurn) return;
+        if(!IsSameTokenAndNotAlreadyApplied(effect, tokenId, combat, lastCombatant)) return;
+        debug("Confusion Trigger!");
+
+        /** Actually apply Affliction */
+        const actor = lastCombatant.actor;
+
+
+        let applyConfusion = async (type) => {
+            const token = canvas.tokens.get(lastCombatant.tokenId);
+            switch(type) {
+                case 3: {
+                    const dmg = Math.floor(Number(actor.data.data.stats.atk.total)/2);
+                    await ApplyFlatDamage([token], "Confusion Damage", dmg);
+                    return;
+                }
+                case 2: {
+                    const dmg = Math.floor(Number(actor.data.data.stats.spatk.total)/2);
+                    await ApplyFlatDamage([token], "Confusion Damage", dmg);
+                    return;
+                }
+                case 1: {
+                    const dmg = Number(actor.data.data.health.tick);
+                    await ApplyFlatDamage([token], "Confusion Damage", dmg);
+                    return;
+                }
+            }
+        }
+
+        if(isErrata) {
+            const actions_taken = actor.data.flags.ptu?.actions_taken; 
+            if(actions_taken?.attacked?.physical || actions_taken?.attacked?.special || actions_taken?.attacked?.status) {
+                if(actions_taken?.attacked?.physical) await applyConfusion(CONFIG.PTUCombat.Attack.PHYSICAL);
+                if(actions_taken?.attacked?.special) await applyConfusion(CONFIG.PTUCombat.Attack.SPECIAL);
+                if(actions_taken?.attacked?.status) await applyConfusion(CONFIG.PTUCombat.Attack.STATUS);
+            }
+            else {
+                await new Promise((resolve, reject) => {
+                    const dialog = new Dialog({
+                        title: `${actor.name}'s Confusion`,
+                        content: `<p>Did ${actor.name} use any move? If so which type?</p>`,
+                        buttons: {
+                            Phsyical: {
+                                label: "Physical",
+                                callback: async () => {await applyConfusion(CONFIG.PTUCombat.Attack.PHYSICAL); resolve(CONFIG.PTUCombat.Attack.PHYSICAL)}
+                            },
+                            Special: {
+                                label: "Special",
+                                callback: async () => {await applyConfusion(CONFIG.PTUCombat.Attack.SPECIAL); resolve(CONFIG.PTUCombat.Attack.SPECIAL)}
+                            },
+                            Status: {
+                                label: "Status",
+                                callback: async () => {await applyConfusion(CONFIG.PTUCombat.Attack.STATUS); resolve(CONFIG.PTUCombat.Attack.STATUS)}
+                            },
+                            None: {
+                                label: "No Attack",
+                                callback: () => resolve(CONFIG.PTUCombat.Attack.NONE)
+                            }
+                        },
+                        default: "None",
+                        close: () => reject
+                    }, 
+                    {
+                        width: 600,
+                    });
+                    dialog.render(true);
+                })
+            }
+        }
+
+        const saveCheck = await actor.sheet._onSaveRoll();
+        const roll = JSON.parse(saveCheck.data.roll);
+        roll._total = roll.total;
+        let messageData = {};
+
+        if(isErrata) {
+            const DC = CONFIG.PTUCombat.DC.CONFUSED;
+        
+            if(roll.total >= DC) {
+                messageData = {
+                    title: `${actor.name}'s<br>Confused Save!`,
+                    roll: roll,
+                    description: `Save Success!<br>${actor.name} is no longer Confused!`,
+                    success: true
+                }
+
+                await actor.effects.find(x => x.data.label == "Confused").delete();
+            }
+            else {
+                messageData = {
+                    title: `${actor.name}'s<br>Confused Save!`,
+                    roll: roll,
+                    description: `Save Failed!`,
+                    success: false
+                }        
+            }
+        }
+        else {
+            if(roll.total <= CONFIG.PTUCombat.DC.CONFUSED_HIT_ITSELF) {
+                messageData = {
+                    title: `${actor.name}'s<br>Confused Save!`,
+                    roll: roll,
+                    description: `${actor.name} hits itself in confusion!<br><small>${actor.name} must use a typeless struggle against itself.</small>`,
+                    success: false
+                }   
+            }
+            else if(roll.total > CONFIG.PTUCombat.DC.CONFUSED_HIT_ITSELF && roll.total <= CONFIG.PTUCombat.DC.CONFUSED_NORMAL){
+                messageData = {
+                    title: `${actor.name}'s<br>Confused Save!`,
+                    roll: roll,
+                    description: `${actor.name} may act normally.`,
+                    success: true
+                }        
+            }
+            else {
+                messageData = {
+                    title: `${actor.name}'s<br>Confused Save!`,
+                    roll: roll,
+                    description: `Save Success!<br>${actor.name} is no longer Confused!`,
+                    success: true
+                }
+    
+                await actor.effects.find(x => x.data.label == "Confused").delete();
+            }
+        }
+        const content = await renderTemplate('/systems/ptu/templates/chat/save-check.hbs', messageData);
+        await saveCheck.update({content: content});
+
+        /** If affliction can only be triggered once per turn, make sure it shows as applied. */
+        if(options.round.direction == CONFIG.PTUCombat.DirectionOptions.FORWARD) return; // If new round already started don't register EoT effect.
+        await combat.update({[`flags.ptu.applied.${tokenId}.${effect}`]: true})
+    }], 
+    ["paralyzed", async function(tokenId, combat, lastCombatant, roundData, options, sender, effect, isStartOfTurn){
+        if(!isStartOfTurn) return;
+        if(!IsSameTokenAndNotAlreadyApplied(effect, tokenId, combat, lastCombatant)) return;
+        debug("Paralysis Trigger!");
+
+        /** Actually apply Affliction */
+        const isErrata = game.settings.get("ptu", "errata");
+
+        const actor = lastCombatant.actor;
+
+        const saveCheck = await actor.sheet._onSaveRoll();
+        const roll = JSON.parse(saveCheck.data.roll);
+        roll._total = roll.total;
+        let messageData = {};
+        
+        if(roll.total >= (isErrata ? CONFIG.PTUCombat.DC.PARALYZED : CONFIG.PTUCombat.DC.PARALYZED_PRE_ERRATA)) {
+            messageData = {
+                title: `${actor.name}'s<br>Paralysis Save!`,
+                roll: roll,
+                description: `Save Success!`,
+                success: true
+            }
+        }
+        else {
+            messageData = {
+                title: `${actor.name}'s<br>Paralysis Save!`,
+                roll: roll,
+                description: `Save Failed!`,
+                success: false
+            }
+            if(isErrata) {
+                const aeAffliction = new ActiveEffect(mergeObject(CONFIG.statusEffects.find(x => x.id == "effect.other.vulnerable"), {duration: {rounds: 1, turns: 0}}), actor);
+                await actor.createEmbeddedEntity("ActiveEffect", aeAffliction.data);           
+            }
+        }
+        const content = await renderTemplate('/systems/ptu/templates/chat/save-check.hbs', messageData);
+        await saveCheck.update({content: content});
+
+        /** If affliction can only be triggered once per turn, make sure it shows as applied. */
+        await combat.update({[`flags.ptu.applied.${tokenId}.${effect}`]: true})
+    }],
+    ["frozen", async function(tokenId, combat, lastCombatant, roundData, options, sender, effect, isStartOfTurn){
+        if(isStartOfTurn) return;
+        if(!IsSameTokenAndNotAlreadyApplied(effect, tokenId, combat, lastCombatant)) return;
+        debug("Frozen Trigger!");
+
+        /** Actually apply Affliction */
+        const actor = lastCombatant.actor;
+
+        const saveCheck = await actor.sheet._onSaveRoll();
+        const roll = JSON.parse(saveCheck.data.roll);
+        roll._total = roll.total;
+        let messageData = {};
+
+        //TODO: Add Sun/Hail check
+        const DC = actor.data.data.typing.includes("Fire") ? CONFIG.PTUCombat.DC.FROZEN + CONFIG.PTUCombat.DC.FROZEN_FIRE_MOD : CONFIG.PTUCombat.DC.FROZEN;
+        
+        if(roll.total >= DC) {
+            messageData = {
+                title: `${actor.name}'s<br>Frozen Save!`,
+                roll: roll,
+                description: `Save Success!<br>${actor.name} Thawed Out!`,
+                success: true
+            }
+
+            await actor.effects.find(x => x.data.label == Handlebars.helpers.capitalizeFirst(effect)).delete();
+        }
+        else {
+            messageData = {
+                title: `${actor.name}'s<br>Frozen Save!`,
+                roll: roll,
+                description: `Save Failed!`,
+                success: false
+            }        
+        }
+        const content = await renderTemplate('/systems/ptu/templates/chat/save-check.hbs', messageData);
+        await saveCheck.update({content: content});
+
+        /** If affliction can only be triggered once per turn, make sure it shows as applied. */
+        if(options.round.direction == CONFIG.PTUCombat.DirectionOptions.FORWARD) return; // If new round already started don't register EoT effect.
+        await combat.update({[`flags.ptu.applied.${tokenId}.${effect}`]: true})
+    }],
+    ["infatuated", async function(tokenId, combat, lastCombatant, roundData, options, sender, effect, isStartOfTurn){
+        if(isStartOfTurn) return;
+        if(!IsSameTokenAndNotAlreadyApplied(effect, tokenId, combat, lastCombatant)) return;
+        debug("Infatuation Trigger!");
+
+        /** Actually apply Affliction */
+        const actor = lastCombatant.actor;
+        const isErrata = game.settings.get("ptu", "errata");
+
+        const saveCheck = await actor.sheet._onSaveRoll();
+        const roll = JSON.parse(saveCheck.data.roll);
+        roll._total = roll.total;
+        let messageData = {};
+
+        if(isErrata) {
+            const DC = CONFIG.PTUCombat.DC.INFATUATION;
+            
+            if(roll.total >= DC) {
+                messageData = {
+                    title: `${actor.name}'s<br>Infatuation Save!`,
+                    roll: roll,
+                    description: `Save Success!<br>${actor.name} got back to it's senses!`,
+                    success: true
+                }
+
+                await actor.effects.find(x => x.data.label == "Infatuation").delete();
+            }
+            else {
+                messageData = {
+                    title: `${actor.name}'s<br>Infatuation Save!`,
+                    roll: roll,
+                    description: `Save Failed!`,
+                    success: false
+                }        
+            }
+        }
+        else {
+            if(roll.total < CONFIG.PTUCombat.DC.INFATUATION_AFFLICTED) {
+                messageData = {
+                    title: `${actor.name}'s<br>Infatuation Save!`,
+                    roll: roll,
+                    description: `Save Failed!`,
+                    success: false
+                }        
+            }
+            else if(roll.total > CONFIG.PTUCombat.DC.INFATUATION_AFFLICTED && roll.total <= CONFIG.PTUCombat.DC.INFATUATION_NORMAL) {
+                messageData = {
+                    title: `${actor.name}'s<br>Infatuation Save!`,
+                    roll: roll,
+                    description: `Save Success!<br>${actor.name} may act normally!`,
+                    success: true
+                }
+            }
+            else {
+                messageData = {
+                    title: `${actor.name}'s<br>Infatuation Save!`,
+                    roll: roll,
+                    description: `Save Success!<br>${actor.name} got back to it's senses!`,
+                    success: true
+                }
+    
+                await actor.effects.find(x => x.data.label == "Infatuation").delete();
+            }
+        }
+        const content = await renderTemplate('/systems/ptu/templates/chat/save-check.hbs', messageData);
+        await saveCheck.update({content: content});
+
+        /** If affliction can only be triggered once per turn, make sure it shows as applied. */
+        if(options.round.direction == CONFIG.PTUCombat.DirectionOptions.FORWARD) return; // If new round already started don't register EoT effect.
+        await combat.update({[`flags.ptu.applied.${tokenId}.${effect}`]: true})
+    }],
+    ["raging", async function(tokenId, combat, lastCombatant, roundData, options, sender, effect, isStartOfTurn){
+        if(isStartOfTurn) return;
+        if(!IsSameTokenAndNotAlreadyApplied(effect, tokenId, combat, lastCombatant)) return;
+        debug("Rage Trigger!");
+
+        /** Actually apply Affliction */
+        const actor = lastCombatant.actor;
+
+        const saveCheck = await actor.sheet._onSaveRoll();
+        const roll = JSON.parse(saveCheck.data.roll);
+        roll._total = roll.total;
+        let messageData = {};
+
+        const DC = CONFIG.PTUCombat.DC.RAGE;
+        
+        if(roll.total >= DC) {
+            messageData = {
+                title: `${actor.name}'s<br>Rage Save!`,
+                roll: roll,
+                description: `Save Success!<br>${actor.name} calmed down!`,
+                success: true
+            }
+
+            await actor.effects.find(x => x.data.label == "Rage").delete();
+        }
+        else {
+            messageData = {
+                title: `${actor.name}'s<br>Rage Save!`,
+                roll: roll,
+                description: `Save Failed!`,
+                success: false
+            }        
+        }
+        const content = await renderTemplate('/systems/ptu/templates/chat/save-check.hbs', messageData);
+        await saveCheck.update({content: content});
+
+        /** If affliction can only be triggered once per turn, make sure it shows as applied. */
+        if(options.round.direction == CONFIG.PTUCombat.DirectionOptions.FORWARD) return; // If new round already started don't register EoT effect.
+        await combat.update({[`flags.ptu.applied.${tokenId}.${effect}`]: true})
+    }],
+    ["sleeping", async function(tokenId, combat, lastCombatant, roundData, options, sender, effect, isStartOfTurn){
+        if(isStartOfTurn) return;
+        if(!IsSameTokenAndNotAlreadyApplied(effect, tokenId, combat, lastCombatant)) return;
+        debug("Sleep Trigger!");
+
+        /** Actually apply Affliction */
+        const actor = lastCombatant.actor;
+
+        const saveCheck = await actor.sheet._onSaveRoll();
+        const roll = JSON.parse(saveCheck.data.roll);
+        roll._total = roll.total;
+        let messageData = {};
+
+        const DC = CONFIG.PTUCombat.DC.SLEEP;
+        
+        if(roll.total >= DC) {
+            messageData = {
+                title: `${actor.name}'s<br>Sleep Save!`,
+                roll: roll,
+                description: `Save Success!<br>${actor.name} woke up!`,
+                success: true
+            }
+
+            await actor.effects.find(x => x.data.label == "Sleep").delete();
+            const bad_sleep = actor.effects.find(x => x.data.label == "BadSleep");
+            if(bad_sleep) await bad_sleep.delete();
+        }
+        else {
+            messageData = {
+                title: `${actor.name}'s<br>Sleep Save!`,
+                roll: roll,
+                description: `Save Failed!`,
+                success: false
+            }        
+        }
+        const content = await renderTemplate('/systems/ptu/templates/chat/save-check.hbs', messageData);
+        await saveCheck.update({content: content});
+
+        /** If affliction can only be triggered once per turn, make sure it shows as applied. */
+        if(options.round.direction == CONFIG.PTUCombat.DirectionOptions.FORWARD) return; // If new round already started don't register EoT effect.
+        await combat.update({[`flags.ptu.applied.${tokenId}.${effect}`]: true})
+    }],
+    ["badly_sleeping", async function(tokenId, combat, lastCombatant, roundData, options, sender, effect, isStartOfTurn){
+        if(isStartOfTurn) return;
+        if(!IsSameTokenAndNotAlreadyApplied(effect, tokenId, combat, lastCombatant)) return;
+        debug("Bad Sleep Trigger!");
+
+        /** Actually apply Affliction */
+        const actor = lastCombatant.actor;
+
+        const token = canvas.tokens.get(lastCombatant.tokenId);
+        await ApplyFlatDamage([token], "Nightmare (Bad Sleep)", actor.data.data.health.tick * 2);
+
+        /** If affliction can only be triggered once per turn, make sure it shows as applied. */
+        if(options.round.direction == CONFIG.PTUCombat.DirectionOptions.FORWARD) return; // If new round already started don't register EoT effect.
+        await combat.update({[`flags.ptu.applied.${tokenId}.${effect}`]: true})
+    }],
+]);
 
 Hooks.on("applyActiveEffect", function(actorData, change) {
     if(change.key == "data.modifiers.flinch_count") {
+        const isErrata = game.settings.get("ptu", "errata");
+        if(!isErrata) return;
         let actor;
 
         if(actorData.isToken) {
@@ -103,29 +631,44 @@ Hooks.on("applyActiveEffect", function(actorData, change) {
     }
 })
 
-Hooks.on("deleteCombat", async function(combat, options, id)  {
-    for(let c of combat.combatants) {
-        if(c.actor.data.data.modifiers.flinch_count.value > 0) {
-            log(`Reseting ${c.actor.name} (${c.actor._id})'s flinch count.`)
-            let flinches = c.actor.effects.filter(x => x.data.label == "Flinch")
-            for(let flinch of flinches) await flinch.delete();
+// Set combat details on active effects for duration based calculations like Badly Poisoned
+Hooks.on("preCreateActiveEffect", function(actor,effect,options,id) {
+    applyPreCreateActiveEffectChanges(effect);
+})
 
-            await c.actor.update({"data.modifiers.flinch_count": {value: 0, keys: []}})
+Hooks.on("preUpdateToken", function(scene, tokenData, changes, options, sender) {
+    // Only continue if effects have been changed
+    if(!changes.actorData?.effects) return;    
+
+    // Take a snapshot of the current tokenData before changes are applied
+    const data = duplicate(tokenData);
+    
+    if(data.actorData.effects) {
+        // If a new effect is added
+        if(data.actorData.effects.length < changes.actorData.effects.length) {
+            // Apply preCreate effect changes
+            applyPreCreateActiveEffectChanges(changes.actorData.effects[changes.actorData.effects.length-1], false);
         }
+    }
+    else {
+        // If first effect, apply changes to that.
+        applyPreCreateActiveEffectChanges(changes.actorData.effects[0], false);
     }
 });
 
-// Set combat details on active effects for duration based calculations like Badly Poisoned
-Hooks.on("preCreateActiveEffect", function(actor,effect,options,id) {
+function applyPreCreateActiveEffectChanges(effect, preCreate = true) {
     if(game.combats.active) {
-        effect.duration = {
+        effect.duration = mergeObject(effect.duration ?? {}, {
             startRound: game.combats.active.current?.round, 
             startTurn: game.combats.active.current?.turn,
             combat: game.combats.active.id
-        }
-        effect["flags.ptu.roundsElapsed"] = 0;
+        });
+        if(preCreate) effect["flags.ptu.roundsElapsed"] = 0;
+        else effect.flags = mergeObject(effect.flags ?? {}, {ptu: {roundsElapsed: 0}});
     }
     else {
-        effect["flags.ptu.roundsElapsed"] = -1;
+        effect.duration = mergeObject(effect.duration ?? {}, {startRound: -1, startTurn: -1});
+        if(preCreate) effect["flags.ptu.roundsElapsed"] = 0;
+        else effect.flags = mergeObject(effect.flags ?? {}, {ptu: {roundsElapsed: -1}});
     }
-})
+}

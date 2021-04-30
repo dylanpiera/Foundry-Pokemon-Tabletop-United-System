@@ -195,7 +195,9 @@ export class PTUActor extends Actor {
     data.ap.total = 5 + Math.floor(data.level.current / 5);
 
     data.initiative = {value: data.stats.spd.total + data.modifiers.initiative};
-    if(actorData.flags?.ptu?.is_paralyzed) data.initiative.value = Math.floor(data.initiative.value * 0.5);
+    if(actorData.flags?.ptu?.is_paralyzed) {
+      if(game.settings.get("ptu", "errata"))data.initiative.value = Math.floor(data.initiative.value * 0.5);
+    }
     if(data.modifiers.flinch_count?.value > 0) { 
       data.initiative.value -= (data.modifiers.flinch_count.value * 5);
     }
@@ -242,6 +244,8 @@ export class PTUActor extends Actor {
 
     data.health.percent = Math.round((data.health.value / data.health.max) * 100);
 
+    data.health.tick = Math.floor(data.health.total/10);
+
     data.initiative = {value: data.stats.spd.total + data.modifiers.initiative + (data.training?.agility?.trained ? data.training?.critical ? 12 : 4 : 0) + (data.training?.agility?.ordered ? 4 : 0)};
     if(actorData.flags?.ptu?.is_paralyzed) data.initiative.value = Math.floor(data.initiative.value * 0.5);
     if(data.modifiers.flinch_count?.value > 0) { 
@@ -273,8 +277,10 @@ export class PTUActor extends Actor {
     /* The Corner of Exceptions */
 
     // Shedinja will always be a special case.
-    if(data.species.toLowerCase() === "shedinja") data.health.max = 1;
-
+    if(data.species.toLowerCase() === "shedinja") { 
+      data.health.max = 1;
+      data.health.tick = 1;
+    }
   }
 
 }
