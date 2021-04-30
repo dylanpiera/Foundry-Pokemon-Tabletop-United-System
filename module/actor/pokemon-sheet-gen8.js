@@ -222,6 +222,8 @@ export class PTUGen8PokemonSheet extends ActorSheet {
 		});
 	}
 
+	_onDragItemStart(event) {}
+
 	/**
 	 * Handle creating a new Owned Item for the actor using initial data defined in the HTML dataset
 	 * @param {Event} event   The originating click event
@@ -313,12 +315,14 @@ export class PTUGen8PokemonSheet extends ActorSheet {
 	 * @param {Event} event   The originating click event
 	 * @private
 	 */
-	_onMoveRoll(event) {
+	_onMoveRoll(event, {actor, item} = {}) {
 		event.preventDefault();
-		const element = event.currentTarget;
-		const dataset = element.dataset;
-		const move = this.actor.items.find(x => x._id == dataset.id).data;
-		move.data = PrepareMoveData(this.actor.data.data, move.data);
+ 
+		const element = event?.currentTarget;
+		const dataset = element?.dataset;
+		const move = item ? item : this.actor.items.find(x => x._id == dataset.id).data;
+
+		move.data = PrepareMoveData(actor ? actor.data.data : this.actor.data.data, move.data);
 
 		/** Option Callbacks */
 		let PerformFullAttack = () => {

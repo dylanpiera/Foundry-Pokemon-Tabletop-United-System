@@ -192,6 +192,8 @@ async function registerHandlebars() {
 Hooks.once('init', async function() {
 
   game.ptu = {
+    rollItemMacro,
+    moveMacro: _onMoveMacro,
     PTUActor,
     PTUItem,
     PTUPokemonCharactermancer,
@@ -636,18 +638,36 @@ Hooks.on("renderActorSheet", function(sheet,element,settings) {
  * @returns {Promise}
  */
 async function createPTUMacro(data, slot) {
+  if (data.type == "Actor") {
+    const actor = game.actors.get(data.id);
+    const command = `game.actors.get("${data.id}").sheet.render(true)`;
+    let macro = game.macros.entities.find(m => (m.name === actor.name) && (m.command === command));
+    if (!macro) {
+      macro = await Macro.create({
+        name: actor.name,
+        type: "script",
+        img: actor.img,
+        command: command,
+        flags: { "ptu.actorMacro": true }
+      });
+    }
+    game.user.assignHotbarMacro(macro, slot);
+    return false;
+  }
+
   if (data.type !== "Item") return;
   if (!("data" in data)) return ui.notifications.warn("You can only create macro buttons for owned Items");
   const item = data.data;
+  const actor = game.actors.get(data.actorId);
 
   // Create the macro command
-  const command = `game.ptu.rollItemMacro("${item.name}");`;
-  let macro = game.macros.entities.find(m => (m.name === item.name) && (m.command === command));
+  const command = `game.ptu.rollItemMacro("${data.actorId}","${item._id}","${data.sceneId}", "${data.tokenId}");`;
+  let macro = game.macros.entities.find(m => (m.name === `${actor.name}'s ${item.name}`) && (m.command === command));
   if (!macro) {
     macro = await Macro.create({
-      name: item.name,
+      name: `${actor.name}'s ${item.name}`,
       type: "script",
-      img: item.img,
+      img: item.type == 'move' && item.img === "icons/svg/mystery-man.svg" ? `/systems/ptu/css/images/types2/${item.data.type}IC_Icon.png`: item.img,
       command: command,
       flags: { "ptu.itemMacro": true }
     });
@@ -657,21 +677,51 @@ async function createPTUMacro(data, slot) {
 }
 
 /**
- * Create a Macro from an Item drop.
- * Get an existing item macro if one exists, otherwise create a new one.
- * @param {string} itemName
+ * Handle item macro.
+ * @param {string} actorId
+ * @param {string} itemId
  * @return {Promise}
  */
-function rollItemMacro(itemName) {
-  const speaker = ChatMessage.getSpeaker();
-  let actor;
-  if (speaker.token) actor = game.actors.tokens[speaker.token];
-  if (!actor) actor = game.actors.get(speaker.actor);
-  const item = actor ? actor.items.find(i => i.name === itemName) : null;
-  if (!item) return ui.notifications.warn(`Your controlled Actor does not have an item named ${itemName}`);
+function rollItemMacro(actorId, itemId, sceneId, tokenId) {
+  const isTokenActor = sceneId && sceneId != "null" && tokenId && tokenId != "null";
+  const actor = game.actors.get(actorId);
+  let actorData = duplicate(actor.data);
+  
+  if(isTokenActor) {
+    const token = game.scenes.get(sceneId)?.data?.tokens?.find(x => x?._id == tokenId);
+    if(!token) return ui.notifications.warn(`Scene or token no longer exists. Macro is invalid.`);
+    actorData = mergeObject(actorData, token.actorData);
+  }
 
-  // Trigger the item roll
-  return item.roll();
+  if(!actor) return ui.notifications.warn(`Couldn't find actor with ID ${actorId}`);
+
+  const item = (isTokenActor && actorData.items) ? actorData.items.find(x => x._id == itemId) : actor.items.get(itemId);
+  if(!item) return ui.notifications.warn(`Actor ${actor.name} doesn't have an item with ID ${itemId}`);
+
+  switch(item.type) {
+    case 'move': {
+      return game.ptu.moveMacro(actor, isTokenActor ? item : item.data);
+    }
+    case 'item': {
+      return;
+    }
+
+    default: return ui.notifications.warn(`I'm sorry, macro support has yet to be added for '${item.type}s'`)
+  }
+
+  // const speaker = ChatMessage.getSpeaker();
+  // let actor;
+  // if (speaker.token) actor = game.actors.tokens[speaker.token];
+  // if (!actor) actor = game.actors.get(speaker.actor);
+  // const item = actor ? actor.items.find(i => i.name === itemName) : null;
+  // if (!item) return ui.notifications.warn(`Your controlled Actor does not have an item named ${itemName}`);
+
+  // // Trigger the item roll
+  // return item.roll();
+}
+
+function _onMoveMacro(actor, item) {
+  return actor.sheet._onMoveRoll(new Event(''), {actor, item});;
 }
 
 function setAccessabilityFont(enabled) {

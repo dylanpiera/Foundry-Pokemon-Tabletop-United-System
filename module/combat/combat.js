@@ -182,20 +182,24 @@ export default class PTUCombat {
     }
 
     async _onEndOfTurn(combat, combatant, lastTurn, options, sender) {
+        // if different combat is updated
         if(combat.id != this.combat.id) return;
+        // if this combatant doesn't have special PTU Flags, it can be ignored.
         if(!combatant.actor.data.flags.ptu) return;
-        
         // Only worry about effects if the combat has started
         if(!combat.started) return;
 
         await this._handleAfflictions(combat, combatant, lastTurn, options, sender, false)
 
+        // TODO: Maybe merge this into its own function 
+        // Checks to see if an effect should be deleted based on its duration, as well as updating the effect's "roundsElapsed" flag, for stuff like toxic.
         for(let effect of combatant.actor.effects) {
             if(options.turn.direction == CONFIG.PTUCombat.DirectionOptions.FORWARD) {
                 const curRound = (options.round.direction == CONFIG.PTUCombat.DirectionOptions.FORWARD) ? lastTurn.round : combat.round;
                 const startRound = effect.data.duration?.startRound;
-                debug((startRound - curRound), effect.data.duration?.rounds * -1);
                 if((startRound - curRound) <= (effect.data.duration?.rounds * -1)) {
+                    // If turns is bigger than 0, the effect needs to be deleted at the end of the turn
+                    // if it is undefined, it should be deleted at the start of the turn (ergo not now)
                     if(effect.data.duration?.turns > 0)  {
                         await effect.delete();
                         continue;
@@ -204,11 +208,6 @@ export default class PTUCombat {
             }
 
             const val = (duplicate(effect.data.flags).ptu?.roundsElapsed ?? 0) + 1;
-
-            if(effect.data.duration?.rounds > 0 || effect.data.duration?.turns > 0 ) {
-                const roundDiff = lastTurn.round - effect.data.duration?.startRound;
-
-            }
             await effect.update({"flags.ptu.roundsElapsed": val});
         }
     }
@@ -387,15 +386,17 @@ export default class PTUCombat {
         if(afflictions.length == 0) return;
 
         for(let affliction of afflictions) {
-            //Do not deal double poison damage
+            // Do not deal double poison damage
             if(affliction == "poisoned") {
                 if(afflictions.includes("badly_poisoned")) continue;
             }
 
+            // If asleep ignore Rage/Infatuate/Confusion checks & damage
             if(affliction == "raging" || affliction == "infatuated" || affliction == "confused") {
                 if(afflictions.includes("sleeping")) continue;
             }
 
+            // If badly sleeping but not sleeping, ignore.
             if(affliction == "badly_sleeping") {
                 if(!afflictions.includes("sleeping")) continue;
             }
