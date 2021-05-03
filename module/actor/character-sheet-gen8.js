@@ -67,19 +67,39 @@ export class PTUGen8CharacterSheet extends ActorSheet {
 		const feats = [];
 		const edges = [];
 		const items = [];
+		const items_categorized = {
+			"Key": [],
+			"Medical": [],
+			"Food": [],
+			"Equipment": [],
+			"Pokemon Items": [],
+			"PokeBalls": [],
+			"Misc": []
+		};
 		const abilities = [];
 		const moves = [];
 		const capabilities = [];
 		const dex = {
 			seen: [],
 			owned: []
-		}
+		};
 
 		// Iterate through items, allocating to containers
 		// let totalWeight = 0;
 		for (let i of sheetData.items) {
 			let item = i.data;
 			i.img = i.img || DEFAULT_TOKEN;
+			if(i.type == 'item'){
+				let cat=i.data.category;
+				if(cat === undefined || cat == ""){
+					cat="Misc";
+				}
+				if(!(items_categorized[cat])){
+					//Category needs handling
+					items_categorized[cat]=[];
+				}
+				items_categorized[cat].push(i);
+			}
 			switch(i.type) {
 				case 'feat': feats.push(i); break;
 				case 'edge': edges.push(i); break;
@@ -93,11 +113,13 @@ export class PTUGen8CharacterSheet extends ActorSheet {
 					break;
 			}
 		}
+		console.log("full items",items_categorized);
 
 		// Assign and return
 		actorData.feats = feats;
 		actorData.edges = edges;
 		actorData.items = items;
+		actorData.items_categorized = items_categorized;
 		actorData.abilities = abilities;
 		actorData.moves = moves;
 		actorData.capabilities = capabilities;
@@ -138,6 +160,13 @@ export class PTUGen8CharacterSheet extends ActorSheet {
 			this.actor.deleteOwnedItem(li.data('itemId'));
 			li.slideUp(200, () => this.render(false));
 		});
+		//Drag Inventory Item
+		html.find('.item-categorized').each((i,element) => {
+			element.addEventListener("drop",(event) => this._onItemDrop(event),false);
+			element.addEventListener("dragstart",(event) => this._onItemDrag(event),false);
+			element.addEventListener("dragend",(event) => this._onItemDragEnd(event),false);
+			
+		});
 
 		// Delete Effect
 		html.find('.effect-delete').click((ev) => {
@@ -165,8 +194,8 @@ export class PTUGen8CharacterSheet extends ActorSheet {
 			html.find('li.item').each((i, li) => {
 				if (li.classList.contains('inventory-header')) return;
 				li.setAttribute('draggable', true);
-				li.addEventListener('dragstart', handler, false);
-			});
+					li.addEventListener('dragstart', handler, false);
+				});
 		}
 
 		html.find('#heldItemInput').autocomplete({
@@ -174,6 +203,25 @@ export class PTUGen8CharacterSheet extends ActorSheet {
 			autoFocus: true,
 			minLength: 1
 		});
+	}
+	async _onItemDrag(event){
+		//Letting the drop event know our target item ID
+		await event.dataTransfer.setData("text/plain",event.target.dataset.itemId);
+	}
+
+	async _onItemDragEnd(event){
+		console.log("drag end",event);
+	}
+	_onItemDrop(event){
+		console.log("cat debug",event.toElement.dataset);
+
+		console.log("drop event",event);
+		var itemToUpdate=event.dataTransfer.getData("text");
+		var category=event.toElement.dataset.category;
+		var item = this.actor.getOwnedItem(itemToUpdate);
+		item.data.data.category=category;
+		console.log("drop data",category,item);
+		this.actor.updateOwnedItem(item.data);
 	}
 
 	_onDragItemStart(event) {}
@@ -514,3 +562,8 @@ const CritOptions = {
 	NORMAL: 'normal',
 	CRIT_HIT: 'hit'
 }
+
+Hooks.on("preCreateOwnedItem", (canvas, update) => {
+
+	console.log("drop hook",canvas,update);
+});
