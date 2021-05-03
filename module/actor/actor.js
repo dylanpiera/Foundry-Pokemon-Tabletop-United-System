@@ -115,6 +115,23 @@ export class PTUActor extends Actor {
   prepareDerivedData() {
     const actorData = this.data;
 
+    if(!isNaN(Number(actorData.data.skills.acrobatics.value))) {
+      const skills = duplicate(actorData.data.skills)
+      for (let [key, skill] of Object.entries(skills)) {  
+        skill["value"] = {
+          "value": !isNaN(Number(skill.value)) ? skill.value : 2,
+          "mod": 0,
+        };
+        skill["modifier"] = {
+          "value": !isNaN(Number(skill.modifier)) ? skill.modifier : 2,
+          "mod": 0,
+        };
+      }
+      debug("Applying data update to", this.name);
+      setTimeout(() => this.update({'data.skills': skills}), 1000);
+      actorData.data.skills = skills;
+    }
+
     // Make separate methods for each Actor type (character, npc, etc.) to keep
     // things organized.
     if (actorData.type === 'character') this._prepareCharacterData(actorData);
@@ -168,7 +185,9 @@ export class PTUActor extends Actor {
     // Make modifications to data here. For example:
 
     for (let [key, skill] of Object.entries(data.skills)) {
-      skill["rank"] = this._getRank(skill["value"]);  
+      skill["rank"] = this._getRank(skill["value"]["value"]);  
+      skill["value"]["total"] = skill["value"]["value"] + skill["value"]["mod"];
+      skill["modifier"]["total"] = skill["modifier"]["value"] + skill["modifier"]["mod"];
     }
     if(dexExpEnabled) {
       data.level.dexexp = actorData.items.filter(x => x.type == "dexentry" && x.data.owned).length;
@@ -268,7 +287,9 @@ export class PTUActor extends Actor {
 
     // Calc skill rank
     for (let [key, skill] of Object.entries(data.skills)) {
-      skill["rank"] = this._getRank(skill["value"]);  
+      skill["rank"] = this._getRank(skill["value"]["value"]);
+      skill["value"]["total"] = skill["value"]["value"] + skill["value"]["mod"];  
+      skill["modifier"]["total"] = skill["modifier"]["value"] + skill["modifier"]["mod"];
     }
 
     // Calc Type Effectiveness
