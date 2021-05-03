@@ -113,7 +113,6 @@ export class PTUGen8CharacterSheet extends ActorSheet {
 					break;
 			}
 		}
-		console.log("full items",items_categorized);
 
 		// Assign and return
 		actorData.feats = feats;
@@ -162,10 +161,8 @@ export class PTUGen8CharacterSheet extends ActorSheet {
 		});
 		//Drag Inventory Item
 		html.find('.item-categorized').each((i,element) => {
-			element.addEventListener("drop",(event) => this._onItemDrop(event),false);
-			element.addEventListener("dragstart",(event) => this._onItemDrag(event),false);
-			element.addEventListener("dragend",(event) => this._onItemDragEnd(event),false);
-			
+			element.addEventListener("drop",this._onItemDrop.bind(this));
+			element.addEventListener("dragstart",this._onItemDrag.bind(this));
 		});
 
 		// Delete Effect
@@ -204,24 +201,45 @@ export class PTUGen8CharacterSheet extends ActorSheet {
 			minLength: 1
 		});
 	}
+
 	async _onItemDrag(event){
 		//Letting the drop event know our target item ID
 		await event.dataTransfer.setData("text/plain",event.target.dataset.itemId);
 	}
 
-	async _onItemDragEnd(event){
-		console.log("drag end",event);
-	}
-	_onItemDrop(event){
-		console.log("cat debug",event.toElement.dataset);
+	async _onItemDrop(event){
+		debug("Drop Category",event.toElement.dataset?.category);
+		debug("Drop Event",event);
 
-		console.log("drop event",event);
-		var itemToUpdate=event.dataTransfer.getData("text");
-		var category=event.toElement.dataset.category;
-		var item = this.actor.getOwnedItem(itemToUpdate);
+		const itemId = event.dataTransfer.getData("text");
+		const category = event.toElement.dataset.category;
+		const actor = this.actor;
+
+		// Grab item from character sheet
+		let item = actor.getOwnedItem(itemId);
+		// If Item doesn't exist yet wait for item creation to resolve, then try again.
+		if(!item) {
+			const itemId = await new Promise((resolve, reject) => {
+				const hookId = Hooks.on("createOwnedItem", function(hookActor, hookItem, options, sender){
+					if(actor.id == hookActor.id && hookItem.type == "item") {
+						Hooks.off("createOwnedItem", hookId)
+						resolve(hookItem._id);
+					}
+				})
+				// if after 1.5 sec there is no success, abort.
+				setTimeout(() => {
+					Hooks.off("createOwnedItem", hookId);
+					debug("Did not catch item drop.")
+					reject
+				}, 1500);
+			});
+			if(!itemId) return;
+			item = actor.getOwnedItem(itemId);
+		}
+
 		item.data.data.category=category;
-		console.log("drop data",category,item);
-		this.actor.updateOwnedItem(item.data);
+		await this.actor.updateOwnedItem(item.data);
+		log(`Moved ${item.name} to ${category} category`);
 	}
 
 	_onDragItemStart(event) {}
@@ -562,8 +580,3 @@ const CritOptions = {
 	NORMAL: 'normal',
 	CRIT_HIT: 'hit'
 }
-
-Hooks.on("preCreateOwnedItem", (canvas, update) => {
-
-	console.log("drop hook",canvas,update);
-});
