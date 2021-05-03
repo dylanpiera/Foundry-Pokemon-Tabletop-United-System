@@ -326,6 +326,7 @@
     "item": {
       "templates": ["base"],
       "quantity": 1,
+      "category": "",
       "cost": 0
     }
   }

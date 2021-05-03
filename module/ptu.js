@@ -754,3 +754,7 @@ Hooks.on("renderSettingsConfig", (app, html, user) => {
 });
 
 export default DirectoryPicker;
+
+
+//Drag hook for inventory category change
+

@@ -1,18 +1,18 @@
 <ol class="inventory-list">
-    <li class="inventory-header flexrow">
-        <h3 class="item-name flexrow">{{title}}</h3>
+    <li class="inventory-header item flexrow" data-category="{{category}}">
+        <h3 class="item-categorized item-name flexrow" data-category="{{category}}" >{{title}}</h3>
         <div class="item-controls">
-            <a class="item-control item-create" title="Add {{type}}" data-type="{{type}}"><i
+            <a class="item-control item-create" title="Add {{type}}" data-type="{{type}}" data-category="{{category}}"><i
                 class="fas fa-plus-circle" style="margin-right: 3px;"></i><span
                 class="readable">Add</span></a>
         </div>
     </li>
     <ol class="item-list">
         {{#each data as | obj |}}
-        <li class="item flexrow" data-item-id="{{obj._id}}">
+        <li class="item flexrow item-categorized" data-category="{{../category}}" data-item-id="{{obj._id}}">
             <div class="item-name flexrow">
 
-            <h4 title="Toggle Info ({{obj.name}})" data-toggle="collapse"
+            <h4 data-category="{{../category}}" title="Toggle Info ({{obj.name}})" data-toggle="collapse"
             {{#if obj.data.snippet}}
                 data-target=".{{obj._id}}-collapse" aria-expanded="false"
                 aria-controls="{{obj._id}}-collapse {{obj._id}}-snippet-collapse"
