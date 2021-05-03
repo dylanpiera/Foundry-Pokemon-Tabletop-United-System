@@ -92,7 +92,7 @@ async function executeApplyDamageToTargets(targets, data, damage, isFlat = false
 		}
 
         log(`Dealing ${actualDamage} damage to ${target.name}`); 
-        appliedDamage[target.actor.data._id] = {name: target.actor.data.name, damage: actualDamage, old: {value: duplicate(target.actor.data.data.health.value), temp: duplicate(target.actor.data.data.tempHp.value)}};
+        appliedDamage[target.data.actorLink ? target.actor.data._id : target.data._id] = {name: target.actor.data.name, damage: actualDamage, type: target.data.actorLink ? "actor" : "token", old: {value: duplicate(target.actor.data.data.health.value), temp: duplicate(target.actor.data.data.tempHp.value)}};
         await target.actor.modifyTokenAttribute("health", actualDamage*-1, true, true);
     }
     await displayAppliedDamageToTargets({data: appliedDamage, move: data.moveName});
@@ -114,12 +114,13 @@ export function undoDamageToTargets(event) {
 
 	let data = {
         target: event.currentTarget.dataset.target,
+        type: event.currentTarget.dataset.targetType,
         oldHp: parseInt(event.currentTarget.dataset.oldValue),
         oldTempHp: parseInt(event.currentTarget.dataset.oldTemp),
         damage: parseInt(event.currentTarget.dataset.damage)
     }
     
-    let actor = game.actors.get(data.target);
+    let actor = data.type == "actor" ? game.actors.get(data.target) : canvas.tokens.get(data.target).actor;
     if(!actor) return;
 
     

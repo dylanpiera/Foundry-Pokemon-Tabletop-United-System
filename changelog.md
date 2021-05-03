@@ -1,6 +1,15 @@
 # Welcome to the Beta!
 Hey there! You are on the Beta Branch. If you ever have any feedback please do share with us over on [Github](https://github.com/dylanpiera/Foundry-Pokemon-Tabletop-United-System/issues) or [Discord](https://discord.gg/fE3w59q)
 
+## 1.2.14 - Quality of Life - Electric Boogaloo
+- Fixed Token actor's being unable to undo-damage.
+- Fixed ActiveEffect config sheet breaking effects after saving
+- Added 'Priority' field & info to ActiveEffect config sheet
+- Added full Effect tab to Trainer Sheets
+- Added 'game.items' field to 'game.ptu.items' list, for easy access in autocomplete fields.
+- Added a Pokeball field for keeping track of what ball was used to caught a mon.
+  - Feature request from MoveMaster module to display proper ball, doesn't do anything in main system.
+
 ## 1.2.13 - Quality of Life
 - Added Habitat Rolltables Compendium
 - Fixed some habitats having typos in them

@@ -42,13 +42,14 @@ import PTUCombat from './combat/combat.js'
 import Api from './api/api.js'
 import RenderDex from './utils/pokedex.js'
 import TMsData from './data/tm-data.js'
+import PTUActiveEffectConfig from './forms/active-effect-config.js';
 
 export let debug = (...args) => {if (game.settings.get("ptu", "showDebugInfo") ?? false) console.log("DEBUG: FVTT PTU | ", ...args)};
 export let log = (...args) => console.log("FVTT PTU | ", ...args);
 export let warn = (...args) => console.warn("FVTT PTU | ", ...args);
 export let error = (...args) => console.error("FVTT PTU | ", ...args)
 
-export const LATEST_VERSION = "1.2.13";
+export const LATEST_VERSION = "1.2.14";
 
 function registerSheets() {
   // Register sheet application classes
@@ -196,6 +197,8 @@ async function registerHandlebars() {
 }
 
 Hooks.once('init', async function() {
+
+  CONFIG.ActiveEffect.sheetClass = PTUActiveEffectConfig;
 
   game.ptu = {
     rollItemMacro,
@@ -588,7 +591,7 @@ Hooks.once("ready", async function() {
   setAccessabilityFont(game.settings.get("ptu", "accessability"));
 
   // Globally enable items from item compendium
-  game.ptu["items"] = await game.packs.get("ptu.items").getContent();
+  game.ptu["items"] = Array.from(new Set(game.items.filter(x => x.type == "item").concat(await game.packs.get("ptu.items").getContent())));
 
   // Wait to register hotbar drop hook on ready so that modules could register earlier if they want to
   Hooks.on("hotbarDrop", (bar, data, slot) => createPTUMacro(data, slot));

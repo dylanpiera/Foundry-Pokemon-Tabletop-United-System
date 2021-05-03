@@ -271,6 +271,7 @@
       "owner": "0",
       "shiny": false,
       "loyalty": 3,
+      "pokeball": "",
 
       "training": {
         "agility": {

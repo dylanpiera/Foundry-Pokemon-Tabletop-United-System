@@ -885,7 +885,7 @@
                     <div class="swsh-header">
                       <div class="d-flex w-100 mt-1 mb-1 align-items-center">
                         <div class="col-sm-8">
-                          <label for="data.egggroup">Egg Group {{isGm}}</label>
+                          <label for="data.egggroup">Egg Group</label>
                         </div>
                         <div class="col-sm-4">
                           <label for="data.owner">Shiny</label>
@@ -1112,6 +1112,24 @@
                     </div>
                   </div>
                 </div>
+
+                <!-- Pokéball -->
+                <div class="swsh-box mb-2 w-100" style="text-align: center; word-break: keep-all;">
+                    <div class="swsh-header">
+                      <div class="d-flex w-100 mt-1 mb-1 align-items-center">
+                        <div class="col-sm-12">
+                          <label for="data.pokeball">Pokéball</label>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="swsh-body" style="display: block;">
+                      <div class="d-flex w-100 mt-1 mb-1">
+                        <div class="col-sm-12">
+                          <input type="text" name="data.pokeball" value="{{data.pokeball}}" data-dtype="String"/>
+                        </div>
+                      </div>
+                    </div>
+                </div>
               </div>
               <div class="col">
                 <!-- Skills -->
@@ -1158,7 +1176,7 @@
             </div>
           </div>
 
-           <!-- Effects Tab -->
+          <!-- Effects Tab -->
           <div class="tab details effects" data-group="primary" data-tab="effects">
             <div class="h-100 swsh-box">
               <div class="swsh-header pl-2 effect-header">
