@@ -591,7 +591,7 @@ Hooks.once("ready", async function() {
   setAccessabilityFont(game.settings.get("ptu", "accessability"));
 
   // Globally enable items from item compendium
-  game.ptu["items"] = await game.packs.get("ptu.items").getContent();
+  game.ptu["items"] = game.items.filter(x => x.type == "item").concat(await game.packs.get("ptu.items").getContent())
 
   // Wait to register hotbar drop hook on ready so that modules could register earlier if they want to
   Hooks.on("hotbarDrop", (bar, data, slot) => createPTUMacro(data, slot));
