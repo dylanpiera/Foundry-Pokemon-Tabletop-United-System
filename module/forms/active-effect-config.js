@@ -39,4 +39,20 @@
       </li>`);
       changes.appendChild(change[0]);
     }
+
+    /** @override */
+    async _updateObject(event, formData) {
+      formData = expandObject(formData);
+      formData.changes = Object.values(formData.changes || {});
+      for ( let c of formData.changes ) {
+        // TODO - store as numeric when it's unambiguous, remove this later. See #4309
+        const n = parseFloat(c.value)
+        if ( String(n) === c.value ) c.value = n;
+
+        if(c.value.includes(',')) {
+          c.value = c.value.replace("[", "").replace("]", "").split(",")
+        }
+      }
+      return this.object.update(formData);
+    }
   }
