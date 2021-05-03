@@ -1251,6 +1251,20 @@ header.effect-change.effects-header.flexrow > div {
   text-align: center;
   white-space: nowrap;
 }
+.mod-input {
+  position: relative;
+}
+.mod-input:hover:before {
+  color: green;
+}
+.mod-input:before {
+  content: attr(data-mod);
+  padding: 5px 5px 0 0;
+  color: #19181370;
+  position: absolute;
+  right: 0;
+  pointer-events: none;
+}
 /* MD CSS */
 .md h1,
 .md h2,
