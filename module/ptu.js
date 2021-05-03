@@ -115,7 +115,7 @@ async function registerHandlebars() {
 		return _calcMoveDb(PrepareMoveData(actorData, move), bool);
   });
   Handlebars.registerHelper("calcCritRange", function (actorData) {
-		return actorData.modifiers.critRange ? actorData.modifiers.critRange : 0;
+		return actorData.modifiers.critRange?.total ? actorData.modifiers.critRange?.total : 0;
   });
   Handlebars.registerHelper("calcCritRangeMove", function (move) {
     return move.owner ? move.owner.critRange : 0;
@@ -294,8 +294,8 @@ export function PrepareMoveData(actorData, move) {
   move.owner = { 
     type: actorData.typing,
     stats: actorData.stats,
-    acBonus: actorData.modifiers.acBonus,
-    critRange: actorData.modifiers.critRange
+    acBonus: actorData.modifiers.acBonus.total,
+    critRange: actorData.modifiers.critRange.total
   };
   move.prepared = true;
 

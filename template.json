@@ -4,18 +4,45 @@
     "templates": {
       "modifiers": {
         "modifiers": {
-          "statPoints": 0,
-          "initiative": 0,
-          "hardened": false,
-          "acBonus": 0,
-          "critRange" : 0,
-          "evasion" : {
-            "physical" : 0,
-            "special" : 0,
-            "speed" : 0
+          "statPoints": {
+            "value": 0,
+            "mod": 0
           },
-          "saveChecks": 0,
-          "effectRange": 0,
+          "initiative": {
+            "value": 0,
+            "mod": 0
+          },
+          "hardened": false,
+          "acBonus": {
+            "value": 0,
+            "mod": 0
+          },
+          "critRange" : {
+            "value": 0,
+            "mod": 0
+          },
+          "evasion" : {
+            "physical" : {
+              "value": 0,
+              "mod": 0
+            },
+            "special" : {
+              "value": 0,
+              "mod": 0
+            },
+            "speed" : {
+              "value": 0,
+              "mod": 0
+            }
+          },
+          "saveChecks": {
+            "value": 0,
+            "mod": 0
+          },
+          "effectRange": {
+            "value": 0,
+            "mod": 0
+          },
           "flinch_count": {
             "value": 0,
             "keys": []
