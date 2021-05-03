@@ -220,6 +220,12 @@ export class PTUGen8PokemonSheet extends ActorSheet {
 			autoFocus: true,
 			minLength: 1
 		});
+
+		html.find('input[name="data.pokeball"]').autocomplete({
+			source: game.ptu.items.filter(x => x.data.category == "PokeBalls" || x.name.toLowerCase().endsWith("ball")).map((i) => i.data.name),
+			autoFocus: true,
+			minLength: 1
+		});
 	}
 
 	_onDragItemStart(event) {}

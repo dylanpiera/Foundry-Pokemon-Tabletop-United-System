@@ -677,6 +677,7 @@ span.readable {
   line-height: 20px;
   background: transparent;
   font-weight: bold;
+  box-shadow: none;
 }
 .actor .inventory-list .inventory-header h3 {
   margin: 0;
