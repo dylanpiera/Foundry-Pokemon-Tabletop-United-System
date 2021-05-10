@@ -1,4 +1,5 @@
 import { debug, error, log, PrepareMoveData, warn } from '../ptu.js'
+import { HardenedChanges } from '../data/training-data.js'
 
 /**
  * Extend the basic ActorSheet with some very simple modifications
@@ -229,6 +230,22 @@ export class PTUGen8PokemonSheet extends ActorSheet {
 			minLength: 1
 		});
 
+		html.find('input[name="data.health.injuries"]').change(async (event) => {
+			await new Promise(r => setTimeout(r, 100));
+
+			const value = Number(event.currentTarget.value);
+			if(isNaN(value)) return;
+
+			await this._applyHardenedEffect(value, this.actor.data.data.modifiers.hardened);
+		})
+
+		html.find('input[name="data.modifiers.hardened"]').click(async (event) => {
+			const value = Number(this.actor.data.data.health.injuries);
+			const isHardened = event.currentTarget.checked;
+
+			await this._applyHardenedEffect(value, isHardened);
+		})
+
 		html.find('input[data-name^="data.training"]').click(async (event) => {
 			const path = event.currentTarget.dataset.name;
 			const training = path.split('.')[2];
@@ -264,6 +281,36 @@ export class PTUGen8PokemonSheet extends ActorSheet {
 			}).data
 			return await this.actor.createEmbeddedEntity("ActiveEffect", effectData);
 		})
+	}
+
+	async _applyHardenedEffect(value, isHardened) {
+		const calcHardenedChanges = (injuries) => {
+			const changes = [];
+			for(let i = 0; i <= injuries; i++) {
+				if(HardenedChanges[i])
+					changes.push(...HardenedChanges[i])
+			}
+			return changes;
+		} 
+
+		const effect = this.actor.effects.find(x => x.data.label == "Hardened Injuries")
+		if(value === 0 || !isHardened) {
+			if(effect) await effect.delete();
+			return;
+		}
+
+		if(!effect) {
+			const effectData = new ActiveEffect({
+				changes: calcHardenedChanges(value),
+				label: 'Hardened Injuries',
+				icon: "",
+				transfer: false,
+				'flags.ptu.editLocked': true,
+				_id: randomID()
+			}).data
+			return await this.actor.createEmbeddedEntity("ActiveEffect", effectData);
+		}
+		await effect.update({changes: calcHardenedChanges(value)});
 	}
 
 	_onDragItemStart(event) {}

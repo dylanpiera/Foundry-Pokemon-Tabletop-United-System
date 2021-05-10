@@ -43,3 +43,25 @@ export default function(training, isOrder = false) {
         default: return;
     }
 }
+
+export const HardenedChanges = {
+    1: [
+        {"key":"data.modifiers.critRange.mod", "mode":2, "value":1, "priority": 20},
+        {"key":"data.modifiers.effectRange.mod", "mode":2, "value":1, "priority": 20}
+    ],
+    3: [
+        {"key":"data.modifiers.initiative.mod", "mode":2, "value":5, "priority": 20},
+        {"key":"data.modifiers.evasion.physical.mod", "mode":2, "value":1, "priority": 20},
+        {"key":"data.modifiers.evasion.special.mod", "mode":2, "value":1, "priority": 20},
+        {"key":"data.modifiers.evasion.speed.mod", "mode":2, "value":1, "priority": 20}
+    ],
+    5: [
+        {"key":"data.modifiers.damageReduction.mod", "mode":2, "value":5, "priority": 20},
+    ],
+    7: [
+        {"key":"data.modifiers.immuneToEffectDamage", "mode":5, "value":true, "priority": 50},
+    ],
+    9: [
+        {"key":"data.modifiers.resistanceSteps.mod", "mode":2, "value":1, "priority": 20},
+    ]
+}
