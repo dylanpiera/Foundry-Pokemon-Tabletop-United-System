@@ -261,6 +261,7 @@ export class PTUActor extends Actor {
     data.health.max = data.health.injuries > 0 ? Math.trunc(data.health.total*(1-((data.modifiers.hardened ? Math.min(data.health.injuries, 5) : data.health.injuries)/10))) : data.health.total;
 
     data.health.percent = Math.round((data.health.value / data.health.max) * 100);
+    data.health.tick = Math.floor(data.health.total/10);
 
     data.evasion = CalculateEvasions(data, actorData.flags?.ptu);
     data.capabilities = CalculateTrainerCapabilities(data.skills, actorData.items, data.stats.spd.stage, actorData.flags?.ptu);
