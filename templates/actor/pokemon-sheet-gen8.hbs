@@ -693,7 +693,7 @@
                               <p>Critical Moment?</p>
                             </div>
                             <div class="col-sm-6">
-                              <input name="data.training.critical" type="checkbox" {{checked data.training.critical}} />
+                              <input data-name="data.training.critical" type="checkbox" {{checked data.training.critical}} />
                             </div>
                           </div>
                       </div>
@@ -989,7 +989,7 @@
                         <label for="data.modifiers.effectRange.value">Effect Range Bonus</label>
                       </div>
                       <div class="col-sm-6">
-                        <label for="data.modifiers.flinch_count.value"># Flinched This Battle</label>
+                        <label for="data.modifiers.skillBonus.value">Skill Bonus</label>
                       </div>
                     </div>
                   </div>
@@ -1005,8 +1005,13 @@
                           modOrigins=(getProperty origins "data.modifiers.effectRange.mod")}}
                       </div>
                       <div class="col-sm-6">
-                        <input type="text" name="data.modifiers.flinch_count.value" value="{{data.modifiers.flinch_count.value}}"
-                          data-dtype="Number" />
+                        {{> "mod-field" 
+                          mod=data.modifiers.skillBonus.mod 
+                          path="data.modifiers.skillBonus.value" 
+                          value=data.modifiers.skillBonus.value 
+                          total=data.modifiers.skillBonus.total
+                          dtype="Number" 
+                          modOrigins=(getProperty origins "data.modifiers.skillBonus.mod")}}
                       </div>
                     </div>
                   </div>

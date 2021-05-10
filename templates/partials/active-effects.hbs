@@ -2,11 +2,13 @@
 <div class="swsh-box mb-2 w-100 no-shadow">
     <div class="swsh-header pl-2 effect-header">
         <h3 style="flex: 1 0 50%">{{effect.label}}</h3>
-        <div class="item-controls pr-1 flexcol" style="flex: 0 0 7%;">
-            <a class="item-control effect-edit" data-id="{{effect._id}}" title="Edit Effect"><i
-                class="fas fa-edit" style="margin-right: 3px;"></i><span
-                class="readable">Edit</span></a>
-        </div>
+        {{#unless effect.flags.ptu.editLocked}}
+            <div class="item-controls pr-1 flexcol" style="flex: 0 0 7%;">
+                <a class="item-control effect-edit" data-id="{{effect._id}}" title="Edit Effect"><i
+                    class="fas fa-edit" style="margin-right: 3px;"></i><span
+                    class="readable">Edit</span></a>
+            </div>
+        {{/unless}}
         <div class="item-controls flexcol" style="flex: 0 0 7%;">
             <a class="item-control effect-delete" data-id="{{effect._id}}" title="Delete Effect"><i
                 class="fas fa-trash" style="margin-right: 3px;"></i><span
@@ -53,37 +55,3 @@
     </div>
 </div>
 {{/each}}
-
-{{!-- <div class="swsh-box">
-    <div class="swsh-header">
-        <div class="d-flex flexrow effect-row">
-                <div class="effect-name">
-                    <h4>Effect</h4>
-                </div>
-                <div class="effect-duration">Duration</div>
-                <div class="item-controls effect-controls flexrow">
-                    <a class="effect-control" data-action="create" title="Create Effect">
-                        <i class="fas fa-plus"></i> Add
-                    </a>
-                </div>
-            </div>
-    </div>
-    <div class="swsh-body">
-        {{#each actor.effects as |effect|}}
-            <div class="d-flex flexrow effect-row">
-                <div class="effect-name">
-                    <h4>{{effect.label}}</h4>
-                </div>
-                <div class="effect-duration">{{effect.duration.label}}</div>
-                <div class="item-controls effect-controls flexrow">
-                    <a class="effect-control" data-action="toggle" title="Toggle Effect">
-                        <i class="fas {{#if effect.disabled}}fa-check{{else}}fa-times{{/if}}"></i>
-                    </a>
-                    <a class="effect-control" data-action="delete" title="Delete Effect">
-                        <i class="fas fa-trash"></i>
-                    </a>
-                </div>
-            </div>
-        {{/each}}
-    </div>
-</div> --}}

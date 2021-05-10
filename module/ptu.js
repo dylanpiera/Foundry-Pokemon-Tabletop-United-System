@@ -43,7 +43,7 @@ import Api from './api/api.js'
 import RenderDex from './utils/pokedex.js'
 import TMsData from './data/tm-data.js'
 import PTUActiveEffectConfig from './forms/active-effect-config.js';
-import TrainingData from './data/training-data.js';
+import getTrainingChanges from './data/training-data.js';
 
 export let debug = (...args) => {if (game.settings.get("ptu", "showDebugInfo") ?? false) console.log("DEBUG: FVTT PTU | ", ...args)};
 export let log = (...args) => console.log("FVTT PTU | ", ...args);
@@ -259,7 +259,7 @@ Hooks.once('init', async function() {
       GetOrCreateCachedItem
     },
     api: new Api(),
-    TrainingData
+    getTrainingChanges
   };
 
   /**

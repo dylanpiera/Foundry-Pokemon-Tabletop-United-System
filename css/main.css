@@ -1269,11 +1269,14 @@ header.effect-change.effects-header.flexrow > div {
   display: none;
   position: absolute;
   top: -10px;
+  left: 50%;
   width: 100%;
+  min-width: 13rem;
   background: linear-gradient(45deg, #ECDBEB, #DFFFFE);
-  transform: translate(0, -100%);
+  transform: translate(-50%, -100%);
   border: black 1px solid;
   box-shadow: #00000060 0 0 15px;
+  z-index: 100;
 }
 .mod-input .mod-tooltip:hover {
   display: block;

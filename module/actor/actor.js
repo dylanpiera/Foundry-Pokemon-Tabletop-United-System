@@ -334,7 +334,7 @@ export class PTUActor extends Actor {
 
     data.health.tick = Math.floor(data.health.total/10);
 
-    data.initiative = {value: data.stats.spd.total + data.modifiers.initiative.total + (data.training?.agility?.trained ? data.training?.critical ? 12 : 4 : 0) + (data.training?.agility?.ordered ? 4 : 0)};
+    data.initiative = {value: data.stats.spd.total + data.modifiers.initiative.total};
     if(actorData.flags?.ptu?.is_paralyzed) data.initiative.value = Math.floor(data.initiative.value * 0.5);
     if(data.modifiers.flinch_count?.value > 0) { 
       data.initiative.value -= (data.modifiers.flinch_count.value * 5);
@@ -347,7 +347,7 @@ export class PTUActor extends Actor {
 
     data.evasion = CalculateEvasions(data, actorData.flags?.ptu);
 
-    data.capabilities = CalculatePokemonCapabilities(speciesData, actorData.items.values(), data.stats.spd.stage, data.training, actorData.flags?.ptu);
+    data.capabilities = CalculatePokemonCapabilities(speciesData, actorData.items.values(), data.stats.spd.stage, data.modifiers.capabilities?.total, actorData.flags?.ptu);
 
     if(speciesData) data.egggroup = speciesData["Breeding Information"]["Egg Group"].join(" & ");
 

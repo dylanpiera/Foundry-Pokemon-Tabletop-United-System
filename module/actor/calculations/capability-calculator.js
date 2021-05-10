@@ -133,7 +133,7 @@ export function CalculateTrainerCapabilities(trainerSkills, items, speedCombatSt
     return capabilities;
 }
 
-export function CalculatePokemonCapabilities(speciesData, items, speedCombatStages = 0, training = {}, ptuFlags = undefined) {
+export function CalculatePokemonCapabilities(speciesData, items, speedCombatStages = 0, capabilityMod = 0, ptuFlags = undefined) {
     if (speciesData?.Capabilities == null) return [];
 
     if (typeof (speciesData.Capabilities.Overland) === "string") {
@@ -193,7 +193,7 @@ export function CalculatePokemonCapabilities(speciesData, items, speedCombatStag
             };
             if (key == "Power" || key == "Weight Class" || key == "Naturewalk" || key == "Other") continue;
             if (speciesData.Capabilities[key] > 0) {
-                speciesData.Capabilities[key] = Math.max(speciesData.Capabilities[key] + spcsChanges + (training?.agility?.trained ? training?.critical ? 3 : 1 : 0) + (training?.agility?.ordered ? 1 : 0), speciesData.Capabilities[key] > 1 ? 2 : 1)
+                speciesData.Capabilities[key] = Math.max(speciesData.Capabilities[key] + spcsChanges + capabilityMod, speciesData.Capabilities[key] > 1 ? 2 : 1)
                 if(isSlowed) speciesData.Capabilities[key] = Math.max(1, Math.floor(speciesData.Capabilities[key] * 0.5));
             }
         }

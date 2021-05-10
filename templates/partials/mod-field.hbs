@@ -6,11 +6,15 @@
             {{#each modOrigins}}
                 <ul>
                     <b>{{label}}</b>: 
-                    {{#unless (is (aeTypes change.type) "Add")}}
-                        {{aeTypes change.type}} {{change.value}}
+                    {{#if (is (aeTypes change.type) "Add")}}
+                        {{#if (gt change.value -1)}}+ {{/if}}{{change.value}}                
                     {{else}}
-                        {{#if (gt change.value -1)}}+{{/if}}{{change.value}}
-                    {{/unless}} 
+                        {{#if (is (aeTypes change.type) "Multiply")}}
+                            x {{change.value}}
+                        {{else}}
+                            {{aeTypes change.type}} {{change.value}}
+                        {{/if}}
+                    {{/if}} 
                 </ul>
             {{/each}}
             {{#if total}}

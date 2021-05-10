@@ -43,6 +43,10 @@
             "value": 0,
             "mod": 0
           },
+          "skillBonus": {
+            "value": 0,
+            "mod": 0
+          },
           "flinch_count": {
             "value": 0,
             "keys": []

@@ -11,12 +11,6 @@ export function CalculateEvasions(data, ptuFlags) {
         "speed": Math.max(Math.min(Math.floor(data.stats.spd.total / 5),6) + data.modifiers.evasion.speed.total, 0)
     };
 
-    let globalMod = (data.training?.inspired?.trained ? data.training?.critical ? 3 : 1 : 0) + (data.training?.inspired?.ordered ? 1 : 0);
-
-    if (data.modifiers.hardened && data.health.injuries >= 3) globalMod++;
-
-    if(globalMod != 0) evasion = Object.fromEntries(Object.entries(evasion).map(([key, value]) => [key, value + globalMod]));
-
     if(ptuFlags?.is_stuck) evasion.speed = 0;
 
     return evasion;
