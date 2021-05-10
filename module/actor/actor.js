@@ -16,6 +16,7 @@ export class PTUActor extends Actor {
    * Augment the basic actor data with additional dynamic data.
    */
   prepareData() {
+    this.origins = {};
     super.prepareData();
 
     const actorData = this.data;
@@ -29,6 +30,45 @@ export class PTUActor extends Actor {
     }
 
     this.applyActiveEffects(false);
+
+    // Add extra origin info
+
+    this.origins = mergeObject(this.origins, {
+      data: {
+        levelUpPoints: [
+          {label: "Base Value", change: {type: CONST.ACTIVE_EFFECT_MODES.ADD, value: actorData.type === 'character' ? 9 : 10}},
+          {label: "Level", change: {type: CONST.ACTIVE_EFFECT_MODES.ADD, value: actorData.data.level.current}},
+          {label: "HP Stat", change: {type: CONST.ACTIVE_EFFECT_MODES.ADD, value: -actorData.data.stats.hp.levelUp}},
+          {label: "ATK Stat", change: {type: CONST.ACTIVE_EFFECT_MODES.ADD, value: -actorData.data.stats.atk.levelUp}},
+          {label: "DEF Stat", change: {type: CONST.ACTIVE_EFFECT_MODES.ADD, value: -actorData.data.stats.def.levelUp}},
+          {label: "SP.ATK Stat", change: {type: CONST.ACTIVE_EFFECT_MODES.ADD, value: -actorData.data.stats.spatk.levelUp}},
+          {label: "SP.DEF Stat", change: {type: CONST.ACTIVE_EFFECT_MODES.ADD, value: -actorData.data.stats.spdef.levelUp}},
+          {label: "SPD Stat", change: {type: CONST.ACTIVE_EFFECT_MODES.ADD, value: -actorData.data.stats.spd.levelUp}},
+          {label: "Stat Point Modifier", change: {type: CONST.ACTIVE_EFFECT_MODES.ADD, value: actorData.data.modifiers.statPoints.total}},
+        ],
+        evasion: {
+          physical: [
+            {label: "DEF Stat / 5 (max 6)", change: {type: CONST.ACTIVE_EFFECT_MODES.ADD, value: Math.min(Math.floor(actorData.data.stats.def.total / 5),6)}},
+            {label: "Physical Evasion Mod", change: {type: CONST.ACTIVE_EFFECT_MODES.ADD, value: actorData.data.modifiers.evasion.physical.total}},
+          ],
+          special: [
+            {label: "SP.DEF Stat / 5 (max 6)", change: {type: CONST.ACTIVE_EFFECT_MODES.ADD, value: Math.min(Math.floor(actorData.data.stats.spdef.total / 5),6)}},
+            {label: "Physical Evasion Mod", change: {type: CONST.ACTIVE_EFFECT_MODES.ADD, value: actorData.data.modifiers.evasion.special.total}},
+          ],
+          speed: [
+            {label: "SPD Stat / 5 (max 6)", change: {type: CONST.ACTIVE_EFFECT_MODES.ADD, value: Math.min(Math.floor(actorData.data.stats.spd.total / 5),6)}},
+            {label: "Physical Evasion Mod", change: {type: CONST.ACTIVE_EFFECT_MODES.ADD, value: actorData.data.modifiers.evasion.speed.total}},
+          ]
+        },
+        stats: {
+         spdef: {
+           stage: [
+            this.data.flags.ptu?.is_poisoned ? {label: "Poisoned", change: {type: CONST.ACTIVE_EFFECT_MODES.ADD, value: -2}} : undefined,
+           ].filter(x => x!==undefined) 
+         } 
+        }
+      }
+    })
   }
 
   /**
@@ -37,6 +77,7 @@ export class PTUActor extends Actor {
   /** @override */
   applyActiveEffects(doBaseData = true) {
     const overrides = {};
+    const origins = {}; 
     // Organize non-disabled effects by their application priority
     const effects = Array.from(this.effects).concat(this.items.filter(item => item?.effects?.size > 0).flatMap(item => Array.from(item.effects)));
 
@@ -65,10 +106,15 @@ export class PTUActor extends Actor {
     for (let change of changes) {
       debug(this.name, change);
       const result = change.effect.apply(this, change);
-      if (result !== null) overrides[change.key] = result;
+      if (result !== null) {
+        overrides[change.key] = result;
+        if(!origins[change.key]) origins[change.key] = [];
+        origins[change.key].push({label: change.effect.data.label, change: {type: change.mode, value: change.value}});
+      }
     }
     // Expand the set of final overrides
-    this.overrides = expandObject(overrides);
+    this.overrides = mergeObject(this.overrides ?? {}, overrides);
+    this.origins = mergeObject(this.origins ?? {}, origins);
   }
 
   /** @override */
@@ -125,6 +171,56 @@ export class PTUActor extends Actor {
   prepareDerivedData() {
     const actorData = this.data;
 
+    // Update data structures.
+    {
+      const data = {}
+      if(!isNaN(actorData.data.skills.acrobatics.value)) {
+        const skills = duplicate(actorData.data.skills)
+        for (let [key, skill] of Object.entries(skills)) {  
+          skill["value"] = {
+            "value": !isNaN(Number(skill.value)) ? skill.value : 2,
+            "mod": 0,
+          };
+          skill["modifier"] = {
+            "value": !isNaN(Number(skill.modifier)) ? skill.modifier : 2,
+            "mod": 0,
+          };
+        }
+        actorData.data.skills = skills;
+        data.skills = skills;
+        data.requiresUpdate = true;
+      }
+      if(isNaN(actorData.data.modifiers.initiative.value)) {
+        const modifiers = duplicate(actorData.data.modifiers);
+        for(let [key, value] of Object.entries(modifiers)) {
+          if(key == "hardened" || key == "flinch_count" || key == 'immuneToEffectDamage' || key == 'skillBonus') continue;
+          if(key == "evasion") {
+            for(let [evasion, actualValue] of Object.entries(value)) {
+              modifiers[key][evasion] = {
+                "value": actualValue,
+                "mod": 0
+              }
+            }
+          }
+          else {
+            modifiers[key] = {
+              "value": value,
+              "mod": 0
+            }
+          }
+        }
+        actorData.data.modifiers = modifiers;
+        data.modifiers = modifiers;
+        data.requiresUpdate = true;
+      }
+
+      if(data.requiresUpdate) {
+        delete data.requiresUpdate;
+        debug("Applying data update to", this.name);
+        setTimeout(() => this.update({data: data}), 1000);
+      }
+    }
+
     // Make separate methods for each Actor type (character, npc, etc.) to keep
     // things organized.
     if (actorData.type === 'character') this._prepareCharacterData(actorData);
@@ -175,11 +271,28 @@ export class PTUActor extends Actor {
 
     let dexExpEnabled = "true" == game.settings.get("ptu", "useDexExp") ?? false;
 
-    // Make modifications to data here. For example:
+    // Prepare data with Mods.
 
     for (let [key, skill] of Object.entries(data.skills)) {
-      skill["rank"] = this._getRank(skill["value"]);  
+      skill["rank"] = this._getRank(skill["value"]["value"]);  
+      skill["value"]["total"] = skill["value"]["value"] + skill["value"]["mod"];
+      skill["modifier"]["total"] = skill["modifier"]["value"] + skill["modifier"]["mod"];
     }
+
+    for (let [key, mod] of Object.entries(data.modifiers)) {
+      if(key == "hardened" || key == "flinch_count" || key == 'immuneToEffectDamage') continue;
+      if(key == "evasion") {
+        for(let [evasion, value] of Object.entries(mod)) {
+          data.modifiers[key][evasion]["total"] = value["value"] + value["mod"];
+        }
+      }
+      else {
+        data.modifiers[key]["total"] = mod["value"] + mod["mod"];
+      }
+    }
+
+    // Use Data
+
     if(dexExpEnabled) {
       data.level.dexexp = actorData.items.filter(x => x.type == "dexentry" && x.data.owned).length;
       data.level.current = data.level.milestones + Math.trunc((data.level.dexexp+data.level.miscexp)/10) + 1 > 50 ? 50 : data.level.milestones + Math.trunc((data.level.dexexp+data.level.miscexp)/10) + 1; 
@@ -188,7 +301,7 @@ export class PTUActor extends Actor {
       data.level.current = data.level.milestones + Math.trunc(data.level.miscexp/10) + 1 > 50 ? 50 : data.level.milestones + Math.trunc(data.level.miscexp/10) + 1; 
     }
 
-    data.levelUpPoints = data.level.current + data.modifiers.statPoints + 9;
+    data.levelUpPoints = data.level.current + data.modifiers.statPoints.total + 9;
     data.stats = CalculatePoisonedCondition(duplicate(data.stats), actorData.flags?.ptu);
     var result = CalculateStatTotal(data.levelUpPoints, data.stats, actorData.items.find(x => x.name.toLowerCase().replace("[playtest]") == "twisted power") != null);
     data.stats = result.stats;
@@ -198,13 +311,14 @@ export class PTUActor extends Actor {
     data.health.max = data.health.injuries > 0 ? Math.trunc(data.health.total*(1-((data.modifiers.hardened ? Math.min(data.health.injuries, 5) : data.health.injuries)/10))) : data.health.total;
 
     data.health.percent = Math.round((data.health.value / data.health.max) * 100);
+    data.health.tick = Math.floor(data.health.total/10);
 
     data.evasion = CalculateEvasions(data, actorData.flags?.ptu);
     data.capabilities = CalculateTrainerCapabilities(data.skills, actorData.items, data.stats.spd.stage, actorData.flags?.ptu);
 
     data.ap.total = 5 + Math.floor(data.level.current / 5);
 
-    data.initiative = {value: data.stats.spd.total + data.modifiers.initiative};
+    data.initiative = {value: data.stats.spd.total + data.modifiers.initiative.total};
     if(actorData.flags?.ptu?.is_paralyzed) {
       if(game.settings.get("ptu", "errata"))data.initiative.value = Math.floor(data.initiative.value * 0.5);
     }
@@ -224,10 +338,25 @@ export class PTUActor extends Actor {
 
     data.isCustomSpecies = speciesData?.isCustomSpecies ?? false;
 
+    // Prepare data with Mods.
+    for (let [key, mod] of Object.entries(data.modifiers)) {
+      if(key == "hardened" || key == "flinch_count" || key == 'immuneToEffectDamage') continue;
+      if(key == "evasion") {
+        for(let [evasion, value] of Object.entries(mod)) {
+          data.modifiers[key][evasion]["total"] = value["value"] + value["mod"];
+        }
+      }
+      else {
+        data.modifiers[key]["total"] = mod["value"] ?? 0 + mod["mod"] ?? 0;
+      }
+    }
+
+    // Use Data
+
     // Calculate Level
     data.level.current = CalcLevel(data.level.exp, 50, game.ptu.levelProgression);
 
-    data.levelUpPoints = data.level.current + data.modifiers.statPoints + 10;
+    data.levelUpPoints = data.level.current + data.modifiers.statPoints.total + 10;
 
     data.level.expTillNextLevel = (data.level.current < 100) ? game.ptu.levelProgression[data.level.current+1] : game.ptu.levelProgression[100];
     data.level.percent = Math.round(((data.level.exp - game.ptu.levelProgression[data.level.current]) / (data.level.expTillNextLevel - game.ptu.levelProgression[data.level.current])) * 100);
@@ -256,7 +385,7 @@ export class PTUActor extends Actor {
 
     data.health.tick = Math.floor(data.health.total/10);
 
-    data.initiative = {value: data.stats.spd.total + data.modifiers.initiative + (data.training?.agility?.trained ? data.training?.critical ? 12 : 4 : 0) + (data.training?.agility?.ordered ? 4 : 0)};
+    data.initiative = {value: data.stats.spd.total + data.modifiers.initiative.total};
     if(actorData.flags?.ptu?.is_paralyzed) data.initiative.value = Math.floor(data.initiative.value * 0.5);
     if(data.modifiers.flinch_count?.value > 0) { 
       data.initiative.value -= (data.modifiers.flinch_count.value * 5);
@@ -269,7 +398,7 @@ export class PTUActor extends Actor {
 
     data.evasion = CalculateEvasions(data, actorData.flags?.ptu);
 
-    data.capabilities = CalculatePokemonCapabilities(speciesData, actorData.items.values(), data.stats.spd.stage, data.training, actorData.flags?.ptu);
+    data.capabilities = CalculatePokemonCapabilities(speciesData, actorData.items.values(), data.stats.spd.stage, data.modifiers.capabilities?.total, actorData.flags?.ptu);
 
     if(speciesData) data.egggroup = speciesData["Breeding Information"]["Egg Group"].join(" & ");
 
@@ -278,7 +407,9 @@ export class PTUActor extends Actor {
 
     // Calc skill rank
     for (let [key, skill] of Object.entries(data.skills)) {
-      skill["rank"] = this._getRank(skill["value"]);  
+      skill["value"]["total"] = skill["value"]["value"] + skill["value"]["mod"];  
+      skill["modifier"]["total"] = skill["modifier"]["value"] + skill["modifier"]["mod"];
+      skill["rank"] = this._getRank(skill["value"]["total"]);
     }
 
     // Calc Type Effectiveness

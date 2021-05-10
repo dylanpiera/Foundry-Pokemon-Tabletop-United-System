@@ -54,14 +54,35 @@
                           disabled />
                       </div>
                       <div class="stats {{key}} mod col-sm-2">
-                        <input type="text" name="data.stats.{{key}}.mod" value="{{stat.mod}}" data-dtype="Number" />
+                        {{> "mod-field" 
+                          path=(concat "data.stats." key ".mod") 
+                          value=stat.mod
+                          dtype="Number" 
+                          mod=""
+                          total="ignored"
+                          modOrigins=(getProperty ../origins (concat "data.stats." key ".mod"))
+                          flipped=(gt 3 @index)}}
                       </div>
                       <div class="stats {{key}} levelUp col-sm-2">
-                        <input type="text" name="data.stats.{{key}}.levelUp" value="{{stat.levelUp}}" data-dtype="Number" />
+                        {{> "mod-field" 
+                          path=(concat "data.stats." key ".levelUp") 
+                          value=stat.levelUp
+                          dtype="Number" 
+                          mod=""
+                          total="ignored"
+                          modOrigins=(getProperty ../origins (concat "data.stats." key ".levelUp"))
+                          flipped=(gt 3 @index)}}
                       </div>
                       <div class="stats stage stage col-sm-2">
                         {{#if (isdefined stat.stage)}}
-                        <input type="text" name="data.stats.{{key}}.stage" value="{{stat.stage}}" data-dtype="Number" />
+                          {{> "mod-field" 
+                            path=(concat "data.stats." key ".stage") 
+                            value=stat.stage
+                            dtype="Number" 
+                            mod=""
+                            total="ignored"
+                            modOrigins=(getProperty ../origins (concat "data.stats." key ".stage"))
+                            flipped=(gt 3 @index)}}
                         {{/if}}
                       </div>
                       <div class="stats {{key}} total col-sm-2">
@@ -76,8 +97,14 @@
                         <label for="data.levelUpPoints" class="resource-label">Remaining Level-Up Points:</label>
                       </div>
                       <div class="col">
-                        <input type="text" name="data.levelUpPoints" value="{{data.levelUpPoints}}" data-dtype="Number"
-                          disabled />
+                        {{> "mod-field" 
+                          path="data.levelUpPoints"
+                          value=data.levelUpPoints
+                          dtype="Number" 
+                          mod=""
+                          total=data.levelUpPoints
+                          modOrigins=(getProperty origins "data.levelUpPoints")
+                          disabled=true}}
                       </div>
                     </div>
                     {{/if}}
@@ -87,49 +114,6 @@
                   <div class="swsh-box mt-auto w-100">
                     <div class="swsh-body" style="display: block;">
                       {{> item-display title="Abilities" type="ability" data=actor.abilities}}
-                      {{!-- <ol class="inventory-list">
-                        <li class="inventory-header flexrow">
-                          <h3 class="item-name flexrow">Abilities</h3>
-                          <div class="item-controls">
-                            <a class="item-control item-create" title="Add ability" data-type="ability"><i
-                                class="fas fa-plus-circle" style="margin-right: 3px;"></i><span
-                                class="readable">Add</span></a>
-                          </div>
-                        </li>
-                        <ol class="item-list">
-                          {{#each actor.abilities as | ability |}}
-                          <li class="item flexrow" data-item-id="{{ability._id}}">
-                            <div class="item-name flexrow">
-                              <h4 title="Toggle Info ({{ability.name}})" data-toggle="collapse"
-                                data-target="#{{ability._id}}-collapse" aria-expanded="false"
-                                aria-controls="{{ability._id}}-collapse">
-                                <i class="fas fa-info-circle info-icon"></i>
-                                {{ability.name}}
-                              </h4>
-                            </div>
-                            <div class="item-controls" style="flex: 0 0 55px; justify-content: center; display:flex;">
-                              <a class="item-control item-edit" title="Edit ability"><i class="fas fa-edit"></i></a>
-                              <a class="item-control item-delete" title="Delete ability"><i class="fas fa-trash"></i></a>
-                            </div>
-                            {{#if ability.data.snippet}}
-                              <div class="collapse in readable lh-16 item-summary" id="{{ability._id}}-collapse">
-                                <p class="summary">{{{ability.data.snippet}}}</p>
-                              </div>
-                            {{else}}
-                              {{#if (is true (getGameSetting "openByDefault"))}}
-                                <div class="collapse in readable lh-16 item-summary" id="{{ability._id}}-collapse">
-                                  <p class="summary">{{{ability.data.effect}}}</p>
-                                </div>
-                              {{else}}
-                                <div class="collapse readable lh-16 item-summary" id="{{ability._id}}-collapse">
-                                  <p class="summary">{{{ability.data.effect}}}</p>
-                                </div>
-                              {{/if}}
-                            {{/if}}
-                          </li>
-                          {{/each}}
-                        </ol>
-                      </ol> --}}
                     </div>
                   </div>
                 </div>
@@ -433,49 +417,6 @@
                   <!-- Other Capabilities -->
                   <div class="swsh-body w-100 mt-2" style="display: block;">
                     {{> item-display title="Other Capabilities" type="capability" data=actor.capabilities}}
-                    {{!-- <ol class="inventory-list">
-                      <li class="inventory-header flexrow">
-                        <h3 class="item-name flexrow">Other Capabilities</h3>
-                        <div class="item-controls">
-                          <a class="item-control item-create" title="Add capability" data-type="capability"><i
-                              class="fas fa-plus-circle" style="margin-right: 3px;"></i><span
-                              class="readable">Add</span></a>
-                        </div>
-                      </li>
-                      <ol class="item-list">
-                        {{#each actor.capabilities as | capability |}}
-                        <li class="item flexrow" data-item-id="{{capability._id}}">
-                          <div class="item-name flexrow">
-                            <h4 title="Toggle Info ({{capability.name}})" data-toggle="collapse"
-                              data-target="#{{capability._id}}-collapse" aria-expanded="false"
-                              aria-controls="{{capability._id}}-collapse">
-                              <i class="fas fa-info-circle info-icon"></i>
-                              {{capability.name}}
-                            </h4>
-                          </div>
-                          <div class="item-controls" style="flex: 0 0 55px; justify-content: center; display:flex;">
-                            <a class="item-control item-edit" title="Edit capability"><i class="fas fa-edit"></i></a>
-                            <a class="item-control item-delete" title="Delete capability"><i class="fas fa-trash"></i></a>
-                          </div>
-                          {{#if capability.data.snippet}}
-                            <div class="collapse in readable lh-16 item-summary" id="{{capability._id}}-collapse">
-                              <p class="summary">{{{capability.data.snippet}}}</p>
-                            </div>
-                          {{else}}
-                            {{#if (is true (getGameSetting "openByDefault"))}}
-                              <div class="collapse in readable lh-16 item-summary" id="{{capability._id}}-collapse">
-                                <p class="summary">{{{capability.data.effect}}}</p>
-                              </div>
-                            {{else}}
-                              <div class="collapse readable lh-16 item-summary" id="{{capability._id}}-collapse">
-                                <p class="summary">{{{capability.data.effect}}}</p>
-                              </div>
-                            {{/if}}
-                          {{/if}}
-                        </li>
-                        {{/each}}
-                      </ol>
-                    </ol> --}}
                   </div>
                 </div>
               </div>
@@ -484,49 +425,6 @@
                 <div class="swsh-box mt-2 w-100">
                   <div class="swsh-body w-100" style="display: block;">
                     {{> item-display title="Poké Edges" type="pokeedge" data=actor.edges}}
-                    {{!-- <ol class="inventory-list">
-                      <li class="inventory-header flexrow">
-                        <h3 class="item-name flexrow">Poké Edges</h3>
-                        <div class="item-controls">
-                          <a class="item-control item-create" title="Add pokeedge" data-type="pokeedge"><i
-                              class="fas fa-plus-circle" style="margin-right: 3px;"></i><span
-                              class="readable">Add</span></a>
-                        </div>
-                      </li>
-                      <ol class="item-list">
-                        {{#each actor.edges as | pokeedge |}}
-                        <li class="item flexrow" data-item-id="{{pokeedge._id}}">
-                          <div class="item-name flexrow">
-                            <h4 title="Toggle Info ({{pokeedge.name}})" data-toggle="collapse"
-                              data-target="#{{pokeedge._id}}-collapse" aria-expanded="false"
-                              aria-controls="{{pokeedge._id}}-collapse">
-                              <i class="fas fa-info-circle info-icon"></i>
-                              {{pokeedge.name}}
-                            </h4>
-                          </div>
-                          <div class="item-controls" style="flex: 0 0 55px; justify-content: center; display:flex;">
-                            <a class="item-control item-edit" title="Edit pokeedge"><i class="fas fa-edit"></i></a>
-                            <a class="item-control item-delete" title="Delete pokeedge"><i class="fas fa-trash"></i></a>
-                          </div>
-                          {{#if pokeedge.data.snippet}}
-                            <div class="collapse in readable lh-16 item-summary" id="{{pokeedge._id}}-collapse">
-                              <p class="summary">{{{pokeedge.data.snippet}}}</p>
-                            </div>
-                          {{else}}
-                            {{#if (is true (getGameSetting "openByDefault"))}}
-                              <div class="collapse in readable lh-16 item-summary" id="{{pokeedge._id}}-collapse">
-                                <p class="summary">{{{pokeedge.data.effect}}}</p>
-                              </div>
-                            {{else}}
-                              <div class="collapse readable lh-16 item-summary" id="{{pokeedge._id}}-collapse">
-                                <p class="summary">{{{pokeedge.data.effect}}}</p>
-                              </div>
-                            {{/if}}
-                          {{/if}}
-                        </li>
-                        {{/each}}
-                      </ol>
-                    </ol> --}}
                   </div>
                 </div>
 
@@ -584,16 +482,37 @@
                   <div class="swsh-body" style="display: block;">
                     <div class="d-flex w-100 mt-1 mb-1">
                       <div class="col-sm-4">
-                        <input type="text" name="data.evasion.physical" value="{{data.evasion.physical}}" data-dtype="Number"
-                          disabled />
+                        {{> "mod-field" 
+                          path="data.evasion.physical"
+                          value=data.evasion.physical
+                          dtype="Number" 
+                          mod=""
+                          total=data.evasion.physical
+                          modOrigins=(getProperty origins "data.evasion.physical")
+                          disabled=true
+                          flipped=true}}
                       </div>
                       <div class="col-sm-4">
-                        <input type="text" name="data.evasion.special" value="{{data.evasion.special}}" data-dtype="Number"
-                          disabled />
+                        {{> "mod-field" 
+                          path="data.evasion.special"
+                          value=data.evasion.special
+                          dtype="Number" 
+                          mod=""
+                          total=data.evasion.special
+                          modOrigins=(getProperty origins "data.evasion.special")
+                          disabled=true
+                          flipped=true}}
                       </div>
                       <div class="col-sm-4">
-                        <input type="text" name="data.evasion.speed" value="{{data.evasion.speed}}" data-dtype="Number"
-                          disabled />
+                        {{> "mod-field" 
+                          path="data.evasion.speed"
+                          value=data.evasion.speed
+                          dtype="Number" 
+                          mod=""
+                          total=data.evasion.speed
+                          modOrigins=(getProperty origins "data.evasion.speed")
+                          disabled=true
+                          flipped=true}}
                       </div>
                     </div>
                   </div>
@@ -621,7 +540,7 @@
                           data-dtype="Number" />
                       </div>
                       <div class="col-sm-3">
-                        <input name="data.modifiers.hardened" type="checkbox" {{checked data.modifiers.hardened}} />
+                        <input data-name="data.modifiers.hardened" type="checkbox" {{checked data.modifiers.hardened}} />
                       </div>
                       <div class="col-sm-5">
                         <input type="text" name="data.health.total" value="{{data.health.total}}" data-dtype="Number"
@@ -680,10 +599,10 @@
                                 <p>{{capitalizeFirst key}} Training</p>
                               </div>
                               <div class="col-sm-3">
-                                <input name="data.training.{{key}}.trained" type="checkbox" {{checked training.trained}} />
+                                <input data-name="data.training.{{key}}.trained" type="checkbox" {{checked training.trained}} />
                               </div>
                               <div class="col-sm-3">
-                                <input name="data.training.{{key}}.ordered" type="checkbox" {{checked training.ordered}} />
+                                <input data-name="data.training.{{key}}.ordered" type="checkbox" {{checked training.ordered}} />
                               </div>
                             </div>
                           {{/if}}
@@ -693,7 +612,7 @@
                               <p>Critical Moment?</p>
                             </div>
                             <div class="col-sm-6">
-                              <input name="data.training.critical" type="checkbox" {{checked data.training.critical}} />
+                              <input data-name="data.training.critical" type="checkbox" {{checked data.training.critical}} />
                             </div>
                           </div>
                       </div>
@@ -704,14 +623,20 @@
                       <div class="swsh-header" style="height: 51px;">
                         <div class="d-flex w-100 mt-1 mb-1 align-items-center">
                           <div class="col-sm-12">
-                            <label for="data.modifiers.saveChecks">Save Checks Modifier</label>
+                            <label for="data.modifiers.saveChecks.value">Save Checks Modifier</label>
                           </div>
                         </div>
                       </div>
                       <div class="swsh-body d-flex flex-column h-100" style="display: block;">
                         <div class="d-flex w-100 mt-auto mb-auto">
                           <div class="col-sm-12">
-                            <input name="data.modifiers.saveChecks" type="text" value="{{data.modifiers.saveChecks}}" data-dtype="Number" />
+                            {{> "mod-field" 
+                              mod=data.modifiers.saveChecks.mod 
+                              path="data.modifiers.saveChecks.value" 
+                              value=data.modifiers.saveChecks.value 
+                              total=data.modifiers.saveChecks.total
+                              dtype="Number"
+                              modOrigins=(getProperty origins "data.modifiers.saveChecks.mod")}}
                           </div>
                         </div>
                         <div class="d-flex w-100 mt-auto mb-auto">
@@ -916,22 +841,32 @@
                   <div class="swsh-header">
                     <div class="d-flex w-100 mt-1 mb-1">
                       <div class="col-sm-6">
-                        <label for="data.modifiers.initiative">Initiative Mod</label>
+                        <label for="data.modifiers.initiative.value">Initiative Mod</label>
                       </div>
                       <div class="col-sm-6">
-                        <label for="data.modifiers.statPoints">Stat Point Mod</label>
+                        <label for="data.modifiers.statPoints.value">Stat Point Mod</label>
                       </div>
                     </div>
                   </div>
                   <div class="swsh-body">
                     <div class="d-flex w-100 mt-1 mb-1">
                       <div class="col-sm-6">
-                        <input name="data.modifiers.initiative" type="text" value="{{data.modifiers.initiative}}"
-                          data-dtype="Number" />
+                        {{> "mod-field" 
+                          mod=data.modifiers.initiative.mod 
+                          path="data.modifiers.initiative.value" 
+                          value=data.modifiers.initiative.value 
+                          total=data.modifiers.initiative.total
+                          dtype="Number"
+                          modOrigins=(getProperty origins "data.modifiers.initiative.mod")}}
                       </div>
                       <div class="col-sm-6">
-                        <input type="text" name="data.modifiers.statPoints" value="{{data.modifiers.statPoints}}"
-                          data-dtype="Number" />
+                        {{> "mod-field" 
+                          mod=data.modifiers.statPoints.mod 
+                          path="data.modifiers.statPoints.value" 
+                          value=data.modifiers.statPoints.value 
+                          total=data.modifiers.statPoints.total
+                          dtype="Number" 
+                          modOrigins=(getProperty origins "data.modifiers.statPoints.mod")}}
                       </div>
                     </div>
                   </div>
@@ -948,63 +883,98 @@
                   <div class="swsh-body">
                     <div class="d-flex w-100 mt-1 mb-1">
                       <div class="col-sm-6">
-                        <input type="text" name="data.modifiers.acBonus" value="{{data.modifiers.acBonus}}"
-                          data-dtype="Number" />
+                        {{> "mod-field" 
+                          mod=data.modifiers.acBonus.mod 
+                          path="data.modifiers.acBonus.value" 
+                          value=data.modifiers.acBonus.value 
+                          total=data.modifiers.acBonus.total
+                          dtype="Number" 
+                          modOrigins=(getProperty origins "data.modifiers.acBonus.mod")}}
                       </div>
                       <div class="col-sm-6">
-                        <input type="text" name="data.modifiers.critRange" value="{{data.modifiers.critRange}}"
-                          data-dtype="Number" />
+                        {{> "mod-field" 
+                          mod=data.modifiers.critRange.mod 
+                          path="data.modifiers.critRange.value" 
+                          value=data.modifiers.critRange.value 
+                          total=data.modifiers.critRange.total
+                          dtype="Number" 
+                          modOrigins=(getProperty origins "data.modifiers.critRange.mod")}}
                       </div>
                     </div>
                   </div>
                   <div class="swsh-header pt-1">
                     <div class="d-flex w-100 mt-1 mb-1">
                       <div class="col-sm-6">
-                        <label for="data.modifiers.effectRange">Effect Range Bonus</label>
+                        <label for="data.modifiers.effectRange.value">Effect Range Bonus</label>
                       </div>
                       <div class="col-sm-6">
-                        <label for="data.modifiers.flinch_count.value"># Flinched This Battle</label>
+                        <label for="data.modifiers.skillBonus.value">Skill Bonus</label>
                       </div>
                     </div>
                   </div>
                   <div class="swsh-body">
                     <div class="d-flex w-100 mt-1 mb-1">
                       <div class="col-sm-6">
-                        <input type="text" name="data.modifiers.effectRange" value="{{data.modifiers.effectRange}}"
-                          data-dtype="Number" />
+                        {{> "mod-field" 
+                          mod=data.modifiers.effectRange.mod 
+                          path="data.modifiers.effectRange.value" 
+                          value=data.modifiers.effectRange.value 
+                          total=data.modifiers.effectRange.total
+                          dtype="Number" 
+                          modOrigins=(getProperty origins "data.modifiers.effectRange.mod")}}
                       </div>
                       <div class="col-sm-6">
-                        <input type="text" name="data.modifiers.flinch_count.value" value="{{data.modifiers.flinch_count.value}}"
-                          data-dtype="Number" />
+                        {{> "mod-field" 
+                          mod=data.modifiers.skillBonus.mod 
+                          path="data.modifiers.skillBonus.value" 
+                          value=data.modifiers.skillBonus.value 
+                          total=data.modifiers.skillBonus.total
+                          dtype="Number" 
+                          modOrigins=(getProperty origins "data.modifiers.skillBonus.mod")}}
                       </div>
                     </div>
                   </div>
                   <div class="swsh-header pt-1">
                     <div class="d-flex w-100 mt-1 mb-1">
                       <div class="col-sm-4">
-                        <label for="data.modifiers.evasion.physical">Phys Eva Bonus</label>
+                        <label for="data.modifiers.evasion.physical.value">Phys Eva Bonus</label>
                       </div>
                       <div class="col-sm-4">
-                        <label for="data.modifiers.evasion.special">Spec Eva Bonus</label>
+                        <label for="data.modifiers.evasion.special.value">Spec Eva Bonus</label>
                       </div>
                       <div class="col-sm-4">
-                        <label for="data.modifiers.evasion.speed">Spd Eva Bonus</label>
+                        <label for="data.modifiers.evasion.speed.value">Spd Eva Bonus</label>
                       </div>
                     </div>
                   </div>
                   <div class="swsh-body">
                     <div class="d-flex w-100 mt-1 mb-1">
                       <div class="col-sm-4">
-                        <input type="text" name="data.modifiers.evasion.physical" value="{{data.modifiers.evasion.physical}}"
-                          data-dtype="Number" />
+                        {{> "mod-field" 
+                          mod=data.modifiers.evasion.physical.mod 
+                          path="data.modifiers.evasion.physical.value" 
+                          value=data.modifiers.evasion.physical.value 
+                          total=data.modifiers.evasion.physical.total
+                          dtype="Number" 
+                          modOrigins=(getProperty origins "data.modifiers.evasion.physical.mod")}}
                       </div>
                       <div class="col-sm-4">
-                        <input type="text" name="data.modifiers.evasion.special" value="{{data.modifiers.evasion.special}}"
-                          data-dtype="Number" />
+                        {{> "mod-field" 
+                          mod=data.modifiers.evasion.special.mod 
+                          path="data.modifiers.evasion.special.value" 
+                          value=data.modifiers.evasion.special.value 
+                          total=data.modifiers.evasion.special.total 
+                          dtype="Number" 
+                          modOrigins=(getProperty origins "data.modifiers.evasion.special.mod")}}
                       </div>
                       <div class="col-sm-4">
-                        <input type="text" name="data.modifiers.evasion.speed" value="{{data.modifiers.evasion.speed}}"
-                          data-dtype="Number" />
+                        {{> "mod-field" 
+                          mod=data.modifiers.evasion.speed.mod 
+                          path="data.modifiers.evasion.speed.value" 
+                          value=data.modifiers.evasion.speed.value 
+                          total=data.modifiers.evasion.speed.total
+                          dtype="Number" 
+                          modOrigins=(getProperty origins "data.modifiers.evasion.speed.mod")}}
                       </div>
                     </div>
                   </div>
@@ -1148,24 +1118,39 @@
                         {{#each data.skills as |skill key|}}
                         <div class="row no-gutters {{key}} align-items-center">
                           <div class="skill {{key}} col-sm-4 bgcolor key type--{{skill.type}} align-self-center">
-                            <label for="data.skills.{{key}}.modifier" class="resource-label">{{skill.label}}</label>
+                            <label for="data.skills.{{key}}.label" class="resource-label">{{skill.label}}</label>
                           </div>
                           <div class="skill {{key}} col pl-1 pr-1 fs-9 center-text">
-                            <input type="text" name="data.skills.{{key}}.modifier" value="{{skill.modifier}}" data-dtype="Number" disabled/>
+                            {{> "mod-field" 
+                              path=(concat "data.skills." key ".modifier.value") 
+                              value=skill.modifier.value
+                              dtype="Number" 
+                              mod=skill.modifier.mod
+                              total=skill.modifier.total
+                              modOrigins=(getProperty ../origins (concat "data.skills." key ".modifier.mod") )
+                              disabled=true
+                              flipped=(gt 8 @index)}}
                           </div>
                           <div class="skill {{key}} col-sm-3 align-self-center bgcolor skill--{{skill.rank}} center-text">
-                            <label for="data.skills.{{key}}.value" class="resource-label">{{skill.rank}}</label>
+                            <label for="data.skills.{{key}}.rank" class="resource-label">{{skill.rank}}</label>
                           </div>
                           <div class="skill {{key}} col pl-1 fs-9 center-text">
-                            <input type="text" name="data.skills.{{key}}.value" value="{{skill.value}}"
-                              data-dtype="Number" disabled/>
+                            {{> "mod-field" 
+                              path=(concat "data.skills." key ".value.value") 
+                              value=skill.value.value
+                              dtype="Number" 
+                              mod=skill.value.mod
+                              total=skill.value.total
+                              modOrigins=(getProperty ../origins (concat "data.skills." key ".value.mod") )
+                              disabled=true
+                              flipped=(gt 8 @index)}}
                           </div>
                           <div class="skill {{key}} col-sm-2 align-self-center bgcolor fs-9 center-text rollable"
-                            data-roll="{{skill.value}}d6{{#if skill.modifier}}+{{skill.modifier}}{{/if}}"
+                            data-roll="{{skill.value.total}}d6{{#if skill.modifier.total}}+{{skill.modifier.total}}{{/if}}"
                             data-label="{{skill.label}}">
                             <i class="fas fa-dice-d20"></i>
                             <label for="data.skills.{{key}}.value"
-                              class="resource-label">{{skill.value}}d6{{#if skill.modifier}}+{{skill.modifier}}{{/if}}</label>
+                              class="resource-label">{{skill.value.total}}d6{{#if skill.modifier.total}}+{{skill.modifier.total}}{{/if}}</label>
                           </div>
                         </div>
                         {{/each}}

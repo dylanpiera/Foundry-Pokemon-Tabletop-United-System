@@ -99,20 +99,20 @@
                         <div class="skill {{key}} col pl-1 pr-1 fs-9 center-text">
                             <input
                               type="text"
-                              name="data.skills.{{key}}.modifier"
-                              value="{{skill.modifier}}"
+                              name="data.skills.{{key}}.modifier.value"
+                              value="{{skill.modifier.value}}"
                               data-dtype="Number"
                             />
                         </div>
                         <div class="skill {{key}} col-sm-3 align-self-center bgcolor skill--{{skill.rank}} center-text">
-                          <label for="data.skills.{{key}}.value" class="resource-label"
+                          <label for="data.skills.{{key}}.rank" class="resource-label"
                             >{{skill.rank}}</label>
                         </div>
                         <div class="skill {{key}} col pl-1 fs-9 center-text">
                           <input
                               type="text"
-                              name="data.skills.{{key}}.value"
-                              value="{{skill.value}}"
+                              name="data.skills.{{key}}.value.value"
+                              value="{{skill.value.value}}"
                               data-dtype="Number"
                             />
                         </div>
@@ -124,7 +124,7 @@
                           <label 
                             for="data.skills.{{key}}.value" 
                             class="resource-label" 
-                            >{{skill.value}}d6{{#if skill.modifier}}+{{skill.modifier}}{{/if}}</label>
+                            >{{skill.value.total}}d6{{#if skill.modifier.total}}+{{skill.modifier.total}}{{/if}}</label>
                         </div>
                       </div>
                       {{/each}}
