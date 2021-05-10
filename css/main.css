@@ -1292,6 +1292,9 @@ header.effect-change.effects-header.flexrow > div {
   font-size: 12px;
   font-family: sans-serif;
 }
+.mod-input .mod-tooltip ol ul {
+  white-space: normal;
+}
 /* MD CSS */
 .md h1,
 .md h2,

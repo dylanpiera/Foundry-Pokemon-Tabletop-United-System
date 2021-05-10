@@ -104,7 +104,7 @@ export class PTUActor extends Actor {
     changes.sort((a, b) => a.priority - b.priority);
     // Apply all changes
     for (let change of changes) {
-      debug(this.name, change);
+      debug(change.key, change);
       const result = change.effect.apply(this, change);
       if (result !== null) {
         overrides[change.key] = result;

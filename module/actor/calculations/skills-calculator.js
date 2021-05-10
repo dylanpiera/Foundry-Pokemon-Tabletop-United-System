@@ -24,10 +24,10 @@ export function CalculateSkills(skills, speciesData, pokeEdges, background) {
         }
     }
 
-    for(let edge of pokeEdges) {
-        var key = ExtractImprovement(edge);
-        if(key) skills[ExtractEd(key)].value.value += 1;
-    }
+    // for(let edge of pokeEdges) {
+    //     var key = ExtractImprovement(edge);
+    //     if(key) skills[ExtractEd(key)].value.value += 1;
+    // }
 
     for(let skill of Object.values(background.increased)) {
         if(skills[skill]) {
