@@ -54,14 +54,32 @@
                           disabled />
                       </div>
                       <div class="stats {{key}} mod col-sm-2">
-                        <input type="text" name="data.stats.{{key}}.mod" value="{{stat.mod}}" data-dtype="Number" />
+                        {{> "mod-field" 
+                          path=(concat "data.stats." key ".mod") 
+                          value=stat.mod
+                          dtype="Number" 
+                          mod=""
+                          total=0
+                          modOrigins=(getProperty ../origins (concat "data.stats." key ".mod"))}}
                       </div>
                       <div class="stats {{key}} levelUp col-sm-2">
-                        <input type="text" name="data.stats.{{key}}.levelUp" value="{{stat.levelUp}}" data-dtype="Number" />
+                        {{> "mod-field" 
+                          path=(concat "data.stats." key ".levelUp") 
+                          value=stat.levelUp
+                          dtype="Number" 
+                          mod=""
+                          total=0
+                          modOrigins=(getProperty ../origins (concat "data.stats." key ".levelUp"))}}
                       </div>
                       <div class="stats stage stage col-sm-2">
                         {{#if (isdefined stat.stage)}}
-                        <input type="text" name="data.stats.{{key}}.stage" value="{{stat.stage}}" data-dtype="Number" />
+                        {{> "mod-field" 
+                          path=(concat "data.stats." key ".stage") 
+                          value=stat.stage
+                          dtype="Number" 
+                          mod=""
+                          total=0
+                          modOrigins=(getProperty ../origins (concat "data.stats." key ".stage"))}}
                         {{/if}}
                       </div>
                       <div class="stats {{key}} total col-sm-2">
@@ -76,8 +94,16 @@
                         <label for="data.levelUpPoints" class="resource-label">Remaining Level-Up Points:</label>
                       </div>
                       <div class="col">
-                        <input type="text" name="data.levelUpPoints" value="{{data.levelUpPoints}}" data-dtype="Number"
-                          disabled />
+                        {{> "mod-field" 
+                          path="data.levelUpPoints"
+                          value=data.levelUpPoints
+                          dtype="Number" 
+                          mod=""
+                          total=data.levelUpPoints
+                          modOrigins=(getProperty origins "data.levelUpPoints")
+                          disabled=true}}
+                        {{!-- <input type="text" name="data.levelUpPoints" value="{{data.levelUpPoints}}" data-dtype="Number"
+                          disabled /> --}}
                       </div>
                     </div>
                     {{/if}}

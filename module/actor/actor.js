@@ -29,6 +29,22 @@ export class PTUActor extends Actor {
     }
 
     this.applyActiveEffects(false);
+
+    // Add extra origin info
+
+    this.origins = mergeObject(this.origins, {
+      data: {levelUpPoints: [
+        {label: "Base Value", change: {type: CONST.ACTIVE_EFFECT_MODES.ADD, value: actorData.type === 'character' ? 9 : 10}},
+        {label: "Level", change: {type: CONST.ACTIVE_EFFECT_MODES.ADD, value: actorData.data.level.current}},
+        {label: "HP Stat", change: {type: CONST.ACTIVE_EFFECT_MODES.ADD, value: -actorData.data.stats.hp.levelUp}},
+        {label: "ATK Stat", change: {type: CONST.ACTIVE_EFFECT_MODES.ADD, value: -actorData.data.stats.atk.levelUp}},
+        {label: "DEF Stat", change: {type: CONST.ACTIVE_EFFECT_MODES.ADD, value: -actorData.data.stats.def.levelUp}},
+        {label: "SP.ATK Stat", change: {type: CONST.ACTIVE_EFFECT_MODES.ADD, value: -actorData.data.stats.spatk.levelUp}},
+        {label: "SP.DEF Stat", change: {type: CONST.ACTIVE_EFFECT_MODES.ADD, value: -actorData.data.stats.spdef.levelUp}},
+        {label: "SPD Stat", change: {type: CONST.ACTIVE_EFFECT_MODES.ADD, value: -actorData.data.stats.spd.levelUp}},
+        {label: "Stat Point Modifier", change: {type: CONST.ACTIVE_EFFECT_MODES.ADD, value: actorData.data.modifiers.statPoints.total}},
+      ]}
+    })
   }
 
   /**
