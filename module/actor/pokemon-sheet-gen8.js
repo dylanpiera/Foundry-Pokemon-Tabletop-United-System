@@ -239,7 +239,7 @@ export class PTUGen8PokemonSheet extends ActorSheet {
 			await this._applyHardenedEffect(value, this.actor.data.data.modifiers.hardened);
 		})
 
-		html.find('input[name="data.modifiers.hardened"]').click(async (event) => {
+		html.find('input[data-name="data.modifiers.hardened"]').click(async (event) => {
 			const value = Number(this.actor.data.data.health.injuries);
 			const isHardened = event.currentTarget.checked;
 
@@ -295,7 +295,10 @@ export class PTUGen8PokemonSheet extends ActorSheet {
 
 		const effect = this.actor.effects.find(x => x.data.label == "Hardened Injuries")
 		if(value === 0 || !isHardened) {
-			if(effect) await effect.delete();
+			if(effect) {
+				await effect.delete();
+				if(this.actor.data.data.modifiers.hardened) await this.actor.update({'data.modifiers.hardened': false});
+			}
 			return;
 		}
 

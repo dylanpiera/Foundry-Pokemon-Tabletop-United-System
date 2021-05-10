@@ -45,6 +45,9 @@ export default function(training, isOrder = false) {
 }
 
 export const HardenedChanges = {
+    0: [
+        {"key":"data.modifiers.hardened", "mode": 5, "value": true, "priority": 50}
+    ],
     1: [
         {"key":"data.modifiers.critRange.mod", "mode":2, "value":1, "priority": 20},
         {"key":"data.modifiers.effectRange.mod", "mode":2, "value":1, "priority": 20}
