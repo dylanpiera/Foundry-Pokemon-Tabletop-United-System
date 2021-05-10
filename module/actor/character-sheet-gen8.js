@@ -260,19 +260,27 @@ export class PTUGen8CharacterSheet extends ActorSheet {
 	 * @param {Event} event   The originating click event
 	 * @private
 	 */
-	_onSaveRoll(event) {
+	 async _onSaveRoll(event = new Event('void')) {
 		event.preventDefault();
 		if(event.screenX == 0 && event.screenY == 0) return;
-		
-		let mod = this.actor.data.data.modifiers.saveChecks ?? 0;
+
+		let mod = this.actor.data.data.modifiers.saveChecks?.total;
 		let roll = new Roll("1d20 + @mod", {mod: mod});
-		let label = 'Rolling Save Check';
-		roll.roll().toMessage({
-			speaker: ChatMessage.getSpeaker({
-				actor: this.actor
-			}),
-			flavor: label
-		});
+		
+		roll.roll();
+
+		const messageData = {
+			title: `${this.actor.name}'s<br>Save Check`,
+			user: game.user._id,
+			sound: CONFIG.sounds.dice,
+			templateType: 'save',
+			roll: roll,
+			description: `Save check of ${roll._total}!`
+		}
+
+		messageData.content = await renderTemplate('/systems/ptu/templates/chat/save-check.hbs', messageData);
+
+		return ChatMessage.create(messageData, {});
 	}
 
 	/**
@@ -294,7 +302,7 @@ export class PTUGen8CharacterSheet extends ActorSheet {
 			let acRoll = CalculateAcRoll(move.data, this.actor.data);
 			let diceResult = GetDiceResult(acRoll)
 
-			let crit = diceResult === 1 ? CritOptions.CRIT_MISS : diceResult >= 20 - this.actor.data.data.modifiers.critRange ? CritOptions.CRIT_HIT : CritOptions.NORMAL;
+			let crit = diceResult === 1 ? CritOptions.CRIT_MISS : diceResult >= 20 - this.actor.data.data.modifiers.critRange?.total ? CritOptions.CRIT_HIT : CritOptions.NORMAL;
 
 			let damageRoll;
 			if(crit != CritOptions.CRIT_MISS) {
@@ -414,7 +422,7 @@ export class PTUGen8CharacterSheet extends ActorSheet {
 function CalculateAcRoll(moveData, actor) {
 	return new Roll('1d20-@ac+@acBonus', {
 		ac: (parseInt(moveData.ac) || 0),
-		acBonus: (actor.flags?.ptu?.is_blind ? actor.flags?.ptu?.is_totally_blind ? -10 : -6 : 0) + (parseInt(actor.data.modifiers.acBonus) || 0)
+		acBonus: (actor.flags?.ptu?.is_blind ? actor.flags?.ptu?.is_totally_blind ? -10 : -6 : 0) + (parseInt(actor.data.modifiers.acBonus?.total) || 0)
 	})
 }
 

@@ -43,13 +43,14 @@ import Api from './api/api.js'
 import RenderDex from './utils/pokedex.js'
 import TMsData from './data/tm-data.js'
 import PTUActiveEffectConfig from './forms/active-effect-config.js';
+import getTrainingChanges from './data/training-data.js';
 
 export let debug = (...args) => {if (game.settings.get("ptu", "showDebugInfo") ?? false) console.log("DEBUG: FVTT PTU | ", ...args)};
 export let log = (...args) => console.log("FVTT PTU | ", ...args);
 export let warn = (...args) => console.warn("FVTT PTU | ", ...args);
 export let error = (...args) => console.error("FVTT PTU | ", ...args)
 
-export const LATEST_VERSION = "1.2.14";
+export const LATEST_VERSION = "1.2.15";
 
 function registerSheets() {
   // Register sheet application classes
@@ -70,6 +71,7 @@ async function registerHandlebars() {
 
   fetch('/systems/ptu/templates/partials/charactermancer-evolution-partial.hbs').then(r => r.text().then(template => Handlebars.registerPartial('cm-evolution', template)))
   fetch('/systems/ptu/templates/partials/active-effects.hbs').then(r => r.text().then(template => Handlebars.registerPartial('active-effects', template)));
+  fetch('/systems/ptu/templates/partials/mod-field.hbs').then(r => r.text().then(template => Handlebars.registerPartial('mod-field', template)));
 
   Handlebars.registerHelper("concat", function() {
     var outStr = '';
@@ -115,11 +117,19 @@ async function registerHandlebars() {
 		return _calcMoveDb(PrepareMoveData(actorData, move), bool);
   });
   Handlebars.registerHelper("calcCritRange", function (actorData) {
-		return actorData.modifiers.critRange ? actorData.modifiers.critRange : 0;
+		return actorData.modifiers.critRange?.total ? actorData.modifiers.critRange?.total : 0;
   });
   Handlebars.registerHelper("calcCritRangeMove", function (move) {
     return move.owner ? move.owner.critRange : 0;
   });
+  Handlebars.registerHelper("getProperty", getProperty);
+  Handlebars.registerHelper("aeTypes", function(id) {
+    const types = Object.entries(CONST.ACTIVE_EFFECT_MODES).reduce((obj, e) => {
+      obj[e[1]] = game.i18n.localize("EFFECT.MODE_"+e[0]);
+      return obj;
+    }, {});
+    return id ? types[id] : types;
+  })
 
   function keyToNatureStat(key) {
     switch (key) {
@@ -248,7 +258,8 @@ Hooks.once('init', async function() {
     cache: {
       GetOrCreateCachedItem
     },
-    api: new Api()
+    api: new Api(),
+    getTrainingChanges
   };
 
   /**
@@ -294,8 +305,8 @@ export function PrepareMoveData(actorData, move) {
   move.owner = { 
     type: actorData.typing,
     stats: actorData.stats,
-    acBonus: actorData.modifiers.acBonus,
-    critRange: actorData.modifiers.critRange
+    acBonus: actorData.modifiers.acBonus.total,
+    critRange: actorData.modifiers.critRange.total
   };
   move.prepared = true;
 

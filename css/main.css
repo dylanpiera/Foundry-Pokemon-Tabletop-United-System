@@ -1251,6 +1251,42 @@ header.effect-change.effects-header.flexrow > div {
   text-align: center;
   white-space: nowrap;
 }
+.mod-input {
+  position: relative;
+}
+.mod-input:before {
+  content: attr(data-mod);
+  padding: 5px 5px 0 0;
+  color: #19181370;
+  position: absolute;
+  right: 0;
+  pointer-events: none;
+}
+.mod-input:hover > .mod-tooltip {
+  display: block;
+}
+.mod-input .mod-tooltip {
+  display: none;
+  position: absolute;
+  top: -10px;
+  left: 50%;
+  width: 100%;
+  min-width: 13rem;
+  background: linear-gradient(45deg, #ECDBEB, #DFFFFE);
+  transform: translate(-50%, -100%);
+  border: black 1px solid;
+  box-shadow: #00000060 0 0 15px;
+  z-index: 100;
+}
+.mod-input .mod-tooltip:hover {
+  display: block;
+}
+.mod-input .mod-tooltip ol {
+  padding-inline-start: 0;
+  text-align: start;
+  font-size: 12px;
+  font-family: sans-serif;
+}
 /* MD CSS */
 .md h1,
 .md h2,

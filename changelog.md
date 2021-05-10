@@ -1,6 +1,11 @@
 # Welcome to the Beta!
 Hey there! You are on the Beta Branch. If you ever have any feedback please do share with us over on [Github](https://github.com/dylanpiera/Foundry-Pokemon-Tabletop-United-System/issues) or [Discord](https://discord.gg/fE3w59q)
 
+## 1.2.15 - Modifiers Update
+- Updated the modifiers system to show where effects are coming from
+- Made training apply as ActiveEffect instead of somewhere hidden deep within the system
+  - **NOTE**: You need to reapply trainings for them to work properly. 
+
 ## 1.2.14 - Quality of Life - Electric Boogaloo
 - Fixed Token actor's being unable to undo-damage.
 - Fixed ActiveEffect config sheet breaking effects after saving

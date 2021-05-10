@@ -1533,6 +1533,50 @@ header.effect-change.effects-header.flexrow > div {
     white-space: nowrap;
 }
 
+
+.mod-input {
+    position: relative;
+
+    &:before {
+        content: attr(data-mod);
+        padding: 5px 5px 0 0;
+        color: #19181370;
+        position: absolute;
+        right: 0;
+        pointer-events: none;
+    }
+
+    &:hover > .mod-tooltip {
+        display: block;
+    }
+
+    .mod-tooltip {
+        display: none;
+        position: absolute;
+        
+        &:hover {
+            display: block;
+        }
+
+        top: -10px;
+        left: 50%;
+        width: 100%;
+        min-width: 13rem;
+        background: linear-gradient(45deg, #ECDBEB, #DFFFFE);
+        transform: translate(-50%, -100%);
+        border: black 1px solid;
+        box-shadow: #00000060 0 0 15px;
+        z-index: 100;
+
+        ol {
+            padding-inline-start: 0;
+            text-align: start;
+            font-size: 12px;
+            font-family: sans-serif;
+        }
+    }
+}
+
 /* MD CSS */
 .md h1, .md h2, .md h3, .md h4, .md h5, .md h6 {
     border-bottom: 0.5px solid lightgray;
