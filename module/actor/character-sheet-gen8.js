@@ -32,6 +32,9 @@ export class PTUGen8CharacterSheet extends ActorSheet {
 			this._prepareCharacterItems(data);
 		}
 
+		data['origins'] = this.actor.origins;
+		debug(data.origins, this.actor);
+
 		return data;
 	}
 
