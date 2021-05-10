@@ -143,7 +143,7 @@ export class PTUActor extends Actor {
       if(isNaN(actorData.data.modifiers.initiative.value)) {
         const modifiers = duplicate(actorData.data.modifiers);
         for(let [key, value] of Object.entries(modifiers)) {
-          if(key == "hardened" || key == "flinch_count") continue;
+          if(key == "hardened" || key == "flinch_count" || key == 'immuneToEffectDamage' || key == 'skillBonus') continue;
           if(key == "evasion") {
             for(let [evasion, actualValue] of Object.entries(value)) {
               modifiers[key][evasion] = {
