@@ -1281,6 +1281,11 @@ header.effect-change.effects-header.flexrow > div {
 .mod-input .mod-tooltip:hover {
   display: block;
 }
+.mod-input .mod-tooltip.bottom-display {
+  top: unset;
+  bottom: -10px;
+  transform: translate(-50%, 100%);
+}
 .mod-input .mod-tooltip ol {
   padding-inline-start: 0;
   text-align: start;

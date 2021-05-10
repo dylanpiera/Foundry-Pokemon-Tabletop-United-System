@@ -59,8 +59,9 @@
                           value=stat.mod
                           dtype="Number" 
                           mod=""
-                          total=0
-                          modOrigins=(getProperty ../origins (concat "data.stats." key ".mod"))}}
+                          total="ignored"
+                          modOrigins=(getProperty ../origins (concat "data.stats." key ".mod"))
+                          flipped=(gt 3 @index)}}
                       </div>
                       <div class="stats {{key}} levelUp col-sm-2">
                         {{> "mod-field" 
@@ -68,8 +69,9 @@
                           value=stat.levelUp
                           dtype="Number" 
                           mod=""
-                          total=0
-                          modOrigins=(getProperty ../origins (concat "data.stats." key ".levelUp"))}}
+                          total="ignored"
+                          modOrigins=(getProperty ../origins (concat "data.stats." key ".levelUp"))
+                          flipped=(gt 3 @index)}}
                       </div>
                       <div class="stats stage stage col-sm-2">
                         {{#if (isdefined stat.stage)}}
@@ -78,8 +80,9 @@
                           value=stat.stage
                           dtype="Number" 
                           mod=""
-                          total=0
-                          modOrigins=(getProperty ../origins (concat "data.stats." key ".stage"))}}
+                          total="ignored"
+                          modOrigins=(getProperty ../origins (concat "data.stats." key ".stage"))
+                          flipped=(gt 3 @index)}}
                         {{/if}}
                       </div>
                       <div class="stats {{key}} total col-sm-2">
@@ -610,16 +613,37 @@
                   <div class="swsh-body" style="display: block;">
                     <div class="d-flex w-100 mt-1 mb-1">
                       <div class="col-sm-4">
-                        <input type="text" name="data.evasion.physical" value="{{data.evasion.physical}}" data-dtype="Number"
-                          disabled />
+                        {{> "mod-field" 
+                          path="data.evasion.physical"
+                          value=data.evasion.physical
+                          dtype="Number" 
+                          mod=""
+                          total=data.evasion.physical
+                          modOrigins=(getProperty origins "data.evasion.physical")
+                          disabled=true
+                          flipped=true}}
                       </div>
                       <div class="col-sm-4">
-                        <input type="text" name="data.evasion.special" value="{{data.evasion.special}}" data-dtype="Number"
-                          disabled />
+                        {{> "mod-field" 
+                          path="data.evasion.special"
+                          value=data.evasion.special
+                          dtype="Number" 
+                          mod=""
+                          total=data.evasion.special
+                          modOrigins=(getProperty origins "data.evasion.special")
+                          disabled=true
+                          flipped=true}}
                       </div>
                       <div class="col-sm-4">
-                        <input type="text" name="data.evasion.speed" value="{{data.evasion.speed}}" data-dtype="Number"
-                          disabled />
+                        {{> "mod-field" 
+                          path="data.evasion.speed"
+                          value=data.evasion.speed
+                          dtype="Number" 
+                          mod=""
+                          total=data.evasion.speed
+                          modOrigins=(getProperty origins "data.evasion.speed")
+                          disabled=true
+                          flipped=true}}
                       </div>
                     </div>
                   </div>
@@ -1061,7 +1085,7 @@
                           mod=data.modifiers.evasion.physical.mod 
                           path="data.modifiers.evasion.physical.value" 
                           value=data.modifiers.evasion.physical.value 
-                          total=data.evasion.physical
+                          total=data.modifiers.evasion.physical.total
                           dtype="Number" 
                           modOrigins=(getProperty origins "data.modifiers.evasion.physical.mod")}}
                       </div>
@@ -1070,7 +1094,7 @@
                           mod=data.modifiers.evasion.special.mod 
                           path="data.modifiers.evasion.special.value" 
                           value=data.modifiers.evasion.special.value 
-                          total=data.evasion.special
+                          total=data.modifiers.evasion.special.total 
                           dtype="Number" 
                           modOrigins=(getProperty origins "data.modifiers.evasion.special.mod")}}
                       </div>
@@ -1079,7 +1103,7 @@
                           mod=data.modifiers.evasion.speed.mod 
                           path="data.modifiers.evasion.speed.value" 
                           value=data.modifiers.evasion.speed.value 
-                          total=data.evasion.speed
+                          total=data.modifiers.evasion.speed.total
                           dtype="Number" 
                           modOrigins=(getProperty origins "data.modifiers.evasion.speed.mod")}}
                       </div>
@@ -1228,14 +1252,29 @@
                             <label for="data.skills.{{key}}.label" class="resource-label">{{skill.label}}</label>
                           </div>
                           <div class="skill {{key}} col pl-1 pr-1 fs-9 center-text">
-                            <input type="text" name="data.skills.{{key}}.modifier.value" value="{{skill.modifier.value}}" data-dtype="Number" disabled/>
+                            {{> "mod-field" 
+                              path=(concat "data.skills." key ".modifier.value") 
+                              value=skill.modifier.value
+                              dtype="Number" 
+                              mod=skill.modifier.mod
+                              total=skill.modifier.total
+                              modOrigins=(getProperty ../origins (concat "data.skills." key ".modifier.mod") )
+                              disabled=true
+                              flipped=true}}
                           </div>
                           <div class="skill {{key}} col-sm-3 align-self-center bgcolor skill--{{skill.rank}} center-text">
                             <label for="data.skills.{{key}}.rank" class="resource-label">{{skill.rank}}</label>
                           </div>
                           <div class="skill {{key}} col pl-1 fs-9 center-text">
-                            <input type="text" name="data.skills.{{key}}.value.value" value="{{skill.value.value}}"
-                              data-dtype="Number" disabled/>
+                            {{> "mod-field" 
+                              path=(concat "data.skills." key ".value.value") 
+                              value=skill.value.value
+                              dtype="Number" 
+                              mod=skill.value.mod
+                              total=skill.value.total
+                              modOrigins=(getProperty ../origins (concat "data.skills." key ".value.mod") )
+                              disabled=true
+                              flipped=(gt 8 @index)}}
                           </div>
                           <div class="skill {{key}} col-sm-2 align-self-center bgcolor fs-9 center-text rollable"
                             data-roll="{{skill.value.total}}d6{{#if skill.modifier.total}}+{{skill.modifier.total}}{{/if}}"

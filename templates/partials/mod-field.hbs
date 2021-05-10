@@ -1,6 +1,6 @@
 <span class="mod-input" {{#if (isdefined mod)}}data-mod="{{#if (gt mod 0)}}+{{/if}}{{mod}}"{{/if}}>
     {{#if modOrigins}}
-    <div class="mod-tooltip">
+    <div class="mod-tooltip {{#if flipped}}bottom-display{{/if}}">
         <h1 style="font-size:14px; text-align:center;">Modifiers:</h1>
         <ol>
             {{#each modOrigins}}
@@ -17,11 +17,11 @@
                     {{/if}} 
                 </ul>
             {{/each}}
-            {{#if total}}
+            {{#unless (is total "ignored")}}
                 <ul style="border-top: 1px solid black; padding-top: 0.25rem;">
                     <b>Total:</b> {{total}}
                 </ul>
-            {{/if}}
+            {{/unless}}
         </ol>
     </div>
     {{/if}}

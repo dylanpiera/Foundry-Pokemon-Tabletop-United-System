@@ -1,4 +1,4 @@
-import { warn } from "../../ptu.js";
+import { debug, warn } from "../../ptu.js";
 
 export function CalculateTrainerCapabilities(trainerSkills, items, speedCombatStages, ptuFlags) {
     let mods = {
@@ -193,7 +193,8 @@ export function CalculatePokemonCapabilities(speciesData, items, speedCombatStag
             };
             if (key == "Power" || key == "Weight Class" || key == "Naturewalk" || key == "Other") continue;
             if (speciesData.Capabilities[key] > 0) {
-                speciesData.Capabilities[key] = Math.max(speciesData.Capabilities[key] + spcsChanges + capabilityMod, speciesData.Capabilities[key] > 1 ? 2 : 1)
+                debug(capabilityMod);
+                speciesData.Capabilities[key] = Math.max(speciesData.Capabilities[key] + spcsChanges + capabilityMod ?? 0, speciesData.Capabilities[key] > 1 ? 2 : 1)
                 if(isSlowed) speciesData.Capabilities[key] = Math.max(1, Math.floor(speciesData.Capabilities[key] * 0.5));
             }
         }
