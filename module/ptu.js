@@ -70,6 +70,7 @@ async function registerHandlebars() {
 
   fetch('/systems/ptu/templates/partials/charactermancer-evolution-partial.hbs').then(r => r.text().then(template => Handlebars.registerPartial('cm-evolution', template)))
   fetch('/systems/ptu/templates/partials/active-effects.hbs').then(r => r.text().then(template => Handlebars.registerPartial('active-effects', template)));
+  fetch('/systems/ptu/templates/partials/mod-field.hbs').then(r => r.text().then(template => Handlebars.registerPartial('mod-field', template)));
 
   Handlebars.registerHelper("concat", function() {
     var outStr = '';
@@ -120,6 +121,14 @@ async function registerHandlebars() {
   Handlebars.registerHelper("calcCritRangeMove", function (move) {
     return move.owner ? move.owner.critRange : 0;
   });
+  Handlebars.registerHelper("getProperty", getProperty);
+  Handlebars.registerHelper("aeTypes", function(id) {
+    const types = Object.entries(CONST.ACTIVE_EFFECT_MODES).reduce((obj, e) => {
+      obj[e[1]] = game.i18n.localize("EFFECT.MODE_"+e[0]);
+      return obj;
+    }, {});
+    return id ? types[id] : types;
+  })
 
   function keyToNatureStat(key) {
     switch (key) {

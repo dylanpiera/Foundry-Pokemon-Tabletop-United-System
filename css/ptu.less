@@ -1536,10 +1536,6 @@ header.effect-change.effects-header.flexrow > div {
 
 .mod-input {
     position: relative;
-    
-    &:hover:before {
-        color: green;
-    }
 
     &:before {
         content: attr(data-mod);
@@ -1548,6 +1544,33 @@ header.effect-change.effects-header.flexrow > div {
         position: absolute;
         right: 0;
         pointer-events: none;
+    }
+
+    &:hover > .mod-tooltip {
+        display: block;
+    }
+
+    .mod-tooltip {
+        display: none;
+        position: absolute;
+        
+        &:hover {
+            display: block;
+        }
+
+        top: -10px;
+        width: 100%;
+        background: linear-gradient(45deg, #ECDBEB, #DFFFFE);
+        transform: translate(0, -100%);
+        border: black 1px solid;
+        box-shadow: #00000060 0 0 15px;
+
+        ol {
+            padding-inline-start: 0;
+            text-align: start;
+            font-size: 12px;
+            font-family: sans-serif;
+        }
     }
 }
 

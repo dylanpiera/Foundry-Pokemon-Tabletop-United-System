@@ -37,6 +37,7 @@ export class PTUActor extends Actor {
   /** @override */
   applyActiveEffects(doBaseData = true) {
     const overrides = {};
+    const origins = {}; 
     // Organize non-disabled effects by their application priority
     const changes = this.effects.reduce((changes, e) => {
       if (e.data.disabled) return changes;
@@ -55,10 +56,15 @@ export class PTUActor extends Actor {
     // Apply all changes
     for (let change of changes) {
       const result = change.effect.apply(this, change);
-      if (result !== null) overrides[change.key] = result;
+      if (result !== null) {
+        overrides[change.key] = result;
+        if(!origins[change.key]) origins[change.key] = [];
+        origins[change.key].push({label: change.effect.data.label, change: {type: change.mode, value: change.value}});
+      }
     }
     // Expand the set of final overrides
-    this.overrides = expandObject(overrides);
+    this.overrides = mergeObject(this.overrides ?? {}, overrides);
+    this.origins = mergeObject(this.origins ?? {}, origins);
   }
 
   /** @override */

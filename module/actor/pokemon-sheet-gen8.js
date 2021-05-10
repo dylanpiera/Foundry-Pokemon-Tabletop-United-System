@@ -32,6 +32,8 @@ export class PTUGen8PokemonSheet extends ActorSheet {
 			this._prepareCharacterItems(data);
 		}
 
+		data['origins'] = this.actor.origins;
+
 		data['compendiumItems'] = game.ptu.items;
 		data['natures'] = game.ptu.natureData;
 
