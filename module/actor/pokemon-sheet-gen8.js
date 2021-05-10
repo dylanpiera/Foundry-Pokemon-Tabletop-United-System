@@ -228,6 +228,41 @@ export class PTUGen8PokemonSheet extends ActorSheet {
 			autoFocus: true,
 			minLength: 1
 		});
+
+		html.find('input[data-name^="data.training"]').click(async (event) => {
+			const path = event.currentTarget.dataset.name;
+			const training = path.split('.')[2];
+			const isOrder = path.split('.')[3] == "ordered";
+
+			// If property is true
+			if(getProperty(this.actor.data, path)) {
+				const effects = [];
+				this.actor.data.effects.forEach(effect => {
+					if(effect.changes.some(change => change.key == path)) {
+						effects.push(effect._id);
+						return;
+					}
+				});
+				
+				if(effects.length == 0 ) {
+					return await this.actor.update({[path]: false});
+				}
+
+				for(let id of effects) {
+					await this.actor.effects.get(id).delete();
+				}
+				return;
+			}
+
+			const effectData = new ActiveEffect({
+				changes: [{"key":path,"mode":5,"value":true,"priority":50}].concat(game.ptu.TrainingData[training].changes),
+				label: `${training.capitalize()} ${isOrder ? "Order" : "Training"}`,
+				icon: "",
+				transfer: false,
+				_id: randomID()
+			}).data
+			return await this.actor.createEmbeddedEntity("ActiveEffect", effectData);
+		})
 	}
 
 	_onDragItemStart(event) {}
