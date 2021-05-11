@@ -16,6 +16,7 @@ export class PTUActor extends Actor {
    * Augment the basic actor data with additional dynamic data.
    */
   prepareData() {
+    this.origins = {};
     super.prepareData();
 
     const actorData = this.data;
@@ -29,6 +30,45 @@ export class PTUActor extends Actor {
     }
 
     this.applyActiveEffects(false);
+
+    // Add extra origin info
+
+    this.origins = mergeObject(this.origins, {
+      data: {
+        levelUpPoints: [
+          {label: "Base Value", change: {type: CONST.ACTIVE_EFFECT_MODES.ADD, value: actorData.type === 'character' ? 9 : 10}},
+          {label: "Level", change: {type: CONST.ACTIVE_EFFECT_MODES.ADD, value: actorData.data.level.current}},
+          {label: "HP Stat", change: {type: CONST.ACTIVE_EFFECT_MODES.ADD, value: -actorData.data.stats.hp.levelUp}},
+          {label: "ATK Stat", change: {type: CONST.ACTIVE_EFFECT_MODES.ADD, value: -actorData.data.stats.atk.levelUp}},
+          {label: "DEF Stat", change: {type: CONST.ACTIVE_EFFECT_MODES.ADD, value: -actorData.data.stats.def.levelUp}},
+          {label: "SP.ATK Stat", change: {type: CONST.ACTIVE_EFFECT_MODES.ADD, value: -actorData.data.stats.spatk.levelUp}},
+          {label: "SP.DEF Stat", change: {type: CONST.ACTIVE_EFFECT_MODES.ADD, value: -actorData.data.stats.spdef.levelUp}},
+          {label: "SPD Stat", change: {type: CONST.ACTIVE_EFFECT_MODES.ADD, value: -actorData.data.stats.spd.levelUp}},
+          {label: "Stat Point Modifier", change: {type: CONST.ACTIVE_EFFECT_MODES.ADD, value: actorData.data.modifiers.statPoints.total}},
+        ],
+        evasion: {
+          physical: [
+            {label: "DEF Stat / 5 (max 6)", change: {type: CONST.ACTIVE_EFFECT_MODES.ADD, value: Math.min(Math.floor(actorData.data.stats.def.total / 5),6)}},
+            {label: "Physical Evasion Mod", change: {type: CONST.ACTIVE_EFFECT_MODES.ADD, value: actorData.data.modifiers.evasion.physical.total}},
+          ],
+          special: [
+            {label: "SP.DEF Stat / 5 (max 6)", change: {type: CONST.ACTIVE_EFFECT_MODES.ADD, value: Math.min(Math.floor(actorData.data.stats.spdef.total / 5),6)}},
+            {label: "Physical Evasion Mod", change: {type: CONST.ACTIVE_EFFECT_MODES.ADD, value: actorData.data.modifiers.evasion.special.total}},
+          ],
+          speed: [
+            {label: "SPD Stat / 5 (max 6)", change: {type: CONST.ACTIVE_EFFECT_MODES.ADD, value: Math.min(Math.floor(actorData.data.stats.spd.total / 5),6)}},
+            {label: "Physical Evasion Mod", change: {type: CONST.ACTIVE_EFFECT_MODES.ADD, value: actorData.data.modifiers.evasion.speed.total}},
+          ]
+        },
+        stats: {
+         spdef: {
+           stage: [
+            this.data.flags.ptu?.is_poisoned ? {label: "Poisoned", change: {type: CONST.ACTIVE_EFFECT_MODES.ADD, value: -2}} : undefined,
+           ].filter(x => x!==undefined) 
+         } 
+        }
+      }
+    })
   }
 
   /**
@@ -297,7 +337,7 @@ export class PTUActor extends Actor {
         }
       }
       else {
-        data.modifiers[key]["total"] = mod["value"] + mod["mod"];
+        data.modifiers[key]["total"] = mod["value"] ?? 0 + mod["mod"] ?? 0;
       }
     }
 
@@ -357,9 +397,9 @@ export class PTUActor extends Actor {
 
     // Calc skill rank
     for (let [key, skill] of Object.entries(data.skills)) {
-      skill["rank"] = this._getRank(skill["value"]["value"]);
       skill["value"]["total"] = skill["value"]["value"] + skill["value"]["mod"];  
       skill["modifier"]["total"] = skill["modifier"]["value"] + skill["modifier"]["mod"];
+      skill["rank"] = this._getRank(skill["value"]["total"]);
     }
 
     // Calc Type Effectiveness

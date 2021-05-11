@@ -1,13 +1,13 @@
-<span class="mod-input" data-mod="{{#if (gt mod 0)}}+{{/if}}{{mod}}">
+<span class="mod-input" {{#if (isdefined mod)}}data-mod="{{#if (gt mod 0)}}+{{/if}}{{mod}}"{{/if}}>
     {{#if modOrigins}}
-    <div class="mod-tooltip">
-        <h1 style="font-size:14px">Modifiers:</h1>
+    <div class="mod-tooltip {{#if flipped}}bottom-display{{/if}}">
+        <h1 style="font-size:14px; text-align:center;">Modifiers:</h1>
         <ol>
             {{#each modOrigins}}
                 <ul>
                     <b>{{label}}</b>: 
                     {{#if (is (aeTypes change.type) "Add")}}
-                        {{#if (gt change.value -1)}}+ {{/if}}{{change.value}}                
+                        {{#if (gt change.value -1)}}+{{/if}}{{change.value}}                
                     {{else}}
                         {{#if (is (aeTypes change.type) "Multiply")}}
                             x {{change.value}}
@@ -17,11 +17,11 @@
                     {{/if}} 
                 </ul>
             {{/each}}
-            {{#if total}}
+            {{#unless (is total "ignored")}}
                 <ul style="border-top: 1px solid black; padding-top: 0.25rem;">
                     <b>Total:</b> {{total}}
                 </ul>
-            {{/if}}
+            {{/unless}}
         </ol>
     </div>
     {{/if}}
