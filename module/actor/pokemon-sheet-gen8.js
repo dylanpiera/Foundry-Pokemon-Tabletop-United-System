@@ -375,8 +375,6 @@ export class PTUGen8PokemonSheet extends ActorSheet {
 		const dataset = element.dataset;
 
 		if (dataset.roll) {
-			let mod = this.actor.data.data.modifiers.skillBonus.total;
-			if(mod > 0) dataset.roll += `+${mod}`;
 			let roll = new Roll(dataset.roll, this.actor.data.data);
 			let label = dataset.label ? `Rolling ${dataset.label}` : '';
 			roll.roll().toMessage({

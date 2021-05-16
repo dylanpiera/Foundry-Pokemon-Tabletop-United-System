@@ -66,7 +66,26 @@ export class PTUActor extends Actor {
             this.data.flags.ptu?.is_poisoned ? {label: "Poisoned", change: {type: CONST.ACTIVE_EFFECT_MODES.ADD, value: -2}} : undefined,
            ].filter(x => x!==undefined) 
          } 
-        }
+        },
+        skills: actorData.data.modifiers.skillBonus.total > 0 ? Object.keys(actorData.data.skills).map(skill => {
+            return {
+                [skill]: {
+                    modifier: {
+                        mod: [{
+                            label: "Skill Bonus",
+                            change: {
+                                type: CONST.ACTIVE_EFFECT_MODES.ADD,
+                                value: actorData.data.modifiers.skillBonus.total
+                            }
+                        }]
+                    }
+                }
+            }
+          }).reduce((map, obj) => {
+            const skill = Object.keys(obj)[0];
+            map[skill] = obj[skill];
+            return map;
+          }) : undefined
       }
     })
   }
@@ -393,7 +412,7 @@ export class PTUActor extends Actor {
     if(speciesData) data.egggroup = speciesData["Breeding Information"]["Egg Group"].join(" & ");
 
     //TODO: Add skill background
-    data.skills = CalculateSkills(data.skills, speciesData, actorData.items.filter(x => x.type == "pokeedge"), data.background);
+    data.skills = CalculateSkills(data.skills, speciesData, actorData.items.filter(x => x.type == "pokeedge"), data.background, data.modifiers.skillBonus.total);
 
     // Calc skill rank
     for (let [key, skill] of Object.entries(data.skills)) {
