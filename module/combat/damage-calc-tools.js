@@ -80,8 +80,7 @@ async function executeApplyDamageToTargets(targets, data, damage, {isFlat, isRes
 		else {
 			let defense = data.category == "Special" ? target.actor.data.data.stats.spdef.total : target.actor.data.data.stats.def.total;
 
-            debug(data.type, target.actor.data.data.effectiveness.All[data.type]);
-			actualDamage = Math.max(1, Math.floor((damage - parseInt(defense) - parseInt(target.actor.data.data.modifiers?.damageReduction?.total ?? 0) - parseInt(damageReduction)) * (target.actor.data.data.effectiveness.All[data.type] * isResist ? 0.5 : 1)))
+			actualDamage = Math.max(1, Math.floor((damage - parseInt(defense) - parseInt(target.actor.data.data.modifiers?.damageReduction?.total ?? 0) - parseInt(damageReduction)) * (target.actor.data.data.effectiveness.All[data.type] - (isResist ? (target.actor.data.data.effectiveness.All[data.type] > 1 ? 0.5 : target.actor.data.data.effectiveness.All[data.type]*0.5) : 0))))
 		}
 
         log(`Dealing ${actualDamage} damage to ${target.name}`); 

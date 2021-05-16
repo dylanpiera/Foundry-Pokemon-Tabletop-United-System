@@ -15,6 +15,7 @@ Hey there! You are on the Beta Branch. If you ever have any feedback please do s
   - Apply flat damage
   - **NOTE:** Hold shift while hitting one of the buttons to apply an ad-hoc Damage Reduction.
 
+- 1.2.17.1: Hotfix, fixed super effectiveness.
 
 ## 1.2.16 - Small Fixes
 - Also added new modifiers UI to Trainer Sheets
