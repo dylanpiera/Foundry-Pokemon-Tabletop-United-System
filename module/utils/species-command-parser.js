@@ -3,7 +3,6 @@ import { getRandomIntInclusive, lpad} from './generic-helpers.js'
 import { GetOrCacheAbilities, GetOrCacheCapabilities, GetOrCacheMoves} from './cache-helper.js'
 
 export async function CreateMonParser(input, andCreate = false) {
-    debug(input)
     let commands = []; 
     for(let line of input.split("\n")) {
         let l = line.split(" ");
@@ -172,8 +171,7 @@ export async function FinishDexDragPokemonCreation(formData, update)
 
     let drop_coordinates_x = update["x"];
     let drop_coordinates_y = update["y"];
-
-    debug(update["x"], update["y"]);
+    
     let level = parseInt(formData["data.level"]);
 
     let new_actor = await game.ptu.monGenerator.ActorGenerator.Create({

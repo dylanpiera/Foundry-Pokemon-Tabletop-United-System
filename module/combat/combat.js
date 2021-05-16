@@ -167,7 +167,6 @@ export default class PTUCombat {
     }
 
     _onDelete(combat) {
-        debug(combat.id, this.combat.id);
         if(combat.id != this.combat.id) return;
         this.destroy(false);
     }
