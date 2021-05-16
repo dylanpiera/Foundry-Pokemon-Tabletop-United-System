@@ -53,11 +53,11 @@ export class PTUActor extends Actor {
           ],
           special: [
             {label: "SP.DEF Stat / 5 (max 6)", change: {type: CONST.ACTIVE_EFFECT_MODES.ADD, value: Math.min(Math.floor(actorData.data.stats.spdef.total / 5),6)}},
-            {label: "Physical Evasion Mod", change: {type: CONST.ACTIVE_EFFECT_MODES.ADD, value: actorData.data.modifiers.evasion.special.total}},
+            {label: "Special Evasion Mod", change: {type: CONST.ACTIVE_EFFECT_MODES.ADD, value: actorData.data.modifiers.evasion.special.total}},
           ],
           speed: [
             {label: "SPD Stat / 5 (max 6)", change: {type: CONST.ACTIVE_EFFECT_MODES.ADD, value: Math.min(Math.floor(actorData.data.stats.spd.total / 5),6)}},
-            {label: "Physical Evasion Mod", change: {type: CONST.ACTIVE_EFFECT_MODES.ADD, value: actorData.data.modifiers.evasion.speed.total}},
+            {label: "Speed Evasion Mod", change: {type: CONST.ACTIVE_EFFECT_MODES.ADD, value: actorData.data.modifiers.evasion.speed.total}},
           ]
         },
         stats: {
@@ -277,7 +277,7 @@ export class PTUActor extends Actor {
         }
       }
       else {
-        data.modifiers[key]["total"] = mod["value"] + mod["mod"];
+        data.modifiers[key]["total"] = (mod["value"] ?? 0) + (mod["mod"] ?? 0);
       }
     }
 
@@ -337,7 +337,7 @@ export class PTUActor extends Actor {
         }
       }
       else {
-        data.modifiers[key]["total"] = mod["value"] ?? 0 + mod["mod"] ?? 0;
+        data.modifiers[key]["total"] = (mod["value"] ?? 0) + (mod["mod"] ?? 0);
       }
     }
 
