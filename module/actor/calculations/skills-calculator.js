@@ -1,4 +1,4 @@
-export function CalculateSkills(skills, speciesData, pokeEdges, background) {
+export function CalculateSkills(skills, speciesData, pokeEdges, background, bonus = 0) {
     if (speciesData == null) return skills;
     if (speciesData._id == "ARCEUS") {
         for (let [key, skill] of Object.entries(skills)) {
@@ -38,6 +38,10 @@ export function CalculateSkills(skills, speciesData, pokeEdges, background) {
         if(skills[skill]) {
             skills[skill].value.value -= 1;
         }
+    }
+
+    if(bonus != 0) {
+        for(let [key, skill] of Object.entries(skills)) skill.modifier.mod += bonus;
     }
 
     return skills;

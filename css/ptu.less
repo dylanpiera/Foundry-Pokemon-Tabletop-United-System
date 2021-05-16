@@ -821,6 +821,10 @@ span.readable {
     .effects {
         .inventory-list {
             width: 100%;
+
+            .effect-disabled, .effect-disabled ~ .item-list {
+                filter: opacity(0.5);
+            }
         }
     }
 
@@ -912,7 +916,7 @@ span.readable {
 }
 
 .actor .inventory-list .inventory-header .item-controls, .effect-header {
-    a.item-create, a.effect-edit, a.effect-delete, a.effect-create {
+    a.item-create, a.effect-edit, a.effect-delete, a.effect-create, a.effect-suspend {
         background: #ffffffa6;
         border-radius: 5px;
         font-weight: 400;
@@ -1229,6 +1233,36 @@ p.summary {
             flex: 0 0 100% !important;
             word-break: break-word !important;
         }
+    }
+
+}
+
+div.hover-button {
+    display: none;
+    position: absolute;
+    bottom: -117%;
+    width: 130%;
+    transform: translate(-16%);
+}
+
+.apply-damage-button:hover > .hover-button {
+    display: flex;
+    flex-direction: row;
+}
+
+a.hover-button {
+    flex: 1 1 30%;
+    font-size: 7px;
+    word-break: break-word;
+    background: #999;
+    border: 1px solid #777;
+    margin: 1px;
+    border-radius: 7%;
+    letter-spacing: 0.5px;
+    font-weight: 100;
+
+    &.resist-damage-button {
+        font-size: 6px;
     }
 }
 

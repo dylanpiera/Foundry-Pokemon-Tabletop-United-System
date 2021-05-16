@@ -1,7 +1,12 @@
 {{#each actor.effects as |effect|}}
 <div class="swsh-box mb-2 w-100 no-shadow">
     <div class="swsh-header pl-2 effect-header">
-        <h3 style="flex: 1 0 50%">{{effect.label}}</h3>
+        <h3 style="flex: 1 0 50%">{{effect.label}} {{#if (is effect.disabled true)}}(Disabled){{/if}}</h3>
+        <div class="item-controls pr-1 flexcol" style="flex: 0 0 13%;">
+            <a class="item-control effect-suspend" data-id="{{effect._id}}" title="{{#if (is effect.disabled true)}}Enable Effect{{else}}Disable Effect{{/if}}"><i
+                class="fas {{#if (is effect.disabled true)}}fa-times-circle{{else}}fa-check-circle{{/if}}" style="margin-right: 3px;"></i><span
+                class="readable">{{#if (is effect.disabled true)}}Enable Effect{{else}}Disable Effect{{/if}}</span></a>
+        </div>
         {{#unless effect.flags.ptu.editLocked}}
             <div class="item-controls pr-1 flexcol" style="flex: 0 0 7%;">
                 <a class="item-control effect-edit" data-id="{{effect._id}}" title="Edit Effect"><i
@@ -17,7 +22,7 @@
     </div>
     <div class="swsh-body w-100">
         <ol class="inventory-list">
-            <li class="inventory-header flexrow" style="background: linear-gradient(45deg, #ffffffbb, #fff, #ffffffbb); border-radius: 5px;">
+            <li class="inventory-header flexrow {{#if (is effect.disabled true)}}effect-disabled{{/if}}" style="background: linear-gradient(45deg, #ffffffbb, #fff, #ffffffbb); border-radius: 5px;">
             <div class="item-name flexcol align-items-center align-self-center" style="flex: 1 0 12%;">
                 <h4>Target</h4>
             </div>

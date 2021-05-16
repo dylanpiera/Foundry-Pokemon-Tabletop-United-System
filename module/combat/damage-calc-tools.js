@@ -3,80 +3,72 @@ import { debug, log } from "../ptu.js";
 Hooks.on("renderChatMessage", (message, html, data) => {
     setTimeout(() => {
         $(html).find(".apply-damage-button").on("click", game.ptu.combat.applyDamageToTargets);
-    }, 1000);
-    setTimeout(() => {
         $(html).find(".undo-damage-button").on("click", game.ptu.combat.undoDamageToTargets);
+        $(html).find(".half-damage-button").on("click", (ev) => game.ptu.combat.applyDamageToTargets(ev, ATTACK_MOD_OPTIONS.HALF));
+        $(html).find(".resist-damage-button").on("click", (ev) => game.ptu.combat.applyDamageToTargets(ev, ATTACK_MOD_OPTIONS.RESIST));
+        $(html).find(".flat-damage-button").on("click", (ev) => game.ptu.combat.applyDamageToTargets(ev, ATTACK_MOD_OPTIONS.FLAT));
     }, 1000);
 });
 
-export function applyDamageToTargets(event) {
-	event.preventDefault();
+const ATTACK_MOD_OPTIONS = {
+    NONE: 0,
+    HALF: 1,
+    RESIST: 2,
+    FLAT: 3
+}
 
-	let moveData = {
-        moveName: event.currentTarget.dataset.moveName,
-		type: event.currentTarget.dataset.type,
-		category: event.currentTarget.dataset.category,
-		regDamage: event.currentTarget.dataset.regDamage,
-		critDamage: event.currentTarget.dataset.critDamage,
+export async function applyDamageToTargets(event, options = ATTACK_MOD_OPTIONS.NONE) {
+	event.preventDefault();
+    if(event.target != event.currentTarget) return;
+
+    const dataset = event.currentTarget.dataset.moveName ? event.currentTarget.dataset : event.currentTarget.parentElement.parentElement.dataset;
+
+	const moveData = {
+        moveName: dataset.moveName,
+		type: dataset.type,
+		category: dataset.category,
+		regDamage: dataset.regDamage,
+		critDamage: dataset.critDamage,
 	}
 
 	let targeted_tokens = canvas.tokens.controlled;
 	if(targeted_tokens?.length == 0) return;
-		
-	if(moveData.critDamage != moveData.regDamage) {
-	    let dialog = new Dialog({
-            title: "Crit or Regular Damage?",
-            content: "Would you like to apply crit or regular damage?",
-            buttons: {
-                normal: {
-                    label: "Normal Damage",
-                    callback: () => executeApplyDamageToTargets(canvas.tokens.controlled, moveData, moveData.regDamage)
-                },
-                critical: {
-                    label: "Critical Damage",
-                    callback: () => executeApplyDamageToTargets(canvas.tokens.controlled, moveData, moveData.critDamage)
-                },
-                isFlat: {
-                    label: "Flat Damage",
-                    callback: () => executeApplyDamageToTargets(canvas.tokens.controlled, moveData, moveData.regDamage, true)
-                },
-                cancel: {
-                    label: "Close"
-                }
-            },
-            default: "close",
-            close: () => {}  
-	    });
-		dialog.render(true)
-	} else {
-        let dialog = new Dialog({
-            title: "Is it flat damage?",
-            content: "Should the damage be applied as flat damage?",
-            buttons: {
-                normal: {
-                    label: "No",
-                    callback: () => executeApplyDamageToTargets(canvas.tokens.controlled, moveData, moveData.regDamage)
-                },
-                isFlat: {
-                    label: "Yes",
-                    callback: () => executeApplyDamageToTargets(canvas.tokens.controlled, moveData, moveData.regDamage, true)
-                },
-                cancel: {
-                    label: "Close"
-                }
-            },
-            default: "close",
-            close: () => {}  
+
+    let dr = 0;
+
+    if(event.shiftKey) {
+        dr = await new Promise((resolve, reject) => {
+            Dialog.confirm({
+                title: `Apply Damage Reduction`,
+                content: `<input type="number" name="damage-reduction" value="0"></input>`,
+                yes: (html) => resolve(parseInt(html.find('input[name="damage-reduction"]').val()))
+            });
         });
-        dialog.render(true);
-	}
+    }
+
+    if(options > 0) {
+        switch(options) {
+            case ATTACK_MOD_OPTIONS.HALF:
+                return executeApplyDamageToTargets(canvas.tokens.controlled, moveData, moveData.regDamage ? Math.max(1, Math.floor(moveData.regDamage / 2)) : Math.max(1, Math.floor(moveData.critDamage / 2)), {damageReduction : dr});
+            case ATTACK_MOD_OPTIONS.RESIST:
+                return executeApplyDamageToTargets(canvas.tokens.controlled, moveData, moveData.regDamage ? moveData.regDamage : moveData.critDamage, {isResist: true, damageReduction : dr});
+            case ATTACK_MOD_OPTIONS.FLAT:
+                return executeApplyDamageToTargets(canvas.tokens.controlled, moveData, moveData.regDamage ? moveData.regDamage : moveData.critDamage, {isFlat: true, damageReduction : dr})
+
+        }
+        return;
+    }
+
+    return executeApplyDamageToTargets(canvas.tokens.controlled, moveData, moveData.regDamage ? moveData.regDamage : moveData.critDamage, {damageReduction : dr});
 }
 
 export async function ApplyFlatDamage(targets, sourceName, damage) {
     return executeApplyDamageToTargets(targets, {moveName: sourceName}, damage, true)
 }
 
-async function executeApplyDamageToTargets(targets, data, damage, isFlat = false) {
+async function executeApplyDamageToTargets(targets, data, damage, {isFlat, isResist, damageReduction}={isFlat: false, isResist: false}) {
+    if(isNaN(damageReduction)) damageReduction = 0;
+
     let appliedDamage = {};
 	for(let target of targets) {
 		if(target.actor.data.permission[game.userId] < 3) continue;
@@ -88,7 +80,8 @@ async function executeApplyDamageToTargets(targets, data, damage, isFlat = false
 		else {
 			let defense = data.category == "Special" ? target.actor.data.data.stats.spdef.total : target.actor.data.data.stats.def.total;
 
-			actualDamage = Math.max(1, Math.floor((damage - parseInt(defense)) * target.actor.data.data.effectiveness.All[data.type]))
+            debug(data.type, target.actor.data.data.effectiveness.All[data.type]);
+			actualDamage = Math.max(1, Math.floor((damage - parseInt(defense) - parseInt(target.actor.data.data.modifiers?.damageReduction?.total ?? 0) - parseInt(damageReduction)) * (target.actor.data.data.effectiveness.All[data.type] * isResist ? 0.5 : 1)))
 		}
 
         log(`Dealing ${actualDamage} damage to ${target.name}`); 

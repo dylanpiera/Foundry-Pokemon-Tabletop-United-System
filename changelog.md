@@ -1,6 +1,21 @@
 # Welcome to the Beta!
 Hey there! You are on the Beta Branch. If you ever have any feedback please do share with us over on [Github](https://github.com/dylanpiera/Foundry-Pokemon-Tabletop-United-System/issues) or [Discord](https://discord.gg/fE3w59q)
 
+## 1.2.17 - Bugfixes & Damage Reduction
+- Fixed effects being deleted in combat when they shouldn't be
+
+- Added a 'Suspend Effect' button to Effects in the 'Effects' tab
+- Added Skill Bonus history for mons, and also now show their skill bonus applied in the sheet.
+- Added a check that will make sure you won't add a duplicate dex entry to your trainer sheet
+- 'data.modifiers.damageReduction' is now properly applied during damage calc.
+
+- Removed popup for 'how to apply damage', instead added extra options when applying damage on hover
+  - Apply half damage
+  - Apply damage as if resistant 1 step further
+  - Apply flat damage
+  - **NOTE:** Hold shift while hitting one of the buttons to apply an ad-hoc Damage Reduction.
+
+
 ## 1.2.16 - Small Fixes
 - Also added new modifiers UI to Trainer Sheets
 - Added modifiers UI to Skills & Stats
