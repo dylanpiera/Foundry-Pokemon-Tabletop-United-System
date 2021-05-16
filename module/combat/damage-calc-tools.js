@@ -22,19 +22,20 @@ export function applyDamageToTargets(event) {
 
 	let targeted_tokens = canvas.tokens.controlled;
 	if(targeted_tokens?.length == 0) return;
+
+    if(event.shiftKey) {
+        executeApplyDamageToTargets(canvas.tokens.controlled, moveData, moveData.regDamage ? moveData.regDamage : moveData.critDamage);
+        return;
+    }
 		
 	if(moveData.critDamage != moveData.regDamage) {
 	    let dialog = new Dialog({
-            title: "Crit or Regular Damage?",
-            content: "Would you like to apply crit or regular damage?",
+            title: "Is it flat damage?",
+            content: "Should the damage be applied as flat damage?",
             buttons: {
                 normal: {
                     label: "Normal Damage",
-                    callback: () => executeApplyDamageToTargets(canvas.tokens.controlled, moveData, moveData.regDamage)
-                },
-                critical: {
-                    label: "Critical Damage",
-                    callback: () => executeApplyDamageToTargets(canvas.tokens.controlled, moveData, moveData.critDamage)
+                    callback: () => executeApplyDamageToTargets(canvas.tokens.controlled, moveData, moveData.regDamage ? moveData.regDamage : moveData.critDamage)
                 },
                 isFlat: {
                     label: "Flat Damage",
@@ -54,11 +55,11 @@ export function applyDamageToTargets(event) {
             content: "Should the damage be applied as flat damage?",
             buttons: {
                 normal: {
-                    label: "No",
+                    label: "Normal Damage",
                     callback: () => executeApplyDamageToTargets(canvas.tokens.controlled, moveData, moveData.regDamage)
                 },
                 isFlat: {
-                    label: "Yes",
+                    label: "Flat Damage",
                     callback: () => executeApplyDamageToTargets(canvas.tokens.controlled, moveData, moveData.regDamage, true)
                 },
                 cancel: {
@@ -88,7 +89,7 @@ async function executeApplyDamageToTargets(targets, data, damage, isFlat = false
 		else {
 			let defense = data.category == "Special" ? target.actor.data.data.stats.spdef.total : target.actor.data.data.stats.def.total;
 
-			actualDamage = Math.max(1, Math.floor((damage - parseInt(defense)) * target.actor.data.data.effectiveness.All[data.type]))
+			actualDamage = Math.max(1, Math.floor((damage - parseInt(defense) - parseInt(target.actor.data.data.modifiers?.damageReduction?.total ?? 0)) * target.actor.data.data.effectiveness.All[data.type]))
 		}
 
         log(`Dealing ${actualDamage} damage to ${target.name}`); 
