@@ -33,7 +33,6 @@ export class PTUGen8CharacterSheet extends ActorSheet {
 		}
 
 		data['origins'] = this.actor.origins;
-		debug(data.origins, this.actor);
 
 		return data;
 	}
@@ -189,6 +188,16 @@ export class PTUGen8CharacterSheet extends ActorSheet {
 			autoFocus: true,
 			minLength: 1
 		});
+
+		Hooks.on("preCreateOwnedItem", (actor, itemData, options, sender) => {
+			if(actor.id !== this.actor.id || actor.data.type !== "character" || itemData.type !== "dexentry") return;
+			
+			const item = actor.items.getName(itemData.name)
+			if(item) {
+				//if(!item.data.owned) item.update({"data.owned": true});
+				return false;
+			}
+		})
 	}
 
 	_onDragItemStart(event) {}
@@ -220,6 +229,9 @@ export class PTUGen8CharacterSheet extends ActorSheet {
 			// Finally, create the effect!
 			debug("Created new effect",itemData);
 			return this.actor.createEmbeddedEntity(itemData.type, itemData);
+		}
+		if(itemData.type === "dexentry") {
+
 		}
 
 		// Finally, create the item!
