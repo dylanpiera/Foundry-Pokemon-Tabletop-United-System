@@ -657,6 +657,10 @@ span.readable {
 .actor .effects .inventory-list {
   width: 100%;
 }
+.actor .effects .inventory-list .effect-disabled,
+.actor .effects .inventory-list .effect-disabled ~ .item-list {
+  filter: opacity(0.5);
+}
 .actor .inventory-list {
   list-style: none;
   margin: 0;
@@ -738,7 +742,9 @@ span.readable {
 .actor .inventory-list .inventory-header .item-controls a.effect-delete,
 .effect-header a.effect-delete,
 .actor .inventory-list .inventory-header .item-controls a.effect-create,
-.effect-header a.effect-create {
+.effect-header a.effect-create,
+.actor .inventory-list .inventory-header .item-controls a.effect-suspend,
+.effect-header a.effect-suspend {
   background: #ffffffa6;
   border-radius: 5px;
   font-weight: 400;

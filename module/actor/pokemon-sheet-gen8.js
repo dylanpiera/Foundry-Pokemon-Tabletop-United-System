@@ -187,6 +187,18 @@ export class PTUGen8PokemonSheet extends ActorSheet {
 			effect.sheet.render(true);
 		});
 
+		// Disable Effect
+		html.find('.effect-suspend').click(async (ev) => {
+			ev.preventDefault();
+			const button = ev.currentTarget;
+			const effectId = button.dataset.id;
+			const effect = this.actor.effects.get(effectId);
+			const effectData = duplicate(effect.data);
+			effectData.disabled = !effectData.disabled;
+			await effect.update(effectData);
+			this.render(false);
+		});
+
 		// Delete Inventory Item
 		html.find('.item-delete').click((ev) => {
 			const li = $(ev.currentTarget).parents('.item');
