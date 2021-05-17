@@ -325,16 +325,33 @@ export class PTUGen8CharacterSheet extends ActorSheet {
 		move.data = PrepareMoveData(actor ? actor.data.data : this.actor.data.data, move.data);
 
 		/** Option Callbacks */
-		let PerformFullAttack = () => {
-			let acRoll = CalculateAcRoll(move.data, this.actor.data);
+		let PerformFullAttack = (damageBonus = 0) => {
+			const moveData = duplicate(move.data);
+			if(damageBonus != 0) moveData.damageBonus += damageBonus;
+
+			let acRoll = CalculateAcRoll(moveData, this.actor.data);
 			let diceResult = GetDiceResult(acRoll)
 
 			let crit = diceResult === 1 ? CritOptions.CRIT_MISS : diceResult >= 20 - this.actor.data.data.modifiers.critRange?.total ? CritOptions.CRIT_HIT : CritOptions.NORMAL;
 
-			let damageRoll;
+			let damageRoll, critRoll;
 			if(crit != CritOptions.CRIT_MISS) {
-				damageRoll = CalculateDmgRoll(move.data, this.actor.data.data, crit)
+				switch(game.settings.get("ptu", "combatRollPreference")) {
+					case "situational":
+						if(crit == CritOptions.CRIT_HIT) critRoll = CalculateDmgRoll(moveData, this.actor.data.data, crit);
+						else damageRoll = CalculateDmgRoll(moveData, this.actor.data.data, crit);
+					break;
+					case "both":
+						damageRoll = CalculateDmgRoll(moveData, this.actor.data.data, CritOptions.NORMAL);
+					case "always-crit":
+						critRoll = CalculateDmgRoll(moveData, this.actor.data.data, CritOptions.CRIT_HIT);
+					break;
+					case "always-normal":
+						damageRoll = CalculateDmgRoll(moveData, this.actor.data.data, CritOptions.NORMAL);
+					break;
+				}
 				if(damageRoll) damageRoll.roll();
+				if(critRoll) critRoll.roll();
 			}
 			sendMoveRollMessage(acRoll, {
 				speaker: ChatMessage.getSpeaker({
@@ -343,6 +360,7 @@ export class PTUGen8CharacterSheet extends ActorSheet {
 				name: move.name,
 				move: move.data,
 				damageRoll: damageRoll,
+				critRoll: critRoll,
 				templateType: MoveMessageTypes.FULL_ATTACK,
 				crit: crit
 			});
@@ -388,6 +406,14 @@ export class PTUGen8CharacterSheet extends ActorSheet {
 		/** Check for Shortcut */
 		// Instant full roll
 		if(event.shiftKey) {
+			if(event.altKey) {
+				Dialog.confirm({
+					title: `Apply Damage Bonus`,
+					content: `<input type="number" name="damage-bonus" value="0"></input>`,
+					yes: (html) => PerformFullAttack(parseInt(html.find('input[name="damage-bonus"]').val()))
+				});
+				return;
+			}
 			PerformFullAttack();
 			return;
 		}
@@ -458,7 +484,7 @@ function CalculateDmgRoll(moveData, actorData, isCrit) {
 
 	if (moveData.damageBase.toString().match(/^[0-9]+$/) != null) {
 		let dbRoll = game.ptu.DbData[moveData.stab ? parseInt(moveData.damageBase) + 2 : moveData.damageBase];
-		let bonus = Math.max(moveData.category === "Physical" ? actorData.stats.atk.total : actorData.stats.spatk.total, 0);
+		let bonus = Math.max((moveData.category === "Physical" ? (actorData.stats.atk.total + (actorData.modifiers.damageBonus?.physical?.total ?? 0)) : (actorData.stats.spatk.total + (actorData.modifiers.damageBonus?.special?.total ?? 0))) + (moveData.damageBonus ?? 0), 0);
 		if (!dbRoll) return;
 		return new Roll(isCrit == CritOptions.CRIT_HIT ? '@roll+@roll+@bonus' : '@roll+@bonus', {
 			roll: dbRoll,

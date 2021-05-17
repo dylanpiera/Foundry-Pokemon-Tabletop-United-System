@@ -290,10 +290,11 @@ export class PTUActor extends Actor {
 
     for (let [key, mod] of Object.entries(data.modifiers)) {
       if(key == "hardened" || key == "flinch_count" || key == 'immuneToEffectDamage') continue;
-      if(key == "evasion") {
-        for(let [evasion, value] of Object.entries(mod)) {
-          data.modifiers[key][evasion]["total"] = value["value"] + value["mod"];
+      if(key == "damageBonus" || key == "evasion") {
+        for(let [subkey, value] of Object.entries(mod)) {
+          data.modifiers[key][subkey]["total"] = (value["value"] ?? 0) + (value["mod"] ?? 0);
         }
+        continue;
       }
       else {
         data.modifiers[key]["total"] = (mod["value"] ?? 0) + (mod["mod"] ?? 0);
@@ -352,7 +353,7 @@ export class PTUActor extends Actor {
       if(key == "hardened" || key == "flinch_count" || key == 'immuneToEffectDamage') continue;
       if(key == "damageBonus" || key == "evasion") {
         for(let [subkey, value] of Object.entries(mod)) {
-          data.modifiers[key][subkey]["total"] = value["value"] + value["mod"];
+          data.modifiers[key][subkey]["total"] = (value["value"] ?? 0) + (value["mod"] ?? 0);
         }
         continue;
       }

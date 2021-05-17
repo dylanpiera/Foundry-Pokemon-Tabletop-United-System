@@ -532,6 +532,10 @@ export class PTUGen8PokemonSheet extends ActorSheet {
 			})
 			return;
 		}
+		if(event.altKey) {
+			RollDamage();
+			return;
+		}
 
 		/** Show Dialog */
 		let d = new Dialog({

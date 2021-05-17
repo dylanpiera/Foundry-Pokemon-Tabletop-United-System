@@ -1,6 +1,20 @@
 # Welcome to the Beta!
 Hey there! You are on the Beta Branch. If you ever have any feedback please do share with us over on [Github](https://github.com/dylanpiera/Foundry-Pokemon-Tabletop-United-System/issues) or [Discord](https://discord.gg/fE3w59q)
 
+## 1.2.18 - Settings & Damage Modifiers
+- Moved PTU Settings to its own menu in the Settings Tab
+- Added Damage Bonus fields to Moves
+- Added a Physical & Special Damage Bonus field to Trainer & Pokémon Sheets
+
+- Combat now keeps the 'data.modifiers.damageReduction' modifier in mind 
+- Automated the remainder of the Hardened buffs
+  - Damage Reduction is now applied
+  - 'data.modifiers.resistanceSteps' now manipulates the target's effectiveness
+  
+### Bugfixes
+- Fixed the Darumaka Line not generating properly due to Darmanitan not being oh so zen about things.
+- Fixed Stonjourner... just not existing... Like it wasn't there, at all... But now it is!
+
 ## 1.2.17 - Bugfixes & Damage Reduction
 - Fixed effects being deleted in combat when they shouldn't be
 
