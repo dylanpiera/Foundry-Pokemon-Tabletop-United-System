@@ -59,6 +59,16 @@
               "value": 0,
               "keys": []
             }
+          },
+          "damageReduction": {
+            "physical": {
+              "value": 0,
+              "keys": []
+            },
+            "special": {
+              "value": 0,
+              "keys": []
+            }
           }
         }
       },

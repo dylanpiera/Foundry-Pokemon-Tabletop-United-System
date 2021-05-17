@@ -973,6 +973,45 @@
                   </div>
                   <div class="swsh-header pt-1">
                     <div class="d-flex w-100 mt-1 mb-1">
+                      <div class="col">
+                        <label for="data.modifiers.damageReduction">Damage Reduction</label>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="swsh-header pt-1">
+                    <div class="d-flex w-100 mt-1 mb-1">
+                      <div class="col-sm-6">
+                        <label for="data.modifiers.damageReduction.physical.value">Physical</label>
+                      </div>
+                      <div class="col-sm-6">
+                        <label for="data.modifiers.damageReduction.special.value">Special</label>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="swsh-body">
+                    <div class="d-flex w-100 mt-1 mb-1">
+                      <div class="col-sm-6">
+                        {{> "mod-field" 
+                          mod=data.modifiers.damageReduction.physical.mod 
+                          path="data.modifiers.damageReduction.physical.value" 
+                          value=data.modifiers.damageReduction.physical.value 
+                          total=data.modifiers.damageReduction.physical.total
+                          dtype="Number" 
+                          modOrigins=(getProperty origins "data.modifiers.damageReduction.physical.mod")}}
+                      </div>
+                      <div class="col-sm-6">
+                        {{> "mod-field" 
+                          mod=data.modifiers.damageReduction.special.mod 
+                          path="data.modifiers.damageReduction.special.value" 
+                          value=data.modifiers.damageReduction.special.value 
+                          total=data.modifiers.damageReduction.special.total
+                          dtype="Number" 
+                          modOrigins=(getProperty origins "data.modifiers.damageReduction.special.mod")}}
+                      </div>
+                    </div>
+                  </div>
+                  <div class="swsh-header pt-1">
+                    <div class="d-flex w-100 mt-1 mb-1">
                       <div class="col-sm-4">
                         <label for="data.modifiers.evasion.physical.value">Phys Eva Bonus</label>
                       </div>
