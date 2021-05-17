@@ -107,6 +107,8 @@ export const EffectFns = new Map([
         /** Actually apply Affliction */
         const actor = lastCombatant.actor;
 
+        if(actor.data.data.modifiers.immuneToEffectDamage) return;
+
         let applyPoison = async () => {
             const token = canvas.tokens.get(lastCombatant.tokenId);
             await ApplyFlatDamage([token], "Poison", actor.data.data.health.tick);
@@ -135,6 +137,7 @@ export const EffectFns = new Map([
 
         /** Actually apply Affliction */
         const actor = lastCombatant.actor;
+        if(actor.data.data.modifiers.immuneToEffectDamage) return;
 
         let applyPoison = async () => {
             const token = canvas.tokens.get(lastCombatant.tokenId);
@@ -166,6 +169,7 @@ export const EffectFns = new Map([
 
         /** Actually apply Affliction */
         const actor = lastCombatant.actor;
+        if(actor.data.data.modifiers.immuneToEffectDamage) return;
 
         let applyBurn = async () => {
             const token = canvas.tokens.get(lastCombatant.tokenId);
@@ -195,6 +199,7 @@ export const EffectFns = new Map([
 
         /** Actually apply Affliction */
         const actor = lastCombatant.actor;
+        if(actor.data.data.modifiers.immuneToEffectDamage) return;
 
         let applyCurse = async () => {
             const token = canvas.tokens.get(lastCombatant.tokenId);
@@ -231,6 +236,7 @@ export const EffectFns = new Map([
 
 
         let applyConfusion = async (type) => {
+            if(actor.data.data.modifiers.immuneToEffectDamage) return;
             const token = canvas.tokens.get(lastCombatant.tokenId);
             switch(type) {
                 case 3: {
@@ -596,6 +602,7 @@ export const EffectFns = new Map([
 
         /** Actually apply Affliction */
         const actor = lastCombatant.actor;
+        if(actor.data.data.modifiers.immuneToEffectDamage) return;
 
         const token = canvas.tokens.get(lastCombatant.tokenId);
         await ApplyFlatDamage([token], "Nightmare (Bad Sleep)", actor.data.data.health.tick * 2);

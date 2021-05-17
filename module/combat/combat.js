@@ -167,7 +167,6 @@ export default class PTUCombat {
     }
 
     _onDelete(combat) {
-        debug(combat.id, this.combat.id);
         if(combat.id != this.combat.id) return;
         this.destroy(false);
     }
@@ -197,7 +196,7 @@ export default class PTUCombat {
             if(options.turn.direction == CONFIG.PTUCombat.DirectionOptions.FORWARD) {
                 const curRound = (options.round.direction == CONFIG.PTUCombat.DirectionOptions.FORWARD) ? lastTurn.round : combat.round;
                 const startRound = effect.data.duration?.startRound;
-                if((startRound - curRound) <= (effect.data.duration?.rounds * -1)) {
+                if((startRound - curRound) <= ((effect.data.duration?.rounds ?? NaN) * -1)) {
                     // If turns is bigger than 0, the effect needs to be deleted at the end of the turn
                     // if it is undefined, it should be deleted at the start of the turn (ergo not now)
                     if(effect.data.duration?.turns > 0)  {
@@ -224,7 +223,7 @@ export default class PTUCombat {
                 const curRound = combat.round;
                 const startRound = effect.data.duration?.startRound;
                 debug((startRound - curRound), effect.data.duration?.rounds * -1);
-                if((startRound - curRound) <= (effect.data.duration?.rounds * -1)) {
+                if((startRound - curRound) <= ((effect.data.duration?.rounds ?? NaN) * -1)) {
                     if(effect.data.duration?.turns > 0) continue; // Needs to be removed at end of turn
                     await effect.delete();
                 }

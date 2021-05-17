@@ -1,4 +1,5 @@
 import { debug, error, log, PrepareMoveData, warn } from '../ptu.js'
+import { HardenedChanges } from '../data/training-data.js'
 
 /**
  * Extend the basic ActorSheet with some very simple modifications
@@ -31,6 +32,8 @@ export class PTUGen8PokemonSheet extends ActorSheet {
 		if (this.actor.data.type == 'pokemon') {
 			this._prepareCharacterItems(data);
 		}
+
+		data['origins'] = this.actor.origins;
 
 		data['compendiumItems'] = game.ptu.items;
 		data['natures'] = game.ptu.natureData;
@@ -184,6 +187,18 @@ export class PTUGen8PokemonSheet extends ActorSheet {
 			effect.sheet.render(true);
 		});
 
+		// Disable Effect
+		html.find('.effect-suspend').click(async (ev) => {
+			ev.preventDefault();
+			const button = ev.currentTarget;
+			const effectId = button.dataset.id;
+			const effect = this.actor.effects.get(effectId);
+			const effectData = duplicate(effect.data);
+			effectData.disabled = !effectData.disabled;
+			await effect.update(effectData);
+			this.render(false);
+		});
+
 		// Delete Inventory Item
 		html.find('.item-delete').click((ev) => {
 			const li = $(ev.currentTarget).parents('.item');
@@ -201,7 +216,7 @@ export class PTUGen8PokemonSheet extends ActorSheet {
 		});
 
 		// Rollable abilities.
-		html.find('.rollable.skill').click(this._onRoll.bind(this));
+		html.find('.rollable.skill').click(this._onSkillRoll.bind(this));
 		html.find('.rollable.gen8move').click(this._onMoveRoll.bind(this));
 		html.find('.rollable.save').click(this._onSaveRoll.bind(this));
 
@@ -220,6 +235,97 @@ export class PTUGen8PokemonSheet extends ActorSheet {
 			autoFocus: true,
 			minLength: 1
 		});
+
+		html.find('input[name="data.pokeball"]').autocomplete({
+			source: game.ptu.items.filter(x => x.data.category == "PokeBalls" || x.name.toLowerCase().endsWith("ball")).map((i) => i.data.name),
+			autoFocus: true,
+			minLength: 1
+		});
+
+		html.find('input[name="data.health.injuries"]').change(async (event) => {
+			await new Promise(r => setTimeout(r, 100));
+
+			const value = Number(event.currentTarget.value);
+			if(isNaN(value)) return;
+
+			await this._applyHardenedEffect(value, this.actor.data.data.modifiers.hardened);
+		})
+
+		html.find('input[data-name="data.modifiers.hardened"]').click(async (event) => {
+			const value = Number(this.actor.data.data.health.injuries);
+			const isHardened = event.currentTarget.checked;
+
+			await this._applyHardenedEffect(value, isHardened);
+		})
+
+		html.find('input[data-name^="data.training"]').click(async (event) => {
+			const path = event.currentTarget.dataset.name;
+			const training = path.split('.')[2];
+			const isOrder = path.split('.')[3] == "ordered";
+
+			// If property is true
+			if(getProperty(this.actor.data, path)) {
+				const effects = [];
+				this.actor.data.effects.forEach(effect => {
+					if(effect.changes.some(change => change.key == path)) {
+						effects.push(effect._id);
+						return;
+					}
+				});
+				
+				if(effects.length == 0 ) {
+					return await this.actor.update({[path]: false});
+				}
+
+				for(let id of effects) {
+					await this.actor.effects.get(id).delete();
+				}
+				return;
+			}
+
+			const effectData = new ActiveEffect({
+				changes: [{"key":path,"mode":5,"value":true,"priority":50}].concat(game.ptu.getTrainingChanges(training, isOrder).changes),
+				label: `${training.capitalize()} ${training == 'critical' ? "Moment" : isOrder ? "Order" : "Training"}`,
+				icon: "",
+				transfer: false,
+				'flags.ptu.editLocked': true,
+				_id: randomID()
+			}).data
+			return await this.actor.createEmbeddedEntity("ActiveEffect", effectData);
+		})
+	}
+
+	async _applyHardenedEffect(value, isHardened) {
+		const calcHardenedChanges = (injuries) => {
+			const changes = [];
+			for(let i = 0; i <= injuries; i++) {
+				if(HardenedChanges[i])
+					changes.push(...HardenedChanges[i])
+			}
+			return changes;
+		} 
+
+		const effect = this.actor.effects.find(x => x.data.label == "Hardened Injuries")
+		if(value === 0 || !isHardened) {
+			if(effect) {
+				await effect.delete();
+				if(this.actor.data.data.modifiers.hardened) await this.actor.update({'data.modifiers.hardened': false});
+			}
+			return;
+		}
+
+		if(!effect) {
+			const effectData = new ActiveEffect({
+				changes: calcHardenedChanges(value),
+				label: 'Hardened Injuries',
+				icon: "",
+				transfer: false,
+				'flags.ptu.editLocked': true,
+				_id: randomID()
+			}).data
+			return await this.actor.createEmbeddedEntity("ActiveEffect", effectData);
+		}
+		await effect.update({changes: calcHardenedChanges(value)});
 	}
 
 	_onDragItemStart(event) {}
@@ -263,14 +369,12 @@ export class PTUGen8PokemonSheet extends ActorSheet {
 	 * @param {Event} event   The originating click event
 	 * @private
 	 */
-	_onRoll(event) {
+	_onSkillRoll(event) {
 		event.preventDefault();
 		const element = event.currentTarget;
 		const dataset = element.dataset;
 
 		if (dataset.roll) {
-			let mod = (this.actor.data.data.training?.focused?.trained ? this.actor.data.data.training?.critical ? 6 : 2 : 0) + (this.actor.data.data.training?.focused?.ordered ? 2 : 0);
-			if(mod > 0) dataset.roll += `+${mod}`;
 			let roll = new Roll(dataset.roll, this.actor.data.data);
 			let label = dataset.label ? `Rolling ${dataset.label}` : '';
 			roll.roll().toMessage({
@@ -291,7 +395,7 @@ export class PTUGen8PokemonSheet extends ActorSheet {
 		event.preventDefault();
 		if(event.screenX == 0 && event.screenY == 0) return;
 
-		let mod = (this.actor.data.data.training?.inspired?.trained ? this.actor.data.data.training?.critical ? 6 : 2 : 0) + (this.actor.data.data.training?.inspired?.ordered ? 2 : 0) + this.actor.data.data.modifiers.saveChecks;
+		let mod = this.actor.data.data.modifiers.saveChecks?.total;
 		let roll = new Roll("1d20 + @mod", {mod: mod});
 		
 		roll.roll();
@@ -325,26 +429,29 @@ export class PTUGen8PokemonSheet extends ActorSheet {
 		move.data = PrepareMoveData(actor ? actor.data.data : this.actor.data.data, move.data);
 
 		/** Option Callbacks */
-		let PerformFullAttack = () => {
-			let acRoll = CalculateAcRoll(move.data, this.actor.data);
+		let PerformFullAttack = (damageBonus = 0) => {
+			const moveData = duplicate(move.data);
+			if(damageBonus != 0) moveData.damageBonus += damageBonus;
+
+			let acRoll = CalculateAcRoll(moveData, this.actor.data);
 			let diceResult = GetDiceResult(acRoll)
 
-			let crit = diceResult === 1 ? CritOptions.CRIT_MISS : (diceResult >= 20 - this.actor.data.data.modifiers.critRange - (this.actor.data.data.training?.brutal?.trained ? this.actor.data.data.training?.critical ? 3 : 1 : 0) - (this.actor.data.data.training?.brutal?.ordered ? 1 : 0)) ? CritOptions.CRIT_HIT : CritOptions.NORMAL;
+			let crit = diceResult === 1 ? CritOptions.CRIT_MISS : (diceResult >= 20 - this.actor.data.data.modifiers.critRange?.total) ? CritOptions.CRIT_HIT : CritOptions.NORMAL;
 
 			let damageRoll, critRoll;
 			if(crit != CritOptions.CRIT_MISS) {
 				switch(game.settings.get("ptu", "combatRollPreference")) {
 					case "situational":
-						if(crit == CritOptions.CRIT_HIT) critRoll = CalculateDmgRoll(move.data, this.actor.data.data, crit);
-						else damageRoll = CalculateDmgRoll(move.data, this.actor.data.data, crit);
+						if(crit == CritOptions.CRIT_HIT) critRoll = CalculateDmgRoll(moveData, this.actor.data.data, crit);
+						else damageRoll = CalculateDmgRoll(moveData, this.actor.data.data, crit);
 					break;
 					case "both":
-						damageRoll = CalculateDmgRoll(move.data, this.actor.data.data, CritOptions.NORMAL);
+						damageRoll = CalculateDmgRoll(moveData, this.actor.data.data, CritOptions.NORMAL);
 					case "always-crit":
-						critRoll = CalculateDmgRoll(move.data, this.actor.data.data, CritOptions.CRIT_HIT);
+						critRoll = CalculateDmgRoll(moveData, this.actor.data.data, CritOptions.CRIT_HIT);
 					break;
 					case "always-normal":
-						damageRoll = CalculateDmgRoll(move.data, this.actor.data.data, CritOptions.NORMAL);
+						damageRoll = CalculateDmgRoll(moveData, this.actor.data.data, CritOptions.NORMAL);
 					break;
 				}
 				if(damageRoll) damageRoll.roll();
@@ -403,6 +510,14 @@ export class PTUGen8PokemonSheet extends ActorSheet {
 		/** Check for Shortcut */
 		// Instant full roll
 		if(event.shiftKey) {
+			if(event.altKey) {
+				Dialog.confirm({
+					title: `Apply Damage Bonus`,
+					content: `<input type="number" name="damage-bonus" value="0"></input>`,
+					yes: (html) => PerformFullAttack(parseInt(html.find('input[name="damage-bonus"]').val()))
+				});
+				return;
+			}
 			PerformFullAttack();
 			return;
 		}
@@ -418,7 +533,7 @@ export class PTUGen8PokemonSheet extends ActorSheet {
 			return;
 		}
 		if(event.altKey) {
-			if (move.data.category !== "Status") RollDamage();
+			RollDamage();
 			return;
 		}
 
@@ -467,7 +582,7 @@ function CalculateAcRoll(moveData, actor) {
 	return new Roll('1d20-@ac+@acBonus', {
 		ac: (parseInt(moveData.ac) || 0),
 		acBonus: (actor.flags?.ptu?.is_blind ? actor.flags?.ptu?.is_totally_blind ? -10 : -6 : 0) + 
-		(parseInt(actor.data.modifiers.acBonus) || 0) + (actor.data.training?.focused?.trained ? actor.data.training?.critical ? 3 : 1 : 0) + (actor.data.training?.focused?.ordered ? 1 : 0)
+		(parseInt(actor.data.modifiers.acBonus?.total) || 0)
 	})
 }
 
@@ -476,7 +591,7 @@ function CalculateDmgRoll(moveData, actorData, isCrit) {
 
 	if (moveData.damageBase.toString().match(/^[0-9]+$/) != null) {
 		let dbRoll = game.ptu.DbData[moveData.stab ? parseInt(moveData.damageBase) + 2 : moveData.damageBase];
-		let bonus = Math.max(moveData.category === "Physical" ? actorData.stats.atk.total : actorData.stats.spatk.total, 0);
+		let bonus = Math.max((moveData.category === "Physical" ? (actorData.stats.atk.total + (actorData.modifiers.damageBonus?.physical?.total ?? 0)) : (actorData.stats.spatk.total + (actorData.modifiers.damageBonus?.special?.total ?? 0))) + (moveData.damageBonus ?? 0), 0);
 		if (!dbRoll) return;
 		return new Roll(isCrit == CritOptions.CRIT_HIT ? '@roll+@roll+@bonus' : '@roll+@bonus', {
 			roll: dbRoll,

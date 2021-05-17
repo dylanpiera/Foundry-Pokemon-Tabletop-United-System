@@ -165,7 +165,7 @@ a.item {
   left: 0;
   bottom: -45px;
   padding: 0px 20px;
-  width: 100%;
+  width: fit-content;
 }
 .container-fluid > .sheet-footer .tabs {
   padding-right: 8px;
@@ -657,6 +657,10 @@ span.readable {
 .actor .effects .inventory-list {
   width: 100%;
 }
+.actor .effects .inventory-list .effect-disabled,
+.actor .effects .inventory-list .effect-disabled ~ .item-list {
+  filter: opacity(0.5);
+}
 .actor .inventory-list {
   list-style: none;
   margin: 0;
@@ -677,6 +681,7 @@ span.readable {
   line-height: 20px;
   background: transparent;
   font-weight: bold;
+  box-shadow: none;
 }
 .actor .inventory-list .inventory-header h3 {
   margin: 0;
@@ -737,7 +742,9 @@ span.readable {
 .actor .inventory-list .inventory-header .item-controls a.effect-delete,
 .effect-header a.effect-delete,
 .actor .inventory-list .inventory-header .item-controls a.effect-create,
-.effect-header a.effect-create {
+.effect-header a.effect-create,
+.actor .inventory-list .inventory-header .item-controls a.effect-suspend,
+.effect-header a.effect-suspend {
   background: #ffffffa6;
   border-radius: 5px;
   font-weight: 400;
@@ -808,7 +815,7 @@ span.readable {
   left: 0;
   top: 27px;
   padding: 0px 20px;
-  width: 100%;
+  width: fit-content;
   z-index: 20;
   height: fit-content;
 }
@@ -990,6 +997,31 @@ p.summary {
 .message-content .dice-roll .dice-total {
   flex: 0 0 100% !important;
   word-break: break-word !important;
+}
+div.hover-button {
+  display: none;
+  position: absolute;
+  bottom: -117%;
+  width: 130%;
+  transform: translate(-16%);
+}
+.apply-damage-button:hover > .hover-button {
+  display: flex;
+  flex-direction: row;
+}
+a.hover-button {
+  flex: 1 1 30%;
+  font-size: 7px;
+  word-break: break-word;
+  background: #999;
+  border: 1px solid #777;
+  margin: 1px;
+  border-radius: 7%;
+  letter-spacing: 0.5px;
+  font-weight: 100;
+}
+a.hover-button.resist-damage-button {
+  font-size: 6px;
 }
 /* ----------------------------------------- */
 /*  Dice Tooltip
@@ -1248,6 +1280,74 @@ p.summary {
 }
 header.effect-change.effects-header.flexrow > div {
   text-align: center;
+  white-space: nowrap;
+}
+.damage-mod-header {
+  position: absolute;
+  top: 5px;
+  right: 20px;
+  width: 50%;
+  max-width: 400px;
+  text-align: center;
+  white-space: nowrap;
+}
+.small-input input {
+  height: 20px !important;
+}
+.mod-input {
+  position: relative;
+}
+.mod-input:before {
+  content: attr(data-mod);
+  padding: 5px 5px 0 0;
+  color: #19181370;
+  position: absolute;
+  right: 0;
+  pointer-events: none;
+}
+.mod-input:hover > .mod-tooltip {
+  display: block;
+}
+.mod-input .mod-tooltip {
+  display: none;
+  position: absolute;
+  top: -10px;
+  left: 50%;
+  width: 100%;
+  min-width: 13rem;
+  background: linear-gradient(45deg, #ECDBEB, #DFFFFE);
+  transform: translate(-50%, -100%);
+  border: black 1px solid;
+  box-shadow: #00000060 0 0 15px;
+  z-index: 100;
+}
+.mod-input .mod-tooltip:hover {
+  display: block;
+}
+.mod-input .mod-tooltip.bottom-display {
+  top: unset;
+  bottom: -10px;
+  transform: translate(-50%, 100%);
+}
+.mod-input .mod-tooltip ol {
+  padding-inline-start: 0;
+  text-align: start;
+  font-size: 12px;
+  font-family: sans-serif;
+}
+.settings .settings-body {
+  padding-top: 15px;
+}
+.settings .settings-tabs {
+  flex: 0 0 32px;
+  line-height: 32px;
+  font-size: 16px;
+  border-bottom: 1px solid black;
+}
+.settings .settings-tabs .fas {
+  padding-right: 10px;
+}
+.settings .settings-tabs.tabs .item {
   white-space: nowrap;
 }
 /* MD CSS */

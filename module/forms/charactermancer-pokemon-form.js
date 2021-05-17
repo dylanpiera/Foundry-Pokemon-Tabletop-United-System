@@ -44,7 +44,7 @@ export class PTUPokemonCharactermancer extends FormApplication {
     data.selectedSpecies = this.speciesData;
 
     data.level = this.object.data.data.level.current;
-    data.levelUpPoints = this.object.data.data.modifiers.statPoints + 10 + data.level;
+    data.levelUpPoints = this.object.data.data.modifiers.statPoints?.total + 10 + data.level;
     data.nature = this.object.data.data.nature;
 
     // Stats
@@ -283,7 +283,7 @@ export class PTUPokemonCharactermancer extends FormApplication {
   }
 
   _reCalcStats() {
-    this.data.levelUpPoints = this.object.data.data.modifiers.statPoints + 10 + this.data.level;
+    this.data.levelUpPoints = this.object.data.data.modifiers.statPoints?.total + 10 + this.data.level;
     this.data.stats = this.object.data.data.stats;
     this.data.stats.hp.value = CalcBaseStat(this.data.selectedSpecies, this.data.nature.value, "HP");
     this.data.stats.atk.value = CalcBaseStat(this.data.selectedSpecies, this.data.nature.value, "Attack");

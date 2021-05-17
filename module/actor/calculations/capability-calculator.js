@@ -1,4 +1,4 @@
-import { warn } from "../../ptu.js";
+import { debug, warn } from "../../ptu.js";
 
 export function CalculateTrainerCapabilities(trainerSkills, items, speedCombatStages, ptuFlags) {
     let mods = {
@@ -13,32 +13,32 @@ export function CalculateTrainerCapabilities(trainerSkills, items, speedCombatSt
     }
 
     let calcOverlandSpeed = function () {
-        if ((trainerSkills.survival.value > trainerSkills.athletics.value || trainerSkills.survival.value > trainerSkills.acrobatics.value) && mods["Traveler"]) {
-            if (trainerSkills.athletics.value > trainerSkills.acrobatics.value) return Math.floor((trainerSkills.athletics.value + trainerSkills.survival.value) / 2);
-            else return Math.floor((trainerSkills.acrobatics.value + trainerSkills.survival.value) / 2);
+        if ((trainerSkills.survival.value.total > trainerSkills.athletics.value.total || trainerSkills.survival.value.total > trainerSkills.acrobatics.value.total) && mods["Traveler"]) {
+            if (trainerSkills.athletics.value.total > trainerSkills.acrobatics.value.total) return Math.floor((trainerSkills.athletics.value.total + trainerSkills.survival.value.total) / 2);
+            else return Math.floor((trainerSkills.acrobatics.value.total + trainerSkills.survival.value.total) / 2);
         }
-        return Math.floor((trainerSkills.athletics.value + trainerSkills.acrobatics.value) / 2)
+        return Math.floor((trainerSkills.athletics.value.total + trainerSkills.acrobatics.value.total) / 2)
     }
 
     let calcHighJump = function () {
-        if (trainerSkills.survival.value > trainerSkills.acrobatics.value && mods["Traveler"]) {
-            return trainerSkills.survival.value >= 6 ? 2 : trainerSkills.survival.value >= 4 ? 1 : 0;
+        if (trainerSkills.survival.value.total > trainerSkills.acrobatics.value.total && mods["Traveler"]) {
+            return trainerSkills.survival.value.total >= 6 ? 2 : trainerSkills.survival.value.total >= 4 ? 1 : 0;
         }
-        return trainerSkills.acrobatics.value >= 6 ? 2 : trainerSkills.acrobatics.value >= 4 ? 1 : 0;
+        return trainerSkills.acrobatics.value.total >= 6 ? 2 : trainerSkills.acrobatics.value.total >= 4 ? 1 : 0;
     }
 
     let calcLongJump = function () {
-        if (trainerSkills.survival.value > trainerSkills.acrobatics.value && mods["Traveler"]) {
-            return Math.trunc(trainerSkills.survival.value / 2)
+        if (trainerSkills.survival.value.total > trainerSkills.acrobatics.value.total && mods["Traveler"]) {
+            return Math.trunc(trainerSkills.survival.value.total / 2)
         }
-        return Math.trunc(trainerSkills.acrobatics.value / 2)
+        return Math.trunc(trainerSkills.acrobatics.value.total / 2)
     }
 
     let calcPower = function () {
-        if (trainerSkills.survival.value > trainerSkills.athletics.value && mods["Traveler"]) {
-            return (trainerSkills.survival.value >= 3 ? 1 : 0) + (trainerSkills.combat.value >= 4 ? 1 : 0);
+        if (trainerSkills.survival.value.total > trainerSkills.athletics.value.total && mods["Traveler"]) {
+            return (trainerSkills.survival.value.total >= 3 ? 1 : 0) + (trainerSkills.combat.value.total >= 4 ? 1 : 0);
         }
-        return (trainerSkills.athletics.value >= 3 ? 1 : 0) + (trainerSkills.combat.value >= 4 ? 1 : 0);
+        return (trainerSkills.athletics.value.total >= 3 ? 1 : 0) + (trainerSkills.combat.value.total >= 4 ? 1 : 0);
     }
 
     for (let item of items.values()) {
@@ -114,7 +114,7 @@ export function CalculateTrainerCapabilities(trainerSkills, items, speedCombatSt
 
     let capabilities = {
         "Overland": Math.max(2, calcOverlandSpeed() + 3) + mods["Overland"],
-        "Throwing Range": trainerSkills.athletics.value + 4 + mods["Throwing Range"],
+        "Throwing Range": trainerSkills.athletics.value.total + 4 + mods["Throwing Range"],
         "High Jump": calcHighJump() + mods["High Jump"],
         "Long Jump": calcLongJump() + mods["Long Jump"],
         "Power": calcPower() + 4 + mods["Power"]
@@ -133,7 +133,7 @@ export function CalculateTrainerCapabilities(trainerSkills, items, speedCombatSt
     return capabilities;
 }
 
-export function CalculatePokemonCapabilities(speciesData, items, speedCombatStages = 0, training = {}, ptuFlags = undefined) {
+export function CalculatePokemonCapabilities(speciesData, items, speedCombatStages = 0, capabilityMod = 0, ptuFlags = undefined) {
     if (speciesData?.Capabilities == null) return [];
 
     if (typeof (speciesData.Capabilities.Overland) === "string") {
@@ -193,7 +193,7 @@ export function CalculatePokemonCapabilities(speciesData, items, speedCombatStag
             };
             if (key == "Power" || key == "Weight Class" || key == "Naturewalk" || key == "Other") continue;
             if (speciesData.Capabilities[key] > 0) {
-                speciesData.Capabilities[key] = Math.max(speciesData.Capabilities[key] + spcsChanges + (training?.agility?.trained ? training?.critical ? 3 : 1 : 0) + (training?.agility?.ordered ? 1 : 0), speciesData.Capabilities[key] > 1 ? 2 : 1)
+                speciesData.Capabilities[key] = Math.max(speciesData.Capabilities[key] + spcsChanges + capabilityMod ?? 0, speciesData.Capabilities[key] > 1 ? 2 : 1)
                 if(isSlowed) speciesData.Capabilities[key] = Math.max(1, Math.floor(speciesData.Capabilities[key] * 0.5));
             }
         }

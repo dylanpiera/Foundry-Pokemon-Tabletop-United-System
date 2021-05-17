@@ -43,13 +43,15 @@ import Api from './api/api.js'
 import RenderDex from './utils/pokedex.js'
 import TMsData from './data/tm-data.js'
 import PTUActiveEffectConfig from './forms/active-effect-config.js';
+import getTrainingChanges from './data/training-data.js';
+import {PTUSettings, PTUSettingCategories} from './forms/settings.js';
 
 export let debug = (...args) => {if (game.settings.get("ptu", "showDebugInfo") ?? false) console.log("DEBUG: FVTT PTU | ", ...args)};
 export let log = (...args) => console.log("FVTT PTU | ", ...args);
 export let warn = (...args) => console.warn("FVTT PTU | ", ...args);
 export let error = (...args) => console.error("FVTT PTU | ", ...args)
 
-export const LATEST_VERSION = "1.2.14";
+export const LATEST_VERSION = "1.2.18.1";
 
 function registerSheets() {
   // Register sheet application classes
@@ -70,6 +72,7 @@ async function registerHandlebars() {
 
   fetch('/systems/ptu/templates/partials/charactermancer-evolution-partial.hbs').then(r => r.text().then(template => Handlebars.registerPartial('cm-evolution', template)))
   fetch('/systems/ptu/templates/partials/active-effects.hbs').then(r => r.text().then(template => Handlebars.registerPartial('active-effects', template)));
+  fetch('/systems/ptu/templates/partials/mod-field.hbs').then(r => r.text().then(template => Handlebars.registerPartial('mod-field', template)));
 
   Handlebars.registerHelper("concat", function() {
     var outStr = '';
@@ -115,11 +118,19 @@ async function registerHandlebars() {
 		return _calcMoveDb(PrepareMoveData(actorData, move), bool);
   });
   Handlebars.registerHelper("calcCritRange", function (actorData) {
-		return actorData.modifiers.critRange ? actorData.modifiers.critRange : 0;
+		return actorData.modifiers.critRange?.total ? actorData.modifiers.critRange?.total : 0;
   });
   Handlebars.registerHelper("calcCritRangeMove", function (move) {
     return move.owner ? move.owner.critRange : 0;
   });
+  Handlebars.registerHelper("getProperty", getProperty);
+  Handlebars.registerHelper("aeTypes", function(id) {
+    const types = Object.entries(CONST.ACTIVE_EFFECT_MODES).reduce((obj, e) => {
+      obj[e[1]] = game.i18n.localize("EFFECT.MODE_"+e[0]);
+      return obj;
+    }, {});
+    return id ? types[id] : types;
+  })
 
   function keyToNatureStat(key) {
     switch (key) {
@@ -184,7 +195,7 @@ async function registerHandlebars() {
 
   function _calcMoveDb(move, bool = false) {
     if(move.category === "Status") return;
-    let bonus = move.owner ? move.category === "Physical" ? move.owner.stats.atk.total : move.owner.stats.spatk.total : 0;
+    let bonus = (move.owner ? move.category === "Physical" ? (move.owner.stats.atk.total + (move.owner.damageBonus?.physical?.total ?? 0)) : (move.owner.stats.spatk.total + (move.owner.damageBonus?.special?.total ?? 0)) : 0 )+ (move.damageBonus ?? 0);
     if(move.damageBase.toString().match(/^[0-9]+$/) != null) {
       let db = game.ptu.DbData[move.stab ? parseInt(move.damageBase) + 2 : move.damageBase];  
       if(db) return db + (bool ? " + " : "#") + bonus;
@@ -248,7 +259,10 @@ Hooks.once('init', async function() {
     cache: {
       GetOrCreateCachedItem
     },
-    api: new Api()
+    api: new Api(),
+    getTrainingChanges,
+    settings: PTUSettings,
+    settingCategories: PTUSettingCategories
   };
 
   /**
@@ -294,8 +308,9 @@ export function PrepareMoveData(actorData, move) {
   move.owner = { 
     type: actorData.typing,
     stats: actorData.stats,
-    acBonus: actorData.modifiers.acBonus,
-    critRange: actorData.modifiers.critRange
+    acBonus: actorData.modifiers.acBonus.total,
+    critRange: actorData.modifiers.critRange.total,
+    damageBonus: actorData.modifiers.damageBonus
   };
   move.prepared = true;
 
@@ -316,6 +331,7 @@ function _loadSystemSettings() {
     config: true,
     type: Boolean,
     default: true,
+    category: "rules"
   });
 
   game.settings.register("ptu", "useTutorPoints", {
@@ -328,7 +344,8 @@ function _loadSystemSettings() {
       "true": "Use Tutor Points",
       "false": "Don't use Tutor Points"
     },
-    default: "true"
+    default: "true",
+    category: "rules"
   });
 
   game.settings.register("ptu", "useDexExp", {
@@ -341,7 +358,8 @@ function _loadSystemSettings() {
       "true": "Use Dex Exp",
       "false": "Don't use Dex Exp"
     },
-    default: "false"
+    default: "false",
+    category: "rules"
   });
 
   game.settings.register("ptu", "nonOwnerCanSeeTabs", {
@@ -350,7 +368,8 @@ function _loadSystemSettings() {
     scope: "world",
     config: true,
     type: Boolean,
-    default: false
+    default: false,
+    category: "general"
   });
 
   game.settings.register("ptu", "dex-permission", {
@@ -366,7 +385,8 @@ function _loadSystemSettings() {
       4: "GM Prompt (**NOT YET IMPLEMENTED**)",
       5: "Always allow Pokédex", 
     },
-    default: 1
+    default: 1,
+    category: "general"
   })
 
   game.settings.register("ptu", "combatRollPreference", {
@@ -381,7 +401,8 @@ function _loadSystemSettings() {
       "always-crit": "Always roll crit damage",
       "both": "Always roll both"
     },
-    default: "situational"
+    default: "situational",
+    category: "combat"
   });
 
   game.settings.register("ptu", "combatDescPreference", {
@@ -396,7 +417,8 @@ function _loadSystemSettings() {
       "snippet-or-full": "Show move snippet, or full effect if unset",
       "show": "Show full effect"
     },
-    default: "snippet"
+    default: "snippet",
+    category: "combat"
   });
 
   game.settings.register("ptu", "defaultPokemonImageDirectory", {
@@ -406,6 +428,7 @@ function _loadSystemSettings() {
     config: true,
     type: DirectoryPicker.Directory,
     default: "Gen4-Art/",
+    category: "general"
   });
 
   game.settings.register("ptu", "leagueBattleInvertTrainerInitiative", {
@@ -414,7 +437,8 @@ function _loadSystemSettings() {
     scope: "world",
     config: true,
     type: Boolean,
-    default: true
+    default: true,
+    category: "combat"
   });
 
   game.settings.register("ptu", "verboseChatInfo", {
@@ -451,7 +475,8 @@ function _loadSystemSettings() {
     scope: "world",
     config: true,
     type: Boolean,
-    default: false
+    default: false,
+    category: "rules"
   });
 
   game.settings.register("ptu", "sageData", {
@@ -460,7 +485,8 @@ function _loadSystemSettings() {
     scope: "world",
     config: true,
     type: Boolean,
-    default: false
+    default: false,
+    category: "rules"
   });
 
   game.settings.register("ptu", "uraniumData", {
@@ -469,7 +495,8 @@ function _loadSystemSettings() {
     scope: "world",
     config: true,
     type: Boolean,
-    default: false
+    default: false,
+    category: "rules"
   });
 
   game.settings.register("ptu", "customSpecies", {
@@ -496,7 +523,8 @@ function _loadSystemSettings() {
     config: true,
     type: Boolean,
     default: false,
-    onChange: (value) => CustomSpeciesFolder.updateFolderDisplay(value)
+    onChange: (value) => CustomSpeciesFolder.updateFolderDisplay(value),
+    category: "other"
   });
 
   game.settings.register("ptu", "playPokemonCriesOnDrop", {
@@ -505,7 +533,8 @@ function _loadSystemSettings() {
     scope: "world",
     config: true,
     type: Boolean,
-    default: false
+    default: false,
+    category: "other"
   });
 
   game.settings.register("ptu", "pokemonCryDirectory", {
@@ -515,7 +544,8 @@ function _loadSystemSettings() {
     config: true,
     type: DirectoryPicker.Directory,
     default: "pokemon_cries/",
-    onChange: (value) => CustomSpeciesFolder.updateFolderDisplay(value)
+    onChange: (value) => CustomSpeciesFolder.updateFolderDisplay(value),
+    category: "other"
   });
 
   game.settings.register("ptu", "moveSoundDirectory", {
@@ -525,7 +555,8 @@ function _loadSystemSettings() {
     config: true,
     type: DirectoryPicker.Directory,
     default: "pokemon_sounds/",
-    onChange: (value) => CustomSpeciesFolder.updateFolderDisplay(value)
+    onChange: (value) => CustomSpeciesFolder.updateFolderDisplay(value),
+    category: "other"
   });
 } 
 
@@ -566,19 +597,18 @@ Hooks.on('dropActorSheetData', function(actor, sheet, itemDropData, ){
   return false;
 });
 
-Hooks.on("renderSettingsConfig", function() {
-  let element = $('#client-settings .tab[data-tab="system"] .module-header')[0];
-  element.outerHTML = `
-  <div class="d-flex flexrow">
-    ${element.outerHTML}
-    <div class="item-controls flexcol" style="align-self: center;flex: 0 0 30%;">
-      <a class="item-control" id="open-custom-species-editor"><i class="fas fa-edit" style="margin-right: 3px;"></i><span class="readable">Edit Custom Species</span></a>
+Hooks.on("renderSettingsConfig", function(esc, html, data) {
+  const element = html.find('.tab[data-tab="system"] .settings-list');
+  let header = element.find(".module-header");
+  element.html(
+    `${header[0].outerHTML}
+    <div>
+      <h3>We have moved!</h3>
+      <p class="notes pb-2">All system settings can now be found in the PTU Settings, right under the section with the Configure Settings button in the sidebar!</p>
+      <button onclick="new game.ptu.settings().render(true);" class="mb-2">Open PTU Settings</button>
     </div>
-  </div>`
-
-  $('#open-custom-species-editor').click(function() { 
-    new game.ptu.PTUCustomSpeciesEditor().render(true);
-  })
+    `);
+    html.height('auto');
 });
 
 /* -------------------------------------------- */
@@ -591,7 +621,7 @@ Hooks.once("ready", async function() {
   setAccessabilityFont(game.settings.get("ptu", "accessability"));
 
   // Globally enable items from item compendium
-  game.ptu["items"] = await game.packs.get("ptu.items").getContent();
+  game.ptu["items"] = Array.from(new Set(game.items.filter(x => x.type == "item").concat(await game.packs.get("ptu.items").getContent())));
 
   // Wait to register hotbar drop hook on ready so that modules could register earlier if they want to
   Hooks.on("hotbarDrop", (bar, data, slot) => createPTUMacro(data, slot));
@@ -632,6 +662,25 @@ Hooks.once("ready", async function() {
 
   PTUCombat.Initialize();
 });
+
+/* -------------------------------------------- */
+/*  Settings Initialization                       */
+/* -------------------------------------------- */
+
+Hooks.on("renderSettings", (app, html) => {
+  html.find('#settings-game').after($(`<h2>PTU System Settings</h2><div id="ptu-options"></div>`));
+
+  game.ptu.settings.Initialize(html);
+
+  if(game.user.isGM) {
+    $('#ptu-options').append($(
+      `<button data-action="ptu-custom-species-editor">
+          <i class="fas fa-book-open"></i>
+          Edit Custom Species
+      </button>`));
+    html.find('button[data-action="ptu-custom-species-editor"').on("click", _ => new game.ptu.PTUCustomSpeciesEditor().render(true));
+  }
+})
 
 /* -------------------------------------------- */
 /*  Canvas Initialization                       */

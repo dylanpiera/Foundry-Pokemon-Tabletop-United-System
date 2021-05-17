@@ -1,6 +1,56 @@
 # Welcome to the Beta!
 Hey there! You are on the Beta Branch. If you ever have any feedback please do share with us over on [Github](https://github.com/dylanpiera/Foundry-Pokemon-Tabletop-United-System/issues) or [Discord](https://discord.gg/fE3w59q)
 
+## 1.2.18 - Settings & Damage Modifiers
+- Moved PTU Settings to its own menu in the Settings Tab
+- Added Damage Bonus fields to Moves
+- Added a Physical & Special Damage Bonus & Damage Reduction field to Trainer & Pokémon Sheets
+
+- Automated the remainder of the Hardened buffs
+  - Damage Reduction is now applied
+  - 'data.modifiers.resistanceSteps' now manipulates the target's effectiveness
+  
+### Bugfixes
+- Fixed the Darumaka Line not generating properly due to Darmanitan not being oh so zen about things
+- Fixed Stonjourner... just not existing... Like it wasn't there, at all... But now it is!
+
+- 1.2.18.1: Fixed Custom Species Editor being visible to players
+
+## 1.2.17 - Bugfixes & Damage Reduction
+- Fixed effects being deleted in combat when they shouldn't be
+
+- Added a 'Suspend Effect' button to Effects in the 'Effects' tab
+- Added Skill Bonus history for mons, and also now show their skill bonus applied in the sheet.
+- Added a check that will make sure you won't add a duplicate dex entry to your trainer sheet
+- 'data.modifiers.damageReduction' is now properly applied during damage calc.
+
+- Removed popup for 'how to apply damage', instead added extra options when applying damage on hover
+  - Apply half damage
+  - Apply damage as if resistant 1 step further
+  - Apply flat damage
+  - **NOTE:** Hold shift while hitting one of the buttons to apply an ad-hoc Damage Reduction.
+
+- 1.2.17.1: Hotfix, fixed super effectiveness.
+
+## 1.2.16 - Small Fixes
+- Also added new modifiers UI to Trainer Sheets
+- Added modifiers UI to Skills & Stats
+
+## 1.2.15 - Modifiers Update
+- Updated the modifiers system to show where effects are coming from
+- Made training apply as ActiveEffect instead of somewhere hidden deep within the system
+  - **NOTE**: You need to reapply trainings for them to work properly. 
+- Added Hardened condition applying effects through AE.
+
+## 1.2.14 - Quality of Life - Electric Boogaloo
+- Fixed Token actor's being unable to undo-damage.
+- Fixed ActiveEffect config sheet breaking effects after saving
+- Added 'Priority' field & info to ActiveEffect config sheet
+- Added full Effect tab to Trainer Sheets
+- Added 'game.items' field to 'game.ptu.items' list, for easy access in autocomplete fields.
+- Added a Pokeball field for keeping track of what ball was used to caught a mon.
+  - Feature request from MoveMaster module to display proper ball, doesn't do anything in main system.
+
 ## 1.2.13 - Quality of Life
 - Added Habitat Rolltables Compendium
 - Fixed some habitats having typos in them

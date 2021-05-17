@@ -87,6 +87,15 @@ export function GetMonEffectiveness(data) {
         typeCalc = value.execute(typeCalc);
     }
 
+    const effectivenessModifier = data.data.modifiers?.resistanceSteps?.total ?? 0;
+    if(effectivenessModifier != 0) {
+        const timesMod = Math.pow((effectivenessModifier > 0 ? 0.5 : 2), Math.abs(effectivenessModifier));
+
+        for(const [type, value] of Object.entries(typeCalc)) {
+            typeCalc[type] *= timesMod;
+        }
+    }
+
     for(const [typeKey,value] of Object.entries(typeCalc)) {
         if(value < 1) {
             if(value == 0) {

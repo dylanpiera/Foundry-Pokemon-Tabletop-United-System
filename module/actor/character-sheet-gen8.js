@@ -32,6 +32,8 @@ export class PTUGen8CharacterSheet extends ActorSheet {
 			this._prepareCharacterItems(data);
 		}
 
+		data['origins'] = this.actor.origins;
+
 		return data;
 	}
 
@@ -153,6 +155,18 @@ export class PTUGen8CharacterSheet extends ActorSheet {
 			effect.sheet.render(true);
 		});
 
+		// Disable Effect
+		html.find('.effect-suspend').click(async (ev) => {
+			ev.preventDefault();
+			const button = ev.currentTarget;
+			const effectId = button.dataset.id;
+			const effect = this.actor.effects.get(effectId);
+			const effectData = duplicate(effect.data);
+			effectData.disabled = !effectData.disabled;
+			await effect.update(effectData);
+			this.render(false);
+		});
+
 		// Delete Inventory Item
 		html.find('.item-delete').click((ev) => {
 			const li = $(ev.currentTarget).parents('.item');
@@ -200,6 +214,16 @@ export class PTUGen8CharacterSheet extends ActorSheet {
 			autoFocus: true,
 			minLength: 1
 		});
+
+		Hooks.on("preCreateOwnedItem", (actor, itemData, options, sender) => {
+			if(actor.id !== this.actor.id || actor.data.type !== "character" || itemData.type !== "dexentry") return;
+			
+			const item = actor.items.getName(itemData.name)
+			if(item) {
+				//if(!item.data.owned) item.update({"data.owned": true});
+				return false;
+			}
+		})
 	}
 
 	async _onItemDrag(event){
@@ -272,6 +296,9 @@ export class PTUGen8CharacterSheet extends ActorSheet {
 			debug("Created new effect",itemData);
 			return this.actor.createEmbeddedEntity(itemData.type, itemData);
 		}
+		if(itemData.type === "dexentry") {
+
+		}
 
 		// Finally, create the item!
 		debug("Created new item",itemData);
@@ -326,19 +353,27 @@ export class PTUGen8CharacterSheet extends ActorSheet {
 	 * @param {Event} event   The originating click event
 	 * @private
 	 */
-	_onSaveRoll(event) {
+	 async _onSaveRoll(event = new Event('void')) {
 		event.preventDefault();
 		if(event.screenX == 0 && event.screenY == 0) return;
-		
-		let mod = this.actor.data.data.modifiers.saveChecks ?? 0;
+
+		let mod = this.actor.data.data.modifiers.saveChecks?.total;
 		let roll = new Roll("1d20 + @mod", {mod: mod});
-		let label = 'Rolling Save Check';
-		roll.roll().toMessage({
-			speaker: ChatMessage.getSpeaker({
-				actor: this.actor
-			}),
-			flavor: label
-		});
+		
+		roll.roll();
+
+		const messageData = {
+			title: `${this.actor.name}'s<br>Save Check`,
+			user: game.user._id,
+			sound: CONFIG.sounds.dice,
+			templateType: 'save',
+			roll: roll,
+			description: `Save check of ${roll._total}!`
+		}
+
+		messageData.content = await renderTemplate('/systems/ptu/templates/chat/save-check.hbs', messageData);
+
+		return ChatMessage.create(messageData, {});
 	}
 
 	/**
@@ -356,16 +391,33 @@ export class PTUGen8CharacterSheet extends ActorSheet {
 		move.data = PrepareMoveData(actor ? actor.data.data : this.actor.data.data, move.data);
 
 		/** Option Callbacks */
-		let PerformFullAttack = () => {
-			let acRoll = CalculateAcRoll(move.data, this.actor.data);
+		let PerformFullAttack = (damageBonus = 0) => {
+			const moveData = duplicate(move.data);
+			if(damageBonus != 0) moveData.damageBonus += damageBonus;
+
+			let acRoll = CalculateAcRoll(moveData, this.actor.data);
 			let diceResult = GetDiceResult(acRoll)
 
-			let crit = diceResult === 1 ? CritOptions.CRIT_MISS : diceResult >= 20 - this.actor.data.data.modifiers.critRange ? CritOptions.CRIT_HIT : CritOptions.NORMAL;
+			let crit = diceResult === 1 ? CritOptions.CRIT_MISS : diceResult >= 20 - this.actor.data.data.modifiers.critRange?.total ? CritOptions.CRIT_HIT : CritOptions.NORMAL;
 
-			let damageRoll;
+			let damageRoll, critRoll;
 			if(crit != CritOptions.CRIT_MISS) {
-				damageRoll = CalculateDmgRoll(move.data, this.actor.data.data, crit)
+				switch(game.settings.get("ptu", "combatRollPreference")) {
+					case "situational":
+						if(crit == CritOptions.CRIT_HIT) critRoll = CalculateDmgRoll(moveData, this.actor.data.data, crit);
+						else damageRoll = CalculateDmgRoll(moveData, this.actor.data.data, crit);
+					break;
+					case "both":
+						damageRoll = CalculateDmgRoll(moveData, this.actor.data.data, CritOptions.NORMAL);
+					case "always-crit":
+						critRoll = CalculateDmgRoll(moveData, this.actor.data.data, CritOptions.CRIT_HIT);
+					break;
+					case "always-normal":
+						damageRoll = CalculateDmgRoll(moveData, this.actor.data.data, CritOptions.NORMAL);
+					break;
+				}
 				if(damageRoll) damageRoll.roll();
+				if(critRoll) critRoll.roll();
 			}
 			sendMoveRollMessage(acRoll, {
 				speaker: ChatMessage.getSpeaker({
@@ -374,6 +426,7 @@ export class PTUGen8CharacterSheet extends ActorSheet {
 				name: move.name,
 				move: move.data,
 				damageRoll: damageRoll,
+				critRoll: critRoll,
 				templateType: MoveMessageTypes.FULL_ATTACK,
 				crit: crit
 			});
@@ -419,6 +472,14 @@ export class PTUGen8CharacterSheet extends ActorSheet {
 		/** Check for Shortcut */
 		// Instant full roll
 		if(event.shiftKey) {
+			if(event.altKey) {
+				Dialog.confirm({
+					title: `Apply Damage Bonus`,
+					content: `<input type="number" name="damage-bonus" value="0"></input>`,
+					yes: (html) => PerformFullAttack(parseInt(html.find('input[name="damage-bonus"]').val()))
+				});
+				return;
+			}
 			PerformFullAttack();
 			return;
 		}
@@ -480,7 +541,7 @@ export class PTUGen8CharacterSheet extends ActorSheet {
 function CalculateAcRoll(moveData, actor) {
 	return new Roll('1d20-@ac+@acBonus', {
 		ac: (parseInt(moveData.ac) || 0),
-		acBonus: (actor.flags?.ptu?.is_blind ? actor.flags?.ptu?.is_totally_blind ? -10 : -6 : 0) + (parseInt(actor.data.modifiers.acBonus) || 0)
+		acBonus: (actor.flags?.ptu?.is_blind ? actor.flags?.ptu?.is_totally_blind ? -10 : -6 : 0) + (parseInt(actor.data.modifiers.acBonus?.total) || 0)
 	})
 }
 
@@ -489,7 +550,7 @@ function CalculateDmgRoll(moveData, actorData, isCrit) {
 
 	if (moveData.damageBase.toString().match(/^[0-9]+$/) != null) {
 		let dbRoll = game.ptu.DbData[moveData.stab ? parseInt(moveData.damageBase) + 2 : moveData.damageBase];
-		let bonus = Math.max(moveData.category === "Physical" ? actorData.stats.atk.total : actorData.stats.spatk.total, 0);
+		let bonus = Math.max((moveData.category === "Physical" ? (actorData.stats.atk.total + (actorData.modifiers.damageBonus?.physical?.total ?? 0)) : (actorData.stats.spatk.total + (actorData.modifiers.damageBonus?.special?.total ?? 0))) + (moveData.damageBonus ?? 0), 0);
 		if (!dbRoll) return;
 		return new Roll(isCrit == CritOptions.CRIT_HIT ? '@roll+@roll+@bonus' : '@roll+@bonus', {
 			roll: dbRoll,
