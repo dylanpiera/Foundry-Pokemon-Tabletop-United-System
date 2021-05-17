@@ -59,7 +59,8 @@ export const HardenedChanges = {
         {"key":"data.modifiers.evasion.speed.mod", "mode":2, "value":1, "priority": 20}
     ],
     5: [
-        {"key":"data.modifiers.damageReduction.mod", "mode":2, "value":5, "priority": 20},
+        {"key":"data.modifiers.damageReduction.physical.mod", "mode":2, "value":5, "priority": 20},
+        {"key":"data.modifiers.damageReduction.special.mod", "mode":2, "value":5, "priority": 20},
     ],
     7: [
         {"key":"data.modifiers.immuneToEffectDamage", "mode":5, "value":true, "priority": 50},

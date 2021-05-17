@@ -78,9 +78,12 @@ async function executeApplyDamageToTargets(targets, data, damage, {isFlat, isRes
 			actualDamage = damage;
 		}
 		else {
-			let defense = data.category == "Special" ? target.actor.data.data.stats.spdef.total : target.actor.data.data.stats.def.total;
+			const defense = data.category == "Special" ? target.actor.data.data.stats.spdef.total : target.actor.data.data.stats.def.total;
+            const dr = parseInt(data.category == "Special" ? (target.actor.data.data.modifiers?.damageReduction?.special?.total ?? 0) : (target.actor.data.data.modifiers?.damageReduction?.physical?.total ?? 0));
 
-			actualDamage = Math.max(1, Math.floor((damage - parseInt(defense) - parseInt(target.actor.data.data.modifiers?.damageReduction?.total ?? 0) - parseInt(damageReduction)) * (target.actor.data.data.effectiveness.All[data.type] - (isResist ? (target.actor.data.data.effectiveness.All[data.type] > 1 ? 0.5 : target.actor.data.data.effectiveness.All[data.type]*0.5) : 0))))
+            const effectiveness = target.actor.data.data.effectiveness?.All[data.type] ?? 1;
+
+			actualDamage = Math.max(1, Math.floor((damage - parseInt(defense) - dr - parseInt(damageReduction)) * (effectiveness - (isResist ? (effectiveness > 1 ? 0.5 : effectiveness*0.5) : 0))))
 		}
 
         log(`Dealing ${actualDamage} damage to ${target.name}`); 
