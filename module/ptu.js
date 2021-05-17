@@ -51,7 +51,7 @@ export let log = (...args) => console.log("FVTT PTU | ", ...args);
 export let warn = (...args) => console.warn("FVTT PTU | ", ...args);
 export let error = (...args) => console.error("FVTT PTU | ", ...args)
 
-export const LATEST_VERSION = "1.2.18";
+export const LATEST_VERSION = "1.2.18.1";
 
 function registerSheets() {
   // Register sheet application classes
@@ -672,12 +672,14 @@ Hooks.on("renderSettings", (app, html) => {
 
   game.ptu.settings.Initialize(html);
 
-  $('#ptu-options').append($(
-    `<button data-action="ptu-custom-species-editor">
-        <i class="fas fa-book-open"></i>
-        Edit Custom Species
-    </button>`));
+  if(game.user.isGM) {
+    $('#ptu-options').append($(
+      `<button data-action="ptu-custom-species-editor">
+          <i class="fas fa-book-open"></i>
+          Edit Custom Species
+      </button>`));
     html.find('button[data-action="ptu-custom-species-editor"').on("click", _ => new game.ptu.PTUCustomSpeciesEditor().render(true));
+  }
 })
 
 /* -------------------------------------------- */

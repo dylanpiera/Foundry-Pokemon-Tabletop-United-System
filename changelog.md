@@ -11,8 +11,10 @@ Hey there! You are on the Beta Branch. If you ever have any feedback please do s
   - 'data.modifiers.resistanceSteps' now manipulates the target's effectiveness
   
 ### Bugfixes
-- Fixed the Darumaka Line not generating properly due to Darmanitan not being oh so zen about things.
+- Fixed the Darumaka Line not generating properly due to Darmanitan not being oh so zen about things
 - Fixed Stonjourner... just not existing... Like it wasn't there, at all... But now it is!
+
+- 1.2.18.1: Fixed Custom Species Editor being visible to players
 
 ## 1.2.17 - Bugfixes & Damage Reduction
 - Fixed effects being deleted in combat when they shouldn't be
