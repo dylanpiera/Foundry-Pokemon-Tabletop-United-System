@@ -290,8 +290,45 @@
         
           <!-- Moves Tab -->
           <div class="tab details moves h-100" data-group="primary" data-tab="moves">
+            <div class="damage-mod-header swsh-box" style="border: none;">
+              <div class="swsh-header" style="padding: 0;">
+                <div class="d-flex w-100 mt-1 mb-1">
+                  <div class="col-sm-6">
+                    <label for="data.modifiers.damageBonus.physical.value">Physical Damage Mod</label>
+                  </div>
+                  <div class="col-sm-6">
+                    <label for="data.modifiers.damageBonus.special.value">Special Damage Mod</label>
+                  </div>
+                </div>
+              </div>
+              <div class="swsh-body" style="padding: 0;">
+                <div class="d-flex w-100" style="margin: 0.1rem 0;">
+                  <div class="col-sm-6 small-input">
+                    {{> "mod-field" 
+                      mod=data.modifiers.damageBonus.physical.mod 
+                      path="data.modifiers.damageBonus.physical.value" 
+                      value=data.modifiers.damageBonus.physical.value 
+                      total=data.modifiers.damageBonus.physical.total
+                      dtype="Number"
+                      modOrigins=(getProperty origins "data.modifiers.damageBonus.physical.mod")
+                      flipped=true}}
+                  </div>
+                  <div class="col-sm-6 small-input">
+                    {{> "mod-field" 
+                      mod=data.modifiers.damageBonus.special.mod 
+                      path="data.modifiers.damageBonus.special.value" 
+                      value=data.modifiers.damageBonus.special.value 
+                      total=data.modifiers.damageBonus.special.total
+                      dtype="Number" 
+                      modOrigins=(getProperty origins "data.modifiers.damageBonus.special.mod")
+                      flipped=true}}
+                  </div>
+                </div>
+              </div>
+            </div>
+
             <!-- Moves -->
-            <ol class="inventory-list">
+            <ol class="inventory-list" style="padding-top: 0.5rem;">
               <li class="inventory-header flexrow" style="background: linear-gradient(45deg, #ffffffbb, #fff, #ffffffbb); border-radius: 5px;">
                 <div class="item-name flexcol align-items-center align-self-center" style="flex: 0 0 12%; margin-left: 3%;">
                     <h4>Move</h4>

@@ -49,6 +49,16 @@
           "flinch_count": {
             "value": 0,
             "keys": []
+          },
+          "damageBonus": {
+            "physical": {
+              "value": 0,
+              "keys": []
+            },
+            "special": {
+              "value": 0,
+              "keys": []
+            }
           }
         }
       },
@@ -476,7 +486,8 @@
       "ac": "",
       "range": "",
       "contestType": "",
-      "stab": false
+      "stab": false,
+      "damageBonus": 0
     },
     "capability": {
       "templates": ["base"]

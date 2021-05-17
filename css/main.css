@@ -165,7 +165,7 @@ a.item {
   left: 0;
   bottom: -45px;
   padding: 0px 20px;
-  width: 100%;
+  width: fit-content;
 }
 .container-fluid > .sheet-footer .tabs {
   padding-right: 8px;
@@ -815,7 +815,7 @@ span.readable {
   left: 0;
   top: 27px;
   padding: 0px 20px;
-  width: 100%;
+  width: fit-content;
   z-index: 20;
   height: fit-content;
 }
@@ -1281,6 +1281,18 @@ a.hover-button.resist-damage-button {
 header.effect-change.effects-header.flexrow > div {
   text-align: center;
   white-space: nowrap;
+}
+.damage-mod-header {
+  position: absolute;
+  top: 5px;
+  right: 20px;
+  width: 50%;
+  max-width: 400px;
+  text-align: center;
+  white-space: nowrap;
+}
+.small-input input {
+  height: 20px !important;
 }
 .mod-input {
   position: relative;

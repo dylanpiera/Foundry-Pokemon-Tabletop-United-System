@@ -194,7 +194,7 @@ async function registerHandlebars() {
 
   function _calcMoveDb(move, bool = false) {
     if(move.category === "Status") return;
-    let bonus = move.owner ? move.category === "Physical" ? move.owner.stats.atk.total : move.owner.stats.spatk.total : 0;
+    let bonus = (move.owner ? move.category === "Physical" ? (move.owner.stats.atk.total + (move.owner.damageBonus?.physical?.total ?? 0)) : (move.owner.stats.spatk.total + (move.owner.damageBonus?.special?.total ?? 0)) : 0 )+ (move.damageBonus ?? 0);
     if(move.damageBase.toString().match(/^[0-9]+$/) != null) {
       let db = game.ptu.DbData[move.stab ? parseInt(move.damageBase) + 2 : move.damageBase];  
       if(db) return db + (bool ? " + " : "#") + bonus;
@@ -306,7 +306,8 @@ export function PrepareMoveData(actorData, move) {
     type: actorData.typing,
     stats: actorData.stats,
     acBonus: actorData.modifiers.acBonus.total,
-    critRange: actorData.modifiers.critRange.total
+    critRange: actorData.modifiers.critRange.total,
+    damageBonus: actorData.modifiers.damageBonus
   };
   move.prepared = true;
 
