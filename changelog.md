@@ -6,6 +6,7 @@ Hey there! You are on the Beta Branch. If you ever have any feedback please do s
 - Trainer Inventory is now subdivided by category
 - You can create new categories by simply having an item with a category that is not yet defined
 - Dragging an item on top of a category will change its' category
+- 1.2.19.1: Added back item sorting within categories
 
 ## 1.2.18 - Settings & Damage Modifiers
 - Moved PTU Settings to its own menu in the Settings Tab

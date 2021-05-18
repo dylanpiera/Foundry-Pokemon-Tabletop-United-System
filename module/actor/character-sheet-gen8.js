@@ -246,8 +246,16 @@ export class PTUGen8CharacterSheet extends ActorSheet {
 
 		// Grab item from character sheet
 		let item = actor.getOwnedItem(itemId);
+		
+		// If item exists check if category changed
+		if(item) {
+			const itemData = duplicate(item.data);
+			if(itemData.data.category == category)			
+				// Handle item sorting within the same Actor
+				return this._onSortItem(event, itemData);
+		}
 		// If Item doesn't exist yet wait for item creation to resolve, then try again.
-		if(!item) {
+		else {
 			const itemId = await new Promise((resolve, reject) => {
 				const hookId = Hooks.on("createOwnedItem", function(hookActor, hookItem, options, sender){
 					if(actor.id == hookActor.id && hookItem.type == "item") {
