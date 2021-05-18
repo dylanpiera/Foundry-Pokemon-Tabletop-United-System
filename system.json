@@ -2,7 +2,7 @@
   "name": "ptu",
   "title": "Pokemon Tabletop United",
   "description": "A Pen and Paper Roleplaying Game Set in the World of Pokemon",
-  "version": "1.2.1",
+  "version": "1.2.18.2",
   "minimumCoreVersion": "0.6.5",
   "compatibleCoreVersion": "0.7.9",
   "templateVersion": 2,
@@ -80,6 +80,13 @@
       "entity": "Item",
       "name": "fan-game-content",
       "path": "packs/fan-game-content.db",
+      "system": "ptu"
+    },
+    {
+      "label": "habitats",
+      "entity": "RollTable",
+      "name": "habitats",
+      "path": "packs/habitats.db",
       "system": "ptu"
     }
   ],

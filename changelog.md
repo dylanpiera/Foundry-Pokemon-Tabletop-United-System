@@ -8,19 +8,200 @@
 
 DMs can now quickly generate Pokémon for random encounters using the chat! For more info see the [wiki](https://github.com/dylanpiera/Foundry-Pokemon-Tabletop-United-System/wiki/Pokemon-Generation-using-Chat-Commands).
 - This also works by Dragging & Dropping dex entries right into the battle field! Creating tokens where needed.
+=======
+## 1.2.18 - Settings & Damage Modifiers
+- Moved PTU Settings to its own menu in the Settings Tab
+- Added Damage Bonus fields to Moves
+- Added a Physical & Special Damage Bonus & Damage Reduction field to Trainer & Pokémon Sheets
 
-### Quality of Live Improvements
-- Charactermancer Species field now has Autocomplete.
-- Added a 'Send to Chat' button to all items.
-- Added a 'Owner' field on mon sheets that allows you to link your mons to your character sheet.
-  - Also added an 'Open Owner' button if an owner has been selected.
-  - Owners is purely meant for trainers at the moment, and therefore will only show PCs as options that the Owner of the mon also owns.
-- Added a Shiny field for all your capture calc needs.
-- Add 'Notes' to Character & Pokemon sheets, for your own record keeping!
-- Added Sage & Uranium Fangame Dexes as well as all their suplemental moves/abilities/etc.
-- Added system settings in regards to Audio for Module usage.
-
+- Automated the remainder of the Hardened buffs
+  - Damage Reduction is now applied
+  - 'data.modifiers.resistanceSteps' now manipulates the target's effectiveness
+  
 ### Bugfixes
+- Fixed the Darumaka Line not generating properly due to Darmanitan not being oh so zen about things
+- Fixed Stonjourner... just not existing... Like it wasn't there, at all... But now it is!
+
+- 1.2.18.1: Fixed Custom Species Editor being visible to players
+
+## 1.2.17 - Bugfixes & Damage Reduction
+- Fixed effects being deleted in combat when they shouldn't be
+
+- Added a 'Suspend Effect' button to Effects in the 'Effects' tab
+- Added Skill Bonus history for mons, and also now show their skill bonus applied in the sheet.
+- Added a check that will make sure you won't add a duplicate dex entry to your trainer sheet
+- 'data.modifiers.damageReduction' is now properly applied during damage calc.
+
+- Removed popup for 'how to apply damage', instead added extra options when applying damage on hover
+  - Apply half damage
+  - Apply damage as if resistant 1 step further
+  - Apply flat damage
+  - **NOTE:** Hold shift while hitting one of the buttons to apply an ad-hoc Damage Reduction.
+
+- 1.2.17.1: Hotfix, fixed super effectiveness.
+
+## 1.2.16 - Small Fixes
+- Also added new modifiers UI to Trainer Sheets
+- Added modifiers UI to Skills & Stats
+
+## 1.2.15 - Modifiers Update
+- Updated the modifiers system to show where effects are coming from
+- Made training apply as ActiveEffect instead of somewhere hidden deep within the system
+  - **NOTE**: You need to reapply trainings for them to work properly. 
+- Added Hardened condition applying effects through AE.
+
+## 1.2.14 - Quality of Life - Electric Boogaloo
+- Fixed Token actor's being unable to undo-damage.
+- Fixed ActiveEffect config sheet breaking effects after saving
+- Added 'Priority' field & info to ActiveEffect config sheet
+- Added full Effect tab to Trainer Sheets
+- Added 'game.items' field to 'game.ptu.items' list, for easy access in autocomplete fields.
+- Added a Pokeball field for keeping track of what ball was used to caught a mon.
+  - Feature request from MoveMaster module to display proper ball, doesn't do anything in main system.
+
+## 1.2.13 - Quality of Life
+- Added Habitat Rolltables Compendium
+- Fixed some habitats having typos in them
+- Added 'game.ptu.TMsData' for easy conversion between TM number and move name.
+- Show TM name as well as number, instead of just number, in Pokédex
+
+## 1.2.12 - Status & Combat Automation
+- Added Drag & Drop Macro support for Moves & the Pokédex Item for Trainers.
+- Added game setting to control Pokédex Item's behavior.
+- Changed Settings order to be more organized
+- Added 2 token conditions (Tag & Cheered) without effects, so users can keep track of these conditions more easily.
+
+### Combat Changes:
+- Added LeagueBattle property to battles, which can be set in the PTU Combat Settings Menu.
+  - PTU Combat Setings menu replaces Foundry's Combat Settings Menu.
+  - League Battles will automatically fix Trainer's initiative order. *Will require a re-roll if players already rolled.*
+- Status Effects with Start of Turn or End of Turn effects now automatically trigger in Combat.
+  - This includes things like Sleep Checks automatically removing the sleep conditon.
+- Added game setting for pre-errata effect handling.
+  - **NOTE:** Only semi-supported. Mostly disables the system's automation and gives appropriate messages where possible.
+- Fixed 'Skip Defeated' option not working properly.
+
+### API: 
+- Added a PTU Combat Tracker, which will reside in 'game.ptu.combats'.
+  - **NOTE:** the PTU Combat Tracker only runs __client side__ on the GMs machine. 
+- Added 'turnEnd' 'turnStart' and 'roundEnd' hooks.
+- Active Effects now automatically update their 'roundsElapsed' flag, and are automatically deleted based on their 'duration.round' and 'duration.turns' properties.
+
+## 1.2.11 - Charactermancer Alpha & AE Tab
+- Updated Active Effects tab to be fully operational without having to use code.
+- Added alpha version of the new Charactermancer. Currently implemented:
+  - Species / Id selection
+  - Exp / Level calculation
+  - Evolution Detection based on Level
+  - Nature Selection
+  - Stat Selection based on Level
+  - Data Restore upon improper closing
+
+The Charactermancer update has been in development for a long time, and while I'm not happy with the current implementation, it does *work*. So for now do enjoy the functionality it has to offer while I work on re-doing it and giving it all features down the line!
+
+## 1.2.10 - Status Affliction Api Update
+- Added extra data to Status Affliction for Developer use.
+
+## 1.2.9 - Hotfix Save Checks
+- No longer roll save checks when pressing enter / return
+- Item placeholder is updated to better reflect the system
+
+## 1.2.8 - Status Effects!
+- Added Status Afflictions to the system as token effects
+- Some effects have automated effects, for more info see the following list:
+> **Burn**: -2 def cs
+> **Frozen:** become vulnerable
+> **Paralysis:** half init
+> **Poison:** -2 spdef cs*
+> **Flinch:** Apply stacking -5 initiative penalty (reapply flinch to token to increase flinch stacks), become vulnerable, flinch stacks reset when combat ends. 
+> **Sleep:** become vulnerable
+> **Faint:** become vulnerable
+> **Blind:** become vulnerable, -6 accuracy
+> **Total Blind:** become blind, -4 accuracy (ergo total of -10)
+> **Slowed:** half movement
+> **Stuck:** speed evasion = 0
+> **Tripped:** become vulnerable
+> **Vulnerable:** evasion = 0
+- Fixed the requirement to close a character sheet for owner field to update
+- Added a debug tab to sheets that show active effects and their modifiers.
+  - This is currently purely a view, but will later be expended to allow manual editing of custom effects
+
+## 1.2.7 - Bonus Fields
+- Re-added 'imgpath' param to '/ptug' command.
+- Owner field now also works for GM pokemon.
+- Re-remvoed 'The Furnace' dependency :|
+- Added field for Effect Range bonus.
+- Added GM Only loyalty field.
+
+## 1.2.6 - Fixed Img Generator
+- Generated Img Path now use a relative path instead of absolute.
+
+## 1.2.4 - 1.2.5 - Training, Save Checks & Temp HP Bar
+- Automatically modify initiative of actors in Combat when their initative modifier or speed stat changes.
+- Added Training options to the Combat Tab that automatically add (invisible) modifiers where necessary
+- Add Save Checks to Combat Tab
+- Made Temp HP bar available as Token Bar
+
+- **API BREAKING**: 'data.health.temp' has now moved to 'data.tempHp' 
+
+## 1.2.3 - Mon Generator Update
+- Changed the Generator to batch apply, saving on a lot of database calls.
+- Dex Drag & Drop now centers to the square the mon is dropped into.
+
+***Note:*** This update is also testing to see if the 'Mysterious Disappearance' glitch that can occur when generating pokemon. Being that after a refresh sometimes Items (like moves, abilities etc.) or other Data is missing from the actor.
+As well as players being unable to edit the mon when granted permission without refreshing their browser.
+
+## 1.2.2 - Bugfix
+- Fixed Custom Species Art not taking priority over regular art when selected by ID
+- Fixed Custom Moves, Abilities & Capabilities not being loaded when they are turned on for Character Generation.
+
+## 1.2.1 - Version 1.2 Release - Beta Branch
+
+## 1.1.12 - Bugfix
+- Fixed Command showing even when command is properly handled.
+
+## 1.1.11 - More Mon Generation & QoL Improvements
+### Generator Changes
+- Generator now creates a folder instead of dumping everything in the root folder, if the folder doesn't exist
+- You can now set a default image directory for the Generator to use in System Settings
+- Instead of typing the '/ptug' command you can now also drag-and-drop a Dex Entry onto the canvas, instantly creating a token of the requested mon.
+- Fixed Token data not being updated after evolutions.
+### Bugfixes
+=======
+## 1.1.10 - Items to Chat & Missing Content
+- Added missing Fan-Game content to Compendium
+- Added 'Send to Chat' button to all items
+- Fixed custom moves not displaying their name in chat.
+
+## 1.1.9 - Mon Generator Improvements
+- Added 'Other' Capabilities to the Generator
+- Added 'ptu.finishedGeneratingMons' hook for API usage.
+
+## 1.1.7 - 1.1.8 - Extra Fangame Content
+- Added Sage & Uranium Fangame Dexes as optional species sources.
+- Added Nuclear Type (Only when Uranium Data is enabled)
+- Fixed Custom Species not working with Art Work generation due to having 4 digits as their dex ID.
+
+## 1.1.5 - 1.1.6 - Generator Performance Fix
+- Fixed Generator not working properly when working on lower-end PCs or with higher-amount of simultanious generations.
+- Fixed the Intimidate skill being spelled as "Intimidation".
+- Fixed overland capability calculation.
+- *Api Change:* Added easy caching of data using 'game.ptu.cache.GetOrCreateCachedItem()'
+
+## 1.1.4 - Oricorio Fix
+- Add all Oricorio Forms for Species Calculation
+- Removed errors when using 'base' Oricorio.
+
+## 1.1.3 - DM Pokemon Generation
+### New Features
+- Charactermancer's Species field now autocompletes.
+- **Big Change!** DM Quick-Pokemon Generation
+
+DMs can now quickly generate Pokémon for random encounters using the chat! For more info see the [wiki](https://github.com/dylanpiera/Foundry-Pokemon-Tabletop-United-System/wiki/Pokemon-Generation-using-Chat-Commands).
+
+### Bug Fixes
+- Damage Undo button now remembers Temp HP.
+>>>>>>> 3da0df0173c5ad978a125211aa2a96d3b6bc9d0a
 - HP can now go into the negatives, for all your taskmaster needs.
 - Temp HP Calculations are now applied properly to Token Actors as well.
 - Added all Oricorio Forms

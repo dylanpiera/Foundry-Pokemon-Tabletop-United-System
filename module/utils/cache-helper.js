@@ -11,3 +11,36 @@ export async function GetOrCreateCachedItem(key, getFn) {
     }
     return result;
 }
+
+export function GetOrCacheAbilities() { 
+    return GetOrCreateCachedItem("abilities", async () => {
+        let abilities = await game.packs.get("ptu.abilities").getContent();
+        if(game.settings.get("ptu", "uraniumData") || game.settings.get("ptu", "sageData")) {
+            let fgc = await game.packs.get("ptu.fan-game-content").getContent();
+            Array.prototype.push.apply(abilities, fgc.filter(x => x.type == "ability"));
+        }
+        return abilities;
+    });
+}
+
+export function GetOrCacheMoves() { 
+    return GetOrCreateCachedItem("moves", async () => {
+        let moves = await game.packs.get("ptu.moves").getContent();
+        if(game.settings.get("ptu", "uraniumData") || game.settings.get("ptu", "sageData")) {
+            let fgc = await game.packs.get("ptu.fan-game-content").getContent();
+            Array.prototype.push.apply(moves, fgc.filter(x => x.type == "move"));
+        }
+        return moves;
+    });
+}
+
+export function GetOrCacheCapabilities() { 
+    return GetOrCreateCachedItem("capabilities", async () => {
+        let capabilities = await game.packs.get("ptu.capabilities").getContent();
+        if(game.settings.get("ptu", "uraniumData") || game.settings.get("ptu", "sageData")) {
+            let fgc = await game.packs.get("ptu.fan-game-content").getContent();
+            Array.prototype.push.apply(capabilities, fgc.filter(x => x.type == "capability"));
+        }
+        return capabilities;
+    });
+}

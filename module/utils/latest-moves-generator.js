@@ -1,3 +1,5 @@
+import { GetOrCacheMoves} from './cache-helper.js'
+
 export async function GiveLatestMoves(actor) {
     let species = actor.data.data.species;
     let level = actor.data.data.level.current;
@@ -5,7 +7,7 @@ export async function GiveLatestMoves(actor) {
     let speciesData = game.ptu.GetSpeciesData(species);
     if(!speciesData) return;
 
-    let moves = await game.ptu.cache.GetOrCreateCachedItem("moves", () => game.packs.get("ptu.moves").getContent());
+    let moves = await GetOrCacheMoves();
     let levelUpMoves = speciesData["Level Up Move List"].filter(x => x.Level <= level);
     let evoMoves = speciesData["Level Up Move List"].filter(x => x.Level == "Evo");
 
@@ -14,5 +16,5 @@ export async function GiveLatestMoves(actor) {
         newMoves.push(levelUpMove);
     }
 
-    return actor.createOwnedItem(newMoves.map(move => moves.find(x => x.data.name == move.Move)));
+    return actor.createOwnedItem(newMoves.map(move => moves.find(x => x.name == move.Move)));
 }
