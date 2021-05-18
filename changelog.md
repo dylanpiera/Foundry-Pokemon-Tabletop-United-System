@@ -1,6 +1,12 @@
 # Welcome to the Beta!
 Hey there! You are on the Beta Branch. If you ever have any feedback please do share with us over on [Github](https://github.com/dylanpiera/Foundry-Pokemon-Tabletop-United-System/issues) or [Discord](https://discord.gg/fE3w59q)
 
+## 1.2.19 - Inventory Sorting
+- Added Category propety to items
+- Trainer Inventory is now subdivided by category
+- You can create new categories by simply having an item with a category that is not yet defined
+- Dragging an item on top of a category will change its' category
+
 ## 1.2.18 - Settings & Damage Modifiers
 - Moved PTU Settings to its own menu in the Settings Tab
 - Added Damage Bonus fields to Moves

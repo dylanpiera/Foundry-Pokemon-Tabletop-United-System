@@ -69,19 +69,40 @@ export class PTUGen8CharacterSheet extends ActorSheet {
 		const feats = [];
 		const edges = [];
 		const items = [];
+		const items_categorized = {
+			"Key": [],
+			"Medical": [],
+			"Food": [],
+			"Equipment": [],
+			"Pokemon Items": [],
+			"PokeBalls": [],
+			"TMs": [],
+			"Misc": []
+		};
 		const abilities = [];
 		const moves = [];
 		const capabilities = [];
 		const dex = {
 			seen: [],
 			owned: []
-		}
+		};
 
 		// Iterate through items, allocating to containers
 		// let totalWeight = 0;
 		for (let i of sheetData.items) {
 			let item = i.data;
 			i.img = i.img || DEFAULT_TOKEN;
+			if(i.type == 'item'){
+				let cat=i.data.category;
+				if(cat === undefined || cat == ""){
+					cat="Misc";
+				}
+				if(!(items_categorized[cat])){
+					//Category needs handling
+					items_categorized[cat]=[];
+				}
+				items_categorized[cat].push(i);
+			}
 			switch(i.type) {
 				case 'feat': feats.push(i); break;
 				case 'edge': edges.push(i); break;
@@ -96,10 +117,15 @@ export class PTUGen8CharacterSheet extends ActorSheet {
 			}
 		}
 
+		for(const category of Object.keys(items_categorized)) {
+			if(actorData.data.item_categories[category] === undefined) actorData.data.item_categories[category] = true;
+		}
+
 		// Assign and return
 		actorData.feats = feats;
 		actorData.edges = edges;
 		actorData.items = items;
+		actorData.items_categorized = items_categorized;
 		actorData.abilities = abilities;
 		actorData.moves = moves;
 		actorData.capabilities = capabilities;
@@ -152,6 +178,11 @@ export class PTUGen8CharacterSheet extends ActorSheet {
 			this.actor.deleteOwnedItem(li.data('itemId'));
 			li.slideUp(200, () => this.render(false));
 		});
+		//Drag Inventory Item
+		html.find('.item-categorized').each((i,element) => {
+			element.addEventListener("drop",this._onItemDrop.bind(this));
+			element.addEventListener("dragstart",this._onItemDrag.bind(this));
+		});
 
 		// Delete Effect
 		html.find('.effect-delete').click((ev) => {
@@ -179,8 +210,8 @@ export class PTUGen8CharacterSheet extends ActorSheet {
 			html.find('li.item').each((i, li) => {
 				if (li.classList.contains('inventory-header')) return;
 				li.setAttribute('draggable', true);
-				li.addEventListener('dragstart', handler, false);
-			});
+					li.addEventListener('dragstart', handler, false);
+				});
 		}
 
 		html.find('#heldItemInput').autocomplete({
@@ -198,6 +229,46 @@ export class PTUGen8CharacterSheet extends ActorSheet {
 				return false;
 			}
 		})
+	}
+
+	async _onItemDrag(event){
+		//Letting the drop event know our target item ID
+		await event.dataTransfer.setData("text/plain",event.target.dataset.itemId);
+	}
+
+	async _onItemDrop(event){
+		debug("Drop Category",event.toElement.dataset?.category);
+		debug("Drop Event",event);
+
+		const itemId = event.dataTransfer.getData("text");
+		const category = event.toElement.dataset.category;
+		const actor = this.actor;
+
+		// Grab item from character sheet
+		let item = actor.getOwnedItem(itemId);
+		// If Item doesn't exist yet wait for item creation to resolve, then try again.
+		if(!item) {
+			const itemId = await new Promise((resolve, reject) => {
+				const hookId = Hooks.on("createOwnedItem", function(hookActor, hookItem, options, sender){
+					if(actor.id == hookActor.id && hookItem.type == "item") {
+						Hooks.off("createOwnedItem", hookId)
+						resolve(hookItem._id);
+					}
+				})
+				// if after 1.5 sec there is no success, abort.
+				setTimeout(() => {
+					Hooks.off("createOwnedItem", hookId);
+					debug("Did not catch item drop.")
+					reject
+				}, 1500);
+			});
+			if(!itemId) return;
+			item = actor.getOwnedItem(itemId);
+		}
+
+		item.data.data.category=category;
+		await this.actor.updateOwnedItem(item.data);
+		log(`Moved ${item.name} to ${category} category`);
 	}
 
 	_onDragItemStart(event) {}

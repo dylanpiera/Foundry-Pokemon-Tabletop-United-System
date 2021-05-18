@@ -215,24 +215,36 @@
           <!-- Inventory -->
           <div class="tab details inventory" data-group="primary" data-tab="inventory">
             <div class="row">
-              <div class="col">
-                <!-- Items -->
-                <div class="swsh-box mt-2 w-100">
-                  <div class="swsh-body w-100" style="display: block;">
-                    {{> item-display title="Items" type="item" data=actor.items}}
+              <div class="col">	
+		            <!-- Items -->
+                  <div class="swsh-box mt-2 w-100">
+                    {{#each actor.items_categorized as | category catname| }}
+                      {{> item-display title=(concat "Items: " catname) type="item" data=category category=catname boxed=true filter=../data.item_categories}}
+                    {{/each}}
                   </div>
-                </div>
               </div>
               <div class="col">
-                <div class="swsh-box">
+                <div class="swsh-box mt-2 mb-2">
                   <div class="swsh-header justify-content-center">
                     <h3 for="data.money" class="mr-1">Money</h3>
                   </div>
                   <div class="swsh-body ml-3 mr-3">
                     <input type="text" name="data.money" value="{{data.money}}" data-dtype="Number">
                   </div>
-                  <div class="swsh-body mt-3 justify-content-center">
-                    <h3 style="color:#6c757d;">Inventory Sorting & More Coming Soon!</h3>
+                </div>
+                <div class="swsh-box mb-2">
+                  <div class="swsh-header justify-content-center">
+                    <h3 for="data.item_categories" class="mr-1">Item Categories</h3>
+                  </div>
+                  <div class="swsh-body ml-3 mr-3">
+                    <div class="d-flex flexrow" style="flex-wrap: wrap; width: 100%;">
+                      {{#each data.item_categories as |value category|}}
+                        <div class="d-flex flexrow m-1" style="flex: 0 1 31%; align-items: center;">
+                          <label for="data.item_categories.{{category}}">{{category}}</label>
+                          <input name="data.item_categories.{{category}}" type="checkbox" {{checked value}}>
+                        </div>
+                      {{/each}}
+                    </div>
                   </div>
                 </div>
               </div>

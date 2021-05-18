@@ -686,6 +686,7 @@ span.readable {
 .actor .inventory-list .inventory-header h3 {
   margin: 0;
   padding: 0;
+  padding-left: 0.5rem;
   font-weight: bold;
 }
 .actor .inventory-list .item-amount {
