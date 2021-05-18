@@ -88,8 +88,6 @@ export class PTUItemSheet extends ItemSheet {
 	 * @private
 	 */
 	_toChat() {
-		debug(this.object);
-
 		switch(this.object.data.type) {
 			case "move":
 				return sendMoveMessage({
