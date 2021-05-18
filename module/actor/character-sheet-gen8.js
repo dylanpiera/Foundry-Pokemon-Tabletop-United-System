@@ -76,6 +76,7 @@ export class PTUGen8CharacterSheet extends ActorSheet {
 			"Equipment": [],
 			"Pokemon Items": [],
 			"PokeBalls": [],
+			"TMs": [],
 			"Misc": []
 		};
 		const abilities = [];
@@ -114,6 +115,10 @@ export class PTUGen8CharacterSheet extends ActorSheet {
 					else dex.seen.push(i); 
 					break;
 			}
+		}
+
+		for(const category of Object.keys(items_categorized)) {
+			if(actorData.data.item_categories[category] === undefined) actorData.data.item_categories[category] = true;
 		}
 
 		// Assign and return
