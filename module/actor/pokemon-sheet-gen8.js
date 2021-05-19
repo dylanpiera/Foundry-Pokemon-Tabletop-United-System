@@ -293,7 +293,7 @@ export class PTUGen8PokemonSheet extends ActorSheet {
 				'flags.ptu.editLocked': true,
 				_id: randomID()
 			}).data
-			return await this.actor.createEmbeddedEntity("ActiveEffect", effectData);
+			return await this.actor.createEmbeddedDocuments("ActiveEffect", [effectData]);
 		})
 	}
 
@@ -325,7 +325,7 @@ export class PTUGen8PokemonSheet extends ActorSheet {
 				'flags.ptu.editLocked': true,
 				_id: randomID()
 			}).data
-			return await this.actor.createEmbeddedEntity("ActiveEffect", effectData);
+			return await this.actor.createEmbeddedDocuments("ActiveEffect", [effectData]);
 		}
 		await effect.update({changes: calcHardenedChanges(value)});
 	}
@@ -358,7 +358,7 @@ export class PTUGen8PokemonSheet extends ActorSheet {
 		if(itemData.type === "ActiveEffect") {
 			// Finally, create the effect!
 			debug("Created new effect",itemData);
-			return this.actor.createEmbeddedEntity(itemData.type, itemData);
+			return this.actor.createEmbeddedDocuments(itemData.type, [itemData]);
 		}
 
 		// Finally, create the item!

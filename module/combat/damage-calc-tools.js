@@ -64,7 +64,7 @@ export async function applyDamageToTargets(event, options = ATTACK_MOD_OPTIONS.N
 }
 
 export async function ApplyFlatDamage(targets, sourceName, damage) {
-    return executeApplyDamageToTargets(targets, {moveName: sourceName}, damage, true)
+    return executeApplyDamageToTargets(targets, {moveName: sourceName}, damage, {isFlat: true})
 }
 
 async function executeApplyDamageToTargets(targets, data, damage, {isFlat, isResist, damageReduction}={isFlat: false, isResist: false}) {

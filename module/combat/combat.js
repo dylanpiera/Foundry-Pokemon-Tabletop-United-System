@@ -403,7 +403,7 @@ export default class PTUCombat {
             const effect = EffectFns.get(affliction); 
             if(!effect) continue;
 
-            await effect(combatant.tokenId, this.combat, combatant, lastTurn, options, sender, affliction, isStartOfTurn);
+            await effect(combatant.token.id, this.combat, combatant, lastTurn, options, sender, affliction, isStartOfTurn);
         }
     }
 

@@ -307,7 +307,7 @@ export class PTUGen8CharacterSheet extends ActorSheet {
 		if(itemData.type === "ActiveEffect") {
 			// Finally, create the effect!
 			debug("Created new effect",itemData);
-			return this.actor.createEmbeddedEntity(itemData.type, itemData);
+			return this.actor.createEmbeddedDocuments(itemData.type, [itemData]);
 		}
 		if(itemData.type === "dexentry") {
 

@@ -88,7 +88,7 @@ export const Afflictions = [
 ];
 
 function IsSameTokenAndNotAlreadyApplied(effect, tokenId, combat, lastCombatant) {
-    if(tokenId !== lastCombatant.tokenId) return false;
+    if(tokenId !== lastCombatant.token.id) return false;
     
     const flag = combat.getFlag("ptu", `applied`);
     // If the effect has already been applied, skip.
@@ -110,7 +110,7 @@ export const EffectFns = new Map([
         if(actor.data.data.modifiers.immuneToEffectDamage) return;
 
         let applyPoison = async () => {
-            const token = canvas.tokens.get(lastCombatant.tokenId);
+            const token = canvas.tokens.get(lastCombatant.token.id);
             await ApplyFlatDamage([token], "Poison", actor.data.data.health.tick);
         }
 
@@ -140,7 +140,7 @@ export const EffectFns = new Map([
         if(actor.data.data.modifiers.immuneToEffectDamage) return;
 
         let applyPoison = async () => {
-            const token = canvas.tokens.get(lastCombatant.tokenId);
+            const token = canvas.tokens.get(lastCombatant.token.id);
             const badly_poisoned_effect = token.actor.effects.find(x => x.data.label == "Badly Poisoned");
             await ApplyFlatDamage([token], "Toxic Damage", (5 * badly_poisoned_effect.data.flags.ptu?.roundsElapsed) + 5);
         }
@@ -172,7 +172,7 @@ export const EffectFns = new Map([
         if(actor.data.data.modifiers.immuneToEffectDamage) return;
 
         let applyBurn = async () => {
-            const token = canvas.tokens.get(lastCombatant.tokenId);
+            const token = canvas.tokens.get(lastCombatant.token.id);
             await ApplyFlatDamage([token], "Burn", actor.data.data.health.tick);
         }
 
@@ -202,7 +202,7 @@ export const EffectFns = new Map([
         if(actor.data.data.modifiers.immuneToEffectDamage) return;
 
         let applyCurse = async () => {
-            const token = canvas.tokens.get(lastCombatant.tokenId);
+            const token = canvas.tokens.get(lastCombatant.token.id);
             await ApplyFlatDamage([token], "Curse", actor.data.data.health.tick * 2);
         }
 
@@ -237,7 +237,7 @@ export const EffectFns = new Map([
 
         let applyConfusion = async (type) => {
             if(actor.data.data.modifiers.immuneToEffectDamage) return;
-            const token = canvas.tokens.get(lastCombatant.tokenId);
+            const token = canvas.tokens.get(lastCombatant.token.id);
             switch(type) {
                 case 3: {
                     const dmg = Math.floor(Number(actor.data.data.stats.atk.total)/2);
@@ -392,7 +392,7 @@ export const EffectFns = new Map([
             }
             if(isErrata) {
                 const aeAffliction = new ActiveEffect(mergeObject(CONFIG.statusEffects.find(x => x.id == "effect.other.vulnerable"), {duration: {rounds: 1, turns: 0}}), actor);
-                await actor.createEmbeddedEntity("ActiveEffect", aeAffliction.data);           
+                await actor.createEmbeddedDocuments("ActiveEffect", [aeAffliction.data]);           
             }
         }
         const content = await renderTemplate('/systems/ptu/templates/chat/save-check.hbs', messageData);
@@ -604,7 +604,7 @@ export const EffectFns = new Map([
         const actor = lastCombatant.actor;
         if(actor.data.data.modifiers.immuneToEffectDamage) return;
 
-        const token = canvas.tokens.get(lastCombatant.tokenId);
+        const token = canvas.tokens.get(lastCombatant.token.id);
         await ApplyFlatDamage([token], "Nightmare (Bad Sleep)", actor.data.data.health.tick * 2);
 
         /** If affliction can only be triggered once per turn, make sure it shows as applied. */
