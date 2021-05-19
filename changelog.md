@@ -1,3 +1,10 @@
+**Welcome to the Alpha!**
+This is the Alpha branch which is most likely very unstable. I hope you backed up your Foundry Install & Worlds before trying to convert.
+Please report any bugs on the discord!
+
+## 1.4.0-Alpha.1
+- Updated to Foundry Version 0.8.4
+
 ## 1.3.1 - Firefox Compatability Fix
 - Fixed a compatability issue with Firefox when it came to the new Inventory system
 - Fixed some CSS to make things look a bit better in Firefox
