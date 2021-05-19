@@ -59,7 +59,7 @@
                               dtype="Number" 
                               mod=skill.value.mod
                               total=skill.value.total
-                              modOrigins=(getProperty ../origins (concat "data.skills." key ".value.mod"))
+                              modOrigins=(getProperty ../actor.origins (concat "data.skills." key ".value.mod"))
                               flipped=(gt 8 @index)}}
                           </div>
                           <div class="skill {{key}} col-sm-3 align-self-center bgcolor skill--{{skill.rank}} center-text">
@@ -72,7 +72,7 @@
                               dtype="Number" 
                               mod=skill.modifier.mod
                               total=skill.modifier.total
-                              modOrigins=(getProperty ../origins (concat "data.skills." key ".modifier.mod") )
+                              modOrigins=(getProperty ../actor.origins (concat "data.skills." key ".modifier.mod") )
                               flipped=(gt 8 @index)}}
                           </div>
                           <div class="skill {{key}} col-sm-2 align-self-center bgcolor fs-9 center-text rollable"
@@ -434,7 +434,7 @@
                           dtype="Number" 
                           mod=""
                           total="ignored"
-                          modOrigins=(getProperty ../origins (concat "data.stats." key ".mod"))
+                          modOrigins=(getProperty ../actor.origins (concat "data.stats." key ".mod"))
                           flipped=(gt 3 @index)}}
                       </div>
                       <div class="stats {{key}} levelUp col-sm-2">
@@ -444,7 +444,7 @@
                           dtype="Number" 
                           mod=""
                           total="ignored"
-                          modOrigins=(getProperty ../origins (concat "data.stats." key ".levelUp"))
+                          modOrigins=(getProperty ../actor.origins (concat "data.stats." key ".levelUp"))
                           flipped=(gt 3 @index)}}
                       </div>
                       <div class="stats stage stage col-sm-2">
@@ -455,7 +455,7 @@
                             dtype="Number" 
                             mod=""
                             total="ignored"
-                            modOrigins=(getProperty ../origins (concat "data.stats." key ".stage"))
+                            modOrigins=(getProperty ../actor.origins (concat "data.stats." key ".stage"))
                             flipped=(gt 3 @index)}}
                         {{/if}}
                       </div>

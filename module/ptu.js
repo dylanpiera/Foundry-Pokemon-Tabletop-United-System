@@ -1,9 +1,7 @@
 // Import Modules
 import { PTUActor } from "./actor/actor.js";
 import { GetSpeciesData } from "./actor/actor.js";
-import { PTUGen4CharacterSheet } from "./actor/character-sheet-gen4.js";
 import { PTUGen8CharacterSheet } from "./actor/character-sheet-gen8.js";
-import { PTUGen4PokemonSheet } from "./actor/pokemon-sheet-gen4.js";
 import { PTUGen8PokemonSheet } from "./actor/pokemon-sheet-gen8.js";
 import { PTUItem } from "./item/item.js";
 import { PTUItemSheet } from "./item/item-sheet.js";
@@ -57,9 +55,7 @@ function registerSheets() {
   // Register sheet application classes
   Actors.unregisterSheet("core", ActorSheet);
   Actors.registerSheet("ptu", PTUGen8CharacterSheet, { types: ["character"], makeDefault: true });
-  // Actors.registerSheet("ptu", PTUGen4CharacterSheet, { types: ["character"], makeDefault: false });
   Actors.registerSheet("ptu", PTUGen8PokemonSheet, { types: ["pokemon"], makeDefault: true });
-  // Actors.registerSheet("ptu", PTUGen4PokemonSheet, { types: ["pokemon"], makeDefault: false });
   Items.unregisterSheet("core", ItemSheet);
   Items.registerSheet("ptu", PTUItemSheet, { types: ["item","ability","move","capability", "pokeedge","dexentry"], makeDefault: true });
   Items.registerSheet("ptu", PTUEdgeSheet, { types: ["edge"], makeDefault: true });
@@ -741,7 +737,7 @@ async function createPTUMacro(data, slot) {
   const actor = game.actors.get(data.actorId);
 
   // Create the macro command
-  const command = `game.ptu.rollItemMacro("${data.actorId}","${item._id}","${data.sceneId}", "${data.tokenId}");`;
+  const command = `game.ptu.rollItemMacro("${data.actorId}","${item.id}","${data.sceneId}", "${data.tokenId}");`;
   let macro = game.macros.entities.find(m => (m.name === `${actor.name}'s ${item.name}`) && (m.command === command));
   if (!macro) {
     macro = await Macro.create({
@@ -768,14 +764,14 @@ function rollItemMacro(actorId, itemId, sceneId, tokenId) {
   let actorData = duplicate(actor.data);
   
   if(isTokenActor) {
-    const token = game.scenes.get(sceneId)?.data?.tokens?.find(x => x?._id == tokenId);
+    const token = game.scenes.get(sceneId)?.data?.tokens?.find(x => x?.id == tokenId);
     if(!token) return ui.notifications.warn(`Scene or token no longer exists. Macro is invalid.`);
     actorData = mergeObject(actorData, token.actorData);
   }
 
   if(!actor) return ui.notifications.warn(`Couldn't find actor with ID ${actorId}`);
 
-  const item = (isTokenActor && actorData.items) ? actorData.items.find(x => x._id == itemId) : actor.items.get(itemId);
+  const item = (isTokenActor && actorData.items) ? actorData.items.find(x => x.id == itemId) : actor.items.get(itemId);
   if(!item) return ui.notifications.warn(`Actor ${actor.name} doesn't have an item with ID ${itemId}`);
 
   switch(item.type) {
@@ -832,7 +828,7 @@ function _onPokedexMacro() {
       case 3: { // Only owned mons
         if(!game.user.character) return ui.notifications.warn("Please make sure you have a trainer as your Selected Player Character");
 
-        if(!game.user.character.itemTypes.dexentry.some(entry => entry.data.name == game.ptu.GetSpeciesData(token.actor.data.data.species)?._id?.toLowerCase() && entry.data.data.owned)) {
+        if(!game.user.character.itemTypes.dexentry.some(entry => entry.data.name == game.ptu.GetSpeciesData(token.actor.data.data.species)?.id?.toLowerCase() && entry.data.data.owned)) {
           ui.notifications.warn("Only owned species can be identified by the Pokédex.");
           continue;
         }
@@ -987,12 +983,12 @@ export default class DirectoryPicker extends FilePicker {
 Hooks.on("updateInitiative", function(actor) {
   if(!game.combats?.active) return;
 
-  let c = game.combats.active.combatants.find(x => x.actor?._id == actor._id)
+  let c = game.combats.active.combatants.find(x => x.actor?.id == actor.id)
   if(!c) return;
   let init = actor.data.data.initiative.value;
   let tieBreaker = Number((c.initiative+"").split(".")[1]) * 0.01;
   if(init+tieBreaker != c.initiative) {
-    game.combats.active.setInitiative(c._id, init >= 0 ? init+tieBreaker : (Math.abs(init)+tieBreaker)*-1);
+    game.combats.active.setInitiative(c.id, init >= 0 ? init+tieBreaker : (Math.abs(init)+tieBreaker)*-1);
   }
 
   return true;

@@ -31,8 +31,8 @@ export class PTUGen8CharacterSheet extends ActorSheet {
 		if (this.actor.data.type == 'character') {
 			this._prepareCharacterItems(data);
 		}
-
-		data['origins'] = this.actor.origins;
+		data.data = this.actor.data.data;
+		// data['origins'] = this.actor.origins;
 
 		return data;
 	}

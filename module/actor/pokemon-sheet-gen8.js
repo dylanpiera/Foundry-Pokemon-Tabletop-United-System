@@ -33,6 +33,8 @@ export class PTUGen8PokemonSheet extends ActorSheet {
 			this._prepareCharacterItems(data);
 		}
 
+		data.data = this.actor.data.data;
+
 		data['origins'] = this.actor.origins;
 
 		data['compendiumItems'] = game.ptu.items;
@@ -84,7 +86,7 @@ export class PTUGen8PokemonSheet extends ActorSheet {
 	_prepareCharacterItems(sheetData) {
 		sheetData['skills'] = this.actor.data.data.skills
 
-		const actorData = sheetData.actor;
+		const actor = sheetData.actor;
 
 		// Initialize containers.
 		const abilities = [];
@@ -115,13 +117,13 @@ export class PTUGen8PokemonSheet extends ActorSheet {
 		}
 
 		// Assign and return
-		actorData.abilities = abilities;
-		actorData.moves = moves;
-		actorData.capabilities = capabilities;
-		actorData.edges = edges;
+		actor.abilities = abilities;
+		actor.moves = moves;
+		actor.capabilities = capabilities;
+		actor.edges = edges;
 
-		for(let move of actorData.moves) {
-			move.data = PrepareMoveData(actorData.data, move.data)
+		for(let move of actor.moves) {
+			move.data = PrepareMoveData(actor.data.data, move.data)
 		}
 	}
 

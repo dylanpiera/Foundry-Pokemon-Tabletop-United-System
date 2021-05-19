@@ -39,7 +39,8 @@ export class PTUItemSheet extends ItemSheet {
 	getData() {
 		const data = super.getData();
 
-		data.data = PrepareMoveData(this.object.options.actor?.data?.data, data.data);
+		if(this.object.type === 'move' && this.object.isOwned)
+			data.data = PrepareMoveData(this.object.options.actor?.data?.data, data.data);
 		return data;
 	}
 

@@ -14,16 +14,16 @@
         <div class="swsh-body w-100" style="display: block;">{{/if}}
             <ol class="item-list">
                 {{#each data as | obj |}}
-                <li class="item flexrow item-categorized" data-category="{{../category}}" data-item-id="{{obj._id}}">
+                <li class="item flexrow item-categorized" data-category="{{../category}}" data-item-id="{{obj.id}}">
                     <div class="item-name flexrow">
 
                     <h4 data-category="{{../category}}" title="Toggle Info ({{obj.name}})" data-toggle="collapse"
                     {{#if obj.data.snippet}}
-                        data-target=".{{obj._id}}-collapse" aria-expanded="false"
-                        aria-controls="{{obj._id}}-collapse {{obj._id}}-snippet-collapse"
+                        data-target=".{{obj.id}}-collapse" aria-expanded="false"
+                        aria-controls="{{obj.id}}-collapse {{obj.id}}-snippet-collapse"
                     {{else}}
-                        data-target="#{{obj._id}}-collapse" aria-expanded="false"
-                        aria-controls="{{obj._id}}-collapse"
+                        data-target="#{{obj.id}}-collapse" aria-expanded="false"
+                        aria-controls="{{obj.id}}-collapse"
                     {{/if}}
                     >
                         <i class="fas fa-info-circle info-icon"></i>
@@ -32,13 +32,13 @@
                     </div>
                     {{#if obj.data.quantity}}
                         <div class="item-detail item-amount">
-                            <input data-item-id="{{obj._id}}" data-binding="data.quantity" type="text" value="{{obj.data.quantity}}" data-dtype="Number"/>
+                            <input data-item-id="{{obj.id}}" data-binding="data.quantity" type="text" value="{{obj.data.quantity}}" data-dtype="Number"/>
                         </div>
                     {{/if}}
                     {{#if (isdefined obj.data.owned)}}
                         <div class="item-detail item-owned">
                             <label for="data.owned">Owned:</label>
-                            <input data-item-id="{{obj._id}}" data-binding="data.owned" type="checkbox" {{checked obj.data.owned}} />
+                            <input data-item-id="{{obj.id}}" data-binding="data.owned" type="checkbox" {{checked obj.data.owned}} />
                         </div>
                     {{/if}}
                     <div class="item-controls" style="flex: 0 0 55px; justify-content: center; display:flex;">
@@ -46,7 +46,7 @@
                     <a class="item-control item-delete" title="Delete {{type}}"><i class="fas fa-trash"></i></a>
                     </div>
                     {{#if obj.data.snippet}}
-                    <div class="collapse readable lh-16 item-summary {{obj._id}}-collapse" id="{{obj._id}}-collapse">
+                    <div class="collapse readable lh-16 item-summary {{obj.id}}-collapse" id="{{obj.id}}-collapse">
                         {{#if obj.data.entry}}
                             <div class="row">
                                 <div class="col" style="word-break:break-word;">
@@ -88,12 +88,12 @@
                             <p class="summary">{{{obj.data.effect}}}</p>
                         {{/if}}
                     </div>
-                    <div class="collapse in readable lh-16 item-summary {{obj._id}}-collapse" id="{{obj._id}}-snippet-collapse">
+                    <div class="collapse in readable lh-16 item-summary {{obj.id}}-collapse" id="{{obj.id}}-snippet-collapse">
                         <p class="summary">{{{obj.data.snippet}}}</p>
                     </div>
                     {{else}}
                     {{#if (is true (getGameSetting "openByDefault"))}}
-                        <div class="collapse in readable lh-16 item-summary" id="{{obj._id}}-collapse">
+                        <div class="collapse in readable lh-16 item-summary" id="{{obj.id}}-collapse">
                         {{#if obj.data.entry}}
                             <div class="row">
                                 <div class="col" style="word-break:break-word;">
@@ -136,7 +136,7 @@
                             </div>
                         {{/if}}
                     {{else}}
-                        <div class="collapse readable lh-16 item-summary" id="{{obj._id}}-collapse">
+                        <div class="collapse readable lh-16 item-summary" id="{{obj.id}}-collapse">
                         {{#if obj.data.entry}}
                             <div class="row">
                                 <div class="col" style="word-break:break-word;">

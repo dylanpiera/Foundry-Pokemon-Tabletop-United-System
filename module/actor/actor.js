@@ -402,7 +402,7 @@ export class PTUActor extends Actor {
     Hooks.call("updateInitiative", this);
 
     data.tp.max = (data.level.current > 0 ? Math.floor(data.level.current / 5) : 0) + 1;
-    data.tp.pep.value = actorData.items.filter(x => x.type == "pokeedge" && x.data.origin.toLowerCase() != "pusher").length;
+    data.tp.pep.value = actorData.items.filter(x => x.type == "pokeedge" && x.data.origin?.toLowerCase() != "pusher").length;
     data.tp.pep.max = data.level.current > 0 ? Math.floor(data.level.current / 10)+1 : 1;
 
     data.evasion = CalculateEvasions(data, actorData.flags?.ptu);
