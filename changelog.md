@@ -1,3 +1,8 @@
+## 1.3.1 - Firefox Compatability Fix
+- Fixed a compatability issue with Firefox when it came to the new Inventory system
+- Fixed some CSS to make things look a bit better in Firefox
+- Added Legendary property to species data for use in Macros
+
 ## 1.3.0 - Automation & Quality of Life
 ### Overview
 Update 1.3.0 will be the final update released for Foundry 0.7.9, as after this update I will be focusing my full attention to updating the system to Foundry 0.8.*

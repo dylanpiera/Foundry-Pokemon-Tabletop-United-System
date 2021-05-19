@@ -237,11 +237,11 @@ export class PTUGen8CharacterSheet extends ActorSheet {
 	}
 
 	async _onItemDrop(event){
-		debug("Drop Category",event.toElement.dataset?.category);
+		debug("Drop Category",event.target.dataset?.category);
 		debug("Drop Event",event);
 
 		const itemId = event.dataTransfer.getData("text");
-		const category = event.toElement.dataset.category;
+		const category = event.target.dataset.category;
 		const actor = this.actor;
 
 		// Grab item from character sheet

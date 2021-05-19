@@ -1592,6 +1592,11 @@ header.effect-change.effects-header.flexrow > div {
         position: absolute;
         right: 0;
         pointer-events: none;
+        bottom: 5px;
+
+        @-moz-document url-prefix() {
+            right: 6px;
+        }
     }
 
     &:hover > .mod-tooltip {

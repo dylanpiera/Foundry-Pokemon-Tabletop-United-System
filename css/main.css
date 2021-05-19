@@ -1305,6 +1305,12 @@ header.effect-change.effects-header.flexrow > div {
   position: absolute;
   right: 0;
   pointer-events: none;
+  bottom: 5px;
+}
+@-moz-document url-prefix() {
+  .mod-input:before {
+    right: 6px;
+  }
 }
 .mod-input:hover > .mod-tooltip {
   display: block;
