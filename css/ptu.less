@@ -197,7 +197,7 @@ a.item {
     left: 0;
     bottom: -45px;
     padding: 0px 20px;
-    width: 100%;
+    width: fit-content;
 
     .tabs {
         li {
@@ -818,6 +818,16 @@ span.readable {
         background: linear-gradient(45deg, #ffffffbb, #fff, #ffffffbb);
     }
 
+    .effects {
+        .inventory-list {
+            width: 100%;
+
+            .effect-disabled, .effect-disabled ~ .item-list {
+                filter: opacity(0.5);
+            }
+        }
+    }
+
     .inventory-list {
         list-style: none;
         margin: 0;
@@ -839,10 +849,12 @@ span.readable {
             line-height: 20px;
             background: transparent;
             font-weight: bold;
+            box-shadow:none;
 
             h3 {
                 margin: 0;
                 padding: 0;
+                padding-left:0.5rem;
                 font-weight: bold;
             }
         }
@@ -904,14 +916,30 @@ span.readable {
     }
 }
 
-.actor .inventory-list .inventory-header .item-controls a.item-create {
-    background: #ffffffa6;
-    border-radius: 5px;
-    font-weight: 400;
-    color: rgba(0,0,0,.6);
-    line-height: 18px;
-    padding-top: 2px;
-    flex: 0 0 100%;
+.actor .inventory-list .inventory-header .item-controls, .effect-header {
+    a.item-create, a.effect-edit, a.effect-delete, a.effect-create, a.effect-suspend {
+        background: #ffffffa6;
+        border-radius: 5px;
+        font-weight: 400;
+        color: rgba(0,0,0,.6);
+        line-height: 18px;
+        padding-top: 2px;
+        flex: 0 0 100%;
+    }
+}
+
+.effect-header .item-controls{
+    flex: 0 0 55px;
+    justify-content: center;
+    display:flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-self: center;
+
+    a {
+        font-size: 12px;
+        text-align: center;
+    }
 }
 
 .actor .inventory-list .item-controls a.item-create:hover {
@@ -977,7 +1005,7 @@ span.readable {
         left: 0;
         top: 27px;
         padding: 0px 20px;
-        width: 100%;
+        width: fit-content;
         z-index: 20;
         height: fit-content;
     
@@ -1087,7 +1115,20 @@ span.readable {
     visibility: hidden;
 }
 
-.gen8 .stats {
+.gen8 {
+    &.charactermancer input {
+        &.nature-up {
+            background-color: #CC9999;
+            color: black;
+            text-transform: uppercase;
+        }
+        &.nature-down {
+            background-color: #99CCCC;
+            color: black;
+            text-transform: uppercase;
+        }
+    }
+
     .nature-up {
         color: #b27d94;
         font-weight: bold;
@@ -1194,6 +1235,36 @@ p.summary {
             word-break: break-word !important;
         }
     }
+
+}
+
+div.hover-button {
+    display: none;
+    position: absolute;
+    bottom: -117%;
+    width: 130%;
+    transform: translate(-16%);
+}
+
+.apply-damage-button:hover > .hover-button {
+    display: flex;
+    flex-direction: row;
+}
+
+a.hover-button {
+    flex: 1 1 30%;
+    font-size: 7px;
+    word-break: break-word;
+    background: #999;
+    border: 1px solid #777;
+    margin: 1px;
+    border-radius: 7%;
+    letter-spacing: 0.5px;
+    font-weight: 100;
+
+    &.resist-damage-button {
+        font-size: 6px;
+    }
 }
 
 /* ----------------------------------------- */
@@ -1263,6 +1334,15 @@ p.summary {
             filter: sepia(0.5) hue-rotate(-60deg);
         }
     }
+}
+
+.success {
+    color: #18520b;
+    //filter: sepia(0.5) hue-rotate(60deg);
+}
+.failure {
+    color: #aa0200;
+    //filter: sepia(0.5) hue-rotate(-60deg);
 }
 
 .changelog {
@@ -1337,6 +1417,239 @@ p.summary {
     }
 }
 
+.charactermancer {
+     .window-content {
+        padding: unset;
+    }
+
+    .container-fluid {
+        text-align: center;
+        padding: unset;
+        position: relative;
+    }
+
+    .content {
+        //padding: 1rem;
+        z-index: 5;
+        position: inherit;
+    }
+
+    .bar {
+        background-color: #272727;
+        color: white;
+        font-size: 22px;
+        font-weight: bold;
+        padding: 0.75rem;
+
+        &.hp {
+            background: rgb(39,39,39);
+            background: linear-gradient(90deg, rgba(39,39,39,1) 0%, rgba(39,39,39,1) 72%, rgba(27,61,27,1) 100%);
+        }
+        &.atk, &.def {
+            background: rgb(39,39,39);
+            background: linear-gradient(90deg, rgba(39,39,39,1) 0%, rgba(39,39,39,1) 72%, #3D3D3D 100%);
+        }
+        &.spatk, &.spdef {
+            background: rgb(39,39,39);
+            background: linear-gradient(90deg, rgba(39,39,39,1) 0%, rgba(39,39,39,1) 72%, #3D2E1B 100%);
+        }
+        &.spd {
+            background: rgb(39,39,39);
+            background: linear-gradient(90deg, rgba(39,39,39,1) 0%, rgba(39,39,39,1) 72%, #3D3C1B 100%);
+        }
+        
+    }
+
+    input, select {
+        background-color: #999;
+        color: black;
+        border-color: #666;
+        height: 100%;
+        padding: 0.5rem;
+
+        &.no-box {
+            border: unset;
+            background: unset;
+            color: white;
+            &:focus {
+                box-shadow: unset;
+            }
+        }
+    }
+
+    .stats {
+        &.key {
+            flex: 1 0 30%;
+            text-align: start;
+        }
+        &.base {
+            flex: 0 1 20%;
+        }
+        &.levelUp {
+            flex: 0 1 20%;
+        }
+        &.total {
+            flex: 1 0 25%;
+        }
+    }
+
+    #preview-img img {
+        width: 100%;
+        max-height: 404px;
+        border-bottom: 0;
+    }
+
+    .typing {
+        min-height: 45px;
+        margin-top: -2px;
+    }
+
+    #levelContainer, #levelExpContainer {
+        display: inline-block;
+        position: relative;
+        width: 100%;
+
+        #levelField {
+            padding-left: 3.5rem;
+        }
+
+        #levelExpField {
+            padding-right: 1rem;
+        }
+
+        #levelPrefix {
+            position: absolute;
+            top: 9px;
+            color: #111;
+            padding-left: 5px;
+            width:fit-content;
+            pointer-events: none;
+        }
+
+        #levelExpSuffix {
+            position: absolute;
+            top: 9px;
+            color: #111;
+            padding-right: 5px;
+            width:fit-content;
+            pointer-events: none;
+        }
+    }
+
+    .box {
+        h5 {
+            text-decoration: underline;
+        }
+        border: solid 2px #666;
+        background-color: #999;
+        color: #666;
+        padding: 0.1rem;
+    }
+
+    #evolutionContainer {
+        select {
+            max-width: 99px;
+            margin-left: -2px;
+        }
+    }
+}
+
+.loyalty, .loyalty input {
+    font-style: italic;
+    color: gray;
+}
+
+.window-app .window-content {
+    background: linear-gradient(45deg, #ECDBEB, #DFFFFE);
+}
+
+header.effect-change.effects-header.flexrow > div {
+    text-align: center;
+    white-space: nowrap;
+}
+
+.damage-mod-header {
+    position: absolute;
+    top: 5px;
+    right: 20px;
+    width: 50%;
+    max-width: 400px;
+    text-align: center;
+    white-space: nowrap;
+}
+
+.small-input input {
+    height: 20px !important;
+}
+
+.mod-input {
+    position: relative;
+
+    &:before {
+        content: attr(data-mod);
+        padding: 5px 5px 0 0;
+        color: #19181370;
+        position: absolute;
+        right: 0;
+        pointer-events: none;
+    }
+
+    &:hover > .mod-tooltip {
+        display: block;
+    }
+
+    .mod-tooltip {
+        display: none;
+        position: absolute;
+        
+        &:hover {
+            display: block;
+        }
+
+        &.bottom-display {
+            top: unset;
+            bottom: -10px;
+            transform: translate(-50%, 100%);
+        }
+
+        top: -10px;
+        left: 50%;
+        width: 100%;
+        min-width: 13rem;
+        background: linear-gradient(45deg, #ECDBEB, #DFFFFE);
+        transform: translate(-50%, -100%);
+        border: black 1px solid;
+        box-shadow: #00000060 0 0 15px;
+        z-index: 100;
+
+        ol {
+            padding-inline-start: 0;
+            text-align: start;
+            font-size: 12px;
+            font-family: sans-serif;
+        }
+    }
+}
+
+.settings {
+    .settings-body {
+        padding-top: 15px;
+    }
+    .settings-tabs {
+        flex: 0 0 32px;
+        line-height: 32px;
+        font-size: 16px;
+        border-bottom: 1px solid black;
+
+        .fas {
+            padding-right: 10px;
+        }
+
+        &.tabs .item {
+            white-space:nowrap;
+        }
+    }
+}
 
 /* MD CSS */
 .md h1, .md h2, .md h3, .md h4, .md h5, .md h6 {
@@ -1362,4 +1675,18 @@ p.summary {
 /* Firefox Fix */
 .sheet-footer {
     height: 0;
+}
+
+.no-shadow {
+    box-shadow: none;
+}
+
+.pokedexflex {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+
+    & > span {
+        flex: 1 1 50%;
+    }
 }

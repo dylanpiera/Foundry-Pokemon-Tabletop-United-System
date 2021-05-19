@@ -4,120 +4,278 @@
     "templates": {
       "modifiers": {
         "modifiers": {
-          "statPoints": 0,
-          "initiative": 0,
-          "hardened": false,
-          "acBonus": 0,
-          "critRange" : 0,
+          "statPoints": {
+            "value": 0,
+            "mod": 0
+          },
+          "initiative": {
+            "value": 0,
+            "mod": 0
+          },
+          "acBonus": {
+            "value": 0,
+            "mod": 0
+          },
+          "critRange" : {
+            "value": 0,
+            "mod": 0
+          },
           "evasion" : {
-            "physical" : 0,
-            "special" : 0,
-            "speed" : 0
+            "physical" : {
+              "value": 0,
+              "mod": 0
+            },
+            "special" : {
+              "value": 0,
+              "mod": 0
+            },
+            "speed" : {
+              "value": 0,
+              "mod": 0
+            }
+          },
+          "saveChecks": {
+            "value": 0,
+            "mod": 0
+          },
+          "effectRange": {
+            "value": 0,
+            "mod": 0
+          },
+          "skillBonus": {
+            "value": 0,
+            "mod": 0
+          },
+          "flinch_count": {
+            "value": 0,
+            "keys": []
+          },
+          "damageBonus": {
+            "physical": {
+              "value": 0,
+              "keys": []
+            },
+            "special": {
+              "value": 0,
+              "keys": []
+            }
+          },
+          "damageReduction": {
+            "physical": {
+              "value": 0,
+              "keys": []
+            },
+            "special": {
+              "value": 0,
+              "keys": []
+            }
           }
         }
       },
       "skills": {
         "skills": {
           "acrobatics": {
-            "value": 2,
+            "value": {
+              "value": 2,
+              "mod": 0
+            },
             "label": "Acrobatics",
-            "modifier": 0,
+            "modifier": {
+              "value": 0,
+              "mod": 0
+            },
             "type": "body"
           },
           "athletics": {
-            "value": 2,
+            "value": {
+              "value": 2,
+              "mod": 0
+            },
             "label": "Athletics",
-            "modifier": 0,
+            "modifier": {
+              "value": 0,
+              "mod": 0
+            },
             "type": "body"
           },
           "charm": {
-            "value": 2,
+            "value": {
+              "value": 2,
+              "mod": 0
+            },
             "label": "Charm",
-            "modifier": 0,
+            "modifier": {
+              "value": 0,
+              "mod": 0
+            },
             "type": "spirit"
           },
           "combat": {
-            "value": 2,
+            "value": {
+              "value": 2,
+              "mod": 0
+            },
             "label": "Combat",
-            "modifier": 0,
+            "modifier": {
+              "value": 0,
+              "mod": 0
+            },
             "type": "body"
           },
           "command": {
-            "value": 2,
+            "value": {
+              "value": 2,
+              "mod": 0
+            },
             "label": "Command",
-            "modifier": 0,
+            "modifier": {
+              "value": 0,
+              "mod": 0
+            },
             "type": "spirit"
           },
           "generalEd": {
-            "value": 2,
+            "value": {
+              "value": 2,
+              "mod": 0
+            },
             "label": "General Ed",
-            "modifier": 0,
+            "modifier": {
+              "value": 0,
+              "mod": 0
+            },
             "type": "mind"
           },
           "medicineEd": {
-            "value": 2,
+            "value": {
+              "value": 2,
+              "mod": 0
+            },
             "label": "Medicine Ed",
-            "modifier": 0,
+            "modifier": {
+              "value": 0,
+              "mod": 0
+            },
             "type": "mind"
           },
           "occultEd": {
-            "value": 2,
+            "value": {
+              "value": 2,
+              "mod": 0
+            },
             "label": "Occult Ed",
-            "modifier": 0,
+            "modifier": {
+              "value": 0,
+              "mod": 0
+            },
             "type": "mind"
           },
           "pokemonEd": {
-            "value": 2,
+            "value": {
+              "value": 2,
+              "mod": 0
+            },
             "label": "Pokémon Ed",
-            "modifier": 0,
+            "modifier": {
+              "value": 0,
+              "mod": 0
+            },
             "type": "mind"
           },
           "techEd": {
-            "value": 2,
+            "value": {
+              "value": 2,
+              "mod": 0
+            },
             "label": "Technology Ed",
-            "modifier": 0,
+            "modifier": {
+              "value": 0,
+              "mod": 0
+            },
             "type": "mind"
           },
           "focus": {
-            "value": 2,
+            "value": {
+              "value": 2,
+              "mod": 0
+            },
             "label": "Focus",
-            "modifier": 0,
+            "modifier": {
+              "value": 0,
+              "mod": 0
+            },
             "type": "spirit"
           }, 
           "guile": {
-            "value": 2,
+            "value": {
+              "value": 2,
+              "mod": 0
+            },
             "label": "Guile",
-            "modifier": 0,
+            "modifier": {
+              "value": 0,
+              "mod": 0
+            },
             "type": "mind"
           },
           "intimidate": {
-            "value": 2,
+            "value": {
+              "value": 2,
+              "mod": 0
+            },
             "label": "Intimidate",
-            "modifier": 0,
+            "modifier": {
+              "value": 0,
+              "mod": 0
+            },
             "type": "body"
           },
           "intuition": {
-            "value": 2,
+            "value": {
+              "value": 2,
+              "mod": 0
+            },
             "label": "Intuition",
-            "modifier": 0,
+            "modifier": {
+              "value": 0,
+              "mod": 0
+            },
             "type": "spirit"
           },
           "perception": {
-            "value": 2,
+            "value": {
+              "value": 2,
+              "mod": 0
+            },
             "label": "Perception",
-            "modifier": 0,
+            "modifier": {
+              "value": 0,
+              "mod": 0
+            },
             "type": "mind"
           },
           "stealth": {
-            "value": 2,
+            "value": {
+              "value": 2,
+              "mod": 0
+            },
             "label": "Stealth",
-            "modifier": 0,
+            "modifier": {
+              "value": 0,
+              "mod": 0
+            },
             "type": "body"
           },
           "survival": {
-            "value": 2,
+            "value": {
+              "value": 2,
+              "mod": 0
+            },
             "label": "Survival",
-            "modifier": 0,
+            "modifier": {
+              "value": 0,
+              "mod": 0
+            },
             "type": "body"
           }
         }
@@ -175,7 +333,11 @@
       },
       "shared": {
         "digestionBuff": "",
-        "notes": ""
+        "notes": "",
+        "tempHp": {
+          "value": null,
+          "max": null
+        }
       }
     },
     "character": {
@@ -200,6 +362,8 @@
       "ap": {
         "value": 5
       },
+
+      "item_categories": {},
 
       "biography": {
         "physicalDescription": "",
@@ -258,8 +422,29 @@
         }
       },
 
-      "owner": "",
-      "shiny": false
+      "owner": "0",
+      "shiny": false,
+      "loyalty": 3,
+      "pokeball": "",
+
+      "training": {
+        "agility": {
+          "trained": false,
+          "ordered": false
+        },
+        "brutal": {
+          "trained": false,
+          "ordered": false
+        },
+        "focused": {
+          "trained": false,
+          "ordered": false
+        },
+        "inspired": {
+          "trained": false,
+          "ordered": false
+        }
+      }
     }
   },
   "Item": {
@@ -313,7 +498,8 @@
       "ac": "",
       "range": "",
       "contestType": "",
-      "stab": false
+      "stab": false,
+      "damageBonus": 0
     },
     "capability": {
       "templates": ["base"]
@@ -326,6 +512,7 @@
     "item": {
       "templates": ["base"],
       "quantity": 1,
+      "category": "",
       "cost": 0
     }
   }

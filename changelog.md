@@ -1,12 +1,88 @@
-## 1.2.0 - Combat Automation, Pokemon Generation & Much more!
+## 1.3.0 - Automation & Quality of Life
+### Overview
+Update 1.3.0 will be the final update released for Foundry 0.7.9, as after this update I will be focusing my full attention to updating the system to Foundry 0.8.*
+But, let us talk about the update, shall we! It's been 2 months in the making after all.
+
+This update was all focused around Automation & Quality of Life features, adding things like combat damage calculation, status effect automation, active effects implementations, and much more.
+There are a lot of 'hidden' features present, and also some experimental ones. But I hope you enjoy this update while I work on upgrading to 0.8 regardless!
+
+### New Feature Overview
+- Moves & the Pokédex item now have macrobar support.
+- Initiative is now dynamically updated in Combat when it or any stats it is derrived from are changed.
+- Training Options & Orders are now present.
+- Added save checks that are automatically rolled in Combat for Status Effects.
+- Added inventory categorization for trainers.
+- Added a new Settings Menu specifically for PTU.
+- Added an experimental and basic version of the Pokémon Charactermancer.
+- And added lots and lots of modifier fields.
+
+### New Trainer Features
+- Added Item Categories for trainer sheets.
+  - You can simply drag an item between categories, or edit an item's category property.
+  - Manually editing an item allows you to create a new Category by simply giving it a category that doesn't exist yet.
+- The Pokédex Item can now be dragged on the Macro Bar to be used on Pokémon.
+  - Behavior can be configured in settings by DM.
+- Added Notes section to sheet.
+
+### New Pokémon Features
+- Hardened condition is now fully implemented.
+- Added Trainings & Orders, that apply as Active Effects.
+- Added a Pokéball field in the Extra tab to keep track of how you caught a mon.
+- Added an experimental version of the Charactermancer, allowing you to more easily create Pokémon. Currently implemented:
+  - Species / Id selection
+  - Exp / Level calculation
+  - Evolution Detection based on Level
+  - Nature Selection
+  - Stat Selection based on Level
+  - Data Restore upon improper closing
+- Added the Owner field.
+- Added a GM only Loyalty field.
+
+### New Modifiers
+- (Almost) All fields that can (and should) be modified will show you the 'history' of the modification, based on what is affecting this value.
+- Added Damage Modifier & Damage Reduction modifiers.
+- Added Effect Range Field (doesn't do anything, just for you to keep track)
+
+### New Combat Features
+- Token Effects have been replaced with PTU Status Effects.
+- Status Effects will automatically do start/end of turn effects while in Combat.
+  - Status Effects with a duration will also automatically be deleted when appropriate.
+- Initiative Dynamically updates if a stat / property that affects it is changed for an Actor
+- Added League Battle option in a Combat's settings, which makes Trainers go in reverse order before Pokémon.
+  - Requires a re-roll if enabled after trainer rolled initiative.
+
+### New Game Master Features
+- Added Habitat Rollable Compendium to be used for randomly generating encounters
+  - To make use of this with the /ptug command, please import all of the tables to the game world first.
+
+### Other New Features & 'Secrets'
+- Added Effects tab allowing you to create custom ActiveEffects or suspend active ones temporarily.
+  - For examples, give your Pokémon Trainings and see how they're applied. Alternatively, ask on the [Discord!](https://discord.gg/fE3w59q)
+- Holding shift & alt, while rolling a move, will allow you to add a 1x damage modifier to the roll.
+- Holding shift while clicking the Apply Damage button from a move in the chat will allow you to apply a 1x damage reduction to the roll.
+
+### Bugfixes
+- Fixed the Darumaka Line not generating properly due to Darmanitan not being oh so zen about things.
+- Fixed Stonjourner... just not existing... Like it wasn't there, at all... But now it is!
+- Pressing enter/return in a sheet no longer will randomly roll abilities/save checks.
+- Re-removed 'The Furnace' dependency. (Still recommended however)
+- 'imgpath' parameter properly works again with /ptug command.
+- Pokémon generated with 'imgpath' now will use relative path instead of absolute.
+- Made Temp HP bar available as Token Bar 
+
+### API Features
+- Added 'turnEnd' 'turnStart' and 'roundEnd' hooks.
+- [**BREAKING**]: 'data.health.temp' has now moved to 'data.tempHp'
+
+## 1.2.0 - Combat Automation, Pokémon Generation & Much more!
 ### Combat Automation
 - Added a 'Deal Damage' button to Attack Chat Messages, which applies the damage of that move to all selected tokens.
   - Also added an Undo button for the applied damage.
 
-### Pokemon Generation
-- **Big Change!** DM Quick-Pokemon Generation
+### Pokémon Generation
+- **Big Change!** DM Quick-Pokémon Generation
 
-DMs can now quickly generate Pokémon for random encounters using the chat! For more info see the [wiki](https://github.com/dylanpiera/Foundry-Pokemon-Tabletop-United-System/wiki/Pokemon-Generation-using-Chat-Commands).
+DMs can now quickly generate Pokémon for random encounters using the chat! For more info see the [wiki](https://github.com/dylanpiera/Foundry-Pokémon-Tabletop-United-System/wiki/Pokémon-Generation-using-Chat-Commands).
 - This also works by Dragging & Dropping dex entries right into the battle field! Creating tokens where needed.
 
 ### Quality of Live Improvements
@@ -16,7 +92,7 @@ DMs can now quickly generate Pokémon for random encounters using the chat! For 
   - Also added an 'Open Owner' button if an owner has been selected.
   - Owners is purely meant for trainers at the moment, and therefore will only show PCs as options that the Owner of the mon also owns.
 - Added a Shiny field for all your capture calc needs.
-- Add 'Notes' to Character & Pokemon sheets, for your own record keeping!
+- Add 'Notes' to Character & Pokémon sheets, for your own record keeping!
 - Added Sage & Uranium Fangame Dexes as well as all their suplemental moves/abilities/etc.
 - Added system settings in regards to Audio for Module usage.
 
@@ -64,7 +140,7 @@ DMs can now quickly generate Pokémon for random encounters using the chat! For 
 
 ## 1.0.0 - Version 1!
 - Added automated release cycle
-  - There is a beta branch available, for more info see [README.md](https://github.com/dylanpiera/Foundry-Pokemon-Tabletop-United-System/blob/master/README.md)
+  - There is a beta branch available, for more info see [README.md](https://github.com/dylanpiera/Foundry-Pokémon-Tabletop-United-System/blob/master/README.md)
 - Added in-foundry copy of this very Changelog!
 - Reworked README.md to better reflect our V1 release! 
 

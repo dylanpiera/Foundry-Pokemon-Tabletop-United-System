@@ -165,7 +165,7 @@ a.item {
   left: 0;
   bottom: -45px;
   padding: 0px 20px;
-  width: 100%;
+  width: fit-content;
 }
 .container-fluid > .sheet-footer .tabs {
   padding-right: 8px;
@@ -654,6 +654,13 @@ span.readable {
 .actor.gen8 .inventory-list:not(.inventory-header) .item:nth-child(even) {
   background: linear-gradient(45deg, #ffffffbb, #fff, #ffffffbb);
 }
+.actor .effects .inventory-list {
+  width: 100%;
+}
+.actor .effects .inventory-list .effect-disabled,
+.actor .effects .inventory-list .effect-disabled ~ .item-list {
+  filter: opacity(0.5);
+}
 .actor .inventory-list {
   list-style: none;
   margin: 0;
@@ -674,10 +681,12 @@ span.readable {
   line-height: 20px;
   background: transparent;
   font-weight: bold;
+  box-shadow: none;
 }
 .actor .inventory-list .inventory-header h3 {
   margin: 0;
   padding: 0;
+  padding-left: 0.5rem;
   font-weight: bold;
 }
 .actor .inventory-list .item-amount {
@@ -727,7 +736,16 @@ span.readable {
 .actor .inventory-list .item .item-name h4:hover .info-icon {
   color: #00000038;
 }
-.actor .inventory-list .inventory-header .item-controls a.item-create {
+.actor .inventory-list .inventory-header .item-controls a.item-create,
+.effect-header a.item-create,
+.actor .inventory-list .inventory-header .item-controls a.effect-edit,
+.effect-header a.effect-edit,
+.actor .inventory-list .inventory-header .item-controls a.effect-delete,
+.effect-header a.effect-delete,
+.actor .inventory-list .inventory-header .item-controls a.effect-create,
+.effect-header a.effect-create,
+.actor .inventory-list .inventory-header .item-controls a.effect-suspend,
+.effect-header a.effect-suspend {
   background: #ffffffa6;
   border-radius: 5px;
   font-weight: 400;
@@ -735,6 +753,18 @@ span.readable {
   line-height: 18px;
   padding-top: 2px;
   flex: 0 0 100%;
+}
+.effect-header .item-controls {
+  flex: 0 0 55px;
+  justify-content: center;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-self: center;
+}
+.effect-header .item-controls a {
+  font-size: 12px;
+  text-align: center;
 }
 .actor .inventory-list .item-controls a.item-create:hover {
   background: #788898cc;
@@ -786,7 +816,7 @@ span.readable {
   left: 0;
   top: 27px;
   padding: 0px 20px;
-  width: 100%;
+  width: fit-content;
   z-index: 20;
   height: fit-content;
 }
@@ -869,11 +899,21 @@ span.readable {
 .gen8move.rollable[data-ac="NaN"][data-roll=""] {
   visibility: hidden;
 }
-.gen8 .stats .nature-up {
+.gen8.charactermancer input.nature-up {
+  background-color: #CC9999;
+  color: black;
+  text-transform: uppercase;
+}
+.gen8.charactermancer input.nature-down {
+  background-color: #99CCCC;
+  color: black;
+  text-transform: uppercase;
+}
+.gen8 .nature-up {
   color: #b27d94;
   font-weight: bold;
 }
-.gen8 .stats .nature-down {
+.gen8 .nature-down {
   color: #98c7c9;
   font-weight: bold;
 }
@@ -959,6 +999,31 @@ p.summary {
   flex: 0 0 100% !important;
   word-break: break-word !important;
 }
+div.hover-button {
+  display: none;
+  position: absolute;
+  bottom: -117%;
+  width: 130%;
+  transform: translate(-16%);
+}
+.apply-damage-button:hover > .hover-button {
+  display: flex;
+  flex-direction: row;
+}
+a.hover-button {
+  flex: 1 1 30%;
+  font-size: 7px;
+  word-break: break-word;
+  background: #999;
+  border: 1px solid #777;
+  margin: 1px;
+  border-radius: 7%;
+  letter-spacing: 0.5px;
+  font-weight: 100;
+}
+a.hover-button.resist-damage-button {
+  font-size: 6px;
+}
 /* ----------------------------------------- */
 /*  Dice Tooltip
 /* ----------------------------------------- */
@@ -1024,6 +1089,12 @@ p.summary {
   color: #aa0200;
   filter: sepia(0.5) hue-rotate(-60deg);
 }
+.success {
+  color: #18520b;
+}
+.failure {
+  color: #aa0200;
+}
 .changelog div {
   word-break: break-word;
 }
@@ -1078,6 +1149,208 @@ p.summary {
   font-size: 13px;
   line-height: 16px;
 }
+.charactermancer .window-content {
+  padding: unset;
+}
+.charactermancer .container-fluid {
+  text-align: center;
+  padding: unset;
+  position: relative;
+}
+.charactermancer .content {
+  z-index: 5;
+  position: inherit;
+}
+.charactermancer .bar {
+  background-color: #272727;
+  color: white;
+  font-size: 22px;
+  font-weight: bold;
+  padding: 0.75rem;
+}
+.charactermancer .bar.hp {
+  background: #272727;
+  background: linear-gradient(90deg, #272727 0%, #272727 72%, #1b3d1b 100%);
+}
+.charactermancer .bar.atk,
+.charactermancer .bar.def {
+  background: #272727;
+  background: linear-gradient(90deg, #272727 0%, #272727 72%, #3D3D3D 100%);
+}
+.charactermancer .bar.spatk,
+.charactermancer .bar.spdef {
+  background: #272727;
+  background: linear-gradient(90deg, #272727 0%, #272727 72%, #3D2E1B 100%);
+}
+.charactermancer .bar.spd {
+  background: #272727;
+  background: linear-gradient(90deg, #272727 0%, #272727 72%, #3D3C1B 100%);
+}
+.charactermancer input,
+.charactermancer select {
+  background-color: #999;
+  color: black;
+  border-color: #666;
+  height: 100%;
+  padding: 0.5rem;
+}
+.charactermancer input.no-box,
+.charactermancer select.no-box {
+  border: unset;
+  background: unset;
+  color: white;
+}
+.charactermancer input.no-box:focus,
+.charactermancer select.no-box:focus {
+  box-shadow: unset;
+}
+.charactermancer .stats.key {
+  flex: 1 0 30%;
+  text-align: start;
+}
+.charactermancer .stats.base {
+  flex: 0 1 20%;
+}
+.charactermancer .stats.levelUp {
+  flex: 0 1 20%;
+}
+.charactermancer .stats.total {
+  flex: 1 0 25%;
+}
+.charactermancer #preview-img img {
+  width: 100%;
+  max-height: 404px;
+  border-bottom: 0;
+}
+.charactermancer .typing {
+  min-height: 45px;
+  margin-top: -2px;
+}
+.charactermancer #levelContainer,
+.charactermancer #levelExpContainer {
+  display: inline-block;
+  position: relative;
+  width: 100%;
+}
+.charactermancer #levelContainer #levelField,
+.charactermancer #levelExpContainer #levelField {
+  padding-left: 3.5rem;
+}
+.charactermancer #levelContainer #levelExpField,
+.charactermancer #levelExpContainer #levelExpField {
+  padding-right: 1rem;
+}
+.charactermancer #levelContainer #levelPrefix,
+.charactermancer #levelExpContainer #levelPrefix {
+  position: absolute;
+  top: 9px;
+  color: #111;
+  padding-left: 5px;
+  width: fit-content;
+  pointer-events: none;
+}
+.charactermancer #levelContainer #levelExpSuffix,
+.charactermancer #levelExpContainer #levelExpSuffix {
+  position: absolute;
+  top: 9px;
+  color: #111;
+  padding-right: 5px;
+  width: fit-content;
+  pointer-events: none;
+}
+.charactermancer .box {
+  border: solid 2px #666;
+  background-color: #999;
+  color: #666;
+  padding: 0.1rem;
+}
+.charactermancer .box h5 {
+  text-decoration: underline;
+}
+.charactermancer #evolutionContainer select {
+  max-width: 99px;
+  margin-left: -2px;
+}
+.loyalty,
+.loyalty input {
+  font-style: italic;
+  color: gray;
+}
+.window-app .window-content {
+  background: linear-gradient(45deg, #ECDBEB, #DFFFFE);
+}
+header.effect-change.effects-header.flexrow > div {
+  text-align: center;
+  white-space: nowrap;
+}
+.damage-mod-header {
+  position: absolute;
+  top: 5px;
+  right: 20px;
+  width: 50%;
+  max-width: 400px;
+  text-align: center;
+  white-space: nowrap;
+}
+.small-input input {
+  height: 20px !important;
+}
+.mod-input {
+  position: relative;
+}
+.mod-input:before {
+  content: attr(data-mod);
+  padding: 5px 5px 0 0;
+  color: #19181370;
+  position: absolute;
+  right: 0;
+  pointer-events: none;
+}
+.mod-input:hover > .mod-tooltip {
+  display: block;
+}
+.mod-input .mod-tooltip {
+  display: none;
+  position: absolute;
+  top: -10px;
+  left: 50%;
+  width: 100%;
+  min-width: 13rem;
+  background: linear-gradient(45deg, #ECDBEB, #DFFFFE);
+  transform: translate(-50%, -100%);
+  border: black 1px solid;
+  box-shadow: #00000060 0 0 15px;
+  z-index: 100;
+}
+.mod-input .mod-tooltip:hover {
+  display: block;
+}
+.mod-input .mod-tooltip.bottom-display {
+  top: unset;
+  bottom: -10px;
+  transform: translate(-50%, 100%);
+}
+.mod-input .mod-tooltip ol {
+  padding-inline-start: 0;
+  text-align: start;
+  font-size: 12px;
+  font-family: sans-serif;
+}
+.settings .settings-body {
+  padding-top: 15px;
+}
+.settings .settings-tabs {
+  flex: 0 0 32px;
+  line-height: 32px;
+  font-size: 16px;
+  border-bottom: 1px solid black;
+}
+.settings .settings-tabs .fas {
+  padding-right: 10px;
+}
+.settings .settings-tabs.tabs .item {
+  white-space: nowrap;
+}
 /* MD CSS */
 .md h1,
 .md h2,
@@ -1104,6 +1377,17 @@ p.summary {
 /* Firefox Fix */
 .sheet-footer {
   height: 0;
+}
+.no-shadow {
+  box-shadow: none;
+}
+.pokedexflex {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+.pokedexflex > span {
+  flex: 1 1 50%;
 }
 .w-25 {
   width: 25% !important;
@@ -1633,19 +1917,6 @@ button,
 }
 button.tox-tbtn:hover::before {
   content: unset;
-}
-button:hover::before,
-.button:hover::before {
-  content: "";
-  position: absolute;
-  top: 7px;
-  left: 1px;
-  width: 2px;
-  height: 2px;
-  font-size: 2px;
-  color: #181010;
-  -webkit-box-shadow: 1em 0em 0 #181010, 2em 0em 0 #181010, 1em 1em 0 #181010, 2em 1em 0 #181010, 3em 1em 0 #181010, 1em 2em 0 #181010, 2em 2em 0 #181010, 3em 2em 0 #181010, 4em 2em 0 #181010, 1em 3em 0 #181010, 2em 3em 0 #181010, 3em 3em 0 #181010, 4em 3em 0 #181010, 5em 3em 0 #181010, 1em 4em 0 #181010, 2em 4em 0 #181010, 3em 4em 0 #181010, 4em 4em 0 #181010, 1em 5em 0 #181010, 2em 5em 0 #181010, 3em 5em 0 #181010, 1em 6em 0 #181010, 2em 6em 0 #181010;
-  box-shadow: 1em 0em 0 #181010, 2em 0em 0 #181010, 1em 1em 0 #181010, 2em 1em 0 #181010, 3em 1em 0 #181010, 1em 2em 0 #181010, 2em 2em 0 #181010, 3em 2em 0 #181010, 4em 2em 0 #181010, 1em 3em 0 #181010, 2em 3em 0 #181010, 3em 3em 0 #181010, 4em 3em 0 #181010, 5em 3em 0 #181010, 1em 4em 0 #181010, 2em 4em 0 #181010, 3em 4em 0 #181010, 4em 4em 0 #181010, 1em 5em 0 #181010, 2em 5em 0 #181010, 3em 5em 0 #181010, 1em 6em 0 #181010, 2em 6em 0 #181010;
 }
 button.pokemon,
 .button.pokemon {
@@ -2915,11 +3186,17 @@ h6 {
 .header-fields {
   height: 150px;
 }
-.sheet-header {
+.sheet:not(.active-effect-sheet) .sheet-header {
   height: 150px;
   -webkit-box-flex: unset;
   -ms-flex: unset;
   flex: unset;
+}
+.active-effect-sheet form {
+  padding-bottom: 2rem;
+}
+.active-effect-sheet .sheet-footer button {
+  margin-top: 0.5rem;
 }
 .item-header {
   font-weight: bold;

@@ -1,0 +1,82 @@
+{{#each stages as | set stage |}}
+    {{#if (gt set.length 0)}}
+        {{#if (gt set.length 1)}}
+            {{#if set.selected}}
+                {{#with (lookup set set.selected)}}
+                    <div class="d-flex flex-col" data-stage="{{stage}}" data-id="{{data._id}}" style="width: 25%; flex-direction: column;">
+                        {{#if image}}<img src="{{image}}">{{/if}}
+                        <div style="min-height: 32px; padding: 2px;">
+                            {{#select data._id}}
+                                <select name="stages.{{stage}}.selected" data-stage="{{stage}}">
+                                    {{#each set as | set |}}
+                                    <option value="{{data._id}}">{{capitalizeFirst name}}</option>
+                                    {{/each}}
+                                </select>
+                            {{/select}}
+                        </div>
+                        <div style="min-height: 32px; padding: 2px;">
+                            <p>Level {{level}}</p>
+                        </div>
+                        <div class="box">
+                            {{#each data.Abilities as | list tier |}}
+                            <div class="mb-2">
+                                <h5>{{tier}}</h5>
+                                {{#each list as | ability |}}
+                                    <p class="fs-9">{{ability}}</p>
+                                {{/each}}
+                            </div>
+                            {{/each}}
+                        </div>
+                    </div>
+                {{/with}}
+            {{else}}
+                <div class="d-flex flex-col" data-stage="{{stage}}" data-id="{{set.0.data._id}}" style="width: 25%; flex-direction: column;">
+                    {{#if set.0.image}}<img src="{{set.0.image}}">{{/if}}
+                    <div style="min-height: 32px; padding: 2px;">
+                        {{#select set.0.data._id}}
+                            <select name="stages.{{stage}}.selected" data-stage="{{stage}}">
+                                {{#each set as | set |}}
+                                <option value="{{set.data._id}}">{{capitalizeFirst set.name}}</option>
+                                {{/each}}
+                            </select>
+                        {{/select}}
+                    </div>
+                    <div style="min-height: 32px; padding: 2px;">
+                        <p>Level {{set.0.level}}</p>
+                    </div>
+                    <div class="box">
+                        {{#each set.0.data.Abilities as | list tier |}}
+                            <div class="mb-2">
+                                <h5>{{tier}}</h5>
+                                {{#each list as | ability |}}
+                                    <p class="fs-9">{{ability}}</p>
+                                {{/each}}
+                            </div>
+                        {{/each}}
+                    </div>
+                </div>
+            {{/if}}
+        {{else}}
+        <div class="d-flex flex-col" data-stage="{{stage}}" data-id="{{set.0.data._id}}" style="width: 25%; flex-direction: column;">
+            {{#if set.0.image}}<img src="{{set.0.image}}">{{/if}}
+            <div style="min-height: 32px; padding: 2px;">
+                <p>{{set.0.name}}</p>
+            </div>
+            <div style="min-height: 32px; padding: 2px;">
+                <p>Level {{#if (not set.0.level "Null")}}{{set.0.level}}{{else}}0{{/if}}</p>
+            </div>
+            <div class="box">
+                {{#each set.0.data.Abilities as | list tier |}}
+                    <div class="mb-2">
+                        <h5>{{tier}}</h5>
+                        {{#each list as | ability |}}
+                            <p class="fs-9">{{ability}}</p>
+                        {{/each}}
+                    </div>
+                {{/each}}
+            </div>
+        </div>
+        {{/if}}
+    {{/if}}
+{{/each}}
+
