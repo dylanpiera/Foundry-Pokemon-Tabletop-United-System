@@ -468,7 +468,8 @@ export class PTUGen8PokemonSheet extends ActorSheet {
 				damageRoll: damageRoll,
 				critRoll: critRoll,
 				templateType: MoveMessageTypes.FULL_ATTACK,
-				crit: crit
+				crit: crit,
+				isCrit: crit == CritOptions.CRIT_HIT
 			});
 		}
 
@@ -483,7 +484,8 @@ export class PTUGen8PokemonSheet extends ActorSheet {
 					name: move.name,
 					move: move.data,
 					templateType: MoveMessageTypes.DAMAGE,
-					crit: crit
+					crit: crit,
+					isCrit: crit == CritOptions.CRIT_HIT
 				});
 			}
 
