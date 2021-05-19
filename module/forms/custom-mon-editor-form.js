@@ -15,7 +15,7 @@ export class PTUCustomMonEditor extends FormApplication {
         template: "systems/ptu/templates/forms/custom-mon-editor.hbs",
         width: 600,
         height: 650,
-        title: this.object ? `Editing ${this.object._id}` : "Creating Custom Species",
+        title: this.object ? `Editing ${this.object.id}` : "Creating Custom Species",
         tabs: [{ navSelector: ".sheet-tabs", contentSelector: ".sheet-body", initial: "stats" }],
         resizable: true
       });
@@ -52,7 +52,7 @@ export class PTUCustomMonEditor extends FormApplication {
       let journalEntry = CustomSpeciesFolder.findEntry(this.object);
       if(journalEntry === undefined) journalEntry = CustomSpeciesFolder.findEntry(this.object.ptuNumber);
       if(journalEntry === undefined) {
-        log("No entry found for " + this.object._id + " creating new entry");
+        log("No entry found for " + this.object.id + " creating new entry");
         await JournalEntry.create({name: this.object.ptuNumber, content: JSON.stringify(this.object), folder: CustomSpeciesFolder._dirId})
       } else {
         await journalEntry.update({content: JSON.stringify(this.object)});

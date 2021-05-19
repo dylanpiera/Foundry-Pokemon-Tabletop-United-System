@@ -27,7 +27,7 @@ export default class CustomSpeciesFolder {
     }
 
     let folder = game.journal.directory.folders.find(f => f.name === this.dirName);
-    this._dirId = folder._id;
+    this._dirId = folder.id;
   }
 
   /**
@@ -55,13 +55,13 @@ export default class CustomSpeciesFolder {
     if(species._journalId === undefined) { 
       if(typeof species === 'object') return undefined;
       if(parseInt(species)) {
-        let result = game.journal.entities.find(entry => entry.data.name.toLowerCase().includes(species))
-        if(result === undefined) result = game.journal.entities.find(entry => entry?.data?.content?.includes(`"ptuNumber":${species}`));
+        let result = game.journal.contents.find(entry => entry.data.name.toLowerCase().includes(species))
+        if(result === undefined) result = game.journal.contents.find(entry => entry?.data?.content?.includes(`"ptuNumber":${species}`));
         return result;
       }
       else {
-        let result = game.journal.entities.find(entry => entry.data.name.toLowerCase().includes(species.toLowerCase()))
-        if(result === undefined) result = game.journal.entities.find(entry => entry?.data?.content?.includes(`"_id":"${species}"`));
+        let result = game.journal.contents.find(entry => entry.data.name.toLowerCase().includes(species.toLowerCase()))
+        if(result === undefined) result = game.journal.contents.find(entry => entry?.data?.content?.includes(`"_id":"${species}"`));
         return result;
       }
     }
@@ -85,7 +85,7 @@ export default class CustomSpeciesFolder {
   }
 
   static getAvailableId() {
-    let currentList = game.folders.get(this._dirId).entities.map(x => parseInt(x.name)).sort((a,b) => b-a);
+    let currentList = game.folders.get(this._dirId).contents.map(x => parseInt(x.name)).sort((a,b) => b-a);
     if(currentList) {
       let highest = currentList[0];
 

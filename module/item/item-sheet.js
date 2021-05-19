@@ -40,7 +40,7 @@ export class PTUItemSheet extends ItemSheet {
 		const data = super.getData();
 
 		if(this.object.type === 'move' && this.object.isOwned)
-			data.data = PrepareMoveData(this.object.options.actor?.data?.data, data.data);
+			data.data = PrepareMoveData(this.object.actor?.data?.data, data.data);
 		return data;
 	}
 
@@ -123,7 +123,7 @@ export class PTUItemSheet extends ItemSheet {
 		if (dataset.roll || dataset.type == 'Status') {
 			let roll = new Roll('1d20+' + dataset.ac, this.actor.data.data);
 			let label = dataset.label ? `To-Hit for move: ${dataset.label} ` : '';
-			roll.roll().toMessage({
+			roll.evaluate({async: false}).toMessage({
 				speaker: ChatMessage.getSpeaker({ actor: this.actor }),
 				flavor: label
 			});
@@ -141,7 +141,7 @@ export class PTUItemSheet extends ItemSheet {
 					content: `${dataset.label} critically missed!`,
 					type: CONST.CHAT_MESSAGE_TYPES.OOC,
 					speaker: ChatMessage.getSpeaker({ actor: this.actor }),
-					user: game.user._id
+					user: game.user_id
 				});
 				return;
 			}
@@ -154,7 +154,7 @@ export class PTUItemSheet extends ItemSheet {
 					mod: rollData[1]
 				});
 				let label = dataset.label ? `${isCrit ? "Crit damage" : "Damage"} for move: ${dataset.label}` : '';
-				roll.roll().toMessage({
+				roll.evaluate({async: false}).toMessage({
 					speaker: ChatMessage.getSpeaker({ actor: this.actor }),
 					flavor: label
 				});
@@ -165,7 +165,7 @@ export class PTUItemSheet extends ItemSheet {
 
 export async function sendItemMessage(messageData = {}) {
 	messageData = mergeObject({
-		user: game.user._id,
+		user: game.user.id,
 	}, messageData);
 
 	if(!messageData.item) {

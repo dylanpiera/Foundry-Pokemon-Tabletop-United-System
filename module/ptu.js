@@ -271,8 +271,8 @@ Hooks.once('init', async function() {
   };
 
   // Define custom Entity classes
-  CONFIG.Actor.entityClass = PTUActor;
-  CONFIG.Item.entityClass = PTUItem;
+  CONFIG.Actor.documentClass = PTUActor;
+  CONFIG.Item.documentClass = PTUItem;
 
   // Custom Combat Settings
   CONFIG.Combat.defeatedStatusId = "effect.other.fainted";
@@ -617,7 +617,7 @@ Hooks.once("ready", async function() {
   setAccessabilityFont(game.settings.get("ptu", "accessability"));
 
   // Globally enable items from item compendium
-  game.ptu["items"] = Array.from(new Set(game.items.filter(x => x.type == "item").concat(await game.packs.get("ptu.items").getContent())));
+  game.ptu["items"] = Array.from(new Set(game.items.filter(x => x.type == "item").concat(await game.packs.get("ptu.items").getDocuments())));
 
   // Wait to register hotbar drop hook on ready so that modules could register earlier if they want to
   Hooks.on("hotbarDrop", (bar, data, slot) => createPTUMacro(data, slot));
@@ -717,7 +717,7 @@ async function createPTUMacro(data, slot) {
   if (data.type == "Actor") {
     const actor = game.actors.get(data.id);
     const command = `game.actors.get("${data.id}").sheet.render(true)`;
-    let macro = game.macros.entities.find(m => (m.name === actor.name) && (m.command === command));
+    let macro = game.macros.contents.find(m => (m.name === actor.name) && (m.command === command));
     if (!macro) {
       macro = await Macro.create({
         name: actor.name,
@@ -738,7 +738,7 @@ async function createPTUMacro(data, slot) {
 
   // Create the macro command
   const command = `game.ptu.rollItemMacro("${data.actorId}","${item.id}","${data.sceneId}", "${data.tokenId}");`;
-  let macro = game.macros.entities.find(m => (m.name === `${actor.name}'s ${item.name}`) && (m.command === command));
+  let macro = game.macros.contents.find(m => (m.name === `${actor.name}'s ${item.name}`) && (m.command === command));
   if (!macro) {
     macro = await Macro.create({
       name: `${actor.name}'s ${item.name}`,

@@ -624,7 +624,7 @@ Hooks.on("applyActiveEffect", function(actorData, change) {
             if(!actor?.data) return;
         }
         else {
-            actor = game.actors?.get(actorData._id)
+            actor = game.actors?.get(actorData.id)
             if(!actor?.data) return;
         }
         let count = duplicate(actor.data).data.modifiers.flinch_count;
