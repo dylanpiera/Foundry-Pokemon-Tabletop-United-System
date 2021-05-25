@@ -28,18 +28,12 @@ import { debug } from "../ptu.js";
      * @param {HTMLElement} button    The clicked action button
      * @private
      */
-    _addEffectChange(button) {
-      const changes = button.closest(".tab").querySelector(".changes-list");
-      const last = changes.lastElementChild;
-      const idx = last ? last.dataset.index+1 : 0;
-      const change = $(`
-      <li class="effect-change flexrow" data-index="${idx}">
-          <input type="text" name="changes.${idx}.key" value=""/>
-          <input type="number" name="changes.${idx}.mode" value="2"/>
-          <input type="text" name="changes.${idx}.value" value=""/>
-          <input type="number" name="changes.${idx}.priority" value="0"/>
-      </li>`);
-      changes.appendChild(change[0]);
+    async _addEffectChange() {
+      const idx = this.document.data.changes.length;
+      await this.submit({preventClose: true, updateData: {
+        [`changes.${idx}`]: {key: "", mode: CONST.ACTIVE_EFFECT_MODES.ADD, value: "0", priority: 20}
+      }});
+      this.render(false);
     }
 
     /** @override */
@@ -47,13 +41,6 @@ import { debug } from "../ptu.js";
       formData = expandObject(formData);
       formData.changes = Object.values(formData.changes || {});
       for ( let c of formData.changes ) {
-        // TODO - store as numeric when it's unambiguous, remove this later. See #4309
-        const n = parseFloat(c.value)
-        if ( String(n) === c.value ) {
-          c.value = n;
-          continue;
-        }
-
         if(c.value.includes(',')) {
           c.value = c.value.replace("[", "").replace("]", "").split(",")
         }

@@ -2,6 +2,16 @@
 This is the Alpha branch which is most likely very unstable. I hope you backed up your Foundry Install & Worlds before trying to convert.
 Please report any bugs on the discord!
 
+## 1.4.0-Alpha.3
+- Effects applied to Embedded Documents can now apply effects to the Parent of those Embedded Documents
+f.e: Skill Improvement (Acrobatics) Poké Edge has an effect with change key: '../data.skills.acrobatics.value.mod'
+which means it will be applied to the parent of the Poké Edge.
+  - Both '../' and 'actor.' prefix allow manipulation of Parent
+  - This works on any item type, and can be accessed through the 'effects' tab bar button
+
+## 1.4.0-Alpha.2
+- Removed more deprecated references
+
 ## 1.4.0-Alpha.1
 - Updated to Foundry Version 0.8.4
 

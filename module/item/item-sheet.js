@@ -105,7 +105,7 @@ export class PTUItemSheet extends ItemSheet {
 			await this.object.update({effects: [effectData]});
 		}
 		
-		const effect = this.object.effects.entries[0];
+		const effect = this.object.effects.contents[0];
 		return effect.sheet.render(true);
 	}
 

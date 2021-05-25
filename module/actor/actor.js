@@ -113,9 +113,14 @@ export class PTUActor extends Actor {
           if(e.parent.data.type != this.data.type) {
             if(!c.key.startsWith("actor.") && !c.key.startsWith("../")) return undefined; 
             c.key = c.key.replace("actor.", "").replace("../", "");
-            c.effect.parent = this;
           }
           c.priority = c.priority ?? c.mode * 10;
+          
+          const n = parseFloat(c.value)
+          if ( String(n) === c.value ) {
+            c.value = n;
+          }
+
           return c;
         }).filter(x => x!=undefined)
       );
@@ -123,7 +128,6 @@ export class PTUActor extends Actor {
     changes.sort((a, b) => a.priority - b.priority);
     // Apply all changes
     for (let change of changes) {
-      debug(change.key, change);
       const result = change.effect.apply(this, change);
       if (result !== null) {
         overrides[change.key] = result;
