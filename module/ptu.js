@@ -43,13 +43,119 @@ import TMsData from './data/tm-data.js'
 import PTUActiveEffectConfig from './forms/active-effect-config.js';
 import getTrainingChanges from './data/training-data.js';
 import {PTUSettings, PTUSettingCategories} from './forms/settings.js';
+import {LoadSystemSettings, SetAccessabilityFont} from './settings.js'
+import PreloadHandlebarsTemplates from './templates.js'
 
 export let debug = (...args) => {if (game.settings.get("ptu", "showDebugInfo") ?? false) console.log("DEBUG: FVTT PTU | ", ...args)};
 export let log = (...args) => console.log("FVTT PTU | ", ...args);
 export let warn = (...args) => console.warn("FVTT PTU | ", ...args);
 export let error = (...args) => console.error("FVTT PTU | ", ...args)
 
-export const LATEST_VERSION = "1.4.0-alpha.1";
+export const LATEST_VERSION = "1.4.0-alpha.2";
+
+/* -------------------------------------------- */
+/*  Foundry VTT Initialization                  */
+/* -------------------------------------------- */
+
+Hooks.once('init', function() {
+
+  // Create a namespace within the game global
+  game.ptu = {
+    rollItemMacro,
+    moveMacro: _onMoveMacro,
+    pokedexMacro: _onPokedexMacro,
+    renderDex: RenderDex,
+    PTUActor,
+    PTUItem,
+    PTUPokemonCharactermancer,
+    PTUDexDragOptions,
+    PTUCustomSpeciesEditor,
+    PTUCustomMonEditor,
+    PTUCharacterNotesForm,
+    levelProgression,
+    pokemonData,
+    customSpeciesData: [],
+    natureData,
+    DbData,
+    TMsData,
+    TypeEffectiveness,
+    GetSpeciesData,
+    RollWithDb,
+    PlayPokemonCry,
+    FinishDexDragPokemonCreation,
+    monGenerator: {
+      ActorGenerator,
+      CreateMonParser,
+      GetRandomNature,
+      GiveRandomAbilities,
+      GiveLatestMoves,
+      ApplyEvolution,
+      GiveCapabilities,
+      StatDistributions: {
+        DistributeStatsWeighted,
+        DistributeStatsRandomly,
+        DistributeByBaseStats,
+        BaseStatsWithNature,
+        ApplyLevelUpPoints
+      },
+      GetSpeciesArt
+    },
+    combat: {
+      applyDamageToTargets,
+      undoDamageToTargets
+    },
+    combats: new Map(),
+    cache: {
+      GetOrCreateCachedItem
+    },
+    api: new Api(),
+    getTrainingChanges,
+    settings: PTUSettings,
+    settingCategories: PTUSettingCategories
+  };
+
+  /**
+   * Set an initiative formula for the system
+   * @type {String}
+   */
+  CONFIG.Combat.initiative = {
+    formula: "@initiative.value + (1d20 * 0.01)",
+    decimals: 2
+  };
+
+  // Define custom Entity classes
+  CONFIG.Actor.documentClass = PTUActor;
+  CONFIG.Item.documentClass = PTUItem;
+
+  // Define custom Active Effect class
+  CONFIG.ActiveEffect.sheetClass = PTUActiveEffectConfig;
+
+  // Custom Combat Settings
+  CONFIG.Combat.defeatedStatusId = "effect.other.fainted";
+
+  // Register sheet application classes
+  registerSheets();
+
+  // Register Handlebar Helpers
+  registerHandlebars();
+
+  // Load System Settings
+  LoadSystemSettings();
+
+  if(game.settings.get("ptu", "insurgenceData")) {
+    Array.prototype.push.apply(game.ptu["pokemonData"], insurgenceData);
+  }
+  if(game.settings.get("ptu", "sageData")) {
+    Array.prototype.push.apply(game.ptu["pokemonData"], sageData);
+  }
+  if(game.settings.get("ptu", "uraniumData")) {
+    Array.prototype.push.apply(game.ptu["pokemonData"], uraniumData);
+  }
+
+  // Preload Handlebars Templates
+  PreloadHandlebarsTemplates();
+});
+
 
 function registerSheets() {
   // Register sheet application classes
@@ -62,14 +168,7 @@ function registerSheets() {
   Items.registerSheet("ptu", PTUFeatSheet, { types: ["feat"], makeDefault: true });
 }
 
-async function registerHandlebars() {
-  let itemDisplayTemplate = await (await fetch('/systems/ptu/templates/partials/item-display-partial.hbs')).text()
-  Handlebars.registerPartial('item-display', itemDisplayTemplate);
-
-  fetch('/systems/ptu/templates/partials/charactermancer-evolution-partial.hbs').then(r => r.text().then(template => Handlebars.registerPartial('cm-evolution', template)))
-  fetch('/systems/ptu/templates/partials/active-effects.hbs').then(r => r.text().then(template => Handlebars.registerPartial('active-effects', template)));
-  fetch('/systems/ptu/templates/partials/mod-field.hbs').then(r => r.text().then(template => Handlebars.registerPartial('mod-field', template)));
-
+function registerHandlebars() {
   Handlebars.registerHelper("concat", function() {
     var outStr = '';
     for (var arg in arguments) {
@@ -181,8 +280,7 @@ async function registerHandlebars() {
 
   /** If furnace ain't installed... */
   if(!Object.keys(Handlebars.helpers).includes("divide")) {
-    warn("It is recommended to install & enable 'The Furnace' module.")
-
+    
     Handlebars.registerHelper("divide", (value1, value2) => Number(value1) / Number(value2));
     Handlebars.registerHelper("multiply", (value1, value2) => Number(value1) * Number(value2));
     Handlebars.registerHelper("floor", (value) => Math.floor(Number(value)));
@@ -203,102 +301,6 @@ async function registerHandlebars() {
   }
 }
 
-Hooks.once('init', async function() {
-
-  CONFIG.ActiveEffect.sheetClass = PTUActiveEffectConfig;
-
-  game.ptu = {
-    rollItemMacro,
-    moveMacro: _onMoveMacro,
-    pokedexMacro: _onPokedexMacro,
-    renderDex: RenderDex,
-    PTUActor,
-    PTUItem,
-    PTUPokemonCharactermancer,
-    PTUDexDragOptions,
-    PTUCustomSpeciesEditor,
-    PTUCustomMonEditor,
-    PTUCharacterNotesForm,
-    levelProgression,
-    pokemonData,
-    customSpeciesData: [],
-    natureData,
-    DbData,
-    TMsData,
-    TypeEffectiveness,
-    GetSpeciesData,
-    RollWithDb,
-    PlayPokemonCry,
-    FinishDexDragPokemonCreation,
-    monGenerator: {
-      ActorGenerator,
-      CreateMonParser,
-      GetRandomNature,
-      GiveRandomAbilities,
-      GiveLatestMoves,
-      ApplyEvolution,
-      GiveCapabilities,
-      StatDistributions: {
-        DistributeStatsWeighted,
-        DistributeStatsRandomly,
-        DistributeByBaseStats,
-        BaseStatsWithNature,
-        ApplyLevelUpPoints
-      },
-      GetSpeciesArt
-    },
-    combat: {
-      applyDamageToTargets,
-      undoDamageToTargets
-    },
-    combats: new Map(),
-    cache: {
-      GetOrCreateCachedItem
-    },
-    api: new Api(),
-    getTrainingChanges,
-    settings: PTUSettings,
-    settingCategories: PTUSettingCategories
-  };
-
-  /**
-   * Set an initiative formula for the system
-   * @type {String}
-   */
-  CONFIG.Combat.initiative = {
-    formula: "@initiative.value + (1d20 * 0.01)",
-    decimals: 2
-  };
-
-  // Define custom Entity classes
-  CONFIG.Actor.documentClass = PTUActor;
-  CONFIG.Item.documentClass = PTUItem;
-
-  // Custom Combat Settings
-  CONFIG.Combat.defeatedStatusId = "effect.other.fainted";
-
-  // Register sheet application classes
-  registerSheets();
-
-  // If you need to add Handlebars helpers, here are a few useful examples:
-  await registerHandlebars();
-  
-
-  // Load System Settings
-  _loadSystemSettings();
-
-  if(game.settings.get("ptu", "insurgenceData")) {
-    Array.prototype.push.apply(game.ptu["pokemonData"], insurgenceData);
-  }
-  if(game.settings.get("ptu", "sageData")) {
-    Array.prototype.push.apply(game.ptu["pokemonData"], sageData);
-  }
-  if(game.settings.get("ptu", "uraniumData")) {
-    Array.prototype.push.apply(game.ptu["pokemonData"], uraniumData);
-  }
-
-});
-
 export function PrepareMoveData(actorData, move) {
   if(!actorData || move.prepared) return move;
   move.owner = { 
@@ -313,248 +315,69 @@ export function PrepareMoveData(actorData, move) {
   move.stab = move.owner?.type && (move.owner.type[0] == move.type || move.owner.type[1] == move.type);
   move.acBonus = move.owner.acBonus ? move.owner.acBonus : 0; 
   return move;
-}
-
-/* -------------------------------------------- */
-/*  System Setting Initialization               */
-/* -------------------------------------------- */
-
-function _loadSystemSettings() {
-  game.settings.register("ptu", "errata", {
-    name: "PTU Errata",
-    hint: "The FVTT PTU System has been created using the latest Community Erratas in mind. If you would like to disable some of the errata's changes, specifically when it comes to automation, you can disable this option.",
-    scope: "world",
-    config: true,
-    type: Boolean,
-    default: true,
-    category: "rules"
-  });
-
-  game.settings.register("ptu", "useTutorPoints", {
-    name: "Use Tutor Points for Pokémon",
-    hint: "Otherwise use the suggested changes in the 'GM Advice and Suggested Houserules' (see: https://pastebin.com/iDt2Mj0d)",
-    scope: "world",
-    config: true,
-    type: String,
-    choices: {
-      "true": "Use Tutor Points",
-      "false": "Don't use Tutor Points"
-    },
-    default: "true",
-    category: "rules"
-  });
-
-  game.settings.register("ptu", "useDexExp", {
-    name: "Use Dex Experience for Trainer Level Calculation",
-    hint: "",
-    scope: "world",
-    config: true,
-    type: String,
-    choices: {
-      "true": "Use Dex Exp",
-      "false": "Don't use Dex Exp"
-    },
-    default: "false",
-    category: "rules"
-  });
-
-  game.settings.register("ptu", "nonOwnerCanSeeTabs", {
-    name: "Non-owners can see Sheet Tabs",
-    hint: "Allow players with Limited/Observer permissions to browse tabs in a Pokémon/Trainer's full sheet",
-    scope: "world",
-    config: true,
-    type: Boolean,
-    default: false,
-    category: "general"
-  });
-
-  game.settings.register("ptu", "dex-permission", {
-    name: "Pokédex Permission",
-    hint: "The required permission for a player to be able to see a Pokédex entry",
-    scope: "world",
-    config: true,
-    type: Number,
-    choices: {
-      1: "Disable Pokédex",
-      2: "Only on owned Tokens",
-      3: "Only on owned Mons (checks trainer's dex tab)",
-      4: "GM Prompt (**NOT YET IMPLEMENTED**)",
-      5: "Always allow Pokédex", 
-    },
-    default: 1,
-    category: "general"
-  })
-
-  game.settings.register("ptu", "combatRollPreference", {
-    name: "Combat Roll Preference",
-    hint: "Choose whether crits should always be rolled, or only when the to-hit is an actual crit.",
-    scope: "world",
-    config: true,
-    type: String,
-    choices: {
-      "situational": "Show damage situationally",
-      "always-normal": "Always roll normal damage",
-      "always-crit": "Always roll crit damage",
-      "both": "Always roll both"
-    },
-    default: "situational",
-    category: "combat"
-  });
-
-  game.settings.register("ptu", "combatDescPreference", {
-    name: "Combat Description Preference",
-    hint: "Choose whether the move effect should be displayed when rolling To-Hit/Damage.",
-    scope: "world",
-    config: true,
-    type: String,
-    choices: {
-      "none": "Don't show move effect",
-      "snippet": "Show move snippet, or nothing if unset",
-      "snippet-or-full": "Show move snippet, or full effect if unset",
-      "show": "Show full effect"
-    },
-    default: "snippet",
-    category: "combat"
-  });
-
-  game.settings.register("ptu", "defaultPokemonImageDirectory", {
-    name: "Default Pokemon Image Directory",
-    hint: "The directory where the user can upload image files (named as the pokedex number of the species) to be used as the default images when generating pokemon.",
-    scope: "world",
-    config: true,
-    type: DirectoryPicker.Directory,
-    default: "Gen4-Art/",
-    category: "general"
-  });
-
-  game.settings.register("ptu", "leagueBattleInvertTrainerInitiative", {
-    name: "League Battle Initiative",
-    hint: "Invert Trainer Initative during League Battles",
-    scope: "world",
-    config: true,
-    type: Boolean,
-    default: true,
-    category: "combat"
-  });
-
-  game.settings.register("ptu", "verboseChatInfo", {
-    name: "Verbose Chat Output",
-    hint: "When enabled shows more details in chat messages.",
-    scope: "client",
-    config: true,
-    type: Boolean,
-    default: false
-  });
-
-  game.settings.register("ptu", "openByDefault", {
-    name: "Open Collapsables by Default",
-    hint: "Collapsables such as the Feat & Edges list will display their summary by default.",
-    scope: "client",
-    config: true,
-    type: Boolean,
-    default: false
-  });
-
-  game.settings.register("ptu", "accessability", {
-    name: "Font Accessability",
-    hint: "Set global font to 'Sans-Serif'. Please be aware that the system is not visually tested with this option enabled.",
-    scope: "client",
-    config: true,
-    type: Boolean,
-    default: false,
-    onChange: (enabled) => setAccessabilityFont(enabled)
-  });
-
-  game.settings.register("ptu", "insurgenceData", {
-    name: "Pokémon Insurgence Data",
-    hint: "Adds Pokémon Insurgence data to the game based on DataNinja's Homebrew Compilation's Insurgence Data.",
-    scope: "world",
-    config: true,
-    type: Boolean,
-    default: false,
-    category: "rules"
-  });
-
-  game.settings.register("ptu", "sageData", {
-    name: "Pokémon Sage Data",
-    hint: "Adds Pokémon Sage data to the game based on DataNinja's Homebrew Compilation's Sage Data.",
-    scope: "world",
-    config: true,
-    type: Boolean,
-    default: false,
-    category: "rules"
-  });
-
-  game.settings.register("ptu", "uraniumData", {
-    name: "Pokémon Uranium Data",
-    hint: "Adds Pokémon Uranium data to the game based on DataNinja's Homebrew Compilation's Uranium Data.",
-    scope: "world",
-    config: true,
-    type: Boolean,
-    default: false,
-    category: "rules"
-  });
-
-  game.settings.register("ptu", "customSpecies", {
-    name: "Custom Species json (Requires Refresh)",
-    hint: "Please specify the path of a custom species file (inside the world directory) if you wish to add Homebrew Pokémon. [Currently in Beta!]",
-    scope: "world",
-    config: false,
-    type: String,
-    default: ""
-  });
-
-  game.settings.register("ptu", "dismissedVersion", {
-    name: "Current Dismissed Version",
-    scope: "client",
-    config: false,
-    type: Object,
-    default: {}
-  })
-
-  game.settings.register("ptu", "showDebugInfo", {
-    name: "Show Debug Info",
-    hint: "Only for debug purposes. Logs extra debug messages & shows hidden folders/items",
-    scope: "world",
-    config: true,
-    type: Boolean,
-    default: false,
-    onChange: (value) => CustomSpeciesFolder.updateFolderDisplay(value),
-    category: "other"
-  });
-
-  game.settings.register("ptu", "playPokemonCriesOnDrop", {
-    name: "Play Pokemon Cry when dragged from Dex",
-    hint: "This will play a Pokemon's cry when it is drag-and-dropped from the pokedex compendium.",
-    scope: "world",
-    config: true,
-    type: Boolean,
-    default: false,
-    category: "other"
-  });
-
-  game.settings.register("ptu", "pokemonCryDirectory", {
-    name: "Pokemon Cry Directory",
-    hint: "The directory where the user can upload mp3 or wav files (named as the lowercase name of the pokemon).",
-    scope: "world",
-    config: true,
-    type: DirectoryPicker.Directory,
-    default: "pokemon_cries/",
-    onChange: (value) => CustomSpeciesFolder.updateFolderDisplay(value),
-    category: "other"
-  });
-
-  game.settings.register("ptu", "moveSoundDirectory", {
-    name: "Move Sound Directory",
-    hint: "The directory where the user can upload mp3 or wav files (named as the lowercase name of the move) to be used by scripts or modules.",
-    scope: "world",
-    config: true,
-    type: DirectoryPicker.Directory,
-    default: "pokemon_sounds/",
-    onChange: (value) => CustomSpeciesFolder.updateFolderDisplay(value),
-    category: "other"
-  });
 } 
+
+/* -------------------------------------------- */
+/*  Foundry VTT Setup                           */
+/* -------------------------------------------- */
+
+/**
+ * This function runs after game data has been requested and loaded from the servers, so entities exist
+ */
+Hooks.once("setup", function() {
+  
+});
+
+/**
+ * Once the entire VTT framework is initialized, initialize extra data
+ */
+Hooks.once("ready", async function() {
+  await InitCustomSpecies();
+
+  SetAccessabilityFont(game.settings.get("ptu", "accessability"));
+
+  // Globally enable items from item compendium
+  game.ptu["items"] = Array.from(new Set(game.items.filter(x => x.type == "item").concat(await game.packs.get("ptu.items").getDocuments())));
+
+  // Wait to register hotbar drop hook on ready so that modules could register earlier if they want to
+  Hooks.on("hotbarDrop", (bar, data, slot) => createPTUMacro(data, slot));
+
+  game.socket.on("system.ptu", (data) => {
+    if(data == null) return; 
+    if(data == "RefreshCustomSpecies" || (data == "ReloadGMSpecies" && game.user.isGM)) Hooks.callAll("updatedCustomSpecies"); 
+  });
+
+  /** Display Changelog */
+  if(game.settings.get("ptu", "dismissedVersion")[game.userId] !== LATEST_VERSION) {
+  // Create a script tag, set its source
+    var scriptTag = document.createElement("script"),
+        filePath = "https://cdn.jsdelivr.net/npm/marked/marked.min.js";
+
+    // And listen to it
+    scriptTag.onload = async function(loadEvent) {
+      new ChangeLog(await(await fetch("/systems/ptu/changelog.md")).text()).render(true);
+    }
+
+    // Make sure this file actually loads instead of a cached version
+    // Add a timestamp onto the URL (i.e. file.js?bust=12345678)
+    var cacheBuster = "";
+
+    cacheBuster = "?bust=" + new Date().getTime();
+
+    // Set the type of file and where it can be found
+    scriptTag.type = "text/javascript";
+    scriptTag.src = filePath + cacheBuster;
+
+    // Finally add it to the <head>
+    document.getElementsByTagName("head")[0].appendChild(scriptTag);  
+  }
+
+  /** Combat Initialization */
+  CONFIG.statusEffects = Afflictions;
+  CONFIG.Combat.defeatedStatusId = Afflictions[0].id;
+
+  PTUCombat.Initialize();
+});
 
 /* -------------------------------------------- */
 /*  Custom Species (Editor) Hooks               */
@@ -605,58 +428,6 @@ Hooks.on("renderSettingsConfig", function(esc, html, data) {
     </div>
     `);
     html.height('auto');
-});
-
-/* -------------------------------------------- */
-/*  Items & Custom Species Initialization       */
-/* -------------------------------------------- */
-
-Hooks.once("ready", async function() {
-  await InitCustomSpecies();
-
-  setAccessabilityFont(game.settings.get("ptu", "accessability"));
-
-  // Globally enable items from item compendium
-  game.ptu["items"] = Array.from(new Set(game.items.filter(x => x.type == "item").concat(await game.packs.get("ptu.items").getDocuments())));
-
-  // Wait to register hotbar drop hook on ready so that modules could register earlier if they want to
-  Hooks.on("hotbarDrop", (bar, data, slot) => createPTUMacro(data, slot));
-
-  game.socket.on("system.ptu", (data) => {
-    if(data == null) return; 
-    if(data == "RefreshCustomSpecies" || (data == "ReloadGMSpecies" && game.user.isGM)) Hooks.callAll("updatedCustomSpecies"); 
-  });
-
-  /** Display Changelog */
-  if(game.settings.get("ptu", "dismissedVersion")[game.userId] !== LATEST_VERSION) {
-  // Create a script tag, set its source
-    var scriptTag = document.createElement("script"),
-        filePath = "https://cdn.jsdelivr.net/npm/marked/marked.min.js";
-
-    // And listen to it
-    scriptTag.onload = async function(loadEvent) {
-      new ChangeLog(await(await fetch("/systems/ptu/changelog.md")).text()).render(true);
-    }
-
-    // Make sure this file actually loads instead of a cached version
-    // Add a timestamp onto the URL (i.e. file.js?bust=12345678)
-    var cacheBuster = "";
-
-    cacheBuster = "?bust=" + new Date().getTime();
-
-    // Set the type of file and where it can be found
-    scriptTag.type = "text/javascript";
-    scriptTag.src = filePath + cacheBuster;
-
-    // Finally add it to the <head>
-    document.getElementsByTagName("head")[0].appendChild(scriptTag);  
-  }
-
-  /** Combat Initialization */
-  CONFIG.statusEffects = Afflictions;
-  CONFIG.Combat.defeatedStatusId = Afflictions[0].id;
-
-  PTUCombat.Initialize();
 });
 
 /* -------------------------------------------- */
@@ -788,15 +559,6 @@ function rollItemMacro(actorId, itemId, sceneId, tokenId) {
     default: return ui.notifications.warn(`I'm sorry, macro support has yet to be added for '${item.type}s'`)
   }
 
-  // const speaker = ChatMessage.getSpeaker();
-  // let actor;
-  // if (speaker.token) actor = game.actors.tokens[speaker.token];
-  // if (!actor) actor = game.actors.get(speaker.actor);
-  // const item = actor ? actor.items.find(i => i.name === itemName) : null;
-  // if (!item) return ui.notifications.warn(`Your controlled Actor does not have an item named ${itemName}`);
-
-  // // Trigger the item roll
-  // return item.roll();
 }
 
 function _onMoveMacro(actor, item) {
@@ -846,14 +608,6 @@ function _onPokedexMacro() {
   }
 }
 
-function setAccessabilityFont(enabled) {
-  if(enabled) {
-    document.querySelector(':root').style.setProperty('--pkmnFontStyle', 'sans-serif')
-  } else {
-    document.querySelector(':root').style.setProperty('--pkmnFontStyle', 'Pokemon GB')
-  }
-}
-
 export async function PlayPokemonCry(species) 
 {
     if(game.settings.get("ptu", "playPokemonCriesOnDrop"))
@@ -877,108 +631,6 @@ export async function PlayPokemonCry(species)
     }
 }
 
-export default class DirectoryPicker extends FilePicker {
-  constructor(options = {}) {
-    super(options);
-  }
-
-  _onSubmit(event) {
-    event.preventDefault();
-    const path = event.target.target.value;
-    const activeSource = this.activeSource;
-    const bucket = event.target.bucket ? event.target.bucket.value : null;
-    this.field.value = DirectoryPicker.format({
-      activeSource,
-      bucket,
-      path,
-    });
-    this.close();
-  }
-
-  static async uploadToPath(path, file) {
-    const options = DirectoryPicker.parse(path);
-    return FilePicker.upload(options.activeSource, options.current, file, { bucket: options.bucket });
-  }
-
-  // returns the type "Directory" for rendering the SettingsConfig
-  static Directory(val) {
-    return val;
-  }
-
-  // formats the data into a string for saving it as a GameSetting
-  static format(value) {
-    return value.bucket !== null
-      // ? `[${value.activeSource}:${value.bucket}] ${value.path}`
-      // : `[${value.activeSource}] ${value.path}`;
-      ? `${value.path}/`
-      : `${value.path}/`;
-  }
-
-  // parses the string back to something the FilePicker can understand as an option
-  static parse(str) {
-    let matches = str.match(/\[(.+)\]\s*(.+)/);
-    if (matches) {
-      let source = matches[1];
-      const current = matches[2].trim();
-      const [s3, bucket] = source.split(":");
-      if (bucket !== undefined) {
-        return {
-          activeSource: s3,
-          bucket: bucket,
-          current: current,
-        };
-      } else {
-        return {
-          activeSource: s3,
-          bucket: null,
-          current: current,
-        };
-      }
-    }
-    // failsave, try it at least
-    return {
-      activeSource: "data",
-      bucket: null,
-      current: str,
-    };
-  }
-
-  // Adds a FilePicker-Simulator-Button next to the input fields
-  static processHtml(html) {
-    $(html)
-      .find(`input[data-dtype="Directory"]`)
-      .each((index, element) => {
-        // disable the input field raw editing
-        $(element).prop("readonly", true);
-
-        // if there is no button next to this input element yet, we add it
-        if (!$(element).next().length) {
-          let picker = new DirectoryPicker({
-            field: $(element)[0],
-            ...DirectoryPicker.parse($(element).val()),
-          });
-          let pickerButton = $(
-            '<button type="button" class="file-picker" data-type="imagevideo" data-target="img" title="Pick directory"><i class="fas fa-file-import fa-fw"></i></button>'
-          );
-          pickerButton.on("click", () => {
-            picker.render(true);
-          });
-          $(element).parent().append(pickerButton);
-        }
-      });
-  }
-
-  /** @override */
-  activateListeners(html) {
-    super.activateListeners(html);
-
-    // remove unnecessary elements
-    $(html).find("ol.files-list").remove();
-    $(html).find("footer div").remove();
-    $(html).find("footer button").text("Select Directory");
-  }
-}
-
 // Automatically update Initiative if Speed / Init Mod changes
 Hooks.on("updateInitiative", function(actor) {
   if(!game.combats?.active) return;
@@ -993,9 +645,3 @@ Hooks.on("updateInitiative", function(actor) {
 
   return true;
 }) 
-
-// this s hooked in, we don't use all the data, so lets stop eslint complaining
-// eslint-disable-next-line no-unused-vars
-Hooks.on("renderSettingsConfig", (app, html, user) => {
-  DirectoryPicker.processHtml(html);
-});

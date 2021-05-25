@@ -37,6 +37,10 @@
                                             min="{{ this.range.min }}" max="{{ this.range.max }}" step="{{ this.range.step }}"/>
                                         <span class="range-value">{{this.value}}</span>
 
+                                    {{else if this.filePicker}}
+                                    {{filePicker target=(concat this.module "." this.key) type="folder"}}
+                                        <input type="text" name="{{this.module}}.{{this.key}}" value="{{this.value}}" data-dtype="{{this.type}}"/>
+
                                     {{else}}
                                         <input type="text" name="{{this.module}}.{{this.key}}" value="{{this.value}}" data-dtype="{{this.type}}"/>
                                     {{/if}}
