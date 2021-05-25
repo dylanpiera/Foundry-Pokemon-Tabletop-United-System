@@ -98,14 +98,23 @@ export class PTUActor extends Actor {
     const overrides = {};
     const origins = {}; 
     // Organize non-disabled effects by their application priority
-    const changes = this.effects.reduce((changes, e) => {
+    const effects = Array.from(this.effects).concat(this.items.filter(item => item?.effects?.size > 0).flatMap(item => Array.from(item.effects)));
+
+    const changes = effects.reduce((changes, e) => {
       if (e.data.disabled) return changes;
       return changes.concat(
         e.data.changes.map((c) => {
           c = duplicate(c);
           if(doBaseData && c.priority >= 51) return undefined;
           if(!doBaseData && c.priority <= 50) return undefined;
+          
           c.effect = e;
+
+          if(e.parent.data.type != this.data.type) {
+            if(!c.key.startsWith("actor.") && !c.key.startsWith("../")) return undefined; 
+            c.key = c.key.replace("actor.", "").replace("../", "");
+            c.effect.parent = this;
+          }
           c.priority = c.priority ?? c.mode * 10;
           return c;
         }).filter(x => x!=undefined)
@@ -114,6 +123,7 @@ export class PTUActor extends Actor {
     changes.sort((a, b) => a.priority - b.priority);
     // Apply all changes
     for (let change of changes) {
+      debug(change.key, change);
       const result = change.effect.apply(this, change);
       if (result !== null) {
         overrides[change.key] = result;

@@ -1,3 +1,5 @@
+import { debug } from "../ptu.js";
+
 /**
  * A form designed for creating and editing an Active Effect on an Actor or Item entity.
  * @implements {FormApplication}
@@ -38,5 +40,29 @@
           <input type="number" name="changes.${idx}.priority" value="0"/>
       </li>`);
       changes.appendChild(change[0]);
+    }
+
+    /** @override */
+    async _updateObject(event, formData) {
+      formData = expandObject(formData);
+      formData.changes = Object.values(formData.changes || {});
+      for ( let c of formData.changes ) {
+        // TODO - store as numeric when it's unambiguous, remove this later. See #4309
+        const n = parseFloat(c.value)
+        if ( String(n) === c.value ) {
+          c.value = n;
+          continue;
+        }
+
+        if(c.value.includes(',')) {
+          c.value = c.value.replace("[", "").replace("]", "").split(",")
+        }
+      }
+      debug(this.object)
+      if(this.object.data.flags.ptu.itemEffect) {
+        const obj = mergeObject(duplicate(this.object.data), formData);
+        return this.object.parent.update({effects: [obj]})
+      }
+      return this.object.update(formData);
     }
   }

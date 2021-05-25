@@ -81,7 +81,32 @@ export class PTUItemSheet extends ItemSheet {
 			onclick: () => this._toChat()
 		});
 
+		buttons.unshift({
+			label: "Effects",
+			class: "open-effects",
+			icon: "fas fa-edit",
+			onclick: () => this._loadEffectSheet()
+		});	
+
 		return buttons;
+	}
+
+	async _loadEffectSheet() {
+		if(this.object.effects.size == 0) {
+			const effectData = {
+				changes: [],
+				label: this.object.name,
+				icon: this.object.img,
+				transfer: false,
+				flags: {ptu: {itemEffect: true}},
+				parent: this.object,
+				_id: randomID()
+			}
+			await this.object.update({effects: [effectData]});
+		}
+		
+		const effect = this.object.effects.entries[0];
+		return effect.sheet.render(true);
 	}
 
 	/**
