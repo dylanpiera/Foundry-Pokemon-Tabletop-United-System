@@ -589,21 +589,21 @@
                       <ul style="position: relative; left: 15px; width: 96%; line-height: 15px; text-align: start;">
                         {{#if data.modifiers.hardened}}<li>Injuries beyond the 5th do not lower Maximum Hit Points</li>
                         {{/if}}
-                        {{#if (and (is true data.modifiers.hardened) (biggerOrEqual data.health.injuries 1))}}<li>+1 to
+                        {{#if (and (is "true" data.modifiers.hardened) (biggerOrEqual data.health.injuries 1))}}<li>+1 to
                           Critical Hit and Effect Range</li>{{/if}}
-                        {{#if (and (is true data.modifiers.hardened) (biggerOrEqual data.health.injuries 3))}}<li>+1
+                        {{#if (and (is "true" data.modifiers.hardened) (biggerOrEqual data.health.injuries 3))}}<li>+1
                           Evasion and +5 Initiative</li>{{/if}}
                         {{#if (biggerOrEqual data.health.injuries 5)}}<li>Unable to regain Hit Points from Resting</li>
                         {{/if}}
-                        {{#if (and (is true data.modifiers.hardened) (biggerOrEqual data.health.injuries 5))}}<li>+5
+                        {{#if (and (is "true" data.modifiers.hardened) (biggerOrEqual data.health.injuries 5))}}<li>+5
                           Damage Reduction</li>{{/if}}
-                        {{#if (and (not true data.modifiers.hardened) (biggerOrEqual data.health.injuries 5))}}<li>Take
+                        {{#if (and (not "true" data.modifiers.hardened) (biggerOrEqual data.health.injuries 5))}}<li>Take
                           {{data.health.injuries}} Damage whenever taking a Standard Action during Combat</li>{{/if}}
-                        {{#if (and (is true data.modifiers.hardened) (biggerOrEqual data.health.injuries 7))}}<li>Immune
+                        {{#if (and (is "true" data.modifiers.hardened) (biggerOrEqual data.health.injuries 7))}}<li>Immune
                           to Loss of Hit Points (but not damage) from all effects</li>{{/if}}
-                        {{#if (and (is true data.modifiers.hardened) (biggerOrEqual data.health.injuries 9))}}<li>Resist
+                        {{#if (and (is "true" data.modifiers.hardened) (biggerOrEqual data.health.injuries 9))}}<li>Resist
                           all damage one step further</li>{{/if}}
-                        {{#if (and (not true data.modifiers.hardened) (biggerOrEqual data.health.injuries 10))}}<li>
+                        {{#if (and (not "true" data.modifiers.hardened) (biggerOrEqual data.health.injuries 10))}}<li>
                           <b>Death</b></li>{{/if}}
                         </ol>
                     </div>

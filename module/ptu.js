@@ -508,7 +508,7 @@ async function createPTUMacro(data, slot) {
   const actor = game.actors.get(data.actorId);
 
   // Create the macro command
-  const command = `game.ptu.rollItemMacro("${data.actorId}","${item.id}","${data.sceneId}", "${data.tokenId}");`;
+  const command = `game.ptu.rollItemMacro("${data.actorId}","${item._id}","${data.sceneId}", "${data.tokenId}");`;
   let macro = game.macros.contents.find(m => (m.name === `${actor.name}'s ${item.name}`) && (m.command === command));
   if (!macro) {
     macro = await Macro.create({
