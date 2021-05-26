@@ -4,8 +4,13 @@ import { CheckStage } from '../utils/calculate-evolution.js';
 import { excavateObj, dataFromPath } from '../utils/generic-helpers.js';
 import { CalcBaseStat, CalculateStatTotal } from "../actor/calculations/stats-calculator.js";
 import LevelField from "../api/front-end/components/levelField.js";
-import levelFieldsStore from "../api/front-end/stores/levelFieldsStore.js";
+import initStore from "../api/front-end/charactermancerStore.js";
 import LevelExpField from "../api/front-end/components/levelExpField.js";
+import NextButton from "../api/front-end/components/nextButton.js";
+import SpeciesField from "../api/front-end/components/speciesField.js";
+import SpeciesIdField from "../api/front-end/components/speciesIdField.js";
+import SpeciesImage from "../api/front-end/components/speciesImg.js";
+import TypeBar from "../api/front-end/components/typeBar.js";
 
 /**
  * Extend the basic ActorSheet with some very simple modifications
@@ -68,11 +73,7 @@ export class PTUPokemonCharactermancer extends FormApplication {
 
   async applyBaseChanges() {
     console.groupCollapsed(`Charactermancer Render`)
-    $('#speciesIdField').val(this.speciesData.number);
-
-    this._updateTyping();
-    $('#levelBar').attr("class", `progress-bar p${this.object.data.data.level.current}`)
-    await this._updateArt();
+    // $('#speciesIdField').val(this.speciesData.number);
 
     for(const component of Object.values(this.components)) component.render();
 
@@ -82,52 +83,45 @@ export class PTUPokemonCharactermancer extends FormApplication {
   /** @override */
 	async activateListeners(html) {
     super.activateListeners(html);
-    const ref = this;
 
-    this.stores.levelFields = levelFieldsStore(this.object.data.data.level);
-
-    this.components.levelField = new LevelField(this.stores.levelFields);
-    this.components.levelExpField = new LevelExpField(this.stores.levelFields);
-
+    this.store = initStore({
+      level: this.object.data.data.level,
+      tabs: this._tabs[0],
+      actor: this.object,
+      species: this.speciesData
+    });
     
-  }
+    this.components = {
+      speciesField: new SpeciesField(this.store),
+      speciesIdField: new SpeciesIdField(this.store),
+      previewImage: new SpeciesImage(this.store),
+      typeBar: new TypeBar(this.store),
+      levelField: new LevelField(this.store),
+      levelExpField: new LevelExpField(this.store),
+      nextButton: new NextButton(this.store),
+    }    
 
-  /* -------------------------------------------- */
-
-  async _updateArt() {
-    let imgSrc = game.settings.get("ptu", "defaultPokemonImageDirectory");
-    if(imgSrc) {
-      let imgPath = await GetSpeciesArt(this.speciesData ? this.speciesData : this.object.species.data ? {_id: this.object.data.species} : {_id: this.object.name}, imgSrc);
-      if(imgPath) {
-        this.image = imgPath;
-
-        $("#preview-img").html(`<img src="${this.image}"><input type="hidden" name="img" value="${this.image}">`);
-      }
-      else {
-        $("#preview-img").html(`<img src="/icons/svg/mystery-man-black.svg" style="height: 404px; width: 100%;">`);
-      }
-    }
-  }
-
-  _updateTyping() {
-    this.typing = undefined;
-
-    if(this.speciesData) {
-      this.typing = {
-        type1: `/systems/ptu/css/images/types2/${this.speciesData.Type[0]}IC.png`,
-        type2: `/systems/ptu/css/images/types2/${this.speciesData.Type[1] != "null" ? this.speciesData.Type[1] + `IC_Flipped` : "IC_Flipped"}.png`
-      }
-
-      $('#type1').attr("src",this.typing.type1);
-      $('#type2').attr("src",this.typing.type2);
-    }
+    this.components.speciesField.element.autocomplete({
+      source: this.allSpecies.map(x => x.name),
+      autoFocus: true,
+      minLength: 1,
+      select: () => setTimeout(() => this.components.speciesField.element.trigger("change"), 100)
+    });
   }
 
   /* -------------------------------------------- */
   
   /** @override */
-  async _updateObject(event, formData) {
-    log(`CHARACTERMANCER: Updating ${this.object.name}`,formData);
-    //await this.object.update(formData);
+  async _updateObject(event) {
+    const formData = duplicate(this.store.state);
+
+    const data = {
+      'level.exp': formData.exp,
+      'species': formData.species._id,
+    }
+    if(formData.imgPath) data.img = formData.imgPath;
+
+    log(`CHARACTERMANCER: Updating ${this.object.name}`, data);
+    await this.object.update({data: data});
   }
 }

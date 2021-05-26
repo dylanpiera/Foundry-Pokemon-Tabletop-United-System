@@ -36,7 +36,7 @@ export default class Store {
                 state[key] = value;
                 
                 // Trace out to the console. This will be grouped by the related action
-                console.log(`stateChange: ${key}: ${value}`);
+                console.log(`stateChange: ${key}:`, value);
                 
                 // Publish the change event for the components that are listening
                 self.events.publish('stateChange', self.state);
