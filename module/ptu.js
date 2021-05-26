@@ -51,7 +51,7 @@ export let log = (...args) => console.log("FVTT PTU | ", ...args);
 export let warn = (...args) => console.warn("FVTT PTU | ", ...args);
 export let error = (...args) => console.error("FVTT PTU | ", ...args)
 
-export const LATEST_VERSION = "1.4.0-alpha.4";
+export const LATEST_VERSION = "1.4.0-alpha.6";
 
 /* -------------------------------------------- */
 /*  Foundry VTT Initialization                  */
@@ -265,6 +265,10 @@ function registerHandlebars() {
 
   Handlebars.registerHelper("isGm", function () {
     return game.user.isGM;
+  })
+
+  Handlebars.registerHelper("ld", function(key, value) {
+    return {hash: {[key]: value}};
   })
 
   Handlebars.registerHelper("toReadableEffectMode", function(effectId) {

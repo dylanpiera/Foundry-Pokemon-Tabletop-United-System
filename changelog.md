@@ -2,6 +2,9 @@
 This is the Alpha branch which is most likely very unstable. I hope you backed up your Foundry Install & Worlds before trying to convert.
 Please report any bugs on the discord!
 
+## 1.4.0-Alpha.6
+- Added Localization to Character & Pokemon Sheets
+
 ## 1.4.0-Alpha.5
 - Fixed Confusion not flipping a coin when applying damage, instead always applying damage.
 - Fixed Confusion dealing only 1 tick of damage on status moves instead of 2 ticks.

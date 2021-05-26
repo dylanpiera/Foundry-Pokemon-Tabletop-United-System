@@ -1400,7 +1400,11 @@ header.effect-change.effects-header.flexrow > div {
 }
 /* Token Tooltip width change */
 .token-tooltip-alt-tooltip-column {
-  max-width: 25rem;
+  max-width: 25rem !important;
+}
+/* System name styling */
+li.system {
+  font-size: 9px;
 }
 .w-25 {
   width: 25% !important;

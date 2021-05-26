@@ -69,6 +69,7 @@ export class PTUPokemonCharactermancer extends FormApplication {
 
   /** @override */
   render(options) {
+    ui.notifications.notify("Charactermancer is temporarily disabled as it's undergoing changes", "warning"); return;
     if($('.charactermancer').length > 0) return;
     super.render(options);
   }

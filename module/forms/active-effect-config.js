@@ -46,7 +46,7 @@ import { debug } from "../ptu.js";
         }
       }
       debug(this.object)
-      if(this.object.data.flags.ptu.itemEffect) {
+      if(this.object.data.flags?.ptu?.itemEffect) {
         const obj = mergeObject(duplicate(this.object.data), formData);
         return this.object.parent.update({effects: [obj]})
       }

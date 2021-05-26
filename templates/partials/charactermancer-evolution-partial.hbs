@@ -15,7 +15,7 @@
                             {{/select}}
                         </div>
                         <div style="min-height: 32px; padding: 2px;">
-                            <p>Level {{level}}</p>
+                            <p>{{localize "PTU.Level"}} {{level}}</p>
                         </div>
                         <div class="box">
                             {{#each data.Abilities as | list tier |}}
@@ -42,7 +42,7 @@
                         {{/select}}
                     </div>
                     <div style="min-height: 32px; padding: 2px;">
-                        <p>Level {{set.0.level}}</p>
+                        <p>{{localize "PTU.Level"}} {{set.0.level}}</p>
                     </div>
                     <div class="box">
                         {{#each set.0.data.Abilities as | list tier |}}
@@ -63,7 +63,7 @@
                 <p>{{set.0.name}}</p>
             </div>
             <div style="min-height: 32px; padding: 2px;">
-                <p>Level {{#if (not set.0.level "Null")}}{{set.0.level}}{{else}}0{{/if}}</p>
+                <p>{{localize "PTU.Level"}} {{#if (not set.0.level "Null")}}{{set.0.level}}{{else}}0{{/if}}</p>
             </div>
             <div class="box">
                 {{#each set.0.data.Abilities as | list tier |}}
