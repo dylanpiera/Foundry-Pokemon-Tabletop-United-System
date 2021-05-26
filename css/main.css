@@ -1398,6 +1398,10 @@ header.effect-change.effects-header.flexrow > div {
 .pokedexflex > span {
   flex: 1 1 50%;
 }
+/* Token Tooltip width change */
+.token-tooltip-alt-tooltip-column {
+  max-width: 25rem;
+}
 .w-25 {
   width: 25% !important;
 }
