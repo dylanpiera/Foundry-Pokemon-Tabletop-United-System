@@ -62,7 +62,7 @@ export class PTUPokemonCharactermancer extends FormApplication {
   render(force=false, options={}) {
     if($('.charactermancer').length > 0) return;
 
-    this._render(force, options).then(this.applyBaseChanges.bind(this)).catch(err => {
+    this._render(force, options).then(this._afterRender.bind(this)).catch(err => {
       err.message = `An error occurred while rendering ${this.constructor.name} ${this.appId}: ${err.message}`;
       console.error(err);
       this._state = Application.RENDER_STATES.ERROR;
@@ -71,25 +71,43 @@ export class PTUPokemonCharactermancer extends FormApplication {
     return this;  
   }
 
-  async applyBaseChanges() {
-    console.groupCollapsed(`Charactermancer Render`)
-    // $('#speciesIdField').val(this.speciesData.number);
+  /** @override */
+	activateListeners(html) {
+    super.activateListeners(html);
+    
+    console.groupCollapsed(`Charactermancer Initialization`)
 
-    for(const component of Object.values(this.components)) component.render();
+    this._initializeState();
+
+    this.components.speciesField.element.autocomplete({
+      source: this.allSpecies.map(x => x.name),
+      autoFocus: true,
+      minLength: 1,
+      select: () => setTimeout(() => this.components.speciesField.element.trigger("change"), 100)
+    });
 
     console.groupEnd();
   }
 
-  /** @override */
-	async activateListeners(html) {
-    super.activateListeners(html);
+  /* -------------------------------------------- */
 
-    this.store = initStore({
-      level: this.object.data.data.level,
-      tabs: this._tabs[0],
-      actor: this.object,
-      species: this.speciesData
-    });
+  _initializeState(stateBackup) {
+    if(stateBackup) {
+      this.store = initStore({
+        level: {current: stateBackup.level, exp: stateBackup.exp},
+        tabs: this._tabs[0],
+        actor: this.object,
+        species: stateBackup.species
+      })
+    }
+    else {
+      this.store = initStore({
+        level: this.object.data.data.level,
+        tabs: this._tabs[0],
+        actor: this.object,
+        species: this.speciesData
+      });
+    }
     
     this.components = {
       speciesField: new SpeciesField(this.store),
@@ -99,29 +117,80 @@ export class PTUPokemonCharactermancer extends FormApplication {
       levelField: new LevelField(this.store),
       levelExpField: new LevelExpField(this.store),
       nextButton: new NextButton(this.store),
-    }    
+    }   
 
-    this.components.speciesField.element.autocomplete({
-      source: this.allSpecies.map(x => x.name),
-      autoFocus: true,
-      minLength: 1,
-      select: () => setTimeout(() => this.components.speciesField.element.trigger("change"), 100)
-    });
+    console.log("Store:", this.store);
+    console.log("Components:", this.components);
+  }
+
+  async _afterRender() {
+    console.groupCollapsed(`Charactermancer Render`)
+
+    for(const component of Object.values(this.components)) component.render();
+
+    backupCheck:
+    if(this.object.getFlag("ptu", "cmbackup")) {
+      let current = duplicate(this.store.state)
+      let backup = duplicate(this.object.getFlag("ptu", "cmbackup"));
+
+      delete current.actor;
+      delete current.tabs;
+      delete current.imgPath;
+      delete current.currentTab;
+
+      delete backup.actor;
+      delete backup.tabs;
+      delete backup.imgPath;
+      delete backup.currentTab;
+      console.log(current, backup);
+      console.log(JSON.stringify(current) == JSON.stringify(backup))
+      if(JSON.stringify(current) == JSON.stringify(backup)) break backupCheck;
+
+      let confirmation;
+      await Dialog.confirm({
+        title: `Backup Data Found!`,
+        content: `<p class='readable pb-2 pt-1'>It seems you didn't properly close the Charactermancer the last time you used it.<br>Would you like us to import your old data or delete it?</p>`,
+        yes: _ => {
+          confirmation = true;
+        },
+        no: async _ => {
+          await this.object.unsetFlag("ptu", "cmbackup");
+        },
+        rejectClose: false
+      });
+
+      if(confirmation) {
+        this._initializeState(this.object.getFlag("ptu", "cmbackup"));
+        for(const component of Object.values(this.components)) component.render();
+      }
+    }
+
+    console.groupEnd();
   }
 
   /* -------------------------------------------- */
   
   /** @override */
-  async _updateObject(event) {
+  async _updateObject() {
     const formData = duplicate(this.store.state);
 
     const data = {
-      'level.exp': formData.exp,
-      'species': formData.species._id,
+      data: {
+        'level.exp': formData.exp,
+        'species': formData.species._id,
+      }
     }
     if(formData.imgPath) data.img = formData.imgPath;
 
     log(`CHARACTERMANCER: Updating ${this.object.name}`, data);
-    await this.object.update({data: data});
+    await this.object.update(data);
+  }
+
+  async close(options) {
+    await super.close(options);
+    if(options === undefined)
+      await this.object.setFlag("ptu", "cmbackup", duplicate(this.store.state));
+    else
+      await this.object.unsetFlag("ptu", "cmbackup");
   }
 }

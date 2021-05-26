@@ -5,8 +5,13 @@ import { CheckStage } from '../../utils/calculate-evolution.js';
 import { GetSpeciesArt } from '../../utils/species-command-parser.js';
 
 export default function({level, tabs, initialTab, species, actor}) {
-    return new Store({
+    const store = new Store({
         actions: {
+            init(context) {
+                const imgSrc = game.settings.get("ptu", "defaultPokemonImageDirectory");
+                if(imgSrc)
+                    GetSpeciesArt(context.state.species, imgSrc).then(imgPath => context.commit('updateArt', imgPath));
+            },
             changeSpecies(context, species) {
                 const speciesData = game.ptu.GetSpeciesData(species);
                 if(!speciesData) return;
@@ -77,6 +82,10 @@ export default function({level, tabs, initialTab, species, actor}) {
             imgPath: ""
         }
     })
+
+    store.dispatch('init');
+
+    return store;
 };
 
 async function handleSpeciesPageEnd(context) {
