@@ -236,7 +236,20 @@ export const EffectFns = new Map([
 
 
         let applyConfusion = async (type) => {
-            if(actor.data.data.modifiers.immuneToEffectDamage) return;
+            const coinFlip = new Roll("1d2");
+            await coinFlip.evaluate({async: true});
+
+            const coinFlipMessageData = {
+                title: `Will ${actor.name} hit itself in confusion?`,
+                roll: coinFlip,
+                description: coinFlip.result == "2" ? `Did not hit itself in confusion!` : `Hits itself in Confusion!`,
+                success: coinFlip.result == "2"
+            };            
+
+            coinFlipMessageData.content = await renderTemplate('/systems/ptu/templates/chat/save-check.hbs', coinFlipMessageData);
+            await ChatMessage.create(coinFlipMessageData, {});
+
+            if(actor.data.data.modifiers.immuneToEffectDamage || coinFlipMessageData.success) return;
             const token = canvas.tokens.get(lastCombatant.token.id);
             switch(type) {
                 case 3: {
