@@ -1360,6 +1360,11 @@ header.effect-change.effects-header.flexrow > div {
 .settings .settings-tabs.tabs .item {
   white-space: nowrap;
 }
+.tab[data-tab].active.flex-tab {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
 /* MD CSS */
 .md h1,
 .md h2,

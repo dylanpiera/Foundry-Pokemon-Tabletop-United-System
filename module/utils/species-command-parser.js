@@ -82,7 +82,7 @@ export async function CreateMonParser(input, andCreate = false) {
 export async function GetSpeciesArt(mon, basePath, type = ".png") {
     let path = basePath+lpad(mon?.number, 4)+type;
     let result = await fetch(path);
-    if(result.status === 404) {
+    if(result.status === 404 && mon?.number < 1000) {
         path = basePath+lpad(mon?.number, 3)+type;
         result = await fetch(path);
     }

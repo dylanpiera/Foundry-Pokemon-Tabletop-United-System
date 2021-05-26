@@ -1,3 +1,4 @@
+{{log this}}
 <form
   class="{{cssClass}} container-fluid"
   autocomplete="off"
@@ -28,27 +29,31 @@
     clip-path: polygon(0 0, 42% 0, -35% 100%, 0% 100%);">
   </div>
   <div class="sheet-body content d-flex align-items-end flex-column h-100">
-    <div class="tab details species" data-group="primary" data-tab="species">
+    <div class="tab flex-tab details species" data-group="primary" data-tab="species">
       <div class="w-100 justify-content-center mb-3 bar mt-3">
         <label for="data.species">Pokemon Species</label>
       </div>
+
       <div class="d-flex w-100 pl-4 pr-4">
         <div class="col-sm-8 justify-content-center mb-2" style="padding-left: unset;">
           <input id="speciesField" type="text" name="data.species" value="{{#if object.data.species}}{{object.data.species}}{{else}}{{object.name}}{{/if}}"/>
         </div>
         <div class="col-sm-4 justify-content-center mb-2" style="padding-right: unset;">
-          <input id="speciesIdField" type="number" name="data.species.id" value="{{#if selectedSpecies}}{{selectedSpecies.number}}{{/if}}" />
+          <input id="speciesIdField" type="number" value="{{#if app.speciesData}}{{app.speciesData.number}}{{/if}}" />
         </div>
       </div>
+
       <div class="w-100 pl-4 pr-4 justify-content-center" id="preview-img">
       </div>
+
       <div class="w-100 typing d-flex pl-4 pr-4 pb-2">
         <img id="type1" src="/systems/ptu/css/images/types2/IC.png"><img id="type2" src="/systems/ptu/css/images/types2/IC_Flipped.png">
       </div>
+
       <div class="w-100 d-flex pb-2 pl-4 pr-4">
         <div class="col-sm-6 justify-content-center mb-2" style="padding-left: unset;">
           <div id="levelExpContainer">
-            <input id="levelExpField" type="number" step="1" min="0" name="data.level.exp" value="{{#if object.data.level}}{{object.data.level.exp}}{{/if}}"/>
+            <input id="levelExpField" type="number" step="1" min="0" name="data.level.exp" value="{{#if object.data.data.level}}{{object.data.data.level.exp}}{{/if}}"/>
             <span id="levelExpSuffix"> XP</span>
             <div id="levelExpInvis" style="width: auto;
               display: inline-block;
@@ -59,7 +64,7 @@
         </div>
         <div class="col-sm-6 justify-content-center mb-1" style="padding-right: unset;">
           <div id="levelContainer">
-            <input id="levelField" min="1" max="100" step="1" type="number" name="data.level.current" value="{{#if object.data.level}}{{object.data.level.current}}{{/if}}" />
+            <input id="levelField" min="1" max="100" step="1" type="number" value="{{#if object.data.data.level}}{{object.data.data.level.current}}{{/if}}" />
             <span id="levelPrefix">Level </span>
             <div id="levelInvis" style="width: auto;
               display: inline-block;
@@ -72,9 +77,11 @@
       <div class="w-100 pb-2 pl-4 pr-4">
         <div class="progress-bar" id="levelBar"></div>
       </div>
-      <div class="w-100 d-flex flex-row pl-4 pr-4 mb-2" id="evolutionContainer" style="flex-wrap: wrap; justify-content: space-evenly">
+
+      {{!-- <div class="w-100 d-flex flex-row pl-4 pr-4 mb-2" id="evolutionContainer" style="flex-wrap: wrap; justify-content: space-evenly">
         {{> "systems/ptu/templates/partials/charactermancer-evolution-partial.hbs" stages=stages}}
-      </div>
+      </div> --}}
+
       <div class="w-100 justify-content-between mt-auto mb-1">
         <button class="btn" data-value="submit" style="width: 40%;">Submit</button>
         <button class="btn" data-value="species-next" style="width: 40%;">Next</button>
