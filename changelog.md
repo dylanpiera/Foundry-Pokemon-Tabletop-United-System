@@ -1,3 +1,6 @@
+## 1.3.2 - Fix Combat Visibility
+- Fixed invisible combat tokens... well, becoming invisible from the GM!
+
 ## 1.3.1 - Firefox Compatability Fix
 - Fixed a compatability issue with Firefox when it came to the new Inventory system
 - Fixed some CSS to make things look a bit better in Firefox
