@@ -11,6 +11,13 @@ export default function({level, tabs, initialTab, species, actor}) {
                 const imgSrc = game.settings.get("ptu", "defaultPokemonImageDirectory");
                 if(imgSrc)
                     GetSpeciesArt(context.state.species, imgSrc).then(imgPath => context.commit('updateArt', imgPath));
+                
+                if(context.state.nature) {
+                    const natureInfo = game.ptu.natureData[context.state.nature];
+                    if(!natureInfo) return;
+
+                    context.commit('updateNature', [context.state.nature, natureInfo]);
+                }
             },
             changeSpecies(context, species) {
                 const speciesData = game.ptu.GetSpeciesData(species);
@@ -48,6 +55,23 @@ export default function({level, tabs, initialTab, species, actor}) {
                     case 'species': handleSpeciesPageEnd(context); break;
                     case 'stats': handleStatsPageEnd(context); break;
                 }
+            },
+            changeNatureStat(context, {value, isUp}) {
+                if(!value) return;
+
+                const otherStat = isUp ? context.state.natureStat.down : context.state.natureStat.up;
+                const natureInfo = Object.entries(game.ptu.natureData).find(x => x[1][0] == (isUp ? value : otherStat) && x[1][1] == (isUp ? otherStat : value))
+                if(!natureInfo) return;
+
+                context.commit('updateNature', natureInfo);
+            },
+            changeNature(context, nature) {
+                if(!nature) return;
+
+                const natureInfo = game.ptu.natureData[nature];
+                if(!natureInfo) return;
+
+                context.commit('updateNature', [nature, natureInfo])
             }
         },
         mutations: {
@@ -70,6 +94,14 @@ export default function({level, tabs, initialTab, species, actor}) {
             updateTab(state, tab) {
                 state.currentTab = tab;
                 return state;
+            },
+            updateNature(state, natureInfo) {
+                state.nature = natureInfo[0];
+                state.natureStat = {
+                    up: natureInfo[1][0], 
+                    down: natureInfo[1][1]
+                };
+                return state;
             }
         },
         state: {
@@ -79,7 +111,12 @@ export default function({level, tabs, initialTab, species, actor}) {
             tabs,
             species,
             actor,
-            imgPath: ""
+            imgPath: "",
+            nature: actor.data.data.nature.value,
+            natureStat: {
+                up: '',
+                down: '',
+            }
         }
     })
 

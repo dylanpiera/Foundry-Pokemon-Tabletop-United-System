@@ -899,12 +899,12 @@ span.readable {
 .gen8move.rollable[data-ac="NaN"][data-roll=""] {
   visibility: hidden;
 }
-.gen8.charactermancer input.nature-up {
+.gen8.charactermancer select.nature-up {
   background-color: #CC9999;
   color: black;
   text-transform: uppercase;
 }
-.gen8.charactermancer input.nature-down {
+.gen8.charactermancer select.nature-down {
   background-color: #99CCCC;
   color: black;
   text-transform: uppercase;

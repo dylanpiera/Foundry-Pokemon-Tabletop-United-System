@@ -7,6 +7,8 @@ import SpeciesField from "../api/front-end/components/speciesField.js";
 import SpeciesIdField from "../api/front-end/components/speciesIdField.js";
 import SpeciesImage from "../api/front-end/components/speciesImg.js";
 import TypeBar from "../api/front-end/components/typeBar.js";
+import NatureSelect from "../api/front-end/components/natureSelect.js";
+import NatureStatSelect from "../api/front-end/components/natureStatSelect.js";
 
 /**
  * Extend the basic ActorSheet with some very simple modifications
@@ -42,7 +44,15 @@ export class PTUPokemonCharactermancer extends FormApplication {
     const data = super.getData();
     data.dtypes = ["String", "Number", "Boolean"];
     
-    data['natures'] = game.ptu.natureData;
+    data.natures = game.ptu.natureData;
+    data.natureStatOptions = {
+      "HP": "HP",
+      "Attack": "ATK",
+      "Defense": "DEF",
+      "Special Attack": "SPATK",
+      "Special Defense": "SPDEF",
+      "Speed": "SPD"
+    }
     
     this.allSpecies = game.ptu.pokemonData.map(x => {return {number: x.ptuNumber, name: x._id}}).concat(game.ptu.customSpeciesData.map(x => {return {number: x.ptuNumber, name: x._id}}));
     this.speciesData = game.ptu.GetSpeciesData(this.object.data.data.species ? this.object.data.data.species : this.object.name);
@@ -113,6 +123,9 @@ export class PTUPokemonCharactermancer extends FormApplication {
       levelField: new LevelField(this.store),
       levelExpField: new LevelExpField(this.store),
       nextButton: new NextButton(this.store),
+      natureSelect: new NatureSelect(this.store),
+      natureStatUpSelect: new NatureStatSelect(this.store, true),
+      natureStatDownSelect: new NatureStatSelect(this.store, false),
     }   
 
     console.log("Store:", this.store);
@@ -174,6 +187,7 @@ export class PTUPokemonCharactermancer extends FormApplication {
       data: {
         'level.exp': formData.exp,
         'species': formData.species._id,
+        'nature.value': formData.nature
       }
     }
     if(formData.imgPath) data.img = formData.imgPath;
