@@ -1,6 +1,19 @@
-export function CalcBaseStat(specie, nature, statKey) {
+function CalcBaseStat(specie, nature, statKey) {
     if (specie != null) return _calculateStatWithNature(nature, statKey, _fetchSpecieStat(specie, statKey));
     return 0;
+}
+
+export function CalcBaseStats(stats, speciesData, nature, ignoreStages = false) {
+    const newStats = duplicate(stats);
+
+    newStats.hp.value = CalcBaseStat(speciesData, nature, "HP", ignoreStages);
+    newStats.atk.value = CalcBaseStat(speciesData, nature, "Attack", ignoreStages);
+    newStats.def.value = CalcBaseStat(speciesData, nature, "Defense", ignoreStages);
+    newStats.spatk.value = CalcBaseStat(speciesData, nature, "Special Attack", ignoreStages);
+    newStats.spdef.value = CalcBaseStat(speciesData, nature, "Special Defense", ignoreStages);
+    newStats.spd.value = CalcBaseStat(speciesData, nature, "Speed", ignoreStages);
+
+    return newStats;
 }
 
 function _fetchSpecieStat(specie, stat) {
@@ -16,10 +29,15 @@ function _calculateStatWithNature(nature, statKey, stat) {
     return Math.max(stat, 1);
 }
 
-export function CalculateStatTotal(levelUpPoints, stats, hasTwistedPower = false) {
-    for (let [key, value] of Object.entries(stats)) {
-        let sub = value["value"] + value["mod"] + value["levelUp"];
+export function CalculateStatTotal(levelUpPoints, stats, {twistedPower, ignoreStages}) {
+    for (const [key, value] of Object.entries(stats)) {
+        const sub = value["value"] + value["mod"] + value["levelUp"];
         levelUpPoints -= value["levelUp"];
+
+        if(ignoreStages) {
+            value["total"] = sub; continue;
+        }
+
         if (value["stage"] > 0) {
             value["total"] = Math.floor(sub * value["stage"] * 0.2 + sub);
         } else {
@@ -31,7 +49,7 @@ export function CalculateStatTotal(levelUpPoints, stats, hasTwistedPower = false
         }
     }
 
-    if(hasTwistedPower) {
+    if(twistedPower) {
         let atkTotal = stats.atk.total;
         let spatkTotal = stats.spatk.total;
         //if(Math.abs(atkTotal - spatkTotal) <= 5 ) {

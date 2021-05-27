@@ -51,7 +51,7 @@ export let log = (...args) => console.log("FVTT PTU | ", ...args);
 export let warn = (...args) => console.warn("FVTT PTU | ", ...args);
 export let error = (...args) => console.error("FVTT PTU | ", ...args)
 
-export const LATEST_VERSION = "1.4.0-alpha.6";
+export const LATEST_VERSION = "1.4.0-alpha.7";
 
 /* -------------------------------------------- */
 /*  Foundry VTT Initialization                  */

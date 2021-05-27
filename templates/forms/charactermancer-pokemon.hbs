@@ -28,27 +28,33 @@
     clip-path: polygon(0 0, 42% 0, -35% 100%, 0% 100%);">
   </div>
   <div class="sheet-body content d-flex align-items-end flex-column h-100">
-    <div class="tab details species" data-group="primary" data-tab="species">
+
+    <!-- Species Tab -->
+    <div class="tab flex-tab details species" data-group="primary" data-tab="species">
       <div class="w-100 justify-content-center mb-3 bar mt-3">
         <label for="data.species">Pokemon Species</label>
       </div>
+
       <div class="d-flex w-100 pl-4 pr-4">
         <div class="col-sm-8 justify-content-center mb-2" style="padding-left: unset;">
           <input id="speciesField" type="text" name="data.species" value="{{#if object.data.species}}{{object.data.species}}{{else}}{{object.name}}{{/if}}"/>
         </div>
         <div class="col-sm-4 justify-content-center mb-2" style="padding-right: unset;">
-          <input id="speciesIdField" type="number" name="data.species.id" value="{{#if selectedSpecies}}{{selectedSpecies.number}}{{/if}}" />
+          <input id="speciesIdField" type="number" value="{{#if app.speciesData}}{{app.speciesData.number}}{{/if}}" />
         </div>
       </div>
+
       <div class="w-100 pl-4 pr-4 justify-content-center" id="preview-img">
       </div>
-      <div class="w-100 typing d-flex pl-4 pr-4 pb-2">
+
+      <div class="w-100 typing d-flex pl-4 pr-4 pb-2" id="typebar">
         <img id="type1" src="/systems/ptu/css/images/types2/IC.png"><img id="type2" src="/systems/ptu/css/images/types2/IC_Flipped.png">
       </div>
+
       <div class="w-100 d-flex pb-2 pl-4 pr-4">
         <div class="col-sm-6 justify-content-center mb-2" style="padding-left: unset;">
           <div id="levelExpContainer">
-            <input id="levelExpField" type="number" step="1" min="0" name="data.level.exp" value="{{#if object.data.level}}{{object.data.level.exp}}{{/if}}"/>
+            <input id="levelExpField" type="number" step="1" min="0" name="data.level.exp" value="{{#if object.data.data.level}}{{object.data.data.level.exp}}{{/if}}"/>
             <span id="levelExpSuffix"> XP</span>
             <div id="levelExpInvis" style="width: auto;
               display: inline-block;
@@ -59,7 +65,7 @@
         </div>
         <div class="col-sm-6 justify-content-center mb-1" style="padding-right: unset;">
           <div id="levelContainer">
-            <input id="levelField" min="1" max="100" step="1" type="number" name="data.level.current" value="{{#if object.data.level}}{{object.data.level.current}}{{/if}}" />
+            <input id="levelField" min="1" max="100" step="1" type="number" value="{{#if object.data.data.level}}{{object.data.data.level.current}}{{/if}}" />
             <span id="levelPrefix">Level </span>
             <div id="levelInvis" style="width: auto;
               display: inline-block;
@@ -72,24 +78,32 @@
       <div class="w-100 pb-2 pl-4 pr-4">
         <div class="progress-bar" id="levelBar"></div>
       </div>
-      <div class="w-100 d-flex flex-row pl-4 pr-4 mb-2" id="evolutionContainer" style="flex-wrap: wrap; justify-content: space-evenly">
+
+      {{!-- <div class="w-100 d-flex flex-row pl-4 pr-4 mb-2" id="evolutionContainer" style="flex-wrap: wrap; justify-content: space-evenly">
         {{> "systems/ptu/templates/partials/charactermancer-evolution-partial.hbs" stages=stages}}
-      </div>
+      </div> --}}
+
       <div class="w-100 justify-content-between mt-auto mb-1">
         <button class="btn" data-value="submit" style="width: 40%;">Submit</button>
         <button class="btn" data-value="species-next" style="width: 40%;">Next</button>
       </div>
     </div>
+
+    <!-- Stats Tab -->
     <div class="tab details stats" data-group="primary" data-tab="stats">
       <!-- Nature -->
       <div class="w-100 justify-content-center mb-3 bar mt-3">
         <label for="data.nature.value">Nature</label>
       </div>
       <div class="d-flex w-100 pl-1 pr-1">
-        <div class="col-sm-3 justify-content-center mb-2" style="padding-right: unset;">
-          <input disabled id="natureDown" class="nature-down" type="text" value="">
+        <div class="col justify-content-center mb-2" style="padding-right: unset;">
+            <select id="natureDown" class="nature-down">
+              {{#each natureStatOptions as | shortcode nature |}}
+                <option value="{{nature}}">{{shortcode}}</option>
+              {{/each}}
+            </select>
         </div>
-        <div class="col-sm-6 justify-content-center mb-2" style="padding 0 5px;">
+        <div class="col-sm-5 justify-content-center mb-2" style="padding 0 5px;">
           {{#select object.data.nature.value}}
             <select id="natureSelect" name="data.nature.value">
               {{#each natures as | nature key |}}
@@ -98,8 +112,12 @@
             </select>
           {{/select}}
         </div>
-        <div class="col-sm-3 justify-content-center mb-2" style="padding-left: unset;">
-          <input disabled id="natureUp" class="nature-up" type="text" value="">
+        <div class="col justify-content-center mb-2" style="padding-left: unset;">
+          <select id="natureUp" class="nature-up">
+              {{#each natureStatOptions as | shortcode nature |}}
+                <option value="{{nature}}">{{shortcode}}</option>
+              {{/each}}
+            </select>
         </div>
       </div>
 
@@ -120,31 +138,15 @@
           </div>
         </div>
       </div>
-      {{#each stats as |stat key|}}
-        <div class="w-100 justify-content-center mb-1 bar mt-1 {{key}}" style="padding: 0.1rem; font-size: 11px;">
-          <div class="pl-3 pr-2 d-flex flex-row">
-            <div class="stats {{key}} key {{natureCheck ../nature.value key}}">
-              <label for="data.stats.{{key}}.value" class="resource-label">{{#if (is key "hp")}}HP{{else}}{{stat.label}}{{/if}}</label>
-            </div>
-            <div class="stats {{key}} base ">
-              <input type="text" class="no-box" value="{{stat.value}}" data-dtype="Number"
-                disabled />
-            </div>
-            <div class="stats {{key}} levelUp">
-              <input type="text" name="data.stats.{{key}}.levelUp" value="{{stat.levelUp}}" data-key="{{key}}" data-dtype="Number" />
-            </div>
-            <div class="stats {{key}} total">
-              <input type="text" class="no-box" value="{{stat.total}}" data-dtype="Number"
-                disabled />
-            </div>
-          </div>
-        </div>
-      {{/each}}
+
+      <div id="cm-stats-block">
+        {{!-- {{> "/systems/ptu/templates/partials/charactermancer/stat-block-partial.hbs" stats=stats nature=object.data.data.nature.value}} --}}
+      </div>
 
       <div class="w-100 mb-3 bar mt-1 pr-2" style="background: unset; padding: 0.1rem; font-size: 9px;">
         <div class="d-flex flex-row justify-content-end pr-2">
           <div style="flex: 0 1 20%">
-            <input type="text" name="data.levelUpPoints" value="0" data-dtype="Number" disabled />
+            <input type="text" id="statBlockLevelUpPoints" name="data.levelUpPoints" value="{{levelUpPoints}}" data-dtype="Number" disabled />
           </div>
           <div style="flex: 0 0 25%; padding-left: 5px; color:black; align-self: center;">
             <label>Levelup Points Remaining</label>
@@ -165,7 +167,7 @@
       <!-- Buttons -->
       <div class="w-100 justify-content-between mt-auto mb-1" style="position: absolute; bottom:0;">
         <button class="btn" data-value="submit" style="width: 40%;">Submit</button>
-        <button class="btn" data-value="species-next" style="width: 40%;">Next</button>
+        <button class="btn" data-value="stats-next" style="width: 40%;">Next</button>
       </div>
     </div>
   </div>

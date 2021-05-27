@@ -2,7 +2,7 @@ import { CalcLevel } from "./calculations/level-up-calculator.js";
 import { CalculateEvasions } from "./calculations/evasion-calculator.js";
 import { CalculatePokemonCapabilities, CalculateTrainerCapabilities} from "./calculations/capability-calculator.js"; 
 import { CalculateSkills } from "./calculations/skills-calculator.js"; 
-import { CalcBaseStat, CalculateStatTotal, CalculatePoisonedCondition } from "./calculations/stats-calculator.js";
+import { CalcBaseStats, CalculateStatTotal, CalculatePoisonedCondition } from "./calculations/stats-calculator.js";
 import { GetMonEffectiveness } from "./calculations/effectiveness-calculator.js";
 import { warn, debug, log } from '../ptu.js' 
 
@@ -327,7 +327,7 @@ export class PTUActor extends Actor {
 
     data.levelUpPoints = data.level.current + data.modifiers.statPoints.total + 9;
     data.stats = CalculatePoisonedCondition(duplicate(data.stats), actorData.flags?.ptu);
-    var result = CalculateStatTotal(data.levelUpPoints, data.stats, actorData.items.find(x => x.name.toLowerCase().replace("[playtest]") == "twisted power") != null);
+    var result = CalculateStatTotal(data.levelUpPoints, data.stats, {twistedPower: actorData.items.find(x => x.name.toLowerCase().replace("[playtest]") == "twisted power") != null});
     data.stats = result.stats;
     data.levelUpPoints = result.levelUpPoints;
     
@@ -387,14 +387,9 @@ export class PTUActor extends Actor {
     // Stats
     data.stats = CalculatePoisonedCondition(duplicate(data.stats), actorData.flags?.ptu);
 
-    data.stats.hp.value = CalcBaseStat(speciesData, data.nature.value, "HP");
-    data.stats.atk.value = CalcBaseStat(speciesData, data.nature.value, "Attack");
-    data.stats.def.value = CalcBaseStat(speciesData, data.nature.value, "Defense");
-    data.stats.spatk.value = CalcBaseStat(speciesData, data.nature.value, "Special Attack");
-    data.stats.spdef.value = CalcBaseStat(speciesData, data.nature.value, "Special Defense");
-    data.stats.spd.value = CalcBaseStat(speciesData, data.nature.value, "Speed");
+    data.stats = CalcBaseStats(data.stats, speciesData, data.nature.value);
 
-    var result = CalculateStatTotal(data.levelUpPoints, data.stats, actorData.items.find(x => x.name.toLowerCase().replace("[playtest]") == "twisted power") != null);
+    var result = CalculateStatTotal(data.levelUpPoints, data.stats, {twistedPower: actorData.items.find(x => x.name.toLowerCase().replace("[playtest]") == "twisted power") != null});
     data.stats = result.stats;
     data.levelUpPoints = result.levelUpPoints;
 
