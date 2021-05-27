@@ -78,8 +78,8 @@ export class PTUCustomSpeciesEditor extends Application {
         $(".custom-species-editor .alert").addClass("hidden")
       } else {
         $(".custom-species-editor div.item-species").css("flex", "0 0 35%");
-        $(".custom-species-editor .delete.hidden").removeClass("hidden")
-        $(".custom-species-editor .alert.hidden").removeClass("hidden")
+        $(".custom-species-editor .delete.ptu-hidden").removeClass("hidden")
+        $(".custom-species-editor .alert.ptu-hidden").removeClass("hidden")
         $("#species-list").addClass("delete");
         $("#new-mon").prop("disabled", true);
       }

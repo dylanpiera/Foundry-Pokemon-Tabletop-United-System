@@ -1783,7 +1783,7 @@ tbody.collapse.in {
   background-color: transparent;
   border: 0;
 }
-.hidden {
+.ptu-hidden {
   display: none !important;
 }
 .affix {
