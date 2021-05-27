@@ -14,7 +14,7 @@ export default class NatureSelect extends Component {
      *
      * @returns {void}
      */
-     render() {
+     async render() {
         if(this.element.val() != this.state.nature) this.element.val(this.state.nature);
         
         this.element.off("change");

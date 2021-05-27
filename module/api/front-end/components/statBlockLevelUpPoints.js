@@ -15,6 +15,6 @@ export default class StatBlockLevelUpPoints extends Component {
      * @returns {void}
      */
     async render() {
-        if(this.element.val() != this.state.levelUpPoints) this.element.val(this.state.levelUpPoints);
+        if(this.element.val() !== ""+this.state.levelUpPoints) this.element.val(this.state.levelUpPoints);
     }
 }

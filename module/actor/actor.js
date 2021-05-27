@@ -16,6 +16,7 @@ export class PTUActor extends Actor {
    * Augment the basic actor data with additional dynamic data.
    */
   prepareData() {
+    console.groupCollapsed("Initializing ", this.name)
     this.origins = {};
     super.prepareData();
 
@@ -88,6 +89,7 @@ export class PTUActor extends Actor {
           }) : undefined
       }
     })
+    console.groupEnd();
   }
 
   /**

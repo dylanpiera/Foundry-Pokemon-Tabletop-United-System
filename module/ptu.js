@@ -51,13 +51,14 @@ export let log = (...args) => console.log("FVTT PTU | ", ...args);
 export let warn = (...args) => console.warn("FVTT PTU | ", ...args);
 export let error = (...args) => console.error("FVTT PTU | ", ...args)
 
-export const LATEST_VERSION = "1.4.0-alpha.7";
+export const LATEST_VERSION = "1.4.0-alpha.8";
 
 /* -------------------------------------------- */
 /*  Foundry VTT Initialization                  */
 /* -------------------------------------------- */
 
 Hooks.once('init', function() {
+  console.groupCollapsed("PTU Init");
 
   // Create a namespace within the game global
   game.ptu = {
@@ -154,6 +155,8 @@ Hooks.once('init', function() {
 
   // Preload Handlebars Templates
   PreloadHandlebarsTemplates();
+
+  console.groupEnd();
 });
 
 
@@ -336,6 +339,7 @@ Hooks.once("setup", function() {
  * Once the entire VTT framework is initialized, initialize extra data
  */
 Hooks.once("ready", async function() {
+  console.groupCollapsed("PTU Ready")
   await InitCustomSpecies();
 
   SetAccessabilityFont(game.settings.get("ptu", "accessability"));
@@ -381,6 +385,7 @@ Hooks.once("ready", async function() {
   CONFIG.Combat.defeatedStatusId = Afflictions[0].id;
 
   PTUCombat.Initialize();
+  console.groupEnd();
 });
 
 /* -------------------------------------------- */

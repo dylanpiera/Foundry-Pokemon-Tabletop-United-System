@@ -70,6 +70,16 @@ export function LoadSystemSettings() {
         category: "general"
     })
 
+    game.settings.register("ptu", "showCharactermancerEvolutions", {
+        name: "Show evolutions in Charactermancer",
+        hint: "Allow players to see evolutions in the Charactermancer. DMs ignore this setting.",
+        scope: "world",
+        config: true,
+        type: Boolean,
+        default: true,
+        category: "general"
+    })
+
     game.settings.register("ptu", "combatRollPreference", {
         name: "Combat Roll Preference",
         hint: "Choose whether crits should always be rolled, or only when the to-hit is an actual crit.",

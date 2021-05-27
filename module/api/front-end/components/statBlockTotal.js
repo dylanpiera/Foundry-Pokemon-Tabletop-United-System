@@ -16,10 +16,10 @@ export default class StatBlockTotal extends Component {
      * @returns {void}
      */
     async render() {
+        if(isObjectEmpty(this.state.stats)) return;
         if(!document.contains(this.element[0])) this.element = $(`#cm-stats-block .total.${this.statKey} input`)
 
         const total = this.state.stats[this.statKey].total;
-        console.log(this.statKey, total, this.element.val());
         if(this.element.val() != total) this.element.val(total);
     }
 }

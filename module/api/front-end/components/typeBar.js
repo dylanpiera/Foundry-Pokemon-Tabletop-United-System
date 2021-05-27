@@ -14,7 +14,7 @@ export default class TypeBar extends Component {
      *
      * @returns {void}
      */
-    render() {
+    async render() {
         if(this.state.species) {
             const typing = {
                 type1: `/systems/ptu/css/images/types2/${this.state.species.Type[0]}IC.png`,

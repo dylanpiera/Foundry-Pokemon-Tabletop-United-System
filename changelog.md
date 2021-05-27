@@ -2,6 +2,10 @@
 This is the Alpha branch which is most likely very unstable. I hope you backed up your Foundry Install & Worlds before trying to convert.
 Please report any bugs on the discord!
 
+## 1.4.0-Alpha.8
+- Add Evolution section back to the Charactermancer
+- Added an option for turning off this section for Players, in case you don't want to display all these details up-front.
+
 ## 1.4.0-Alpha.7
 - Re-enable most of the Charactermancer
 

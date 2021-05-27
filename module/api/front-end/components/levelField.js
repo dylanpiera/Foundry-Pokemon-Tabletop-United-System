@@ -13,7 +13,7 @@ export default class LevelField extends Component {
      *
      * @returns {void}
      */
-     render() {
+     async render() {
         // If value is outdated, update it
         if(this.element.val() != this.state.level) this.element.val(this.state.level);
 
