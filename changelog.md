@@ -1,6 +1,9 @@
 # Welcome to the Beta!
 Hey there! You are on the Beta Branch. If you ever have any feedback please do share with us over on [Github](https://github.com/dylanpiera/Foundry-Pokemon-Tabletop-United-System/issues) or [Discord](https://discord.gg/fE3w59q)
 
+## 1.4-beta-2
+- Added Front-end API to game.ptu globals
+
 ## 1.4-Beta-1
 **This is the first Foundry 0.8.\* Beta. Please note that you can not run this beta on 0.7.9**
 - Updated to Foundry version 0.8.5

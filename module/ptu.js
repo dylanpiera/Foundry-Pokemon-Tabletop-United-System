@@ -45,13 +45,15 @@ import getTrainingChanges from './data/training-data.js';
 import {PTUSettings, PTUSettingCategories} from './forms/settings.js';
 import {LoadSystemSettings, SetAccessabilityFont} from './settings.js'
 import PreloadHandlebarsTemplates from './templates.js'
+import Store from "./api/front-end/lib/store.js";
+import Component from "./api/front-end/lib/component.js";
 
 export let debug = (...args) => {if (game.settings.get("ptu", "showDebugInfo") ?? false) console.log("DEBUG: FVTT PTU | ", ...args)};
 export let log = (...args) => console.log("FVTT PTU | ", ...args);
 export let warn = (...args) => console.warn("FVTT PTU | ", ...args);
 export let error = (...args) => console.error("FVTT PTU | ", ...args)
 
-export const LATEST_VERSION = "1.4-Beta-1";
+export const LATEST_VERSION = "1.4-Beta-2";
 
 /* -------------------------------------------- */
 /*  Foundry VTT Initialization                  */
@@ -112,7 +114,11 @@ Hooks.once('init', function() {
     api: new Api(),
     getTrainingChanges,
     settings: PTUSettings,
-    settingCategories: PTUSettingCategories
+    settingCategories: PTUSettingCategories,
+    frontEnd: {
+      Store,
+      Component
+    }
   };
 
   /**
