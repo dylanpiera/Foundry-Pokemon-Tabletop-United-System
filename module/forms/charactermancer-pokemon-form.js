@@ -169,6 +169,10 @@ export class PTUPokemonCharactermancer extends FormApplication {
       console.log(JSON.stringify(current) == JSON.stringify(backup))
       if(JSON.stringify(current) == JSON.stringify(backup)) break backupCheck;
 
+      // Disable interaction & grayscale the background
+      $('.charactermancer').css('pointer-events', 'none')
+      $('.charactermancer').css('-webkit-filter', 'grayscale(1)')
+
       let confirmation;
       await Dialog.confirm({
         title: `Backup Data Found!`,
@@ -181,6 +185,10 @@ export class PTUPokemonCharactermancer extends FormApplication {
         },
         rejectClose: false
       });
+
+      // Enable interaction again
+      $('.charactermancer').css('pointer-events', 'unset');
+      $('.charactermancer').css('-webkit-filter', 'unset');
 
       if(confirmation) {
         this._initializeState(this.object.getFlag("ptu", "cmbackup"));

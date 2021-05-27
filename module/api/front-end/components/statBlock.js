@@ -16,12 +16,13 @@ export default class StatBlock extends Component {
      */
     async render() {
         const isEmpty = this.element.html().trim() == "";
-        const isSpeciesRefresh = this.speciesId != this.state.species._id;
-        if(!isEmpty && !isSpeciesRefresh) return;
-        this.speciesId = this.state.species._id;
+        if(!isEmpty && !this._isBasestatChange(this.state.stats)) return;
 
+        this.baseStats = Object.fromEntries(Object.entries(this.state.stats).map(x => [x[0], x[1].value]))
+        
         const stats = this.state.stats;
         const nature = this.state.nature;
+        debug(this.speciesId, this.state.species._id, stats);
 
         if(!stats || !nature) return;
 
@@ -36,5 +37,12 @@ export default class StatBlock extends Component {
             this.store.dispatch('changeStats', {levelUpStats: {[stat]: {levelUp: value}}});
             event.target.focus();
         })
+    }
+
+    _isBasestatChange(stats) {
+        const baseStats = Object.fromEntries(Object.entries(stats).map(x => [x[0], x[1].value]));
+        const result = (JSON.stringify(baseStats) != JSON.stringify(this.baseStats));
+        debug(result, baseStats, this.baseStats);
+        return result;
     }
 }
