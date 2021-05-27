@@ -7,6 +7,7 @@ export default async function PreloadHandlebarsTemplates() {
         "systems/ptu/templates/partials/item-display-partial.hbs",
         
         // Charactermancer Partials
-        "systems/ptu/templates/partials/charactermancer-evolution-partial.hbs"
+        "systems/ptu/templates/partials/charactermancer-evolution-partial.hbs",
+        "/systems/ptu/templates/partials/charactermancer/stat-block-partial.hbs"
     ]);
   };

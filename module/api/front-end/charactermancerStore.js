@@ -3,6 +3,7 @@ import { CalcLevel } from '../../actor/calculations/level-up-calculator.js';
 import { debug, log } from '../../ptu.js';
 import { CheckStage } from '../../utils/calculate-evolution.js';
 import { GetSpeciesArt } from '../../utils/species-command-parser.js';
+import { CalcBaseStats, CalculateStatTotal } from '../../actor/calculations/stats-calculator.js';
 
 export default function({level, tabs, initialTab, species, actor}) {
     const store = new Store({
@@ -18,6 +19,8 @@ export default function({level, tabs, initialTab, species, actor}) {
 
                     context.commit('updateNature', [context.state.nature, natureInfo]);
                 }
+
+                context.dispatch('changeStats');
             },
             changeSpecies(context, species) {
                 const speciesData = game.ptu.GetSpeciesData(species);
@@ -72,6 +75,23 @@ export default function({level, tabs, initialTab, species, actor}) {
                 if(!natureInfo) return;
 
                 context.commit('updateNature', [nature, natureInfo])
+            },
+            changeStats(context, stats) {
+                
+                const statChanges = mergeObject(context.state.actor.data.data.stats, stats ?? {});
+                console.log(stats, statChanges);
+                const baseStats = CalcBaseStats(statChanges, context.state.species, context.state.actor.data.data.nature.value);
+
+                // Recalculate stats
+                const levelUpPoints = context.state.actor.data.data.modifiers.statPoints?.total + 10 + context.state.actor.data.data.level.current;
+
+                const calculatedStats = CalculateStatTotal(levelUpPoints, baseStats, {ignoreStages: true});
+                const result = {
+                    stats: calculatedStats.stats, 
+                    levelUpPoints: calculatedStats.levelUpPoints
+                };
+
+                context.commit('updateStats', result);
             }
         },
         mutations: {
@@ -102,6 +122,11 @@ export default function({level, tabs, initialTab, species, actor}) {
                     down: natureInfo[1][1]
                 };
                 return state;
+            },
+            updateStats(state, {stats, levelUpPoints}) {
+                state.stats = stats;
+                state.levelUpPoints = levelUpPoints;
+                return state;
             }
         },
         state: {
@@ -116,7 +141,9 @@ export default function({level, tabs, initialTab, species, actor}) {
             natureStat: {
                 up: '',
                 down: '',
-            }
+            },
+            stats: {},
+            levelUpPoints: 0,
         }
     })
 

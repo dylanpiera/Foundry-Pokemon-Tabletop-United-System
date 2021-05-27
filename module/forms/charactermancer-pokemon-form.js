@@ -9,6 +9,10 @@ import SpeciesImage from "../api/front-end/components/speciesImg.js";
 import TypeBar from "../api/front-end/components/typeBar.js";
 import NatureSelect from "../api/front-end/components/natureSelect.js";
 import NatureStatSelect from "../api/front-end/components/natureStatSelect.js";
+import { CalcBaseStats, CalculateStatTotal } from "../actor/calculations/stats-calculator.js";
+import StatBlock from "../api/front-end/components/statBlock.js";
+import StatBlockTotal from "../api/front-end/components/statBlockTotal.js";
+import StatBlockLevelUpPoints from "../api/front-end/components/statBlockLevelUpPoints.js";
 
 /**
  * Extend the basic ActorSheet with some very simple modifications
@@ -126,6 +130,14 @@ export class PTUPokemonCharactermancer extends FormApplication {
       natureSelect: new NatureSelect(this.store),
       natureStatUpSelect: new NatureStatSelect(this.store, true),
       natureStatDownSelect: new NatureStatSelect(this.store, false),
+      statBlock: new StatBlock(this.store),
+      statHpTotalField: new StatBlockTotal(this.store, "hp"),
+      statAtkTotalField: new StatBlockTotal(this.store, "atk"),
+      statDefTotalField: new StatBlockTotal(this.store, "def"),
+      statSpatkTotalField: new StatBlockTotal(this.store, "spatk"),
+      statSpdefTotalField: new StatBlockTotal(this.store, "spdef"),
+      statSpdTotalField: new StatBlockTotal(this.store, "spd"),
+      levelUpPoints: new StatBlockLevelUpPoints(this.store),
     }   
 
     console.log("Store:", this.store);
@@ -187,7 +199,15 @@ export class PTUPokemonCharactermancer extends FormApplication {
       data: {
         'level.exp': formData.exp,
         'species': formData.species._id,
-        'nature.value': formData.nature
+        'nature.value': formData.nature,
+        'stats': {
+          "hp.levelUp": formData.stats.hp.levelUp,
+          "atk.levelUp": formData.stats.atk.levelUp,
+          "def.levelUp": formData.stats.def.levelUp,
+          "spatk.levelUp": formData.stats.spatk.levelUp,
+          "spdef.levelUp": formData.stats.spdef.levelUp,
+          "spd.levelUp": formData.stats.spd.levelUp,
+        }
       }
     }
     if(formData.imgPath) data.img = formData.imgPath;

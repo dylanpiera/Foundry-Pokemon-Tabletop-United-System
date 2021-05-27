@@ -46,9 +46,6 @@ export default class Store {
                     console.warn(`You should use a mutation to set ${key}`);
                 }
                 
-                // Reset the status ready for the next operation
-                self.status = 'resting';
-                
                 return true;
             }
         });
@@ -112,7 +109,7 @@ export default class Store {
         self.status = 'mutation';
         
         // Get a new version of the state by running the mutation and storing the result of it
-        let newState = self.mutations[mutationKey](self.state, payload);
+        const newState = self.mutations[mutationKey](self.state, payload);
         
         // Make sure that updating the state update doesn't trigger again
         self.status = 'migrating-mutation'
