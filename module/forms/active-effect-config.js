@@ -1,3 +1,5 @@
+import { debug } from "../ptu.js";
+
 /**
  * A form designed for creating and editing an Active Effect on an Actor or Item entity.
  * @implements {FormApplication}
@@ -26,17 +28,28 @@
      * @param {HTMLElement} button    The clicked action button
      * @private
      */
-    _addEffectChange(button) {
-      const changes = button.closest(".tab").querySelector(".changes-list");
-      const last = changes.lastElementChild;
-      const idx = last ? last.dataset.index+1 : 0;
-      const change = $(`
-      <li class="effect-change flexrow" data-index="${idx}">
-          <input type="text" name="changes.${idx}.key" value=""/>
-          <input type="number" name="changes.${idx}.mode" value="2"/>
-          <input type="text" name="changes.${idx}.value" value=""/>
-          <input type="number" name="changes.${idx}.priority" value="0"/>
-      </li>`);
-      changes.appendChild(change[0]);
+    async _addEffectChange() {
+      const idx = this.document.data.changes.length;
+      await this.submit({preventClose: true, updateData: {
+        [`changes.${idx}`]: {key: "", mode: CONST.ACTIVE_EFFECT_MODES.ADD, value: "0", priority: 20}
+      }});
+      this.render(false);
+    }
+
+    /** @override */
+    async _updateObject(event, formData) {
+      formData = expandObject(formData);
+      formData.changes = Object.values(formData.changes || {});
+      for ( let c of formData.changes ) {
+        if(c.value.includes(',')) {
+          c.value = c.value.replace("[", "").replace("]", "").split(",")
+        }
+      }
+      debug(this.object)
+      if(this.object.data.flags?.ptu?.itemEffect) {
+        const obj = mergeObject(duplicate(this.object.data), formData);
+        return this.object.parent.update({effects: [obj]})
+      }
+      return this.object.update(formData);
     }
   }

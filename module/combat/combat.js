@@ -35,7 +35,7 @@ CONFIG.PTUCombat = {
 Hooks.on("deleteCombat", async function(combat, options, id)  {
     for(let c of combat.combatants) {
         if(c.actor.data.data.modifiers.flinch_count.value > 0) {
-            log(`Reseting ${c.actor.name} (${c.actor._id})'s flinch count.`)
+            log(`Reseting ${c.actor.name} (${c.actor.id})'s flinch count.`)
             let flinches = c.actor.effects.filter(x => x.data.label == "Flinch")
             for(let flinch of flinches) await flinch.delete();
 
@@ -377,7 +377,7 @@ export default class PTUCombat {
         let decimal = Number((combatant.initiative - Math.trunc(combatant.initiative).toFixed(2)));
         if(decimal == 0) return;
         debug("test")
-        await this.combat.setInitiative(combatant._id, 1000 - combatant.actor.data.data.initiative.value + decimal);
+        await this.combat.setInitiative(combatant.id, 1000 - combatant.actor.data.data.initiative.value + decimal);
     }
 
     async _handleAfflictions(combat, combatant, lastTurn, options, sender, isStartOfTurn) {
@@ -403,7 +403,7 @@ export default class PTUCombat {
             const effect = EffectFns.get(affliction); 
             if(!effect) continue;
 
-            await effect(combatant.tokenId, this.combat, combatant, lastTurn, options, sender, affliction, isStartOfTurn);
+            await effect(combatant.token.id, this.combat, combatant, lastTurn, options, sender, affliction, isStartOfTurn);
         }
     }
 

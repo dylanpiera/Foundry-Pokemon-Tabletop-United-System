@@ -33,6 +33,8 @@ export class PTUGen8PokemonSheet extends ActorSheet {
 			this._prepareCharacterItems(data);
 		}
 
+		data.data = this.actor.data.data;
+
 		data['origins'] = this.actor.origins;
 
 		data['compendiumItems'] = game.ptu.items;
@@ -68,7 +70,7 @@ export class PTUGen8PokemonSheet extends ActorSheet {
 
 		if(!data['owners'].includes(this.actor.data.data.owner)) {
 			if(this.isEditable)
-				this.actor.update({"data.owner": data['canBeWild'] ? "0" : data['owners'][0]?._id})
+				this.actor.update({"data.owner": data['canBeWild'] ? "0" : data['owners'][0]?.id})
 		}
 
 		return data;
@@ -84,7 +86,7 @@ export class PTUGen8PokemonSheet extends ActorSheet {
 	_prepareCharacterItems(sheetData) {
 		sheetData['skills'] = this.actor.data.data.skills
 
-		const actorData = sheetData.actor;
+		const actor = sheetData.actor;
 
 		// Initialize containers.
 		const abilities = [];
@@ -115,13 +117,13 @@ export class PTUGen8PokemonSheet extends ActorSheet {
 		}
 
 		// Assign and return
-		actorData.abilities = abilities;
-		actorData.moves = moves;
-		actorData.capabilities = capabilities;
-		actorData.edges = edges;
+		actor.abilities = abilities;
+		actor.moves = moves;
+		actor.capabilities = capabilities;
+		actor.edges = edges;
 
-		for(let move of actorData.moves) {
-			move.data = PrepareMoveData(actorData.data, move.data)
+		for(let move of actor.moves) {
+			move.data = PrepareMoveData(actor.data.data, move.data)
 		}
 	}
 
@@ -131,7 +133,7 @@ export class PTUGen8PokemonSheet extends ActorSheet {
 	_getHeaderButtons() {
 		let buttons = super._getHeaderButtons();
 
-		if (this.actor.owner) {
+		if (this.actor.isOwner) {
 			buttons.unshift({
 				label: "Charactermancer",
 				class: "open-charactermancer",
@@ -174,7 +176,7 @@ export class PTUGen8PokemonSheet extends ActorSheet {
 		// Update Inventory Item
 		html.find('.item-edit').click((ev) => {
 			const li = $(ev.currentTarget).parents('.item');
-			const item = this.actor.getOwnedItem(li.data('itemId'));
+			const item = this.actor.items.get(li.data('itemId'));
 			item.sheet.render(true);
 		});
 
@@ -221,7 +223,7 @@ export class PTUGen8PokemonSheet extends ActorSheet {
 		html.find('.rollable.save').click(this._onSaveRoll.bind(this));
 
 		// Drag events for macros.
-		if (this.actor.owner) {
+		if (this.actor.isOwner) {
 			let handler = (ev) => this._onDragItemStart(ev);
 			html.find('li.item').each((i, li) => {
 				if (li.classList.contains('inventory-header')) return;
@@ -268,7 +270,7 @@ export class PTUGen8PokemonSheet extends ActorSheet {
 				const effects = [];
 				this.actor.data.effects.forEach(effect => {
 					if(effect.changes.some(change => change.key == path)) {
-						effects.push(effect._id);
+						effects.push(effect.id);
 						return;
 					}
 				});
@@ -291,7 +293,7 @@ export class PTUGen8PokemonSheet extends ActorSheet {
 				'flags.ptu.editLocked': true,
 				_id: randomID()
 			}).data
-			return await this.actor.createEmbeddedEntity("ActiveEffect", effectData);
+			return await this.actor.createEmbeddedDocuments("ActiveEffect", [effectData]);
 		})
 	}
 
@@ -323,7 +325,7 @@ export class PTUGen8PokemonSheet extends ActorSheet {
 				'flags.ptu.editLocked': true,
 				_id: randomID()
 			}).data
-			return await this.actor.createEmbeddedEntity("ActiveEffect", effectData);
+			return await this.actor.createEmbeddedDocuments("ActiveEffect", [effectData]);
 		}
 		await effect.update({changes: calcHardenedChanges(value)});
 	}
@@ -356,7 +358,7 @@ export class PTUGen8PokemonSheet extends ActorSheet {
 		if(itemData.type === "ActiveEffect") {
 			// Finally, create the effect!
 			debug("Created new effect",itemData);
-			return this.actor.createEmbeddedEntity(itemData.type, itemData);
+			return this.actor.createEmbeddedDocuments(itemData.type, [itemData]);
 		}
 
 		// Finally, create the item!
@@ -377,7 +379,7 @@ export class PTUGen8PokemonSheet extends ActorSheet {
 		if (dataset.roll) {
 			let roll = new Roll(dataset.roll, this.actor.data.data);
 			let label = dataset.label ? `Rolling ${dataset.label}` : '';
-			roll.roll().toMessage({
+			roll.evaluate({async: false}).toMessage({
 				speaker: ChatMessage.getSpeaker({
 					actor: this.actor
 				}),
@@ -398,11 +400,11 @@ export class PTUGen8PokemonSheet extends ActorSheet {
 		let mod = this.actor.data.data.modifiers.saveChecks?.total;
 		let roll = new Roll("1d20 + @mod", {mod: mod});
 		
-		roll.roll();
+		await roll.evaluate({async: true});
 
 		const messageData = {
 			title: `${this.actor.name}'s<br>Save Check`,
-			user: game.user._id,
+			user: game.user.id,
 			sound: CONFIG.sounds.dice,
 			templateType: 'save',
 			roll: roll,
@@ -424,7 +426,7 @@ export class PTUGen8PokemonSheet extends ActorSheet {
  
 		const element = event?.currentTarget;
 		const dataset = element?.dataset;
-		const move = item ? item : this.actor.items.find(x => x._id == dataset.id).data;
+		const move = item ? item : this.actor.items.get(dataset.id).data;
 
 		move.data = PrepareMoveData(actor ? actor.data.data : this.actor.data.data, move.data);
 
@@ -454,8 +456,8 @@ export class PTUGen8PokemonSheet extends ActorSheet {
 						damageRoll = CalculateDmgRoll(moveData, this.actor.data.data, CritOptions.NORMAL);
 					break;
 				}
-				if(damageRoll) damageRoll.roll();
-				if(critRoll) critRoll.roll();
+				if(damageRoll) damageRoll.evaluate({async: false});
+				if(critRoll) critRoll.evaluate({async: false});
 			}
 			sendMoveRollMessage(acRoll, {
 				speaker: ChatMessage.getSpeaker({
@@ -466,7 +468,8 @@ export class PTUGen8PokemonSheet extends ActorSheet {
 				damageRoll: damageRoll,
 				critRoll: critRoll,
 				templateType: MoveMessageTypes.FULL_ATTACK,
-				crit: crit
+				crit: crit,
+				isCrit: crit == CritOptions.CRIT_HIT
 			});
 		}
 
@@ -481,7 +484,8 @@ export class PTUGen8PokemonSheet extends ActorSheet {
 					name: move.name,
 					move: move.data,
 					templateType: MoveMessageTypes.DAMAGE,
-					crit: crit
+					crit: crit,
+					isCrit: crit == CritOptions.CRIT_HIT
 				});
 			}
 
@@ -606,7 +610,7 @@ function CalculateDmgRoll(moveData, actorData, isCrit) {
 }
 
 function GetDiceResult(roll) {
-	if (!roll._rolled) roll.evaluate();
+	if (!roll._evaluated) roll.evaluate({async: false});
 
 	let diceResult = -2;
 	try {
@@ -632,10 +636,10 @@ function PerformAcRoll(roll, move, actor) {
 }
 
 async function sendMoveRollMessage(rollData, messageData = {}) {
-	if (!rollData._rolled) rollData.evaluate();
+	if (!rollData._evaluated) await rollData.evaluate({async: true});
 
 	messageData = mergeObject({
-		user: game.user._id,
+		user: game.user.id,
 		sound: CONFIG.sounds.dice,
 		templateType: MoveMessageTypes.DAMAGE,
 		verboseChatInfo: game.settings.get("ptu", "verboseChatInfo") ?? false,
@@ -661,7 +665,7 @@ async function sendMoveRollMessage(rollData, messageData = {}) {
 
 export async function sendMoveMessage(messageData = {}) {
 	messageData = mergeObject({
-		user: game.user._id,
+		user: game.user.id,
 		templateType: MoveMessageTypes.DAMAGE,
 		verboseChatInfo: game.settings.get("ptu", "verboseChatInfo") ?? false
 	}, messageData);

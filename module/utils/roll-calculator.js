@@ -3,7 +3,7 @@ export function RollWithDb(db, damageMod = 0, label = "") {
     
     let roll = new Roll(rollCalc + "+" + damageMod, {});
         if(!label) label = `Damage for move with DB: ${db}`;
-        roll.roll().toMessage({
+        roll.evaluate({async: false}).toMessage({
           flavor: label
         });
   }

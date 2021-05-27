@@ -1,60 +1,62 @@
-<form class="{{cssClass}}" autocomplete="off">
-    <header class="sheet-header mb-2" style="height: auto;">
-        <div class="hgss-box">
-            <div class="hgss-body">
-                <span 
-                class="readable p-2" 
-                style="word-break: break-word;
-                    line-height: 13px;
-                    font-size: 15px;">{{{data.entry}}}</span>
+{{#with data}}
+    <form class="{{cssClass}}" autocomplete="off">
+        <header class="sheet-header mb-2" style="height: auto;">
+            <div class="hgss-box">
+                <div class="hgss-body">
+                    <span 
+                    class="readable p-2" 
+                    style="word-break: break-word;
+                        line-height: 13px;
+                        font-size: 15px;">{{{data.entry}}}</span>
+                </div>
             </div>
-        </div>
-    </header>
-    {{!-- Sheet Body --}}
-    <div class="sheet-body">
-        <div class="details readable h-100">
-            <div style="display: grid; grid-template-columns: 45% 50%; justify-content: space-between; padding: 0 5px;">
-                <div class="hgss-box align-items-center" style="display: grid; grid-template-columns: 40% 60%;">
-                    <div class="hgss-header vertical">
-                        <label for="name">Name:</label>
-                    </div>
-                    <div class="hgss-body">
-                        <input
-                            class="ml-2"
-                            name="name"
-                            type="text"
-                            value="{{item.name}}"
-                            placeholder="Name"
-                        />
-                    </div>
-
-                    <div class="hgss-header vertical">
-                        <label for="name">Owned:</label>
-                    </div>
-                    <div class="hgss-body">
-                        <div class="d-flex align-items-center">
+        </header>
+        {{!-- Sheet Body --}}
+        <div class="sheet-body">
+            <div class="details readable h-100">
+                <div style="display: grid; grid-template-columns: 45% 50%; justify-content: space-between; padding: 0 5px;">
+                    <div class="hgss-box align-items-center" style="display: grid; grid-template-columns: 40% 60%;">
+                        <div class="hgss-header vertical">
+                            <label for="name">Name:</label>
+                        </div>
+                        <div class="hgss-body">
                             <input
                                 class="ml-2"
-                                data-item-id="{{item._id}}" 
-                                data-binding="data.owned" 
-                                type="checkbox" {{checked data.owned}}
-                                disabled
+                                name="name"
+                                type="text"
+                                value="{{name}}"
+                                placeholder="Name"
                             />
-                            <label for="data.owned"><span class="text-muted" style="word-break: break-word;">Please edit in trainer sheet.</span></label>
+                        </div>
+
+                        <div class="hgss-header vertical">
+                            <label for="name">Owned:</label>
+                        </div>
+                        <div class="hgss-body">
+                            <div class="d-flex align-items-center">
+                                <input
+                                    class="ml-2"
+                                    data-item-id="{{_id}}" 
+                                    data-binding="data.owned" 
+                                    type="checkbox" {{checked data.owned}}
+                                    disabled
+                                />
+                                <label for="data.owned"><span class="text-muted" style="word-break: break-word;">Please edit in trainer sheet.</span></label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="hgss-box align-items-center">
+                        <div class="hgss-header mb-1 " style="padding: 6px 5px;">
+                            <label for="data.entry">Entry:</label>
+                        </div>
+                        <div class="hgss-body" style="word-break: break-word;">
+                            <textarea
+                                class="ml-2"
+                                name="data.entry">{{data.entry}}</textarea>
                         </div>
                     </div>
                 </div>
-                <div class="hgss-box align-items-center">
-                    <div class="hgss-header mb-1 " style="padding: 6px 5px;">
-                        <label for="data.entry">Entry:</label>
-                    </div>
-                    <div class="hgss-body" style="word-break: break-word;">
-                        <textarea
-                            class="ml-2"
-                            name="data.entry">{{data.entry}}</textarea>
-                    </div>
-                </div>
             </div>
         </div>
-    </div>
-</form>
+    </form>
+{{/with}}

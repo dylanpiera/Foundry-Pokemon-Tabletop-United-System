@@ -29,6 +29,7 @@ export async function applyDamageToTargets(event, options = ATTACK_MOD_OPTIONS.N
 		category: dataset.category,
 		regDamage: dataset.regDamage,
 		critDamage: dataset.critDamage,
+        isCrit: dataset.isCrit == "true"
 	}
 
 	let targeted_tokens = canvas.tokens.controlled;
@@ -49,21 +50,21 @@ export async function applyDamageToTargets(event, options = ATTACK_MOD_OPTIONS.N
     if(options > 0) {
         switch(options) {
             case ATTACK_MOD_OPTIONS.HALF:
-                return executeApplyDamageToTargets(canvas.tokens.controlled, moveData, moveData.regDamage ? Math.max(1, Math.floor(moveData.regDamage / 2)) : Math.max(1, Math.floor(moveData.critDamage / 2)), {damageReduction : dr});
+                return executeApplyDamageToTargets(canvas.tokens.controlled, moveData, !moveData.isCrit ? Math.max(1, Math.floor(moveData.regDamage / 2)) : Math.max(1, Math.floor(moveData.critDamage / 2)), {damageReduction : dr});
             case ATTACK_MOD_OPTIONS.RESIST:
-                return executeApplyDamageToTargets(canvas.tokens.controlled, moveData, moveData.regDamage ? moveData.regDamage : moveData.critDamage, {isResist: true, damageReduction : dr});
+                return executeApplyDamageToTargets(canvas.tokens.controlled, moveData, !moveData.isCrit ? moveData.regDamage : moveData.critDamage, {isResist: true, damageReduction : dr});
             case ATTACK_MOD_OPTIONS.FLAT:
-                return executeApplyDamageToTargets(canvas.tokens.controlled, moveData, moveData.regDamage ? moveData.regDamage : moveData.critDamage, {isFlat: true, damageReduction : dr})
+                return executeApplyDamageToTargets(canvas.tokens.controlled, moveData, !moveData.isCrit ? moveData.regDamage : moveData.critDamage, {isFlat: true, damageReduction : dr})
 
         }
         return;
     }
 
-    return executeApplyDamageToTargets(canvas.tokens.controlled, moveData, moveData.regDamage ? moveData.regDamage : moveData.critDamage, {damageReduction : dr});
+    return executeApplyDamageToTargets(canvas.tokens.controlled, moveData, !moveData.isCrit ? moveData.regDamage : moveData.critDamage, {damageReduction : dr});
 }
 
 export async function ApplyFlatDamage(targets, sourceName, damage) {
-    return executeApplyDamageToTargets(targets, {moveName: sourceName}, damage, true)
+    return executeApplyDamageToTargets(targets, {moveName: sourceName}, damage, {isFlat: true})
 }
 
 async function executeApplyDamageToTargets(targets, data, damage, {isFlat, isResist, damageReduction}={isFlat: false, isResist: false}) {
@@ -87,7 +88,7 @@ async function executeApplyDamageToTargets(targets, data, damage, {isFlat, isRes
 		}
 
         log(`Dealing ${actualDamage} damage to ${target.name}`); 
-        appliedDamage[target.data.actorLink ? target.actor.data._id : target.data._id] = {name: target.actor.data.name, damage: actualDamage, type: target.data.actorLink ? "actor" : "token", old: {value: duplicate(target.actor.data.data.health.value), temp: duplicate(target.actor.data.data.tempHp.value)}};
+        appliedDamage[target.data.actorLink ? target.actor.id : target.data.id] = {name: target.actor.data.name, damage: actualDamage, type: target.data.actorLink ? "actor" : "token", old: {value: duplicate(target.actor.data.data.health.value), temp: duplicate(target.actor.data.data.tempHp.value)}};
         await target.actor.modifyTokenAttribute("health", actualDamage*-1, true, true);
     }
     await displayAppliedDamageToTargets({data: appliedDamage, move: data.moveName});
@@ -95,7 +96,7 @@ async function executeApplyDamageToTargets(targets, data, damage, {isFlat, isRes
 
 async function displayAppliedDamageToTargets(appliedDamage) {
     let messageData = {
-        user: game.user._id,
+        user: game.user.id,
         content: await renderTemplate("/systems/ptu/templates/chat/automation/applied-damage.hbs", appliedDamage),
         type: CONST.CHAT_MESSAGE_TYPES.WHISPER, 
         whisper: game.users.filter(x => x.isGM)
@@ -121,5 +122,4 @@ export function undoDamageToTargets(event) {
     
     log(`FVTT PTU | Undoing ${data.damage} damage to ${actor.data.name} - Old HP: ${data.oldHp} - Old Temp: ${data.oldTempHp}`); 
     actor.update({"data.health.value": data.oldHp, "data.tempHp.value": data.oldTempHp, "data.tempHp.max": data.oldTempHp})
-    //actor.modifyTokenAttribute("health", data.damage, true, true);    
 }

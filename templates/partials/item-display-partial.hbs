@@ -7,7 +7,7 @@
                 <div class="item-controls">
                     <a class="item-control item-create" title="Add {{type}}" data-type="{{type}}" data-category="{{category}}"><i
                         class="fas fa-plus-circle" style="margin-right: 3px;"></i><span
-                        class="readable">Add</span></a>
+                        class="readable">{{localize "ITEM.AddButton"}}</span></a>
                 </div>
             </li>
         {{#if boxed}}</div>
@@ -37,13 +37,13 @@
                     {{/if}}
                     {{#if (isdefined obj.data.owned)}}
                         <div class="item-detail item-owned">
-                            <label for="data.owned">Owned:</label>
+                            <label for="data.owned">{{localize "ITEM.DexEntryOwned"}}:</label>
                             <input data-item-id="{{obj._id}}" data-binding="data.owned" type="checkbox" {{checked obj.data.owned}} />
                         </div>
                     {{/if}}
                     <div class="item-controls" style="flex: 0 0 55px; justify-content: center; display:flex;">
-                    <a class="item-control item-edit" title="Edit {{type}}"><i class="fas fa-edit"></i></a>
-                    <a class="item-control item-delete" title="Delete {{type}}"><i class="fas fa-trash"></i></a>
+                        <a class="item-control item-edit" title="Edit {{type}}"><i class="fas fa-edit"></i></a>
+                        <a class="item-control item-delete" title="Delete {{type}}"><i class="fas fa-trash"></i></a>
                     </div>
                     {{#if obj.data.snippet}}
                     <div class="collapse readable lh-16 item-summary {{obj._id}}-collapse" id="{{obj._id}}-collapse">
@@ -57,30 +57,30 @@
                             {{#if obj.data.origin}}
                             <div class="row">
                                 <div class="col-sm-4">
-                                <b>Origin:</b>
+                                <b>{{localize "ITEM.Origin"}}:</b>
                                 </div>
                                 <div class="col">
-                                {{obj.data.origin}}
+                                    {{obj.data.origin}}
                                 </div>
                             </div>
                             {{/if}}
                             {{#if obj.data.prerequisites}}
                             <div class="row">
                                 <div class="col-sm-4">
-                                <b>Prerequisites:</b>
+                                <b>{{localize "ITEM.Prerequisites"}}:</b>
                                 </div>
                                 <div class="col">
-                                {{obj.data.prerequisites}}
+                                    {{obj.data.prerequisites}}
                                 </div>
                             </div>
                             {{/if}}
                             {{#if obj.data.tags}}
                             <div class="row">
                                 <div class="col-sm-4">
-                                <b>Tags:</b>
+                                <b>{{localize "ITEM.Tags"}}:</b>
                                 </div>
                                 <div class="col">
-                                {{obj.data.tags}}
+                                    {{obj.data.tags}}
                                 </div>
                             </div>
                             {{/if}}
@@ -104,7 +104,7 @@
                             {{#if obj.data.origin}}
                                 <div class="row">
                                 <div class="col-sm-4">
-                                    <b>Origin:</b>
+                                    <b>{{localize "ITEM.Origin"}}:</b>
                                 </div>
                                 <div class="col">
                                     {{obj.data.origin}}
@@ -114,7 +114,7 @@
                             {{#if obj.data.prerequisites}}
                                 <div class="row">
                                 <div class="col-sm-4">
-                                    <b>Prerequisites:</b>
+                                    <b>{{localize "ITEM.Prerequisites"}}:</b>
                                 </div>
                                 <div class="col">
                                     {{obj.data.prerequisites}}
@@ -124,7 +124,7 @@
                             {{#if obj.data.tags}}
                                 <div class="row">
                                 <div class="col-sm-4">
-                                    <b>Tags:</b>
+                                    <b>{{localize "ITEM.Tags"}}:</b>
                                 </div>
                                 <div class="col">
                                     {{obj.data.tags}}
@@ -147,7 +147,7 @@
                             {{#if obj.data.origin}}
                                 <div class="row">
                                 <div class="col-sm-4">
-                                    <b>Origin:</b>
+                                    <b>{{localize "ITEM.Origin"}}:</b>
                                 </div>
                                 <div class="col">
                                     {{obj.data.origin}}
@@ -157,7 +157,7 @@
                             {{#if obj.data.prerequisites}}
                                 <div class="row">
                                 <div class="col-sm-4">
-                                    <b>Prerequisites:</b>
+                                    <b>{{localize "ITEM.Prerequisites"}}:</b>
                                 </div>
                                 <div class="col">
                                     {{obj.data.prerequisites}}
@@ -167,7 +167,7 @@
                             {{#if obj.data.tags}}
                                 <div class="row">
                                 <div class="col-sm-4">
-                                    <b>Tags:</b>
+                                    <b>{{localize "ITEM.Tags"}}:</b>
                                 </div>
                                 <div class="col">
                                     {{obj.data.tags}}

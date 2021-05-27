@@ -27,10 +27,10 @@ async function migrateOldData() {
                 const content = await result.json();
             
                 for(let mon of content) {            
-                    let journalEntry = CustomSpeciesFolder.findEntry(mon._id)
+                    let journalEntry = CustomSpeciesFolder.findEntry(mon.id)
                     if(journalEntry) continue;
                     
-                    log("No entry found for " + mon._id + " creating new entry");
+                    log("No entry found for " + mon.id + " creating new entry");
                     let id = CustomSpeciesFolder.getAvailableId();
                     mergeObject(mon, {number: `${id}`, ptuNumber: id})
                     await JournalEntry.create({name: mon.ptuNumber, content: JSON.stringify(mon), folder: CustomSpeciesFolder._dirId})
@@ -58,7 +58,7 @@ async function migrateOldData() {
 export async function UpdateCustomSpecies(data) {
     log("Triggering Custom Species Refresh")
     debug("Custom Species Refresh Arguments:", data)
-    game.ptu.customSpeciesData = await JSON.parse("["+Folders.instance.get(CustomSpeciesFolder._dirId).entities.map(x => $(`<p>${x.data.content}</p>`).text()).join(",")+"]");
+    game.ptu.customSpeciesData = await JSON.parse("["+Folders.instance.get(CustomSpeciesFolder._dirId).contents.map(x => $(`<p>${x.data.content}</p>`).text()).join(",")+"]");
     
     try {
         if(data && data.outdatedApplications) {

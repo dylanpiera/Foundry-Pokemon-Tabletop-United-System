@@ -38,11 +38,11 @@
                   <div class="swsh-box mt-auto w-100 mb-2">
                     <div class="swsh-header skill skill-block" style="padding: 0;">
                       <div class="row no-gutters header w-100">
-                        <div class="col-sm-4 pt-2 pb-2">Skill</div>
-                        <div class="col mt-2 mb-2">Value</div>
-                        <div class="col-sm-3 mt-2 mb-2">Rank</div>
-                        <div class="col mt-2 mb-2">Mod</div>
-                        <div class="col-sm-2 mt-2 mb-2">Dice</div>
+                        <div class="col-sm-3 pt-2 pb-2">{{localize "PTU.SkillLabel"}}</div>
+                        <div class="col mt-2 mb-2">{{localize "PTU.SkillValue"}}</div>
+                        <div class="col-sm-3 mt-2 mb-2">{{localize "PTU.SkillRank"}}</div>
+                        <div class="col mt-2 mb-2">{{localize "PTU.SkillMod"}}</div>
+                        <div class="col-sm-2 mt-2 mb-2">{{localize "PTU.SkillDice"}}</div>
                       </div>
                     </div>
                     <div class="swsh-body p-0">
@@ -53,26 +53,26 @@
                             <label for="data.skills.{{key}}.label" class="resource-label" {{#if (is key "techEd")}}style="font-size:10px;"{{/if}}>{{skill.label}}</label>
                           </div>
                           <div class="skill {{key}} col pl-1 pr-1 fs-9 center-text">
-                            {{> "mod-field" 
+                            {{> "systems/ptu/templates/partials/mod-field.hbs" 
                               path=(concat "data.skills." key ".value.value") 
                               value=skill.value.value
                               dtype="Number" 
                               mod=skill.value.mod
                               total=skill.value.total
-                              modOrigins=(getProperty ../origins (concat "data.skills." key ".value.mod"))
+                              modOrigins=(getProperty ../actor.origins (concat "data.skills." key ".value.mod"))
                               flipped=(gt 8 @index)}}
                           </div>
                           <div class="skill {{key}} col-sm-3 align-self-center bgcolor skill--{{skill.rank}} center-text">
-                            <label for="data.skills.{{key}}.rank" class="resource-label">{{skill.rank}}</label>
+                            <label for="data.skills.{{key}}.rank" class="resource-label">{{localize (concat "PTU.Skill" skill.rank)}}</label>
                           </div>
                           <div class="skill {{key}} col pl-1 fs-9 center-text">
-                            {{> "mod-field" 
+                            {{> "systems/ptu/templates/partials/mod-field.hbs" 
                               path=(concat "data.skills." key ".modifier.value") 
                               value=skill.modifier.value
                               dtype="Number" 
                               mod=skill.modifier.mod
                               total=skill.modifier.total
-                              modOrigins=(getProperty ../origins (concat "data.skills." key ".modifier.mod") )
+                              modOrigins=(getProperty ../actor.origins (concat "data.skills." key ".modifier.mod") )
                               flipped=(gt 8 @index)}}
                           </div>
                           <div class="skill {{key}} col-sm-2 align-self-center bgcolor fs-9 center-text rollable"
@@ -116,7 +116,7 @@
                         </div>
                       </div>
                       <div class="options w-100 d-flex">
-                        <div class="temp-hp"><label for="temp-hp">temp</label></div>
+                        <div class="temp-hp"><label for="temp-hp">{{localize "PTU.HPTemp"}}</label></div>
                         <div class="d-flex pt-1 pb-1" style="text-align: center;">
                           <input class="ml-1 mr-1" type="text" name="data.tempHp.value" value="{{data.tempHp.value}}" data-dtype="Number">
                           <span style="font-size: 20px;"> / </span>
@@ -133,7 +133,7 @@
                   <div class="w-100 level-box mt-1 mb-1">
                     <div class="swsh-box" style="text-align: center; word-break: keep-all;">
                       <div class="swsh-header">
-                        <h3 class="m-auto">Action Points</h3>
+                        <h3 class="m-auto">{{localize "PTU.ActionPoints"}}</h3>
                       </div>
                       <div class="swsh-body">
                         <div class="resource-content flexrow flex-group-right hp-info">
@@ -151,7 +151,7 @@
                       <div class="swsh-header">
                         <div class="d-flex w-100 align-items-center justify-content-center">
                           <div class="col-sm-2">
-                            <label for="data.level.current">Level:</label>
+                            <label for="data.level.current">{{localize "PTU.Level"}}:</label>
                           </div>
                           <div class="col-sm-3">
                             <input class="ml-2" type="text" name="data.level.current" value="{{data.level.current}}" data-dtype="Number"
@@ -163,20 +163,20 @@
                         <div class="d-flex w-100 mt-1 mb-1 align-items-center justify-content-between">
                           {{#if (is "true" (getGameSetting "useDexExp"))}}
                           <div class="col-sm-4">
-                            <label for="data.level.milestones">Milestones</label>
+                            <label for="data.level.milestones">{{localize "PTU.LevelMilestones"}}</label>
                           </div>
                           <div class="col-sm-4">
-                            <label for="data.level.dexexp">Dex Exp</label>
+                            <label for="data.level.dexexp">{{localize "PTU.LevelDexExp"}}</label>
                           </div>
                           <div class="col-sm-4">
-                            <label for="data.level.miscexp">Misc Exp</label>
+                            <label for="data.level.miscexp">{{localize "PTU.LevelMiscExp"}}</label>
                           </div>
                           {{else}}
                             <div class="col-sm-6">
-                              <label for="data.level.milestones">Milestones</label>
+                              <label for="data.level.milestones">{{localize "PTU.LevelMilestones"}}</label>
                             </div>
                             <div class="col-sm-6">
-                              <label for="data.level.miscexp">Misc Exp</label>
+                              <label for="data.level.miscexp">{{localize "PTU.LevelMiscExp"}}</label>
                             </div>
                           {{/if}}
                         </div>
@@ -219,14 +219,14 @@
 		            <!-- Items -->
                   <div class="swsh-box mt-2 w-100">
                     {{#each actor.items_categorized as | category catname| }}
-                      {{> item-display title=(concat "Items: " catname) type="item" data=category category=catname boxed=true filter=../data.item_categories}}
+                      {{> "systems/ptu/templates/partials/item-display-partial.hbs" title=(concat (concat (localize "ITEM.TypeItemPlural") ": ") catname) type="item" data=category category=catname boxed=true filter=../data.item_categories}}
                     {{/each}}
                   </div>
               </div>
               <div class="col">
                 <div class="swsh-box mt-2 mb-2">
                   <div class="swsh-header justify-content-center">
-                    <h3 for="data.money" class="mr-1">Money</h3>
+                    <h3 for="data.money" class="mr-1">{{localize "PTU.Money"}}</h3>
                   </div>
                   <div class="swsh-body ml-3 mr-3">
                     <input type="text" name="data.money" value="{{data.money}}" data-dtype="Number">
@@ -234,7 +234,7 @@
                 </div>
                 <div class="swsh-box mb-2">
                   <div class="swsh-header justify-content-center">
-                    <h3 for="data.item_categories" class="mr-1">Item Categories</h3>
+                    <h3 for="data.item_categories" class="mr-1">{{localize "PTU.ItemCategories"}}</h3>
                   </div>
                   <div class="swsh-body ml-3 mr-3">
                     <div class="d-flex flexrow" style="flex-wrap: wrap; width: 100%;">
@@ -257,17 +257,17 @@
               <div class="swsh-header" style="padding: 0;">
                 <div class="d-flex w-100 mt-1 mb-1">
                   <div class="col-sm-6">
-                    <label for="data.modifiers.damageBonus.physical.value">Physical Damage Mod</label>
+                    <label for="data.modifiers.damageBonus.physical.value">{{localize "PTU.DamageModPhysical"}}</label>
                   </div>
                   <div class="col-sm-6">
-                    <label for="data.modifiers.damageBonus.special.value">Special Damage Mod</label>
+                    <label for="data.modifiers.damageBonus.special.value">{{localize "PTU.DamageModSpecial"}}</label>
                   </div>
                 </div>
               </div>
               <div class="swsh-body" style="padding: 0;">
                 <div class="d-flex w-100" style="margin: 0.1rem 0;">
                   <div class="col-sm-6 small-input">
-                    {{> "mod-field" 
+                    {{> "systems/ptu/templates/partials/mod-field.hbs" 
                       mod=data.modifiers.damageBonus.physical.mod 
                       path="data.modifiers.damageBonus.physical.value" 
                       value=data.modifiers.damageBonus.physical.value 
@@ -277,7 +277,7 @@
                       flipped=true}}
                   </div>
                   <div class="col-sm-6 small-input">
-                    {{> "mod-field" 
+                    {{> "systems/ptu/templates/partials/mod-field.hbs" 
                       mod=data.modifiers.damageBonus.special.mod 
                       path="data.modifiers.damageBonus.special.value" 
                       value=data.modifiers.damageBonus.special.value 
@@ -294,42 +294,42 @@
             <ol class="inventory-list" style="padding-top: 0.5rem;">
               <li class="inventory-header flexrow" style="background: linear-gradient(45deg, #ffffffbb, #fff, #ffffffbb); border-radius: 5px;">
                 <div class="item-name flexcol align-items-center align-self-center" style="flex: 0 0 12%; margin-left: 3%;">
-                    <h4>Move</h4>
+                    <h4>{{localize "PTU.MoveLabel"}}</h4>
                 </div>
                 <div class="item-name flexcol align-items-center align-self-center" style="flex: 0 0 8%;">
-                  <h4>Type</h4>
+                  <h4>{{localize "PTU.MoveType"}}</h4>
                 </div>
                 <div class="item-name flexcol align-items-center align-self-center" style="flex: 0 0 7%;">
-                  <h4>Category</h4>
+                  <h4>{{localize "PTU.MoveCategory"}}</h4>
                 </div>
                 <div class="item-name flexcol align-items-center align-self-center" style="flex: 0 0 5%;">
-                  <h4>DB</h4>
+                  <h4>{{localize "PTU.MoveDb"}}</h4>
                 </div>
                 <div class="item-name flexcol align-items-center align-self-center" style="flex: 0 0 13%;">
-                  <h4>Damage Roll</h4>
+                  <h4>{{localize "PTU.MoveDamageRoll"}}</h4>
                 </div>
                 <div class="item-name flexcol align-items-center align-self-center" style="flex: 0 0 10%;">
-                  <h4>Frequency</h4>
+                  <h4>{{localize "PTU.MoveFrequency"}}</h4>
                 </div>
                 <div class="item-name flexcol align-items-center align-self-center" style="flex: 0 0 4%;">
-                  <h4>AC</h4>
+                  <h4>{{localize "PTU.MoveAc"}}</h4>
                 </div>
                 <div class="item-name flexcol align-items-center align-self-center" style="flex: 0 0 13%;">
-                  <h4>Range</h4>
+                  <h4>{{localize "PTU.MoveRange"}}</h4>
                 </div>
                 <div class="item-name flexcol align-items-center align-self-center" style="flex: 0 0 20%;"> 
-                  <h4>Effect</h4>
+                  <h4>{{localize "PTU.MoveEffect"}}</h4>
                 </div>
                 <div class="item-controls flexcol" style="flex: 0 0 5%;">
                   <a class="item-control item-create" title="Add move" data-type="move"><i
                       class="fas fa-plus-circle" style="margin-right: 3px;"></i><span
-                      class="readable">Add</span></a>
+                      class="readable">{{localize "ITEM.AddButton"}}</span></a>
                 </div>
               </li>
               <ol class="item-list">
                 {{#each actor.moves as | move |}}
-                <li class="item flexrow" data-item-id="{{move._id}}">
-                  <div class="gen8move rollable" data-id="{{move._id}}"> 
+                <li class="item flexrow" data-item-id="{{move.id}}">
+                  <div class="gen8move rollable" data-id="{{move.id}}"> 
                     <i class="fas fa-dice-d20" style="position:unset; flex: 0 0 3%;"></i>
                   </div>
                   <div class="item-name flexcol align-items-center align-self-center" style="flex: 0 0 12%;">
@@ -387,7 +387,7 @@
                 <!-- Feats -->
                 <div class="swsh-box mt-2 w-100">
                   <div class="swsh-body w-100" style="display: block;">
-                    {{> item-display title="Features" type="feat" data=actor.feats}}
+                    {{> "systems/ptu/templates/partials/item-display-partial.hbs" title=(localize "ITEM.TypeFeatPlural") type="feat" data=actor.feats}}
                   </div>
                 </div>
               </div>
@@ -395,7 +395,7 @@
                 <!-- Edges-->
                 <div class="swsh-box mt-2 w-100">
                   <div class="swsh-body w-100" style="display: block;">
-                    {{> item-display title="Edges" type="edge" data=actor.edges}}
+                    {{> "systems/ptu/templates/partials/item-display-partial.hbs" title=(localize "ITEM.TypeEdgePlural") type="edge" data=actor.edges}}
                   </div>
                 </div>
               </div>
@@ -411,12 +411,12 @@
                   <!-- Stats -->
                   <div class="w-100 stats stat-block mb-2">
                     <div class="row no-gutters header">
-                      <div class="col-sm-2 pt-2 pb-2 key stat-header">Stats</div>
-                      <div class="col-sm-2 mt-2 mb-2">Base</div>
-                      <div class="col-sm-2 mt-2 mb-2">Mod</div>
-                      <div class="col-sm-2 mt-2 mb-2" style="font-size: 9px;">Level-Up</div>
-                      <div class="col-sm-2 mt-2 mb-2">Stage</div>
-                      <div class="col-sm-2 mt-2 mb-2">Total</div>
+                      <div class="col-sm-2 pt-2 pb-2 key stat-header">{{localize "PTU.StatsLabel"}}</div>
+                      <div class="col-sm-2 mt-2 mb-2">{{localize "PTU.StatsBase"}}</div>
+                      <div class="col-sm-2 mt-2 mb-2">{{localize "PTU.StatsMod"}}</div>
+                      <div class="col-sm-2 mt-2 mb-2" style="font-size: 9px;">{{localize "PTU.StatsLevelup"}}</div>
+                      <div class="col-sm-2 mt-2 mb-2">{{localize "PTU.StatsStage"}}</div>
+                      <div class="col-sm-2 mt-2 mb-2">{{localize "PTU.StatsTotal"}}</div>
                     </div>
                     {{#each data.stats as |stat key|}}
                     <div class="row no-gutters {{key}}">
@@ -428,34 +428,34 @@
                           disabled />
                       </div>
                       <div class="stats {{key}} mod col-sm-2">
-                        {{> "mod-field" 
+                        {{> "systems/ptu/templates/partials/mod-field.hbs" 
                           path=(concat "data.stats." key ".mod") 
                           value=stat.mod
                           dtype="Number" 
                           mod=""
                           total="ignored"
-                          modOrigins=(getProperty ../origins (concat "data.stats." key ".mod"))
+                          modOrigins=(getProperty ../actor.origins (concat "data.stats." key ".mod"))
                           flipped=(gt 3 @index)}}
                       </div>
                       <div class="stats {{key}} levelUp col-sm-2">
-                        {{> "mod-field" 
+                        {{> "systems/ptu/templates/partials/mod-field.hbs" 
                           path=(concat "data.stats." key ".levelUp") 
                           value=stat.levelUp
                           dtype="Number" 
                           mod=""
                           total="ignored"
-                          modOrigins=(getProperty ../origins (concat "data.stats." key ".levelUp"))
+                          modOrigins=(getProperty ../actor.origins (concat "data.stats." key ".levelUp"))
                           flipped=(gt 3 @index)}}
                       </div>
                       <div class="stats stage stage col-sm-2">
                         {{#if (isdefined stat.stage)}}
-                          {{> "mod-field" 
+                          {{> "systems/ptu/templates/partials/mod-field.hbs" 
                             path=(concat "data.stats." key ".stage") 
                             value=stat.stage
                             dtype="Number" 
                             mod=""
                             total="ignored"
-                            modOrigins=(getProperty ../origins (concat "data.stats." key ".stage"))
+                            modOrigins=(getProperty ../actor.origins (concat "data.stats." key ".stage"))
                             flipped=(gt 3 @index)}}
                         {{/if}}
                       </div>
@@ -468,10 +468,10 @@
                     {{#if data.levelUpPoints}}
                     <div class="row no-gutters levelUpPoints">
                       <div class="col-sm-8">
-                        <label for="data.levelUpPoints" class="resource-label">Remaining Level-Up Points:</label>
+                        <label for="data.levelUpPoints" class="resource-label">{{localize "PTU.StatsRemainingLevelupPoints"}}:</label>
                       </div>
                       <div class="col">
-                        {{> "mod-field" 
+                        {{> "systems/ptu/templates/partials/mod-field.hbs" 
                           path="data.levelUpPoints"
                           value=data.levelUpPoints
                           dtype="Number" 
@@ -487,7 +487,7 @@
                   <!-- Abilities -->
                   <div class="swsh-box mb-2 w-100">
                     <div class="swsh-body" style="display: block;">
-                      {{> item-display title="Abilities" type="ability" data=actor.abilities}}
+                      {{> "systems/ptu/templates/partials/item-display-partial.hbs" title=(localize "ITEM.TypeAbilityPlural") type="ability" data=actor.abilities}}
                     </div>
                   </div>
                 </div>
@@ -501,20 +501,20 @@
                     <div class="swsh-header">
                       <div class="d-flex w-100 mt-1 mb-1 align-items-center">
                         <div class="col-sm-4">
-                          <label for="data.evasion.physical">Physical<br>Evasion</label>
+                          <label for="data.evasion.physical">{{{localize "PTU.EvasionPhysical"}}}</label>
                         </div>
                         <div class="col-sm-4">
-                          <label for="data.evasion.special">Special<br>Evasion</label>
+                          <label for="data.evasion.special">{{{localize "PTU.EvasionSpecial"}}}</label>
                         </div>
                         <div class="col-sm-4">
-                          <label for="data.evasion.speed">Speed<br>Evasion</label>
+                          <label for="data.evasion.speed">{{{localize "PTU.EvasionSpeed"}}}</label>
                         </div>
                       </div>
                     </div>
                     <div class="swsh-body" style="display: block;">
                       <div class="d-flex w-100 mt-1 mb-1">
                         <div class="col-sm-4">
-                          {{> "mod-field" 
+                          {{> "systems/ptu/templates/partials/mod-field.hbs" 
                             path="data.evasion.physical"
                             value=data.evasion.physical
                             dtype="Number" 
@@ -525,7 +525,7 @@
                             flipped=true}}
                         </div>
                         <div class="col-sm-4">
-                          {{> "mod-field" 
+                          {{> "systems/ptu/templates/partials/mod-field.hbs" 
                             path="data.evasion.special"
                             value=data.evasion.special
                             dtype="Number" 
@@ -536,7 +536,7 @@
                             flipped=true}}
                         </div>
                         <div class="col-sm-4">
-                          {{> "mod-field" 
+                          {{> "systems/ptu/templates/partials/mod-field.hbs" 
                             path="data.evasion.speed"
                             value=data.evasion.speed
                             dtype="Number" 
@@ -555,10 +555,10 @@
                     <div class="swsh-header">
                       <div class="d-flex w-100 mt-1 mb-1 align-items-center">
                         <div class="col-sm-6">
-                          <label for="data.health.injuries">Injuries</label>
+                          <label for="data.health.injuries">{{localize "PTU.Injuries"}}</label>
                         </div>
                         <div class="col-sm-6">
-                          <label for="data.health.total">Total Health <small>Ignoring Injuries</small></label>
+                          <label for="data.health.total">{{localize "PTU.TotalHealth"}}<br><small>{{localize "PTU.IgnoringInjuries"}}</small></label>
                         </div>
                       </div>
                     </div>
@@ -576,25 +576,16 @@
                       {{#if (or (bigger data.health.injuries 0) (is true data.modifiers.hardened))}}
                       <div class="d-flex w-100 mt-1 mb-1">
                         <ul style="position: relative; left: 15px; width: 96%; line-height: 15px; text-align: start;">
-                          {{#if data.modifiers.hardened}}<li>Injuries beyond the 5th do not lower Maximum Hit Points</li>
-                          {{/if}}
-                          {{#if (and (is true data.modifiers.hardened) (biggerOrEqual data.health.injuries 1))}}<li>+1 to
-                            Critical Hit and Effect Range</li>{{/if}}
-                          {{#if (and (is true data.modifiers.hardened) (biggerOrEqual data.health.injuries 3))}}<li>+1
-                            Evasion and +5 Initiative</li>{{/if}}
-                          {{#if (biggerOrEqual data.health.injuries 5)}}<li>Unable to regain Hit Points from Resting</li>
-                          {{/if}}
-                          {{#if (and (is true data.modifiers.hardened) (biggerOrEqual data.health.injuries 5))}}<li>+5
-                            Damage Reduction</li>{{/if}}
-                          {{#if (and (not true data.modifiers.hardened) (biggerOrEqual data.health.injuries 5))}}<li>Take
-                            {{data.health.injuries}} Damage whenever taking a Standard Action during Combat</li>{{/if}}
-                          {{#if (and (is true data.modifiers.hardened) (biggerOrEqual data.health.injuries 7))}}<li>Immune
-                            to Loss of Hit Points (but not damage) from all effects</li>{{/if}}
-                          {{#if (and (is true data.modifiers.hardened) (biggerOrEqual data.health.injuries 9))}}<li>Resist
-                            all damage one step further</li>{{/if}}
-                          {{#if (and (not true data.modifiers.hardened) (biggerOrEqual data.health.injuries 10))}}<li>
-                            <b>Death</b></li>{{/if}}
-                          </ol>
+                          {{#if data.modifiers.hardened}}<li>{{localize "PTU.HardenedEffect0"}}</li>{{/if}}
+                          {{#if (and (is "true" data.modifiers.hardened) (biggerOrEqual data.health.injuries 1))}}<li>{{localize "PTU.HardenedEffect1"}}</li>{{/if}}
+                          {{#if (and (is "true" data.modifiers.hardened) (biggerOrEqual data.health.injuries 3))}}<li>{{localize "PTU.HardenedEffect2"}}</li>{{/if}}
+                          {{#if (biggerOrEqual data.health.injuries 5)}}<li>{{localize "PTU.InjuryEffect1"}}</li>{{/if}}
+                          {{#if (and (is "true" data.modifiers.hardened) (biggerOrEqual data.health.injuries 5))}}<li>{{localize "PTU.HardenedEffect3"}}</li>{{/if}}
+                          {{#if (and (not "true" data.modifiers.hardened) (biggerOrEqual data.health.injuries 5))}}<li>{{localize "PTU.InjuryEffect2" (ld "injuries" data.health.injuries)}}</li>{{/if}}
+                          {{#if (and (is "true" data.modifiers.hardened) (biggerOrEqual data.health.injuries 7))}}<li>{{localize "PTU.HardenedEffect4"}}</li>{{/if}}
+                          {{#if (and (is "true" data.modifiers.hardened) (biggerOrEqual data.health.injuries 9))}}<li>{{localize "PTU.HardenedEffect5"}}</li>{{/if}}
+                          {{#if (and (not "true" data.modifiers.hardened) (biggerOrEqual data.health.injuries 10))}}<li><b>{{localize "PTU.InjuryEffect3"}}</b></li>{{/if}}
+                        </ul>
                       </div>
                       {{/if}}
                     </div>
@@ -603,7 +594,7 @@
                   <!-- Capabilities -->
                   <div class="swsh-box mb-2 w-100">
                     <div class="swsh-header">
-                      <h3 class="item-name flexrow">Capabilities</h3>
+                      <h3 class="item-name flexrow">{{localize "ITEM.TypeCapabilityPlural"}}</h3>
                     </div>
                     <div class="swsh-body readable w-100 align-items-center" style="white-space: nowrap;">
                       {{#each data.capabilities as |capability key|}}
@@ -621,7 +612,7 @@
 
                     <!-- Other Capabilities -->
                     <div class="swsh-body w-100 mt-2" style="display: block;">
-                      {{> item-display title="Other Capabilities" type="capability" data=actor.capabilities}}
+                      {{> "systems/ptu/templates/partials/item-display-partial.hbs" title=(localize "PTU.CapabilityOther") type="capability" data=actor.capabilities}}
                     </div>
                   </div>
                 </div>
@@ -636,7 +627,7 @@
                       <div class="swsh-header">
                         <div class="d-flex w-100 mt-1 mb-1">
                           <div class="col">
-                            <label for="data.heldItem">Held Item</label>
+                            <label for="data.heldItem">{{localize "PTU.HeldItem"}}</label>
                           </div>
                         </div>
                       </div>
@@ -649,7 +640,7 @@
                       </div>
                       <!-- Item Effect -->
                       <div class="swsh-header">
-                        <h3 class="m-auto">Item Effect</h3>
+                        <h3 class="m-auto">{{localize "PTU.ItemEffect"}}</h3>
                       </div>
                       <div class="swsh-body w-100">
                         <textarea style="min-height: 100px;" id="itemDescription" disabled>{{itemDescription data.heldItem}}</textarea>
@@ -658,7 +649,7 @@
                       <div class="swsh-header">
                         <div class="d-flex w-100 mt-1 mb-1">
                           <div class="col">
-                            <label for="data.digestionBuff">Digestion Buff</label>
+                            <label for="data.digestionBuff">{{localize "PTU.DigestionBuff"}}</label>
                           </div>
                         </div>
                       </div>
@@ -675,7 +666,7 @@
                       <div class="swsh-header" >
                         <div class="d-flex w-100 mt-1 mb-1 align-items-center">
                           <div class="col-sm-12">
-                            <label for="data.modifiers.saveChecks.value">Save Checks Modifier</label>
+                            <label for="data.modifiers.saveChecks.value">{{localize "PTU.SaveCheckLabel"}}</label>
                           </div>
                         </div>
                       </div>
@@ -687,7 +678,7 @@
                         </div>
                         <div class="d-flex w-100 mt-1 mb-1">
                           <div class="col-sm-12">
-                            <button class="btn rollable save">Make Save</button>
+                            <button class="btn rollable save">{{localize "PTU.SaveCheckAction"}}</button>
                           </div>
                         </div>
                       </div>
@@ -706,23 +697,23 @@
                 <div class="swsh-box w-100 mb-2" style="text-align: center; word-break: keep-all;">
                   <div class="swsh-header">
                     <div class="d-flex w-100 mt-1 mb-1" style="font-size: 13px; justify-content: center;">
-                      <h3>Modifiers</h3>
+                      <h3>{{localize "PTU.Modifiers"}}</h3>
                     </div>
                   </div>
                   <div class="swsh-header">
                     <div class="d-flex w-100 mt-1 mb-1">
                       <div class="col-sm-6">
-                        <label for="data.modifiers.initiative.value">Initiative Mod</label>
+                        <label for="data.modifiers.initiative.value">{{localize "PTU.Initiative"}} {{localize "PTU.Bonus"}}</label>
                       </div>
                       <div class="col-sm-6">
-                        <label for="data.modifiers.statPoints.value">Stat Point Mod</label>
+                        <label for="data.modifiers.statPoints.value">{{localize "PTU.StatPoint"}} {{localize "PTU.Bonus"}}</label>
                       </div>
                     </div>
                   </div>
                   <div class="swsh-body">
                     <div class="d-flex w-100 mt-1 mb-1">
                       <div class="col-sm-6">
-                        {{> "mod-field" 
+                        {{> "systems/ptu/templates/partials/mod-field.hbs" 
                           mod=data.modifiers.initiative.mod 
                           path="data.modifiers.initiative.value" 
                           value=data.modifiers.initiative.value 
@@ -732,7 +723,7 @@
                           flipped=true}}
                       </div>
                       <div class="col-sm-6">
-                        {{> "mod-field" 
+                        {{> "systems/ptu/templates/partials/mod-field.hbs" 
                           mod=data.modifiers.statPoints.mod 
                           path="data.modifiers.statPoints.value" 
                           value=data.modifiers.statPoints.value 
@@ -746,20 +737,20 @@
                   <div class="swsh-header pt-1">
                     <div class="d-flex w-100 mt-1 mb-1">
                       <div class="col-sm-4">
-                        <label for="data.modifiers.acBonus.value">Accuracy Bonus</label>
+                        <label for="data.modifiers.acBonus.value">{{localize "PTU.Accuracy"}} {{localize "PTU.Bonus"}}</label>
                       </div>
                       <div class="col-sm-4 fs-10">
-                        <label for="data.modifiers.critRange.value">Crit Range Bonus</label>
+                        <label for="data.modifiers.critRange.value">{{localize "PTU.CritRange"}} {{localize "PTU.Bonus"}}</label>
                       </div>
                       <div class="col-sm-4 fs-10">
-                        <label for="data.modifiers.effectRange.value">Effect Range Bonus</label>
+                        <label for="data.modifiers.effectRange.value">{{localize "PTU.EffectRange"}} {{localize "PTU.Bonus"}}</label>
                       </div>
                     </div>
                   </div>
                   <div class="swsh-body">
                     <div class="d-flex w-100 mt-1 mb-1">
                       <div class="col-sm-4">
-                        {{> "mod-field" 
+                        {{> "systems/ptu/templates/partials/mod-field.hbs" 
                           mod=data.modifiers.acBonus.mod 
                           path="data.modifiers.acBonus.value" 
                           value=data.modifiers.acBonus.value 
@@ -769,7 +760,7 @@
                           flipped=true}}
                       </div>
                       <div class="col-sm-4">
-                        {{> "mod-field" 
+                        {{> "systems/ptu/templates/partials/mod-field.hbs" 
                           mod=data.modifiers.critRange.mod 
                           path="data.modifiers.critRange.value" 
                           value=data.modifiers.critRange.value 
@@ -779,7 +770,7 @@
                           flipped=true}}
                       </div>
                       <div class="col-sm-4">
-                        {{> "mod-field" 
+                        {{> "systems/ptu/templates/partials/mod-field.hbs" 
                           mod=data.modifiers.effectRange.mod 
                           path="data.modifiers.effectRange.value" 
                           value=data.modifiers.effectRange.value 
@@ -793,24 +784,24 @@
                   <div class="swsh-header pt-1">
                     <div class="d-flex w-100 mt-1 mb-1">
                       <div class="col">
-                        <label for="data.modifiers.damageReduction">Damage Reduction</label>
+                        <label for="data.modifiers.damageReduction">{{localize "PTU.DamageReduction"}}</label>
                       </div>
                     </div>
                   </div>
                   <div class="swsh-header pt-1">
                     <div class="d-flex w-100 mt-1 mb-1">
                       <div class="col-sm-6">
-                        <label for="data.modifiers.damageReduction.physical.value">Physical</label>
+                        <label for="data.modifiers.damageReduction.physical.value">{{localize "PTU.Physical"}}</label>
                       </div>
                       <div class="col-sm-6">
-                        <label for="data.modifiers.damageReduction.special.value">Special</label>
+                        <label for="data.modifiers.damageReduction.special.value">{{localize "PTU.Special"}}</label>
                       </div>
                     </div>
                   </div>
                   <div class="swsh-body">
                     <div class="d-flex w-100 mt-1 mb-1">
                       <div class="col-sm-6">
-                        {{> "mod-field" 
+                        {{> "systems/ptu/templates/partials/mod-field.hbs" 
                           mod=data.modifiers.damageReduction.physical.mod 
                           path="data.modifiers.damageReduction.physical.value" 
                           value=data.modifiers.damageReduction.physical.value 
@@ -819,7 +810,7 @@
                           modOrigins=(getProperty origins "data.modifiers.damageReduction.physical.mod")}}
                       </div>
                       <div class="col-sm-6">
-                        {{> "mod-field" 
+                        {{> "systems/ptu/templates/partials/mod-field.hbs" 
                           mod=data.modifiers.damageReduction.special.mod 
                           path="data.modifiers.damageReduction.special.value" 
                           value=data.modifiers.damageReduction.special.value 
@@ -832,20 +823,20 @@
                   <div class="swsh-header pt-1">
                     <div class="d-flex w-100 mt-1 mb-1">
                       <div class="col-sm-4">
-                        <label for="data.modifiers.evasion.physical.value">Phys Eva Bonus</label>
+                        <label for="data.modifiers.evasion.physical.value">{{localize "PTU.EvasionPhysicalShort"}} {{localize "PTU.EvasionShort"}} {{localize "PTU.Bonus"}}</label>
                       </div>
                       <div class="col-sm-4">
-                        <label for="data.modifiers.evasion.special.value">Spec Eva Bonus</label>
+                        <label for="data.modifiers.evasion.special.value">{{localize "PTU.EvasionSpecialShort"}} {{localize "PTU.EvasionShort"}} {{localize "PTU.Bonus"}}</label>
                       </div>
                       <div class="col-sm-4">
-                        <label for="data.modifiers.evasion.speed.value">Spd Eva Bonus</label>
+                        <label for="data.modifiers.evasion.speed.value">{{localize "PTU.EvasionSpeedShort"}} {{localize "PTU.EvasionShort"}} {{localize "PTU.Bonus"}}</label>
                       </div>
                     </div>
                   </div>
                   <div class="swsh-body">
                     <div class="d-flex w-100 mt-1 mb-1">
                       <div class="col-sm-4">
-                        {{> "mod-field" 
+                        {{> "systems/ptu/templates/partials/mod-field.hbs" 
                           mod=data.modifiers.evasion.physical.mod 
                           path="data.modifiers.evasion.physical.value" 
                           value=data.modifiers.evasion.physical.value 
@@ -854,7 +845,7 @@
                           modOrigins=(getProperty origins "data.modifiers.evasion.physical.mod")}}
                       </div>
                       <div class="col-sm-4">
-                        {{> "mod-field" 
+                        {{> "systems/ptu/templates/partials/mod-field.hbs" 
                           mod=data.modifiers.evasion.special.mod 
                           path="data.modifiers.evasion.special.value" 
                           value=data.modifiers.evasion.special.value 
@@ -863,7 +854,7 @@
                           modOrigins=(getProperty origins "data.modifiers.evasion.special.mod")}}
                       </div>
                       <div class="col-sm-4">
-                        {{> "mod-field" 
+                        {{> "systems/ptu/templates/partials/mod-field.hbs" 
                           mod=data.modifiers.evasion.speed.mod 
                           path="data.modifiers.evasion.speed.value" 
                           value=data.modifiers.evasion.speed.value 
@@ -879,24 +870,24 @@
                 <div class="swsh-box w-100 mb-2" style="text-align: center;">
                   <div class="swsh-header">
                     <div class="d-flex w-100 mt-1" style="font-size: 13px; justify-content: center;">
-                        <h3>Skill Background</h3>
+                        <h3>{{localize "PTU.SkillBackground"}}</h3>
                     </div>
                   </div>
                   <div class="swsh-header" style="background-color: #fff3cd;">
                     <div class="d-flex w-100 mb-1" style="justify-content: center;">
-                        <p class="fs-8 ml-4 mr-4" style="color: #856404;">Please note that this is purely for you to keep track!<br>the sheet doesn't automatically apply trainer skill backgrounds.</p>
+                        <p class="fs-8 ml-4 mr-4" style="color: #856404;">{{{localize "PTU.SkillBackgroundNotice"}}}</p>
                     </div>
                   </div>
                   <div class="swsh-header">
                     <div class="d-flex w-100 mt-1 mb-1">
                       <div class="col-sm-4">
-                        <label for="data.background.pathetic.one">Pathetic #1</label>
+                        <label for="data.background.pathetic.one">{{localize "PTU.SkillPathetic"}} #1</label>
                       </div>
                       <div class="col-sm-4">
-                        <label for="data.background.pathetic.two">Pathetic #2</label>
+                        <label for="data.background.pathetic.two">{{localize "PTU.SkillPathetic"}} #2</label>
                       </div>
                       <div class="col-sm-4">
-                        <label for="data.background.pathetic.three">Pathetic #3</label>
+                        <label for="data.background.pathetic.three">{{localize "PTU.SkillPathetic"}} #3</label>
                       </div>
                     </div>
                   </div>
@@ -905,7 +896,7 @@
                       <div class="col-sm-4">
                         {{#select data.background.pathetic.one}}
                         <select name="data.background.pathetic.one">
-                          <option value="blank">None</option>
+                          <option value="blank">{{localize "PTU.SelectNone"}}</option>
                           {{#each skills as | skill key |}}
                           <option value="{{key}}">{{skill.label}}</option>
                           {{/each}}
@@ -915,7 +906,7 @@
                       <div class="col-sm-4">
                         {{#select data.background.pathetic.two}}
                         <select name="data.background.pathetic.two">
-                          <option value="blank">None</option>
+                          <option value="blank">{{localize "PTU.SelectNone"}}</option>
                           {{#each skills as | skill key |}}
                           <option value="{{key}}">{{skill.label}}</option>
                           {{/each}}
@@ -925,7 +916,7 @@
                       <div class="col-sm-4">
                         {{#select data.background.pathetic.three}}
                         <select name="data.background.pathetic.three">
-                          <option value="blank">None</option>
+                          <option value="blank">{{localize "PTU.SelectNone"}}</option>
                           {{#each skills as | skill key |}}
                           <option value="{{key}}">{{skill.label}}</option>
                           {{/each}}
@@ -937,10 +928,10 @@
                   <div class="swsh-header">
                     <div class="d-flex w-100 mt-1 mb-1">
                       <div class="col-sm-6">
-                        <label for="data.background.novice">Novice Skill</label>
+                        <label for="data.background.novice">{{localize "PTU.SkillNovice"}} {{localize "PTU.Skill"}}</label>
                       </div>
                       <div class="col-sm-6">
-                        <label for="data.background.adept">Adept Skill</label>
+                        <label for="data.background.adept">{{localize "PTU.SkillAdept"}} {{localize "PTU.Skill"}}</label>
                       </div>
                     </div>
                   </div>
@@ -949,7 +940,7 @@
                       <div class="col-sm-6">
                         {{#select data.background.novice}}
                         <select name="data.background.novice">
-                          <option value="blank">None</option>
+                          <option value="blank">{{localize "PTU.SelectNone"}}</option>
                           {{#each skills as | skill key |}}
                           <option value="{{key}}">{{skill.label}}</option>
                           {{/each}}
@@ -959,7 +950,7 @@
                       <div class="col-sm-6">
                         {{#select data.background.adept}}
                         <select name="data.background.adept">
-                          <option value="blank">None</option>
+                          <option value="blank">{{localize "PTU.SelectNone"}}</option>
                           {{#each skills as | skill key |}}
                           <option value="{{key}}">{{skill.label}}</option>
                           {{/each}}
@@ -977,16 +968,16 @@
                   <div class="swsh-header">
                     <div class="d-flex w-100 mt-1 mb-1">
                       <div class="col-sm-3">
-                        <label for="data.age">Age:</label>
+                        <label for="data.age">{{localize "PTU.Age"}}:</label>
                       </div>
                       <div class="col-sm-3">
-                        <label for="data.sex">Sex:</label>
+                        <label for="data.sex">{{localize "PTU.Sex"}}:</label>
                       </div>
                       <div class="col-sm-3">
-                        <label for="data.height">Height:</label>
+                        <label for="data.height">{{localize "PTU.Height"}}:</label>
                       </div>
                       <div class="col-sm-3">
-                        <label for="data.weight">Weight:</label>
+                        <label for="data.weight">{{localize "PTU.Weight"}}:</label>
                       </div>
                     </div>
                   </div>
@@ -1026,7 +1017,7 @@
                 </div>
                 <div class="swsh-box h-25 w-100 mb-2 red">
                   <div class="swsh-header">
-                    <h3>Physical Description</h3>
+                    <h3>{{localize "PTU.PhysicalDescription"}}</h3>
                   </div>
                   <div class="swsh-body h-90">
                     {{editor content=data.biography.physicalDescription target="data.biography.physicalDescription" button=true owner=owner editable=editable}}
@@ -1034,7 +1025,7 @@
                 </div>
                 <div class="swsh-box h-35 w-100 mb-2 yellow">
                   <div class="swsh-header">
-                    <h3>Background Description</h3>
+                    <h3>{{localize "PTU.Background"}}</h3>
                   </div>
                   <div class="swsh-body h-90">
                     {{editor content=data.biography.background target="data.biography.background" button=true owner=owner editable=editable}}
@@ -1042,7 +1033,7 @@
                 </div>
                 <div class="swsh-box h-35 w-100 mb-2 purple">
                   <div class="swsh-header">
-                    <h3>Personality</h3>
+                    <h3>{{localize "PTU.Personality"}}</h3>
                   </div>
                   <div class="swsh-body h-90">
                     {{editor content=data.biography.personality target="data.biography.personality" button=true owner=owner editable=editable}}
@@ -1050,7 +1041,7 @@
                 </div>
                 <div class="swsh-box h-35 w-100 mb-2 green">
                   <div class="swsh-header">
-                    <h3>Goals</h3>
+                    <h3>{{localize "PTU.Goals"}}</h3>
                   </div>
                   <div class="swsh-body h-90">
                     {{editor content=data.biography.goals target="data.biography.goals" button=true owner=owner editable=editable}}
@@ -1058,7 +1049,7 @@
                 </div>
                 <div class="swsh-box h-35 w-100 mb-2 green">
                   <div class="swsh-header">
-                    <h3>Dreams</h3>
+                    <h3>{{localize "PTU.Dreams"}}</h3>
                   </div>
                   <div class="swsh-body h-90">
                     {{editor content=data.biography.dreams target="data.biography.dreams" button=true owner=owner editable=editable}}
@@ -1066,7 +1057,7 @@
                 </div>
                 <div class="swsh-box h-35 w-100 mb-2 green">
                   <div class="swsh-header">
-                    <h3>Obsessions</h3>
+                    <h3>{{localize "PTU.Obsessions"}}</h3>
                   </div>
                   <div class="swsh-body h-90">
                     {{editor content=data.biography.obsessions target="data.biography.obsessions" button=true owner=owner editable=editable}}
@@ -1083,7 +1074,7 @@
               <div class="col">
                 <div class="swsh-box mt-2 w-100">
                   <div class="swsh-body w-100" style="display: block;">
-                    {{> item-display title="Seen" type="dexentry" data=actor.dex.seen}}
+                    {{> "systems/ptu/templates/partials/item-display-partial.hbs" title=(localize "ITEM.DexEntrySeen") type="dexentry" data=actor.dex.seen}}
                   </div>
                 </div>
               </div>
@@ -1091,7 +1082,7 @@
               <div class="col">
                 <div class="swsh-box mt-2 w-100">
                   <div class="swsh-body w-100" style="display: block;">
-                    {{> item-display title="Owned" type="dexentry" data=actor.dex.owned}}
+                    {{> "systems/ptu/templates/partials/item-display-partial.hbs" title=(localize "ITEM.DexEntryOwned") type="dexentry" data=actor.dex.owned}}
                   </div>
                 </div>
               </div>
@@ -1102,15 +1093,15 @@
           <div class="tab details effects" data-group="primary" data-tab="effects">
             <div class="h-100 swsh-box">
               <div class="swsh-header pl-2 effect-header">
-                <h3 style="flex: 1 1 50%">Active Effects</h3>
+                <h3 style="flex: 1 1 50%">{{localize "PTU.ActiveEffects"}}</h3>
                 <div class="item-controls pr-1 flexcol" style="flex: 0 0 7%;">
                   <a class="item-control item-create" data-type="ActiveEffect" title="Add Effect"><i
                       class="fas fa-plus-circle" style="margin-right: 3px;"></i><span
-                      class="readable">Add</span></a>
+                      class="readable">{{localize "ITEM.AddButton"}}</span></a>
               </div>
               </div>
               <div class="swsh-body pt-3 p-2">
-                {{> "active-effects"}}
+                {{> "systems/ptu/templates/partials/active-effects.hbs"}}
               </div>
             </div>
           </div>
@@ -1121,14 +1112,14 @@
   <div class="sheet-footer">
     <div class="tabs">
       <ul class="sheet-tabs tabs buttons" data-group="primary">
-        <li><button class="item" data-tab="stats">Skills</button></li>
-        <li><button class="item" data-tab="inventory">Inventory</button></li>
-        <li><button class="item" data-tab="features">Features & Edges</button></li>
-        <li><button class="item" data-tab="combat">Combat</button></li>
-        <li><button class="item" data-tab="moves">Moves</button></li>
-        <li><button class="item" data-tab="extra">Extra</button></li>
-        <li><button class="item" data-tab="dex">Dex</button></li>
-        {{#if (is true (getGameSetting "showDebugInfo"))}}<li><button class="item" data-tab="effects">Effects</button></li>{{/if}}
+        <li><button class="item" data-tab="stats">{{localize "PTU.TabsSkills"}}</button></li>
+        <li><button class="item" data-tab="inventory">{{localize "PTU.TabsInventory"}}</button></li>
+        <li><button class="item" data-tab="features">{{localize "PTU.TabsFeatsAndEdges"}}</button></li>
+        <li><button class="item" data-tab="combat">{{localize "PTU.TabsCombat"}}</button></li>
+        <li><button class="item" data-tab="moves">{{localize "PTU.TabsMoves"}}</button></li>
+        <li><button class="item" data-tab="extra">{{localize "PTU.TabsExtra"}}</button></li>
+        <li><button class="item" data-tab="dex">{{localize "PTU.TabsDex"}}</button></li>
+        <li><button class="item" data-tab="effects">{{localize "PTU.TabsEffects"}}</button></li>
       </ul>
     </div>
   </div>
