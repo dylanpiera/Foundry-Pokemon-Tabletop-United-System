@@ -33,7 +33,7 @@ export default class StatBlock extends Component {
         this.element.children().children().children('.levelUp').on("keyup", (event) => {
             const stat = event.target.dataset.key;
             const value = Number(event.target.value);
-            this.store.dispatch('changeStats', {[stat]: {levelUp: value}});
+            this.store.dispatch('changeStats', {levelUpStats: {[stat]: {levelUp: value}}});
             event.target.focus();
         })
     }

@@ -35,27 +35,29 @@ export default function({level, tabs, initialTab, species, actor}) {
                 }
 
                 await context.commit('updateSpecies', speciesData);
-                await context.dispatch('changeStats');
+                await context.dispatch('changeStats', {speciesData});
             },
             async expChange(context, payload) {
                 const exp = Number(payload);
 
-                if(exp === undefined || isNaN(exp)) return;
+                if(exp === undefined || isNaN(exp) || exp == context.state.exp) return;
                 
                 const level = CalcLevel(exp, 50, game.ptu.levelProgression);
+                const oldLevel = duplicate(context.state.level)
 
                 await context.commit('updateExp', exp);
                 await context.commit('updateLevel', level);
+                if(oldLevel != level) await context.dispatch('changeStats');
             },
             async levelChange(context, payload) {
                 const level = payload;
-
-                if(level === undefined || isNaN(level)) return;
-
+                if(level === undefined || isNaN(level) || level == context.state.level) return;
+                
                 const exp = game.ptu.levelProgression[level];
 
                 await context.commit('updateLevel', level);
                 await context.commit('updateExp', exp);
+                await context.dispatch('changeStats');
             },
             async changeTab(context, payload) {
                 log(`Changing to next tab from: ${payload}`)
@@ -81,14 +83,13 @@ export default function({level, tabs, initialTab, species, actor}) {
 
                 await context.commit('updateNature', [nature, natureInfo])
             },
-            async changeStats(context, stats) {
-                
-                const statChanges = mergeObject(context.state.actor.data.data.stats, stats ?? {});
-                console.log(stats, statChanges);
-                const baseStats = CalcBaseStats(statChanges, context.state.species, context.state.actor.data.data.nature.value);
+            async changeStats(context, {levelUpStats, speciesData}={levelUpStats: undefined, speciesData: undefined}) {
+                debug(levelUpStats, speciesData)
+                const statChanges = mergeObject(context.state.actor.data.data.stats, levelUpStats ?? {});
+                const baseStats = CalcBaseStats(statChanges, speciesData ?? context.state.species, context.state.actor.data.data.nature.value);
 
                 // Recalculate stats
-                const levelUpPoints = context.state.actor.data.data.modifiers.statPoints?.total + 10 + context.state.actor.data.data.level.current;
+                const levelUpPoints = context.state.actor.data.data.modifiers.statPoints?.total + 10 + context.state.level;
 
                 const calculatedStats = CalculateStatTotal(levelUpPoints, baseStats, {ignoreStages: true});
                 const result = {
