@@ -44,6 +44,6 @@ export default class PubSub {
         }
         
         // Get each subscription and call its callback with the passed data
-        return self.events[event].map(callback => callback(data));
+        return self.events[event].map(async callback => await callback(data));
     }
 }

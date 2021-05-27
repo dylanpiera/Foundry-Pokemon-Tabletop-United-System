@@ -13,7 +13,7 @@ export default class NextButton extends Component {
      *
      * @returns {void}
      */
-     render() {
+     async render() {
         this.element.off("click");
         this.element.on("click", (event) => {
             event.preventDefault();

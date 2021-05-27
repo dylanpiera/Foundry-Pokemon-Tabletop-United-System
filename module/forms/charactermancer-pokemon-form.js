@@ -13,6 +13,7 @@ import { CalcBaseStats, CalculateStatTotal } from "../actor/calculations/stats-c
 import StatBlock from "../api/front-end/components/statBlock.js";
 import StatBlockTotal from "../api/front-end/components/statBlockTotal.js";
 import StatBlockLevelUpPoints from "../api/front-end/components/statBlockLevelUpPoints.js";
+import EvolutionBlock from "../api/front-end/components/evolutionBlock.js";
 
 /**
  * Extend the basic ActorSheet with some very simple modifications
@@ -126,6 +127,7 @@ export class PTUPokemonCharactermancer extends FormApplication {
       typeBar: new TypeBar(this.store),
       levelField: new LevelField(this.store),
       levelExpField: new LevelExpField(this.store),
+      evolutionBlock: new EvolutionBlock(this.store),
       nextButton: new NextButton(this.store),
       natureSelect: new NatureSelect(this.store),
       natureStatUpSelect: new NatureStatSelect(this.store, true),

@@ -18,7 +18,6 @@ export default class StatBlock extends Component {
         const isEmpty = this.element.html().trim() == "";
         const isSpeciesRefresh = this.speciesId != this.state.species._id;
         if(!isEmpty && !isSpeciesRefresh) return;
-        console.warn("rerender", isEmpty, isSpeciesRefresh)
         this.speciesId = this.state.species._id;
 
         const stats = this.state.stats;

@@ -13,7 +13,7 @@ export default class SpeciesIdField extends Component {
      *
      * @returns {void}
      */
-    render() {
+    async render() {
         if(this.element.val() != this.state.species?.number) this.element.val(this.state.species?.number);
         
         this.element.off("change");

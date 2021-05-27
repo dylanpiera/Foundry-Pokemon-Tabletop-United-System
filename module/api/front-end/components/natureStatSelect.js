@@ -15,7 +15,7 @@ export default class NatureStatSelect extends Component {
      *
      * @returns {void}
      */
-    render() {
+    async render() {
         const sv = (this.isUp ? this.state.natureStat.up : this.state.natureStat.down);
         console.log(this.element.val(), sv);
         if(this.element.val() != sv) this.element.val(sv);

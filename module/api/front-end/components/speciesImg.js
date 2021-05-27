@@ -14,7 +14,7 @@ export default class SpeciesImage extends Component {
      *
      * @returns {void}
      */
-    render() {
+    async render() {
         if(this.state.imgPath) { 
             $("#preview-img").html(`<img src="${this.state.imgPath}">`);
         }

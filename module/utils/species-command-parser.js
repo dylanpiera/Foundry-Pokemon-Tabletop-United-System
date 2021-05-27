@@ -79,9 +79,10 @@ export async function CreateMonParser(input, andCreate = false) {
     return commands;
 }
 
-export async function GetSpeciesArt(mon, basePath, type = ".png") {
+export async function GetSpeciesArt(mon, imgDirectoryPath, type = ".png") {
+    const basePath = imgDirectoryPath+(imgDirectoryPath.endsWith('/') ? '' : '/')
 
-    let path = basePath+(basePath.endsWith('/') ? '' : '/')+lpad(mon?.number, 4)+type;
+    let path = basePath+lpad(mon?.number, 4)+type;
     let result = await fetch(path);
     if(result.status === 404 && mon?.number < 1000) {
         path = basePath+lpad(mon?.number, 3)+type;

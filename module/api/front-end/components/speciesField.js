@@ -13,7 +13,7 @@ export default class SpeciesField extends Component {
      *
      * @returns {void}
      */
-    render() {
+    async render() {
         if(this.element.val() != this.state.species?.id) this.element.val(this.state.species?._id);
         
         this.element.off("change");

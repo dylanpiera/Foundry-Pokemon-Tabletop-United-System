@@ -60,8 +60,7 @@ export default class Store {
      * @returns {boolean}
      * @memberof Store
      */
-    dispatch(actionKey, payload) {
-  
+    async dispatch(actionKey, payload) {
         let self = this;
         
         // Run a quick check to see if the action actually exists
@@ -78,7 +77,7 @@ export default class Store {
         self.status = 'action';
         
         // Actually call the action and pass it the Store context and whatever payload was passed
-        self.actions[actionKey](self, payload);
+        await self.actions[actionKey](self, payload);
         
         // Close our console group to keep things nice and neat
         console.groupEnd();
@@ -95,7 +94,7 @@ export default class Store {
      * @returns {boolean}
      * @memberof Store
      */
-    commit(mutationKey, payload) {
+    async commit(mutationKey, payload) {
         let self = this;
         
         // Run a quick check to see if this mutation actually exists
@@ -109,7 +108,7 @@ export default class Store {
         self.status = 'mutation';
         
         // Get a new version of the state by running the mutation and storing the result of it
-        const newState = self.mutations[mutationKey](self.state, payload);
+        const newState = await self.mutations[mutationKey](self.state, payload);
         
         // Make sure that updating the state update doesn't trigger again
         self.status = 'migrating-mutation'
