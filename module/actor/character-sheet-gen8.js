@@ -250,32 +250,41 @@ export class PTUGen8CharacterSheet extends ActorSheet {
 		// If item exists check if category changed
 		if(item) {
 			const itemData = duplicate(item.data);
-			if(itemData.data.category == category)			
+
+			if(itemData.type != "item" || itemData.data.category == category)			
 				// Handle item sorting within the same Actor
 				return this._onSortItem(event, itemData);
 		}
 		// If Item doesn't exist yet wait for item creation to resolve, then try again.
 		else {
 			const itemId = await new Promise((resolve, reject) => {
-				const hookId = Hooks.on("createOwnedItem", function(hookActor, hookItem, options, sender){
-					if(actor.id == hookActor.id && hookItem.type == "item") {
-						Hooks.off("createOwnedItem", hookId)
+				const hookId = Hooks.on("createItem", function(hookItem, options, sender){
+					if(actor.id == hookItem.parent.id && hookItem.type == "item") {
+						Hooks.off("createItem", hookId)
 						resolve(hookItem.id);
 					}
 				})
 				// if after 1.5 sec there is no success, abort.
 				setTimeout(() => {
-					Hooks.off("createOwnedItem", hookId);
-					debug("Did not catch item drop.")
-					reject
+					Hooks.off("createItem", hookId);
+					reject("Did not catch item drop.")
 				}, 1500);
 			});
 			if(!itemId) return;
 			item = actor.items.get(itemId);
-		}
 
-		item.data.data.category=category;
-		await this.actor.updateOwnedItem(item.data);
+			const oldItem = actor.items.getName(item.name);
+			if(oldItem.id != itemId && oldItem.data.data.quantity) {
+				const data = duplicate(oldItem.data);
+				data.data.quantity++;
+				await this.actor.deleteEmbeddedDocuments("Item", [itemId]);
+				return await this.actor.updateEmbeddedDocuments("Item", [data]);
+			}
+		}
+		const itemData = duplicate(item.data);
+		itemData.data.category=category;
+		
+		await this.actor.updateEmbeddedDocuments("Item", [itemData]);
 		log(`Moved ${item.name} to ${category} category`);
 	}
 
