@@ -142,7 +142,7 @@ export const EffectFns = new Map([
         let applyPoison = async () => {
             const token = canvas.tokens.get(lastCombatant.token.id);
             const badly_poisoned_effect = token.actor.effects.find(x => x.data.label == "Badly Poisoned");
-            await ApplyFlatDamage([token], "Toxic Damage", (5 * badly_poisoned_effect.data.flags.ptu?.roundsElapsed) + 5);
+            await ApplyFlatDamage([token], "Toxic Damage", (5 * (badly_poisoned_effect.data.flags.ptu?.roundsElapsed ?? 0)) + 5);
         }
 
         const actions_taken = actor.data.flags.ptu?.actions_taken; 
