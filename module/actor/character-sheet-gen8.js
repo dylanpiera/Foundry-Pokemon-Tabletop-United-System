@@ -46,7 +46,7 @@ export class PTUGen8CharacterSheet extends ActorSheet {
 				label: "Notes",
 				class: "open-notes",
 				icon: "fas fa-edit",
-				onclick: () => new game.ptu.PTUCharacterNotesForm(this.actor, {"submitOnClose": true}).render(true)
+				onclick: () => new game.ptu.PTUCharacterNotesForm(this.actor, {"submitOnClose": true, "closeOnSubmit": false}).render(true)
 			});
 		}
 
