@@ -2,7 +2,7 @@
 {{else}}
     <ol class="inventory-list" {{#if boxed}}style="padding: 0;"{{/if}}>
         {{#if boxed}}<div class="swsh-header w-100" style="display: block;">{{/if}}
-            <li class="inventory-header item flexrow" data-category="{{category}}">
+            <li class="inventory-header item flexrow" data-category="{{category}}" data-toggle="collapse" data-target=".{{type}}-{{category}}-collapse" aria-expanded="true" aria-controls="{{type}}-{{category}}-collapse">
                 <h3 class="item-categorized item-name flexrow" data-category="{{category}}" >{{title}}</h3>
                 <div class="item-controls">
                     <a class="item-control item-create" title="Add {{type}}" data-type="{{type}}" data-category="{{category}}"><i
@@ -11,7 +11,7 @@
                 </div>
             </li>
         {{#if boxed}}</div>
-        <div class="swsh-body w-100" style="display: block;">{{/if}}
+        <div class="swsh-body w-100 collapse in {{type}}-{{category}}-collapse" style="display: block;">{{/if}}
             <ol class="item-list">
                 {{#each data as | obj |}}
                 <li class="item flexrow item-categorized" data-category="{{../category}}" data-item-id="{{obj._id}}">

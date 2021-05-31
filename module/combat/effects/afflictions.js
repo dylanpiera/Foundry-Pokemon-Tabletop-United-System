@@ -142,7 +142,7 @@ export const EffectFns = new Map([
         let applyPoison = async () => {
             const token = canvas.tokens.get(lastCombatant.token.id);
             const badly_poisoned_effect = token.actor.effects.find(x => x.data.label == "Badly Poisoned");
-            await ApplyFlatDamage([token], "Toxic Damage", (5 * badly_poisoned_effect.data.flags.ptu?.roundsElapsed) + 5);
+            await ApplyFlatDamage([token], "Toxic Damage", (5 * (badly_poisoned_effect.data.flags.ptu?.roundsElapsed ?? 0)) + 5);
         }
 
         const actions_taken = actor.data.flags.ptu?.actions_taken; 
@@ -652,43 +652,25 @@ Hooks.on("applyActiveEffect", function(actorData, change) {
 })
 
 // Set combat details on active effects for duration based calculations like Badly Poisoned
-Hooks.on("preCreateActiveEffect", function(actor,effect,options,id) {
-    applyPreCreateActiveEffectChanges(effect);
+Hooks.on("preCreateActiveEffect", function(effect,effectData,options,sender) {
+    effect.data.update(applyPreCreateActiveEffectChanges(effectData));
 })
 
-Hooks.on("preUpdateToken", function(scene, tokenData, changes, options, sender) {
-    // Only continue if effects have been changed
-    if(!changes.actorData?.effects) return;    
-
-    // Take a snapshot of the current tokenData before changes are applied
-    const data = duplicate(tokenData);
-    
-    if(data.actorData.effects) {
-        // If a new effect is added
-        if(data.actorData.effects.length < changes.actorData.effects.length) {
-            // Apply preCreate effect changes
-            applyPreCreateActiveEffectChanges(changes.actorData.effects[changes.actorData.effects.length-1], false);
-        }
-    }
-    else {
-        // If first effect, apply changes to that.
-        applyPreCreateActiveEffectChanges(changes.actorData.effects[0], false);
-    }
-});
-
 function applyPreCreateActiveEffectChanges(effect, preCreate = true) {
+    const data = {};
     if(game.combats.active) {
-        effect.duration = mergeObject(effect.duration ?? {}, {
+        data.duration = mergeObject(effect.duration ?? {}, {
             startRound: game.combats.active.current?.round, 
             startTurn: game.combats.active.current?.turn,
             combat: game.combats.active.id
         });
-        if(preCreate) effect["flags.ptu.roundsElapsed"] = 0;
-        else effect.flags = mergeObject(effect.flags ?? {}, {ptu: {roundsElapsed: 0}});
+        if(preCreate) data["flags.ptu.roundsElapsed"] = 0;
+        else data.flags = mergeObject(effect.flags ?? {}, {ptu: {roundsElapsed: 0}});
     }
     else {
-        effect.duration = mergeObject(effect.duration ?? {}, {startRound: -1, startTurn: -1});
-        if(preCreate) effect["flags.ptu.roundsElapsed"] = 0;
-        else effect.flags = mergeObject(effect.flags ?? {}, {ptu: {roundsElapsed: -1}});
+        data.duration = mergeObject(effect.duration ?? {}, {startRound: -1, startTurn: -1});
+        if(preCreate) data["flags.ptu.roundsElapsed"] = 0;
+        else data.flags = mergeObject(effect.flags ?? {}, {ptu: {roundsElapsed: -1}});
     }
+    return data;
 }

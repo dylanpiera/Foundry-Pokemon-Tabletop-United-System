@@ -9,10 +9,14 @@
             <div class="swsh-body">
                 {{#each data as |info id|}}
                     <div class="d-flex flex-row" style="flex: 0 0 100%; align-items: center; {{#if @last}}{{else}}border-bottom: 1px solid lightgray;{{/if}}">
-                        <span class="fs-9" style="flex: 0 0 70%; word-break:break-word;">{{info.name}} took {{info.damage}} damage</span>
-                        <button class="undo-damage-button fs-10" data-target="{{id}}" data-target-type="{{info.type}}" data-damage="{{info.damage}}" data-old-temp="{{info.old.temp}}" data-old-value="{{info.old.value}}" style="flex: 0 0 30%;">
-                            undo
-                        </button>
+                        {{#unless (is info.damage "0")}}
+                            <span class="fs-9" style="flex: 0 0 70%; word-break:break-word;">{{info.name}} took {{info.damage}} damage</span>
+                            <button class="undo-damage-button fs-10" data-target="{{id}}" data-target-type="{{info.type}}" data-damage="{{info.damage}}" data-old-temp="{{info.old.temp}}" data-old-value="{{info.old.value}}" style="flex: 0 0 30%;">
+                                undo
+                            </button>
+                        {{else}}
+                            <span class="fs-9 pt-1 pb-1" style="flex: 0 0 70%; word-break:break-word;">{{info.name}} was immune! No damage applied</span>
+                        {{/unless}}
                     </div>
                 {{/each}}
             </div>

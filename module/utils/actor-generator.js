@@ -125,7 +125,8 @@ async function ApplyChanges() {
     else {
         await this.actor.update(this.data);
     }
-    await this.actor.createOwnedItem(this.items);
+    if(this.items.length > 0)
+        await this.actor.createEmbeddedDocuments("Item", duplicate(this.items));
     return this.actor;
 }
 

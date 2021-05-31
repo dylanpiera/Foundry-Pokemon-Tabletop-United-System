@@ -1,6 +1,26 @@
 # Welcome to the Beta!
 Hey there! You are on the Beta Branch. If you ever have any feedback please do share with us over on [Github](https://github.com/dylanpiera/Foundry-Pokemon-Tabletop-United-System/issues) or [Discord](https://discord.gg/fE3w59q)
 
+## 1.4-beta-3 - The Bugfix Update
+Fixed all bugs that were reported for Beta 2 and added a couple new features to Inventory Management.
+
+### New Features
+- Dragging in an item on a Player sheet will now first check if an item by the same name already exists, and if so increment it's quantity, instead of creating a new item entry.
+- Item Categories in Player sheets are now collapsible
+
+### Bugfixes
+- Removing Trainings/Orders now actually removes the Training/Order again.
+- Fixed a Pokémon being dealt damage from a move they're immune to dealing the PTU minimum damage of 1, to 0.
+- Fixed Undo Damage button not working for Token Actors.
+- Fixed /ptug command's 'random [habitat]' command not working.
+- Fixed Notes not displaying properly & closing on submit.
+- Fixed Items not willing to swap positions in Player sheets.
+- Fixed Toxic applying NaN damage on the 1st turn of Toxic.
+- Fixed Active Effects being applied through the Token Effect Overlay on Token Actors not working properly.
+  - Also resolved 'marking as defeated' on Token Actors not working properly.
+- Fixed Pokédex Drag & Drop Macro creation failing.
+- Fixed Indeedee data error which made them unable to be generated.
+
 ## 1.4-beta-2
 - Added Front-end API to game.ptu globals
 

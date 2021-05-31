@@ -46,7 +46,7 @@ export class PTUGen8CharacterSheet extends ActorSheet {
 				label: "Notes",
 				class: "open-notes",
 				icon: "fas fa-edit",
-				onclick: () => new game.ptu.PTUCharacterNotesForm(this.actor, {"submitOnClose": true}).render(true)
+				onclick: () => new game.ptu.PTUCharacterNotesForm(this.actor, {"submitOnClose": true, "closeOnSubmit": false}).render(true)
 			});
 		}
 
@@ -178,11 +178,6 @@ export class PTUGen8CharacterSheet extends ActorSheet {
 			this.actor.deleteOwnedItem(li.data('itemId'));
 			li.slideUp(200, () => this.render(false));
 		});
-		//Drag Inventory Item
-		html.find('.item-categorized').each((i,element) => {
-			element.addEventListener("drop",this._onItemDrop.bind(this));
-			element.addEventListener("dragstart",this._onItemDrag.bind(this));
-		});
 
 		// Delete Effect
 		html.find('.effect-delete').click((ev) => {
@@ -231,52 +226,43 @@ export class PTUGen8CharacterSheet extends ActorSheet {
 		})
 	}
 
-	async _onItemDrag(event){
-		//Letting the drop event know our target item ID
-		await event.dataTransfer.setData("text/plain",event.target.dataset.itemId);
-	}
+	async _onDrop(event){
+		const dataTransfer = JSON.parse(event.dataTransfer.getData('text/plain'));
 
-	async _onItemDrop(event){
-		debug("Drop Category",event.target.dataset?.category);
-		debug("Drop Event",event);
-
-		const itemId = event.dataTransfer.getData("text");
+		const itemData = dataTransfer.data;
 		const category = event.target.dataset.category;
 		const actor = this.actor;
+		let handled = false;
+		let item = undefined;
 
-		// Grab item from character sheet
-		let item = actor.items.get(itemId);
+		if(!itemData) { 
+			item = (await super._onDrop(event))[0];
+			if(!item) {
+				error("Item Drop data is undefined.", event)
+				return;
+			}
+			handled = true;
+
+			const oldItem = actor.items.getName(item.data.name);
+			console.log(oldItem, item);
+			if(oldItem.id != item.id && oldItem.data.data.quantity) {
+				const data = duplicate(oldItem.data);
+				data.data.quantity++;
+				await this.actor.deleteEmbeddedDocuments("Item", [item.id]);
+				return await this.actor.updateEmbeddedDocuments("Item", [data]);
+			}
+		}
+		else item = actor.items.get(itemData._id);
 		
-		// If item exists check if category changed
-		if(item) {
-			const itemData = duplicate(item.data);
-			if(itemData.data.category == category)			
-				// Handle item sorting within the same Actor
-				return this._onSortItem(event, itemData);
-		}
-		// If Item doesn't exist yet wait for item creation to resolve, then try again.
-		else {
-			const itemId = await new Promise((resolve, reject) => {
-				const hookId = Hooks.on("createOwnedItem", function(hookActor, hookItem, options, sender){
-					if(actor.id == hookActor.id && hookItem.type == "item") {
-						Hooks.off("createOwnedItem", hookId)
-						resolve(hookItem.id);
-					}
-				})
-				// if after 1.5 sec there is no success, abort.
-				setTimeout(() => {
-					Hooks.off("createOwnedItem", hookId);
-					debug("Did not catch item drop.")
-					reject
-				}, 1500);
-			});
-			if(!itemId) return;
-			item = actor.items.get(itemId);
-		}
+		if(item.data.type != 'item' || item.data.data.category == category)
+			return this._onSortItem(event, item.data);
 
-		item.data.data.category=category;
-		await this.actor.updateOwnedItem(item.data);
-		log(`Moved ${item.name} to ${category} category`);
+		item = await item.update({'data.category':category});
+		
+		log(`Moved ${item.data.name} to ${category} category`);
+		
+		await this._onSortItem(event, item.data);
+		return handled ? actor.items.get(item.id) : await super._onDrop(event);
 	}
 
 	_onDragItemStart(event) {}

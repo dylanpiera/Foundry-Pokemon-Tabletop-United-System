@@ -84,11 +84,11 @@ async function executeApplyDamageToTargets(targets, data, damage, {isFlat, isRes
 
             const effectiveness = target.actor.data.data.effectiveness?.All[data.type] ?? 1;
 
-			actualDamage = Math.max(1, Math.floor((damage - parseInt(defense) - dr - parseInt(damageReduction)) * (effectiveness - (isResist ? (effectiveness > 1 ? 0.5 : effectiveness*0.5) : 0))))
+			actualDamage = Math.max((effectiveness === 0 ? 0 : 1), Math.floor((damage - parseInt(defense) - dr - parseInt(damageReduction)) * (effectiveness - (isResist ? (effectiveness > 1 ? 0.5 : effectiveness*0.5) : 0))))
 		}
 
         log(`Dealing ${actualDamage} damage to ${target.name}`); 
-        appliedDamage[target.data.actorLink ? target.actor.id : target.data.id] = {name: target.actor.data.name, damage: actualDamage, type: target.data.actorLink ? "actor" : "token", old: {value: duplicate(target.actor.data.data.health.value), temp: duplicate(target.actor.data.data.tempHp.value)}};
+        appliedDamage[target.data.actorLink ? target.actor.id : target.data._id] = {name: target.actor.data.name, damage: actualDamage, type: target.data.actorLink ? "actor" : "token", old: {value: duplicate(target.actor.data.data.health.value), temp: duplicate(target.actor.data.data.tempHp.value)}};
         await target.actor.modifyTokenAttribute("health", actualDamage*-1, true, true);
     }
     await displayAppliedDamageToTargets({data: appliedDamage, move: data.moveName});
