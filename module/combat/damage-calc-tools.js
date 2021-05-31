@@ -84,7 +84,7 @@ async function executeApplyDamageToTargets(targets, data, damage, {isFlat, isRes
 
             const effectiveness = target.actor.data.data.effectiveness?.All[data.type] ?? 1;
 
-			actualDamage = Math.max(1, Math.floor((damage - parseInt(defense) - dr - parseInt(damageReduction)) * (effectiveness - (isResist ? (effectiveness > 1 ? 0.5 : effectiveness*0.5) : 0))))
+			actualDamage = Math.max((effectiveness === 0 ? 0 : 1), Math.floor((damage - parseInt(defense) - dr - parseInt(damageReduction)) * (effectiveness - (isResist ? (effectiveness > 1 ? 0.5 : effectiveness*0.5) : 0))))
 		}
 
         log(`Dealing ${actualDamage} damage to ${target.name}`); 
