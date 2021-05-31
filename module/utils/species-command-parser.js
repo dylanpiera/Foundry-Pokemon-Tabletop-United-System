@@ -35,7 +35,7 @@ export async function CreateMonParser(input, andCreate = false) {
         let table = game.tables.getName(commands["random"]);
         if(!table) {ui.notifications.notify("Couldn't find a table with name " + commands["random"], "error");return;}
         
-        let mons = table.data.results.map(x => {return {mon: x.text, weight: x.weight};}).flatMap(x => {
+        let mons = table.data.results.map(x => {return {mon: x.data.text, weight: x.data.weight};}).flatMap(x => {
             let mon = game.ptu.GetSpeciesData(x.mon);
             if(!mon) return;
             let results = [];
