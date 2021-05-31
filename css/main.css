@@ -665,7 +665,7 @@ span.readable {
   list-style: none;
   margin: 0;
   padding: 0 5px;
-  overflow-y: auto;
+  overflow-y: hidden;
 }
 .actor .inventory-list .item-summary {
   padding-top: 0 !important;
