@@ -366,7 +366,7 @@ Hooks.once("setup", function() {
 
         const uuids = objects.reduce((uuids, o) => {
           if(o.data.locked || o.document.canUserModify(game.user, "delete")) return uuids;
-          if(!o.document.parent.canUserModify(game.user, "delete")) return uuids;
+          if(!o.document.actor.canUserModify(game.user, "delete")) return uuids;
           uuids.push(o.uuid);
           return uuids;
         }, [])

@@ -25,10 +25,12 @@ export default class Api {
                 const documents = [];
                 for(const uuid of data.content.uuids) {
                     const document = await ref._documentFromUuid(uuid);
-                    if(document) documents.push(document);
+                    if(!document) continue;
+                    if(document.data.locked || !document.actor.canUserModify(game.users.get(data.user), "delete")) continue;
+                    documents.push(document);
                 }
 
-                if(data.user != game.user) {
+                if(data.user != game.user.id) {
                     if(!game.settings.get("ptu", "canPlayersDeleteTokens")) return ref._returnBridge({result: new ApiError({message: "setting: `ptu.canPlayersDeleteTokens` has been turned off.", type: 403})}, data)
                 }
 
