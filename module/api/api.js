@@ -131,6 +131,21 @@ export default class Api {
                 await displayAppliedDamageToTargets({data: retVal.appliedDamage, move: label});
 
                 ref._returnBridge(retVal, data);
+            },
+            async toggleEffect(data) {
+                if(!ref._isMainGM()) return;
+                
+                const {uuids, effect} = data.content;
+                const documents = [];
+                for(const uuid of uuids) {
+                    const document = await ref._documentFromUuid(uuid);
+                    if(!document || document.data.locked) continue;
+                    documents.push(document);
+                }
+
+                const retVal = {result: []}; 
+                for(const document of documents) retVal.result.push(await document.layer.get(document.id).toggleEffect(effect));
+                ref._returnBridge(retVal, data);
             }
         }
     }
@@ -228,7 +243,7 @@ export default class Api {
      * @returns {ActorData[]}
      */
     async applyDamage(object, damage, damageType, damageCategory, options) {
-        if(!object) return;
+        if(!object || !damage) return;
         const objects = (object instanceof Array) ? object : [object];
         const tokens = [];
 
@@ -240,8 +255,55 @@ export default class Api {
                 tokens.push(await this._documentFromUuid(o));      
         }
 
+        if(tokens.length === 0) {
+            ui.notifications.notify(`${object?.uuid ?? object} has no tokens linked to it`, 'error');
+            return false;
+        }
+
         const content = {uuids: tokens.map(t => t.uuid), damage, damageType, damageCategory, options};
         return this._handlerBridge(content, "applyDamage");
+    }
+
+    /**
+     * 
+     * @param {*} object - Instance of or array of either Token, TokenDocument or UUID string. 
+     * @param {*} effect - Instance of Effect or effect id from CONFIG.statusEffects
+     * @param {*} options 
+     */
+    async toggleEffect(object, effect, options) {
+        if(!object || !effect) return;
+
+        let actualEffect;
+        if(typeof effect === "object") 
+            actualEffect = effect;
+        else if(typeof effect === "string")
+            actualEffect = CONFIG.statusEffects.find(x => x.id == effect);
+
+        if(!actualEffect) {
+            ui.notifications.notify(`Could not find effect with details: ${effect}`, 'error');
+            return false;
+        }
+
+        const objects = (object instanceof Array) ? object : [object];
+        const tokens = [];
+        for(const o of objects) {
+            if(o instanceof game.ptu.PTUActor) 
+                tokens.push(...(await o.getActiveTokens()));
+
+            if(o instanceof TokenDocument || o instanceof Token)
+                tokens.push(o);
+
+            if(typeof o === "string")
+                tokens.push(await this._documentFromUuid(o));      
+        }
+
+        if(tokens.length === 0) {
+            ui.notifications.notify(`${object?.uuid ?? object} has no tokens linked to it`, 'error');
+            return false;
+        }
+
+        const content = {uuids: tokens.map(t => t.uuid), effect: actualEffect, options};
+        return this._handlerBridge(content, "toggleEffect");
     }
 
     /** API Methods */
