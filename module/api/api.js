@@ -146,6 +146,38 @@ export default class Api {
                 const retVal = {result: []}; 
                 for(const document of documents) retVal.result.push(await document.layer.get(document.id).toggleEffect(effect));
                 ref._returnBridge(retVal, data);
+            },
+            async addActiveEffect(data) {
+                if(!ref._isMainGM()) return;
+                
+                const {uuids, effects} = data.content;
+                const documents = [];
+                for(const uuid of uuids) {
+                    const document = await ref._documentFromUuid(uuid);
+                    if(!document || document.data.locked) continue;
+                    documents.push(document);
+                }
+
+                const retVal = {result: []}; 
+                for(const document of documents) 
+                    retVal.result.push(await document.actor.createEmbeddedDocuments("ActiveEffect", effects));
+                ref._returnBridge(retVal, data);
+            },
+            async removeActiveEffect(data) {
+                if(!ref._isMainGM()) return;
+                
+                const {uuids, effectIds} = data.content;
+                const documents = [];
+                for(const uuid of uuids) {
+                    const document = await ref._documentFromUuid(uuid);
+                    if(!document || document.data.locked) continue;
+                    documents.push(document);
+                }
+
+                const retVal = {result: []}; 
+                for(const document of documents) 
+                    retVal.result.push(await document.actor.deleteEmbeddedDocuments("ActiveEffect", effectIds));
+                ref._returnBridge(retVal, data);
             }
         }
     }
@@ -266,7 +298,7 @@ export default class Api {
 
     /**
      * 
-     * @param {*} object - Instance of or array of either Token, TokenDocument or UUID string. 
+     * @param {*} object - Instance of or array of either PTUActor, Token, TokenDocument or UUID string.
      * @param {*} effect - Instance of Effect or effect id from CONFIG.statusEffects
      * @param {*} options 
      */
@@ -304,6 +336,78 @@ export default class Api {
 
         const content = {uuids: tokens.map(t => t.uuid), effect: actualEffect, options};
         return this._handlerBridge(content, "toggleEffect");
+    }
+
+    /**
+     * 
+     * @param {*} object - Instance of or array of either PTUActor, Token, TokenDocument or UUID string. 
+     * @param {*} effects - Instance of or array of EffectData.
+     * @param {*} options 
+     */
+    async addActiveEffects(object, effects, options) {
+        if(!object || !effects) return;
+
+        const actualEffects = [];
+        for(const e of (effects instanceof Array) ? effects : [effects]) {
+            if(typeof e === 'object')
+                actualEffects.push(e);
+        }
+
+        const tokens = [];
+        for(const o of (object instanceof Array) ? object : [object]) {
+            if(o instanceof game.ptu.PTUActor) 
+                tokens.push(...(await o.getActiveTokens()));
+
+            if(o instanceof TokenDocument || o instanceof Token)
+                tokens.push(o);
+
+            if(typeof o === "string")
+                tokens.push(await this._documentFromUuid(o));      
+        }
+        if(tokens.length === 0) {
+            ui.notifications.notify(`${object?.uuid ?? object} has no tokens linked to it`, 'error');
+            return false;
+        }
+
+        const content = {uuids: tokens.map(t => t.uuid), effects: actualEffects, options};
+        return this._handlerBridge(content, "addActiveEffect");
+    }
+
+    /**
+     * 
+     * @param {*} object - Instance of or array of either PTUActor, Token, TokenDocument or UUID string. 
+     * @param {*} effects - Instance of or array of ActiveEffect, ActiveEffectData or ID string.
+     * @param {*} options 
+     */
+     async removeActiveEffects(object, effects, options) {
+        if(!object || !effects) return;
+
+        const effectIds = [];
+        for(const e of (effects instanceof Array) ? effects : [effects]) {
+            if(typeof e === 'object')
+                effectIds.push(e.id ? e.id : e._id);
+            if(typeof e === 'string')
+                effectIds.push(e);
+        }
+
+        const tokens = [];
+        for(const o of (object instanceof Array) ? object : [object]) {
+            if(o instanceof game.ptu.PTUActor) 
+                tokens.push(...(await o.getActiveTokens()));
+
+            if(o instanceof TokenDocument || o instanceof Token)
+                tokens.push(o);
+
+            if(typeof o === "string")
+                tokens.push(await this._documentFromUuid(o));      
+        }
+        if(tokens.length === 0) {
+            ui.notifications.notify(`${object?.uuid ?? object} has no tokens linked to it`, 'error');
+            return false;
+        }
+
+        const content = {uuids: tokens.map(t => t.uuid), effectIds, options};
+        return this._handlerBridge(content, "removeActiveEffect");
     }
 
     /** API Methods */
