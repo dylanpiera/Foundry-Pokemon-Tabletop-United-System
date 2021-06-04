@@ -53,7 +53,7 @@ export let log = (...args) => console.log("FVTT PTU | ", ...args);
 export let warn = (...args) => console.warn("FVTT PTU | ", ...args);
 export let error = (...args) => console.error("FVTT PTU | ", ...args)
 
-export const LATEST_VERSION = "1.4-Beta-5";
+export const LATEST_VERSION = "1.4-Beta-6";
 
 /* -------------------------------------------- */
 /*  Foundry VTT Initialization                  */
@@ -345,11 +345,6 @@ Hooks.once("setup", function() {
 
     // Digit keys are coerced to their number
     if ( /^Digit/.test(event.code) ) return event.code[5];
-
-    // Enforce that numpad keys are differentiated from digits
-    if ( (event.location === 3) && ((event.code in this.moveKeys) || (event.code in this.zoomKeys)) ) {
-      return event.code;
-    }
 
     // Otherwise always use the character key
     return event.key;

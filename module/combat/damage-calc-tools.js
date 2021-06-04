@@ -94,7 +94,7 @@ async function executeApplyDamageToTargets(targets, data, damage, {isFlat, isRes
     await displayAppliedDamageToTargets({data: appliedDamage, move: data.moveName});
 }
 
-async function displayAppliedDamageToTargets(appliedDamage) {
+export async function displayAppliedDamageToTargets(appliedDamage) {
     let messageData = {
         user: game.user.id,
         content: await renderTemplate("/systems/ptu/templates/chat/automation/applied-damage.hbs", appliedDamage),

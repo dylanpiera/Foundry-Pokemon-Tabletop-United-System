@@ -47,7 +47,7 @@ Hooks.on("deleteCombat", async function(combat, options, id)  {
 Hooks.on("createCombat", initializeNewPTUCombat);
 
 function initializeNewPTUCombat(newCombat, options, sender) {
-    if(!game.ptu.api.isMainGM() || game.ptu.disableCombatAutomation) return;
+    if(!game.ptu.api._isMainGM() || game.ptu.disableCombatAutomation) return;
 
     const combat = game.combats.get(newCombat.id);
     if(!combat) {

@@ -1,6 +1,15 @@
 # Welcome to the Beta!
 Hey there! You are on the Beta Branch. If you ever have any feedback please do share with us over on [Github](https://github.com/dylanpiera/Foundry-Pokemon-Tabletop-United-System/issues) or [Discord](https://discord.gg/fE3w59q)
 
+## 1.4-beta-6 - GM API
+- Added following API Methods
+  - applyDamage
+  - toggleEffect
+  - addActiveEffect
+  - removeActiveEffect
+  - tokenUpdate
+- Fixed console being spammed with errors when clicking random buttons on your keyboard
+
 ## 1.4-beta-5 - GM API - Transfer Ownership
 - Added TransferOwnership command to GM API
   - See Code for Documentation
