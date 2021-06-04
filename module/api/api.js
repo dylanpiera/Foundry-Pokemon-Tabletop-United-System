@@ -1,4 +1,5 @@
-import {debug} from '../ptu.js';
+import { displayAppliedDamageToTargets } from '../combat/damage-calc-tools.js';
+import {debug, log} from '../ptu.js';
 import { dataFromPath } from '../utils/generic-helpers.js';
 
 class ApiError {
@@ -93,6 +94,43 @@ export default class Api {
                 }
 
                 return ref._returnBridge({result : await document.update(newData)}, data);
+            },
+            async applyDamage(data) {
+                if(!ref._isMainGM()) return;
+                
+                const {damageType, damageCategory, uuids} = data.content;
+                const {label = "", isFlat = false, isHalf = false, isResist = false, damageReduction = 0} = data.content.options;
+                const damage = isHalf ? Math.max(1, Math.floor(data.content.damage / 2)) : data.content.damage;
+                
+                const documents = [];
+                for(const uuid of uuids) {
+                    const document = await ref._documentFromUuid(uuid);
+                    if(!document || document.data.locked) continue;
+                    documents.push(document);
+                }
+
+                const retVal = {result: [], appliedDamage: {}};
+
+                for(const document of documents) {
+                    let actualDamage;
+                    if(isFlat) {
+                        actualDamage = damage;
+                    }
+                    else {
+                        const defense = damageCategory == "Special" ? document.actor.data.data.stats.spdef.total : document.actor.data.data.stats.def.total;
+                        const dr = parseInt(damageCategory == "Special" ? (document.actor.data.data.modifiers?.damageReduction?.special?.total ?? 0) : (document.actor.data.data.modifiers?.damageReduction?.physical?.total ?? 0));
+
+                        const effectiveness = document.actor.data.data.effectiveness?.All[damageType] ?? 1;
+
+                        actualDamage = Math.max((effectiveness === 0 ? 0 : 1), Math.floor((damage - parseInt(defense) - dr - parseInt(damageReduction)) * (effectiveness - (isResist ? (effectiveness > 1 ? 0.5 : effectiveness*0.5) : 0))))
+                    }
+                    log(`Dealing ${actualDamage} damage to ${document.name}`); 
+                    retVal.appliedDamage[document.data.actorLink ? document.actor.id : document.data._id] = {name: document.actor.data.name, damage: actualDamage, type: document.data.actorLink ? "actor" : "token", old: {value: duplicate(document.actor.data.data.health.value), temp: duplicate(document.actor.data.data.tempHp.value)}};            
+                    retVal.result.push(await document.actor.modifyTokenAttribute("health", actualDamage*-1, true, true));
+                }
+                await displayAppliedDamageToTargets({data: retVal.appliedDamage, move: label});
+
+                ref._returnBridge(retVal, data);
             }
         }
     }
@@ -149,7 +187,7 @@ export default class Api {
     /**
      * @param {*} object - Instance of a PTUActor, Token, TokenDocument or UUID string. 
      * @param {Object} options - See subproperties:
-     * @param {String} options.pokeball - Pokéball which the Pokémon was captured with.Object
+     * @param {String} options.pokeball - Pokéball which the Pokémon was captured with.
      * @param {Number} options.timeout - DM Query Timeout duration, default 15 sec
      * @param {Object} options.permission - Possible Permission overwrite
      * 
@@ -173,6 +211,37 @@ export default class Api {
 
         const content = {uuid: actor.uuid, options};
         return this._handlerBridge(content, "transferOwnership",options?.timeout ?? 15000);
+    }
+
+    /**
+     * @param {*} object - Instance of or array of either Token, TokenDocument or UUID string. 
+     * @param {Number} damage - Amount of damage to take, if you want to heal, apply negative damage.
+     * @param {String} damageType - The elemental type of the damage
+     * @param {String} damageCategory - Damage Category: 'Special' will use special defense, otherwise defense is used.
+     * @param {Object} options - see subproperties:
+     * @param {String} options.label - Label to display in 'undo-damage' text message
+     * @param {Boolean} options.isFlat - Whether to apply this as flat damage (ignore resistance, defenses & DR) 
+     * @param {Boolean} options.isHalf - Whether to half the incoming damage 
+     * @param {Boolean} options.isResist - Whether the damage should be resisted one step further
+     * @param {Number} options.damageReduction - Flat damage reduction applied to this damage
+     * 
+     * @returns {ActorData[]}
+     */
+    async applyDamage(object, damage, damageType, damageCategory, options) {
+        if(!object) return;
+        const objects = (object instanceof Array) ? object : [object];
+        const tokens = [];
+
+        for(const o of objects) {
+            if(o instanceof TokenDocument || o instanceof Token)
+                tokens.push(o);
+
+            if(typeof o === "string")
+                tokens.push(await this._documentFromUuid(o));      
+        }
+
+        const content = {uuids: tokens.map(t => t.uuid), damage, damageType, damageCategory, options};
+        return this._handlerBridge(content, "applyDamage");
     }
 
     /** API Methods */
