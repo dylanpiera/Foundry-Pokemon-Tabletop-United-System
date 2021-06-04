@@ -178,7 +178,38 @@ export default class Api {
                 for(const document of documents) 
                     retVal.result.push(await document.actor.deleteEmbeddedDocuments("ActiveEffect", effectIds));
                 ref._returnBridge(retVal, data);
-            }
+            },
+            async tokensUpdate(data) {
+                if(!ref._isMainGM()) return;
+
+                const {scale, x, y, tint, height, width, img, brightSight, dimSight, brightLight, dimLight, lightColor, lightAnimation} = data.content.options;
+                
+                const documents = [];
+                for(const uuid of data.content.uuids) {
+                    const document = await ref._documentFromUuid(uuid);
+                    if(!document || document.data.locked) continue;
+                    documents.push(document);
+                }
+
+                const newData = {};
+                if(scale) newData["scale"] = scale;
+                if(x) newData["x"] = x;
+                if(y) newData["y"] = y;
+                if(tint) newData["tint"] = tint;
+                if(height) newData["height"] = height;
+                if(width) newData["width"] = width;
+                if(img) newData["img"] = img;
+                if(brightSight) newData["brightSight"] = brightSight;
+                if(dimSight) newData["dimSight"] = dimSight;
+                if(brightLight) newData["brightLight"] = brightLight;
+                if(dimLight) newData["dimLight"] = dimLight;
+                if(lightColor) newData["lightColor"] = lightColor;
+                if(lightAnimation) newData["lightAnimation"] = lightAnimation;
+
+                const retVal = {result: []}; 
+                for(const document of documents) retVal.result.push(await document.update(newData));
+                ref._returnBridge(retVal, data);
+            },
         }
     }
 
@@ -297,7 +328,6 @@ export default class Api {
     }
 
     /**
-     * 
      * @param {*} object - Instance of or array of either PTUActor, Token, TokenDocument or UUID string.
      * @param {*} effect - Instance of Effect or effect id from CONFIG.statusEffects
      * @param {*} options 
@@ -339,7 +369,6 @@ export default class Api {
     }
 
     /**
-     * 
      * @param {*} object - Instance of or array of either PTUActor, Token, TokenDocument or UUID string. 
      * @param {*} effects - Instance of or array of EffectData.
      * @param {*} options 
@@ -374,12 +403,11 @@ export default class Api {
     }
 
     /**
-     * 
      * @param {*} object - Instance of or array of either PTUActor, Token, TokenDocument or UUID string. 
      * @param {*} effects - Instance of or array of ActiveEffect, ActiveEffectData or ID string.
      * @param {*} options 
      */
-     async removeActiveEffects(object, effects, options) {
+    async removeActiveEffects(object, effects, options) {
         if(!object || !effects) return;
 
         const effectIds = [];
@@ -409,6 +437,37 @@ export default class Api {
         const content = {uuids: tokens.map(t => t.uuid), effectIds, options};
         return this._handlerBridge(content, "removeActiveEffect");
     }
+
+    /**
+     * @param {*} object - Instance of or array of either PTUActor, Token, TokenDocument or UUID string. Passing in an Actor will delete all of its tokens in any scene.
+     * @param {*} options - Data to update should be included on the options object. Only certain data will be updated.
+     * @returns 
+     */
+     async tokensUpdate(object, options) {
+        if(!object) return;
+        const objects = (object instanceof Array) ? object : [object];
+        const tokens = [];
+
+        for(const o of objects) {
+            if(o instanceof game.ptu.PTUActor) 
+                tokens.push(...(await o.getActiveTokens()));
+
+            if(o instanceof TokenDocument || o instanceof Token)
+                tokens.push(o);
+
+            if(typeof o === "string")
+                tokens.push(await this._documentFromUuid(o));      
+        }
+
+        if(tokens.length === 0) {
+            ui.notifications.notify(`${object?.uuid ?? object} has no tokens linked to it`, 'error');
+            return false;
+        }
+
+        const content = {uuids: tokens.map(t => t.uuid), options};
+        return this._handlerBridge(content, "tokensUpdate");
+    }
+
 
     /** API Methods */
     _isMainGM(){
