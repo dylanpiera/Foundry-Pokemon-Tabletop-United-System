@@ -1,6 +1,19 @@
 # Welcome to the Beta!
 Hey there! You are on the Beta Branch. If you ever have any feedback please do share with us over on [Github](https://github.com/dylanpiera/Foundry-Pokemon-Tabletop-United-System/issues) or [Discord](https://discord.gg/fE3w59q)
 
+## 1.4-beta-4 - Execute as GM API!
+Added a big new feature for developers working with this system, the 'Execute as GM' API. Which will allow developers to have users bypass Foundry's permission system by sending requests over a socket.
+
+### New Features
+- Players can now Delete Tokens in a Scene.
+  - This can be turned off by a GM in the System Settings screen.
+
+### Bugfixes
+- Fixed Combat hooks not using the proper arguments.
+- Fixed the Custom Combat Config not showing up.
+- Fixed League Battle initiative not applying properly.
+- Fixed having combatants their initiative tiebreaker being set to .02 instead of the .20 it was, whenever their base init value was updated.
+
 ## 1.4-beta-3 - The Bugfix Update
 Fixed all bugs that were reported for Beta 2 and added a couple new features to Inventory Management.
 
