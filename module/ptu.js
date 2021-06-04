@@ -338,7 +338,42 @@ export function PrepareMoveData(actorData, move) {
  * This function runs after game data has been requested and loaded from the servers, so entities exist
  */
 Hooks.once("setup", function() {
-  
+  const getKey = (event) => {
+
+    // Space bar gets a code because its key is misleading
+    if ( event.code === "Space" ) return event.code;
+
+    // Digit keys are coerced to their number
+    if ( /^Digit/.test(event.code) ) return event.code[5];
+
+    // Enforce that numpad keys are differentiated from digits
+    if ( (event.location === 3) && ((event.code in this.moveKeys) || (event.code in this.zoomKeys)) ) {
+      return event.code;
+    }
+
+    // Otherwise always use the character key
+    return event.key;
+  }
+
+  window.addEventListener('keydown', (event) => {
+    const key = getKey(event);
+    if(["Delete", "Backspace"].includes(key)) {
+      if ( canvas.ready && ( canvas.activeLayer instanceof PlaceablesLayer ) ) {
+        const layer = canvas.activeLayer;
+
+        const objects = layer.options.controllableObjects ? layer.controlled : (layer._hover ? [layer._hover] : []);
+        if ( !objects.length ) return;
+
+        const uuids = objects.reduce((uuids, o) => {
+          if(o.data.locked || o.document.canUserModify(game.user, "delete")) return uuids;
+          if(!o.document.parent.canUserModify(game.user, "delete")) return uuids;
+          uuids.push(o.uuid);
+          return uuids;
+        }, [])
+        if ( uuids.length ) return game.ptu.api.tokensDelete(uuids);
+      }
+    }
+  });
 });
 
 /**

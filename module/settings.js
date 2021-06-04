@@ -43,6 +43,16 @@ export function LoadSystemSettings() {
         category: "rules"
     });
 
+    game.settings.register("ptu", "canPlayersDeleteTokens", {
+        name: "Can Players Delete Tokens?",
+        hint: "Are players allowed to delete tokens they own from a scene?",
+        scope: "world",
+        config: true,
+        type: Boolean,
+        default: true,
+        category: "general"
+    });
+
     game.settings.register("ptu", "nonOwnerCanSeeTabs", {
         name: "Non-owners can see Sheet Tabs",
         hint: "Allow players with Limited/Observer permissions to browse tabs in a Pokémon/Trainer's full sheet",
