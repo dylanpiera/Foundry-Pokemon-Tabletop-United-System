@@ -650,13 +650,16 @@ export async function PlayPokemonCry(species)
 Hooks.on("updateInitiative", function(actor) {
   if(!game.combats?.active) return;
 
-  let c = game.combats.active.combatants.find(x => x.actor?.id == actor.id)
-  if(!c) return;
-  let init = actor.data.data.initiative.value;
-  let tieBreaker = Number((c.initiative+"").split(".")[1]) * 0.01;
-  if(init+tieBreaker != c.initiative) {
-    game.combats.active.setInitiative(c.id, init >= 0 ? init+tieBreaker : (Math.abs(init)+tieBreaker)*-1);
-  }
+  const combatant = game.combats.active.combatants.find(x => x.actor?.id == actor.id)
+  if(!combatant) return;
 
+  const decimal = Number((combatant.initiative - Math.trunc(combatant.initiative).toFixed(2)));
+  if(decimal == 0) return;
+  
+  const init = actor.data.data.initiative.value;
+  
+  if(init+decimal != combatant.initiative) {
+    game.combats.active.setInitiative(combatant.id, init >= 0 ? init+decimal : (Math.abs(init)+decimal)*-1);
+  }
   return true;
 }) 

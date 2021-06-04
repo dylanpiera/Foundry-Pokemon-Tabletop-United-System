@@ -123,16 +123,16 @@ export default class PTUCombat {
     }
 
     /** Hooks */
-    _onCreateCombatant(combat, token, options, sender) {
-        if(combat.id != this.combat.id) return;
+    _onCreateCombatant(combatant, options, sender) {
+        if(combatant.parent.id != this.combat.id) return;
         if(!this.combat.started) return;
         
         // Handle League Battle Init
-        this._updateLeagueInitiative(token);
+        this._updateLeagueInitiative(combatant.token);
     }
 
-    _onUpdateCombatant(combat, token, changes, options, sender) {
-        if(combat.id != this.combat.id) return;
+    _onUpdateCombatant(combatant, changes, options, sender) {
+        if(combatant.parent.id != this.combat.id) return;
         
         if(this.combat.started) {
             // Logic for when battle is started
@@ -143,11 +143,11 @@ export default class PTUCombat {
         // Logic that runs regardless of whether battle has started or not
         
         // Handle League Battle Init
-        this._updateLeagueInitiative(token);
+        this._updateLeagueInitiative(combatant.token);
     }
 
     _onRenderCombatTracker(tracker, htmlElement, sender) {
-        if(tracker.combat?.id != this.combat.id) return;
+        if(tracker.viewed?.id != this.combat.id) return;
         
         const settingsButton = $(htmlElement).children("header").children("nav").children('[data-control="trackerSettings"]');
         settingsButton.off();
@@ -184,7 +184,7 @@ export default class PTUCombat {
         // if different combat is updated
         if(combat.id != this.combat.id) return;
         // if this combatant doesn't have special PTU Flags, it can be ignored.
-        if(!combatant.actor.data.flags.ptu) return;
+        if(!combatant?.actor?.data?.flags?.ptu) return;
         // Only worry about effects if the combat has started
         if(!combat.started) return;
 
@@ -370,13 +370,12 @@ export default class PTUCombat {
         if(!game.settings.get("ptu", "leagueBattleInvertTrainerInitiative")) return;
         if(!this.flags?.ptu?.leagueBattle) return;
         
-        const combatant = this.combat.getCombatantByToken(token.tokenId);
+        const combatant = this.combat.getCombatantByToken(token.id);
         if(!combatant) return;
         if(combatant.actor.data.type != "character") return;
 
-        let decimal = Number((combatant.initiative - Math.trunc(combatant.initiative).toFixed(2)));
+        const decimal = Number((combatant.initiative - Math.trunc(combatant.initiative).toFixed(2)));
         if(decimal == 0) return;
-        debug("test")
         await this.combat.setInitiative(combatant.id, 1000 - combatant.actor.data.data.initiative.value + decimal);
     }
 
