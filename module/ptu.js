@@ -53,7 +53,7 @@ export let log = (...args) => console.log("FVTT PTU | ", ...args);
 export let warn = (...args) => console.warn("FVTT PTU | ", ...args);
 export let error = (...args) => console.error("FVTT PTU | ", ...args)
 
-export const LATEST_VERSION = "1.4-Beta-4";
+export const LATEST_VERSION = "1.4-Beta-5";
 
 /* -------------------------------------------- */
 /*  Foundry VTT Initialization                  */
@@ -366,7 +366,7 @@ Hooks.once("setup", function() {
 
         const uuids = objects.reduce((uuids, o) => {
           if(o.data.locked || o.document.canUserModify(game.user, "delete")) return uuids;
-          if(!o.document.parent.canUserModify(game.user, "delete")) return uuids;
+          if(!o.document.actor.canUserModify(game.user, "delete")) return uuids;
           uuids.push(o.uuid);
           return uuids;
         }, [])

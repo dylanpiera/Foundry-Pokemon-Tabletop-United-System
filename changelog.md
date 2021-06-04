@@ -1,6 +1,11 @@
 # Welcome to the Beta!
 Hey there! You are on the Beta Branch. If you ever have any feedback please do share with us over on [Github](https://github.com/dylanpiera/Foundry-Pokemon-Tabletop-United-System/issues) or [Discord](https://discord.gg/fE3w59q)
 
+## 1.4-beta-5 - GM API - Transfer Ownership
+- Added TransferOwnership command to GM API
+  - See Code for Documentation
+- Added permission check to deleteTokens in case it's directly invoked instead of through 'delete' or 'backspace' key.
+
 ## 1.4-beta-4 - Execute as GM API!
 Added a big new feature for developers working with this system, the 'Execute as GM' API. Which will allow developers to have users bypass Foundry's permission system by sending requests over a socket.
 
