@@ -1,4 +1,5 @@
 import {debug} from '../ptu.js';
+import { dataFromPath } from '../utils/generic-helpers.js';
 
 class ApiError {
     constructor({message, type}) {
@@ -37,6 +38,61 @@ export default class Api {
                 const retVal = {result: []}; 
                 for(const document of documents) retVal.result.push(await document.delete());
                 ref._returnBridge(retVal, data);
+            },
+            async transferOwnership(data) {
+                if(!ref._isMainGM()) return;
+
+                const sender = game.users.get(data.user);
+                const pc = sender.character;
+                const document = await ref._documentFromUuid(data.content.uuid);
+                if(!pc) return ref._returnBridge({result: new ApiError({message: "Player does not have a Character set to transfer ownership too", type: 400})},data);
+                if(!document) return ref._returnBridge({result: new ApiError({message: "Referenced document doesn't exist.", type: 400})},data);            
+
+                let reason;
+                switch(data.content.reason) {
+                    case "capture": reason = "They claim they succeeded a capture roll!"; break;
+                    default: reason = ""; break;
+                }
+
+                //Maybe skip check with a setting?
+                const allowed = await new Promise((resolve, reject) => {
+                    const dialog = new Dialog({
+                        title: "Ownership Transfer",
+                        content: `<p>It seems that ${pc.name} wishes to take control of ${document.name}.<br>${reason}<br>Will you let them?</p>`,
+                        buttons: {
+                            yes: {
+                                icon: '<i class="fas fa-check"></i>',
+                                label: game.i18n.localize("Yes"),
+                                callback: _ => resolve(true)
+                            },
+                            no: {
+                                icon: '<i class="fas fa-times"></i>',
+                                label: game.i18n.localize("No"),
+                                callback: _ => resolve(false)
+                            }
+                        },
+                        default: "no",
+                        close: () => resolve(false),
+                    });
+                    dialog.render(true);
+                    setTimeout(_ => {
+                        dialog.close();
+                        resolve(false);
+                    }, (data.content.options?.timeout ?? 15000) - 1000)
+                }); 
+
+                if(!allowed) return ref._returnBridge({result: new ApiError({message: "DM Denied owner transfer", type: 403})}, data);
+
+                const newData = {
+                    folder: pc.folder.id,
+                    permission: mergeObject({
+                        [sender.id]: 3
+                    }, data.content.options?.permission ?? {}),
+                    "data.owner": pc.id,
+                    "data.pokeball": data.content.options?.pokeball ?? "Basic Ball"
+                }
+
+                return ref._returnBridge({result : await document.update(newData)}, data);
             }
         }
     }
@@ -82,12 +138,41 @@ export default class Api {
         
 
         if(tokens.length === 0) {
-            ui.notifications.notify(`${object?.uuid ?? ""} has no tokens linked to it`, 'error');
+            ui.notifications.notify(`${object?.uuid ?? object} has no tokens linked to it`, 'error');
             return false;
         }
 
         const content = {uuids: tokens.map(t => t.uuid), options};
         return this._handlerBridge(content, "tokensDelete");
+    }
+
+    /**
+     * @param {*} object - Instance of a PTUActor, Token, TokenDocument or UUID string. 
+     * @param {Object} options - See subproperties:
+     * @param {String} options.pokeball - Pokéball which the Pokémon was captured with.Object
+     * @param {Number} options.timeout - DM Query Timeout duration, default 15 sec
+     * @param {Object} options.permission - Possible Permission overwrite
+     * 
+     * @returns {ApiError | ActorData} - Will return data on success, otherwise will return ApiError.
+     * @ApiError {403} - DM Denied request or Timed Out
+     * @ApiError {400} - Badrequest, see message for details. 
+     */
+    async transferOwnership(object, options) {
+        let actor;
+        if(object instanceof game.ptu.PTUActor) 
+            actor = object;
+        else if(object instanceof TokenDocument || o instanceof Token)
+            actor = object.actor;
+        else if(typeof object === "string")
+            actor = await this._documentFromUuid(o);
+            
+        if(!actor) {
+            ui.notifications.notify(`Unable to find an actor associated with: ${object?.uuid ?? object}`, 'error');
+            return false;
+        }
+
+        const content = {uuid: actor.uuid, options};
+        return this._handlerBridge(content, "transferOwnership",options?.timeout ?? 15000);
     }
 
     /** API Methods */
@@ -127,7 +212,7 @@ export default class Api {
             setTimeout(() =>{
                 delete this._requestResolvers[randomID];
                 reject(new Error ("timed out waiting for GM execution"));
-            }, timeOutMs)
+            }, timeOutMs+100)
         })
     
         if (methodResponse.error)
