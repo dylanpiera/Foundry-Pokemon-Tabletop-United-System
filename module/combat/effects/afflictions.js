@@ -660,7 +660,7 @@ export const EffectFns = new Map([
             
             const DC = Math.max(0,20-((vortex_effect.data.flags.ptu?.roundsElapsed ?? 0)*6));
             
-            if(roll.total >= DC) {
+            if(roll.total >= DC || DC == 0) {
                 messageData = {
                     title: `${actor.name}'s<br>Vortex Save!`,
                     roll: roll,
