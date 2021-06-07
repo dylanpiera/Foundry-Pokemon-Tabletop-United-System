@@ -1,75 +1,37 @@
 # Welcome to the Beta!
 Hey there! You are on the Beta Branch. If you ever have any feedback please do share with us over on [Github](https://github.com/dylanpiera/Foundry-Pokemon-Tabletop-United-System/issues) or [Discord](https://discord.gg/fE3w59q)
 
-## 1.4-beta-6 - GM API
-- Added following API Methods
-  - applyDamage
-  - toggleEffect
-  - addActiveEffect
-  - removeActiveEffect
-  - tokenUpdate
-- Fixed console being spammed with errors when clicking random buttons on your keyboard
+## 1.5-Beta-0 - Release 1.4 Dev Branch
+Welcome on the 1.5 dev branch, this is the exact same codebase as the 1.4.0 release.
 
-## 1.4-beta-5 - GM API - Transfer Ownership
-- Added TransferOwnership command to GM API
-  - See Code for Documentation
-- Added permission check to deleteTokens in case it's directly invoked instead of through 'delete' or 'backspace' key.
+## 1.4.0 - Foundry 0.8 Release!
+Hey everyone! With the release of PTUVTT 1.4.0 we now have officially moved over to support Foundry 0.8.6!
 
-## 1.4-beta-4 - Execute as GM API!
-Added a big new feature for developers working with this system, the 'Execute as GM' API. Which will allow developers to have users bypass Foundry's permission system by sending requests over a socket.
+While this version won't be adding as many new features as many of the other major system updates, Foundry 0.8 support in and off itself can be considered a main feature, as it brings lots of new improvements both for Players, GMs as well as system & module developers like myself!
+
+Nonetheless, there are still some new features to the system, so please do read them down below!
 
 ### New Features
-- Players can now Delete Tokens in a Scene.
-  - This can be turned off by a GM in the System Settings screen.
-
-### Bugfixes
-- Fixed Combat hooks not using the proper arguments.
-- Fixed the Custom Combat Config not showing up.
-- Fixed League Battle initiative not applying properly.
-- Fixed having combatants their initiative tiebreaker being set to .02 instead of the .20 it was, whenever their base init value was updated.
-
-## 1.4-beta-3 - The Bugfix Update
-Fixed all bugs that were reported for Beta 2 and added a couple new features to Inventory Management.
-
-### New Features
-- Dragging in an item on a Player sheet will now first check if an item by the same name already exists, and if so increment it's quantity, instead of creating a new item entry.
-- Item Categories in Player sheets are now collapsible
-
-### Bugfixes
-- Removing Trainings/Orders now actually removes the Training/Order again.
-- Fixed a Pokémon being dealt damage from a move they're immune to dealing the PTU minimum damage of 1, to 0.
-- Fixed Undo Damage button not working for Token Actors.
-- Fixed /ptug command's 'random [habitat]' command not working.
-- Fixed Notes not displaying properly & closing on submit.
-- Fixed Items not willing to swap positions in Player sheets.
-- Fixed Toxic applying NaN damage on the 1st turn of Toxic.
-- Fixed Active Effects being applied through the Token Effect Overlay on Token Actors not working properly.
-  - Also resolved 'marking as defeated' on Token Actors not working properly.
-- Fixed Pokédex Drag & Drop Macro creation failing.
-- Fixed Indeedee data error which made them unable to be generated.
-
-## 1.4-beta-2
-- Added Front-end API to game.ptu globals
-
-## 1.4-Beta-1
-**This is the first Foundry 0.8.\* Beta. Please note that you can not run this beta on 0.7.9**
-- Updated to Foundry version 0.8.5
-
-### New Features
-- Effects applied to Embedded Documents can now apply effects to the Parent of those Embedded Documents
-f.e: Skill Improvement (Acrobatics) Poké Edge has an effect with change key: '../data.skills.acrobatics.value.mod'
-which means it will be applied to the parent of the Poké Edge.
+- Upgraded support for Foundry 0.8.6, and dropped support for foundry 0.7.*
+- Effects applied to Embedded Documents such as Items can now apply effects to their parent.
+f.e.: Skill Improvement (Acrobatics) Poké Edge has an effect with change key: '../data.skills.acrobatics.value.mod'
   - Both '../' and 'actor.' prefix allow manipulation of Parent
   - This works on any item type, and can be accessed through the 'effects' tab bar button
-- Added Localization to Character & Pokémon Sheets
-- Completely reworked the Charactermancer's back-end, and fixed some issues with the first.
-  - Nature can now also be selected by changing the up/down stats
-  - Stats properly update when level/species change
-- Added an option to disable the Evolution Tree viewer in the Charactermancer, so you can hide your custom species from your players.
+  - [**BREAKING**]: Please note that due to this all Skill Improvement edges will need to be re-added to an actor for the change to reflect in their sheet
+- Dragging an Item on a Player Sheet which has the exact same name as an item already in the sheet, will now increase the Quantity of the old item, instead of adding a new entry.
+- Players can now Delete their own Tokens in a Scene.
+  - This can be turned off by GM in the System Settings screen.
 
-### Bugfixes
-- Fixed Confusion not flipping a coin when applying damage, instead always applying damage.
-- Fixed Confusion dealing only 1 tick of damage on status moves instead of 2 ticks.
+### Bugfixes:
+- Fixed Confusion always applying damage instead of flipping a coin, and applying the wrong amount of damage.
+- Fixed Indeedee data error which made them unable to be generated.
+- Fixed having combatants their initiative tiebreaker being set to .02 instead of the .20 it was, whenever their base init value was updated.
+
+### Other:
+- Item Categories are now collapsible, but won't remember their status when the sheet is updated.
+- Completely overhauled the back-end of the Charactermancer allowing for much smoother development of new features for it.
+- Added minor improvements to old charactermancer system, including a GM setting to disable evolution previews.
+- Added the 'Execute-as-GM' api inspired by the [Bad Ideas Toolkit](https://foundryvtt.com/packages/bad-ideas-toolkit) allowing both the System and Module devs to make use of GM Escalation for handling automation. For api info see [api.js](https://github.com/dylanpiera/Foundry-Pokemon-Tabletop-United-System/blob/master/module/api/api.js#L232)
 
 ## 1.3.2 - Fix Combat Visibility
 - Fixed invisible combat tokens... well, becoming invisible from the GM!
