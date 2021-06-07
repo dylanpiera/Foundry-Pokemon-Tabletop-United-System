@@ -680,6 +680,8 @@ export async function PlayPokemonCry(species)
 Hooks.on("updateInitiative", function(actor) {
   if(!game.combats?.active) return;
 
+  if(!actor.canUserModify(game.user, "update")) return;
+
   const combatant = game.combats.active.combatants.find(x => x.actor?.id == actor.id)
   if(!combatant) return;
 

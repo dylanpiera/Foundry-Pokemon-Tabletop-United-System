@@ -277,7 +277,7 @@ export default class Api {
         let actor;
         if(object instanceof game.ptu.PTUActor) 
             actor = object;
-        else if(object instanceof TokenDocument || o instanceof Token)
+        else if(object instanceof TokenDocument || object instanceof Token)
             actor = object.actor;
         else if(typeof object === "string")
             actor = await this._documentFromUuid(o);
