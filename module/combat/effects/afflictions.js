@@ -83,12 +83,20 @@ export const Afflictions = [
         {key: "flags.ptu.is_tagged", value: true, mode: CONST.ACTIVE_EFFECT_MODES.OVERRIDE, priority: 50}
     ]},
     {id: "effect.other.cheered", label: "Cheered", icon: 'icons/svg/sun.svg', changes: [
-        {key: "flags.ptu.is_tagged", value: true, mode: CONST.ACTIVE_EFFECT_MODES.OVERRIDE, priority: 50}
+        {key: "flags.ptu.is_cheered", value: true, mode: CONST.ACTIVE_EFFECT_MODES.OVERRIDE, priority: 50}
+    ]},
+    {id: "effect.other.vortex", label: "Vortex", icon: 'icons/svg/circle.svg', changes: [
+        {key: "flags.ptu.is_stuck_in_vortex", value: true, mode: CONST.ACTIVE_EFFECT_MODES.OVERRIDE, priority: 50},
+        {key: "flags.ptu.is_slowed", value: true, mode: CONST.ACTIVE_EFFECT_MODES.OVERRIDE, priority: 50},
+        {key: "flags.ptu.is_trapped", value: true, mode: CONST.ACTIVE_EFFECT_MODES.OVERRIDE, priority: 50},
+    ]},
+    {id: "effect.other.seeded", label: "Seeded", icon: 'icons/svg/oak.svg', changes: [
+        {key: "flags.ptu.is_seeded", value: true, mode: CONST.ACTIVE_EFFECT_MODES.OVERRIDE, priority: 50}
     ]},
 ];
 
 function IsSameTokenAndNotAlreadyApplied(effect, tokenId, combat, lastCombatant) {
-    if(tokenId !== lastCombatant.tokenId) return false;
+    if(tokenId !== lastCombatant.token.id) return false;
     
     const flag = combat.getFlag("ptu", `applied`);
     // If the effect has already been applied, skip.
@@ -110,7 +118,7 @@ export const EffectFns = new Map([
         if(actor.data.data.modifiers.immuneToEffectDamage) return;
 
         let applyPoison = async () => {
-            const token = canvas.tokens.get(lastCombatant.tokenId);
+            const token = canvas.tokens.get(lastCombatant.token.id);
             await ApplyFlatDamage([token], "Poison", actor.data.data.health.tick);
         }
 
@@ -140,9 +148,9 @@ export const EffectFns = new Map([
         if(actor.data.data.modifiers.immuneToEffectDamage) return;
 
         let applyPoison = async () => {
-            const token = canvas.tokens.get(lastCombatant.tokenId);
+            const token = canvas.tokens.get(lastCombatant.token.id);
             const badly_poisoned_effect = token.actor.effects.find(x => x.data.label == "Badly Poisoned");
-            await ApplyFlatDamage([token], "Toxic Damage", (5 * badly_poisoned_effect.data.flags.ptu?.roundsElapsed) + 5);
+            await ApplyFlatDamage([token], "Toxic Damage", (5 * (badly_poisoned_effect.data.flags.ptu?.roundsElapsed ?? 0)) + 5);
         }
 
         const actions_taken = actor.data.flags.ptu?.actions_taken; 
@@ -172,7 +180,7 @@ export const EffectFns = new Map([
         if(actor.data.data.modifiers.immuneToEffectDamage) return;
 
         let applyBurn = async () => {
-            const token = canvas.tokens.get(lastCombatant.tokenId);
+            const token = canvas.tokens.get(lastCombatant.token.id);
             await ApplyFlatDamage([token], "Burn", actor.data.data.health.tick);
         }
 
@@ -202,7 +210,7 @@ export const EffectFns = new Map([
         if(actor.data.data.modifiers.immuneToEffectDamage) return;
 
         let applyCurse = async () => {
-            const token = canvas.tokens.get(lastCombatant.tokenId);
+            const token = canvas.tokens.get(lastCombatant.token.id);
             await ApplyFlatDamage([token], "Curse", actor.data.data.health.tick * 2);
         }
 
@@ -236,8 +244,21 @@ export const EffectFns = new Map([
 
 
         let applyConfusion = async (type) => {
-            if(actor.data.data.modifiers.immuneToEffectDamage) return;
-            const token = canvas.tokens.get(lastCombatant.tokenId);
+            const coinFlip = new Roll("1d2");
+            await coinFlip.evaluate({async: true});
+
+            const coinFlipMessageData = {
+                title: `Will ${actor.name} hit itself in confusion?`,
+                roll: coinFlip,
+                description: coinFlip.result == "2" ? `Did not hit itself in confusion!` : `Hits itself in Confusion!`,
+                success: coinFlip.result == "2"
+            };            
+
+            coinFlipMessageData.content = await renderTemplate('/systems/ptu/templates/chat/save-check.hbs', coinFlipMessageData);
+            await ChatMessage.create(coinFlipMessageData, {});
+
+            if(actor.data.data.modifiers.immuneToEffectDamage || coinFlipMessageData.success) return;
+            const token = canvas.tokens.get(lastCombatant.token.id);
             switch(type) {
                 case 3: {
                     const dmg = Math.floor(Number(actor.data.data.stats.atk.total)/2);
@@ -392,7 +413,7 @@ export const EffectFns = new Map([
             }
             if(isErrata) {
                 const aeAffliction = new ActiveEffect(mergeObject(CONFIG.statusEffects.find(x => x.id == "effect.other.vulnerable"), {duration: {rounds: 1, turns: 0}}), actor);
-                await actor.createEmbeddedEntity("ActiveEffect", aeAffliction.data);           
+                await actor.createEmbeddedDocuments("ActiveEffect", [aeAffliction.data]);           
             }
         }
         const content = await renderTemplate('/systems/ptu/templates/chat/save-check.hbs', messageData);
@@ -604,13 +625,85 @@ export const EffectFns = new Map([
         const actor = lastCombatant.actor;
         if(actor.data.data.modifiers.immuneToEffectDamage) return;
 
-        const token = canvas.tokens.get(lastCombatant.tokenId);
+        const token = canvas.tokens.get(lastCombatant.token.id);
         await ApplyFlatDamage([token], "Nightmare (Bad Sleep)", actor.data.data.health.tick * 2);
 
         /** If affliction can only be triggered once per turn, make sure it shows as applied. */
         if(options.round.direction == CONFIG.PTUCombat.DirectionOptions.FORWARD) return; // If new round already started don't register EoT effect.
         await combat.update({[`flags.ptu.applied.${tokenId}.${effect}`]: true})
     }],
+    ["stuck_in_vortex", async function(tokenId, combat, lastCombatant, roundData, options, sender, effect, isStartOfTurn){
+        if(isStartOfTurn) {
+            if(!IsSameTokenAndNotAlreadyApplied(effect+"sot", tokenId, combat, lastCombatant)) return;
+
+            const actor = lastCombatant.actor;
+            if(actor.data.data.modifiers.immuneToEffectDamage) return;
+
+            const token = canvas.tokens.get(lastCombatant.token.id);
+            await ApplyFlatDamage([token], "Vortex", actor.data.data.health.tick);
+            
+            /** If affliction can only be triggered once per turn, make sure it shows as applied. */
+            if(options.round.direction == CONFIG.PTUCombat.DirectionOptions.FORWARD) return; // If new round already started don't register EoT effect.
+            await combat.update({[`flags.ptu.applied.${tokenId}.${effect}sot`]: true})
+        }
+        else {
+            if(!IsSameTokenAndNotAlreadyApplied(effect+"eot", tokenId, combat, lastCombatant)) return;   
+
+            const actor = lastCombatant.actor;
+
+            const saveCheck = await actor.sheet._onSaveRoll();
+            const roll = JSON.parse(saveCheck.data.roll);
+            roll._total = roll.total;
+            let messageData = {};
+
+            const vortex_effect = actor.effects.find(x => x.data.label == "Vortex");
+            
+            const DC = Math.max(0,20-((vortex_effect.data.flags.ptu?.roundsElapsed ?? 0)*6));
+            
+            if(roll.total >= DC || DC == 0) {
+                messageData = {
+                    title: `${actor.name}'s<br>Vortex Save!`,
+                    roll: roll,
+                    description: `Save Success!<br>${actor.name} escaped the vortex!`,
+                    success: true
+                }
+
+                await actor.effects.find(x => x.data.label == "Vortex").delete();
+            }
+            else {
+                messageData = {
+                    title: `${actor.name}'s<br>Vortex Save!`,
+                    roll: roll,
+                    description: `Save Failed!`,
+                    success: false
+                }        
+            }
+            const content = await renderTemplate('/systems/ptu/templates/chat/save-check.hbs', messageData);
+            await saveCheck.update({content: content});
+
+
+            /** If affliction can only be triggered once per turn, make sure it shows as applied. */
+            if(options.round.direction == CONFIG.PTUCombat.DirectionOptions.FORWARD) return; // If new round already started don't register EoT effect.
+            await combat.update({[`flags.ptu.applied.${tokenId}.${effect}eot`]: true})
+        }
+    }], 
+    ["seeded", async function(tokenId, combat, lastCombatant, roundData, options, sender, effect, isStartOfTurn){
+        if(!isStartOfTurn) return;
+        if(!IsSameTokenAndNotAlreadyApplied(effect, tokenId, combat, lastCombatant)) return;
+
+        /** Actually apply Affliction */
+        const actor = lastCombatant.actor;
+
+        if(actor.data.data.modifiers.immuneToEffectDamage) return;
+
+        const token = canvas.tokens.get(lastCombatant.token.id);
+        await ApplyFlatDamage([token], "Leech Seed", actor.data.data.health.tick); 
+        Hooks.call("onLeechSeedDamage", {actor: actor, damage: actor.data.data.health.tick});  
+
+        /** If affliction can only be triggered once per turn, make sure it shows as applied. */
+        if(options.round.direction == CONFIG.PTUCombat.DirectionOptions.FORWARD) return; // If new round already started don't register EoT effect.
+        await combat.update({[`flags.ptu.applied.${tokenId}.${effect}`]: true})
+    }], 
 ]);
 
 Hooks.on("applyActiveEffect", function(actorData, change) {
@@ -624,7 +717,7 @@ Hooks.on("applyActiveEffect", function(actorData, change) {
             if(!actor?.data) return;
         }
         else {
-            actor = game.actors?.get(actorData._id)
+            actor = game.actors?.get(actorData.id)
             if(!actor?.data) return;
         }
         let count = duplicate(actor.data).data.modifiers.flinch_count;
@@ -639,43 +732,25 @@ Hooks.on("applyActiveEffect", function(actorData, change) {
 })
 
 // Set combat details on active effects for duration based calculations like Badly Poisoned
-Hooks.on("preCreateActiveEffect", function(actor,effect,options,id) {
-    applyPreCreateActiveEffectChanges(effect);
+Hooks.on("preCreateActiveEffect", function(effect,effectData,options,sender) {
+    effect.data.update(applyPreCreateActiveEffectChanges(effectData));
 })
 
-Hooks.on("preUpdateToken", function(scene, tokenData, changes, options, sender) {
-    // Only continue if effects have been changed
-    if(!changes.actorData?.effects) return;    
-
-    // Take a snapshot of the current tokenData before changes are applied
-    const data = duplicate(tokenData);
-    
-    if(data.actorData.effects) {
-        // If a new effect is added
-        if(data.actorData.effects.length < changes.actorData.effects.length) {
-            // Apply preCreate effect changes
-            applyPreCreateActiveEffectChanges(changes.actorData.effects[changes.actorData.effects.length-1], false);
-        }
-    }
-    else {
-        // If first effect, apply changes to that.
-        applyPreCreateActiveEffectChanges(changes.actorData.effects[0], false);
-    }
-});
-
 function applyPreCreateActiveEffectChanges(effect, preCreate = true) {
+    const data = {};
     if(game.combats.active) {
-        effect.duration = mergeObject(effect.duration ?? {}, {
+        data.duration = mergeObject(effect.duration ?? {}, {
             startRound: game.combats.active.current?.round, 
             startTurn: game.combats.active.current?.turn,
             combat: game.combats.active.id
         });
-        if(preCreate) effect["flags.ptu.roundsElapsed"] = 0;
-        else effect.flags = mergeObject(effect.flags ?? {}, {ptu: {roundsElapsed: 0}});
+        if(preCreate) data["flags.ptu.roundsElapsed"] = 0;
+        else data.flags = mergeObject(effect.flags ?? {}, {ptu: {roundsElapsed: 0}});
     }
     else {
-        effect.duration = mergeObject(effect.duration ?? {}, {startRound: -1, startTurn: -1});
-        if(preCreate) effect["flags.ptu.roundsElapsed"] = 0;
-        else effect.flags = mergeObject(effect.flags ?? {}, {ptu: {roundsElapsed: -1}});
+        data.duration = mergeObject(effect.duration ?? {}, {startRound: -1, startTurn: -1});
+        if(preCreate) data["flags.ptu.roundsElapsed"] = 0;
+        else data.flags = mergeObject(effect.flags ?? {}, {ptu: {roundsElapsed: -1}});
     }
+    return data;
 }

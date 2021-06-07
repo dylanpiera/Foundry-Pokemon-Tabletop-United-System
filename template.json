@@ -357,7 +357,8 @@
       },
       "health": {
         "value": 0,
-        "injuries": 0
+        "injuries": 0,
+        "max": 0
       },
       "ap": {
         "value": 5
@@ -406,7 +407,8 @@
       },
       "health": {
         "value": null,
-        "injuries": 0
+        "injuries": 0,
+        "max": 0
       },
 
       "background": {

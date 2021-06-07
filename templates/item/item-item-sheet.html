@@ -1,95 +1,97 @@
-<form class="{{cssClass}}" autocomplete="off">
-    <header class="sheet-header mb-2">
-        <div class="itemBox">
-            <img class="content profile-img" src="{{item.img}}" data-edit="img" title="{{item.name}}"/>
-            <div class="content with-image">
-                Description: <span class="readable p11 pokemon">{{{data.effect}}}</span>
-            </div>
-        </div>
-    </header>
-
-    {{!-- Sheet Body --}}
-    <div class="sheet-body">
-        <div class="details readable h-100">
-            <div style="display: grid; grid-template-columns: 45% 50%; justify-content: space-between; padding: 0 5px;">
-                <div class="hgss-box align-items-center" style="display: grid; grid-template-columns: 40% 60%;">
-                    <div class="hgss-header vertical">
-                        <label for="name">Name:</label>
-                    </div>
-                    <div class="hgss-body">
-                        <input
-                            class="ml-2"
-                            name="name"
-                            type="text"
-                            value="{{item.name}}"
-                            placeholder="Name"
-                        />
-                    </div>
-
-                    <div class="hgss-header vertical">
-                        <label for="data.origin">Obtained at:</label>
-                    </div>
-                    <div class="hgss-body">
-                        <input
-                            class="ml-2"
-                            name="data.origin"
-                            type="text"
-                            value="{{data.origin}}"
-                            placeholder="Pickup"
-                        />
-                    </div>
-
-                    <div class="hgss-header vertical">
-                        <label for="data.quantity">Quantity:</label>
-                    </div>
-                    <div class="hgss-body">
-                        <input
-                            class="ml-2"
-                            name="data.quantity"
-                            type="text"
-                            value="{{data.quantity}}"
-                            data-dtype="Number"
-                        />
-                    </div>
-
-                    <div class="hgss-header vertical">
-                        <label for="data.cost">Cost:</label>
-                    </div>
-                    <div class="hgss-body">
-                        <input
-                            class="ml-2"
-                            name="data.cost"
-                            type="text"
-                            value="{{data.cost}}"
-                            data-dtype="Number"
-                        />
-                    </div>
-
-                    <div class="hgss-header vertical">
-                        <label for="data.category">Category:</label>
-                    </div>
-                    <div class="hgss-body">
-                        <input
-                            class="ml-2"
-                            name="data.category"
-                            type="text"
-                            value="{{data.category}}"
-                        />
-                    </div>
-
-
-                </div>
-                <div class="hgss-box align-items-center">
-                    <div class="hgss-header mb-1 " style="padding: 5px 5px;">
-                        <label for="data.effect">Description:</label>
-                    </div>
-                    <div class="hgss-body" style="word-break: break-word;">
-                        <textarea
-                            class="ml-2"
-                            name="data.effect">{{data.effect}}</textarea>
-                    </div>
+{{#with data}}
+    <form class="{{cssClass}}" autocomplete="off">
+        <header class="sheet-header mb-2">
+            <div class="itemBox">
+                <img class="content profile-img" src="{{img}}" data-edit="img" title="{{name}}"/>
+                <div class="content with-image">
+                    Description: <span class="readable p11 pokemon">{{{data.effect}}}</span>
                 </div>
             </div>
+        </header>
+
+        {{!-- Sheet Body --}}
+        <div class="sheet-body">
+            <div class="details readable h-100">
+                <div style="display: grid; grid-template-columns: 45% 50%; justify-content: space-between; padding: 0 5px;">
+                    <div class="hgss-box align-items-center" style="display: grid; grid-template-columns: 40% 60%;">
+                        <div class="hgss-header vertical">
+                            <label for="name">Name:</label>
+                        </div>
+                        <div class="hgss-body">
+                            <input
+                                class="ml-2"
+                                name="name"
+                                type="text"
+                                value="{{name}}"
+                                placeholder="Name"
+                            />
+                        </div>
+
+                        <div class="hgss-header vertical">
+                            <label for="data.origin">Obtained at:</label>
+                        </div>
+                        <div class="hgss-body">
+                            <input
+                                class="ml-2"
+                                name="data.origin"
+                                type="text"
+                                value="{{data.origin}}"
+                                placeholder="Pickup"
+                            />
+                        </div>
+
+                        <div class="hgss-header vertical">
+                            <label for="data.quantity">Quantity:</label>
+                        </div>
+                        <div class="hgss-body">
+                            <input
+                                class="ml-2"
+                                name="data.quantity"
+                                type="text"
+                                value="{{data.quantity}}"
+                                data-dtype="Number"
+                            />
+                        </div>
+
+                        <div class="hgss-header vertical">
+                            <label for="data.cost">Cost:</label>
+                        </div>
+                        <div class="hgss-body">
+                            <input
+                                class="ml-2"
+                                name="data.cost"
+                                type="text"
+                                value="{{data.cost}}"
+                                data-dtype="Number"
+                            />
+                        </div>
+
+                        <div class="hgss-header vertical">
+                            <label for="data.category">Category:</label>
+                        </div>
+                        <div class="hgss-body">
+                            <input
+                                class="ml-2"
+                                name="data.category"
+                                type="text"
+                                value="{{data.category}}"
+                            />
+                        </div>
+
+
+                    </div>
+                    <div class="hgss-box align-items-center">
+                        <div class="hgss-header mb-1 " style="padding: 5px 5px;">
+                            <label for="data.effect">Description:</label>
+                        </div>
+                        <div class="hgss-body" style="word-break: break-word;">
+                            <textarea
+                                class="ml-2"
+                                name="data.effect">{{data.effect}}</textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-    </div>
-</form>
+    </form>
+{{/with}}

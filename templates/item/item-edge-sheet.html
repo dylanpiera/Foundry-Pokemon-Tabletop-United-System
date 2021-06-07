@@ -1,88 +1,90 @@
-<form class="{{cssClass}}" autocomplete="off">
-    <header class="sheet-header mb-2">
-        <div class="itemBox">
-            <div class="content">
-                Effect: <span class="readable p11 pokemon">{{{data.effect}}}</span>
-            </div>
-        </div>
-    </header>
-
-    {{!-- Sheet Body --}}
-    <div class="sheet-body">
-        <div class="details readable h-100">
-            <div style="display: grid; grid-template-columns: 45% 50%; justify-content: space-between; padding: 0 5px;">
-                <div class="hgss-box align-items-center" style="display: grid; grid-template-columns: 40% 60%;">
-                    <div class="hgss-header vertical">
-                        <label for="name">Name:</label>
-                    </div>
-                    <div class="hgss-body">
-                        <input
-                            class="ml-2"
-                            name="name"
-                            type="text"
-                            value="{{item.name}}"
-                            placeholder="Name"
-                        />
-                    </div>
-
-                    <div class="hgss-header vertical">
-                        <label for="data.origin">Origin:</label>
-                    </div>
-                    <div class="hgss-body">
-                        <input
-                            class="ml-2"
-                            name="data.origin"
-                            type="text"
-                            value="{{data.origin}}"
-                            placeholder="Level-Up"
-                        />
-                    </div>
-
-                    <div class="hgss-header vertical">
-                        <label for="data.prerequisites">Prerequisites:</label>
-                    </div>
-                    <div class="hgss-body">
-                        <input
-                            class="ml-2"
-                            name="data.prerequisites"
-                            type="text"
-                            value="{{data.prerequisites}}"
-                            placeholder=""
-                        />
-                    </div>
-
-                    <div class="hgss-header vertical">
-                        <label for="data.notes">Notes:</label>
-                    </div>
-                    <div class="hgss-body">
-                        <input
-                            class="ml-2"
-                            name="data.notes"
-                            type="text"
-                            value="{{data.notes}}"
-                            placeholder=""
-                        />
-                    </div>
-                </div>
-                <div class="hgss-box align-items-center">
-                    <div class="hgss-header mb-1 " style="padding: 6px 5px;">
-                        <label for="data.effect">Effect:</label>
-                    </div>
-                    <div class="hgss-body" style="word-break: break-word;">
-                        <textarea
-                            class="ml-2"
-                            name="data.effect">{{data.effect}}</textarea>
-                    </div>
-                    <div class="hgss-header mt-1 mb-1 " style="padding: 5px 5px;">
-                        <label for="data.snippet">Snippet:</label>
-                    </div>
-                    <div class="hgss-body" style="word-break: break-word;">
-                        <textarea
-                            class="ml-2"
-                            name="data.snippet">{{data.snippet}}</textarea>
-                    </div>
+{{#with data}}
+    <form class="{{cssClass}}" autocomplete="off">
+        <header class="sheet-header mb-2">
+            <div class="itemBox">
+                <div class="content">
+                    Effect: <span class="readable p11 pokemon">{{{data.effect}}}</span>
                 </div>
             </div>
+        </header>
+
+        {{!-- Sheet Body --}}
+        <div class="sheet-body">
+            <div class="details readable h-100">
+                <div style="display: grid; grid-template-columns: 45% 50%; justify-content: space-between; padding: 0 5px;">
+                    <div class="hgss-box align-items-center" style="display: grid; grid-template-columns: 40% 60%;">
+                        <div class="hgss-header vertical">
+                            <label for="name">Name:</label>
+                        </div>
+                        <div class="hgss-body">
+                            <input
+                                class="ml-2"
+                                name="name"
+                                type="text"
+                                value="{{name}}"
+                                placeholder="Name"
+                            />
+                        </div>
+
+                        <div class="hgss-header vertical">
+                            <label for="data.origin">Origin:</label>
+                        </div>
+                        <div class="hgss-body">
+                            <input
+                                class="ml-2"
+                                name="data.origin"
+                                type="text"
+                                value="{{data.origin}}"
+                                placeholder="Level-Up"
+                            />
+                        </div>
+
+                        <div class="hgss-header vertical">
+                            <label for="data.prerequisites">Prerequisites:</label>
+                        </div>
+                        <div class="hgss-body">
+                            <input
+                                class="ml-2"
+                                name="data.prerequisites"
+                                type="text"
+                                value="{{data.prerequisites}}"
+                                placeholder=""
+                            />
+                        </div>
+
+                        <div class="hgss-header vertical">
+                            <label for="data.notes">Notes:</label>
+                        </div>
+                        <div class="hgss-body">
+                            <input
+                                class="ml-2"
+                                name="data.notes"
+                                type="text"
+                                value="{{data.notes}}"
+                                placeholder=""
+                            />
+                        </div>
+                    </div>
+                    <div class="hgss-box align-items-center">
+                        <div class="hgss-header mb-1 " style="padding: 6px 5px;">
+                            <label for="data.effect">Effect:</label>
+                        </div>
+                        <div class="hgss-body" style="word-break: break-word;">
+                            <textarea
+                                class="ml-2"
+                                name="data.effect">{{data.effect}}</textarea>
+                        </div>
+                        <div class="hgss-header mt-1 mb-1 " style="padding: 5px 5px;">
+                            <label for="data.snippet">Snippet:</label>
+                        </div>
+                        <div class="hgss-body" style="word-break: break-word;">
+                            <textarea
+                                class="ml-2"
+                                name="data.snippet">{{data.snippet}}</textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-    </div>
-</form>
+    </form>
+{{/with}}

@@ -35,7 +35,7 @@ export async function CreateMonParser(input, andCreate = false) {
         let table = game.tables.getName(commands["random"]);
         if(!table) {ui.notifications.notify("Couldn't find a table with name " + commands["random"], "error");return;}
         
-        let mons = table.data.results.map(x => {return {mon: x.text, weight: x.weight};}).flatMap(x => {
+        let mons = table.data.results.map(x => {return {mon: x.data.text, weight: x.data.weight};}).flatMap(x => {
             let mon = game.ptu.GetSpeciesData(x.mon);
             if(!mon) return;
             let results = [];
@@ -79,10 +79,12 @@ export async function CreateMonParser(input, andCreate = false) {
     return commands;
 }
 
-export async function GetSpeciesArt(mon, basePath, type = ".png") {
+export async function GetSpeciesArt(mon, imgDirectoryPath, type = ".png") {
+    const basePath = imgDirectoryPath+(imgDirectoryPath.endsWith('/') ? '' : '/')
+
     let path = basePath+lpad(mon?.number, 4)+type;
     let result = await fetch(path);
-    if(result.status === 404) {
+    if(result.status === 404 && mon?.number < 1000) {
         path = basePath+lpad(mon?.number, 3)+type;
         result = await fetch(path);
     }
@@ -181,7 +183,7 @@ export async function FinishDexDragPokemonCreation(formData, update)
         folder: "Dex Drag-in"
     })
 
-    let protoToken = {data: {bar1: {}}}; //await Token.fromActor(new_actor);
+    const protoToken = duplicate(new_actor.data.token);
     
     let size = game.ptu.GetSpeciesData(new_actor.data.data.species)["Size Class"]
     
@@ -193,20 +195,19 @@ export async function FinishDexDragPokemonCreation(formData, update)
         "Gigantic": {width: 4, height: 4}
     }
 
-    protoToken.data.width = size_categories[size]["width"];
-    protoToken.data.height = size_categories[size]["height"];
-    protoToken.data.actorLink = true;
-    protoToken.data.displayBars = 20;
-    protoToken.data.displayName=  40; 
-    protoToken.data.bar1.attribute = "health";
+    protoToken.width = size_categories[size]["width"];
+    protoToken.height = size_categories[size]["height"];
+    protoToken.actorLink = true;
+    protoToken.displayBars = 20;
+    protoToken.displayName=  40; 
+    protoToken.bar1.attribute = "health";
     
-    new_actor = await new_actor.update({"token": protoToken.data});
+    new_actor = await new_actor.update({"token": protoToken});
 
-    protoToken.scene = game.scenes.viewed;
-    protoToken.data.x = Math.floor(drop_coordinates_x / game.scenes.viewed.data.grid) * game.scenes.viewed.data.grid;
-    protoToken.data.y = Math.floor(drop_coordinates_y / game.scenes.viewed.data.grid) * game.scenes.viewed.data.grid;
+    protoToken.x = Math.floor(drop_coordinates_x / game.scenes.viewed.data.grid) * game.scenes.viewed.data.grid;
+    protoToken.y = Math.floor(drop_coordinates_y / game.scenes.viewed.data.grid) * game.scenes.viewed.data.grid;
 
-    let placedTokenData = await game.scenes.viewed.createEmbeddedEntity("Token", (await Token.fromActor(new_actor, protoToken.data)).data);
+    let placedTokenData = await game.scenes.viewed.createEmbeddedDocuments("Token", [await new_actor.getTokenData(protoToken)]);
 
     let currentSpecies = game.ptu.GetSpeciesData(new_actor.data.data.species)._id;
     game.ptu.PlayPokemonCry(currentSpecies);

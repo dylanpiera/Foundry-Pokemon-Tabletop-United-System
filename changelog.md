@@ -1,3 +1,32 @@
+## 1.4.0 - Foundry 0.8 Release!
+Hey everyone! With the release of PTUVTT 1.4.0 we now have officially moved over to support Foundry 0.8.6!
+
+While this version won't be adding as many new features as many of the other major system updates, Foundry 0.8 support in and off itself can be considered a main feature, as it brings lots of new improvements both for Players, GMs as well as system & module developers like myself!
+
+Nonetheless, there are still some new features to the system, so please do read them down below!
+
+### New Features
+- Upgraded support for Foundry 0.8.6, and dropped support for foundry 0.7.*
+- Effects applied to Embedded Documents such as Items can now apply effects to their parent.
+f.e.: Skill Improvement (Acrobatics) Poké Edge has an effect with change key: '../data.skills.acrobatics.value.mod'
+  - Both '../' and 'actor.' prefix allow manipulation of Parent
+  - This works on any item type, and can be accessed through the 'effects' tab bar button
+  - [**BREAKING**]: Please note that due to this all Skill Improvement edges will need to be re-added to an actor for the change to reflect in their sheet
+- Dragging an Item on a Player Sheet which has the exact same name as an item already in the sheet, will now increase the Quantity of the old item, instead of adding a new entry.
+- Players can now Delete their own Tokens in a Scene.
+  - This can be turned off by GM in the System Settings screen.
+
+### Bugfixes:
+- Fixed Confusion always applying damage instead of flipping a coin, and applying the wrong amount of damage.
+- Fixed Indeedee data error which made them unable to be generated.
+- Fixed having combatants their initiative tiebreaker being set to .02 instead of the .20 it was, whenever their base init value was updated.
+
+### Other:
+- Item Categories are now collapsible, but won't remember their status when the sheet is updated.
+- Completely overhauled the back-end of the Charactermancer allowing for much smoother development of new features for it.
+- Added minor improvements to old charactermancer system, including a GM setting to disable evolution previews.
+- Added the 'Execute-as-GM' api inspired by the [Bad Ideas Toolkit](https://foundryvtt.com/packages/bad-ideas-toolkit) allowing both the System and Module devs to make use of GM Escalation for handling automation. For api info see [api.js](https://github.com/dylanpiera/Foundry-Pokemon-Tabletop-United-System/blob/master/module/api/api.js#L232)
+
 ## 1.3.2 - Fix Combat Visibility
 - Fixed invisible combat tokens... well, becoming invisible from the GM!
 

@@ -2,7 +2,7 @@ import { CalcLevel } from "./calculations/level-up-calculator.js";
 import { CalculateEvasions } from "./calculations/evasion-calculator.js";
 import { CalculatePokemonCapabilities, CalculateTrainerCapabilities} from "./calculations/capability-calculator.js"; 
 import { CalculateSkills } from "./calculations/skills-calculator.js"; 
-import { CalcBaseStat, CalculateStatTotal, CalculatePoisonedCondition } from "./calculations/stats-calculator.js";
+import { CalcBaseStats, CalculateStatTotal, CalculatePoisonedCondition } from "./calculations/stats-calculator.js";
 import { GetMonEffectiveness } from "./calculations/effectiveness-calculator.js";
 import { warn, debug, log } from '../ptu.js' 
 
@@ -16,6 +16,7 @@ export class PTUActor extends Actor {
    * Augment the basic actor data with additional dynamic data.
    */
   prepareData() {
+    console.groupCollapsed("Initializing ", this.name)
     this.origins = {};
     super.prepareData();
 
@@ -88,6 +89,7 @@ export class PTUActor extends Actor {
           }) : undefined
       }
     })
+    console.groupEnd();
   }
 
   /**
@@ -98,15 +100,29 @@ export class PTUActor extends Actor {
     const overrides = {};
     const origins = {}; 
     // Organize non-disabled effects by their application priority
-    const changes = this.effects.reduce((changes, e) => {
+    const effects = Array.from(this.effects).concat(this.items.filter(item => item?.effects?.size > 0).flatMap(item => Array.from(item.effects)));
+
+    const changes = effects.reduce((changes, e) => {
       if (e.data.disabled) return changes;
       return changes.concat(
         e.data.changes.map((c) => {
           c = duplicate(c);
           if(doBaseData && c.priority >= 51) return undefined;
           if(!doBaseData && c.priority <= 50) return undefined;
+          
           c.effect = e;
+
+          if(e.parent.data.type != this.data.type) {
+            if(!c.key.startsWith("actor.") && !c.key.startsWith("../")) return undefined; 
+            c.key = c.key.replace("actor.", "").replace("../", "");
+          }
           c.priority = c.priority ?? c.mode * 10;
+          
+          const n = parseFloat(c.value)
+          if ( String(n) === c.value ) {
+            c.value = n;
+          }
+
           return c;
         }).filter(x => x!=undefined)
       );
@@ -313,7 +329,7 @@ export class PTUActor extends Actor {
 
     data.levelUpPoints = data.level.current + data.modifiers.statPoints.total + 9;
     data.stats = CalculatePoisonedCondition(duplicate(data.stats), actorData.flags?.ptu);
-    var result = CalculateStatTotal(data.levelUpPoints, data.stats, actorData.items.find(x => x.name.toLowerCase().replace("[playtest]") == "twisted power") != null);
+    var result = CalculateStatTotal(data.levelUpPoints, data.stats, {twistedPower: actorData.items.find(x => x.name.toLowerCase().replace("[playtest]") == "twisted power") != null});
     data.stats = result.stats;
     data.levelUpPoints = result.levelUpPoints;
     
@@ -373,14 +389,9 @@ export class PTUActor extends Actor {
     // Stats
     data.stats = CalculatePoisonedCondition(duplicate(data.stats), actorData.flags?.ptu);
 
-    data.stats.hp.value = CalcBaseStat(speciesData, data.nature.value, "HP");
-    data.stats.atk.value = CalcBaseStat(speciesData, data.nature.value, "Attack");
-    data.stats.def.value = CalcBaseStat(speciesData, data.nature.value, "Defense");
-    data.stats.spatk.value = CalcBaseStat(speciesData, data.nature.value, "Special Attack");
-    data.stats.spdef.value = CalcBaseStat(speciesData, data.nature.value, "Special Defense");
-    data.stats.spd.value = CalcBaseStat(speciesData, data.nature.value, "Speed");
+    data.stats = CalcBaseStats(data.stats, speciesData, data.nature.value);
 
-    var result = CalculateStatTotal(data.levelUpPoints, data.stats, actorData.items.find(x => x.name.toLowerCase().replace("[playtest]") == "twisted power") != null);
+    var result = CalculateStatTotal(data.levelUpPoints, data.stats, {twistedPower: actorData.items.find(x => x.name.toLowerCase().replace("[playtest]") == "twisted power") != null});
     data.stats = result.stats;
     data.levelUpPoints = result.levelUpPoints;
 
@@ -402,7 +413,7 @@ export class PTUActor extends Actor {
     Hooks.call("updateInitiative", this);
 
     data.tp.max = (data.level.current > 0 ? Math.floor(data.level.current / 5) : 0) + 1;
-    data.tp.pep.value = actorData.items.filter(x => x.type == "pokeedge" && x.data.origin.toLowerCase() != "pusher").length;
+    data.tp.pep.value = actorData.items.filter(x => x.type == "pokeedge" && x.data.origin?.toLowerCase() != "pusher").length;
     data.tp.pep.max = data.level.current > 0 ? Math.floor(data.level.current / 10)+1 : 1;
 
     data.evasion = CalculateEvasions(data, actorData.flags?.ptu);

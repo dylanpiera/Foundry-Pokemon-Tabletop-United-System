@@ -31,8 +31,8 @@ export class PTUGen8CharacterSheet extends ActorSheet {
 		if (this.actor.data.type == 'character') {
 			this._prepareCharacterItems(data);
 		}
-
-		data['origins'] = this.actor.origins;
+		data.data = this.actor.data.data;
+		// data['origins'] = this.actor.origins;
 
 		return data;
 	}
@@ -41,12 +41,12 @@ export class PTUGen8CharacterSheet extends ActorSheet {
 	_getHeaderButtons() {
 		let buttons = super._getHeaderButtons();
 
-		if (this.actor.owner) {
+		if (this.actor.isOwner) {
 			buttons.unshift({
 				label: "Notes",
 				class: "open-notes",
 				icon: "fas fa-edit",
-				onclick: () => new game.ptu.PTUCharacterNotesForm(this.actor, {"submitOnClose": true}).render(true)
+				onclick: () => new game.ptu.PTUCharacterNotesForm(this.actor, {"submitOnClose": true, "closeOnSubmit": false}).render(true)
 			});
 		}
 
@@ -63,7 +63,7 @@ export class PTUGen8CharacterSheet extends ActorSheet {
 	_prepareCharacterItems(sheetData) {
 		sheetData['skills'] = this.actor.data.data.skills
 		
-		const actorData = sheetData.actor;
+		const actor = sheetData.actor;
 
 		// Initialize containers.
 		const feats = [];
@@ -118,18 +118,18 @@ export class PTUGen8CharacterSheet extends ActorSheet {
 		}
 
 		for(const category of Object.keys(items_categorized)) {
-			if(actorData.data.item_categories[category] === undefined) actorData.data.item_categories[category] = true;
+			if(actor.data.data.item_categories[category] === undefined) actor.data.data.item_categories[category] = true;
 		}
 
 		// Assign and return
-		actorData.feats = feats;
-		actorData.edges = edges;
-		actorData.items = items;
-		actorData.items_categorized = items_categorized;
-		actorData.abilities = abilities;
-		actorData.moves = moves;
-		actorData.capabilities = capabilities;
-		actorData.dex = dex;
+		actor.feats = feats;
+		actor.edges = edges;
+		actor.inventory = items;
+		actor.items_categorized = items_categorized;
+		actor.abilities = abilities;
+		actor.moves = moves;
+		actor.capabilities = capabilities;
+		actor.dex = dex;
 	}
 
 	/* -------------------------------------------- */
@@ -147,7 +147,7 @@ export class PTUGen8CharacterSheet extends ActorSheet {
 		// Update Inventory Item
 		html.find('.item-edit').click((ev) => {
 			const li = $(ev.currentTarget).parents('.item');
-			const item = this.actor.getOwnedItem(li.data('itemId'));
+			const item = this.actor.items.get(li.data('itemId'));
 			item.sheet.render(true);
 		});
 
@@ -178,11 +178,6 @@ export class PTUGen8CharacterSheet extends ActorSheet {
 			this.actor.deleteOwnedItem(li.data('itemId'));
 			li.slideUp(200, () => this.render(false));
 		});
-		//Drag Inventory Item
-		html.find('.item-categorized').each((i,element) => {
-			element.addEventListener("drop",this._onItemDrop.bind(this));
-			element.addEventListener("dragstart",this._onItemDrag.bind(this));
-		});
 
 		// Delete Effect
 		html.find('.effect-delete').click((ev) => {
@@ -205,7 +200,7 @@ export class PTUGen8CharacterSheet extends ActorSheet {
 		html.find('.rollable.save').click(this._onSaveRoll.bind(this));
 
 		// Drag events for macros.
-		if (this.actor.owner) {
+		if (this.actor.isOwner) {
 			let handler = (ev) => this._onDragItemStart(ev);
 			html.find('li.item').each((i, li) => {
 				if (li.classList.contains('inventory-header')) return;
@@ -231,52 +226,43 @@ export class PTUGen8CharacterSheet extends ActorSheet {
 		})
 	}
 
-	async _onItemDrag(event){
-		//Letting the drop event know our target item ID
-		await event.dataTransfer.setData("text/plain",event.target.dataset.itemId);
-	}
+	async _onDrop(event){
+		const dataTransfer = JSON.parse(event.dataTransfer.getData('text/plain'));
 
-	async _onItemDrop(event){
-		debug("Drop Category",event.target.dataset?.category);
-		debug("Drop Event",event);
-
-		const itemId = event.dataTransfer.getData("text");
+		const itemData = dataTransfer.data;
 		const category = event.target.dataset.category;
 		const actor = this.actor;
+		let handled = false;
+		let item = undefined;
 
-		// Grab item from character sheet
-		let item = actor.getOwnedItem(itemId);
+		if(!itemData) { 
+			item = (await super._onDrop(event))[0];
+			if(!item) {
+				error("Item Drop data is undefined.", event)
+				return;
+			}
+			handled = true;
+
+			const oldItem = actor.items.getName(item.data.name);
+			console.log(oldItem, item);
+			if(oldItem.id != item.id && oldItem.data.data.quantity) {
+				const data = duplicate(oldItem.data);
+				data.data.quantity++;
+				await this.actor.deleteEmbeddedDocuments("Item", [item.id]);
+				return await this.actor.updateEmbeddedDocuments("Item", [data]);
+			}
+		}
+		else item = actor.items.get(itemData._id);
 		
-		// If item exists check if category changed
-		if(item) {
-			const itemData = duplicate(item.data);
-			if(itemData.data.category == category)			
-				// Handle item sorting within the same Actor
-				return this._onSortItem(event, itemData);
-		}
-		// If Item doesn't exist yet wait for item creation to resolve, then try again.
-		else {
-			const itemId = await new Promise((resolve, reject) => {
-				const hookId = Hooks.on("createOwnedItem", function(hookActor, hookItem, options, sender){
-					if(actor.id == hookActor.id && hookItem.type == "item") {
-						Hooks.off("createOwnedItem", hookId)
-						resolve(hookItem._id);
-					}
-				})
-				// if after 1.5 sec there is no success, abort.
-				setTimeout(() => {
-					Hooks.off("createOwnedItem", hookId);
-					debug("Did not catch item drop.")
-					reject
-				}, 1500);
-			});
-			if(!itemId) return;
-			item = actor.getOwnedItem(itemId);
-		}
+		if(item.data.type != 'item' || item.data.data.category == category)
+			return this._onSortItem(event, item.data);
 
-		item.data.data.category=category;
-		await this.actor.updateOwnedItem(item.data);
-		log(`Moved ${item.name} to ${category} category`);
+		item = await item.update({'data.category':category});
+		
+		log(`Moved ${item.data.name} to ${category} category`);
+		
+		await this._onSortItem(event, item.data);
+		return handled ? actor.items.get(item.id) : await super._onDrop(event);
 	}
 
 	_onDragItemStart(event) {}
@@ -307,7 +293,7 @@ export class PTUGen8CharacterSheet extends ActorSheet {
 		if(itemData.type === "ActiveEffect") {
 			// Finally, create the effect!
 			debug("Created new effect",itemData);
-			return this.actor.createEmbeddedEntity(itemData.type, itemData);
+			return this.actor.createEmbeddedDocuments(itemData.type, [itemData]);
 		}
 		if(itemData.type === "dexentry") {
 
@@ -333,7 +319,7 @@ export class PTUGen8CharacterSheet extends ActorSheet {
 		const binding = $(t).data("binding");
 	
 		
-		const item = this.actor.getOwnedItem(id);
+		const item = this.actor.items.get(id);
 		const updateParams = {};
 		updateParams[binding] = value;
 		if (item) { item.update(updateParams, {}); }
@@ -344,7 +330,7 @@ export class PTUGen8CharacterSheet extends ActorSheet {
 	 * @param {Event} event   The originating click event
 	 * @private
 	 */
-	_onRoll(event) {
+	async _onRoll(event) {
 		event.preventDefault();
 		const element = event.currentTarget;
 		const dataset = element.dataset;
@@ -352,7 +338,7 @@ export class PTUGen8CharacterSheet extends ActorSheet {
 		if (dataset.roll) {
 			let roll = new Roll(dataset.roll, this.actor.data.data);
 			let label = dataset.label ? `Rolling ${dataset.label}` : '';
-			roll.roll().toMessage({
+			(await roll.evaluate({async: true})).toMessage({
 				speaker: ChatMessage.getSpeaker({
 					actor: this.actor
 				}),
@@ -373,11 +359,11 @@ export class PTUGen8CharacterSheet extends ActorSheet {
 		let mod = this.actor.data.data.modifiers.saveChecks?.total;
 		let roll = new Roll("1d20 + @mod", {mod: mod});
 		
-		roll.roll();
+		await roll.evaluate({async: true});
 
 		const messageData = {
 			title: `${this.actor.name}'s<br>Save Check`,
-			user: game.user._id,
+			user: game.user.id,
 			sound: CONFIG.sounds.dice,
 			templateType: 'save',
 			roll: roll,
@@ -399,7 +385,7 @@ export class PTUGen8CharacterSheet extends ActorSheet {
  
 		const element = event?.currentTarget;
 		const dataset = element?.dataset;
-		const move = item ? item : this.actor.items.find(x => x._id == dataset.id).data;
+		const move = item ? item : this.actor.items.get(dataset.id).data;
 
 		move.data = PrepareMoveData(actor ? actor.data.data : this.actor.data.data, move.data);
 
@@ -429,8 +415,8 @@ export class PTUGen8CharacterSheet extends ActorSheet {
 						damageRoll = CalculateDmgRoll(moveData, this.actor.data.data, CritOptions.NORMAL);
 					break;
 				}
-				if(damageRoll) damageRoll.roll();
-				if(critRoll) critRoll.roll();
+				if(damageRoll) damageRoll.evaluate({async: false});
+				if(critRoll) critRoll.evaluate({async: false});
 			}
 			sendMoveRollMessage(acRoll, {
 				speaker: ChatMessage.getSpeaker({
@@ -578,7 +564,7 @@ function CalculateDmgRoll(moveData, actorData, isCrit) {
 }
 
 function GetDiceResult(roll) {
-	if (!roll._rolled) roll.evaluate();
+	if (!roll._evaluated) roll.evaluate({async:false});
 
 	let diceResult = -2;
 	try {
@@ -604,10 +590,10 @@ function PerformAcRoll(roll, move, actor) {
 }
 
 async function sendMoveRollMessage(rollData, messageData = {}) {
-	if (!rollData._rolled) rollData.evaluate();
+	if (!rollData._evaluated) await rollData.evaluate({async: true});
 
 	messageData = mergeObject({
-		user: game.user._id,
+		user: game.user.id,
 		sound: CONFIG.sounds.dice,
 		templateType: MoveMessageTypes.DAMAGE,
 		verboseChatInfo: game.settings.get("ptu", "verboseChatInfo") ?? false
@@ -627,7 +613,7 @@ async function sendMoveRollMessage(rollData, messageData = {}) {
 
 async function sendMoveMessage(messageData = {}) {
 	messageData = mergeObject({
-		user: game.user._id,
+		user: game.user.id,
 		templateType: MoveMessageTypes.DAMAGE,
 		verboseChatInfo: game.settings.get("ptu", "verboseChatInfo") ?? false
 	}, messageData);
