@@ -143,6 +143,16 @@ export function LoadSystemSettings() {
         category: "combat"
     });
 
+    game.settings.register("ptu", "removeVolatileConditionsAfterCombat", {
+        name: "Remove Conditions after Combat",
+        hint: "Automatically remove Volatile Conditions after Combat",
+        scope: "world",
+        config: true,
+        type: Boolean,
+        default: true,
+        category: "combat"
+    });
+
     game.settings.register("ptu", "verboseChatInfo", {
         name: "Verbose Chat Output",
         hint: "When enabled shows more details in chat messages.",

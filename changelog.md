@@ -1,6 +1,12 @@
 # Welcome to the Beta!
 Hey there! You are on the Beta Branch. If you ever have any feedback please do share with us over on [Github](https://github.com/dylanpiera/Foundry-Pokemon-Tabletop-United-System/issues) or [Discord](https://discord.gg/fE3w59q)
 
+## 1.5-Beta-1 - Auto Delete Volatile Conditions
+- Volatile Conditions are now automatically removed at the end of Combat
+  - This can be disabled in the settings.
+- Combat now remembers who has joined a Combat, deleting flinch from all mons that participated, not those that are just currently on the field.
+- Added the 'endOfCombat' hook with params: 'Combat, participantUuids[]'
+
 ## 1.5-Beta-0 - Release 1.4 Dev Branch
 Welcome on the 1.5 dev branch, this is the exact same codebase as the 1.4.0 release.
 
