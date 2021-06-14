@@ -1,6 +1,10 @@
 # Welcome to the Beta!
 Hey there! You are on the Beta Branch. If you ever have any feedback please do share with us over on [Github](https://github.com/dylanpiera/Foundry-Pokemon-Tabletop-United-System/issues) or [Discord](https://discord.gg/fE3w59q)
 
+## 1.5-Beta-2 - Where's Sentret?
+- Added Sentret dex entry to compendium
+- Fixed the 'ActorGenerator.Create' method to allow quick creation of actors that already exist.
+
 ## 1.5-Beta-1 - Auto Delete Volatile Conditions
 - Volatile Conditions are now automatically removed at the end of Combat
   - This can be disabled in the settings.

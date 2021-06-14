@@ -94,7 +94,7 @@ export class ActorGenerator {
         let ag;
         if(options.exists) { 
             if(!options.actor) throw "actor field required in options";
-            ag = new ActorGenerator(actor);
+            ag = new ActorGenerator(options.actor);
         }
         else {
             if(!options.species) throw "species field required in options";
@@ -112,6 +112,8 @@ export class ActorGenerator {
         }
         await GetOrCacheAbilities(); await GetOrCacheMoves(); await GetOrCacheCapabilities();
 
+        if(options.exists) return ag;
+        
         await ag.Generate().PrepareArt(options.imgpath ?? undefined);
         debug("Generating an actor using the following generator",ag);
         return await ag.ApplyChanges();
