@@ -1,6 +1,10 @@
 # Welcome to the Beta!
 Hey there! You are on the Beta Branch. If you ever have any feedback please do share with us over on [Github](https://github.com/dylanpiera/Foundry-Pokemon-Tabletop-United-System/issues) or [Discord](https://discord.gg/fE3w59q)
 
+## 1.5-Beta-3 - Move Origins
+- Automatically guess the origin of a move on a Pokémon's sheet.
+  - Whenever you add a move to a mon, it will check it's Level-Up, Egg, TM & Tutor list (in that order) to see how it is supposed to get this move, and set that as the assumed origin
+
 ## 1.5-Beta-2 - Where's Sentret?
 - Added Sentret dex entry to compendium
 - Fixed the 'ActorGenerator.Create' method to allow quick creation of actors that already exist.

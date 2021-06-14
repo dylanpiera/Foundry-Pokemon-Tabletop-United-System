@@ -53,7 +53,7 @@ export let log = (...args) => console.log("FVTT PTU | ", ...args);
 export let warn = (...args) => console.warn("FVTT PTU | ", ...args);
 export let error = (...args) => console.error("FVTT PTU | ", ...args)
 
-export const LATEST_VERSION = "1.5-Beta-2";
+export const LATEST_VERSION = "1.5-Beta-3";
 
 /* -------------------------------------------- */
 /*  Foundry VTT Initialization                  */
@@ -695,3 +695,25 @@ Hooks.on("updateInitiative", function(actor) {
   }
   return true;
 }) 
+
+// Whenever a move is created, add it's origin (or none if it's unable to find it).
+Hooks.on("preCreateItem", async function(item, data, options, sender) {
+  if(item.type != "move") return;
+  let origin = "";
+  const speciesData = game.ptu.GetSpeciesData(item.parent.data.data.species);
+  
+  // All of these have a slightly different format, change them to just be an array of the names with capital letters included.
+  const levelUp = speciesData["Level Up Move List"].map(x => x.Move);
+  const EggMoves = speciesData["Egg Move List"];
+  const TMs = speciesData["TM Move List"].map(x => Handlebars.helpers.tmName(x));
+  const TutorMoves = speciesData["Tutor Move List"].map(x => x.replace("(N)", ""))
+     
+  // Priority Level Up > Egg > TM > Tutor
+  if(TutorMoves.includes(item.name)) origin = "Tutor Move";
+  if(TMs.includes(item.name)) origin = "TM Move";
+  if(EggMoves.includes(item.name)) origin = "Egg Move";
+  if(levelUp.includes(item.name)) origin = "Level Up Move";   
+  
+  // In preCreate[document] hook, you can update a document's data class using `document.data.update` before it is committed to the database and actually created.
+  await item.data.update({"data.origin": origin});
+});
