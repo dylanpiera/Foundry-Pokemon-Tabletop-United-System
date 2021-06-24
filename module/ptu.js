@@ -353,6 +353,7 @@ Hooks.once("setup", function() {
   window.addEventListener('keydown', (event) => {
     const key = getKey(event);
     if(["Delete", "Backspace"].includes(key)) {
+      if(event.target.className != "vtt game system-ptu") return;
       if ( canvas.ready && ( canvas.activeLayer instanceof PlaceablesLayer ) ) {
         const layer = canvas.activeLayer;
 
