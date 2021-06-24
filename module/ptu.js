@@ -366,7 +366,9 @@ Hooks.once("setup", function() {
           uuids.push(o.uuid);
           return uuids;
         }, [])
-        if ( uuids.length ) return game.ptu.api.tokensDelete(uuids);
+        if ( uuids.length ) {
+          if(Hooks.call("prePlayerDeleteToken", uuids)) return game.ptu.api.tokensDelete(uuids);
+        }
       }
     }
   });
