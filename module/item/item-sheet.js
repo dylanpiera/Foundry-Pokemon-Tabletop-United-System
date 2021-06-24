@@ -129,7 +129,7 @@ export class PTUItemSheet extends ItemSheet {
 					speaker: ChatMessage.getSpeaker({
 						actor: this.actor
 					}),
-					item: this.object.data
+					item: this.object
 				});
 		}
 	}

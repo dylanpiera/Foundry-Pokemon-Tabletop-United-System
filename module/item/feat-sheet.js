@@ -57,7 +57,7 @@ export class PTUFeatSheet extends ItemSheet {
 			class: ".to-chat",
 			icon: "fas fa-comment",
 			onclick: () => sendItemMessage({
-        item: this.object.data,
+        item: this.object,
         speaker: ChatMessage.getSpeaker({
           actor: this.actor
         })

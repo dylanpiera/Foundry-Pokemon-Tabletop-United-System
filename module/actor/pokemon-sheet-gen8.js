@@ -1,5 +1,6 @@
 import { debug, error, log, PrepareMoveData, warn } from '../ptu.js'
 import { HardenedChanges } from '../data/training-data.js'
+import { sendItemMessage } from '../item/item-sheet.js';
 
 /**
  * Extend the basic ActorSheet with some very simple modifications
@@ -172,6 +173,31 @@ export class PTUGen8PokemonSheet extends ActorSheet {
 
 		// Add Inventory Item
 		html.find('.item-create').click(this._onItemCreate.bind(this));
+
+		// Item to Chat
+		html.find('.item-to-chat').click((ev) => {
+			const li = $(ev.currentTarget).parents('.item');
+			const item = this.actor.items.get(li.data('itemId'));
+
+			switch(item.type) {
+				case "move":
+					return sendMoveMessage({
+						speaker: ChatMessage.getSpeaker({
+							actor: this.actor
+						}),
+						name: item.name,
+						move: item.data.data,
+						templateType: 'details'
+					});
+				default: 
+					return sendItemMessage({
+						speaker: ChatMessage.getSpeaker({
+							actor: this.actor
+						}),
+						item: item
+					});
+			}
+		});
 
 		// Update Inventory Item
 		html.find('.item-edit').click((ev) => {
