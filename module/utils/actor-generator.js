@@ -206,7 +206,7 @@ function PrepareMoves(allMoves) {
     let evoMoves = this.species.data["Level Up Move List"].filter(x => x.Level == "Evo");
 
     let newMoves = evoMoves ? evoMoves : [];
-    for(let levelUpMove of levelUpMoves.slice(Math.max(levelUpMoves.length - 6 + newMoves.length ,0))) {
+    for(let levelUpMove of levelUpMoves.slice(Math.max(levelUpMoves.length - 6 + newMoves.length, 0))) {
         newMoves.push(levelUpMove);
     }
 

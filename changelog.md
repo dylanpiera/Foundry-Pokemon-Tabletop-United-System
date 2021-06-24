@@ -1,6 +1,12 @@
 # Welcome to the Beta!
 Hey there! You are on the Beta Branch. If you ever have any feedback please do share with us over on [Github](https://github.com/dylanpiera/Foundry-Pokemon-Tabletop-United-System/issues) or [Discord](https://discord.gg/fE3w59q)
 
+## 1.5-Beta-4 - Bug Fixes
+- Fix Accidentally deleting tokens when trying to press 'delete' or 'backspace' in a character sheet
+- Add "Send to Chat" buttons to Pokémon & Trainer sheets for all items.
+- Add prePlayerDeleteToken hook for module developers
+- Fixed some typos in settings
+
 ## 1.5-Beta-3 - Move Origins
 - Automatically guess the origin of a move on a Pokémon's sheet.
   - Whenever you add a move to a mon, it will check it's Level-Up, Egg, TM & Tutor list (in that order) to see how it is supposed to get this move, and set that as the assumed origin

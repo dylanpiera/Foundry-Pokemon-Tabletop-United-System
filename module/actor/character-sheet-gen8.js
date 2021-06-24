@@ -1,3 +1,4 @@
+import { sendItemMessage } from '../item/item-sheet.js';
 import { debug, error, log, PrepareMoveData } from '../ptu.js'
 
 /**
@@ -143,6 +144,30 @@ export class PTUGen8CharacterSheet extends ActorSheet {
 
 		// Add Inventory Item
 		html.find('.item-create').click(this._onItemCreate.bind(this));
+
+		// Item to Chat
+		html.find('.item-to-chat').click((ev) => {
+			const li = $(ev.currentTarget).parents('.item');
+			const item = this.actor.items.get(li.data('itemId'));
+			switch(item.type) {
+				case "move":
+					return sendMoveMessage({
+						speaker: ChatMessage.getSpeaker({
+							actor: this.actor
+						}),
+						name: item.name,
+						move: item.data.data,
+						templateType: 'details'
+					});
+				default: 
+					return sendItemMessage({
+						speaker: ChatMessage.getSpeaker({
+							actor: this.actor
+						}),
+						item: item
+					});
+			}
+		});
 
 		// Update Inventory Item
 		html.find('.item-edit').click((ev) => {

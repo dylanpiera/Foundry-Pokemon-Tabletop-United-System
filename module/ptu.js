@@ -53,7 +53,7 @@ export let log = (...args) => console.log("FVTT PTU | ", ...args);
 export let warn = (...args) => console.warn("FVTT PTU | ", ...args);
 export let error = (...args) => console.error("FVTT PTU | ", ...args)
 
-export const LATEST_VERSION = "1.5-Beta-3";
+export const LATEST_VERSION = "1.5-Beta-4";
 
 /* -------------------------------------------- */
 /*  Foundry VTT Initialization                  */
@@ -353,6 +353,7 @@ Hooks.once("setup", function() {
   window.addEventListener('keydown', (event) => {
     const key = getKey(event);
     if(["Delete", "Backspace"].includes(key)) {
+      if(event.target.className != "vtt game system-ptu") return;
       if ( canvas.ready && ( canvas.activeLayer instanceof PlaceablesLayer ) ) {
         const layer = canvas.activeLayer;
 
@@ -365,7 +366,9 @@ Hooks.once("setup", function() {
           uuids.push(o.uuid);
           return uuids;
         }, [])
-        if ( uuids.length ) return game.ptu.api.tokensDelete(uuids);
+        if ( uuids.length ) {
+          if(Hooks.call("prePlayerDeleteToken", uuids)) return game.ptu.api.tokensDelete(uuids);
+        }
       }
     }
   });

@@ -31,7 +31,7 @@ export function LoadSystemSettings() {
 
     game.settings.register("ptu", "useDexExp", {
         name: "Use Dex Experience for Trainer Level Calculation",
-        hint: "",
+        hint: "Whether the system should check how many pokemon are marked as 'Caught' in a Trainer's dex tab, and add that to their dex experience total.",
         scope: "world",
         config: true,
         type: String,
@@ -240,8 +240,8 @@ export function LoadSystemSettings() {
     });
 
     game.settings.register("ptu", "playPokemonCriesOnDrop", {
-        name: "Play Pokemon Cry when dragged from Dex",
-        hint: "This will play a Pokemon's cry when it is drag-and-dropped from the pokedex compendium.",
+        name: "Play Pokémon Cry when dragged from Dex",
+        hint: "This will play a Pokémon's cry when it is drag-and-dropped from the pokedex compendium.",
         scope: "world",
         config: true,
         type: Boolean,
@@ -250,8 +250,8 @@ export function LoadSystemSettings() {
     });
 
     game.settings.register("ptu", "pokemonCryDirectory", {
-        name: "Pokemon Cry Directory",
-        hint: "The directory where the user can upload mp3 or wav files (named as the lowercase name of the pokemon).",
+        name: "Pokémon Cry Directory",
+        hint: "The directory where the user can upload mp3 or wav files (named as the lowercase name of the pokémon).",
         scope: "world",
         config: true,
         type: String,

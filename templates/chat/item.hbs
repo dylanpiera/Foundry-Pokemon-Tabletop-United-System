@@ -1,109 +1,109 @@
 {{#if item}}
-<div class="content flexrow pt-1" style="font-variant: normal;">
-    <div class="swsh-box">
-        <div class="swsh-header" style="border-bottom:1px solid #00000020;text-align:center">
-            <div class="d-flex w-100 mt-1 mb-1 justify-content-center">
-                <span style="padding:5px">{{item.name}}</span>
+    <div class="content flexrow pt-1" style="font-variant: normal;">
+        <div class="swsh-box">
+            <div class="swsh-header" style="border-bottom:1px solid #00000020;text-align:center">
+                <div class="d-flex w-100 mt-1 mb-1 justify-content-center">
+                    <span style="padding:5px;word-break: break-word;">{{item.name}}</span>
+                </div>
+            </div>
+            <div class="d-flex w-100 fs-10 justify-content-center" style="flex-wrap: wrap;word-break: break-word;">
+                    <div class="justify-content-center swsh-header col-sm-5 pt-1 pb-1" style="align-items:center;">
+                        Type
+                    </div>
+                    <div class="justify-content-center swsh-body col-sm-7" style="text-align: center;">
+                        {{capitalizeFirst item.type}}
+                    </div>
+                {{#if item.data.data.origin}}
+                    <div class="justify-content-center swsh-header col-sm-5 pt-1 pb-1" style="align-items:center;">
+                        Origin
+                    </div>
+                    <div class="justify-content-center swsh-body col-sm-7" style="text-align: center;">
+                        {{item.data.data.origin}}
+                    </div>
+                {{/if}}
+                {{#if item.data.data.prerequisites}}
+                    <div class="justify-content-center swsh-header col-sm-5 pt-1 pb-1 fs-9" style="align-items:center;">
+                        Prereqs
+                    </div>
+                    <div class="justify-content-center swsh-body col-sm-7" style="text-align: center;">
+                        {{item.data.data.prerequisites}}
+                    </div>
+                {{/if}}
+                {{#if item.data.data.frequency}}
+                    <div class="justify-content-center swsh-header col-sm-5 pt-1 pb-1 fs-8" style="align-items:center;">
+                        Frequency
+                    </div>
+                    <div class="justify-content-center swsh-body col-sm-7" style="text-align: center;">
+                        {{item.data.data.frequency}}
+                    </div>
+                {{/if}}
+                {{#if item.data.data.tags}}
+                    <div class="justify-content-center swsh-header col-sm-5 pt-1 pb-1 fs-8" style="align-items:center;">
+                        Tags
+                    </div>
+                    <div class="justify-content-center swsh-body col-sm-7" style="text-align: center;">
+                        {{item.data.data.tags}}
+                    </div>
+                {{/if}}
+                {{#if item.data.data.notes}}
+                    <div class="justify-content-center swsh-header col-sm-5 pt-1 pb-1 fs-8" style="align-items:center;">
+                        Notes
+                    </div>
+                    <div class="justify-content-center swsh-body col-sm-7" style="text-align: center;">
+                        {{item.data.data.notes}}
+                    </div>
+                {{/if}}
+                {{#if item.data.data.tier}}
+                    <div class="justify-content-center swsh-header col-sm-5 pt-1 pb-1 fs-8" style="align-items:center;">
+                        Tier
+                    </div>
+                    <div class="justify-content-center swsh-body col-sm-7" style="text-align: center;">
+                        {{item.data.data.tier}}
+                    </div>
+                {{/if}}
+                {{#if item.data.data.quantity}}
+                    <div class="justify-content-center swsh-header col-sm-5 pt-1 pb-1 fs-8" style="align-items:center;">
+                        Quantity
+                    </div>
+                    <div class="justify-content-center swsh-body col-sm-7" style="text-align: center;">
+                        {{item.data.data.quantity}}
+                    </div>
+                {{/if}}
+                {{#if item.data.data.cost}}
+                    <div class="justify-content-center swsh-header col-sm-5 pt-1 pb-1 fs-8" style="align-items:center;">
+                        Cost
+                    </div>
+                    <div class="justify-content-center swsh-body col-sm-7" style="text-align: center;">
+                        {{item.data.data.cost}}
+                    </div>
+                {{/if}}
+                {{#if item.data.data.effect}}
+                    <div class="swsh-header col-sm-12">
+                        <div class="d-flex w-100 mt-1 mb-1 fs-11" style="align-items: center;text-align: center;">
+                            <div class="col">Effect</div>
+                        </div>
+                    </div>
+                    <div class="swsh-body col-sm-12">
+                        <div class="d-flex w-100 mt-1 mb-1 fs-11" style="align-items: center;text-align: center;">
+                            <div class="p-1 readable pokemon p8 tight"
+                                style="word-break: break-word;text-align: start;line-height: 16px;">{{{item.data.data.effect}}}</div>
+                        </div>
+                    </div>
+                {{/if}}
+                {{#if item.data.data.entry}}
+                    <div class="swsh-header col-sm-12">
+                        <div class="d-flex w-100 mt-1 mb-1 fs-11" style="align-items: center;text-align: center;">
+                            <div class="col">Entry</div>
+                        </div>
+                    </div>
+                    <div class="swsh-body col-sm-12">
+                        <div class="d-flex w-100 mt-1 mb-1 fs-11" style="align-items: center;text-align: center;">
+                            <div class="p-1 readable pokemon p8 tight"
+                                style="word-break: break-word;text-align: start;line-height: 16px;">{{{item.data.data.entry}}}</div>
+                        </div>
+                    </div>
+                {{/if}}
             </div>
         </div>
-        <div class="d-flex w-100 fs-10 justify-content-center" style="flex-wrap: wrap;word-break: break-word;">
-                <div class="justify-content-center swsh-header col-sm-5 pt-1 pb-1" style="align-items:center;">
-                    Type
-                </div>
-                <div class="justify-content-center swsh-body col-sm-7" style="text-align: center;">
-                    {{capitalizeFirst item.type}}
-                </div>
-            {{#if item.data.origin}}
-                <div class="justify-content-center swsh-header col-sm-5 pt-1 pb-1" style="align-items:center;">
-                    Origin
-                </div>
-                <div class="justify-content-center swsh-body col-sm-7" style="text-align: center;">
-                    {{item.data.origin}}
-                </div>
-            {{/if}}
-            {{#if item.data.prerequisites}}
-                <div class="justify-content-center swsh-header col-sm-5 pt-1 pb-1 fs-9" style="align-items:center;">
-                    Prereqs
-                </div>
-                <div class="justify-content-center swsh-body col-sm-7" style="text-align: center;">
-                    {{item.data.prerequisites}}
-                </div>
-            {{/if}}
-            {{#if item.data.frequency}}
-                <div class="justify-content-center swsh-header col-sm-5 pt-1 pb-1 fs-8" style="align-items:center;">
-                    Frequency
-                </div>
-                <div class="justify-content-center swsh-body col-sm-7" style="text-align: center;">
-                    {{item.data.frequency}}
-                </div>
-            {{/if}}
-            {{#if item.data.tags}}
-                <div class="justify-content-center swsh-header col-sm-5 pt-1 pb-1 fs-8" style="align-items:center;">
-                    Tags
-                </div>
-                <div class="justify-content-center swsh-body col-sm-7" style="text-align: center;">
-                    {{item.data.tags}}
-                </div>
-            {{/if}}
-            {{#if item.data.notes}}
-                <div class="justify-content-center swsh-header col-sm-5 pt-1 pb-1 fs-8" style="align-items:center;">
-                    Notes
-                </div>
-                <div class="justify-content-center swsh-body col-sm-7" style="text-align: center;">
-                    {{item.data.notes}}
-                </div>
-            {{/if}}
-            {{#if item.data.tier}}
-                <div class="justify-content-center swsh-header col-sm-5 pt-1 pb-1 fs-8" style="align-items:center;">
-                    Tier
-                </div>
-                <div class="justify-content-center swsh-body col-sm-7" style="text-align: center;">
-                    {{item.data.tier}}
-                </div>
-            {{/if}}
-            {{#if item.data.quantity}}
-                <div class="justify-content-center swsh-header col-sm-5 pt-1 pb-1 fs-8" style="align-items:center;">
-                    Quantity
-                </div>
-                <div class="justify-content-center swsh-body col-sm-7" style="text-align: center;">
-                    {{item.data.quantity}}
-                </div>
-            {{/if}}
-            {{#if item.data.cost}}
-                <div class="justify-content-center swsh-header col-sm-5 pt-1 pb-1 fs-8" style="align-items:center;">
-                    Cost
-                </div>
-                <div class="justify-content-center swsh-body col-sm-7" style="text-align: center;">
-                    {{item.data.cost}}
-                </div>
-            {{/if}}
-            {{#if item.data.effect}}
-                <div class="swsh-header col-sm-12">
-                    <div class="d-flex w-100 mt-1 mb-1 fs-11" style="align-items: center;text-align: center;">
-                        <div class="col">Effect</div>
-                    </div>
-                </div>
-                <div class="swsh-body col-sm-12">
-                    <div class="d-flex w-100 mt-1 mb-1 fs-11" style="align-items: center;text-align: center;">
-                        <div class="p-1 readable pokemon p8 tight"
-                            style="word-break: break-word;text-align: start;line-height: 16px;">{{{item.data.effect}}}</div>
-                    </div>
-                </div>
-            {{/if}}
-            {{#if item.data.entry}}
-                <div class="swsh-header col-sm-12">
-                    <div class="d-flex w-100 mt-1 mb-1 fs-11" style="align-items: center;text-align: center;">
-                        <div class="col">Entry</div>
-                    </div>
-                </div>
-                <div class="swsh-body col-sm-12">
-                    <div class="d-flex w-100 mt-1 mb-1 fs-11" style="align-items: center;text-align: center;">
-                        <div class="p-1 readable pokemon p8 tight"
-                            style="word-break: break-word;text-align: start;line-height: 16px;">{{{item.data.entry}}}</div>
-                    </div>
-                </div>
-            {{/if}}
-        </div>
     </div>
-</div>
 {{/if}}

@@ -2,7 +2,7 @@
 A Pokemon Tabletop United System for use in FoundryVTT.
 
 For any questions, feel free to open an issue or message me on Discord: SoaringDylan#0380.
-You can also join our Discord Server for any questions & feedback: https://discord.gg/fE3w59q
+You can also join our Discord Server for any questions & feedback: https://discord.gg/ZTFfKYDxZf
 
 ## How to Install
 #### Release Build
