@@ -269,7 +269,6 @@ export class PTUGen8CharacterSheet extends ActorSheet {
 			handled = true;
 
 			const oldItem = actor.items.getName(item.data.name);
-			console.log(oldItem, item);
 			if(oldItem.id != item.id && oldItem.data.data.quantity) {
 				const data = duplicate(oldItem.data);
 				data.data.quantity++;
@@ -319,9 +318,6 @@ export class PTUGen8CharacterSheet extends ActorSheet {
 			// Finally, create the effect!
 			debug("Created new effect",itemData);
 			return this.actor.createEmbeddedDocuments(itemData.type, [itemData]);
-		}
-		if(itemData.type === "dexentry") {
-
 		}
 
 		// Finally, create the item!

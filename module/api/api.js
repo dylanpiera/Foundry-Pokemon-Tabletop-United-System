@@ -85,7 +85,7 @@ export default class Api {
                 if(!allowed) return ref._returnBridge({result: new ApiError({message: "DM Denied owner transfer", type: 403})}, data);
 
                 const newData = {
-                    folder: pc.folder.id,
+                    folder: pc.folder?.id,
                     permission: mergeObject({
                         [sender.id]: 3
                     }, data.content.options?.permission ?? {}),

@@ -1,11 +1,16 @@
 # Welcome to the Beta!
 Hey there! You are on the Beta Branch. If you ever have any feedback please do share with us over on [Github](https://github.com/dylanpiera/Foundry-Pokemon-Tabletop-United-System/issues) or [Discord](https://discord.gg/fE3w59q)
 
+## 1.5-Beta-5 - Bug Fixes Pt. 2
+- Fixed allowing dex entries to be created multiple times on a sheet when dragged in from compendium.
+- Fixed small error when transfer ownership API was being used with a PC that was not residing in any folder.
+- Fixed Move Master breaking the Player Token Deletion operation due to editing main body classes.
+
 ## 1.5-Beta-4 - Bug Fixes
 - Fix Accidentally deleting tokens when trying to press 'delete' or 'backspace' in a character sheet
 - Add "Send to Chat" buttons to Pokémon & Trainer sheets for all items.
-- Add prePlayerDeleteToken hook for module developers
-- Fixed some typos in settings
+- Add prePlayerDeleteToken hook for module developers.
+- Fixed some typos in settings.
 
 ## 1.5-Beta-3 - Move Origins
 - Automatically guess the origin of a move on a Pokémon's sheet.
