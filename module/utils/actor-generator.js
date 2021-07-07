@@ -147,10 +147,7 @@ async function ApplyChanges() {
 }
 
 function PrepareEvolution(prevent_evolution = undefined) {
-    if(prevent_evolution)
-    {
-        return this;
-    }
+    if(prevent_evolution) return this;
 
     let stages = this.species.data.Evolution.map(x => {return {stage: x[0], name: x[1], level: x[2] == "Null" ? 0 : x[2]}});
 
