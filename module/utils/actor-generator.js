@@ -48,17 +48,17 @@ export class ActorGenerator {
         return this;
     }
 
-    async PrepareArt(imgSrc, imgExt = ".png", shiny = false) {
+    async PrepareArt(imgSrc, imgExt = ".png") {
         if(imgSrc === undefined) {
             imgSrc = game.settings.get("ptu", "defaultPokemonImageDirectory");
             if(!imgSrc) return this;
         }
-        let imgPath = await GetSpeciesArt(this.species.data, imgSrc, imgExt, shiny);
+        let imgPath = await GetSpeciesArt(this.species.data, imgSrc, imgExt, this.actor.data.data.shiny);
         if(imgPath) this.data.img = imgPath;
         return this;
     }
 
-    Generate(statMethod = "weighted", allMoves = undefined, allAbilities = undefined, allCapabilities = undefined, stat_randomness = undefined, is_shiny = undefined, prevent_evolution = undefined) {
+    Generate(statMethod = "weighted", allMoves = undefined, allAbilities = undefined, allCapabilities = undefined, stat_randomness = undefined, shiny_chance = undefined, prevent_evolution = undefined) {
         if(allMoves === undefined) {
             if(game.ptu.cache.moves) allMoves = game.ptu.cache.moves;
             else throw 'Moves not cached, please provide moves.';
@@ -77,7 +77,7 @@ export class ActorGenerator {
         {
             stat_rng = Number(stat_randomness/100);
         }
-        return this.PrepareEvolution(prevent_evolution).PrepareGender().PrepareStats(statMethod, stat_rng).PrepareMoves(allMoves).PrepareAbilities(allAbilities).PrepareCapabilities(allCapabilities).PrepareShiny(is_shiny);
+        return this.PrepareEvolution(prevent_evolution).PrepareGender().PrepareStats(statMethod, stat_rng).PrepareMoves(allMoves).PrepareAbilities(allAbilities).PrepareCapabilities(allCapabilities).PrepareShiny(shiny_chance);
     }
 
     static PrepareData(species, exp, name = undefined, nature = undefined, shiny = undefined) {
@@ -99,8 +99,6 @@ export class ActorGenerator {
 
     static async Create(options = {}) {
         let ag;
-
-        const is_shiny = options?.shiny_chance ? (getRandomIntInclusive(1, 100) <= options.shiny_chance) : false;
 
         const stat_randomness = options?.stat_randomness ?? 20;
 
@@ -128,7 +126,7 @@ export class ActorGenerator {
 
         if(options.exists) return ag;
 
-        await ag.Generate("weighted", undefined, undefined, undefined, stat_randomness, is_shiny, prevent_evolution).PrepareArt(options.imgpath ?? undefined, undefined, is_shiny);
+        await ag.Generate("weighted", undefined, undefined, undefined, stat_randomness, options.shiny_chance, prevent_evolution).PrepareArt(options.imgpath ?? undefined);
         debug("Generating an actor using the following generator",ag);
         return await ag.ApplyChanges();
     }
@@ -285,7 +283,7 @@ function PrepareCapabilities(allCapabilities) {
     return this;
 }
 
-function PrepareShiny(is_shiny = false) {    
-    this.actor.data.data.shiny = is_shiny;
+function PrepareShiny(shiny_chance = 0) {    
+    this.actor.data.data.shiny = ( getRandomIntInclusive(1, 100) <= shiny_chance ? true : false );
     return this;
 }
