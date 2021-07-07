@@ -342,7 +342,7 @@ export class PTUActor extends Actor {
     data.evasion = CalculateEvasions(data, actorData.flags?.ptu);
     data.capabilities = CalculateTrainerCapabilities(data.skills, actorData.items, data.stats.spd.stage, actorData.flags?.ptu);
 
-    data.ap.total = 5 + Math.floor(data.level.current / 5);
+    data.ap.max = 5 + Math.floor(data.level.current / 5);
 
     data.initiative = {value: data.stats.spd.total + data.modifiers.initiative.total};
     if(actorData.flags?.ptu?.is_paralyzed) {
