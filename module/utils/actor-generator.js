@@ -102,11 +102,7 @@ export class ActorGenerator {
 
         const is_shiny = options?.shiny_chance ? (getRandomIntInclusive(1, 100) <= options.shiny_chance) : false;
 
-        let stat_randomness = 20;
-        if(options.stat_randomness)
-        {
-            stat_randomness = options.stat_randomness;
-        }
+        const stat_randomness = options?.stat_randomness ?? 20;
 
         let prevent_evolution = false;
         if(options.prevent_evolution)
