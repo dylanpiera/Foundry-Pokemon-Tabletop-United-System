@@ -100,16 +100,7 @@ export class ActorGenerator {
     static async Create(options = {}) {
         let ag;
 
-        let is_shiny = false;
-        if(options.shiny_chance)
-        {
-            let shiny_roll = getRandomIntInclusive(1, 100);
-
-            if(shiny_roll <= options.shiny_chance)
-            {
-                is_shiny = true;
-            }
-        }
+        const is_shiny = options?.shiny_chance ? (getRandomIntInclusive(1, 100) <= options.shiny_chance) : false;
 
         let stat_randomness = 20;
         if(options.stat_randomness)
