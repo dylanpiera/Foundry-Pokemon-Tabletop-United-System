@@ -45,7 +45,6 @@ export class PTUDexDragOptions extends FormApplication {
     
     /** @override */
     async _updateObject(event, formData) {
-        debug(formData);
 
         let level_min = parseInt(formData["data.level_min"]);
         let level_max = parseInt(formData["data.level_max"]);
