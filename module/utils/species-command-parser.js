@@ -82,11 +82,7 @@ export async function CreateMonParser(input, andCreate = false) {
 export async function GetSpeciesArt(mon, imgDirectoryPath, type = ".png", shiny = false) {
     const basePath = imgDirectoryPath+(imgDirectoryPath.endsWith('/') ? '' : '/')
 
-    let shiny_path = "";
-    if(shiny)
-    {
-        shiny_path = "s";
-    }
+    const shiny_path = shiny ? "s" : "";
 
     let path = basePath+lpad(mon?.number, 4)+shiny_path+type;
     let result = await fetch(path);
