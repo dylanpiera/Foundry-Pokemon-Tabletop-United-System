@@ -104,11 +104,7 @@ export class ActorGenerator {
 
         const stat_randomness = options?.stat_randomness ?? 20;
 
-        let prevent_evolution = false;
-        if(options.prevent_evolution)
-        {
-            prevent_evolution = true;
-        }
+        const prevent_evolution = options?.prevent_evolution ?? false;
 
         if(options.exists) { 
             if(!options.actor) throw "actor field required in options";
