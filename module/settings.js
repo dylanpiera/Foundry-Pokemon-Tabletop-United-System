@@ -211,6 +211,46 @@ export function LoadSystemSettings() {
         category: "rules"
     });
 
+    game.settings.register("ptu", "defaultDexDragInLevelMin", {
+        name: "Default Minimum Dex Drag-In Level",
+        hint: "When you quick-generate a pokemon by dragging its dex compendium entry onto a map, this will be the default minimum level.",
+        scope: "world",
+        config: true,
+        type: Number,
+        default: 10,
+        category: "rules"
+    });
+
+    game.settings.register("ptu", "defaultDexDragInLevelMax", {
+        name: "Default Maximum Dex Drag-In Level",
+        hint: "When you quick-generate a pokemon by dragging its dex compendium entry onto a map, this will be the default maximum level.",
+        scope: "world",
+        config: true,
+        type: Number,
+        default: 10,
+        category: "rules"
+    });
+
+    game.settings.register("ptu", "defaultDexDragInShinyChance", {
+        name: "Default Dex Drag-In Shiny Chance (%)",
+        hint: "When you quick-generate a pokemon by dragging its dex compendium entry onto a map, this will be the default chance for that pokemon to be shiny.",
+        scope: "world",
+        config: true,
+        type: Number,
+        default: 2,
+        category: "rules"
+    });
+
+    game.settings.register("ptu", "defaultDexDragInStatRandomness", {
+        name: "Default Dex Drag-In Stat Randomness (%)",
+        hint: "When you quick-generate a pokemon by dragging its dex compendium entry onto a map, this will be the default amount of randomness applied to its stat distribution.",
+        scope: "world",
+        config: true,
+        type: Number,
+        default: 20,
+        category: "rules"
+    });
+
     game.settings.register("ptu", "customSpecies", {
         name: "Custom Species json (Requires Refresh)",
         hint: "Please specify the path of a custom species file (inside the world directory) if you wish to add Homebrew Pokémon. [Currently in Beta!]",

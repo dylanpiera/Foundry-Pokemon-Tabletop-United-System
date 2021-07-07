@@ -27,6 +27,7 @@ export class ActorGenerator {
         this.PrepareMoves = PrepareMoves;
         this.PrepareAbilities = PrepareAbilities;
         this.PrepareCapabilities = PrepareCapabilities;
+        this.PrepareShiny = PrepareShiny;
     }
 
     data = { data: {}}
@@ -47,17 +48,17 @@ export class ActorGenerator {
         return this;
     }
 
-    async PrepareArt(imgSrc, imgExt = ".png") {
+    async PrepareArt(imgSrc, imgExt = ".png", shiny = false) {
         if(imgSrc === undefined) {
             imgSrc = game.settings.get("ptu", "defaultPokemonImageDirectory");
             if(!imgSrc) return this;
         }
-        let imgPath = await GetSpeciesArt(this.species.data, imgSrc, imgExt);
+        let imgPath = await GetSpeciesArt(this.species.data, imgSrc, imgExt, shiny);
         if(imgPath) this.data.img = imgPath;
         return this;
     }
 
-    Generate(statMethod = "weighted", allMoves = undefined, allAbilities = undefined, allCapabilities = undefined) {
+    Generate(statMethod = "weighted", allMoves = undefined, allAbilities = undefined, allCapabilities = undefined, stat_randomness = undefined, is_shiny = undefined, prevent_evolution = undefined) {
         if(allMoves === undefined) {
             if(game.ptu.cache.moves) allMoves = game.ptu.cache.moves;
             else throw 'Moves not cached, please provide moves.';
@@ -70,10 +71,16 @@ export class ActorGenerator {
             if(game.ptu.cache.capabilities) allCapabilities = game.ptu.cache.capabilities;
             else throw 'Capabilities not cached, please provide moves.';
         }
-        return this.PrepareEvolution().PrepareGender().PrepareStats(statMethod).PrepareMoves(allMoves).PrepareAbilities(allAbilities).PrepareCapabilities(allCapabilities);
+
+        let stat_rng = 0.1;
+        if(stat_randomness)
+        {
+            stat_rng = Number(stat_randomness/100);
+        }
+        return this.PrepareEvolution(prevent_evolution).PrepareGender().PrepareStats(statMethod, stat_rng).PrepareMoves(allMoves).PrepareAbilities(allAbilities).PrepareCapabilities(allCapabilities).PrepareShiny(is_shiny);
     }
 
-    static PrepareData(species, exp, name = undefined, nature = undefined) {
+    static PrepareData(species, exp, name = undefined, nature = undefined, shiny = undefined) {
         return {
             name: name ? name : species.toLowerCase().capitalize(),
             type: "pokemon",
@@ -92,6 +99,30 @@ export class ActorGenerator {
 
     static async Create(options = {}) {
         let ag;
+
+        let is_shiny = false;
+        if(options.shiny_chance)
+        {
+            let shiny_roll = getRandomIntInclusive(1, 100);
+
+            if(shiny_roll <= options.shiny_chance)
+            {
+                is_shiny = true;
+            }
+        }
+
+        let stat_randomness = 20;
+        if(options.stat_randomness)
+        {
+            stat_randomness = options.stat_randomness;
+        }
+
+        let prevent_evolution = false;
+        if(options.prevent_evolution)
+        {
+            prevent_evolution = true;
+        }
+
         if(options.exists) { 
             if(!options.actor) throw "actor field required in options";
             ag = new ActorGenerator(options.actor);
@@ -113,8 +144,8 @@ export class ActorGenerator {
         await GetOrCacheAbilities(); await GetOrCacheMoves(); await GetOrCacheCapabilities();
 
         if(options.exists) return ag;
-        
-        await ag.Generate().PrepareArt(options.imgpath ?? undefined);
+
+        await ag.Generate("weighted", undefined, undefined, undefined, stat_randomness, is_shiny, prevent_evolution).PrepareArt(options.imgpath ?? undefined, undefined, is_shiny);
         debug("Generating an actor using the following generator",ag);
         return await ag.ApplyChanges();
     }
@@ -132,7 +163,12 @@ async function ApplyChanges() {
     return this.actor;
 }
 
-function PrepareEvolution() {
+function PrepareEvolution(prevent_evolution = undefined) {
+    if(prevent_evolution)
+    {
+        return this;
+    }
+
     let stages = this.species.data.Evolution.map(x => {return {stage: x[0], name: x[1], level: x[2] == "Null" ? 0 : x[2]}});
 
     let current;
@@ -266,5 +302,10 @@ function PrepareCapabilities(allCapabilities) {
     }
     
     this.items = this.items.concat(newCapabilities.filter(x => x !== undefined));
+    return this;
+}
+
+function PrepareShiny(is_shiny = false) {    
+    this.actor.data.data.shiny = is_shiny;
     return this;
 }
