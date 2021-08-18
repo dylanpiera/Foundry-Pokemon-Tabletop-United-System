@@ -211,6 +211,55 @@ export function LoadSystemSettings() {
         category: "rules"
     });
 
+    game.settings.register("ptu", "defaultDexDragInLevelMin", {
+        name: "Default Minimum Dex Drag-In Level",
+        hint: "When you quick-generate a pokemon by dragging its dex compendium entry onto a map, this will be the default minimum level.",
+        scope: "world",
+        config: true,
+        type: Number,
+        default: 10,
+        category: "generation"
+    });
+
+    game.settings.register("ptu", "defaultDexDragInLevelMax", {
+        name: "Default Maximum Dex Drag-In Level",
+        hint: "When you quick-generate a pokemon by dragging its dex compendium entry onto a map, this will be the default maximum level.",
+        scope: "world",
+        config: true,
+        type: Number,
+        default: 10,
+        category: "generation"
+    });
+
+    game.settings.register("ptu", "defaultDexDragInShinyChance", {
+        name: "Default Dex Drag-In Shiny Chance (%)",
+        hint: "When you quick-generate a pokemon by dragging its dex compendium entry onto a map, this will be the default chance for that pokemon to be shiny.",
+        scope: "world",
+        config: true,
+        type: Number,
+        default: 2,
+        category: "generation"
+    });
+
+    game.settings.register("ptu", "defaultDexDragInStatRandomness", {
+        name: "Default Dex Drag-In Stat Randomness (%)",
+        hint: "When you quick-generate a pokemon by dragging its dex compendium entry onto a map, this will be the default amount of randomness applied to its stat distribution.",
+        scope: "world",
+        config: true,
+        type: Number,
+        default: 20,
+        category: "generation"
+    });
+    game.settings.register("ptu", "defaultDexDragInPreventEvolution", {
+        name: "Default Dex Drag-In Prevent Evolution",
+        hint: "When you quick-generate a pokemon by dragging its dex compendium entry onto a map, this will be the default setting for whether to prevent evolution or not.",
+        scope: "world",
+        config: true,
+        type: Boolean,
+        default: false,
+        category: "generation"
+    });
+
     game.settings.register("ptu", "customSpecies", {
         name: "Custom Species json (Requires Refresh)",
         hint: "Please specify the path of a custom species file (inside the world directory) if you wish to add Homebrew Pokémon. [Currently in Beta!]",
@@ -272,6 +321,22 @@ export function LoadSystemSettings() {
         onChange: (value) => CustomSpeciesFolder.updateFolderDisplay(value),
         category: "other"
     });
+
+    game.settings.register("ptu", "transferOwnershipDefaultValue", {
+        name: "Transfer Ownership Preference",
+        hint: "After ownership of a mon is transfered, would you like for it to also set default permissions for other players?",
+        scope: "world",
+        config: true,
+        type: Number,
+        choices: {
+            0: "None",
+            1: "Limited",
+            2: "Observer",
+            3: "Owner"
+        },
+        default: 0,
+        category: "other"
+    })
 }
 
 export function SetAccessabilityFont(enabled) {

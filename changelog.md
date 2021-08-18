@@ -1,6 +1,23 @@
 # Welcome to the Beta!
 Hey there! You are on the Beta Branch. If you ever have any feedback please do share with us over on [Github](https://github.com/dylanpiera/Foundry-Pokemon-Tabletop-United-System/issues) or [Discord](https://discord.gg/fE3w59q)
 
+## 1.5-Beta-6 - Dex Drag-in Update
+Hey everyone! It's been a while since I've last seen you guys. It's been about a month and a half since the last beta release, yikes!
+Either way, I needed a summer break, but now I'm back and ready to continue work on the system. So expect more updates in the near future!
+
+For today I've brought you changes in regards to the Dex Drag-In system courtesy of VoidPhoenix, thanks a ton man for adding these missing features, and sorry that it took a while before I could validate them haha.
+
+### Dex Drag-In changes
+- Newly generated actors are put in a folder with the same name as the current scene.
+- Added support for (random) Shiny Generation.
+- Added Level Range (min-max), Shiny Chance, Stat Randomness & Prevent Evolution options to the pop-up.
+  - Default options can be set in settings.
+
+### Other Changes
+- Fixed Trainer AP not showing as a bar option.
+- Automated Tangled Feet abilities.
+- Added a default setting for what the Transfer Ownership api should set the "default" permission to.
+
 ## 1.5-Beta-5 - Bug Fixes Pt. 2
 - Fixed allowing dex entries to be created multiple times on a sheet when dragged in from compendium.
 - Fixed small error when transfer ownership API was being used with a PC that was not residing in any folder.

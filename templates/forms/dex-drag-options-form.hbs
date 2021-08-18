@@ -3,15 +3,42 @@
   autocomplete="off"
   style="text-align: center;"
 >
-  <div class="d-flex align-items-end flex-column h-100">
+  <div class="d-flex align-items-end flex-column h-80">
+
+    <div class="w-100 justify-content-center mb-2"><br>Quick Pokemon Generation<h1>{{species}}</h1></div>
+
     <div class="w-100 justify-content-center mb-2">
-      <label for="data.level">Level:</label>
+      <label for="data.level">Level Range</label>
     </div>
     <div class="w-100 justify-content-center mb-2">
-      <input style="width: 60%;" id="levelField" type="text" name="data.level" value="10"/>
+      <input style="width: 20%;" id="levelMinField" type="text" name="data.level_min" value="{{levelMinDefault}}"/>
+       - 
+      <input style="width: 20%;" id="levelMaxField" type="text" name="data.level_max" value="{{levelMaxDefault}}"/>
     </div>
-    <div class="w-100 justify-content-center mt-auto">
-      <input type="submit" value="Submit!"/>
+
+    <div class="w-100 justify-content-center mb-2">
+      <label for="data.shiny_chance">Shiny Chance (%)</label>
     </div>
+    <div class="w-100 justify-content-center mb-2">
+      <input style="width: 60%;" id="shinyField" type="text" name="data.shiny_chance" value="{{shinyChanceDefault}}"/>
+    </div>
+
+    <div class="w-100 justify-content-center mb-2">
+      <label for="data.stat_randomness">Stat Randomness (%)</label>
+    </div>
+    <div class="w-100 justify-content-center mb-2">
+      <input style="width: 60%;" id="statRandomnessField" type="text" name="data.stat_randomness" value="{{statRandomnessDefault}}"/>
+    </div>
+
+    <div class="w-100 justify-content-center mb-2">
+      <div><br>Prevent Evolution?</div><input type="checkbox" style="width: 20px; height: 20px;" id="prevent_evolution" name="data.prevent_evolution" {{checked preventDefault}}/>
+    </div>
+
   </div>
+
+  <div class="w-100 justify-content-center mt-auto">
+    <br>
+    <input type="submit" value="Generate!" autofocus></input>
+  </div>
+
 </form>

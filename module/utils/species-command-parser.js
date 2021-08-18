@@ -79,21 +79,23 @@ export async function CreateMonParser(input, andCreate = false) {
     return commands;
 }
 
-export async function GetSpeciesArt(mon, imgDirectoryPath, type = ".png") {
+export async function GetSpeciesArt(mon, imgDirectoryPath, type = ".png", shiny = false) {
     const basePath = imgDirectoryPath+(imgDirectoryPath.endsWith('/') ? '' : '/')
 
-    let path = basePath+lpad(mon?.number, 4)+type;
+    const shiny_path = shiny ? "s" : "";
+
+    let path = basePath+lpad(mon?.number, 4)+shiny_path+type;
     let result = await fetch(path);
     if(result.status === 404 && mon?.number < 1000) {
-        path = basePath+lpad(mon?.number, 3)+type;
+        path = basePath+lpad(mon?.number, 3)+shiny_path+type;
         result = await fetch(path);
     }
     if(result.status === 404) {
-        path = basePath+mon?._id+type;
+        path = basePath+mon?._id+shiny_path+type;
         result = await fetch(path);
     }
     if(result.status === 404) {
-        path = basePath+mon?._id?.toLowerCase()+type;
+        path = basePath+mon?._id?.toLowerCase()+shiny_path+type;
         result = await fetch(path);
     }
     if(result.status === 404) {
@@ -164,7 +166,7 @@ Hooks.on("dropCanvasData", (canvas, update) => {
         if(item) update.item = item;
     }
     if(update.item)
-        new game.ptu.PTUDexDragOptions(update, {"submitOnChange": false, "submitOnClose": true}).render(true);
+        new game.ptu.PTUDexDragOptions(update, {"submitOnChange": false, "submitOnClose": false}).render(true);
 });
 
 export async function FinishDexDragPokemonCreation(formData, update)
@@ -175,12 +177,18 @@ export async function FinishDexDragPokemonCreation(formData, update)
     let drop_coordinates_y = update["y"];
     
     let level = parseInt(formData["data.level"]);
+    let shiny_chance = parseInt(formData["data.shiny_chance"]);
+    let stat_randomness = parseInt(formData["data.stat_randomness"]);
+    let prevent_evolution = Number(formData["data.prevent_evolution"]);
 
     let new_actor = await game.ptu.monGenerator.ActorGenerator.Create({
         exists: false,
         species: species_name,
         exp: game.ptu.levelProgression[level],
-        folder: "Dex Drag-in"
+        folder: game.scenes.current.name,
+        shiny_chance: shiny_chance,
+        stat_randomness: stat_randomness,
+        prevent_evolution: prevent_evolution
     })
 
     const protoToken = duplicate(new_actor.data.token);

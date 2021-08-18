@@ -339,10 +339,10 @@ export class PTUActor extends Actor {
     data.health.percent = Math.round((data.health.value / data.health.max) * 100);
     data.health.tick = Math.floor(data.health.total/10);
 
-    data.evasion = CalculateEvasions(data, actorData.flags?.ptu);
+    data.evasion = CalculateEvasions(data, actorData.flags?.ptu, actorData.items);
     data.capabilities = CalculateTrainerCapabilities(data.skills, actorData.items, data.stats.spd.stage, actorData.flags?.ptu);
 
-    data.ap.total = 5 + Math.floor(data.level.current / 5);
+    data.ap.max = 5 + Math.floor(data.level.current / 5);
 
     data.initiative = {value: data.stats.spd.total + data.modifiers.initiative.total};
     if(actorData.flags?.ptu?.is_paralyzed) {
@@ -416,7 +416,7 @@ export class PTUActor extends Actor {
     data.tp.pep.value = actorData.items.filter(x => x.type == "pokeedge" && x.data.origin?.toLowerCase() != "pusher").length;
     data.tp.pep.max = data.level.current > 0 ? Math.floor(data.level.current / 10)+1 : 1;
 
-    data.evasion = CalculateEvasions(data, actorData.flags?.ptu);
+    data.evasion = CalculateEvasions(data, actorData.flags?.ptu, actorData.items);
 
     data.capabilities = CalculatePokemonCapabilities(speciesData, actorData.items.values(), data.stats.spd.stage, data.modifiers.capabilities?.total, actorData.flags?.ptu);
 
