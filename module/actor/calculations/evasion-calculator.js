@@ -1,11 +1,13 @@
 export function CalculateEvasions(data, ptuFlags, actor_items) {
 
-    let tangled_feet_ability = actor_items.filter(x => x.type == "ability").find(x => x.data.name.includes("Tangled Feet"));
-    let tangled_feet_playtest_ability = actor_items.filter(x => x.type == "ability").find(x => x.data.name.includes("Tangled Feet [Playtest]"));
-    let immune_to_vulnerable = (tangled_feet_playtest_ability) ? true : false;
-    let tangled_feet_modifier = (tangled_feet_ability && ( (ptuFlags?.is_slowed && tangled_feet_playtest_ability) || ptuFlags?.is_confused) ) ? 3 : 0
+    const abilities = {};
+    for (let ability of actor_items.filter(x => x.type == "ability")) {
+        if(ability.name.toLowerCase().includes("tangled feet") abilities.tangled_feet = true;
+        if(ability.name.toLowerCase().includes("tangled feet [playtest]") abilities.tangled_feet_playtest = true;
+    }
+    const tangled_feet_modifier = (abilities.tangled_feet && ( (ptuFlags?.is_slowed && abilities.tangled_feet_playtest) || ptuFlags?.is_confused) ) ? 3 : 0
 
-    if( (ptuFlags?.is_vulnerable) && (!immune_to_vulnerable) ) return {
+    if( (ptuFlags?.is_vulnerable) && (!abilities.tangled_feet_playtest) ) return {
         "physical": 0,
         "special": 0,
         "speed": 0
