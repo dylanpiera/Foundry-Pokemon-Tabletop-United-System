@@ -4,6 +4,7 @@ export const PTUSettingCategories = [
     {id: "general", label: "General", icon: "fas fa-cogs"},
     {id: "combat", label: "Combat", icon: "fas fa-fist-raised", subtext: "Combat Rules & Preferences"},
     {id: "rules", label: "Rules", icon: "fas fa-book", subtext: "System rules, like which erratas to use."},
+    {id: "generation", label: "Generation", icon: "fas fa-cogs", subtext: "Settings in regards to Pokémon Generation (through Dex-Dragin)"},
     {id: "preferences", label: "Player Preferences", icon: "fas fa-users", subtext: "These settings only apply to the current user.", settings: {}},
     {id: "other", label: "Other", icon: "fas fa-atlas"},
 ]

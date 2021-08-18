@@ -87,6 +87,7 @@ export default class Api {
                 const newData = {
                     folder: pc.folder?.id,
                     permission: mergeObject({
+                        "default": game.settings.get("ptu", "transferOwnershipDefaultValue") ?? 0,
                         [sender.id]: 3
                     }, data.content.options?.permission ?? {}),
                     "data.owner": pc.id,

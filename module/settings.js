@@ -218,7 +218,7 @@ export function LoadSystemSettings() {
         config: true,
         type: Number,
         default: 10,
-        category: "rules"
+        category: "generation"
     });
 
     game.settings.register("ptu", "defaultDexDragInLevelMax", {
@@ -228,7 +228,7 @@ export function LoadSystemSettings() {
         config: true,
         type: Number,
         default: 10,
-        category: "rules"
+        category: "generation"
     });
 
     game.settings.register("ptu", "defaultDexDragInShinyChance", {
@@ -238,7 +238,7 @@ export function LoadSystemSettings() {
         config: true,
         type: Number,
         default: 2,
-        category: "rules"
+        category: "generation"
     });
 
     game.settings.register("ptu", "defaultDexDragInStatRandomness", {
@@ -248,7 +248,7 @@ export function LoadSystemSettings() {
         config: true,
         type: Number,
         default: 20,
-        category: "rules"
+        category: "generation"
     });
     game.settings.register("ptu", "defaultDexDragInPreventEvolution", {
         name: "Default Dex Drag-In Prevent Evolution",
@@ -257,7 +257,7 @@ export function LoadSystemSettings() {
         config: true,
         type: Boolean,
         default: false,
-        category: "rules"
+        category: "generation"
     });
 
     game.settings.register("ptu", "customSpecies", {
@@ -321,6 +321,22 @@ export function LoadSystemSettings() {
         onChange: (value) => CustomSpeciesFolder.updateFolderDisplay(value),
         category: "other"
     });
+
+    game.settings.register("ptu", "transferOwnershipDefaultValue", {
+        name: "Transfer Ownership Preference",
+        hint: "After ownership of a mon is transfered, would you like for it to also set default permissions for other players?",
+        scope: "world",
+        config: true,
+        type: Number,
+        choices: {
+            0: "None",
+            1: "Limited",
+            2: "Observer",
+            3: "Owner"
+        },
+        default: 0,
+        category: "other"
+    })
 }
 
 export function SetAccessabilityFont(enabled) {
