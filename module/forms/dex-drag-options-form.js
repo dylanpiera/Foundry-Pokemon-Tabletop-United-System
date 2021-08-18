@@ -30,6 +30,7 @@ export class PTUDexDragOptions extends FormApplication {
       data.levelMaxDefault = game.settings.get("ptu", "defaultDexDragInLevelMax");
       data.shinyChanceDefault = game.settings.get("ptu", "defaultDexDragInShinyChance");
       data.statRandomnessDefault = game.settings.get("ptu", "defaultDexDragInStatRandomness");
+      data.preventDefault = game.settings.get("ptu", "defaultDexDragInPreventEvolution");
       data.species = this.object.item.name;
 
       return data;

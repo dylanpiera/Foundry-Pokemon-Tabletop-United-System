@@ -2,8 +2,8 @@ export function CalculateEvasions(data, ptuFlags, actor_items) {
 
     const abilities = {};
     for (let ability of actor_items.filter(x => x.type == "ability")) {
-        if(ability.name.toLowerCase().includes("tangled feet") abilities.tangled_feet = true;
-        if(ability.name.toLowerCase().includes("tangled feet [playtest]") abilities.tangled_feet_playtest = true;
+        if(ability.name.toLowerCase().includes("tangled feet")) abilities.tangled_feet = true;
+        if(ability.name.toLowerCase().includes("tangled feet [playtest]")) abilities.tangled_feet_playtest = true;
     }
     const tangled_feet_modifier = (abilities.tangled_feet && ( (ptuFlags?.is_slowed && abilities.tangled_feet_playtest) || ptuFlags?.is_confused) ) ? 3 : 0
 

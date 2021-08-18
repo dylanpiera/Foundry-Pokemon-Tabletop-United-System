@@ -250,6 +250,15 @@ export function LoadSystemSettings() {
         default: 20,
         category: "rules"
     });
+    game.settings.register("ptu", "defaultDexDragInPreventEvolution", {
+        name: "Default Dex Drag-In Prevent Evolution",
+        hint: "When you quick-generate a pokemon by dragging its dex compendium entry onto a map, this will be the default setting for whether to prevent evolution or not.",
+        scope: "world",
+        config: true,
+        type: Boolean,
+        default: false,
+        category: "rules"
+    });
 
     game.settings.register("ptu", "customSpecies", {
         name: "Custom Species json (Requires Refresh)",
