@@ -46,10 +46,7 @@ export class PTUDexDragOptions extends FormApplication {
     /** @override */
     async _updateObject(event, formData) {
 
-        let level_min = parseInt(formData["data.level_min"]);
-        let level_max = parseInt(formData["data.level_max"]);
-
-        formData["data.level"] = getRandomIntInclusive(level_min, level_max);
+        formData["data.level"] = getRandomIntInclusive(parseInt(formData["data.level_min"]), parseInt(formData["data.level_max"]));
 
         game.ptu.FinishDexDragPokemonCreation(formData, this.object);
     }
