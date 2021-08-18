@@ -26,17 +26,11 @@ export class PTUDexDragOptions extends FormApplication {
       const data = super.getData();
       data.dtypes = ["String", "Number", "Boolean"];
 
-      let levelMinDefault = game.settings.get("ptu", "defaultDexDragInLevelMin");
-      let levelMaxDefault = game.settings.get("ptu", "defaultDexDragInLevelMax");
-      let shinyChanceDefault = game.settings.get("ptu", "defaultDexDragInShinyChance");
-      let statRandomnessDefault = game.settings.get("ptu", "defaultDexDragInStatRandomness");
-      let species = this.object.item.name;
-
-      data.levelMinDefault = levelMinDefault;
-      data.levelMaxDefault = levelMaxDefault;
-      data.shinyChanceDefault = shinyChanceDefault;
-      data.statRandomnessDefault = statRandomnessDefault;
-      data.species = species;
+      data.levelMinDefault = game.settings.get("ptu", "defaultDexDragInLevelMin");
+      data.levelMaxDefault = game.settings.get("ptu", "defaultDexDragInLevelMax");
+      data.shinyChanceDefault = game.settings.get("ptu", "defaultDexDragInShinyChance");
+      data.statRandomnessDefault = game.settings.get("ptu", "defaultDexDragInStatRandomness");
+      data.species = this.object.item.name;
 
       return data;
     }
