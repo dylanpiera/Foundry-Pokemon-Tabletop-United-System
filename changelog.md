@@ -1,6 +1,10 @@
 # Welcome to the Beta!
 Hey there! You are on the Beta Branch. If you ever have any feedback please do share with us over on [Github](https://github.com/dylanpiera/Foundry-Pokemon-Tabletop-United-System/issues) or [Discord](https://discord.gg/fE3w59q)
 
+## 1.5-Beta-8 - Small Patch
+- Fixed Evolution entries for some Pokémon that would break their generation.
+- Added an option for the Virtuoso Dice Pool Limit to be ignored.
+
 ## 1.5-Beta-7 - Fixes & Small Enhancements
 Today we have mostly bug fixes and small enhancements.
 
