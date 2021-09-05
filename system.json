@@ -83,6 +83,13 @@
       "system": "ptu"
     },
     {
+      "label": "uranium & sage dex",
+      "entity": "Item",
+      "name": "uranium-and-sage-dex",
+      "path": "packs/uranium-and-sage-dex.db",
+      "system": "ptu"
+    },
+    {
       "label": "habitats",
       "entity": "RollTable",
       "name": "habitats",
