@@ -1,6 +1,20 @@
 # Welcome to the Beta!
 Hey there! You are on the Beta Branch. If you ever have any feedback please do share with us over on [Github](https://github.com/dylanpiera/Foundry-Pokemon-Tabletop-United-System/issues) or [Discord](https://discord.gg/fE3w59q)
 
+## 1.5-Beta-7 - Fixes & Small Enhancements
+Today we have mostly bug fixes and small enhancements.
+
+### Enhancements:
+- Added Uranium & Sage dex Compendium.
+- Skill dice pools now max out at 6 dice, so virutoso doesn't change the pool to 8d6.
+- Moves with "--" initiative will now always hit.
+- Blindness now applies the accuracy lowering debuff through AE instead of a hidden modifier.
+- Throwing Mastery edge now has an AE that increases the Actor's throwing range capability by 2.
+
+### Bugfixes:
+- Fixed Darmanitan-Normal being unable to be generated.
+- Fixed Move-snippets not working at all for Trainer Moves.
+
 ## 1.5-Beta-6 - Dex Drag-in Update
 Hey everyone! It's been a while since I've last seen you guys. It's been about a month and a half since the last beta release, yikes!
 Either way, I needed a summer break, but now I'm back and ready to continue work on the system. So expect more updates in the near future!

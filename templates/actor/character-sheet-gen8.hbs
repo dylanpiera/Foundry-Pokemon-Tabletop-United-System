@@ -76,11 +76,11 @@
                               flipped=(gt 8 @index)}}
                           </div>
                           <div class="skill {{key}} col-sm-2 align-self-center bgcolor fs-9 center-text rollable"
-                            data-roll="{{skill.value.total}}d6{{#if skill.modifier.total}}+{{skill.modifier.total}}{{/if}}"
+                            data-roll="{{#if (bigger skill.value.total 6)}}6{{else}}{{skill.value.total}}{{/if}}d6{{#if skill.modifier.total}}+{{skill.modifier.total}}{{/if}}"
                             data-label="{{skill.label}}">
                             <i class="fas fa-dice-d20"></i>
                             <label for="data.skills.{{key}}.value"
-                              class="resource-label">{{skill.value.total}}d6{{#if skill.modifier.total}}+{{skill.modifier.total}}{{/if}}</label>
+                              class="resource-label">{{#if (bigger skill.value.total 6)}}6{{else}}{{skill.value.total}}{{/if}}d6{{#if skill.modifier.total}}+{{skill.modifier.total}}{{/if}}</label>
                           </div>
                         </div>
                         {{/each}}

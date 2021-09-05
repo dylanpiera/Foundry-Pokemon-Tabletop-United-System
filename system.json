@@ -2,7 +2,7 @@
   "name": "ptu",
   "title": "Pokemon Tabletop United",
   "description": "A Pen and Paper Roleplaying Game Set in the World of Pokemon",
-  "version": "1.5-Beta-6",
+  "version": "1.5-Beta-7",
   "minimumCoreVersion": "0.8.6",
   "compatibleCoreVersion": "0.8.9",
   "templateVersion": 2,
@@ -80,6 +80,13 @@
       "entity": "Item",
       "name": "fan-game-content",
       "path": "packs/fan-game-content.db",
+      "system": "ptu"
+    },
+    {
+      "label": "uranium & sage dex",
+      "entity": "Item",
+      "name": "uranium-and-sage-dex",
+      "path": "packs/uranium-and-sage-dex.db",
       "system": "ptu"
     },
     {

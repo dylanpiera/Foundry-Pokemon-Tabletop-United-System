@@ -24,11 +24,6 @@ export function CalculateSkills(skills, speciesData, pokeEdges, background, bonu
         }
     }
 
-    // for(let edge of pokeEdges) {
-    //     var key = ExtractImprovement(edge);
-    //     if(key) skills[ExtractEd(key)].value.value += 1;
-    // }
-
     for(let skill of Object.values(background.increased)) {
         if(skills[skill]) {
             skills[skill].value.value += 1;
@@ -45,20 +40,4 @@ export function CalculateSkills(skills, speciesData, pokeEdges, background, bonu
     }
 
     return skills;
-}
-
-function ExtractImprovement(skill) {
-    if(skill.name.startsWith("Skill Improvement (")) {
-        return skill.name.split('(')[1].replace(')',"");   
-    }
-    return null;
-}
-
-function ExtractEd(skillKey) {
-    if(skillKey.endsWith("Ed")) {
-        if(skillKey.startsWith("Technology")) return "techEd";
-        if(skillKey.startsWith("Pokémon")) return "pokemonEd";
-        return skillKey.split(' ')[0].toLowerCase() + skillKey.split(' ')[1]
-    }
-    return skillKey.toLowerCase();
 }

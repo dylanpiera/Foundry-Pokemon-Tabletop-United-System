@@ -467,7 +467,7 @@ export class PTUGen8PokemonSheet extends ActorSheet {
 			let crit = diceResult === 1 ? CritOptions.CRIT_MISS : (diceResult >= 20 - this.actor.data.data.modifiers.critRange?.total) ? CritOptions.CRIT_HIT : CritOptions.NORMAL;
 
 			let damageRoll, critRoll;
-			if(crit != CritOptions.CRIT_MISS) {
+			if((crit != CritOptions.CRIT_MISS) || (moveData.ac == "--")) {
 				switch(game.settings.get("ptu", "combatRollPreference")) {
 					case "situational":
 						if(crit == CritOptions.CRIT_HIT) critRoll = CalculateDmgRoll(moveData, this.actor.data.data, crit);
@@ -611,8 +611,7 @@ export class PTUGen8PokemonSheet extends ActorSheet {
 function CalculateAcRoll(moveData, actor) {
 	return new Roll('1d20-@ac+@acBonus', {
 		ac: (parseInt(moveData.ac) || 0),
-		acBonus: (actor.flags?.ptu?.is_blind ? actor.flags?.ptu?.is_totally_blind ? -10 : -6 : 0) + 
-		(parseInt(actor.data.modifiers.acBonus?.total) || 0)
+		acBonus: (parseInt(actor.data.modifiers.acBonus?.total) || 0)
 	})
 }
 
@@ -646,19 +645,6 @@ function GetDiceResult(roll) {
 		diceResult = roll.parts[0].results[0];
 	}
 	return diceResult;
-}
-
-function PerformAcRoll(roll, move, actor) {
-	sendMoveRollMessage(roll, {
-		speaker: ChatMessage.getSpeaker({
-			actor: actor
-		}),
-		name: move.name,
-		move: move.data,
-		templateType: MoveMessageTypes.TO_HIT
-	}).then(_ => log(`Rolling to hit for ${actor.name}'s ${move.name}`));
-
-	return GetDiceResult(roll);
 }
 
 async function sendMoveRollMessage(rollData, messageData = {}) {
