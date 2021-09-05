@@ -611,8 +611,7 @@ export class PTUGen8PokemonSheet extends ActorSheet {
 function CalculateAcRoll(moveData, actor) {
 	return new Roll('1d20-@ac+@acBonus', {
 		ac: (parseInt(moveData.ac) || 0),
-		acBonus: (actor.flags?.ptu?.is_blind ? actor.flags?.ptu?.is_totally_blind ? -10 : -6 : 0) + 
-		(parseInt(actor.data.modifiers.acBonus?.total) || 0)
+		acBonus: (parseInt(actor.data.modifiers.acBonus?.total) || 0)
 	})
 }
 
