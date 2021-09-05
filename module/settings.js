@@ -180,6 +180,16 @@ export function LoadSystemSettings() {
         default: false,
         onChange: (enabled) => setAccessabilityFont(enabled)
     });
+    
+    game.settings.register("ptu", "ignoreVirtuosoLimit", {
+        name: "Ignore Virtuoso Limit",
+        hint: "Allow Skill Dice pool to go above 6 dice.",
+        scope: "world",
+        config: true,
+        type: Boolean,
+        default: false,
+        category: "rules"
+    });
 
     game.settings.register("ptu", "insurgenceData", {
         name: "Pokémon Insurgence Data",
