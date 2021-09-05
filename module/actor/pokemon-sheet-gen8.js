@@ -467,7 +467,7 @@ export class PTUGen8PokemonSheet extends ActorSheet {
 			let crit = diceResult === 1 ? CritOptions.CRIT_MISS : (diceResult >= 20 - this.actor.data.data.modifiers.critRange?.total) ? CritOptions.CRIT_HIT : CritOptions.NORMAL;
 
 			let damageRoll, critRoll;
-			if(crit != CritOptions.CRIT_MISS) {
+			if((crit != CritOptions.CRIT_MISS) || (moveData.ac == "--")) {
 				switch(game.settings.get("ptu", "combatRollPreference")) {
 					case "situational":
 						if(crit == CritOptions.CRIT_HIT) critRoll = CalculateDmgRoll(moveData, this.actor.data.data, crit);
