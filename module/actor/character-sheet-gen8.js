@@ -448,7 +448,8 @@ export class PTUGen8CharacterSheet extends ActorSheet {
 				damageRoll: damageRoll,
 				critRoll: critRoll,
 				templateType: MoveMessageTypes.FULL_ATTACK,
-				crit: crit
+				crit: crit,
+				isCrit: crit == CritOptions.CRIT_HIT
 			});
 		}
 
@@ -463,7 +464,8 @@ export class PTUGen8CharacterSheet extends ActorSheet {
 					name: move.name,
 					move: move.data,
 					templateType: MoveMessageTypes.DAMAGE,
-					crit: crit
+					crit: crit,
+					isCrit: crit == CritOptions.CRIT_HIT
 				});
 			}
 
@@ -508,6 +510,7 @@ export class PTUGen8CharacterSheet extends ActorSheet {
 				speaker: ChatMessage.getSpeaker({
 					actor: this.actor
 				}),
+				name: move.name,
 				move: move.data,
 				templateType: MoveMessageTypes.DETAILS
 			}).then(data => debug(data))
@@ -535,6 +538,7 @@ export class PTUGen8CharacterSheet extends ActorSheet {
 						speaker: ChatMessage.getSpeaker({
 							actor: this.actor
 						}),
+						name: move.name,
 						move: move.data,
 						templateType: MoveMessageTypes.DETAILS
 					}).then(data => debug(data))
@@ -597,19 +601,6 @@ function GetDiceResult(roll) {
 	return diceResult;
 }
 
-function PerformAcRoll(roll, move, actor) {
-	sendMoveRollMessage(roll, {
-		speaker: ChatMessage.getSpeaker({
-			actor: actor
-		}),
-		name: move.name,
-		move: move.data,
-		templateType: MoveMessageTypes.TO_HIT
-	}).then(_ => log(`Rolling to hit for ${actor.name}'s ${move.name}`));
-
-	return GetDiceResult(roll);
-}
-
 async function sendMoveRollMessage(rollData, messageData = {}) {
 	if (!rollData._evaluated) await rollData.evaluate({async: true});
 
@@ -617,7 +608,9 @@ async function sendMoveRollMessage(rollData, messageData = {}) {
 		user: game.user.id,
 		sound: CONFIG.sounds.dice,
 		templateType: MoveMessageTypes.DAMAGE,
-		verboseChatInfo: game.settings.get("ptu", "verboseChatInfo") ?? false
+		verboseChatInfo: game.settings.get("ptu", "verboseChatInfo") ?? false,
+		crp: game.settings.get("ptu", "combatRollPreference"),
+		cdp: game.settings.get("ptu", "combatDescPreference"),
 	}, messageData);
 
 	messageData.roll = rollData;

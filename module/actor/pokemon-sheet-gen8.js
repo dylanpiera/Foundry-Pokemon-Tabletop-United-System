@@ -648,19 +648,6 @@ function GetDiceResult(roll) {
 	return diceResult;
 }
 
-function PerformAcRoll(roll, move, actor) {
-	sendMoveRollMessage(roll, {
-		speaker: ChatMessage.getSpeaker({
-			actor: actor
-		}),
-		name: move.name,
-		move: move.data,
-		templateType: MoveMessageTypes.TO_HIT
-	}).then(_ => log(`Rolling to hit for ${actor.name}'s ${move.name}`));
-
-	return GetDiceResult(roll);
-}
-
 async function sendMoveRollMessage(rollData, messageData = {}) {
 	if (!rollData._evaluated) await rollData.evaluate({async: true});
 
