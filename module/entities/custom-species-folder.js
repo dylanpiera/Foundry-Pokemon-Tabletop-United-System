@@ -60,6 +60,7 @@ export default class CustomSpeciesFolder {
         return result;
       }
       else {
+        if(!species) return;
         let result = game.journal.contents.find(entry => entry.data.name.toLowerCase().includes(species.toLowerCase()))
         if(result === undefined) result = game.journal.contents.find(entry => entry?.data?.content?.includes(`"_id":"${species}"`));
         return result;
