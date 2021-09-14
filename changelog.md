@@ -1,6 +1,9 @@
 # Welcome to the Beta!
 Hey there! You are on the Beta Branch. If you ever have any feedback please do share with us over on [Github](https://github.com/dylanpiera/Foundry-Pokemon-Tabletop-United-System/issues) or [Discord](https://discord.gg/fE3w59q)
 
+## 1.5-Beta-10
+- Hotfix for 'null' typing showing up in mons with only a single type.
+
 ## 1.5-Beta-9
 Hi all! This is a bigger beta release as the CSE- Custom Species Editor, has received a complete overhaul!
 

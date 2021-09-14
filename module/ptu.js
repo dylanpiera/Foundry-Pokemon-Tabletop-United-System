@@ -54,7 +54,7 @@ export let log = (...args) => console.log("FVTT PTU | ", ...args);
 export let warn = (...args) => console.warn("FVTT PTU | ", ...args);
 export let error = (...args) => console.error("FVTT PTU | ", ...args)
 
-export const LATEST_VERSION = "1.5-Beta-9";
+export const LATEST_VERSION = "1.5-Beta-10";
 
 /* -------------------------------------------- */
 /*  Foundry VTT Initialization                  */
@@ -266,6 +266,7 @@ function registerHandlebars() {
   Handlebars.registerHelper("loadTypeImages", function (types, includeSlash = true) {
     if(!types) return;
     return types.reduce((html, type, index, array) => {
+      if(type == "null") type = "Untyped";
       return html += `<img class="mr-1 ml-1" src="/systems/ptu/css/images/types/${type}IC.webp">` +  (includeSlash ? (index != (array.length-1) ? "<span>/</span>" : "") : "");
     }, "")
     
