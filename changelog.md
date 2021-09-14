@@ -1,6 +1,15 @@
 # Welcome to the Beta!
 Hey there! You are on the Beta Branch. If you ever have any feedback please do share with us over on [Github](https://github.com/dylanpiera/Foundry-Pokemon-Tabletop-United-System/issues) or [Discord](https://discord.gg/fE3w59q)
 
+## 1.5-Beta-9
+Hi all! This is a bigger beta release as the CSE- Custom Species Editor, has received a complete overhaul!
+
+- Added new Custom Species Editor.
+- Added support for Moves & Abilities to the CSE.
+- Added drag & drop support to the CSE for Moves, Abilities & Other Capabilities.
+- Added support for mons with more than 2 types
+- Replaced 'null' typing with 'Untyped' for internal calculations.
+
 ## 1.5-Beta-8 - Small Patch
 - Fixed Evolution entries for some Pokémon that would break their generation.
 - Added an option for the Virtuoso Dice Pool Limit to be ignored.

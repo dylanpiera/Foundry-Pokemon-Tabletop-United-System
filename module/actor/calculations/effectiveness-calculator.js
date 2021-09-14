@@ -1,4 +1,5 @@
 function getTypeEffectiveness(targetType) {
+    if(targetType == "null") targetType = "Untyped";
     return duplicate(game.ptu.TypeEffectiveness[targetType])
 }
 

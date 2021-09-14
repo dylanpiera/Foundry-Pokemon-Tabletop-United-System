@@ -16,7 +16,8 @@ import { DbData } from "./data/db-data.js"
 import { TypeEffectiveness } from "./data/effectiveness-data.js"
 import { PTUPokemonCharactermancer } from './forms/charactermancer-pokemon-form.js'
 import { PTUDexDragOptions } from './forms/dex-drag-options-form.js'
-import { PTUCustomSpeciesEditor } from './forms/custom-species-editor-form.js'
+// import { PTUCustomSpeciesEditor } from './forms/custom-species-editor-form.js'
+import { PTUCustomSpeciesEditor } from './forms/cse-form.js'
 import { PTUCustomMonEditor } from './forms/custom-mon-editor-form.js'
 import { PTUCharacterNotesForm } from './forms/character-notes-form.js'
 import { RollWithDb } from './utils/roll-calculator.js'
@@ -53,7 +54,7 @@ export let log = (...args) => console.log("FVTT PTU | ", ...args);
 export let warn = (...args) => console.warn("FVTT PTU | ", ...args);
 export let error = (...args) => console.error("FVTT PTU | ", ...args)
 
-export const LATEST_VERSION = "1.5-Beta-8";
+export const LATEST_VERSION = "1.5-Beta-9";
 
 /* -------------------------------------------- */
 /*  Foundry VTT Initialization                  */
@@ -262,7 +263,12 @@ function registerHandlebars() {
     return text == "" || text == "--";
   });
 
-  Handlebars.registerHelper("loadTypeImages", function (types) {
+  Handlebars.registerHelper("loadTypeImages", function (types, includeSlash = true) {
+    if(!types) return;
+    return types.reduce((html, type, index, array) => {
+      return html += `<img class="mr-1 ml-1" src="/systems/ptu/css/images/types/${type}IC.webp">` +  (includeSlash ? (index != (array.length-1) ? "<span>/</span>" : "") : "");
+    }, "")
+    
     if(!types) return;
     if(types[1] != "null") return `<img class="mr-1" src="/systems/ptu/css/images/types/${types[0]}IC.webp"><span>/</span><img class="ml-1" src="/systems/ptu/css/images/types/${types[1]}IC.webp">`;
     return `<img src="/systems/ptu/css/images/types/${types[0]}IC.webp">`;

@@ -13,8 +13,8 @@ export class PTUCustomMonEditor extends FormApplication {
       return mergeObject(super.defaultOptions, {
         classes: ["ptu", "custom-species-editor", "mon-editor", "pokemon"],
         template: "systems/ptu/templates/forms/custom-mon-editor.hbs",
-        width: 600,
-        height: 650,
+        width: 800,
+        height: 550,
         title: this.object ? `Editing ${this.object.id}` : "Creating Custom Species",
         tabs: [{ navSelector: ".sheet-tabs", contentSelector: ".sheet-body", initial: "stats" }],
         resizable: true

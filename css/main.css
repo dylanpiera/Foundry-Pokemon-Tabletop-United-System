@@ -148,6 +148,11 @@ a.item {
   z-index: 10;
   position: inherit;
 }
+.panel.cse {
+  justify-content: center;
+  z-index: 10;
+  position: inherit;
+}
 .panel.character {
   background: #F06058;
   border-radius: 0 7% 7% 0;
@@ -939,6 +944,8 @@ span.readable {
 .type-img {
   display: flex;
   align-items: center;
+  justify-content: center;
+  flex-flow: wrap;
 }
 .type-img img {
   height: 20px;
@@ -1410,6 +1417,46 @@ header.effect-change.effects-header.flexrow > div {
 /* System name styling */
 li.system {
   font-size: 9px;
+}
+/* Custom Species Editor */
+.cse .window-content {
+  padding: unset !important;
+}
+.cse .inventory-list:not(.inventory-header) .item:nth-child(even) {
+  background: #ececec;
+}
+.cse #species-list li:hover {
+  text-shadow: 0 0 10px #ff0000a0;
+  cursor: pointer;
+}
+.cse #stats input {
+  padding: 5px;
+}
+.cse .cse #type-list select {
+  color: transparent;
+}
+.cse .cse #type-list li.item {
+  position: relative;
+}
+.cse .cse #type-list li.item:after {
+  content: '>';
+  font: 17px "Pokemon GB", monospace;
+  color: #191813;
+  font-weight: bold;
+  -webkit-transform: rotate(90deg);
+  -moz-transform: rotate(90deg);
+  -ms-transform: rotate(90deg);
+  transform: rotate(90deg);
+  /*Adjust for position however you want*/
+  right: 4px;
+  top: 9px;
+  position: absolute;
+  pointer-events: none;
+}
+.cse .container-fluid > .sheet-footer {
+  left: -10px;
+  bottom: 55px;
+  z-index: 10;
 }
 .w-25 {
   width: 25% !important;
