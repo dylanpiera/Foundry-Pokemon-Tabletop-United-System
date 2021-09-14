@@ -1,8 +1,9 @@
 import CustomSpeciesFolder from "../entities/custom-species-folder.js"
 import initStore from "../api/front-end/cseStore.js";
 import TypeList from "../api/front-end/components/typeList.js";
-import { log } from "../ptu.js";
+import { log, debug } from "../ptu.js";
 import NewMonComponent from "../api/front-end/components/newMonComponent.js";
+import CseDragAndDropList from "../api/front-end/components/cse-dad-list.js";
 
 /**
  * Extend the basic FormApplication with some very simple modifications
@@ -16,9 +17,10 @@ export class PTUCustomSpeciesEditor extends FormApplication {
         classes: ["ptu", "cse", "pokemon"],
         template: "systems/ptu/templates/forms/cse.hbs",
         width: 950,
-        height: 1100,
+        height: 1000,
         title: "Custom Species Editor",
-        tabs: [{ navSelector: ".sheet-tabs", contentSelector: ".sheet-body", initial: "base" }]
+        tabs: [{ navSelector: ".sheet-tabs", contentSelector: ".sheet-body", initial: "base" }],
+        dragDrop: [{dragSelector: ".item-list .item", dropSelector: null}],
       });
     }
   
@@ -30,7 +32,7 @@ export class PTUCustomSpeciesEditor extends FormApplication {
       data.dtypes = ["String", "Number", "Boolean"];
   
       data.species = game.ptu.customSpeciesData.sort((a,b) => a.ptuNumber - b.ptuNumber);
-      this.object = isObjectEmpty(this.object ?? {}) ? data.species[0] : this.object;
+      this.object = isObjectEmpty(this.object ?? {}) ? data.species[0] : this.object.state == "new" ? {} : this.object;
       data.object = this.object;
 
       return data;
@@ -58,21 +60,42 @@ export class PTUCustomSpeciesEditor extends FormApplication {
         this.render(true);
       });
 
+      html.find('.item-create[data-type="species"]').click((ev) => {
+        this._tabs[0].activate('stats');
+        this.object = {state: "new"};
+        this.render(true);
+        setTimeout(() => {
+          $('.cse .tabs').css('visibility', 'hidden');
+        }, 50)
+      })
+
       html.find('.item-create[data-type="type"]').click((ev) => {
         this.store.dispatch("addTyping", "Untyped");
       })
 
-      html.find('#save-cse').click((ev) => {
+      html.find('.item-create[data-type="capability"]').click((ev) => {
+        this.store.dispatch("addCapability", {name: "New Capability"});
+      })
+
+      html.find('.item-create[data-type="move"]').click((ev) => {
+        this.store.dispatch("addMove", {id: randomID(), name: "New Move",});
+      })
+
+      html.find('.item-create[data-type="ability"]').click((ev) => {
+        this.store.dispatch("addAbility", {id: randomID(), name: "New Ability"});
+      })
+
+      html.find('.save-cse').click((ev) => {
         ev.preventDefault();
         this.submit({preventClose: true})
       })
 
-      html.find('#delete-cse').click(async (ev) => {
+      html.find('.delete-cse').click(async (ev) => {
         ev.preventDefault();
         const confirm = await new Promise((resolve, reject) => {
           Dialog.confirm({
-              title: "Delete Species #2000",
-              content: "Are you sure you wish to delete Delta Bulbasaur?",
+              title: `Delete Species #${this.object.number}`,
+              content: `Are you sure you wish to delete ${this.object._id}?`,
               yes: () => resolve(true),
               no: () => resolve(false),
               rejectClose: true
@@ -104,6 +127,16 @@ export class PTUCustomSpeciesEditor extends FormApplication {
         }, 50);
       })
     }
+
+    /** @override */
+    async _onDrop(event){
+      const dataTransfer = JSON.parse(event.dataTransfer.getData('text/plain'));
+
+      const item = await Item.implementation.fromDropData(dataTransfer);
+      const itemData = item.toJSON();
+      
+      await this.store.dispatch(`add${itemData.type.capitalize()}`, itemData);
+    }
   
     /* -------------------------------------------- */
 
@@ -116,7 +149,16 @@ export class PTUCustomSpeciesEditor extends FormApplication {
       this.components = {
         typeList: new TypeList(this.store),
         newMonComponent: new NewMonComponent(this.store),
+        otherCapabilitiesList: new CseDragAndDropList(this.store, "cse-other-capabilities", "capability"),
+        basicAbilitiesList: new CseDragAndDropList(this.store, "cse-basic-abilities", "basic-ability"),
+        advancedAbilitiesList: new CseDragAndDropList(this.store, "cse-advanced-abilities", "advanced-ability"),
+        highAbilitiesList: new CseDragAndDropList(this.store, "cse-high-abilities", "high-ability"),
+        levelUpMovesList: new CseDragAndDropList(this.store, "cse-level-up-moves", "level-up-move"),
+        tutorMovesList: new CseDragAndDropList(this.store, "cse-tutor-moves", "tutor-move"),
+        eggMovesList: new CseDragAndDropList(this.store, "cse-egg-moves", "egg-move"),
+        tmMovesList: new CseDragAndDropList(this.store, "cse-tm-moves", "tm-move"),
       }
+      debug(this.store, this.components);
     }
 
     async _afterRender() {
@@ -169,7 +211,11 @@ export class PTUCustomSpeciesEditor extends FormApplication {
           "Special Defense": parseInt(formData["Base Stats.Special Defense"]),
           "Speed": parseInt(formData["Base Stats.Speed"]),
         },
-        "Abilities": this.store.state.abilities,
+        "Abilities": {
+          Basic: this.store.state.abilities.filter(a => a.tier == "basic").sort((a,b) => a.index - b.index).map(a => a.name),
+          Advanced: this.store.state.abilities.filter(a => a.tier == "advanced").sort((a,b) => a.index - b.index).map(a => a.name),
+          High: this.store.state.abilities.filter(a => a.tier == "high").sort((a,b) => a.index - b.index).map(a => a.name),
+        },
         "Evolution": [[1, formData._id.toUpperCase(), "Null", "Null"]],
         "Height": parseFloat(formData.Height),
         "Size Class": formData["Size Class"].trim(), 
@@ -218,7 +264,20 @@ export class PTUCustomSpeciesEditor extends FormApplication {
             "Dice": parseInt(formData["Skills.Focus.Dice"]) ?? 0,
             "Mod": parseInt(formData["Skills.Focus.Mod"]) ?? 0
           }
-        }
+        },
+        "Level Up Move List": this.store.state.moves.filter(move => !move.egg && !move.tutor && !move.tm).map(move => {
+          return {
+            Move: move.name,
+            Level: move.evo ? "Evo" : move.level
+          }
+        }).sort((a, b) => a.Level == "Evo" ? -1 : a.Level - b.Level),
+        "Egg Move List": this.store.state.moves.filter(move => move.egg).map(move => move.name),
+        "Tutor Move List": this.store.state.moves.filter(move => move.tutor).map(move => move.name),
+        "TM Move List": this.store.state.moves.filter(move => move.tm).map(move => {
+          for(const [tm, name] of game.ptu.TMsData.entries()) {
+            if(name == move.name) return tm;
+          }
+        }).filter(move => move),
       }
 
       if(formattedData["Capabilities"]["Naturewalk"] == false) formattedData["Capabilities"]["Naturewalk"] = []
@@ -228,8 +287,10 @@ export class PTUCustomSpeciesEditor extends FormApplication {
 
     checkMonId(number) {
       if(number) {
-        if(CustomSpeciesFolder.findEntry(number)) {
-          return number;
+        if(number >= 2000) {
+          if(CustomSpeciesFolder.findEntry(number)) {
+            return number;
+          }
         }
       }
       return CustomSpeciesFolder.getAvailableId();

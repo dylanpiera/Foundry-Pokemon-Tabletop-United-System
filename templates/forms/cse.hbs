@@ -31,10 +31,10 @@
             <div class="panel cse h-100">
                 <div class="sheet-body no-hd h-100">
                     <!-- Base Tab -->
-                    {{!-- <div class="tab details base h-100" data-group="primary" data-tab="base"> --}}
-                        <div class="d-flex h-100">
+                    <div class="tab details stats h-100" data-group="primary" data-tab="stats">
+                        <div class="d-flex">
                             <div class="col-sm-12 col-md-4">
-                                <div class="swsh-box m-1 w-100">
+                                <div class="swsh-box m-1 w-100" style="max-height: 900px; overflow-y: scroll;overflow: auto;">
                                     <div class="swsh-header p-1 justify-content-end text-align-center d-flex">
                                         <div class="item-controls flexcol" style="flex: 0 0 15%;">
                                             <a class="item-control item-create" title="Add species" data-type="species"><i class="fas fa-plus-circle" style="margin-right: 3px;"></i><span class="readable">Add</span></a>
@@ -88,7 +88,7 @@
                                         <div class="d-flex flexrow justify-content-between">
                                             <div class="d-flex flexcol" style="flex: 0 0 64%;">
                                                 <div class="swsh-box mb-2">
-                                                    <div class="d-flex">        
+                                                    {{!-- <div class="d-flex">         --}}
                                                         <div class="swsh-header pt-1 pb-1 w-100 justify-content-between" style="text-align: center;">
                                                             <div style="flex: 0 0 65%">
                                                                 <label for="_id">Species</label>
@@ -97,8 +97,8 @@
                                                                 <label for="number">Dex #</label>
                                                             </div>
                                                         </div>
-                                                    </div>
-                                                    <div class="d-flex pt-1 pb-1">
+                                                    {{!-- </div> --}}
+                                                    {{!-- <div class="d-flex pt-1 pb-1"> --}}
                                                         <div class="swsh-body w-100 justify-content-between" style="text-align: center;">
                                                             <div style="flex: 0 0 65%">
                                                                 <input required type="text" name="_id" value="{{object._id}}" />
@@ -109,7 +109,7 @@
                                                                 <input type="hidden" name="number" value="{{object.number}}" />
                                                             </div>
                                                         </div>
-                                                    </div>
+                                                    {{!-- </div> --}}
                                                 </div>
                                                 <div id="stats" class="swsh-box mb-2" style="text-align: center;">
                                                     <div class="d-flex swsh-header pt-1 pb-1" style="flex-wrap: wrap;">
@@ -179,161 +179,432 @@
                                             </div>
                                         </div>
 
-                                        <!-- Other Info -->
+                                        <!-- Other & Skills -->
                                         <div class="d-flex flexrow justify-content-between">
-                                            <div class="swsh-box mb-2">
-                                                <div class="d-flex swsh-header pt-1 pb-1">
-                                                    <div class="col">
-                                                        <label for="Height">Height</label>
+                                            <div class="d-flex flex-col" style="flex: 0 0 49%;">
+                                                <div class="swsh-box mb-2">
+                                                    <div class="d-flex swsh-header pt-1 pb-1">
+                                                        <div class="col">
+                                                            <label for="Height">Height</label>
+                                                        </div>
+                                                        <div class="col">
+                                                            <label for="Weight">Weight</label>
+                                                        </div>
                                                     </div>
-                                                    <div class="col">
-                                                        <label for="Size Class">Size Class</label>
+                                                    <div class="d-flex swsh-body pt-1 pb-1">
+                                                        <div class="col">
+                                                            <input required step="0.1" type="number" name="Height"
+                                                                value="{{object.Height}}" />
+                                                        </div>
+                                                        <div class="col">
+                                                            <input required type="number" name="Weight" value="{{object.Weight}}" />
+                                                        </div>
                                                     </div>
-                                                    <div class="col">
-                                                        <label for="Weight">Weight</label>
+                                                    <div class="d-flex swsh-header pt-1 pb-1">
+                                                        <div class="col">
+                                                            <label for="Size Class">Size Class</label>
+                                                        </div>
+                                                        <div class="col">
+                                                            <label for="Breeding Information.Gender Ratio">Gender Ratio</label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="d-flex swsh-body pt-1 pb-1">
+                                                        <div class="col">
+                                                            <input required type="text" name="Size Class"
+                                                                value="{{object.[Size Class]}}" />
+                                                        </div>
+                                                        <div class="col">
+                                                            <input required type="number" name="Breeding Information.Gender Ratio"
+                                                                value="{{object.[Breeding Information].[Gender Ratio]}}" />
+                                                        </div>
+                                                    </div>
+                                                    <div class="d-flex swsh-header pt-1 pb-1">
+                                                        <div class="col">
+                                                            <label for="Habitat">Habitat</label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="d-flex swsh-body pt-1 pb-1">
+                                                        <div class="col">
+                                                            <input required type="text" name="Habitat" value="{{object.Habitat}}" />
+                                                        </div>
+                                                    </div>
+                                                    <div class="d-flex swsh-header pt-1 pb-1">
+                                                        <div class="col">
+                                                            <label for="Diet">Diet</label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="d-flex swsh-body pt-1 pb-1">
+                                                        <div class="col">
+                                                            <input required type="text" name="Diet" value="{{object.Diet}}" />
+                                                        </div>
+                                                    </div>
+                                                    <div class="d-flex swsh-header pt-1 pb-1">
+                                                        <div class="col">
+                                                            <label for="Breeding Information.Egg Group">Egg Group</label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="d-flex swsh-body pt-1 pb-1">
+                                                        <div class="col">
+                                                            <input required type="text" name="Breeding Information.Egg Group"
+                                                                value="{{object.[Breeding Information].[Egg Group]}}" />
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            <div class="d-flex swsh-body pt-1 pb-1">
-                                                <div class="col">
-                                                    <input required step="0.1" type="number" name="Height"
-                                                        value="{{object.Height}}" />
-                                                </div>
-                                                <div class="col">
-                                                    <input required type="text" name="Size Class"
-                                                        value="{{object.[Size Class]}}" />
-                                                </div>
-                                                <div class="col">
-                                                    <input required type="number" name="Weight" value="{{object.Weight}}" />
-                                                </div>
                                             </div>
-                                            <div class="d-flex swsh-header pt-1 pb-1">
-                                                <div class="col">
-                                                    <label for="Breeding Information.Gender Ratio">Gender Ratio</label>
-                                                </div>
-                                                <div class="col">
-                                                    <label for="Breeding Information.Egg Group">Egg Group</label>
-                                                </div>
-                                            </div>
-                                            <div class="d-flex swsh-body pt-1 pb-1">
-                                                <div class="col">
-                                                    <input required type="number" name="Breeding Information.Gender Ratio"
-                                                        value="{{object.[Breeding Information].[Gender Ratio]}}" />
-                                                </div>
-                                                <div class="col">
-                                                    <input required type="text" name="Breeding Information.Egg Group"
-                                                        value="{{object.[Breeding Information].[Egg Group]}}" />
-                                                </div>
-                                            </div>
-                                            <div class="d-flex swsh-header pt-1 pb-1">
-                                                <div class="col">
-                                                    <label for="Diet">Diet</label>
-                                                </div>
-                                                <div class="col">
-                                                    <label for="Habitat">Habitat</label>
-                                                </div>
-                                            </div>
-                                            <div class="d-flex swsh-body pt-1 pb-1">
-                                                <div class="col">
-                                                    <input required type="text" name="Diet" value="{{object.Diet}}" />
-                                                </div>
-                                                <div class="col">
-                                                    <input required type="text" name="Habitat" value="{{object.Habitat}}" />
+                                            <div class="d-flex flex-col" style="flex: 0 0 49%">
+                                                <div class="swsh-box mb-2">
+                                                    <div class="swsh-header">
+                                                        <div class="d-flex align-items-center w-100">
+                                                            <div class="col-sm-6">
+                                                                <h5>Skill</h5>
+                                                            </div>
+                                                            <div class="col-sm-3" style="text-align: center;">
+                                                                <h5>Dice</h5>
+                                                            </div>
+                                                            <div class="col-sm-3" style="text-align: center;">
+                                                                <h5>Mod</h5>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="swsh-body">
+                                                        {{#each object.Skills as |skill key|}}
+                                                            <div class="d-flex align-items-center pt-1 pb-1">
+                                                                <div class="col-sm-6">
+                                                                    <label for="Skills.{{key}}">{{key}}</label>
+                                                                </div>
+                                                                <div class="col-sm-3">
+                                                                    <input required type="number" name="Skills.{{key}}.Dice"
+                                                                        value="{{skill.Dice}}" />
+                                                                </div>
+                                                                <div class="col-sm-3">
+                                                                    <input required type="number" name="Skills.{{key}}.Mod"
+                                                                        value="{{skill.Mod}}" />
+                                                                </div>
+                                                            </div>
+                                                        {{/each}}
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
-                                        </div>
 
-                                        <!-- Capabilities & Skills -->
-
-                                        <!-- Other Capabilities -->
-
-                                        <!-- Other Abilities -->
-
-                                        <!-- Other Moves -->
+                                        <!-- Capabilities -->
                                         <div class="swsh-box mb-2">
                                             <div class="d-flex swsh-header pt-1 pb-1">
                                                 <div class="col-sm-6">
                                                     <h4>Capabilities</h4>
                                                 </div>
-                                                <div class="col-sm-6">
-                                                    <h4>Skills</h4>
+                                                <div class="col-sm-6 d-flex">
+                                                    <h4 style="flex: 1 0 70%">Other Capabilities</h4>
+                                                    <div class="item-controls flexcol align-self-center" style="flex: 0 0 15%;">
+                                                        <a class="item-control item-create" title="Add capability" data-type="capability"><i class="fas fa-plus-circle" style="margin-right: 3px;"></i><span class="readable">Add</span></a>
+                                                    </div>
                                                 </div>
                                             </div>
                                             <div class="d-flex pt-2 pb-1">
-                                                <div class="col-sm-6">
+                                                <div class="d-flex" style="flex: 0 0 49%; flex-wrap: wrap;">
                                                     {{#each object.Capabilities as |capability key|}}
-                                                    <div class="d-flex align-items-center pt-1 pb-1">
-                                                        <div class="col-sm-7">
-                                                            <label for="Capabilities.{{key}}">{{key}}</label>
-                                                        </div>
-                                                        <div class="col-sm-5">
-                                                            <input {{#if (and (not key "Naturewalk" ) (not key "Other"
-                                                                ))}}required{{/if}} type="text" name="Capabilities.{{key}}"
-                                                                value="{{capability}}" />
-                                                        </div>
-                                                    </div>
+                                                        {{#unless (is key "Other")}}
+                                                            <div class="d-flex align-items-center pt-1 pb-1">
+                                                                <div class="col-sm-7">
+                                                                    <label for="Capabilities.{{key}}">{{key}}</label>
+                                                                </div>
+                                                                <div class="col-sm-5">
+                                                                    <input {{#if (not key "Naturewalk" )}}required{{/if}} type="text" name="Capabilities.{{key}}"
+                                                                        value="{{capability}}" />
+                                                                </div>
+                                                            </div>
+                                                        {{/unless}}
                                                     {{/each}}
                                                 </div>
-                                                <div class="col-sm-6">
-                                                    <div class="d-flex align-items-center">
-                                                        <div class="col-sm-6">
-                                                            <h5>Skill</h5>
-                                                        </div>
-                                                        <div class="col-sm-3">
-                                                            <h5>Dice</h5>
-                                                        </div>
-                                                        <div class="col-sm-3">
-                                                            <h5>Mod</h5>
-                                                        </div>
-                                                    </div>
-                                                    {{#each object.Skills as |skill key|}}
-                                                    <div class="d-flex align-items-center pt-1 pb-1">
-                                                        <div class="col-sm-6">
-                                                            <label for="Skills.{{key}}">{{key}}</label>
-                                                        </div>
-                                                        <div class="col-sm-3">
-                                                            <input required type="number" name="Skills.{{key}}.Dice"
-                                                                value="{{skill.Dice}}" />
-                                                        </div>
-                                                        <div class="col-sm-3">
-                                                            <input required type="number" name="Skills.{{key}}.Mod"
-                                                                value="{{skill.Mod}}" />
-                                                        </div>
-                                                    </div>
-                                                    {{/each}}
+                                                <div style="flex: 0 0 49%; flex-wrap: wrap;" id="cse-other-capabilities">
+                                                    
                                                 </div>
                                             </div>
                                         </div>
+
+                                        <!-- Other Abilities -->
+
+                                        <!-- Other Moves -->
+
+                                        <!-- Controls -->
                                         <div class="d-flex mt-2" style="justify-content: space-evenly;">
                                             <div class="col-sm-5">
-                                                <button id="save-cse">Save Changes</button>
+                                                <button class="save-cse">Save Changes</button>
                                             </div>
                                             <div class="col-sm-5">
-                                                <button id="delete-cse">Delete Species</button>
+                                                <button class="delete-cse">Delete Species</button>
                                             </div>
                                         </div>
                                     {{/if}}
                                 </div>
                             </div>
                         </div>
-                        {{!--
-                    </div> --}}
+                    </div>
+
+                    <!-- Moves Tab -->
+                    <div class="tab details moves h-100" data-group="primary" data-tab="moves">
+                        <div class="d-flex">
+                            <div class="col-sm-12 col-md-4">
+                                <div class="swsh-box m-1 w-100" style="max-height: 900px; overflow-y: scroll;overflow: auto;">
+                                    <div class="swsh-header p-1 justify-content-end text-align-center d-flex">
+                                        <div class="item-controls flexcol" style="flex: 0 0 15%;">
+                                            <a class="item-control item-create" title="Add species" data-type="species"><i class="fas fa-plus-circle" style="margin-right: 3px;"></i><span class="readable">Add</span></a>
+                                        </div>
+                                    </div>
+                                    <div class="swsh-header d-flex">
+                                        <div class="inventory-header flexrow w-100" style="padding: 0 0 0 0.5em">
+                                            <div class="item-name item-species flexcol align-items-center align-self-center"
+                                                style="flex: 1 0 35%;">
+                                                <h4>Species</h4>
+                                            </div>
+                                            <div class="item-name flexcol align-items-center align-self-center"
+                                                style="flex: 0 0 20%;">
+                                                <h4>Id</h4>
+                                            </div>
+                                            <div class="item-name flexcol align-items-center align-self-center"
+                                                style="flex: 0 0 45%;">
+                                                <h4>Typing</h4>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex swsh-body p-0">
+                                        <ol class="inventory-list w-100 p-0 m-0" id="species-list"
+                                            style="padding: 0 0 0 0.5em;">
+                                            {{#each species as |mon|}}
+                                            <li class="item flexrow" data-item-number="{{mon.number}}">
+                                                <div class="item-name item-species flexcol align-items-center align-self-center"
+                                                    style="flex: 1 0 35%; word-break: break-word; text-align: center;">
+                                                    <h5>{{mon._id}}</h5>
+                                                </div>
+                                                <div class="item-name flexcol align-items-center align-self-center"
+                                                    style="flex: 0 0 20%;">
+                                                    <span class="readable pokemon p8 tight">{{mon.number}}</span>
+                                                </div>
+                                                <div class="item-name flexcol align-items-center align-self-center"
+                                                    style="flex: 0 0 45%;">
+                                                    {{!-- <span class="readable pokemon p8 tight type-img">{{#each
+                                                        mon.Type}}{{this}}{{#unless @last}}/{{/unless}}{{/each}}</span> --}}
+                                                        <span class="type-img">{{{loadTypeImages mon.Type false}}}</span>
+                                                </div>
+                                            </li>
+                                            {{/each}}
+                                        </ol>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-12 col-md-8">
+                                <div class="m-1 h-100 w-100" id="cse-mon-moves-editor">
+                                    {{#if object}}
+                                        <!-- Level-up Moves -->
+                                        <div class="swsh-box mb-2" style="max-height: 900px; overflow: auto;">
+                                            <div class="swsh-header pt-1 pb-1">
+                                                <div class="d-flex w-100">
+                                                    <h4 style="flex: 1 0 70%;text-align:center">Level-up Moves</h4>
+                                                    <div class="item-controls flexcol align-self-center" style="flex: 0 0 7%;">
+                                                        <a class="item-control item-create" title="Add move" data-type="move"><i class="fas fa-plus-circle" style="margin-right: 3px;"></i><span class="readable">Add</span></a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="swsh-header pt-1 pb-1">
+                                                <div class="d-flex w-100 pl-1" style="text-align: center;">
+                                                    <h5 class="ml-2 mr-1" style="flex: 0 0 30%">Move</h5>
+                                                    <h5 class="ml-1 mr-1" style="flex: 0 0 15%">Level</h5>
+                                                    <h5 class="ml-1 mr-1" style="flex: 0 0 10%">Evo?</h5>
+                                                    <h5 class="ml-1 mr-1" style="flex: 0 0 10%">Tutor?</h5>
+                                                    <h5 class="ml-1 mr-1" style="flex: 0 0 10%">Egg?</h5>
+                                                    <h5 class="ml-1 mr-1" style="flex: 0 0 10%">TM?</h5>
+                                                </div>
+                                            </div>
+                                            <div class="swsh-body justify-content-center" id="cse-level-up-moves">
+                                            </div>
+
+                                            <!-- Tutor Moves -->
+                                            <div class="swsh-header pt-1 pb-1">
+                                                <div class="d-flex w-100">
+                                                    <h4 style="flex: 1 0 70%;text-align:center">Tutor Moves</h4>
+                                                </div>
+                                            </div>
+                                            <div class="swsh-header pt-1 pb-1">
+                                                <div class="d-flex w-100 pl-1" style="text-align: center;">
+                                                    <h5 class="ml-2 mr-1" style="flex: 1 0 30%">Move</h5>
+                                                    <h5 class="ml-1 mr-1" style="flex: 0 0 10%">Tutor?</h5>
+                                                    <span style="flex: 0 0 5%;"></span>
+                                                </div>
+                                            </div>
+                                            <div class="swsh-body justify-content-center" id="cse-tutor-moves">
+                                            </div>
+
+                                            <!-- Egg Moves -->
+                                            <div class="swsh-header pt-1 pb-1">
+                                                <div class="d-flex w-100">
+                                                    <h4 style="flex: 1 0 70%;text-align:center">Egg Moves</h4>
+                                                </div>
+                                            </div>
+                                            <div class="swsh-header pt-1 pb-1">
+                                                <div class="d-flex w-100 pl-1" style="text-align: center;">
+                                                    <h5 class="ml-2 mr-1" style="flex: 1 0 30%">Move</h5>
+                                                    <h5 class="ml-1 mr-1" style="flex: 0 0 10%">Egg?</h5>
+                                                    <span style="flex: 0 0 5%;"></span>
+                                                </div>
+                                            </div>
+                                            <div class="swsh-body justify-content-center" id="cse-egg-moves">
+                                            </div>
+
+                                            <!-- TM Moves -->
+                                            <div class="swsh-header pt-1 pb-1">
+                                                <div class="d-flex w-100">
+                                                    <h4 style="flex: 1 0 70%;text-align:center">TM Moves</h4>
+                                                </div>
+                                            </div>
+                                            <div class="swsh-header pt-1 pb-1">
+                                                <div class="d-flex w-100 pl-1" style="text-align: center;">
+                                                    <h5 class="ml-2 mr-1" style="flex: 1 0 30%">Move</h5>
+                                                    <h5 class="ml-1 mr-1" style="flex: 0 0 10%">TM?</h5>
+                                                    <span style="flex: 0 0 5%;"></span>
+                                                </div>
+                                            </div>
+                                            <div class="swsh-body justify-content-center" id="cse-tm-moves">
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- Controls -->
+                                        <div class="d-flex mt-2" style="justify-content: space-evenly;">
+                                            <div class="col-sm-5">
+                                                <button class="save-cse">Save Changes</button>
+                                            </div>
+                                            <div class="col-sm-5">
+                                                <button class="delete-cse">Delete Species</button>
+                                            </div>
+                                        </div>
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Abilities Tab -->
+                    <div class="tab details abilities h-100" data-group="primary" data-tab="abilities">
+                        <div class="d-flex">
+                            <div class="col-sm-12 col-md-4">
+                                <div class="swsh-box m-1 w-100" style="max-height: 900px; overflow-y: scroll;overflow: auto;">
+                                    <div class="swsh-header p-1 justify-content-end text-align-center d-flex">
+                                        <div class="item-controls flexcol" style="flex: 0 0 15%;">
+                                            <a class="item-control item-create" title="Add species" data-type="species"><i class="fas fa-plus-circle" style="margin-right: 3px;"></i><span class="readable">Add</span></a>
+                                        </div>
+                                    </div>
+                                    <div class="swsh-header d-flex">
+                                        <div class="inventory-header flexrow w-100" style="padding: 0 0 0 0.5em">
+                                            <div class="item-name item-species flexcol align-items-center align-self-center"
+                                                style="flex: 1 0 35%;">
+                                                <h4>Species</h4>
+                                            </div>
+                                            <div class="item-name flexcol align-items-center align-self-center"
+                                                style="flex: 0 0 20%;">
+                                                <h4>Id</h4>
+                                            </div>
+                                            <div class="item-name flexcol align-items-center align-self-center"
+                                                style="flex: 0 0 45%;">
+                                                <h4>Typing</h4>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex swsh-body p-0">
+                                        <ol class="inventory-list w-100 p-0 m-0" id="species-list"
+                                            style="padding: 0 0 0 0.5em;">
+                                            {{#each species as |mon|}}
+                                            <li class="item flexrow" data-item-number="{{mon.number}}">
+                                                <div class="item-name item-species flexcol align-items-center align-self-center"
+                                                    style="flex: 1 0 35%; word-break: break-word; text-align: center;">
+                                                    <h5>{{mon._id}}</h5>
+                                                </div>
+                                                <div class="item-name flexcol align-items-center align-self-center"
+                                                    style="flex: 0 0 20%;">
+                                                    <span class="readable pokemon p8 tight">{{mon.number}}</span>
+                                                </div>
+                                                <div class="item-name flexcol align-items-center align-self-center"
+                                                    style="flex: 0 0 45%;">
+                                                    {{!-- <span class="readable pokemon p8 tight type-img">{{#each
+                                                        mon.Type}}{{this}}{{#unless @last}}/{{/unless}}{{/each}}</span> --}}
+                                                        <span class="type-img">{{{loadTypeImages mon.Type false}}}</span>
+                                                </div>
+                                            </li>
+                                            {{/each}}
+                                        </ol>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-12 col-md-8">
+                                <div class="m-1 h-100 w-100" id="cse-mon-abilities-editor">
+                                    {{#if object}}
+                                        <!-- Basic Abilities -->
+                                        <div class="swsh-box mb-2" style="max-height: 900px; overflow: auto;">
+                                            <div class="swsh-header pt-1 pb-1">
+                                                <div class="d-flex w-100">
+                                                    <h4 style="flex: 1 0 70%;text-align:center">Abilities</h4>
+                                                    <div class="item-controls flexcol align-self-center" style="flex: 0 0 7%;">
+                                                        <a class="item-control item-create" title="Add Ability" data-type="ability"><i class="fas fa-plus-circle" style="margin-right: 3px;"></i><span class="readable">Add</span></a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="swsh-header pt-1 pb-1">
+                                                <div class="d-flex w-100">
+                                                    <h4 style="flex: 1 0 70%;text-align:center">Basic</h4>
+                                                </div>
+                                            </div>
+                                            <div class="swsh-header pt-1 pb-1">
+                                                <div class="d-flex w-100 pl-1" style="text-align: center;">
+                                                    <h5 class="ml-2 mr-1" style="flex: 0 0 15%">#</h5>
+                                                    <h5 class="ml-1 mr-1" style="flex: 0 0 40%">Ability</h5>
+                                                    <h5 class="ml-1 mr-1" style="flex: 0 0 40%">Tier</h5>
+                                                </div>
+                                            </div>
+                                            <div class="swsh-body justify-content-center" id="cse-basic-abilities">
+                                            </div>
+
+                                            <!-- Intermediate Abilities -->
+                                            <div class="swsh-header pt-1 pb-1">
+                                                <div class="d-flex w-100">
+                                                    <h4 style="flex: 1 0 70%;text-align:center">Advanced</h4>
+                                                </div>
+                                            </div>
+                                            <div class="swsh-body justify-content-center" id="cse-advanced-abilities">
+                                            </div>
+
+                                            <!-- High Abilities -->
+                                            <div class="swsh-header pt-1 pb-1">
+                                                <div class="d-flex w-100">
+                                                    <h4 style="flex: 1 0 70%;text-align:center">High</h4>
+                                                </div>
+                                            </div>
+                                            <div class="swsh-body justify-content-center" id="cse-high-abilities">
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- Controls -->
+                                        <div class="d-flex mt-2" style="justify-content: space-evenly;">
+                                            <div class="col-sm-5">
+                                                <button class="save-cse">Save Changes</button>
+                                            </div>
+                                            <div class="col-sm-5">
+                                                <button class="delete-cse">Delete Species</button>
+                                            </div>
+                                        </div>
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-    {{!-- <div class="sheet-footer">
+    <div class="sheet-footer">
         <div class="tabs">
             <ul class="sheet-tabs tabs buttons" data-group="primary">
-                <li><button class="item" data-tab="stats">{{localize "PTU.TabsSkills"}}</button></li>
-                <li><button class="item" data-tab="inventory">{{localize "PTU.TabsInventory"}}</button></li>
-                <li><button class="item" data-tab="features">{{localize "PTU.TabsFeatsAndEdges"}}</button></li>
-                <li><button class="item" data-tab="combat">{{localize "PTU.TabsCombat"}}</button></li>
-                <li><button class="item" data-tab="moves">{{localize "PTU.TabsMoves"}}</button></li>
-                <li><button class="item" data-tab="extra">{{localize "PTU.TabsExtra"}}</button></li>
-                <li><button class="item" data-tab="dex">{{localize "PTU.TabsDex"}}</button></li>
-                <li><button class="item" data-tab="effects">{{localize "PTU.TabsEffects"}}</button></li>
+                <li><button class="item" data-tab="stats">Stats</button></li>
+                <li><button class="item" data-tab="moves">Moves</button></li>
+                <li><button class="item" data-tab="abilities">Abilities</button></li>
             </ul>
         </div>
-    </div> --}}
+    </div>
 </form>

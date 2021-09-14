@@ -1453,6 +1453,11 @@ li.system {
   position: absolute;
   pointer-events: none;
 }
+.cse .container-fluid > .sheet-footer {
+  left: -10px;
+  bottom: 55px;
+  z-index: 10;
+}
 .w-25 {
   width: 25% !important;
 }

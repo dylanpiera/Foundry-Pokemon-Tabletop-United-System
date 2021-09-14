@@ -264,6 +264,7 @@ function registerHandlebars() {
   });
 
   Handlebars.registerHelper("loadTypeImages", function (types, includeSlash = true) {
+    if(!types) return;
     return types.reduce((html, type, index, array) => {
       return html += `<img class="mr-1 ml-1" src="/systems/ptu/css/images/types/${type}IC.webp">` +  (includeSlash ? (index != (array.length-1) ? "<span>/</span>" : "") : "");
     }, "")

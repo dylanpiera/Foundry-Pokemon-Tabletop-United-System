@@ -21,7 +21,7 @@ export default class NewMonComponent extends Component {
         <div class="h-100 d-flex">
             <div class="swsh-box" style="width: fit-content;height: fit-content;">
                 <div class="swsh-header p-2 justify-content-center">
-                    <h2>Create new species!</h2>
+                    <h4>Create new species!</h4>
                 </div>
                 <div class="swsh-body justify-content-center">
                     <p class="w-100" style="white-space: pre-line; text-align: center;">Lets get started creating a new species, 
@@ -40,6 +40,7 @@ export default class NewMonComponent extends Component {
             ev.preventDefault();
             await this.store.dispatch('changeSpecies', $('#species-import').val());
             await this.store.dispatch('syncPage');
+            $('.cse .tabs').css('visibility', 'visible');
         })
     }
 }
