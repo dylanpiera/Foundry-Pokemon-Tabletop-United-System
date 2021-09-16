@@ -56,7 +56,7 @@ export let log = (...args) => console.log("FVTT PTU | ", ...args);
 export let warn = (...args) => console.warn("FVTT PTU | ", ...args);
 export let error = (...args) => console.error("FVTT PTU | ", ...args)
 
-export const LATEST_VERSION = "1.5-Beta-12";
+export const LATEST_VERSION = "1.5-Beta-13";
 
 /* -------------------------------------------- */
 /*  Foundry VTT Initialization                  */
@@ -391,6 +391,7 @@ Hooks.once("setup", function() {
 Hooks.once("ready", async function() {
   console.groupCollapsed("PTU Ready")
   await InitCustomSpecies();
+  await InitCustomTypings();
 
   SetAccessabilityFont(game.settings.get("ptu", "accessability"));
 

@@ -11,8 +11,8 @@ export async function InitCustomTypings() {
         await Hooks.callAll("updatedCustomTypings");
         await game.socket.emit("system.ptu", "RefreshCustomTypings")
     } catch(err) {
-        warn("Unable to import data as player", err)
-        await ui.notifications.notify("There was a system update that requires the GM to login for migrations to happen. Please notify your GM and refresh after they have joined.", "warning")
+        warn("The system is wonky and now it's fixed.", err)
+        await game.settings.set("ptu", "typeEffectiveness", TypeEffectiveness);
     }
 }
 
