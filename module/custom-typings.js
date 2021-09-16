@@ -3,7 +3,7 @@ import {log, warn, error, debug} from './ptu.js'
 
 export async function InitCustomTypings() {
     try {
-        if(isObjectEmpty(game.settings.get("ptu", "typeEffectiveness") ?? {})) {
+        if(!game.settings.get("ptu", "typeEffectiveness") || (isObjectEmpty(game.settings.get("ptu", "typeEffectiveness") ?? {}))) {
             await game.settings.set("ptu", "typeEffectiveness", TypeEffectiveness);
         }
 
