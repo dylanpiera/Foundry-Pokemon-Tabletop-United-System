@@ -5,6 +5,7 @@ import { CheckStage } from '../../utils/calculate-evolution.js';
 import { GetSpeciesArt } from '../../utils/species-command-parser.js';
 import { CalcBaseStats, CalculateStatTotal } from '../../actor/calculations/stats-calculator.js';
 import { BlankPTUSpecies } from '../../data/species-template.js';
+import CustomSpeciesFolder from "../../entities/custom-species-folder.js"
 
 export default function({speciesData, form}) {
     const store = new Store({
@@ -74,6 +75,7 @@ export default function({speciesData, form}) {
             async changeSpecies(context, species) {
                 const speciesData = species === "" ? duplicate(BlankPTUSpecies) : game.ptu.GetSpeciesData(species);
                 if(!speciesData) return ui.notifications.notify("Unable to find species " + species, "warning");
+                speciesData.number = CustomSpeciesFolder.getAvailableId();
 
                 await context.commit('updateSpecies', speciesData)
                 await context.dispatch('init');
