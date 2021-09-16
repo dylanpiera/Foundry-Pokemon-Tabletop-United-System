@@ -281,10 +281,18 @@ export function LoadSystemSettings() {
 
     game.settings.register("ptu", "dismissedVersion", {
         name: "Current Dismissed Version",
-        scope: "client",
+        scope: "world",
         config: false,
         type: Object,
         default: {}
+    })
+
+    game.settings.register("ptu", "typeEffectiveness", {
+        name: "Type Effectiveness Table",
+        scope: "world",
+        config: false,
+        type: Object,
+        default: undefined
     })
 
     game.settings.register("ptu", "showDebugInfo", {

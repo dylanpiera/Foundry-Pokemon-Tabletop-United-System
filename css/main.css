@@ -148,7 +148,8 @@ a.item {
   z-index: 10;
   position: inherit;
 }
-.panel.cse {
+.panel.cse,
+.panel.cte {
   justify-content: center;
   z-index: 10;
   position: inherit;
@@ -1418,27 +1419,36 @@ header.effect-change.effects-header.flexrow > div {
 li.system {
   font-size: 9px;
 }
-/* Custom Species Editor */
-.cse .window-content {
+/* Custom Species/Typing Editor */
+.cse .window-content,
+.cte .window-content {
   padding: unset !important;
 }
-.cse .inventory-list:not(.inventory-header) .item:nth-child(even) {
+.cse .inventory-list:not(.inventory-header) .item:nth-child(even),
+.cte .inventory-list:not(.inventory-header) .item:nth-child(even) {
   background: #ececec;
 }
-.cse #species-list li:hover {
+.cse #species-list li:hover,
+.cte #species-list li:hover,
+.cse #typing-list li:hover,
+.cte #typing-list li:hover {
   text-shadow: 0 0 10px #ff0000a0;
   cursor: pointer;
 }
-.cse #stats input {
+.cse #stats input,
+.cte #stats input {
   padding: 5px;
 }
-.cse .cse #type-list select {
+.cse .cse #type-list select,
+.cte .cse #type-list select {
   color: transparent;
 }
-.cse .cse #type-list li.item {
+.cse .cse #type-list li.item,
+.cte .cse #type-list li.item {
   position: relative;
 }
-.cse .cse #type-list li.item:after {
+.cse .cse #type-list li.item:after,
+.cte .cse #type-list li.item:after {
   content: '>';
   font: 17px "Pokemon GB", monospace;
   color: #191813;
@@ -1453,10 +1463,14 @@ li.system {
   position: absolute;
   pointer-events: none;
 }
-.cse .container-fluid > .sheet-footer {
+.cse .container-fluid > .sheet-footer,
+.cte .container-fluid > .sheet-footer {
   left: -10px;
   bottom: 55px;
   z-index: 10;
+}
+.cte .window-content {
+  overflow-y: hidden;
 }
 .w-25 {
   width: 25% !important;

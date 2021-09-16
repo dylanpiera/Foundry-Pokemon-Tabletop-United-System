@@ -174,7 +174,7 @@ a.item {
         position: inherit;
     }
 
-    &.cse {
+    &.cse, &.cte {
         justify-content: center;
         z-index: 10;
         position: inherit;
@@ -1724,8 +1724,8 @@ li.system {
     font-size: 9px;
 }
 
-/* Custom Species Editor */
-.cse {
+/* Custom Species/Typing Editor */
+.cse, .cte {
     .window-content {
         padding: unset !important;
     }
@@ -1734,7 +1734,7 @@ li.system {
         background: #ececec;
     }
 
-    #species-list li:hover {
+    #species-list li:hover, #typing-list li:hover {
         text-shadow: 0 0 10px #ff0000a0;
         cursor: pointer;
     }
@@ -1776,4 +1776,8 @@ li.system {
         z-index: 10;
     }
     
+}
+
+.cte .window-content {
+    overflow-y: hidden;
 }

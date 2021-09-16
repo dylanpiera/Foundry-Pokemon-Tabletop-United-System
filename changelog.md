@@ -1,10 +1,22 @@
 # Welcome to the Beta!
 Hey there! You are on the Beta Branch. If you ever have any feedback please do share with us over on [Github](https://github.com/dylanpiera/Foundry-Pokemon-Tabletop-United-System/issues) or [Discord](https://discord.gg/fE3w59q)
 
+## 1.5-Beta-11 - Custom Typings!
+Hey all! For the 2nd part of the Homebrew update I present: the Custom Type Editor!
+
+Currently both the CSE & CTE are still lacking in some features, namely the species editor is missing evolution settings, while the type editor is missing a way to add your own images. Both of these will be added in an upcoming beta.
+For now I thought I'd let you guys play around with the new CTE first!
+
+- Added support for Custom Types using the Custom Type Editor.
+- Existing type effectiveness can now be modded if so desired.
+
+Please note: By default types are only updated on actors after a refresh, if you want to you can use the 'Sync Changes' button in the CTE to apply it to all currently logged in players (including yourself).
+This however forces every single Pokémon in your game to refresh it's data, so if you have a lot of mons, this can create a lot of lagg. 
+
 ## 1.5-Beta-10
 - Hotfix for 'null' typing showing up in mons with only a single type.
 
-## 1.5-Beta-9
+## 1.5-Beta-9 - Custom Species Editor Upgrade
 Hi all! This is a bigger beta release as the CSE- Custom Species Editor, has received a complete overhaul!
 
 - Added new Custom Species Editor.

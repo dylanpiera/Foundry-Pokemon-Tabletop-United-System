@@ -18,10 +18,12 @@ import { PTUPokemonCharactermancer } from './forms/charactermancer-pokemon-form.
 import { PTUDexDragOptions } from './forms/dex-drag-options-form.js'
 // import { PTUCustomSpeciesEditor } from './forms/custom-species-editor-form.js'
 import { PTUCustomSpeciesEditor } from './forms/cse-form.js'
+import { PTUCustomTypingEditor } from './forms/cte-form.js'
 import { PTUCustomMonEditor } from './forms/custom-mon-editor-form.js'
 import { PTUCharacterNotesForm } from './forms/character-notes-form.js'
 import { RollWithDb } from './utils/roll-calculator.js'
 import { InitCustomSpecies, UpdateCustomSpecies} from './custom-species.js'
+import { InitCustomTypings, UpdateCustomTypings} from './custom-typings.js'
 import { ChangeLog } from './forms/changelog-form.js'
 import { applyDamageToTargets, undoDamageToTargets }  from './combat/damage-calc-tools.js'
 import CustomSpeciesFolder from './entities/custom-species-folder.js'
@@ -54,7 +56,7 @@ export let log = (...args) => console.log("FVTT PTU | ", ...args);
 export let warn = (...args) => console.warn("FVTT PTU | ", ...args);
 export let error = (...args) => console.error("FVTT PTU | ", ...args)
 
-export const LATEST_VERSION = "1.5-Beta-10";
+export const LATEST_VERSION = "1.5-Beta-11";
 
 /* -------------------------------------------- */
 /*  Foundry VTT Initialization                  */
@@ -74,7 +76,7 @@ Hooks.once('init', function() {
     PTUPokemonCharactermancer,
     PTUDexDragOptions,
     PTUCustomSpeciesEditor,
-    PTUCustomMonEditor,
+    PTUCustomTypingEditor,
     PTUCharacterNotesForm,
     levelProgression,
     pokemonData,
@@ -159,6 +161,8 @@ Hooks.once('init', function() {
   if(game.settings.get("ptu", "uraniumData")) {
     Array.prototype.push.apply(game.ptu["pokemonData"], uraniumData);
   }
+
+  InitCustomTypings();
 
   // Preload Handlebars Templates
   PreloadHandlebarsTemplates();
@@ -399,6 +403,8 @@ Hooks.once("ready", async function() {
   game.socket.on("system.ptu", (data) => {
     if(data == null) return; 
     if(data == "RefreshCustomSpecies" || (data == "ReloadGMSpecies" && game.user.isGM)) Hooks.callAll("updatedCustomSpecies"); 
+    if(data == "RefreshCustomTypings") Hooks.callAll("updatedCustomTypings");
+    if(data == "RefreshCustomTypingsAndActors") Hooks.callAll("updatedCustomTypings", {updateActors: true}); 
   });
 
   /** Display Changelog */
@@ -438,6 +444,7 @@ Hooks.once("ready", async function() {
 /*  Custom Species (Editor) Hooks               */
 /* -------------------------------------------- */
 Hooks.on("updatedCustomSpecies", UpdateCustomSpecies);
+Hooks.on("updatedCustomTypings", UpdateCustomTypings);
 
 Hooks.on('renderJournalDirectory', function() {
   CustomSpeciesFolder.updateFolderDisplay(game.settings.get("ptu", "showDebugInfo"));
@@ -501,6 +508,12 @@ Hooks.on("renderSettings", (app, html) => {
           Edit Custom Species
       </button>`));
     html.find('button[data-action="ptu-custom-species-editor"').on("click", _ => new game.ptu.PTUCustomSpeciesEditor().render(true));
+    $('#ptu-options').append($(
+      `<button data-action="ptu-custom-typing-editor">
+          <i class="fas fa-book-open"></i>
+          Edit Custom Typings
+      </button>`));
+    html.find('button[data-action="ptu-custom-typing-editor"').on("click", _ => new game.ptu.PTUCustomTypingEditor().render(true));
   }
 })
 
