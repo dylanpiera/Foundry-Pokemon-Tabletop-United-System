@@ -322,7 +322,7 @@ export class PTUGen8CharacterSheet extends ActorSheet {
 
 		// Finally, create the item!
 		debug("Created new item",itemData);
-		return this.actor.createOwnedItem(itemData);
+		return this.actor.createEmbeddedDocuments("Item", [itemData]);
 	}
 
 	_updateItemField(e) {

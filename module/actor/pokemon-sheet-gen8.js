@@ -389,7 +389,7 @@ export class PTUGen8PokemonSheet extends ActorSheet {
 
 		// Finally, create the item!
 		debug("Created new item",itemData);
-		return this.actor.createOwnedItem(itemData);
+		return this.actor.createEmbeddedDocuments("Item", [itemData]);
 	}
 
 	/**
