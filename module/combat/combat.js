@@ -174,8 +174,8 @@ export default class PTUCombat {
         await this._saveData();
       }
     } else {
-      if (!this.data.participants.includes(combatant.token.uuid)) {
-        this.data.participants.push(combatant.token.uuid);
+      if (!this.data.participants.includes(combatant.token.document.uuid)) {
+        this.data.participants.push(combatant.token.document.uuid);
         await this._saveData();
       }
     }
