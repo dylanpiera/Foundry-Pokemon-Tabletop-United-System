@@ -79,25 +79,46 @@ export async function CreateMonParser(input, andCreate = false) {
     return commands;
 }
 
-export async function GetSpeciesArt(mon, imgDirectoryPath, type = ".png", shiny = false) {
+export async function GetSpeciesArt(mon, imgDirectoryPath, type = ".png", shiny = false, animated = false, animated_type = ".webm") {
     const basePath = imgDirectoryPath+(imgDirectoryPath.endsWith('/') ? '' : '/')
 
     const shiny_path = shiny ? "s" : "";
 
     let path = basePath+lpad(mon?.number, 4)+shiny_path+type;
+
+    if(animated)
+    {
+        path = basePath+lpad(mon?.number, 4)+shiny_path+animated_type;
+    }
     let result = await fetch(path);
+
+    if(animated && (result.status === 404 && mon?.number < 1000)) {
+        path = basePath+lpad(mon?.number, 3)+shiny_path+animated_type;
+        result = await fetch(path);
+    }
     if(result.status === 404 && mon?.number < 1000) {
         path = basePath+lpad(mon?.number, 3)+shiny_path+type;
+        result = await fetch(path);
+    }
+
+    if(animated && (result.status === 404)) {
+        path = basePath+mon?._id+shiny_path+animated_type;
         result = await fetch(path);
     }
     if(result.status === 404) {
         path = basePath+mon?._id+shiny_path+type;
         result = await fetch(path);
     }
+
+    if(animated && (result.status === 404)) {
+        path = basePath+mon?._id?.toLowerCase()+shiny_path+animated_type;
+        result = await fetch(path);
+    }
     if(result.status === 404) {
         path = basePath+mon?._id?.toLowerCase()+shiny_path+type;
         result = await fetch(path);
     }
+
     if(result.status === 404) {
         return undefined;
     }
@@ -171,6 +192,7 @@ Hooks.on("dropCanvasData", (canvas, update) => {
 
 export async function FinishDexDragPokemonCreation(formData, update)
 {
+    const imgSrc = game.settings.get("ptu", "defaultPokemonImageDirectory");
     let species_name = update["item"].name;
 
     let drop_coordinates_x = update["x"];
@@ -209,6 +231,8 @@ export async function FinishDexDragPokemonCreation(formData, update)
     protoToken.displayBars = 20;
     protoToken.displayName=  40; 
     protoToken.bar1.attribute = "health";
+
+    protoToken.img = await GetSpeciesArt(game.ptu.GetSpeciesData(new_actor.data.data.species), imgSrc, ".png", new_actor.data.data.shiny, true);
     
     new_actor = await new_actor.update({"token": protoToken});
 
