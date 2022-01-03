@@ -1013,6 +1013,7 @@ div.hover-button {
   bottom: -117%;
   width: 130%;
   transform: translate(-16%);
+  z-index: 100;
 }
 .apply-damage-button:hover > .hover-button {
   display: flex;

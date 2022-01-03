@@ -25,7 +25,7 @@ export class ChangeLog extends FormApplication {
     const data = super.getData();
     data.dtypes = ["String", "Number", "Boolean"];
 
-    data.text = marked(this.object.replace(/[\r]/g,""));
+    data.text = marked.parse(this.object.replace(/[\r]/g,""));
 
     return data;
   }

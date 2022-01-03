@@ -50,7 +50,7 @@ export class PTUSettings extends FormApplication {
             const s = duplicate(setting);
             s.name = game.i18n.localize(s.name);
             s.hint = game.i18n.localize(s.hint);
-            s.value = game.settings.get(s.module, s.key);
+            s.value = game.settings.get(s.namespace, s.key);
             s.type = setting.type instanceof Function ? setting.type.name : "String";
             s.isCheckbox = setting.type === Boolean;
             s.isSelect = s.choices !== undefined;

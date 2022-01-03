@@ -200,7 +200,7 @@ export class PTUGen8CharacterSheet extends ActorSheet {
 		// Delete Inventory Item
 		html.find('.item-delete').click((ev) => {
 			const li = $(ev.currentTarget).parents('.item');
-			this.actor.deleteOwnedItem(li.data('itemId'));
+			this.actor.deleteEmbeddedDocuments("Item", [li.data('itemId')]);
 			li.slideUp(200, () => this.render(false));
 		});
 
@@ -322,7 +322,7 @@ export class PTUGen8CharacterSheet extends ActorSheet {
 
 		// Finally, create the item!
 		debug("Created new item",itemData);
-		return this.actor.createOwnedItem(itemData);
+		return this.actor.createEmbeddedDocuments("Item", [itemData]);
 	}
 
 	_updateItemField(e) {

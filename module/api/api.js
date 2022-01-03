@@ -259,7 +259,7 @@ export default class Api {
             return false;
         }
 
-        const content = {uuids: tokens.map(t => t.uuid), options};
+        const content = {uuids: tokens.map(t => t.document.uuid), options};
         return this._handlerBridge(content, "tokensDelete");
     }
 
@@ -324,7 +324,7 @@ export default class Api {
             return false;
         }
 
-        const content = {uuids: tokens.map(t => t.uuid), damage, damageType, damageCategory, options};
+        const content = {uuids: tokens.map(t => t.document.uuid), damage, damageType, damageCategory, options};
         return this._handlerBridge(content, "applyDamage");
     }
 
@@ -365,7 +365,7 @@ export default class Api {
             return false;
         }
 
-        const content = {uuids: tokens.map(t => t.uuid), effect: actualEffect, options};
+        const content = {uuids: tokens.map(t => t.document.uuid), effect: actualEffect, options};
         return this._handlerBridge(content, "toggleEffect");
     }
 
@@ -399,7 +399,7 @@ export default class Api {
             return false;
         }
 
-        const content = {uuids: tokens.map(t => t.uuid), effects: actualEffects, options};
+        const content = {uuids: tokens.map(t => t.document.uuid), effects: actualEffects, options};
         return this._handlerBridge(content, "addActiveEffect");
     }
 
@@ -435,7 +435,7 @@ export default class Api {
             return false;
         }
 
-        const content = {uuids: tokens.map(t => t.uuid), effectIds, options};
+        const content = {uuids: tokens.map(t => t.document.uuid), effectIds, options};
         return this._handlerBridge(content, "removeActiveEffect");
     }
 
@@ -465,7 +465,7 @@ export default class Api {
             return false;
         }
 
-        const content = {uuids: tokens.map(t => t.uuid), options};
+        const content = {uuids: tokens.map(t => t.document.uuid), options};
         return this._handlerBridge(content, "tokensUpdate");
     }
 

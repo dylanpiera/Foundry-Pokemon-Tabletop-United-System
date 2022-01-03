@@ -1,6 +1,14 @@
 # Welcome to the Beta!
 Hey there! You are on the Beta Branch. If you ever have any feedback please do share with us over on [Github](https://github.com/dylanpiera/Foundry-Pokemon-Tabletop-United-System/issues) or [Discord](https://discord.gg/fE3w59q)
 
+## 1.5-Beta 14 - Foundry 9 Compatibility
+Hey all, just two things for today.
+
+- Migrated to Foundry core version 9
+- Added support for .webm images during pokemon generation.
+
+Thanks to VoidPhoenix#6487 for this update!
+
 ## 1.5-Beta-11 - 13 - Custom Typings!
 Hey all! For the 2nd part of the Homebrew update I present: the Custom Type Editor!
 
