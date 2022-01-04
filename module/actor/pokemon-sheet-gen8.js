@@ -501,7 +501,7 @@ export class PTUGen8PokemonSheet extends ActorSheet {
 
 		let RollDamage = () => {
 			let PerformDamage = (crit) => {
-				let damageRoll = CalculateDmgRoll(move.data, this.actor.data.data, crit).roll()
+				let damageRoll = CalculateDmgRoll(move.data, this.actor.data.data, crit)
 
 				sendMoveRollMessage(damageRoll, {
 					speaker: ChatMessage.getSpeaker({
