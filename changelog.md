@@ -1,6 +1,13 @@
 # Welcome to the Beta!
 Hey there! You are on the Beta Branch. If you ever have any feedback please do share with us over on [Github](https://github.com/dylanpiera/Foundry-Pokemon-Tabletop-United-System/issues) or [Discord](https://discord.gg/fE3w59q)
 
+## 1.5-Beta 15 - Foundry 9 Compatibility (Hotfix)
+A quick hotfix for a couple v9 compatibility bugs that slipped past the last patch:
+
+- Fixed an issue where an error would prevent saving PTU Settings.
+- Fixed an issue where players could not delete tokens.
+- Fixed an error that occured when the user rolled damage on a move from the sheet.
+
 ## 1.5-Beta 14 - Foundry 9 Compatibility
 Hey all, just two things for today.
 
