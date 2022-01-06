@@ -259,7 +259,7 @@ export default class Api {
             return false;
         }
 
-        const content = {uuids: tokens.map(t => t.document.uuid), options};
+        const content = {uuids: tokens.map(t => t.uuid), options};
         return this._handlerBridge(content, "tokensDelete");
     }
 

@@ -86,10 +86,14 @@ export class PTUSettings extends FormApplication {
     /** @override */
     async _updateObject(event, formData) {
         for ( let [k, v] of Object.entries(flattenObject(formData)) ) {
-            let s = game.settings.settings.get(k);
-            let current = game.settings.get(s.module, s.key);
+            let s = game.settings.settings.get("ptu"+k);
+            if(s === undefined)
+            {
+                s = game.settings.settings.get("PTUMoveMaster"+k);
+            }
+            let current = game.settings.get(s.namespace, s.key);
             if ( v !== current ) {
-                await game.settings.set(s.module, s.key, v);
+                await game.settings.set(s.namespace, s.key, v);
             }
         }
     }
