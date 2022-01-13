@@ -1,0 +1,48 @@
+<div class="row m-0 p-0">
+    <button type="button" class="movemaster-button" data-button="{{_id}}">
+        <div class="btn-body">
+            <h3>
+                <!-- Move Name -->
+                <div class="pt-1" {{!-- style="padding-top:5px;" --}} title="{{data.effect}}">
+                    {{name}}
+                </div>
+                <!-- Frequency -->
+                <img src="{{calcFrequencyIconPath data.frequency '0'}}" title="{{data.frequency}} ({{'0'}} Remaining)"
+                    style="border-width: 0;">
+                <!-- Typings -->
+                <div class="type-bar">
+                    <img src="systems/ptu/images/icons/{{data.category}}.png" />
+                    <img src="systems/ptu/images/icons/{{data.type}}IC.png" />
+                </div>
+            </h3>
+            <!-- Stab Bar -->
+            {{#if data.stab}}
+            <div class="col p-0">
+                <span class="type-img">
+                    <img src="/systems/ptu/images/icons/STAB_Border.png" style="height: 1px;" />
+                </span>
+            </div>
+            {{/if}}
+            <!-- Damage Base Bar -->
+            {{!-- {{#if (and (not data.damageBase "--") (not (contains "damage" (data.damageBase)) true)) }} --}}
+            {{#unless (or (is data.damageBase "--") (contains "damage" (toLowerCase data.damageBase)))}}
+            <div class="col p-0">
+                <span class="type-img">
+                    <img title="Damage Base {{calcDb data}}"
+                        src="/systems/ptu/images/icons/DividerIcon_DB{{calcDb data}}.png" />
+                </span>
+            </div>
+            {{/unless}}
+            <!-- Other Icons (to be done) -->
+            {{!-- <h6 style="padding-top: 4px;padding-bottom: 0px;font-size:14px;">
+                <img title="Ranged" src="systems/ptu/images/icons/ranged.png"
+                    style="height: 22px ;border-left-width: 0px;border-top-width: 0px;border-right-width: 0px;border-bottom-width: 0px;">12
+                <img title="Smite" src="systems/ptu/images/icons/smite.png"
+                    style="height: 22px ;border-left-width: 0px;border-top-width: 0px;border-right-width: 0px;border-bottom-width: 0px;">
+                <span style="font-size:30px">
+                    / x 0.5
+                </span>
+            </h6> --}}
+        </div>
+    </button>
+</div>

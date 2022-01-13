@@ -1,5 +1,6 @@
 import initStore from "./sidebarStore.js";
 import { log, debug } from "../ptu.js";
+import MoveList from './components/moves-component.js';
 
 /**
  * Extend the basic FormApplication with some very simple modifications
@@ -30,7 +31,7 @@ export class PTUSidebar extends FormApplication {
 
     let alternate_style = false//game.settings.get("PTUMoveMaster", "useAlternateChatStyling");
 
-    this.position.left = alternate_style ? (x - 455) : (x - 505);
+    this.position.left = alternate_style ? (x - 455) : (x - 510);
     this.position.top = Math.round(y * 0.005);
     this.position.width = 200;
     this.position.height = Math.round(y * 0.985);
@@ -41,7 +42,7 @@ export class PTUSidebar extends FormApplication {
         obj.setPosition({ left: $(window).width() - 455 })//515})
       }
       else {
-        obj.setPosition({ left: $(window).width() - 515 })
+        obj.setPosition({ left: $(window).width() - 510 })
       }
     })
 
@@ -63,6 +64,8 @@ export class PTUSidebar extends FormApplication {
 
     return this;
   }
+
+  stateHasChanged() { this._afterRender(); }
 
   /** @override */
   activateListeners(html) {
@@ -109,7 +112,9 @@ export class PTUSidebar extends FormApplication {
     })
 
     this.components = {
+      movesComponent: new MoveList(this.store)
     }
+
     debug(this.store, this.components);
   }
 

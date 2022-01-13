@@ -81,6 +81,8 @@ export class PTUItemSheet extends ItemSheet {
 			onclick: () => this._toChat()
 		});
 
+		if(this.object.type == "move") return buttons;
+
 		buttons.unshift({
 			label: "Effects",
 			class: "open-effects",
@@ -92,6 +94,7 @@ export class PTUItemSheet extends ItemSheet {
 	}
 
 	async _loadEffectSheet() {
+		if(this.object.type == "move") return;
 		if(this.object.effects.size == 0) {
 			const effectData = {
 				changes: [],

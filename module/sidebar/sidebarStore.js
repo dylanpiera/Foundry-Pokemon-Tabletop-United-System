@@ -21,22 +21,47 @@ export default function({form, actorId}) {
                 
                 await context.commit('setActor', actorId);
             },
+            async updateMoves(context, moves) {
+                if(moves === undefined) {
+                    await context.commit('updateMoves', []);
+                    return;
+                }
+                if(!moves) return;
+
+                await context.commit('updateMoves', duplicate(moves));
+            }
         },
         mutations: {
             async init(state) {
-                state.actor = () => state.actorId ? game.actors.get(state.actorId) : undefined;
+                Object.defineProperty(state, 'actor', {get: () => state.actorId ? game.actors.get(state.actorId) : undefined});
             },
             async setActor(state, actorId) {
                 state.actorId = actorId ? actorId : undefined;
                 return state;
             },
+            async updateMoves(state, moves) {
+                console.log(moves);
+                state.moves = moves;
+                return state;
+            }
         },
         state: {
             actorId,
             actor: undefined,
+            moves: [],
             form: form
-        }
+        },
     })
+    /**
+     * Fetches the ItemDocument of the move by ItemID or Index
+     * @param {*} moveIdOrIndex     0-based index of Moves array or item ID.
+     * @returns 
+     */
+    store.getMove = function (moveIdOrIndex) {
+        const index = Number(moveIdOrIndex);
+        if(isNaN(index) || index > store.state.moves.length - 1) return store.state.actor.items.get(moveIdOrIndex);
+        return store.state.actor.items.get(store.state.moves[index]._id);
+    }
 
     store.dispatch('init');
 

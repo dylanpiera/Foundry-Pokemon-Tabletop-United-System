@@ -196,7 +196,7 @@ function registerHandlebars() {
   });
 
   Handlebars.registerHelper("toLowerCase", function(str) {
-    return str.toLowerCase();
+    return str.toLowerCase ? str.toLowerCase() : str;
   });
 
   Handlebars.registerHelper("isdefined", function (value) {
@@ -241,6 +241,30 @@ function registerHandlebars() {
       return obj;
     }, {});
     return id ? types[id] : types;
+  })
+
+  Handlebars.registerHelper("calcFrequencyIconPath", function (frequency, currentUseCount) {
+    const basePath = "systems/ptu/images/icons/";
+    const useCount = Number(currentUseCount);
+    switch(frequency) {
+      case "At-Will":
+      case "":
+        return basePath+"AtWill"+".png";
+      case "EOT":
+        return basePath+(useCount == 0 ? "EOT_1" : "EOT_0")+".png";
+      case "Scene":
+        return basePath+(useCount >= 1 ? "Scene1_0" : "Scene1_1")+".png";
+      case "Scene x2":
+        return basePath+(useCount >= 2 ? "Scene2_0" : useCount == 1 ? "Scene2_1" : "Scene2_2")+".png";
+      case "Scene x3":
+        return basePath+(useCount >= 3 ? "Scene3_0" : useCount == 2 ? "Scene3_1" : useCount == 1 ? "Scene3_2" : "Scene3_3")+".png";
+      case "Daily":
+        return basePath+(useCount >= 1 ? "daily1_0" : "daily1_1")+".png";
+      case "Daily x2":
+        return basePath+(useCount >= 2 ? "daily2_0" : useCount == 1 ? "daily2_1" : "daily2_2")+".png";
+      case "Daily x3":
+        return basePath+(useCount >= 3 ? "daily3_0" : useCount == 2 ? "daily3_1" : useCount == 1 ? "daily3_2" : "daily3_3")+".png";
+    }
   })
 
   function keyToNatureStat(key) {
@@ -299,6 +323,18 @@ function registerHandlebars() {
       return obj;
     }, {})[effectId]
   })
+
+  Handlebars.registerHelper('contains', function(needle, haystack) {
+    needle = Handlebars.escapeExpression(needle);
+    haystack = Handlebars.escapeExpression(haystack);
+    return (haystack.indexOf(needle) > -1) ? true : false;
+ });
+
+ Handlebars.registerHelper('ifContains', function(needle, haystack, options) {
+  needle = Handlebars.escapeExpression(needle);
+  haystack = Handlebars.escapeExpression(haystack);
+  return (haystack.indexOf(needle) > -1) ? options.fn(this) : options.inverse(this);
+});
 
   Handlebars.registerHelper("inc", function(num) {return Number(num)+1})
 
