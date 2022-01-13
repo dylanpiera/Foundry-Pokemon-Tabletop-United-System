@@ -10,6 +10,7 @@ export class PTUSidebar extends FormApplication {
   /** @override */
   static get defaultOptions() {
     return mergeObject(super.defaultOptions, {
+      id: "ptu-sidebar",
       classes: ["ptu", "sidebar", "ptu-sidebar", "pokemon"],
       template: "systems/ptu/module/sidebar/sidebar-form.hbs",
       title: "PTU Sidebar",
@@ -68,6 +69,35 @@ export class PTUSidebar extends FormApplication {
     super.activateListeners(html);
 
     this._initializeState();
+
+    if(this.hook) Hooks.off("controlToken", this.hook);
+    this.hook = Hooks.on("controlToken", this._onTokenSelect.bind(this));
+  }
+
+  /* -------------------------------------------- */
+
+  async _onTokenSelect(token, selected) {
+    const self = this;
+
+    // If more than 1 token is selected, stop.
+    if(canvas.tokens.controlled.length > 1) return;
+    
+    if(selected) { // Token selection became active
+      const actor = game.actors.get(token.data.actorId);
+      if(actor) self.store.dispatch("setActor", token.data.actorId);
+    }
+    else { // If token got unselected
+      // only continue if no tokens are selected
+      if(canvas.tokens.controlled.length != 0) return;
+
+      // Wait a moment to see if some other token *is* selected.
+      setTimeout(async () => {
+        if(canvas.tokens.controlled.length != 0) return;
+
+        // Select Actor 'undefined' == Unselect & hide
+        self.store.dispatch("setActor");
+      }, 100);
+    }
   }
 
   /* -------------------------------------------- */
@@ -75,6 +105,7 @@ export class PTUSidebar extends FormApplication {
   async _initializeState() {
     this.store = initStore({
       form: this,
+      actorId: game.user.character?.id ?? undefined
     })
 
     this.components = {
