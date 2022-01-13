@@ -50,6 +50,7 @@ import {LoadSystemSettings, SetAccessabilityFont} from './settings.js'
 import PreloadHandlebarsTemplates from './templates.js'
 import Store from "./api/front-end/lib/store.js";
 import Component from "./api/front-end/lib/component.js";
+import { PTUSidebar } from "./sidebar/sidebar-form.js";
 
 export let debug = (...args) => {if (game.settings.get("ptu", "showDebugInfo") ?? false) console.log("DEBUG: FVTT PTU | ", ...args)};
 export let log = (...args) => console.log("FVTT PTU | ", ...args);
@@ -78,6 +79,7 @@ Hooks.once('init', function() {
     PTUCustomSpeciesEditor,
     PTUCustomTypingEditor,
     PTUCharacterNotesForm,
+    PTUSidebar,
     levelProgression,
     pokemonData,
     customSpeciesData: [],
@@ -438,6 +440,10 @@ Hooks.once("ready", async function() {
   CONFIG.Combat.defeatedStatusId = Afflictions[0].id;
 
   PTUCombat.Initialize();
+
+  game.ptu.sidebar = new game.ptu.PTUSidebar();
+  game.ptu.sidebar.render(true);
+
   console.groupEnd();
 });
 
