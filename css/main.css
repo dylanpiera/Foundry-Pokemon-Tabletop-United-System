@@ -2226,10 +2226,9 @@ body.messages-dark-theme .chat-controls .roll-type-select {
   padding-bottom: 0;
   font-size: 14px;
   align-items: center;
-  justify-content: space-evenly;
+  justify-content: center;
 }
-.ptu-sidebar #moves-list .movemaster-button .btn-body .icon-list span,
-.ptu-sidebar #moves-list .movemaster-button .btn-body .icon-list img {
+.ptu-sidebar #moves-list .movemaster-button .btn-body .icon-list span {
   margin: 0 4px;
 }
 .ptu-sidebar #moves-list .movemaster-button .btn-body .icon-list img {

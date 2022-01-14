@@ -109,9 +109,11 @@ export default class MovesList extends Component {
 
         let o = "";
         for(const r of range.slice(0, -1)) {
-            o += getIcon(r) + " ";
+            const x = getIcon(r);
+            if(x) o += `<span>${x}</span>`;
         }
-        o += getIcon(range[range.length-1]);
+        const x = getIcon(range[range.length-1]);
+        if(x) o += `<span>${x}</span>`;
 
         function getIcon(range) {
             if(!range) return;
@@ -149,7 +151,7 @@ export default class MovesList extends Component {
                 case !isNaN(Number(range)): return RangeIcon + range.split(',')[0].trim()
                 default: {
                     if(range.includes("1 target")) return "";
-                    return `<span>${range}</span>`;
+                    return `${range}`;
                 }
             }
         }
