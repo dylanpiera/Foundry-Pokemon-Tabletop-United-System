@@ -76,8 +76,11 @@ export class PTUSidebar extends FormApplication {
 
     this._initializeState();
 
-    if(this.hook) Hooks.off("controlToken", this.hook);
-    this.hook = Hooks.on("controlToken", this._onTokenSelect.bind(this));
+    if(this.controlHook) Hooks.off("controlToken", this.controlHook);
+    this.controlHook = Hooks.on("controlToken", this._onTokenSelect.bind(this));
+
+    if(this.targetHook) Hooks.off("targetToken", this.targetHook);
+    this.targetHook = Hooks.on("targetToken", this._onTokenTarget.bind(this));
   }
 
   /* -------------------------------------------- */
@@ -103,6 +106,20 @@ export class PTUSidebar extends FormApplication {
         // Select Actor 'undefined' == Unselect & hide
         self.store.dispatch("setActor");
       }, 100);
+    }
+  }
+
+  async _onTokenTarget(user, token, selected) {
+    if(user.data._id != game.user.data._id) return;
+
+    const self = this;
+
+    if(selected) { // Targeted Token selection became active
+      const actor = game.actors.get(token.data.actorId);
+      if(actor) self.store.dispatch("addTarget", token.data.actorId);
+    }
+    else { // If token got untargeted
+      self.store.dispatch("removeTarget", token.data.actorId);
     }
   }
 

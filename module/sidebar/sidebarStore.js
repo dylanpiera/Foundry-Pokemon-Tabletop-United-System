@@ -1,6 +1,6 @@
 import Store from '../api/front-end/lib/store.js';
 
-export default function ({ form, actorId }) {
+export default function ({ form, actorId, targetActorId }) {
     const store = new Store({
         actions: {
             async init(context) {
@@ -21,6 +21,18 @@ export default function ({ form, actorId }) {
 
                 await context.commit('setActor', actorId);
             },
+            async addTarget(context, actorId) {
+                if (!actorId) return;
+                if (context.state.targetedActors.includes(actorId)) return;
+
+                await context.commit('addTarget', actorId);
+            },
+            async removeTarget(context, actorId) {
+                if (!actorId) return;
+                if (!context.state.targetedActors.includes(actorId)) return;
+
+                await context.commit('removeTarget', actorId);
+            },
             async updateMoves(context, moves) {
                 if (moves === undefined) {
                     await context.commit('updateMoves', []);
@@ -29,6 +41,9 @@ export default function ({ form, actorId }) {
                 if (!moves) return;
 
                 await context.commit('updateMoves', duplicate(moves));
+            },
+            async targetsUpdated(context) {
+                if (context.state.targetHasChanged) await context.commit("targetsUpdated");
             }
         },
         mutations: {
@@ -40,14 +55,29 @@ export default function ({ form, actorId }) {
                 return state;
             },
             async updateMoves(state, moves) {
-                console.log(moves);
                 state.moves = moves;
+                return state;
+            },
+            async addTarget(state, actorId) {
+                state.targetedActors = state.targetedActors.concat(actorId);
+                state.targetHasChanged = true;
+                return state;
+            },
+            async removeTarget(state, actorId) {
+                state.targetedActors = state.targetedActors.filter(a => a != actorId);
+                state.targetHasChanged = true;
+                return state;
+            },
+            async targetsUpdated(state) {
+                state.targetHasChanged = false;
                 return state;
             }
         },
         state: {
             actorId,
             actor: undefined,
+            targetedActors: [],
+            targetHasChanged: false,
             moves: [],
             form: form
         },
@@ -57,12 +87,23 @@ export default function ({ form, actorId }) {
     /**
      * Fetches the ItemDocument of the move by ItemID or Index
      * @param {*} moveIdOrIndex     0-based index of Moves array or item ID.
-     * @returns 
+     * @returns move or undefined
      */
     store.getMove = function (moveIdOrIndex) {
         const index = Number(moveIdOrIndex);
         if (isNaN(index) || index > store.state.moves.length - 1) return store.state.actor.items.get(moveIdOrIndex);
         return store.state.actor.items.get(store.state.moves[index]._id);
+    }
+
+    /**
+     * Fetches the ActorDocument of the target by ActorID or Index
+     * @param {*} targetIdOrIndex     0-based index of TargetedActors array or Actor ID.
+     * @returns actor or undefined
+     */
+    store.getTarget = function (targetIdOrIndex) {
+        const index = Number(targetIdOrIndex);
+        if (isNaN(index) || index > store.state.targetedActors.length - 1) return game.actors.get(targetIdOrIndex);
+        return game.actors.get(store.state.targetedActors[index]);
     }
 
     store.dispatch('init');
