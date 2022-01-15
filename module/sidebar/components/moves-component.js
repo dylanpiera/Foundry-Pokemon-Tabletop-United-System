@@ -91,12 +91,15 @@ export default class MovesList extends Component {
         moveData.rangeIconsHtml = this._getRangeIcons(moveData.range);
         moveData.effectiveness = 1;
 
-        if (targetIds.length == 0) return moveData;
+        if (targetIds.length == 0) {
+            moveData.effectiveness = -1;
+            return moveData;
+        }
         if (targetIds.length == 1) {
             moveData.effectiveness = this.store.getTarget(targetIds[0]).data.data.effectiveness.All[moveData.type];
         }
-        if (targetIds.length > 1) {
-
+        if (targetIds.length > 1) { // TODO: Maybe add a way to display multiple effectiveness borders?
+            moveData.effectiveness = -1;
         }
 
         return moveData;

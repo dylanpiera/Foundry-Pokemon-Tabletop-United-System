@@ -2274,6 +2274,9 @@ body.messages-dark-theme .chat-controls .roll-type-select {
   height: 22px;
   border-width: 0px;
 }
+.efc.none {
+  border-color: #ccc !important;
+}
 .efc.immune {
   border-color: black !important;
 }
@@ -2292,6 +2295,76 @@ body.messages-dark-theme .chat-controls .roll-type-select {
 .efc.doubly_effective {
   border-color: blue !important;
 }
+/* Something like this could be interesting
+.efc2 {
+  padding-left:5px !important;
+
+  &::before {
+    content: "";
+    width: 5px;
+    height: 100px;
+    left: 5px;
+    bottom: 0;
+    position: absolute;
+    z-index: 100;
+  }
+
+  &.none2::before {
+    background-color: #ccc !important;
+  }
+  &.immune2::before {
+    background-color: black !important;
+  }
+  &.doubly_resisted2::before {
+    background-color: darkred !important;
+  }
+  &.resisted2::before {
+    background-color: #c66 !important;
+  }
+  &.regular2::before {
+    background-color: white !important;
+  }
+  &.effective2::before {
+    background-color: #69c !important;
+  }
+  &.doubly_effective2::before {
+    background-color: blue !important;
+  }
+}
+.efc3 {
+  padding-left:10px !important;
+  &::after {
+    content: "";
+    width: 5px;
+    height: 100px;
+    left: 10px;
+    bottom: 0;
+    position: absolute;
+    z-index: 101;
+  }
+
+  &.none3::after {
+    background-color: #ccc !important;
+  }
+  &.immune3::after {
+    background-color: black !important;
+  }
+  &.doubly_resisted3::after {
+    background-color: darkred !important;
+  }
+  &.resisted3::after {
+    background-color: #c66 !important;
+  }
+  &.regular3::after {
+    background-color: white !important;
+  }
+  &.effective3::after {
+    background-color: #69c !important;
+  }
+  &.doubly_effective3::after {
+    background-color: blue !important;
+  }
+}*/
 /* Freeware Font Credits: https://www.fontspace.com/jackster-productions/pokemon-gb */
 @font-face {
   font-family: "Pokemon GB";

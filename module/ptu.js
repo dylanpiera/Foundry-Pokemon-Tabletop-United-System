@@ -328,14 +328,15 @@ function registerHandlebars() {
     const value = Number(effectiveness);
     if (isNaN(value)) return "regular";
 
+    if(value === -1) return "none";
     if (value < 1) {
       if (value == 0) {
-        return "immune"
+        return "immune";
       }
       if(value <= 0.25) {
         return "doubly_resisted";
       }
-      return "resisted"
+      return "resisted";
     }
     if (value > 1) {
       if(value >= 2) {
