@@ -151,7 +151,6 @@ export const EffectivenessColors = {
 	4: "blue",
 };
 
-
 export const nature_flavor_table =
 {
 	"Cuddly": ["salty", "spicy"],

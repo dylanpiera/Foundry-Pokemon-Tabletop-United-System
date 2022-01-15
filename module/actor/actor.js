@@ -91,7 +91,8 @@ export class PTUActor extends Actor {
     })
     console.groupEnd();
 
-    if(this.id === game.ptu.sidebar?.store.state.actorId ?? 0) game.ptu.sidebar.stateHasChanged();
+    if(this.id === game.ptu.sidebar?.store.state.actorId) game.ptu.sidebar.stateHasChanged();
+    if(game.ptu.sidebar?.store.state.targetedActors.includes(this.id)) game.ptu.sidebar.stateHasChanged(true);
   }
 
   /**

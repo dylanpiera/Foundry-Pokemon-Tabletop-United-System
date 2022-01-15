@@ -72,7 +72,7 @@ export default class MovesList extends Component {
         this.store.dispatch("targetsUpdated");
     }
 
-    PrepareMoveData(moveData, actorData, targetData) {
+    PrepareMoveData(moveData, actorData, targetIds) {
         // Old Prepare Move Data 
         moveData.owner = {
             type: actorData.typing,
@@ -89,12 +89,13 @@ export default class MovesList extends Component {
         // End of Old Prepare Move Data
 
         moveData.rangeIconsHtml = this._getRangeIcons(moveData.range);
+        moveData.effectiveness = 1;
 
-        if (targetData.length == 0) return moveData;
-        if (targetData.length == 1) {
-
+        if (targetIds.length == 0) return moveData;
+        if (targetIds.length == 1) {
+            moveData.effectiveness = this.store.getTarget(targetIds[0]).data.data.effectiveness.All[moveData.type];
         }
-        if (targetData.length > 1) {
+        if (targetIds.length > 1) {
 
         }
 

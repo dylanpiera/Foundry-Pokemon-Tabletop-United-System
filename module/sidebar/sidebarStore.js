@@ -53,6 +53,9 @@ export default function ({ form, actorId, targetActorId }) {
             },
             async targetsUpdated(context) {
                 if (context.state.targetHasChanged) await context.commit("targetsUpdated");
+            },
+            async targetsHasChanged(context) {
+                if (!context.state.targetHasChanged) await context.commit("targetsHasChanged");
             }
         },
         mutations: {
@@ -83,6 +86,10 @@ export default function ({ form, actorId, targetActorId }) {
             },
             async targetsUpdated(state) {
                 state.targetHasChanged = false;
+                return state;
+            },
+            async targetsHasChanged(state) {
+                state.targetHasChanged = true;
                 return state;
             }
         },

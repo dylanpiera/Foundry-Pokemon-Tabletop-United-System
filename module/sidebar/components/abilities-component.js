@@ -44,7 +44,6 @@ export default class AbilitiesList extends Component {
                     return;
                 }
             }
-            if (this.state.targetHasChanged) this.updated += 1;
             if (this.updated == 0) return;
         }
 
@@ -69,7 +68,6 @@ export default class AbilitiesList extends Component {
         }
 
         this.updated = 0;
-        this.store.dispatch("targetsUpdated");
     }
 
     PrepareAbilityData(abilityData, actorData, targetData) {
