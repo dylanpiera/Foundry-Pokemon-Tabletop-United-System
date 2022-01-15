@@ -48,6 +48,8 @@ export default class AbilitiesList extends Component {
         }
 
         let output = "";
+        if(this.state.abilities.length > 0)
+            output += "<img src='systems/ptu/images/icons/DividerIcon_Abilities.png' style='border:none; width:200px;'>"
 
         for (const ability of this.state.abilities ?? []) {
             // Ability data is prepared on a duplicate entry, otherwise the preperation data will be flagged as 

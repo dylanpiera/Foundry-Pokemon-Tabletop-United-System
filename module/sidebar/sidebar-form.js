@@ -17,6 +17,7 @@ export class PTUSidebar extends FormApplication {
       template: "systems/ptu/module/sidebar/sidebar-form.hbs",
       title: "PTU Sidebar",
       dragDrop: [{ dragSelector: ".directory-item.belt-pokeball", dropSelector: null }],
+
     });
   }
 
@@ -45,6 +46,7 @@ export class PTUSidebar extends FormApplication {
       else {
         obj.setPosition({ left: $(window).width() - 510 })
       }
+      $('#ptu-sidebar .ptu-sidebar').height(obj.position.height-2);
     })
 
     // Return data
@@ -64,6 +66,11 @@ export class PTUSidebar extends FormApplication {
     });
 
     return this;
+  }
+
+  /** @override */
+  async close(options={}) {
+    return; // Force app to be unclosable.
   }
 
   /**
@@ -144,6 +151,7 @@ export class PTUSidebar extends FormApplication {
   }
 
   async _afterRender() {
+    $('#ptu-sidebar .ptu-sidebar').height(this.position.height-2);
     for (const component of Object.values(this.components)) component.render();
   }
 

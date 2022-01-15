@@ -2097,7 +2097,6 @@ body.messages-dark-theme .chat-controls .roll-type-select {
   right: 0px;
 }
 .pokedex-bottom {
-  position: absolute;
   width: 200px;
   height: 86px;
   z-index: 10;
@@ -2122,7 +2121,6 @@ body.messages-dark-theme .chat-controls .roll-type-select {
   background: -webkit-linear-gradient(#c6fffa, rgba(198, 255, 250, 0));
 }
 .pokedex-top {
-  position: absolute;
   width: 200px;
   height: 86px;
   z-index: 10;
@@ -2180,12 +2178,42 @@ body.messages-dark-theme .chat-controls .roll-type-select {
 .bossBar {
   width: -webkit-calc(-100%);
 }
-.ptu-sidebar #abilities-list .movemaster-button {
+#ptu-sidebar {
+  background-color: #272727;
+}
+#ptu-sidebar .window-content {
+  padding: 0px !important;
+}
+#ptu-sidebar .ptu-sidebar {
+  display: flex;
+  flex-direction: column;
+}
+#ptu-sidebar .ptu-sidebar .pokedex-top {
+  flex: 86px 0 0;
+}
+#ptu-sidebar .ptu-sidebar .sidebar-content {
+  z-index: 11;
+  background-color: #272727;
+  flex: 100% 0 1;
+  overflow-x: hidden;
+  overflow-y: scroll;
+}
+#ptu-sidebar .ptu-sidebar .sidebar-content::-webkit-scrollbar {
+  width: 0;
+  background: transparent;
+}
+#ptu-sidebar .ptu-sidebar .sidebar-content::-webkit-scrollbar-thumb {
+  background: #ff0000;
+}
+#ptu-sidebar .ptu-sidebar .pokedex-bottom {
+  flex: 86px 0 0;
+}
+#ptu-sidebar .ptu-sidebar #abilities-list .movemaster-button {
   margin: 3px 0px;
   padding: 0;
   text-align: center;
 }
-.ptu-sidebar #abilities-list .movemaster-button .btn-body {
+#ptu-sidebar .ptu-sidebar #abilities-list .movemaster-button .btn-body {
   background-color: #333333;
   color: #cccccc;
   border-left: 5px solid;
@@ -2196,7 +2224,7 @@ body.messages-dark-theme .chat-controls .roll-type-select {
   font-family: "Modesto Condensed";
   line-height: 0.6;
 }
-.ptu-sidebar #abilities-list .movemaster-button .btn-body h3 {
+#ptu-sidebar .ptu-sidebar #abilities-list .movemaster-button .btn-body h3 {
   padding: 0px;
   font-family: "Modesto Condensed";
   font-size: 24px;
@@ -2205,7 +2233,7 @@ body.messages-dark-theme .chat-controls .roll-type-select {
   overflow-wrap: normal !important;
   word-break: keep-all !important;
 }
-.ptu-sidebar #abilities-list .movemaster-button .btn-body .icon-list {
+#ptu-sidebar .ptu-sidebar #abilities-list .movemaster-button .btn-body .icon-list {
   padding-top: 4px;
   padding-bottom: 0;
   font-size: 14px;
@@ -2213,22 +2241,22 @@ body.messages-dark-theme .chat-controls .roll-type-select {
   justify-content: center;
   min-height: 24px;
 }
-.ptu-sidebar #abilities-list .movemaster-button .btn-body .icon-list span {
+#ptu-sidebar .ptu-sidebar #abilities-list .movemaster-button .btn-body .icon-list span {
   margin: 0 4px;
 }
-.ptu-sidebar #abilities-list .movemaster-button .btn-body .icon-list img {
+#ptu-sidebar .ptu-sidebar #abilities-list .movemaster-button .btn-body .icon-list img {
   height: 22px;
   border-width: 0px;
 }
-.ptu-sidebar #moves-list .movemaster-button {
+#ptu-sidebar .ptu-sidebar #moves-list .movemaster-button {
   margin: 3px 0px;
   padding: 0;
   text-align: center;
 }
-.ptu-sidebar #moves-list .movemaster-button .btn-body {
+#ptu-sidebar .ptu-sidebar #moves-list .movemaster-button .btn-body {
   background-color: #333333;
   color: #cccccc;
-  border-left: 5px solid;
+  border-left: 6px solid;
   padding-left: 0px;
   width: 200px;
   min-height: 100px;
@@ -2236,7 +2264,7 @@ body.messages-dark-theme .chat-controls .roll-type-select {
   font-family: "Modesto Condensed";
   line-height: 0.6;
 }
-.ptu-sidebar #moves-list .movemaster-button .btn-body h3 {
+#ptu-sidebar .ptu-sidebar #moves-list .movemaster-button .btn-body h3 {
   padding: 0px;
   font-family: "Modesto Condensed";
   font-size: 24px;
@@ -2245,32 +2273,32 @@ body.messages-dark-theme .chat-controls .roll-type-select {
   overflow-wrap: normal !important;
   word-break: keep-all !important;
 }
-.ptu-sidebar #moves-list .movemaster-button .btn-body .type-bar {
+#ptu-sidebar .ptu-sidebar #moves-list .movemaster-button .btn-body .type-bar {
   height: auto;
   border: 0px !important;
   width: 94px;
   border-width: 0;
   display: flex;
 }
-.ptu-sidebar #moves-list .movemaster-button .btn-body .type-bar img {
+#ptu-sidebar .ptu-sidebar #moves-list .movemaster-button .btn-body .type-bar img {
   border: unset;
 }
-.ptu-sidebar #moves-list .movemaster-button .btn-body .type-img img {
+#ptu-sidebar .ptu-sidebar #moves-list .movemaster-button .btn-body .type-img img {
   width: 248px;
   height: auto;
   padding: 0px !important;
 }
-.ptu-sidebar #moves-list .movemaster-button .btn-body .icon-list {
+#ptu-sidebar .ptu-sidebar #moves-list .movemaster-button .btn-body .icon-list {
   padding-top: 4px;
   padding-bottom: 0;
   font-size: 14px;
   align-items: center;
   justify-content: center;
 }
-.ptu-sidebar #moves-list .movemaster-button .btn-body .icon-list span {
+#ptu-sidebar .ptu-sidebar #moves-list .movemaster-button .btn-body .icon-list span {
   margin: 0 4px;
 }
-.ptu-sidebar #moves-list .movemaster-button .btn-body .icon-list img {
+#ptu-sidebar .ptu-sidebar #moves-list .movemaster-button .btn-body .icon-list img {
   height: 22px;
   border-width: 0px;
 }

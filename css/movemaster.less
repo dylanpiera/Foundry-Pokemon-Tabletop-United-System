@@ -274,7 +274,7 @@ body.messages-dark-theme .chat-controls .roll-type-select {
 }
 
 .pokedex-bottom {
-  position: absolute;
+  // position: absolute;
   width: 200px;
   height: 86px;
   z-index: 10;
@@ -305,7 +305,7 @@ body.messages-dark-theme .chat-controls .roll-type-select {
 }
 
 .pokedex-top {
-  position: absolute;
+  // position: absolute;
   width: 200px;
   height: 86px;
   z-index: 10;
@@ -371,113 +371,145 @@ body.messages-dark-theme .chat-controls .roll-type-select {
   width: -webkit-calc(100% - 200px);
 }
 
-.ptu-sidebar {
-  #abilities-list {
-    .movemaster-button {
-      margin: 3px 0px;
-      padding: 0;
-      text-align: center;
+#ptu-sidebar {
+  background-color: #272727;
+  .window-content {
+    padding: 0px !important;
+  }
 
-      .btn-body {
-        background-color: #333333;
-        color: #cccccc;
-        border-left: 5px solid;
-        padding-left: 0px;
-        width: 200px;
-        height: auto;
-        font-size: 24px;
-        font-family: "Modesto Condensed";
-        line-height: 0.6;
+  .ptu-sidebar {
+    display: flex;
+    flex-direction: column;
 
-        h3 {
-          padding: 0px;
-          font-family: "Modesto Condensed";
+    .pokedex-top {
+      flex: 86px 0 0;
+    }
+    .sidebar-content {
+      z-index:11;
+      background-color:#272727;
+      flex: 100% 0 1;
+      overflow-x: hidden;
+      overflow-y: scroll;
+
+      &::-webkit-scrollbar {
+        width: 0; 
+        background: transparent;
+      }
+      &::-webkit-scrollbar-thumb {
+        background: #ff0000;
+      }
+    }
+    .pokedex-bottom {
+      flex: 86px 0 0;
+    }
+
+    #abilities-list {
+      .movemaster-button {
+        margin: 3px 0px;
+        padding: 0;
+        text-align: center;
+
+        .btn-body {
+          background-color: #333333;
+          color: #cccccc;
+          border-left: 5px solid;
+          padding-left: 0px;
+          width: 200px;
+          height: auto;
           font-size: 24px;
-          color: white;
-          background-color: #272727;
-          overflow-wrap: normal !important;
-          word-break: keep-all !important;
-        }
+          font-family: "Modesto Condensed";
+          line-height: 0.6;
 
-        .icon-list {
-          padding-top: 4px;
-          padding-bottom: 0;
-          font-size: 14px;
-          align-items: center;
-          justify-content: center;
-          min-height: 24px;
-
-          span {
-            margin: 0 4px;
+          h3 {
+            padding: 0px;
+            font-family: "Modesto Condensed";
+            font-size: 24px;
+            color: white;
+            background-color: #272727;
+            overflow-wrap: normal !important;
+            word-break: keep-all !important;
           }
 
-          img {
-            height: 22px;
-            border-width: 0px;
+          .icon-list {
+            padding-top: 4px;
+            padding-bottom: 0;
+            font-size: 14px;
+            align-items: center;
+            justify-content: center;
+            min-height: 24px;
+
+            span {
+              margin: 0 4px;
+            }
+
+            img {
+              height: 22px;
+              border-width: 0px;
+            }
           }
         }
       }
     }
-  }
-  #moves-list {
-    .movemaster-button {
-      margin: 3px 0px;
-      padding: 0;
-      text-align: center;
+    #moves-list {
+      .movemaster-button {
+        margin: 3px 0px;
+        padding: 0;
+        text-align: center;
 
-      .btn-body {
-        background-color: #333333;
-        color: #cccccc;
-        border-left: 6px solid;
-        padding-left: 0px;
-        width: 200px;
-        min-height: 100px;
-        font-size: 24px;
-        font-family: "Modesto Condensed";
-        line-height: 0.6;
-
-        h3 {
-          padding: 0px;
-          font-family: "Modesto Condensed";
+        .btn-body {
+          background-color: #333333;
+          color: #cccccc;
+          border-left: 6px solid;
+          padding-left: 0px;
+          width: 200px;
+          min-height: 100px;
           font-size: 24px;
-          color: white;
-          background-color: #272727;
-          overflow-wrap: normal !important;
-          word-break: keep-all !important;
-        }
+          font-family: "Modesto Condensed";
+          line-height: 0.6;
 
-        .type-bar {
-          height: auto;
-          border: 0px !important;
-          width: 94px;
-          border-width: 0;
-          display: flex;
-
-          img {
-            border: unset;
-          }
-        }
-
-        .type-img img {
-          width: 248px;
-          height: auto;
-          padding: 0px !important;
-        }
-
-        .icon-list {
-          padding-top: 4px;
-          padding-bottom: 0;
-          font-size: 14px;
-          align-items: center;
-          justify-content: center;
-
-          span {
-            margin: 0 4px;
+          h3 {
+            padding: 0px;
+            font-family: "Modesto Condensed";
+            font-size: 24px;
+            color: white;
+            background-color: #272727;
+            overflow-wrap: normal !important;
+            word-break: keep-all !important;
           }
 
-          img {
-            height: 22px;
-            border-width: 0px;
+          .type-bar {
+            height: auto;
+            border: 0px !important;
+            width: 94px;
+            border-width: 0;
+            display: flex;
+
+            img {
+              border: unset;
+            }
+          }
+
+          .type-img img {
+            width: 248px;
+            height: auto;
+            padding: 0px !important;
+          }
+
+          .icon-list {
+            padding-top: 4px;
+            padding-bottom: 0;
+            font-size: 14px;
+            align-items: center;
+            justify-content: center;
+
+            span {
+              margin: 0 4px;
+            }
+
+            img {
+              height: 22px;
+              border-width: 0px;
+            }
           }
         }
       }
