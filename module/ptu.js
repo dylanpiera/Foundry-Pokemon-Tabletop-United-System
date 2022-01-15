@@ -379,6 +379,22 @@ export function PrepareMoveData(actorData, move) {
   return move;
 } 
 
+export function PrepareAbilityData(actorData, ability) {
+  if(!actorData || ability.prepared) return ability;
+  ability.owner = { 
+    // type: actorData.typing,
+    // stats: actorData.stats,
+    // acBonus: actorData.modifiers.acBonus.total,
+    // critRange: actorData.modifiers.critRange.total,
+    // damageBonus: actorData.modifiers.damageBonus
+  };
+  ability.prepared = true;
+
+  // ability.stab = ability.owner?.type && (ability.owner.type[0] == ability.type || ability.owner.type[1] == ability.type);
+  // ability.acBonus = ability.owner.acBonus ? ability.owner.acBonus : 0; 
+  return ability;
+} 
+
 /* -------------------------------------------- */
 /*  Foundry VTT Setup                           */
 /* -------------------------------------------- */

@@ -1,6 +1,7 @@
 import initStore from "./sidebarStore.js";
 import { log, debug } from "../ptu.js";
 import MoveList from './components/moves-component.js';
+import AbilitiesList from './components/abilities-component.js';
 
 /**
  * Extend the basic FormApplication with some very simple modifications
@@ -32,9 +33,9 @@ export class PTUSidebar extends FormApplication {
     let alternate_style = false//game.settings.get("PTUMoveMaster", "useAlternateChatStyling");
 
     this.position.left = alternate_style ? (x - 455) : (x - 510);
-    this.position.top = Math.round(y * 0.005);
+    this.position.top = 2 //Math.round(y * 0.005);
     this.position.width = 200;
-    this.position.height = Math.round(y * 0.985);
+    this.position.height = y - 10;//Math.round(y * 0.990);
 
     var obj = this;
     $(window).resize(function () {
@@ -132,7 +133,8 @@ export class PTUSidebar extends FormApplication {
     })
 
     this.components = {
-      movesComponent: new MoveList(this.store)
+      movesComponent: new MoveList(this.store),
+      abilitiesComponent: new AbilitiesList(this.store)
     }
 
     debug(this.store, this.components);

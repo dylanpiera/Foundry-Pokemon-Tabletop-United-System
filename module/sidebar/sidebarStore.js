@@ -42,6 +42,15 @@ export default function ({ form, actorId, targetActorId }) {
 
                 await context.commit('updateMoves', duplicate(moves));
             },
+            async updateAbilities(context, abilities) {
+                if (abilities === undefined) {
+                    await context.commit('updateAbilities', []);
+                    return;
+                }
+                if (!abilities) return;
+
+                await context.commit('updateAbilities', duplicate(abilities));
+            },
             async targetsUpdated(context) {
                 if (context.state.targetHasChanged) await context.commit("targetsUpdated");
             }
@@ -56,6 +65,10 @@ export default function ({ form, actorId, targetActorId }) {
             },
             async updateMoves(state, moves) {
                 state.moves = moves;
+                return state;
+            },
+            async updateAbilities(state, abilities) {
+                state.abilities = abilities;
                 return state;
             },
             async addTarget(state, actorId) {
@@ -79,6 +92,7 @@ export default function ({ form, actorId, targetActorId }) {
             targetedActors: [],
             targetHasChanged: false,
             moves: [],
+            abilities: [],
             form: form
         },
     })
@@ -93,6 +107,17 @@ export default function ({ form, actorId, targetActorId }) {
         const index = Number(moveIdOrIndex);
         if (isNaN(index) || index > store.state.moves.length - 1) return store.state.actor.items.get(moveIdOrIndex);
         return store.state.actor.items.get(store.state.moves[index]._id);
+    }
+
+    /**
+     * Fetches the ItemDocument of the ability by ItemID or Index
+     * @param {*} abilityIdOrIndex     0-based index of Abilities array or item ID.
+     * @returns ability or undefined
+     */
+        store.getAbility = function (abilityIdOrIndex) {
+        const index = Number(abilityIdOrIndex);
+        if (isNaN(index) || index > store.state.abilities.length - 1) return store.state.actor.items.get(abilityIdOrIndex);
+        return store.state.actor.items.get(store.state.abilities[index]._id);
     }
 
     /**
