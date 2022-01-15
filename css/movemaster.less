@@ -372,6 +372,54 @@ body.messages-dark-theme .chat-controls .roll-type-select {
 }
 
 .ptu-sidebar {
+  #abilities-list {
+    .movemaster-button {
+      margin: 3px 0px;
+      padding: 0;
+      text-align: center;
+      
+      .btn-body {
+        background-color: #333333;
+        color: #cccccc;
+        border-left: 5px solid;
+        border-color: white;
+        padding-left: 0px;
+        width: 200px;
+        height: auto;
+        font-size: 24px;
+        font-family: "Modesto Condensed";
+        line-height: 0.6;
+
+        h3 {
+          padding: 0px;
+          font-family: "Modesto Condensed";
+          font-size: 24px;
+          color: white;
+          background-color: #272727;
+          overflow-wrap: normal !important;
+          word-break: keep-all !important;
+        }
+
+        .icon-list {
+          padding-top: 4px;
+          padding-bottom: 0;
+          font-size: 14px;
+          align-items: center;
+          justify-content: center;
+          min-height: 24px;
+
+          span {
+            margin: 0 4px;
+          }
+
+          img {
+            height: 22px;
+            border-width: 0px;
+          }
+        }
+      }
+    }
+  }
   #moves-list {
     .movemaster-button {
       margin: 3px 0px;
@@ -382,10 +430,10 @@ body.messages-dark-theme .chat-controls .roll-type-select {
         background-color: #333333;
         color: #cccccc;
         border-left: 5px solid;
-        border-color: #cc6666;
+        border-color: white;
         padding-left: 0px;
         width: 200px;
-        height: 103px;
+        min-height: 100px;
         font-size: 24px;
         font-family: "Modesto Condensed";
         line-height: 0.6;
@@ -401,28 +449,28 @@ body.messages-dark-theme .chat-controls .roll-type-select {
         }
 
         .type-bar {
-          height:auto;
-          border:0px !important;
-          width:94px;
+          height: auto;
+          border: 0px !important;
+          width: 94px;
           border-width: 0;
-          display:flex;
+          display: flex;
 
           img {
             border: unset;
           }
         }
-        
+
         .type-img img {
-          width: 248px; 
-          height: auto; 
+          width: 248px;
+          height: auto;
           padding: 0px !important;
         }
 
         .icon-list {
           padding-top: 4px;
           padding-bottom: 0;
-          font-size:14px;
-          align-items:center;
+          font-size: 14px;
+          align-items: center;
           justify-content: center;
 
           span {
@@ -430,7 +478,7 @@ body.messages-dark-theme .chat-controls .roll-type-select {
           }
 
           img {
-            height: 22px ;
+            height: 22px;
             border-width: 0px;
           }
         }

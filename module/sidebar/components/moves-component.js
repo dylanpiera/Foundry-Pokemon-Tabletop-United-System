@@ -105,8 +105,6 @@ export default class MovesList extends Component {
         if(!rangeText) return;
         const range = rangeText.toLowerCase().split(",").map(x => x.trim());
 
-        console.log(range);
-
         let o = "";
         for(const r of range.slice(0, -1)) {
             const x = getIcon(r);
@@ -119,12 +117,12 @@ export default class MovesList extends Component {
             if(!range) return;
             switch (true) {
                 case range.includes("see effect"): return range;
-                case range.includes("blessing"): return BlessingIcon; // + range.slice(range.indexOf("blessing")+9).replace(",","").trim(); - Don't quite understand why this is needed?
+                case range.includes("blessing"): return BlessingIcon; 
                 case range.includes("self"): return SelfIcon;
                 case range.includes("burst"): return BurstIcon + range.slice(range.indexOf("burst")+"burst".length).split(',')[0].trim();
                 case range.includes("line"): return LineIcon + range.slice(range.indexOf("line")+"line".length).split(',')[0].trim();
                 case range.includes("close blast"): return MeleeIcon + BlastIcon + range.slice(range.indexOf("close blast")+"close blast".length).split(',')[0].trim();
-                case range.includes("ranged blast"): return /*RangeIcon + range.split(',')[0] +*/ BlastIcon + range.slice(range.indexOf("ranged blast")+"ranged blast".length).split(',')[0].trim();
+                case range.includes("ranged blast"): return BlastIcon + range.slice(range.indexOf("ranged blast")+"ranged blast".length).split(',')[0].trim();
                 case range.includes("melee"): return MeleeIcon;
                 case range.includes("trigger"): return TriggerIcon;
                 case range.includes("field"): return FieldIcon;
@@ -155,7 +153,7 @@ export default class MovesList extends Component {
                 }
             }
         }
-
+        
         return o;
     }
 }

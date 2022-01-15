@@ -3,13 +3,15 @@
         <div class="btn-body">
             <h3>
                 <!-- Ability Name -->
-                <div class="pt-1" {{!-- style="padding-top:5px;" --}} title="{{data.effect}}">
+                <div class="pt-2 pb-2" {{!-- style="padding-top:5px;" --}} title="{{data.effect}}">
                     {{name}}
                 </div>
-                <!-- Frequency -->
+            </h3>
+            <!-- Frequency -->
+            <div class="d-flex icon-list">
                 <img src="{{calcFrequencyIconPath data.frequency '0'}}" title="{{data.frequency}} ({{'0'}} Remaining)"
                     style="border-width: 0;">
-            </h3>
+            </div>
         </div>
     </button>
 </div>
