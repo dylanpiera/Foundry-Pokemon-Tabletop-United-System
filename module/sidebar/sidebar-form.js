@@ -2,6 +2,7 @@ import initStore from "./sidebarStore.js";
 import { log, debug } from "../ptu.js";
 import MoveList from './components/moves-component.js';
 import AbilitiesList from './components/abilities-component.js';
+import FeaturesList from './components/features-component.js';
 
 /**
  * Extend the basic FormApplication with some very simple modifications
@@ -144,7 +145,8 @@ export class PTUSidebar extends FormApplication {
 
     this.components = {
       movesComponent: new MoveList(this.store),
-      abilitiesComponent: new AbilitiesList(this.store)
+      abilitiesComponent: new AbilitiesList(this.store),
+      featuresComponent: new FeaturesList(this.store)
     }
 
     debug(this.store, this.components);

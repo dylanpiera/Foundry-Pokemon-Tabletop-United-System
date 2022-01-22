@@ -418,6 +418,20 @@ export function PrepareAbilityData(actorData, ability) {
   return ability;
 }
 
+export function PrepareFeatureData(actorData, feature) {
+  if (!actorData || feature.prepared) return feature;
+  feature.owner = {
+    // type: actorData.typing,
+    // stats: actorData.stats,
+    // acBonus: actorData.modifiers.acBonus.total,
+    // critRange: actorData.modifiers.critRange.total,
+    // damageBonus: actorData.modifiers.damageBonus
+  };
+  feature.prepared = true;
+
+  return feature;
+}
+
 /* -------------------------------------------- */
 /*  Foundry VTT Setup                           */
 /* -------------------------------------------- */

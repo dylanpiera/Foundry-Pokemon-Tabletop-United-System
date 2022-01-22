@@ -51,6 +51,15 @@ export default function ({ form, actorId, targetActorId }) {
 
                 await context.commit('updateAbilities', duplicate(abilities));
             },
+            async updateFeatures(context, features) {
+                if (features === undefined) {
+                    await context.commit('updateFeatures', []);
+                    return;
+                }
+                if (!features) return;
+
+                await context.commit('updateFeatures', duplicate(features));
+            },
             async targetsUpdated(context) {
                 if (context.state.targetHasChanged) await context.commit("targetsUpdated");
             },
@@ -72,6 +81,10 @@ export default function ({ form, actorId, targetActorId }) {
             },
             async updateAbilities(state, abilities) {
                 state.abilities = abilities;
+                return state;
+            },
+            async updateFeatures(state, features) {
+                state.features = features;
                 return state;
             },
             async addTarget(state, actorId) {
@@ -100,6 +113,7 @@ export default function ({ form, actorId, targetActorId }) {
             targetHasChanged: false,
             moves: [],
             abilities: [],
+            features: [],
             form: form
         },
     })
@@ -125,6 +139,17 @@ export default function ({ form, actorId, targetActorId }) {
         const index = Number(abilityIdOrIndex);
         if (isNaN(index) || index > store.state.abilities.length - 1) return store.state.actor.items.get(abilityIdOrIndex);
         return store.state.actor.items.get(store.state.abilities[index]._id);
+    }
+
+    /**
+     * Fetches the ItemDocument of the feature by ItemID or Index
+     * @param {*} featureIdOrIndex     0-based index of Abilities array or item ID.
+     * @returns feature or undefined
+     */
+         store.getFeature = function (featureIdOrIndex) {
+            const index = Number(featureIdOrIndex);
+            if (isNaN(index) || index > store.state.features.length - 1) return store.state.actor.items.get(featureIdOrIndex);
+            return store.state.actor.items.get(store.state.features[index]._id);
     }
 
     /**

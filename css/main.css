@@ -2208,6 +2208,8 @@ body.messages-dark-theme .chat-controls .roll-type-select {
 #ptu-sidebar .ptu-sidebar .pokedex-bottom {
   flex: 86px 0 0;
 }
+
+
 #ptu-sidebar .ptu-sidebar #abilities-list .movemaster-button {
   margin: 3px 0px;
   padding: 0;
@@ -2248,6 +2250,50 @@ body.messages-dark-theme .chat-controls .roll-type-select {
   height: 22px;
   border-width: 0px;
 }
+
+
+#ptu-sidebar .ptu-sidebar #features-list .movemaster-button {
+  margin: 3px 0px;
+  padding: 0;
+  text-align: center;
+}
+#ptu-sidebar .ptu-sidebar #features-list .movemaster-button .btn-body {
+  background-color: #333333;
+  color: #cccccc;
+  border-left: 5px solid;
+  padding-left: 0px;
+  width: 200px;
+  height: auto;
+  font-size: 24px;
+  font-family: "Modesto Condensed";
+  line-height: 0.6;
+}
+#ptu-sidebar .ptu-sidebar #features-list .movemaster-button .btn-body h3 {
+  padding: 0px;
+  font-family: "Modesto Condensed";
+  font-size: 24px;
+  color: white;
+  background-color: #272727;
+  overflow-wrap: normal !important;
+  word-break: keep-all !important;
+}
+#ptu-sidebar .ptu-sidebar #features-list .movemaster-button .btn-body .icon-list {
+  padding-top: 4px;
+  padding-bottom: 0;
+  font-size: 14px;
+  align-items: center;
+  justify-content: center;
+  min-height: 24px;
+}
+#ptu-sidebar .ptu-sidebar #features-list .movemaster-button .btn-body .icon-list span {
+  margin: 0 4px;
+}
+#ptu-sidebar .ptu-sidebar #features-list .movemaster-button .btn-body .icon-list img {
+  height: 22px;
+  border-width: 0px;
+}
+
+
 #ptu-sidebar .ptu-sidebar #moves-list .movemaster-button {
   margin: 3px 0px;
   padding: 0;
