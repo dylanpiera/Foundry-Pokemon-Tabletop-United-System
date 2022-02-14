@@ -22,8 +22,8 @@ export function LoadSystemSettings() {
         config: true,
         type: String,
         choices: {
-        "true": "Use Tutor Points",
-        "false": "Don't use Tutor Points"
+            "true": "Use Tutor Points",
+            "false": "Don't use Tutor Points"
         },
         default: "true",
         category: "rules"
@@ -36,8 +36,8 @@ export function LoadSystemSettings() {
         config: true,
         type: String,
         choices: {
-        "true": "Use Dex Exp",
-        "false": "Don't use Dex Exp"
+            "true": "Use Dex Exp",
+            "false": "Don't use Dex Exp"
         },
         default: "false",
         category: "rules"
@@ -70,11 +70,11 @@ export function LoadSystemSettings() {
         config: true,
         type: Number,
         choices: {
-        1: "Disable Pokédex",
-        2: "Only on owned Tokens",
-        3: "Only on owned Mons (checks trainer's dex tab)",
-        4: "GM Prompt (**NOT YET IMPLEMENTED**)",
-        5: "Always allow Pokédex", 
+            1: "Disable Pokédex",
+            2: "Only on owned Tokens",
+            3: "Only on owned Mons (checks trainer's dex tab)",
+            4: "GM Prompt (**NOT YET IMPLEMENTED**)",
+            5: "Always allow Pokédex",
         },
         default: 1,
         category: "general"
@@ -97,10 +97,10 @@ export function LoadSystemSettings() {
         config: true,
         type: String,
         choices: {
-        "situational": "Show damage situationally",
-        "always-normal": "Always roll normal damage",
-        "always-crit": "Always roll crit damage",
-        "both": "Always roll both"
+            "situational": "Show damage situationally",
+            "always-normal": "Always roll normal damage",
+            "always-crit": "Always roll crit damage",
+            "both": "Always roll both"
         },
         default: "situational",
         category: "combat"
@@ -113,10 +113,10 @@ export function LoadSystemSettings() {
         config: true,
         type: String,
         choices: {
-        "none": "Don't show move effect",
-        "snippet": "Show move snippet, or nothing if unset",
-        "snippet-or-full": "Show move snippet, or full effect if unset",
-        "show": "Show full effect"
+            "none": "Don't show move effect",
+            "snippet": "Show move snippet, or nothing if unset",
+            "snippet-or-full": "Show move snippet, or full effect if unset",
+            "show": "Show full effect"
         },
         default: "snippet",
         category: "combat"
@@ -180,7 +180,7 @@ export function LoadSystemSettings() {
         default: false,
         onChange: (enabled) => setAccessabilityFont(enabled)
     });
-    
+
     game.settings.register("ptu", "ignoreVirtuosoLimit", {
         name: "Ignore Virtuoso Limit",
         hint: "Allow Skill Dice pool to go above 6 dice.",
@@ -355,13 +355,297 @@ export function LoadSystemSettings() {
         default: 0,
         category: "other"
     })
+    // Move Master Settings
+    {
+    //     game.settings.register("PTUMoveMaster", "autoApplyInjuries", {
+    //         name: "GM Setting: Automatically Apply Injuries",
+    //         hint: "",
+    //         scope: "world",
+    //         config: true,
+    //         type: String,
+    //         choices: {
+    //             "true": "Automatically Apply Injuries Upon Applying Damage",
+    //             "false": "Don't Automatically Apply Injuries"
+    //         },
+    //         default: "true"
+    //     });
+
+    //     game.settings.register("PTUMoveMaster", "useInjurySplashes", {
+    //         name: "GM Setting: Apply visual splashes of dirt/soot to tokens when they take auto-applied injuries.",
+    //         hint: "",
+    //         scope: "world",
+    //         config: true,
+    //         type: Boolean,
+    //         default: true
+    //     });
+
+    //     game.settings.register("PTUMoveMaster", "useBloodSplashes", {
+    //         name: "GM Setting: Apply visual splashes of blood to tokens when they take auto-applied injuries once they reach 5+ injuries.",
+    //         hint: "This might not fit the tone of more lighthearted games, so it can be turned off here.",
+    //         scope: "world",
+    //         config: true,
+    //         type: Boolean,
+    //         default: true
+    //     });
+
+    //     game.settings.register("PTUMoveMaster", "showEffectiveness", {
+    //         name: "GM Setting: Show move effectiveness on current target",
+    //         hint: "",
+    //         scope: "world",
+    //         config: true,
+    //         type: String,
+    //         choices: {
+    //             "never": "Never",
+    //             "always": "Always",
+    //             "neutralOrBetter": "Only on neutral or better targets",
+    //             "dex": "Only on targets that you possess the Dex entry for their species."
+    //         },
+    //         default: "dex"
+    //     });
+
+    //     game.settings.register("PTUMoveMaster", "showEffectivenessText", {
+    //         name: "Player Setting: Show Effectiveness as Text",
+    //         hint: "",
+    //         scope: "client",
+    //         config: true,
+    //         type: String,
+    //         choices: {
+    //             "true": "Show Effectiveness as Text",
+    //             "false": "Show Effectiveness as Color Only"
+    //         },
+    //         default: "true"
+    //     });
+
+    //     game.settings.register("PTUMoveMaster", "alwaysDisplayTokenNames", {
+    //         name: "GM Setting: Always Display Species in Token Name for Wild Pokemon",
+    //         hint: "Always set wild pokemon's tokens to display their species name to everyone when they're dragged out.",
+    //         scope: "world",
+    //         config: true,
+    //         type: Boolean,
+    //         default: true
+    //     });
+
+    //     game.settings.register("PTUMoveMaster", "alwaysDisplayTokenHealth", {
+    //         name: "GM Setting: Always Display Token Health for Wild Pokemon",
+    //         hint: "Always set wild pokemon's tokens to display their health as a bar to everyone when they're dragged out.",
+    //         scope: "world",
+    //         config: true,
+    //         type: Boolean,
+    //         default: true
+    //     });
+
+    //     game.settings.register("PTUMoveMaster", "alwaysDisplayTokenNature", {
+    //         name: "GM Setting: Always Display Token Nature in Names of Wild Pokemon.",
+    //         hint: "Always set wild pokemon's tokens to display their nature, as an appendation to their names, to everyone when they're dragged out. Note that this will have no effect if Always Display Species in Token Name for Wild Pokemon is not also active.",
+    //         scope: "world",
+    //         config: true,
+    //         type: Boolean,
+    //         default: true
+    //     });
+
+        game.settings.register("ptu", "pokepsychologistCanReplaceCommand", {
+            name: "GM Setting: Pokepsychologist allows replacing Command with Pokemon Education for Loyalty checks.",
+            hint: "As written, Pokepsychologist is relatively worthless, and technically does not allow for one of the uses a casual reading of it might imply. This homebrew option allows trainers with Pokepsychologist to use Pokemon Education in place of Command for Loyalty checks.",
+            scope: "world",
+            config: true,
+            type: Boolean,
+            default: false,
+            category: "rules"
+        });
+
+    //     game.settings.register("PTUMoveMaster", "autoResetStagesOnCombatEnd", {
+    //         name: "GM Setting: Automatically reset stages when ending an encounter.",
+    //         hint: "This will offer an option to make all combatants reset their combat stages and EOT/Scene moves when you end an encounter.",
+    //         scope: "world",
+    //         config: true,
+    //         type: Boolean,
+    //         default: false
+    //     });
+
+    //     game.settings.register("PTUMoveMaster", "usePokeballAnimationOnDragOut", {
+    //         name: "GM Setting: Use an animated pokeball effect when dragging an owned pokemon onto a field with their trainer present.",
+    //         hint: "Disable this if you are having problems with the effects.",
+    //         scope: "world",
+    //         config: true,
+    //         type: Boolean,
+    //         default: true
+    //     });
+
+    //     game.settings.register("PTUMoveMaster", "useAlternateChatStyling", {
+    //         name: "Player Setting: Styles the chat to have (what I think is) a more readable font, compact size, and low-contrast look.",
+    //         hint: "Disable this if you are having compatibility issues with the chat pane styling, or if you just don't like it.",
+    //         scope: "client",
+    //         config: true,
+    //         type: Boolean,
+    //         default: true
+    //     });
+
+        game.settings.register("ptu", "currentWeather", {
+            name: "Current Weather",
+            hint: "This is usually set via internal scripts, but it's exposed here if you need to change it manually.",
+            scope: "world",
+            config: true,
+            type: String,
+            choices: {
+                "Clear": "Clear Weather is the default weather, conferring no innate bonuses or penalties of any sort.",
+                "Sunny": "While Sunny, Fire-Type Attacks gain a +5 bonus to Damage Rolls, and Water-Type Attacks suffer a -5 Damage penalty.",
+                "Rainy": "While Rainy, Water-Type Attacks gain a +5 bonus to Damage Rolls, and Fire-Type Attacks suffer a -5 Damage penalty.",
+                "Hail": "While it is Hailing, all non-Ice Type Pokémon lose a Tick of Hit Points at the beginning of their turn.",
+                "Sandstorm": "While it is Sandstorming, all non-Ground, Rock, or Steel Type Pokémon lose a Tick of Hit Points at the beginning of their turn.",
+            },
+            default: "Clear",
+            category: "combat"
+        });
+
+    //     // game.settings.register("PTUMoveMaster", "useErrataConditions", {
+    //     // 	name: "GM Setting: This determines whether to use the original condition rules, or the errata'd versions.",
+    //     // 	hint: "",
+    //     // 	scope: "world",
+    //     // 	config: true,
+    //     // 	type: String,
+    //     // 	choices: {
+    //     // 	  "Original": "Use the original condition effects.",
+    //     // 	  "Errata": "Use the errata'd condition effects."
+    //     // 	},
+    //     // 	default: "Original"
+    //     // });
+
+    //     game.settings.register("PTUMoveMaster", "autoSkipTurns", {
+    //         name: "GM Setting: Auto-skip turns when no actions possible, due to failing certain saves or being fainted.",
+    //         hint: "Disable this if you are a coward. (Or if you want to manually advance turns all the time)",
+    //         scope: "world",
+    //         config: true,
+    //         type: Boolean,
+    //         default: true
+    //     });
+
+    //     game.settings.register("PTUMoveMaster", "hideConfettiButton", {
+    //         name: "Player Setting: Hides the Confetti button.",
+    //         hint: "Disable this if you have a reason to manually trigger confetti blasts.",
+    //         scope: "client",
+    //         config: true,
+    //         type: Boolean,
+    //         default: true
+    //     });
+
+    //     game.settings.register("PTUMoveMaster", "enforcePokeballRangeLimits", {
+    //         name: "GM Setting: Enforce Pokeball Range Limits.",
+    //         hint: "While enabled, this will prevent throwing out owned pokemon, throwing pokeballs to capture, and recalling owned pokemon, if the trainer is on the field but too far away.",
+    //         scope: "world",
+    //         config: true,
+    //         type: Boolean,
+    //         default: true
+    //     });
+
+    //     game.settings.register("PTUMoveMaster", "PokedexRangeLimit", {
+    //         name: "GM Setting: Custom Pokedex Range Limit",
+    //         hint: "By default, Pokedexes have a scan range of 10 m, but GMs can set a custom value here. A value of 0 will be treated as unlimited range.",
+    //         scope: "world",
+    //         config: true,
+    //         type: String,
+    //         default: "10"
+    //     });
+
+    //     game.settings.register("PTUMoveMaster", "CustomPokeballAC", {
+    //         name: "GM Setting: Custom Pokeball Throw AC",
+    //         hint: "By default, Pokeball throws have a base AC of 6, but GMs can set a custom value here.",
+    //         scope: "world",
+    //         config: true,
+    //         type: String,
+    //         default: "6"
+    //     });
+
+    //     game.settings.register("PTUMoveMaster", "AthleticsReducesPokeballAC", {
+    //         name: "GM Setting: Athletics Rank Reduces Pokeball Throw AC",
+    //         hint: "Enable this to turn on a homebrew option to reduce Pokeball Throw AC by the thrower's Athletics Rank (to a minimum of AC 2).",
+    //         scope: "world",
+    //         config: true,
+    //         type: Boolean,
+    //         default: false
+    //     });
+
+    //     game.settings.register("PTUMoveMaster", "useExtraActionHomebrew", {
+    //         name: "GM Setting: Use Kindled Embers' Extra Action homebrew.",
+    //         hint: "Enable this to give each actor an extra standard action per turn that cannot be used for directly damaging moves (physical, special), nor to repeat the same standard action twice in the same turn. The intent of this change is to diversify action choice and provide more reasons for some of the less popular moves or maneuvers to be used.",
+    //         scope: "world",
+    //         config: true,
+    //         type: Boolean,
+    //         default: false
+    //     });
+
+    //     game.settings.register("PTUMoveMaster", "trackBrokenPokeballs", {
+    //         name: "GM Setting: Track Broken Pokeballs.",
+    //         hint: "The trainer edge 'Poke Ball Repair' allows for re-using balls that break upon failing to capture a Pokemon, so Move Master will automatically created a broken version of balls in the thrower's inventory when a Pokemon breaks free. If you have no use for tracking this, you can disable it here.",
+    //         scope: "world",
+    //         config: true,
+    //         type: Boolean,
+    //         default: true
+    //     });
+
+    //     game.settings.register("PTUMoveMaster", "itemIconDirectory", {
+    //         name: "Item Icons Directory",
+    //         hint: "The directory where the user can upload item image files to be used by scripts or modules. Must end with a /",
+    //         scope: "world",
+    //         config: true,
+    //         type: String,
+    //         default: "item_icons/",
+    //         filePicker: true,
+    //         // onChange: (value) => CustomSpeciesFolder.updateFolderDisplay(value),
+    //         category: "other"
+    //     });
+
+    //     game.settings.register("PTUMoveMaster", "pokedexNameSoundDirectory", {
+    //         name: "Pokedex Name Sounds Directory",
+    //         hint: "The directory where the user can upload sound files of the Pokedex saying the name of a scanned Pokemon when Move Master's Pokedex function is used. Must end with a /",
+    //         scope: "world",
+    //         config: true,
+    //         type: String,
+    //         default: "pokemon_names/",
+    //         filePicker: true,
+    //         // onChange: (value) => CustomSpeciesFolder.updateFolderDisplay(value),
+    //         category: "other"
+    //     });
+
+    //     game.settings.register("PTUMoveMaster", "backgroundFieldDirectory", {
+    //         name: "Background Field Directory",
+    //         hint: "The directory where the user can upload background image files to be used by Move Master in certain UI elements. Must end with a /",
+    //         scope: "world",
+    //         config: true,
+    //         type: String,
+    //         default: "background_fields/",
+    //         filePicker: true,
+    //         // onChange: (value) => CustomSpeciesFolder.updateFolderDisplay(value),
+    //         category: "other"
+    //     });
+
+    //     game.settings.register("PTUMoveMaster", "playerBagDirectory", {
+    //         name: "Player Bag Directory",
+    //         hint: "The directory where the user can upload subdirectories, each with image files with appropriate names (items.png, pokeballs.png, etc.) to be used by Move Master in certain UI elements. The subdirectory 'default' will be used for any actor that does not have a subdirectory of that actor's name (not including spaces). Must end with a /",
+    //         scope: "world",
+    //         config: true,
+    //         type: String,
+    //         default: "player_bags/",
+    //         filePicker: true,
+    //         // onChange: (value) => CustomSpeciesFolder.updateFolderDisplay(value),
+    //         category: "other"
+    //     });
+
+    //     game.settings.register("PTUMoveMaster", "UnavailablePokemonFolderName", {
+    //         name: "GM Setting: Unavailable Pokemon Folder Name",
+    //         hint: "Pokemon that are in any folder whose name contains this string (case insensitive) will be considered to be unavailable, and will not show up on the sidebar 'belt' of their trainers.",
+    //         scope: "world",
+    //         config: true,
+    //         type: String,
+    //         default: "Bench"
+    //     });
+    }
 }
 
 export function SetAccessabilityFont(enabled) {
-    if(enabled) {
-      document.querySelector(':root').style.setProperty('--pkmnFontStyle', 'sans-serif')
+    if (enabled) {
+        document.querySelector(':root').style.setProperty('--pkmnFontStyle', 'sans-serif')
     } else {
-      document.querySelector(':root').style.setProperty('--pkmnFontStyle', 'Pokemon GB')
+        document.querySelector(':root').style.setProperty('--pkmnFontStyle', 'Pokemon GB')
     }
-  }
+}
 

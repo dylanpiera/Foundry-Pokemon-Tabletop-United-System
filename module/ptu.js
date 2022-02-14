@@ -1,7 +1,7 @@
 // Import Modules
 import { PTUActor } from "./actor/actor.js";
 import { GetSpeciesData } from "./actor/actor.js";
-import { PTUGen8CharacterSheet } from "./actor/character-sheet-gen8.js";
+import { PTUGen8CharacterSheet, CalculateAcRoll } from "./actor/character-sheet-gen8.js";
 import { PTUGen8PokemonSheet } from "./actor/pokemon-sheet-gen8.js";
 import { PTUItem } from "./item/item.js";
 import { PTUItemSheet } from "./item/item-sheet.js";
@@ -110,7 +110,8 @@ Hooks.once('init', function () {
     },
     combat: {
       applyDamageToTargets,
-      undoDamageToTargets
+      undoDamageToTargets,
+      CalculateAcRoll
     },
     combats: new Map(),
     cache: {

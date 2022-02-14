@@ -2205,11 +2205,12 @@ body.messages-dark-theme .chat-controls .roll-type-select {
 #ptu-sidebar .ptu-sidebar .sidebar-content::-webkit-scrollbar-thumb {
   background: #ff0000;
 }
+#ptu-sidebar .ptu-sidebar .sidebar-content > div {
+  margin-bottom: 10px;
+}
 #ptu-sidebar .ptu-sidebar .pokedex-bottom {
   flex: 86px 0 0;
 }
-
-
 #ptu-sidebar .ptu-sidebar #abilities-list .movemaster-button {
   margin: 3px 0px;
   padding: 0;

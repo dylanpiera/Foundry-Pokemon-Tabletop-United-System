@@ -66,7 +66,7 @@ export default class MovesList extends Component {
         for (const move of this.state.moves ?? []) {
             $(`.movemaster-button[data-button="${move._id}"]`).on("click", (event) => {
                 // Handle on move click here, for now just log that button is clicked
-                console.log(move.name, "was clicked");
+                this.state.actor.executeMove(move._id)
             })
         }
 

@@ -4,7 +4,7 @@
   "description": "A Pen and Paper Roleplaying Game Set in the World of Pokemon",
   "minimumCoreVersion": "9",
   "compatibleCoreVersion": "9",
-  "version": "1.5-Beta-15",
+  "version": "1.5-Beta-16",
   "templateVersion": 2,
   "author": "Dylan Piera, Tymo Wessel, Jeffrey Hollander, Efren A. Mariño & Cody Swendrowski",
   "esmodules": ["module/ptu.js"],

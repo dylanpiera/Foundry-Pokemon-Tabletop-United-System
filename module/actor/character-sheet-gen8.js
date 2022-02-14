@@ -562,7 +562,7 @@ export class PTUGen8CharacterSheet extends ActorSheet {
 
 /** Pure Functions */
 
-function CalculateAcRoll(moveData, actor) {
+export function CalculateAcRoll(moveData, actor) {
 	return new Roll('1d20-@ac+@acBonus', {
 		ac: (parseInt(moveData.ac) || 0),
 		acBonus: (parseInt(actor.data.modifiers.acBonus?.total) || 0)
@@ -649,8 +649,9 @@ const MoveMessageTypes = {
 	FULL_ATTACK: 'full-attack'
 }
 
-const CritOptions = {
+export const CritOptions = {
 	CRIT_MISS: 'miss',
 	NORMAL: 'normal',
-	CRIT_HIT: 'hit'
+	CRIT_HIT: 'hit',
+	DOUBLE_CRIT_HIT: 'double-hit'
 }
