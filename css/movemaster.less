@@ -385,14 +385,14 @@ body.messages-dark-theme .chat-controls .roll-type-select {
       flex: 86px 0 0;
     }
     .sidebar-content {
-      z-index:11;
-      background-color:#272727;
+      z-index: 11;
+      background-color: #272727;
       flex: 100% 0 1;
       overflow-x: hidden;
       overflow-y: scroll;
 
       &::-webkit-scrollbar {
-        width: 0; 
+        width: 0;
         background: transparent;
       }
       &::-webkit-scrollbar-thumb {
@@ -615,3 +615,95 @@ body.messages-dark-theme .chat-controls .roll-type-select {
     background-color: blue !important;
   }
 }*/
+
+.mm-move {
+  img {
+    border-radius: 0 !important;
+  }
+  .dice-total {
+    display: inline-flex;
+    justify-content: space-evenly;
+    align-items: center;
+    width: 100%;
+    font-family: "Modesto Condensed";
+    font-size: 30px;
+    color: black;
+
+    flex-wrap: wrap;
+
+    h3, h5, h6, img {
+      flex: 33% 0 1;
+    } 
+    .img-row {
+      height: 75px;
+      font-size: 24px;
+      line-height: 0.9;
+      padding: 0.25rem 0 0.25rem 0;
+      border-top: 1px solid #bdbdbd;
+      display: inline-flex;
+      justify-content: space-evenly;
+      align-items: center;
+      width: 100%;
+    }
+  }
+}
+
+/* TODO: Properly turn this into LESS */
+
+#ptu-sidebar .ptu-sidebar #features-list .movemaster-button {
+  margin: 3px 0px;
+  padding: 0;
+  text-align: center;
+}
+#ptu-sidebar .ptu-sidebar #features-list .movemaster-button .btn-body {
+  background-color: #333333;
+  color: #cccccc;
+  border-left: 5px solid;
+  padding-left: 0px;
+  width: 200px;
+  height: auto;
+  font-size: 24px;
+  font-family: "Modesto Condensed";
+  line-height: 0.6;
+}
+#ptu-sidebar .ptu-sidebar #features-list .movemaster-button .btn-body h3 {
+  padding: 0px;
+  font-family: "Modesto Condensed";
+  font-size: 24px;
+  color: white;
+  background-color: #272727;
+  overflow-wrap: normal !important;
+  word-break: keep-all !important;
+}
+#ptu-sidebar
+  .ptu-sidebar
+  #features-list
+  .movemaster-button
+  .btn-body
+  .icon-list {
+  padding-top: 4px;
+  padding-bottom: 0;
+  font-size: 14px;
+  align-items: center;
+  justify-content: center;
+  min-height: 24px;
+}
+#ptu-sidebar
+  .ptu-sidebar
+  #features-list
+  .movemaster-button
+  .btn-body
+  .icon-list
+  span {
+  margin: 0 4px;
+}
+#ptu-sidebar
+  .ptu-sidebar
+  #features-list
+  .movemaster-button
+  .btn-body
+  .icon-list
+  img {
+  height: 22px;
+  border-width: 0px;
+}

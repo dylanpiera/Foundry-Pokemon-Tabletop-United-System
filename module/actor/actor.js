@@ -529,6 +529,22 @@ export class PTUActor extends Actor {
     //TODO: Implement Move Effect Parser
 
     // After effects have been parsed, display chat message with all info.
+    const messageData = mergeObject({
+			title: `${this.name}'s<br>${move.name}`,
+			user: game.user.id,
+			sound: CONFIG.sounds.dice,
+			templateType: 'move',
+			description: `${this.name}'s<br>${move.name}`,
+      hasAC: !(moveData.ac == "" || moveData.ac == "--"),
+      move: moveData,
+      moveName: move.name,
+      targetAmount: Object.keys(attack.data).length,
+      actorImage: this.data.img,
+		}, attack);
+
+		messageData.content = await renderTemplate('/systems/ptu/templates/chat/moves/full-attack.hbs', messageData);
+
+		const msg = await ChatMessage.create(messageData, {});
     // TODO: Display chat message
 
     // If auto combat is turned on automatically apply damage based on result
@@ -596,7 +612,8 @@ export class PTUActor extends Actor {
       data: attacksData,
       damageRolls,
       abilityBonuses,
-      modifiers: damageBonuses.modifierText
+      modifiers: damageBonuses.modifierText,
+      crit: critType
     };
 
 
@@ -627,7 +644,10 @@ export class PTUActor extends Actor {
             }
           }
           if (isNaN(rangeToTarget)) attackData.inRange = true;
-          else attackData.inRange = rangeToTarget <= isInRange(moveData);
+          else {
+            attackData.inRange = rangeToTarget <= isInRange(moveData);
+            attackData.range = rangeToTarget;
+          }
         }
 
         switch (moveData.category.toLowerCase()) {
@@ -638,6 +658,7 @@ export class PTUActor extends Actor {
                 value: Math.max(target.actor.data.data.evasion.physical, target.actor.data.data.evasion.speed),
                 type: "Physical/Speed",
               },
+              image: target.actor.data.img,
             }
             break;
           case "special":
@@ -647,6 +668,7 @@ export class PTUActor extends Actor {
                 value: Math.max(target.actor.data.data.evasion.special, target.actor.data.data.evasion.speed),
                 type: "Special/Speed",
               },
+              image: target.actor.data.img,
             }
             break;
           case "status":
@@ -656,6 +678,7 @@ export class PTUActor extends Actor {
                 value: target.actor.data.data.evasion.speed,
                 type: "Speed",
               },
+              image: target.actor.data.img,
             }
             break;
         }
@@ -757,6 +780,7 @@ export class PTUActor extends Actor {
 
     let dbBonus = 0;
     let hitCount = 1;
+    let isStab = false;
 
     // TODO: Add DoubleStrike/FiveStrike
     // Calculate Technician Bonus
@@ -768,6 +792,7 @@ export class PTUActor extends Actor {
     if (moveData.type == this.data.data.typing[0] || moveData.type == this.data.data.typing[1]) {
       if (abilityBonuses.hasAdaptability) dbBonus += 3;
       else dbBonus += 2;
+      isStab = true;
     }
 
     // TODO: Not yet implemented - Stored Power
@@ -785,7 +810,9 @@ export class PTUActor extends Actor {
     return new Roll(rollString, {
       roll: game.ptu.DbData[(db * hitCount) + dbBonus],
       baseRoll: game.ptu.DbData[db + dbBonus],
-      bonus: damageBonus
+      bonus: damageBonus,
+      db: (db*hitCount + dbBonus),
+      isStab
     })
 
   }
