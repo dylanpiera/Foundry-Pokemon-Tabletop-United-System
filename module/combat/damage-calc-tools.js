@@ -69,7 +69,7 @@ export async function ApplyFlatDamage(targets, sourceName, damage) {
     return executeApplyDamageToTargets(targets, { moveName: sourceName }, damage, { isFlat: true })
 }
 
-async function executeApplyDamageToTargets(targets, data, damage, { isFlat, isResist, isWeak, damageReduction } = { isFlat: false, isResist: false, isWeak: false }) {
+async function executeApplyDamageToTargets(targets, data, damage, { isFlat, isResist, isWeak, damageReduction, msgId } = { isFlat: false, isResist: false, isWeak: false }) {
     if (isNaN(damageReduction)) damageReduction = 0;
 
     let appliedDamage = {};
@@ -93,7 +93,17 @@ async function executeApplyDamageToTargets(targets, data, damage, { isFlat, isRe
         }
 
         log(`Dealing ${actualDamage} damage to ${target.name}`);
-        appliedDamage[target.data.actorLink ? target.actor.id : target.data._id] = { name: target.actor.data.name, damage: actualDamage, type: target.data.actorLink ? "actor" : "token", old: { value: duplicate(target.actor.data.data.health.value), temp: duplicate(target.actor.data.data.tempHp.value) } };
+        appliedDamage[target.data.actorLink ? target.actor.id : target.data._id] = {
+            name: target.actor.data.name,
+            damage: actualDamage,
+            type: target.data.actorLink ? "actor" : "token",
+            old: {
+                value: duplicate(target.actor.data.data.health.value),
+                temp: duplicate(target.actor.data.data.tempHp.value)
+            },
+            tokenId: target.id,
+            msgId,
+        };
         await target.actor.modifyTokenAttribute("health", actualDamage * -1, true, true);
     }
     return await displayAppliedDamageToTargets({ data: appliedDamage, move: data.moveName });
@@ -110,23 +120,30 @@ export async function displayAppliedDamageToTargets(appliedDamage) {
     return ChatMessage.create(messageData, {});
 }
 
-export function undoDamageToTargets(event) {
+export async function undoDamageToTargets(event) {
     event.preventDefault();
 
-    let data = {
+    const data = {
         target: event.currentTarget.dataset.target,
         type: event.currentTarget.dataset.targetType,
         oldHp: parseInt(event.currentTarget.dataset.oldValue),
         oldTempHp: parseInt(event.currentTarget.dataset.oldTemp),
-        damage: parseInt(event.currentTarget.dataset.damage)
+        damage: parseInt(event.currentTarget.dataset.damage),
+        tokenId: event.currentTarget.dataset.tokenTarget,
+        msgId: event.currentTarget.dataset.originMessage,
     }
 
-    let actor = data.type == "actor" ? game.actors.get(data.target) : canvas.tokens.get(data.target).actor;
+    const actor = data.type == "actor" ? game.actors.get(data.target) : canvas.tokens.get(data.target).actor;
     if (!actor) return;
 
 
     log(`FVTT PTU | Undoing ${data.damage} damage to ${actor.data.name} - Old HP: ${data.oldHp} - Old Temp: ${data.oldTempHp}`);
-    actor.update({ "data.health.value": data.oldHp, "data.tempHp.value": data.oldTempHp, "data.tempHp.max": data.oldTempHp })
+    await actor.update({ "data.health.value": data.oldHp, "data.tempHp.value": data.oldTempHp, "data.tempHp.max": data.oldTempHp })
+
+    if (data.tokenId && data.msgId) {
+        await updateApplicatorHtml($(`[data-message-id="${data.msgId}"]`), [data.tokenId], undefined, true, true)
+    }
+
 }
 
 export async function newApplyDamageToTargets(event) {
@@ -158,7 +175,8 @@ export async function newApplyDamageToTargets(event) {
         const critTargets = [];
         messageHtml.find(".mon-list").filter((k, i) => !i.className.includes("disabled")).each((k, i) => {
             const token = canvas.tokens.get(i?.dataset?.target);
-            if (token && i.dataset.hit) {
+            console.log(token.name, i.dataset, i.dataset.hit, i.dataset.hit == 'true')
+            if (token && (i.dataset.hit == 'true')) {
                 if (i.dataset.crit == "hit" || i.dataset.crit == "double-hit")
                     critTargets.push(token);
                 else
@@ -182,14 +200,14 @@ export async function newApplyDamageToTargets(event) {
         // Normal Damage
         if (targets.length != 0) {
             moveData.target = targets;
-            r.push(await applyResult(targets, moveData.damage));
+            r.push(await applyResult(targets, moveData.damage, messageHtml[0].dataset.messageId));
         }
 
         // Crit Damage
         if (critTargets.length != 0) {
             moveData.target = targets;
             moveData.damage = dataset.critDamage
-            r.push(await applyResult(critTargets, moveData.damage));
+            r.push(await applyResult(critTargets, moveData.damage, messageHtml[0].dataset.messageId));
         }
 
         await updateApplicatorHtml(messageHtml, targets.concat(critTargets).map(t => t.id), moveData.mode, true);
@@ -211,20 +229,20 @@ export async function newApplyDamageToTargets(event) {
         });
     }
 
-    return await applyResult(moveData.target, moveData.damage);
+    return await applyResult(moveData.target, moveData.damage, dataset.messageId);
 
-    function applyResult(targets, damage) {
+    function applyResult(targets, damage, messageId) {
         switch (moveData.mode) {
             case "full":
-                return executeApplyDamageToTargets(targets, moveData, damage, { damageReduction: dr });
+                return executeApplyDamageToTargets(targets, moveData, damage, { damageReduction: dr, msgId: messageId });
             case "weak":
-                return executeApplyDamageToTargets(targets, moveData, damage, { isWeak: true, damageReduction: dr });
+                return executeApplyDamageToTargets(targets, moveData, damage, { isWeak: true, damageReduction: dr, msgId: messageId });
             case "resist":
-                return executeApplyDamageToTargets(targets, moveData, damage, { isResist: true, damageReduction: dr });
+                return executeApplyDamageToTargets(targets, moveData, damage, { isResist: true, damageReduction: dr, msgId: messageId });
             case "half":
-                return executeApplyDamageToTargets(targets, moveData, Math.max(1, (damage / 2)), { damageReduction: dr });
+                return executeApplyDamageToTargets(targets, moveData, Math.max(1, (damage / 2)), { damageReduction: dr, msgId: messageId });
             case "flat":
-                return executeApplyDamageToTargets(targets, moveData, damage, { isFlat: true, damageReduction: dr })
+                return executeApplyDamageToTargets(targets, moveData, damage, { isFlat: true, damageReduction: dr, msgId: messageId })
         }
     }
 }
@@ -244,6 +262,8 @@ export async function handleApplicatorItem(event) {
     const critClass = "tooltip fas fa-crosshairs";
     const tooltipContent = (content) => `<span class="tooltip-content">${content}</span>`;
     const messageHtml = $(parent).closest(".chat-message.message");
+    const messageId = messageHtml[0].dataset.messageId;
+    
     if (currentTarget.className.includes("icon")) {
         return;
     }
@@ -286,19 +306,19 @@ export async function handleApplicatorItem(event) {
             damage: baseDataset.damage,
             mode: target.dataset.mode,
             crit: parent.dataset.crit == "hit" || parent.dataset.crit == "double-hit",
-            hasDataset: true
+            hasDataset: true,
+            messageId
         }
         if (data.crit) data.damage = baseDataset.critDamage;
         await newApplyDamageToTargets(data)
     }
-    const messageId = messageHtml[0].dataset.messageId;
     const message = game.messages.get(messageId);
     const newContent = messageHtml.children(".message-content").html().trim();
 
     await game.ptu.api.chatMessageUpdate(message, { content: newContent })
 }
 
-async function updateApplicatorHtml(root, targetIds, mode, updateChatMessage = false) {
+async function updateApplicatorHtml(root, targetIds, mode, updateChatMessage = false, undo = false) {
     const applicatorHTML = {
         normal:
             `<i class="tooltip fas fa-circle" data-mode="full">
@@ -324,24 +344,30 @@ async function updateApplicatorHtml(root, targetIds, mode, updateChatMessage = f
 
     for (const target of targetIds) {
         const monList = $(root).find(`[data-target="${target}"]`)
-        monList.addClass("disabled");
+        if (undo) {
+            monList.removeClass("disabled");
+            monList.children(".applicators").html(applicatorHTML.normal + "\n" + applicatorHTML.half + "\n" + applicatorHTML.weak + "\n" + applicatorHTML.resist+ "\n" + applicatorHTML.flat);
+        }
+        else {
+            monList.addClass("disabled");
 
-        switch (mode) {
-            case "full":
-                monList.children(".applicators").html(applicatorHTML.normal);
-                break;
-            case "half":
-                monList.children(".applicators").html(applicatorHTML.half);
-                break;
-            case "weak":
-                monList.children(".applicators").html(applicatorHTML.weak);
-                break;
-            case "resist":
-                monList.children(".applicators").html(applicatorHTML.resist);
-                break;
-            case "flat":
-                monList.children(".applicators").html(applicatorHTML.flat);
-                break;
+            switch (mode) {
+                case "full":
+                    monList.children(".applicators").html(applicatorHTML.normal);
+                    break;
+                case "half":
+                    monList.children(".applicators").html(applicatorHTML.half);
+                    break;
+                case "weak":
+                    monList.children(".applicators").html(applicatorHTML.weak);
+                    break;
+                case "resist":
+                    monList.children(".applicators").html(applicatorHTML.resist);
+                    break;
+                case "flat":
+                    monList.children(".applicators").html(applicatorHTML.flat);
+                    break;
+            }
         }
     }
     if (updateChatMessage) {
