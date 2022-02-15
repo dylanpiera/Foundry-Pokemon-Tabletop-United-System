@@ -506,7 +506,7 @@ export class PTUActor extends Actor {
     // Set round properties if applicable
     if (move.getFlag("ptu", "lastRoundUsed") != (game.combat?.current?.round ?? 0))
       await move.setFlag("ptu", "lastRoundUsed", game.combat?.current?.round ?? 0);
-    if (game.combat.id && (move.getFlag("ptu", "lastEncounterUsed") != game.combat.id)) await move.setFlag("ptu", "lastEncounterUsed", game.combat.id);
+    if (game.combat?.id && (move.getFlag("ptu", "lastEncounterUsed") != game.combat?.id)) await move.setFlag("ptu", "lastEncounterUsed", game.combat?.id);
 
     // Apply Type Strategist
     if (attack.abilityBonuses.typeStratagistApplies) {

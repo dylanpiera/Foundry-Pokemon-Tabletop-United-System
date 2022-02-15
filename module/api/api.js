@@ -109,7 +109,7 @@ export default class Api {
                 if(!ref._isMainGM()) return;
                 
                 const {damageType, damageCategory, uuids} = data.content;
-                const {label = "", isFlat = false, isHalf = false, isResist = false, damageReduction = 0} = data.content.options;
+                const {label = "", isFlat = false, isHalf = false, isResist = false, isWeak = false, damageReduction = 0, msgId} = data.content.options;
                 const damage = isHalf ? Math.max(1, Math.floor(data.content.damage / 2)) : data.content.damage;
                 
                 const documents = [];
@@ -132,10 +132,22 @@ export default class Api {
 
                         const effectiveness = document.actor.data.data.effectiveness?.All[damageType] ?? 1;
 
-                        actualDamage = Math.max((effectiveness === 0 ? 0 : 1), Math.floor((damage - parseInt(defense) - dr - parseInt(damageReduction)) * (effectiveness - (isResist ? (effectiveness > 1 ? 0.5 : effectiveness*0.5) : 0))))
+                        actualDamage = Math.max(
+                            (effectiveness === 0 ? 0 : 1), 
+                            Math.floor((damage - parseInt(defense) - dr - parseInt(damageReduction)) * (effectiveness + (isResist ? (effectiveness > 1 ? -0.5 : effectiveness*-0.5) : isWeak ? (effectiveness >= 1 ? effectiveness >= 2 ? 1 : 0.5 : effectiveness) : 0))))
                     }
                     log(`Dealing ${actualDamage} damage to ${document.name}`); 
-                    retVal.appliedDamage[document.data.actorLink ? document.actor.id : document.data._id] = {name: document.actor.data.name, damage: actualDamage, type: document.data.actorLink ? "actor" : "token", old: {value: duplicate(document.actor.data.data.health.value), temp: duplicate(document.actor.data.data.tempHp.value)}};            
+                    retVal.appliedDamage[document.data.actorLink ? document.actor.id : document.data._id] = {
+                        name: document.actor.data.name, 
+                        damage: actualDamage, 
+                        type: document.data.actorLink ? "actor" : "token", 
+                        old: {
+                            value: duplicate(document.actor.data.data.health.value), 
+                            temp: duplicate(document.actor.data.data.tempHp.value)
+                        },
+                        tokenId: document.id,
+                        msgId,
+                    };            
                     retVal.result.push(await document.actor.modifyTokenAttribute("health", actualDamage*-1, true, true));
                 }
                 await displayAppliedDamageToTargets({data: retVal.appliedDamage, move: label});
