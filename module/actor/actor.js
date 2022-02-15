@@ -712,7 +712,7 @@ export class PTUActor extends Actor {
     }
 
     function calculateTotalDamageBonus(moveData, bonusDamage, weather, abilityBonuses, actor) {
-      const total = isNaN(Number(bonusDamage)) ? 0 : Number(bonusDamage);
+      let total = isNaN(Number(bonusDamage)) ? 0 : Number(bonusDamage);
       const modifierTexts = [];
 
       // Last Chance
@@ -785,6 +785,8 @@ export class PTUActor extends Actor {
     let dbBonus = 0;
     let hitCount = 1;
     let isStab = false;
+    let isDoubleStrike = false;
+    let isFiveStrike = false;
 
     // TODO: Add DoubleStrike/FiveStrike
     // Calculate Technician Bonus
