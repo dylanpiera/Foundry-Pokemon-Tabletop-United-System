@@ -898,6 +898,9 @@ span.readable {
   display: flex;
   flex-wrap: wrap;
 }
+.swsh-box .swsh-body.dark-body {
+  background: #b3b3b3;
+}
 .sidebar-tab .action-buttons button {
   height: unset;
   max-height: 50px;
@@ -2396,10 +2399,12 @@ body.messages-dark-theme .chat-controls .roll-type-select {
     background-color: blue !important;
   }
 }*/
-.mm-move img {
+.mm-move img,
+.mm-damage-application img {
   border-radius: 0 !important;
 }
-.mm-move .dice-total {
+.mm-move .dice-total,
+.mm-damage-application .dice-total {
   display: inline-flex;
   justify-content: space-evenly;
   align-items: center;
@@ -2410,12 +2415,17 @@ body.messages-dark-theme .chat-controls .roll-type-select {
   flex-wrap: wrap;
 }
 .mm-move .dice-total h3,
+.mm-damage-application .dice-total h3,
 .mm-move .dice-total h5,
+.mm-damage-application .dice-total h5,
 .mm-move .dice-total h6,
-.mm-move .dice-total img {
+.mm-damage-application .dice-total h6,
+.mm-move .dice-total img,
+.mm-damage-application .dice-total img {
   flex: 33% 0 1;
 }
-.mm-move .dice-total .img-row {
+.mm-move .dice-total .img-row,
+.mm-damage-application .dice-total .img-row {
   height: 75px;
   font-size: 24px;
   line-height: 0.9;
@@ -2425,6 +2435,164 @@ body.messages-dark-theme .chat-controls .roll-type-select {
   justify-content: space-evenly;
   align-items: center;
   width: 100%;
+}
+.mm-move .dice-roll,
+.mm-damage-application .dice-roll {
+  font-size: 10px;
+}
+.mm-move .dice-roll .dice-result,
+.mm-damage-application .dice-roll .dice-result {
+  font-size: 10px;
+}
+.mm-move .dice-roll .dice-result .dice-formula,
+.mm-damage-application .dice-roll .dice-result .dice-formula {
+  font-size: 10px;
+}
+.mm-move .dice-roll .dice-result .dice-formula .roll.die,
+.mm-damage-application .dice-roll .dice-result .dice-formula .roll.die {
+  font-size: 8px;
+}
+.mm-move .dice-roll .dice-result .dice-formula .dice-total,
+.mm-damage-application .dice-roll .dice-result .dice-formula .dice-total {
+  display: inline-flex;
+  justify-content: space-evenly;
+  align-items: center;
+  width: 100%;
+  font-family: "Modesto Condensed";
+  font-size: 40px;
+}
+.mm-move .small-button-container,
+.mm-damage-application .small-button-container {
+  height: 12px;
+  margin: 0;
+}
+.mm-move .automated-damage-button,
+.mm-damage-application .automated-damage-button {
+  background-color: #800c0c00;
+  font-family: 'Modesto Condensed';
+  font-size: 28px;
+  color: black;
+}
+.mm-move .automated-damage-button.small,
+.mm-damage-application .automated-damage-button.small {
+  height: 12px;
+  line-height: 0.8;
+  background-color: #919191;
+  font-family: 'Segoe UI';
+  font-size: 10px;
+  color: #b4b4b4;
+  margin-left: 0px ;
+  margin-right: 0px ;
+  margin-top: 2px;
+  margin-bottom: 2px;
+  padding-left: 1px;
+  padding-right: 1px;
+}
+.mm-damage-application .mon-col {
+  flex-direction: column;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+}
+.mm-damage-application .mon-col .mon-list,
+.mm-damage-application .mon-col .mon-list-header {
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: space-evenly;
+  height: 50px;
+  align-items: center;
+}
+.mm-damage-application .mon-col .mon-list.disabled,
+.mm-damage-application .mon-col .mon-list-header.disabled {
+  filter: grayscale(1);
+}
+.mm-damage-application .mon-col .mon-list .mon-item,
+.mm-damage-application .mon-col .mon-list-header .mon-item,
+.mm-damage-application .mon-col .mon-list .mon-item-header,
+.mm-damage-application .mon-col .mon-list-header .mon-item-header {
+  flex: 12% 0 1;
+  font-size: 20px;
+  text-align: center;
+}
+.mm-damage-application .mon-col .mon-list .mon-item.icon,
+.mm-damage-application .mon-col .mon-list-header .mon-item.icon,
+.mm-damage-application .mon-col .mon-list .mon-item-header.icon,
+.mm-damage-application .mon-col .mon-list-header .mon-item-header.icon {
+  flex: 20% 0 1;
+}
+.mm-damage-application .mon-col .mon-list .mon-item .fas,
+.mm-damage-application .mon-col .mon-list-header .mon-item .fas,
+.mm-damage-application .mon-col .mon-list .mon-item-header .fas,
+.mm-damage-application .mon-col .mon-list-header .mon-item-header .fas,
+.mm-damage-application .mon-col .mon-list .mon-item.applicators [data-mode="full"],
+.mm-damage-application .mon-col .mon-list-header .mon-item.applicators [data-mode="full"],
+.mm-damage-application .mon-col .mon-list .mon-item-header.applicators [data-mode="full"],
+.mm-damage-application .mon-col .mon-list-header .mon-item-header.applicators [data-mode="full"],
+.mm-damage-application .mon-col .mon-list .mon-item.applicators [data-mode="resist"],
+.mm-damage-application .mon-col .mon-list-header .mon-item.applicators [data-mode="resist"],
+.mm-damage-application .mon-col .mon-list .mon-item-header.applicators [data-mode="resist"],
+.mm-damage-application .mon-col .mon-list-header .mon-item-header.applicators [data-mode="resist"] {
+  color: #18520b;
+}
+.mm-damage-application .mon-col .mon-list .mon-item .far,
+.mm-damage-application .mon-col .mon-list-header .mon-item .far,
+.mm-damage-application .mon-col .mon-list .mon-item-header .far,
+.mm-damage-application .mon-col .mon-list-header .mon-item-header .far,
+.mm-damage-application .mon-col .mon-list .mon-item.applicators [data-mode="half"],
+.mm-damage-application .mon-col .mon-list-header .mon-item.applicators [data-mode="half"],
+.mm-damage-application .mon-col .mon-list .mon-item-header.applicators [data-mode="half"],
+.mm-damage-application .mon-col .mon-list-header .mon-item-header.applicators [data-mode="half"],
+.mm-damage-application .mon-col .mon-list .mon-item.applicators [data-mode="weak"],
+.mm-damage-application .mon-col .mon-list-header .mon-item.applicators [data-mode="weak"],
+.mm-damage-application .mon-col .mon-list .mon-item-header.applicators [data-mode="weak"],
+.mm-damage-application .mon-col .mon-list-header .mon-item-header.applicators [data-mode="weak"] {
+  color: #aa0200;
+}
+.mm-damage-application .mon-col .mon-list .mon-item.applicators,
+.mm-damage-application .mon-col .mon-list-header .mon-item.applicators,
+.mm-damage-application .mon-col .mon-list .mon-item-header.applicators,
+.mm-damage-application .mon-col .mon-list-header .mon-item-header.applicators {
+  flex: 50% 0 1;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: space-evenly;
+}
+.mm-damage-application .mon-col .mon-list .mon-item.applicators i,
+.mm-damage-application .mon-col .mon-list-header .mon-item.applicators i,
+.mm-damage-application .mon-col .mon-list .mon-item-header.applicators i,
+.mm-damage-application .mon-col .mon-list-header .mon-item-header.applicators i {
+  flex: 18% 0 0;
+  color: black;
+}
+.mm-damage-application .mon-col .mon-list-header {
+  height: 25px;
+  margin-bottom: 5px;
+  border-bottom: 1px solid #919191;
+}
+.mm-damage-application .mon-col .mon-list-header .mon-item-header {
+  font-size: 12px;
+  word-break: keep-all;
+}
+.tooltip {
+  position: relative;
+}
+.tooltip .tooltip-content {
+  visibility: hidden;
+  background-color: #272727;
+  color: #fff;
+  text-align: center;
+  padding: 5px 0;
+  border-radius: 6px;
+  position: absolute;
+  z-index: 200;
+  width: 120px;
+  bottom: 110%;
+  left: 50%;
+  margin-left: -60px;
+  font-size: 12px;
+}
+.tooltip:hover .tooltip-content {
+  visibility: visible;
 }
 /* TODO: Properly turn this into LESS */
 #ptu-sidebar .ptu-sidebar #features-list .movemaster-button {

@@ -545,7 +545,14 @@ export class PTUActor extends Actor {
 		messageData.content = await renderTemplate('/systems/ptu/templates/chat/moves/full-attack.hbs', messageData);
 
 		const msg = await ChatMessage.create(messageData, {});
-    // TODO: Display chat message
+    
+    if(messageData.targetAmount >= 1 && attack.crit != CritOptions.CRIT_MISS) {
+      const applicatorMessageData = duplicate(messageData);
+      applicatorMessageData.damageRolls = messageData.damageRolls;
+      applicatorMessageData.content = await renderTemplate('/systems/ptu/templates/chat/moves/damage-application.hbs', applicatorMessageData);
+      
+      const applicatorMsg = await ChatMessage.create(applicatorMessageData, {});
+    }
 
     // If auto combat is turned on automatically apply damage based on result
     // TODO: Apply Attack (+ effects) 
@@ -575,27 +582,24 @@ export class PTUActor extends Actor {
     const acRoll = await game.ptu.combat.CalculateAcRoll(moveData, this.data).evaluate({ async: true });
 
     // Calculate the Crit Type
-    const critType = calculateCrit(acRoll, this);
+    let critType = calculateCrit(acRoll, this);
 
     // Do Damage Rolls
     const damageRolls = {
       normal: undefined,
       crit: undefined
     }
+    // Calculate 
+    const alwaysHits = critType == CritOptions.CRIT_HIT || critType == CritOptions.DOUBLE_CRIT_HIT || moveData.ac == "" || moveData.ac == "--";
+    if(critType == CritOptions.CRIT_MISS && alwaysHits) critType = CritOptions.NORMAL;
+    
     if (moveData.category.toLowerCase() != "status" && critType != CritOptions.CRIT_MISS) {
       if(moveData.damageBase != "--" && moveData.damageBase) {
-        if (critType == CritOptions.NORMAL) {
-          damageRolls.normal = await this._calculateDamageRoll(moveData, critType, damageBonuses.total, abilityBonuses).evaluate({ async: true });
-        }
-        else {
           damageRolls.normal = await this._calculateDamageRoll(moveData, CritOptions.NORMAL, damageBonuses.total, abilityBonuses).evaluate({ async: true });
-          damageRolls.crit = await this._calculateDamageRoll(moveData, critType, damageBonuses.total, abilityBonuses).evaluate({ async: true });
-        }
+          damageRolls.crit = await this._calculateDamageRoll(moveData, CritOptions.CRIT_HIT, damageBonuses.total, abilityBonuses).evaluate({ async: true });
       }
     }
 
-    // Calculate 
-    const alwaysHits = critType == CritOptions.CRIT_HIT || critType == CritOptions.DOUBLE_CRIT_HIT || moveData.ac == "" || moveData.ac == "--";
 
     for (const attackInfo of Object.values(attacksData)) {
       attackInfo.isHit = alwaysHits ? true : (critType == CritOptions.CRIT_MISS) ? false : acRoll.total >= attackInfo.target.evasion.value;
@@ -632,9 +636,9 @@ export class PTUActor extends Actor {
         if (moveRange) {
           function isInRange(moveData) {
             switch (true) {
+              case moveRange.includes("pass"): return 4;
               case moveRange.includes("melee"): return Math.max(token.data.width, token.data.height);
               case moveRange.includes("self"): return Number.MAX_SAFE_INTEGER;
-              case moveRange.includes("pass"): return 4;
               case moveRange.includes("burst"): return moveRange.slice(moveRange.indexOf("burst") + "burst".length).split(',')[0].trim();
               case moveRange.includes("cone"): return moveRange.slice(moveRange.indexOf("cone") + "cone".length).split(',')[0].trim();
               case moveRange.includes("line"): return moveRange.slice(moveRange.indexOf("line") + "line".length).split(',')[0].trim();

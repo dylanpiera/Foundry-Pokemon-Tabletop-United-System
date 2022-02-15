@@ -40,6 +40,15 @@ export default class Api {
                 for(const document of documents) retVal.result.push(await document.delete());
                 ref._returnBridge(retVal, data);
             },
+            async messageUpdate(data) {
+                if(!ref._isMainGM()) return;
+
+                const message = game.messages.get(data.content.id);
+                if(!message) return;
+
+                const retVal = {result: await message.update(data.content.options)}
+                ref._returnBridge(retVal, data);
+            },
             async transferOwnership(data) {
                 if(!ref._isMainGM()) return;
 
@@ -261,6 +270,22 @@ export default class Api {
 
         const content = {uuids: tokens.map(t => t.uuid), options};
         return this._handlerBridge(content, "tokensDelete");
+    }
+
+    /**
+     * 
+     * @param {*} object - Instance of ChatMessage or UUID string.
+     * @param {*} options - Data object to update the ChatMessage with.
+     * @returns 
+     */
+     async chatMessageUpdate(object, options) {
+        if(!object) return;
+        
+        if(!object.id) object = game.messages.get(object);
+        if(!object?.id) return;
+        
+        const content = {id: object.id, options};
+        return this._handlerBridge(content, "messageUpdate");
     }
 
     /**
