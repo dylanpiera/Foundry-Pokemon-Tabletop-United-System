@@ -306,6 +306,26 @@ export function LoadSystemSettings() {
         category: "other"
     });
 
+    game.settings.register("ptu", "enableMoveAnimations", {
+        name: "Enable Move Animations",
+        hint: "This will play an animated effect on the field between user and target tokens when moves are used. Requires the Sequencer module and JB2A's Animated Assets.",
+        scope: "world",
+        config: true,
+        type: Boolean,
+        default: true,
+        category: "other"
+    });
+
+    game.settings.register("ptu", "dramaticTiming", {
+        name: "Enable Dramatic... Timing!",
+        hint: "This will delay pushing the results of a move to chat for a brief moment in order to reveal success or failure at the same time as its animation shows a hit or miss.",
+        scope: "world",
+        config: true,
+        type: Boolean,
+        default: true,
+        category: "other"
+    });
+
     game.settings.register("ptu", "playPokemonCriesOnDrop", {
         name: "Play Pokémon Cry when dragged from Dex",
         hint: "This will play a Pokémon's cry when it is drag-and-dropped from the pokedex compendium.",
@@ -325,6 +345,16 @@ export function LoadSystemSettings() {
         default: "pokemon_cries/",
         filePicker: true,
         onChange: (value) => CustomSpeciesFolder.updateFolderDisplay(value),
+        category: "other"
+    });
+
+    game.settings.register("ptu", "playMoveSounds", {
+        name: "Play Move Sounds",
+        hint: "This will play a move's sound effect when it's used.",
+        scope: "world",
+        config: true,
+        type: Boolean,
+        default: true,
         category: "other"
     });
 

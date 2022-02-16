@@ -6,6 +6,8 @@ import { CalcBaseStats, CalculateStatTotal, CalculatePoisonedCondition } from ".
 import { GetMonEffectiveness } from "./calculations/effectiveness-calculator.js";
 import { CritOptions } from "./character-sheet-gen8.js";
 import { warn, debug, log } from '../ptu.js'
+import { PlayMoveAnimations } from "../combat/effects/move_animations.js";
+import { PlayMoveSounds } from "../combat/effects/move_sounds.js";
 
 /**
  * Extend the base Actor entity by defining a custom roll data structure which is ideal for the Simple system.
@@ -544,18 +546,39 @@ export class PTUActor extends Actor {
 
 		messageData.content = await renderTemplate('/systems/ptu/templates/chat/moves/full-attack.hbs', messageData);
 
-		const msg = await ChatMessage.create(messageData, {});
+    if((game.settings.get("ptu", "dramaticTiming") == true))
+    {
+      setTimeout( async () => {
+        const msg = await ChatMessage.create(messageData, {});
     
-    if(messageData.targetAmount >= 1 && attack.crit != CritOptions.CRIT_MISS) {
-      const applicatorMessageData = duplicate(messageData);
-      applicatorMessageData.damageRolls = messageData.damageRolls;
-      applicatorMessageData.content = await renderTemplate('/systems/ptu/templates/chat/moves/damage-application.hbs', applicatorMessageData);
-      
-      const applicatorMsg = await ChatMessage.create(applicatorMessageData, {});
-    }
+        if(messageData.targetAmount >= 1 && attack.crit != CritOptions.CRIT_MISS) {
+          const applicatorMessageData = duplicate(messageData);
+          applicatorMessageData.damageRolls = messageData.damageRolls;
+          applicatorMessageData.content = await renderTemplate('/systems/ptu/templates/chat/moves/damage-application.hbs', applicatorMessageData);
+          
+          const applicatorMsg = await ChatMessage.create(applicatorMessageData, {});
+        }
 
-    // If auto combat is turned on automatically apply damage based on result
-    // TODO: Apply Attack (+ effects) 
+        // If auto combat is turned on automatically apply damage based on result
+        // TODO: Apply Attack (+ effects) 
+      }, 1000);
+    }
+    else
+    {
+      const msg = await ChatMessage.create(messageData, {});
+    
+      if(messageData.targetAmount >= 1 && attack.crit != CritOptions.CRIT_MISS) {
+        const applicatorMessageData = duplicate(messageData);
+        applicatorMessageData.damageRolls = messageData.damageRolls;
+        applicatorMessageData.content = await renderTemplate('/systems/ptu/templates/chat/moves/damage-application.hbs', applicatorMessageData);
+        
+        const applicatorMsg = await ChatMessage.create(applicatorMessageData, {});
+      }
+  
+      // If auto combat is turned on automatically apply damage based on result
+      // TODO: Apply Attack (+ effects) 
+    }
+		
 
   }
 
@@ -607,6 +630,8 @@ export class PTUActor extends Actor {
 
     //TODO: Play Sound & Show Visual Move Effects like hit/dodge etc.
     //executeSFX(this, moveData)
+    await PlayMoveAnimations(moveData, token, attacksData);
+    await PlayMoveSounds(moveData, attacksData);
 
     // TODO: Implement TakeAction to keep track of moves used.
     //await game.ptu.combat.TakeAction(this, moveData);
