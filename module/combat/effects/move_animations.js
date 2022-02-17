@@ -2,42 +2,306 @@ import { debug, log } from "../../ptu.js";
 
 
 export const move_animation_library = { // This is basically a list of Sequencer sequences, identified by lowercase move name.
-    "attack order":{},
+    "attack order":{
+        "hit":  { path:"modules/jb2a_patreon/Library/Generic/Energy/EnergyStrand_Multiple01_Dark_Green_30ft_1600x400.webm", scale: 1, repeats:[3, 100, 500]}
+    },
+
+    "bug bite":{
+        "hit":  { path:"modules/jb2a_patreon/Library/Generic/Creature/Bite_01_Regular_Green_400x400.webm", scale: 0.5, repeats:[4, 100], melee: true}
+    },
+
+    "bug buzz":{
+        "hit":  { path:"modules/jb2a_patreon/Library/5th_Level/Cone_Of_Cold/ConeOfCold_01_Regular_Green_600x600.webm", scale: 1.75, repeats:[1, 0]}
+    },
+
+
+
+
+
+
+    "hone claws":{
+        "self": {path:"modules/jb2a_patreon/Library/Generic/Creature/Claws_01_Bright_Blue_400x400.webm", scale:0.7, repeats:[6, 250], anchor_y: 0.25,}
+    },
+
+    
     "hyper beam":{
-        "self":  { path:"modules/jb2a_patreon/Library/TMFX/InPulse/Circle/InPulse_01_Circle_Normal_500.webm", scale: 0.9, anchor_x: 0.15, anchor_y: 0.5, speed:0.1, ease:false, melee:false, count:1 },
-        "hit":  { path:"modules/jb2a_patreon/Library/Cantrip/Eldritch_Blast/EldritchBlast_01_Regular_Yellow_30ft_1600x400.webm", scale: 0.9, anchor_x: 0.15, anchor_y: 0.5, speed:0.1, ease:false, melee:false, count:1 },
+        "self":  { path:"modules/jb2a_patreon/Library/TMFX/InPulse/Circle/InPulse_01_Circle_Normal_500.webm", scale: 1, anchor_x: 0.15, anchor_y: 0.5, speed:0.1, ease:false, melee:false, repeats:[1, 100, 500] },
+        "hit":  { path:"modules/jb2a_patreon/Library/Cantrip/Eldritch_Blast/EldritchBlast_01_Regular_Yellow_30ft_1600x400.webm", scale: 1.2, anchor_x: 0.15, anchor_y: 0.5, speed:0.1, ease:false, melee:false, repeats:[5, 100, 200] },
         // "miss": {}
     },
+    "light screen":{
+        "self":  { path:"modules/jb2a_patreon/Library/Generic/Zoning/ZoningCircle01Out_01_Regular_BlueGreen_600x600.webm", scale: 10, repeats:[1, 0]}
+    },
+    "reflect":{
+        "self":  { path:"modules/jb2a_patreon/Library/Generic/Zoning/ZoningCircle01Out_01_Regular_RedYellow_600x600.webm", scale: 10, repeats:[1, 0]}
+    },
+    "safeguard":{
+        "self":  { path:"modules/jb2a_patreon/Library/Generic/Zoning/ZoningCircle03Out_01_Regular_BlueGreen_600x600.webm", scale: 10, repeats:[1, 0]}
+    },
 };
+
+
+export const move_type_color_filters = {
+    "normal":"#ffffff",
+    "fire":"#e0772d",
+    "water":"#6186e0",
+    "electric":"#e7c22d",
+    "grass":"#70bb4b",
+    "ice":"#8ecaca",
+    "fighting":"#b32d25",
+    "poison":"#953c95",
+    "ground":"#d3b562",
+    "flying":"#9d86e0",
+    "psychic":"#e8527f",
+    "bug":"#9dac1e",
+    "rock":"#ac9534",
+    "ghost":"#69528e",
+    "dragon":"#6934e7",
+    "dark":"#695243",
+    "steel":"#acacc2",
+    "fairy":"#cf9acf",
+    "nuclear":"#03fe01"
+};
+
+
+export const move_type_auras = {
+    "normal":"modules/jb2a_patreon/Library/TMFX/OutPulse/Circle/OutPulse_02_Circle_Fast_500.webm",
+    "fire":"modules/jb2a_patreon/Library/Generic/Marker/EnergyStrandsOverlay_01_Regular_Orange_600x600.webm",
+    "water":"modules/jb2a_patreon/Library/Generic/Liquid/LiquidSplash01_Bright_Blue_400x400.webm",
+    "electric":"modules/jb2a_patreon/Library/Generic/Lightning/StaticElectricity_02_Regular_Green_400x400.webm",
+    "grass":"modules/jb2a_patreon/Library/1st_Level/Detect_Magic/DetectMagicCircle_01_Regular_GreenOrange_1200x1200.webm",
+    "ice":"modules/jb2a_patreon/Library/Generic/Ice/SnowflakeBurst_01_Regular_BlueWhite_Burst_600x600.webm",
+    "fighting":"modules/jb2a_patreon/Library/Generic/Twinkling_Stars/TwinklingStars_09_100x100.webm",
+    "poison":"modules/jb2a_patreon/Library/Generic/Liquid/LiquidSplash01_Bright_Purple_400x400.webm",
+    "ground":"modules/jb2a_patreon/Library/Generic/Impact/GroundCrackImpact_01_Regular_Orange_600x600.webm",
+    "flying":"modules/jb2a_patreon/Library/Generic/Marker/EnergyStrands_01_Regular_Blue_600x600.webm",
+    "psychic":"modules/jb2a_patreon/Library/Generic/Energy/EnergyFieldBot_02_Regular_Purple_400x400.webm",
+    "bug":"modules/jb2a_patreon/Library/Generic/Butterflies/Butterflies_01_Bright_Green_Many_400x400.webm",
+    "rock":"modules/jb2a_patreon/Library/Generic/Traps/Falling_Rocks/FallingRocks01Top_01_Regular_Grey_05x05ft_600x600.webm",
+    "ghost":"modules/jb2a_patreon/Library/Generic/Marker/Marker_02_Regular_PurplePink_400x400.webm",
+    "dragon":"modules/jb2a_patreon/Library/2nd_Level/Flaming_Sphere/FlamingSphere_02_Blue_200x200.webm",
+    "dark":"modules/jb2a_patreon/Library/1st_Level/Sneak_Attack/Sneak_Attack_Dark_Purple_300x300.webm",
+    "steel":"modules/jb2a_patreon/Library/5th_Level/Wall_Of_Force/WallOfForce_01_Grey_Sphere_400x400.webm",
+    "fairy": "modules/jb2a_patreon/Library/Generic/Energy/SwirlingSparkles_01_Regular_BluePink_400x400.webm",
+    "nuclear":"modules/jb2a_patreon/Library/Generic/Liquid/LiquidSplash01_Bright_Green_400x400.webm"
+};
+
+
+export const move_type_impacts_physical = {
+    "normal":"modules/jb2a_patreon/Library/Generic/Impact/Impact_02_Regular_Yellow_400x400.webm",
+    "fire":"modules/jb2a_patreon/Library/Generic/Impact/Impact_02_Regular_Orange_400x400.webm",
+    "water":"modules/jb2a_patreon/Library/Generic/Liquid/LiquidSplash01_Bright_Blue_400x400.webm",
+    "electric":"modules/jb2a_patreon/Library/Generic/Impact/Impact_12_Regular_Green_400x400.webm",
+    "grass":"modules/jb2a_patreon/Library/Generic/Impact/Impact_03_Regular_Green_400x400.webm",
+    "ice":"modules/jb2a_patreon/Library/Generic/Impact/ImpactIceShard01_01_Regular_Blue_400x400.webm",
+    "fighting":"modules/jb2a_patreon/Library/Generic/Impact/Impact_10_Regular_Red_400x400.webm",
+    "poison":"modules/jb2a_patreon/Library/Generic/Impact/ImpactSkull01_01_Regular_PinkPurple_400x400.webm",
+    "ground":"modules/jb2a_patreon/Library/Generic/Impact/GroundCrackImpact_01_Regular_Orange_600x600.webm",
+    "flying":"modules/jb2a_patreon/Library/Generic/Impact/Impact_03_Regular_PinkPurple_400x400.webm",
+    "psychic":"modules/jb2a_patreon/Library/Generic/Impact/Impact_04_Regular_PinkPurple_400x400.webm",
+    "bug":"modules/jb2a_patreon/Library/Generic/Butterflies/Butterflies_01_Bright_Green_Many_400x400.webm",
+    "rock":"modules/jb2a_patreon/Library/Generic/Traps/Falling_Rocks/FallingRocks01Top_01_Regular_Grey_05x05ft_600x600.webm",
+    "ghost":"modules/jb2a_patreon/Library/Generic/Marker/Marker_02_Regular_PurplePink_400x400.webm",
+    "dragon":"modules/jb2a_patreon/Library/Generic/Impact/Impact_04_Dark_Purple_400x400.webm",
+    "dark":"modules/jb2a_patreon/Library/Generic/Impact/Impact_03_Dark_Purple_400x400.webm",
+    "steel":"modules/jb2a_patreon/Library/Generic/Impact/Impact_05_Regular_White_400x400.webm",
+    "fairy": "modules/jb2a_patreon/Library/Generic/Impact/ImpactHeart01_01_Regular_PinkYellow_400x400.webm",
+    "nuclear":"modules/jb2a_patreon/Library/Generic/Liquid/LiquidSplash01_Bright_Green_400x400.webm"
+};
+
+
+export const move_type_impacts_special = {
+    "normal":"modules/jb2a_patreon/Library/Generic/Impact/Impact_02_Regular_Yellow_400x400.webm",
+    "fire":"modules/jb2a_patreon/Library/Generic/Impact/Impact_02_Regular_Orange_400x400.webm",
+    "water":"modules/jb2a_patreon/Library/Generic/Liquid/LiquidSplash01_Bright_Blue_400x400.webm",
+    "electric":"modules/jb2a_patreon/Library/Generic/Impact/Impact_12_Regular_Green_400x400.webm",
+    "grass":"modules/jb2a_patreon/Library/Generic/Impact/Impact_03_Regular_Green_400x400.webm",
+    "ice":"modules/jb2a_patreon/Library/Generic/Impact/ImpactIceShard01_01_Regular_Blue_400x400.webm",
+    "fighting":"modules/jb2a_patreon/Library/Generic/Impact/Impact_10_Regular_Red_400x400.webm",
+    "poison":"modules/jb2a_patreon/Library/Generic/Impact/ImpactSkull01_01_Regular_PinkPurple_400x400.webm",
+    "ground":"modules/jb2a_patreon/Library/Generic/Impact/GroundCrackImpact_01_Regular_Orange_600x600.webm",
+    "flying":"modules/jb2a_patreon/Library/Generic/Impact/Impact_03_Regular_PinkPurple_400x400.webm",
+    "psychic":"modules/jb2a_patreon/Library/Generic/Impact/Impact_04_Regular_PinkPurple_400x400.webm",
+    "bug":"modules/jb2a_patreon/Library/Generic/Butterflies/Butterflies_01_Bright_Green_Many_400x400.webm",
+    "rock":"modules/jb2a_patreon/Library/Generic/Traps/Falling_Rocks/FallingRocks01Top_01_Regular_Grey_05x05ft_600x600.webm",
+    "ghost":"modules/jb2a_patreon/Library/Generic/Marker/Marker_02_Regular_PurplePink_400x400.webm",
+    "dragon":"modules/jb2a_patreon/Library/Generic/Impact/Impact_04_Dark_Purple_400x400.webm",
+    "dark":"modules/jb2a_patreon/Library/Generic/Impact/Impact_03_Dark_Purple_400x400.webm",
+    "steel":"modules/jb2a_patreon/Library/Generic/Impact/Impact_05_Regular_White_400x400.webm",
+    "fairy": "modules/jb2a_patreon/Library/Generic/Impact/ImpactHeart01_01_Regular_PinkYellow_400x400.webm",
+    "nuclear":"modules/jb2a_patreon/Library/Generic/Liquid/LiquidSplash01_Bright_Green_400x400.webm"
+};
+
+
+export const move_type_impacts_status = {
+    "normal":"modules/jb2a_patreon/Library/Generic/Impact/Impact_02_Regular_Yellow_400x400.webm",
+    "fire":"modules/jb2a_patreon/Library/Generic/Impact/Impact_02_Regular_Orange_400x400.webm",
+    "water":"modules/jb2a_patreon/Library/Generic/Liquid/LiquidSplash01_Bright_Blue_400x400.webm",
+    "electric":"modules/jb2a_patreon/Library/Generic/Impact/Impact_12_Regular_Green_400x400.webm",
+    "grass":"modules/jb2a_patreon/Library/Generic/Impact/Impact_03_Regular_Green_400x400.webm",
+    "ice":"modules/jb2a_patreon/Library/Generic/Impact/ImpactIceShard01_01_Regular_Blue_400x400.webm",
+    "fighting":"modules/jb2a_patreon/Library/Generic/Impact/Impact_10_Regular_Red_400x400.webm",
+    "poison":"modules/jb2a_patreon/Library/Generic/Impact/ImpactSkull01_01_Regular_PinkPurple_400x400.webm",
+    "ground":"modules/jb2a_patreon/Library/Generic/Impact/GroundCrackImpact_01_Regular_Orange_600x600.webm",
+    "flying":"modules/jb2a_patreon/Library/Generic/Impact/Impact_03_Regular_PinkPurple_400x400.webm",
+    "psychic":"modules/jb2a_patreon/Library/Generic/Impact/Impact_04_Regular_PinkPurple_400x400.webm",
+    "bug":"modules/jb2a_patreon/Library/Generic/Butterflies/Butterflies_01_Bright_Green_Many_400x400.webm",
+    "rock":"modules/jb2a_patreon/Library/Generic/Traps/Falling_Rocks/FallingRocks01Top_01_Regular_Grey_05x05ft_600x600.webm",
+    "ghost":"modules/jb2a_patreon/Library/Generic/Marker/Marker_02_Regular_PurplePink_400x400.webm",
+    "dragon":"modules/jb2a_patreon/Library/Generic/Impact/Impact_04_Dark_Purple_400x400.webm",
+    "dark":"modules/jb2a_patreon/Library/Generic/Impact/Impact_03_Dark_Purple_400x400.webm",
+    "steel":"modules/jb2a_patreon/Library/Generic/Impact/Impact_05_Regular_White_400x400.webm",
+    "fairy": "modules/jb2a_patreon/Library/Generic/Impact/ImpactHeart01_01_Regular_PinkYellow_400x400.webm",
+    "nuclear":"modules/jb2a_patreon/Library/Generic/Liquid/LiquidSplash01_Bright_Green_400x400.webm"
+};
+
+
+async function PlayMoveTypeAura(move, moveUserToken) 
+{
+    if(move_type_auras[move.type.toLowerCase()])
+    {
+        new Sequence("PTU")
+        .effect()
+            .file( move_type_auras[move.type.toLowerCase()] )
+            .atLocation(moveUserToken)
+            .scaleToObject(1.5)
+            // .rotateIn(360, 2000, {ease: "easeOutCubic"})
+            // .rotateOut(360, 2000, {ease: "easeOutCubic"})
+            // .scaleIn(0, 2000, {ease: "easeOutCubic"})
+            // .scaleOut(0, 1000, {ease: "easeOutCubic"})
+            // .duration(2000)
+            .fadeOut(1000)
+            .fadeIn(1000)
+            .belowTokens()
+            .tint(move_type_color_filters[move.type.toLowerCase()])
+        .play();
+    }
+}
+
+
+async function PlayMoveTargetHitImpact(move, moveTargetToken) 
+{
+    if(move_type_impacts_physical[move.type.toLowerCase()])
+    {
+        new Sequence("PTU")
+        .effect()
+            .file( move_type_impacts_physical[move.type.toLowerCase()] )
+            .atLocation(moveTargetToken)
+            // .scaleToObject(1.5)
+            // .rotateIn(360, 2000, {ease: "easeOutCubic"})
+            // .rotateOut(360, 2000, {ease: "easeOutCubic"})
+            // .scaleIn(0, 2000, {ease: "easeOutCubic"})
+            // .scaleOut(0, 1000, {ease: "easeOutCubic"})
+            // .duration(2000)
+            // .fadeOut(1000)
+            // .fadeIn(1000)
+            // .belowTokens()
+            .tint(move_type_color_filters[move.type.toLowerCase()])
+        .play();
+    }
+}
 
 
 async function PlayMoveSelfAnimation(move, moveUserToken) 
 {
     if(move_animation_library[move.name.toLowerCase()]?.self)
     {
-        new Sequence().effect().file( move_animation_library[move.name.toLowerCase()]["self"]["path"] ).atLocation(moveUserToken).play();
+        let scale = move_animation_library[move.name.toLowerCase()].self?.scale;
+        let repeats = move_animation_library[move.name.toLowerCase()].self?.repeats ? move_animation_library[move.name.toLowerCase()].self?.repeats : [0];
+        let anchor_x = move_animation_library[move.name.toLowerCase()].self?.anchor_x;
+        let anchor_y = move_animation_library[move.name.toLowerCase()].self?.anchor_y;
+
+        new Sequence("PTU")
+            .effect()
+                .file( move_animation_library[move.name.toLowerCase()]["self"]["path"] )
+                .atLocation(moveUserToken)
+                // .anchor(anchor_x, anchor_y)
+                .spriteAnchor({ x: anchor_x, y: anchor_y })
+                .scaleToObject(scale)
+                .tint(move_type_color_filters[move.type.toLowerCase()])
+                .repeats(...repeats)
+            .play();
     }
 }
 
 
-async function PlayMoveHitAnimation(move, moveUserToken, moveTargetToken) 
+async function PlayMoveSuccessfulAttackAnimation(move, moveUserToken, moveTargetToken) 
 {
     if(move_animation_library[move.name.toLowerCase()]?.hit)
     {
-        new Sequence().effect().file( move_animation_library[move.name.toLowerCase()]["hit"]["path"] ).atLocation(moveUserToken).stretchTo(moveTargetToken).missed(false).play();
+        let scale = move_animation_library[move.name.toLowerCase()].hit?.scale;
+        let repeats = move_animation_library[move.name.toLowerCase()].hit?.repeats ? move_animation_library[move.name.toLowerCase()].hit?.repeats : [1, 0, 0];
+        let anchor_x = move_animation_library[move.name.toLowerCase()].hit?.anchor_x;
+        let anchor_y = move_animation_library[move.name.toLowerCase()].hit?.anchor_y;
+        let origin_location = moveUserToken;
+        let target_location = moveTargetToken;
+
+        if(move_animation_library[move.name.toLowerCase()].hit?.melee == true)
+        {
+
+        }
+        
+        move_animation_library[move.name.toLowerCase()].hit?.melee ? move_animation_library[move.name.toLowerCase()].hit?.melee : false;
+
+        new Sequence("PTU")
+            .effect()
+                .file( move_animation_library[move.name.toLowerCase()]["hit"]["path"] )
+                .atLocation(origin_location)
+                // .anchor(anchor_x, anchor_y)
+                .scale(scale)
+                .tint(move_type_color_filters[move.type.toLowerCase()])
+                .stretchTo(target_location)
+                .missed(false)
+                .repeats(...repeats)
+            .play();
     }
+    setTimeout( async () => { await PlayMoveTargetHitImpact(move, moveTargetToken) }, 1100);
 }
 
 
-async function PlayMoveMissAnimation(move, moveUserToken, moveTargetToken) 
+async function PlayMoveMissedAttackAnimation(move, moveUserToken, moveTargetToken) 
 {
     if(move_animation_library[move.name.toLowerCase()]?.miss)
     {
-        new Sequence().effect().file( move_animation_library[move.name.toLowerCase()]["miss"]["path"] ).atLocation(moveUserToken).stretchTo(moveTargetToken).missed(true).play();
+        let scale = move_animation_library[move.name.toLowerCase()].miss?.scale;
+        let repeats = move_animation_library[move.name.toLowerCase()].miss?.repeats ? move_animation_library[move.name.toLowerCase()].miss?.repeats : [1, 0, 0];
+        let anchor_x = move_animation_library[move.name.toLowerCase()].miss?.anchor_x;
+        let anchor_y = move_animation_library[move.name.toLowerCase()].miss?.anchor_y;
+        let origin_location = moveUserToken;
+        let target_location = moveTargetToken;
+
+        new Sequence("PTU")
+            .effect()
+                .file( move_animation_library[move.name.toLowerCase()]["miss"]["path"] )
+                .atLocation(origin_location)
+                // .anchor(anchor_x, anchor_y)
+                .scale(scale)
+                .tint(move_type_color_filters[move.type.toLowerCase()])
+                .stretchTo(target_location)
+                .missed(true)
+                .repeats(...repeats)
+            .play();
     }
     else if(move_animation_library[move.name.toLowerCase()]?.hit)
     {
-        new Sequence().effect().file( move_animation_library[move.name.toLowerCase()]["hit"]["path"] ).atLocation(moveUserToken).stretchTo(moveTargetToken).missed(true).play();
+        let scale = move_animation_library[move.name.toLowerCase()].hit?.scale;
+        let repeats = move_animation_library[move.name.toLowerCase()].hit?.repeats ? move_animation_library[move.name.toLowerCase()].hit?.repeats : [1, 0, 0];
+        let anchor_x = move_animation_library[move.name.toLowerCase()].hit?.anchor_x;
+        let anchor_y = move_animation_library[move.name.toLowerCase()].hit?.anchor_y;
+        let origin_location = moveUserToken;
+        let target_location = moveTargetToken;
+
+        new Sequence("PTU")
+            .effect()
+                .file( move_animation_library[move.name.toLowerCase()]["hit"]["path"] )
+                .atLocation(origin_location)
+                // .anchor(anchor_x, anchor_y)
+                .scale(scale)
+                .tint(move_type_color_filters[move.type.toLowerCase()])
+                .stretchTo(target_location)
+                .missed(true)
+                .repeats(...repeats)
+            .play();
     }
 }
 
@@ -49,19 +313,22 @@ export async function PlayMoveAnimations(move, moveUserToken, attacksData)
         return false; // Either Sequencer module is not installed, or config settings have disabled move animations, so stop here.
     }
 
+    await PlayMoveTypeAura(move, moveUserToken); // Play general type-based 'I am using a move' effect around user.
     await PlayMoveSelfAnimation(move, moveUserToken); // Play any effects that swirl around the *user* of the move.
 
-    for(let target_token_id in attacksData) // Then play the 'projectile' effects between the user and each target.
+    if( (move.range.toLowerCase().includes("self") == false) && (move.range.toLowerCase().includes("blessing") == false) && (move.range.toLowerCase().includes("field") == false))
     {
-        if(attacksData[target_token_id].isHit)
+        for(let target_token_id in attacksData) // Then play the 'projectile' effects between the user and each target.
         {
-            await PlayMoveHitAnimation(move, moveUserToken, canvas.tokens.get(target_token_id));
+            if(attacksData[target_token_id].isHit)
+            {
+                await PlayMoveSuccessfulAttackAnimation(move, moveUserToken, canvas.tokens.get(target_token_id));
+            }
+            else
+            {
+                await PlayMoveMissedAttackAnimation(move, moveUserToken, canvas.tokens.get(target_token_id));
+            }
         }
-        else
-        {
-            await PlayMoveMissAnimation(move, moveUserToken, canvas.tokens.get(target_token_id));
-        }
-        
     }
 
     return true;

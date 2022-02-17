@@ -561,7 +561,7 @@ export class PTUActor extends Actor {
 
         // If auto combat is turned on automatically apply damage based on result
         // TODO: Apply Attack (+ effects) 
-      }, 1000);
+      }, 1100);
     }
     else
     {
@@ -623,9 +623,9 @@ export class PTUActor extends Actor {
       }
     }
 
-
     for (const attackInfo of Object.values(attacksData)) {
       attackInfo.isHit = alwaysHits ? true : (critType == CritOptions.CRIT_MISS) ? false : acRoll.total >= attackInfo.target.evasion.value;
+      attackInfo.isCrit = critType;
     }
 
     //TODO: Play Sound & Show Visual Move Effects like hit/dodge etc.
