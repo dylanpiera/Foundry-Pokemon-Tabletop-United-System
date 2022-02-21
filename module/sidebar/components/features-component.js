@@ -75,34 +75,8 @@ export default class FeaturesList extends Component {
     }
 
     PrepareFeatureData(featureData, actorData, targetIds) {
-        // Old Prepare Feature Data 
-        featureData.owner = {
-            type: actorData.typing,
-            stats: actorData.stats,
-            acBonus: actorData.modifiers.acBonus.total,
-            critRange: actorData.modifiers.critRange.total,
-            damageBonus: actorData.modifiers.damageBonus
-        };
-        featureData.prepared = true;
-
-        featureData.stab = featureData.owner?.type && (featureData.owner.type[0] == featureData.type || featureData.owner.type[1] == featureData.type);
-        featureData.acBonus = featureData.owner.acBonus ? featureData.owner.acBonus : 0;
-
-        // End of Old Prepare Feature Data
-
         featureData.rangeIconsHtml = this._getRangeIcons(featureData.range);
         featureData.effectiveness = 1;
-
-        if (targetIds.length == 0) {
-            featureData.effectiveness = -1;
-            return featureData;
-        }
-        if (targetIds.length == 1) {
-            featureData.effectiveness = this.store.getTarget(targetIds[0]).data.data.effectiveness.All[featureData.type];
-        }
-        if (targetIds.length > 1) { // TODO: Maybe add a way to display multiple effectiveness borders?
-            featureData.effectiveness = -1;
-        }
 
         return featureData;
     }

@@ -437,8 +437,8 @@ export const EffectFns = new Map([
         roll._total = roll.total;
         let messageData = {};
 
-        //TODO: Add Sun/Hail check
-        const DC = actor.data.data.typing.includes("Fire") ? CONFIG.PTUCombat.DC.FROZEN + CONFIG.PTUCombat.DC.FROZEN_FIRE_MOD : CONFIG.PTUCombat.DC.FROZEN;
+        const DC = actor.data.data.typing.includes("Fire") ? CONFIG.PTUCombat.DC.FROZEN + CONFIG.PTUCombat.DC.FROZEN_FIRE_MOD : CONFIG.PTUCombat.DC.FROZEN + 
+        game.settings.get("ptu", "currentWeather") == "Sunny" ? -4 : game.settings.get("ptu", "currentWeather") == "Hail" ? 2 : 0;
         
         if(roll.total >= DC) {
             messageData = {

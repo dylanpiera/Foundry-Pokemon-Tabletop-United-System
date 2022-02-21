@@ -546,27 +546,9 @@ export class PTUActor extends Actor {
 
 		messageData.content = await renderTemplate('/systems/ptu/templates/chat/moves/full-attack.hbs', messageData);
 
-    if((game.settings.get("ptu", "dramaticTiming") == true))
-    {
-      setTimeout( async () => {
-        const msg = await ChatMessage.create(messageData, {});
-    
-        if(messageData.targetAmount >= 1 && attack.crit != CritOptions.CRIT_MISS) {
-          const applicatorMessageData = duplicate(messageData);
-          applicatorMessageData.damageRolls = messageData.damageRolls;
-          applicatorMessageData.content = await renderTemplate('/systems/ptu/templates/chat/moves/damage-application.hbs', applicatorMessageData);
-          
-          const applicatorMsg = await ChatMessage.create(applicatorMessageData, {});
-        }
-
-        // If auto combat is turned on automatically apply damage based on result
-        // TODO: Apply Attack (+ effects) 
-      }, 1100);
-    }
-    else
-    {
+    setTimeout( async () => {
       const msg = await ChatMessage.create(messageData, {});
-    
+  
       if(messageData.targetAmount >= 1 && attack.crit != CritOptions.CRIT_MISS) {
         const applicatorMessageData = duplicate(messageData);
         applicatorMessageData.damageRolls = messageData.damageRolls;
@@ -574,12 +556,10 @@ export class PTUActor extends Actor {
         
         const applicatorMsg = await ChatMessage.create(applicatorMessageData, {});
       }
-  
+
       // If auto combat is turned on automatically apply damage based on result
       // TODO: Apply Attack (+ effects) 
-    }
-		
-
+    }, game.settings.get("ptu", "dramaticTiming") == true ? 1100 : 0);
   }
 
   async _performFullAttack(moveData, token, { bonusDamage, targets }) {
