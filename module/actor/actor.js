@@ -118,10 +118,7 @@ export class PTUActor extends Actor {
           }
           c.priority = c.priority ?? c.mode * 10;
           
-          const n = parseFloat(c.value)
-          if ( String(n) === c.value ) {
-            c.value = n;
-          }
+          c.value = c.value+"";
 
           return c;
         }).filter(x => x!=undefined)
