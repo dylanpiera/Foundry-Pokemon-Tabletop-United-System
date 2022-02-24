@@ -124,10 +124,7 @@ export class PTUActor extends Actor {
           }
           c.priority = c.priority ?? c.mode * 10;
 
-          const n = parseFloat(c.value)
-          if (String(n) === c.value) {
-            c.value = n;
-          }
+          c.value = c.value+"";
 
           return c;
         }).filter(x => x != undefined)
@@ -424,7 +421,7 @@ export class PTUActor extends Actor {
 
     data.evasion = CalculateEvasions(data, actorData.flags?.ptu, actorData.items);
 
-    data.capabilities = CalculatePokemonCapabilities(speciesData, actorData.items.values(), data.stats.spd.stage, data.modifiers.capabilities?.total, actorData.flags?.ptu);
+    data.capabilities = CalculatePokemonCapabilities(speciesData, actorData.items.values(), data.stats.spd.stage, Number(data.modifiers.capabilities?.total), actorData.flags?.ptu);
 
     if (speciesData) data.egggroup = speciesData["Breeding Information"]["Egg Group"].join(" & ");
 
