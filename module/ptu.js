@@ -56,7 +56,7 @@ export let log = (...args) => console.log("FVTT PTU | ", ...args);
 export let warn = (...args) => console.warn("FVTT PTU | ", ...args);
 export let error = (...args) => console.error("FVTT PTU | ", ...args)
 
-export const LATEST_VERSION = "1.5-Beta-15.2";
+export const LATEST_VERSION = "1.5-Beta-15.3";
 
 /* -------------------------------------------- */
 /*  Foundry VTT Initialization                  */
@@ -64,6 +64,15 @@ export const LATEST_VERSION = "1.5-Beta-15.2";
 
 Hooks.once('init', function() {
   console.groupCollapsed("PTU Init");
+
+  /** Overwrite javascript core mechanics because Foundry v9 is dumb */
+  Number.fromString = (str) => {
+    if((typeof str === "number")) return str;
+    if ( (typeof str !== "string") || !str.length ) return NaN
+    // Remove whitespace.
+    str = str.replace(/\s+/g, "");
+    return Number(str);
+  }
 
   // Create a namespace within the game global
   game.ptu = {
