@@ -415,7 +415,7 @@ export class PTUActor extends Actor {
 
     data.evasion = CalculateEvasions(data, actorData.flags?.ptu, actorData.items);
 
-    data.capabilities = CalculatePokemonCapabilities(speciesData, actorData.items.values(), data.stats.spd.stage, data.modifiers.capabilities?.total, actorData.flags?.ptu);
+    data.capabilities = CalculatePokemonCapabilities(speciesData, actorData.items.values(), data.stats.spd.stage, Number(data.modifiers.capabilities?.total), actorData.flags?.ptu);
 
     if(speciesData) data.egggroup = speciesData["Breeding Information"]["Egg Group"].join(" & ");
 
