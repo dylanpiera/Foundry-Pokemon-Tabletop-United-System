@@ -72,7 +72,7 @@ export async function ApplyFlatDamage(targets, sourceName, damage) {
 async function executeApplyDamageToTargets(targets, data, damage, { isFlat, isResist, isWeak, damageReduction, msgId } = { isFlat: false, isResist: false, isWeak: false }) {
     if (isNaN(damageReduction)) damageReduction = 0;
 
-    return await game.ptu.api.applyDamage(targets, damage, data.type, data.category, {isFlat, isResist, isWeak, damageReduction, msgId});
+    return await game.ptu.api.applyDamage(targets, damage, data.type, data.category, { isFlat, isResist, isWeak, damageReduction, msgId });
     // let appliedDamage = {};
     // for (let target of targets) {
     //     // if (target.actor.data.permission[game.userId] < 3) continue;
@@ -266,7 +266,7 @@ export async function handleApplicatorItem(event) {
     const tooltipContent = (content) => `<span class="tooltip-content">${content}</span>`;
     const messageHtml = $(parent).closest(".chat-message.message");
     const messageId = messageHtml[0].dataset.messageId;
-    
+
     if (currentTarget.className.includes("icon")) {
         return;
     }
@@ -349,7 +349,7 @@ async function updateApplicatorHtml(root, targetIds, mode, updateChatMessage = f
         const monList = $(root).find(`[data-target="${target}"]`)
         if (undo) {
             monList.removeClass("disabled");
-            monList.children(".applicators").html(applicatorHTML.normal + "\n" + applicatorHTML.half + "\n" + applicatorHTML.weak + "\n" + applicatorHTML.resist+ "\n" + applicatorHTML.flat);
+            monList.children(".applicators").html(applicatorHTML.normal + "\n" + applicatorHTML.half + "\n" + applicatorHTML.weak + "\n" + applicatorHTML.resist + "\n" + applicatorHTML.flat);
         }
         else {
             monList.addClass("disabled");
@@ -381,6 +381,74 @@ async function updateApplicatorHtml(root, targetIds, mode, updateChatMessage = f
         await game.ptu.api.chatMessageUpdate(message, { content: newContent })
     }
 }
+
+export const ActionTypes = {
+    STANDARD: "Standard",
+    FULL: "Full",
+    SHIFT: "Shift",
+    SWIFT: "Swift",
+    DEFAULT: "N/A"
+}
+
+export const ActionSubTypes = {
+    PHYSICAL: "Physical",
+    SPECIAL: "Special",
+    STATUS: "Status",
+    DEFAULT: "N/A"
+}
+
+export async function TakeAction(actor, { actionType, actionSubType, label }) {
+    const changesToApply = [];
+    const actions = actor.data.flags?.ptu?.actions_taken ?? {};
+    const supportAction = actions?.support ?? false;
+
+    // This handles the homebrew option for extra standard actions that can't be used for directly damaging moves
+    if (game.settings.get("ptu", "useExtraActionHomebrew") && (!supportAction) && (actionSubType != ActionSubTypes.PHYSICAL && actionSubType != ActionSubTypes.SPECIAL)) {
+        addChanges(changesToApply, { actionType, actionSubType, isSupport: true })
+    }
+    // Non-homebrew and/or damaging move and/or second nondamaging branch
+    else {
+        addChanges(changesToApply, { actionType, actionSubType })
+    }
+
+    if (changesToApply.length > 0) {
+        const actionEffect = new ActiveEffect({
+            duration: { rounds: 1, turns: 0 },
+            label,
+            changes: changesToApply
+        }, actor);
+        await actor.createEmbeddedDocuments("ActiveEffect", [actionEffect.data]);
+    }
+
+    function addChanges(changesToApply, { actionType, actionSubType, isSupport }) {
+        if (isSupport) {
+            changesToApply.push(
+                { key: "flags.ptu.actions_taken.support", value: true, mode: CONST.ACTIVE_EFFECT_MODES.OVERRIDE, priority: 50 }
+            );
+        }
+        if (actionType && actionType != ActionTypes.DEFAULT) {
+            if (actionType == ActionTypes.FULL) {
+                changesToApply.push(
+                    { key: `flags.ptu.actions_taken.shift`, value: true, mode: CONST.ACTIVE_EFFECT_MODES.OVERRIDE, priority: 50 }
+                );
+                changesToApply.push(
+                    { key: `flags.ptu.actions_taken.standard`, value: true, mode: CONST.ACTIVE_EFFECT_MODES.OVERRIDE, priority: 50 }
+                );
+            }
+            else {
+                changesToApply.push(
+                    { key: `flags.ptu.actions_taken.${actionType.toLowerCase()}`, value: true, mode: CONST.ACTIVE_EFFECT_MODES.OVERRIDE, priority: 50 }
+                );
+            }
+        }
+        if (actionSubType && actionSubType != ActionSubTypes.DEFAULT) {
+            changesToApply.push(
+                { key: `flags.ptu.actions_taken.attacked.${actionSubType.toLowerCase()}`, value: true, mode: CONST.ACTIVE_EFFECT_MODES.OVERRIDE, priority: 50 }
+            );
+        }
+        return changesToApply;
+    }
+};
 
 export const FiveStrikeHitsDictionary = {
     1: 1,

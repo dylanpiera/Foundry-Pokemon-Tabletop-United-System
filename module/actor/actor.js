@@ -8,7 +8,7 @@ import { CritOptions } from "./character-sheet-gen8.js";
 import { warn, debug, log } from '../ptu.js'
 import { PlayMoveAnimations } from "../combat/effects/move_animations.js";
 import { PlayMoveSounds } from "../combat/effects/move_sounds.js";
-import { FiveStrikeHitsDictionary } from "../combat/damage-calc-tools.js";
+import { ActionTypes, FiveStrikeHitsDictionary } from "../combat/damage-calc-tools.js";
 
 /**
  * Extend the base Actor entity by defining a custom roll data structure which is ideal for the Simple system.
@@ -126,7 +126,7 @@ export class PTUActor extends Actor {
           c.priority = c.priority ?? c.mode * 10;
 
           const n = parseFloat(c.value)
-          if ( String(n) === c.value ) {
+          if (String(n) === c.value) {
             c.value = n;
           }
 
@@ -489,6 +489,7 @@ export class PTUActor extends Actor {
 
     const token = canvas.tokens.controlled[0] ?? this.getActiveTokens()[0]
     const moveData = move.data.data;
+    options.moveName = move.name;
     const attack = await this._performFullAttack(moveData, token, options)
     debug(attack);
 
@@ -528,32 +529,33 @@ export class PTUActor extends Actor {
     }
 
     // Apply move effect parser
-    //TODO: Implement Move Effect Parser
+    //TODO: Implement Move Effect Parser direclty into PTU.
+    Hooks.call("ptu.moveUsed", this);
 
     // After effects have been parsed, display chat message with all info.
     const messageData = mergeObject({
-			title: `${this.name}'s<br>${move.name}`,
-			user: game.user.id,
-			sound: CONFIG.sounds.dice,
-			templateType: 'move',
-			description: `${this.name}'s<br>${move.name}`,
+      title: `${this.name}'s<br>${move.name}`,
+      user: game.user.id,
+      sound: CONFIG.sounds.dice,
+      templateType: 'move',
+      description: `${this.name}'s<br>${move.name}`,
       hasAC: !(moveData.ac == "" || moveData.ac == "--"),
       move: moveData,
       moveName: move.name,
       targetAmount: Object.keys(attack.data).length,
       actorImage: this.data.img,
-		}, attack);
+    }, attack);
 
-		messageData.content = await renderTemplate('/systems/ptu/templates/chat/moves/full-attack.hbs', messageData);
+    messageData.content = await renderTemplate('/systems/ptu/templates/chat/moves/full-attack.hbs', messageData);
 
-    setTimeout( async () => {
+    setTimeout(async () => {
       const msg = await ChatMessage.create(messageData, {});
-  
-      if(messageData.targetAmount >= 1 && attack.crit != CritOptions.CRIT_MISS) {
+
+      if (messageData.targetAmount >= 1 && attack.crit != CritOptions.CRIT_MISS) {
         const applicatorMessageData = duplicate(messageData);
         applicatorMessageData.damageRolls = messageData.damageRolls;
         applicatorMessageData.content = await renderTemplate('/systems/ptu/templates/chat/moves/damage-application.hbs', applicatorMessageData);
-        
+
         const applicatorMsg = await ChatMessage.create(applicatorMessageData, {});
       }
 
@@ -562,15 +564,15 @@ export class PTUActor extends Actor {
     }, game.settings.get("ptu", "dramaticTiming") == true ? 1100 : 0);
   }
 
-  async _performFullAttack(moveData, token, { bonusDamage, targets }) {
+  async _performFullAttack(moveData, token, { bonusDamage, targets, moveName }) {
     if (!moveData) return;
 
-    
+
     // Calculate range to targets & evasions
     const attacksData = calculateTargetDifferences(this, moveData, targets)
-    
+
     // Calculate multi hit moves
-    moveData.fiveStrike =  {
+    moveData.fiveStrike = {
       is: moveData.range?.toLowerCase().includes("five strike") ?? false,
       amount: calculateFiveStrike(),
     }
@@ -591,33 +593,32 @@ export class PTUActor extends Actor {
 
     const damageBonuses = calculateTotalDamageBonus(moveData, bonusDamage, currentWeather, abilityBonuses, this)
 
-    // TODO:  Five Strike & Double Strike
     // Do AC Roll
     const acRoll = await game.ptu.combat.CalculateAcRoll(moveData, this.data).evaluate({ async: true });
-    if(moveData.doubleStrike.is === true) {
+    if (moveData.doubleStrike.is === true) {
       const acRoll2 = await game.ptu.combat.CalculateAcRoll(moveData, this.data).evaluate({ async: true });
-      moveData.doubleStrike.hit1 = {roll: acRoll};
-      moveData.doubleStrike.hit2 = {roll: acRoll2};
+      moveData.doubleStrike.hit1 = { roll: acRoll };
+      moveData.doubleStrike.hit2 = { roll: acRoll2 };
     }
 
     // Calculate the Crit Type
     let critType;
-    if(moveData.doubleStrike.is === true) {
+    if (moveData.doubleStrike.is === true) {
       moveData.doubleStrike.hit1.crit = calculateCrit(moveData.doubleStrike.hit1.roll, this);
       moveData.doubleStrike.hit2.crit = calculateCrit(moveData.doubleStrike.hit2.roll, this);
-      critType = (moveData.doubleStrike.hit1.crit == CritOptions.CRIT_HIT) && (moveData.doubleStrike.hit2.crit == CritOptions.CRIT_HIT) ? CritOptions.DOUBLE_CRIT_HIT : 
-      (moveData.doubleStrike.hit1.crit == CritOptions.CRIT_HIT) || (moveData.doubleStrike.hit2.crit == CritOptions.CRIT_HIT) ? CritOptions.CRIT_HIT :
-      (moveData.doubleStrike.hit1.crit == CritOptions.CRIT_MISS) && (moveData.doubleStrike.hit2.crit == CritOptions.CRIT_MISS) ? CritOptions.CRIT_MISS : CritOptions.NORMAL;
+      critType = (moveData.doubleStrike.hit1.crit == CritOptions.CRIT_HIT) && (moveData.doubleStrike.hit2.crit == CritOptions.CRIT_HIT) ? CritOptions.DOUBLE_CRIT_HIT :
+        (moveData.doubleStrike.hit1.crit == CritOptions.CRIT_HIT) || (moveData.doubleStrike.hit2.crit == CritOptions.CRIT_HIT) ? CritOptions.CRIT_HIT :
+          (moveData.doubleStrike.hit1.crit == CritOptions.CRIT_MISS) && (moveData.doubleStrike.hit2.crit == CritOptions.CRIT_MISS) ? CritOptions.CRIT_MISS : CritOptions.NORMAL;
     }
     else {
       critType = calculateCrit(acRoll, this);
     }
-     
+
     const alwaysHits = critType == CritOptions.CRIT_HIT || critType == CritOptions.DOUBLE_CRIT_HIT || moveData.ac == "" || moveData.ac == "--";
-    if(critType == CritOptions.CRIT_MISS && alwaysHits) critType = CritOptions.NORMAL;
-    
+    if (critType == CritOptions.CRIT_MISS && alwaysHits) critType = CritOptions.NORMAL;
+
     for (const attackInfo of Object.values(attacksData)) {
-      if(moveData.doubleStrike.is === true) {
+      if (moveData.doubleStrike.is === true) {
         moveData.doubleStrike.hit1.hit = (moveData.doubleStrike.hit1.roll.total >= attackInfo.target.evasion.value)
         moveData.doubleStrike.hit2.hit = (moveData.doubleStrike.hit2.roll.total >= attackInfo.target.evasion.value)
         attackInfo.isHit = alwaysHits ? true : (critType == CritOptions.CRIT_MISS) ? false : moveData.doubleStrike.hit1.hit || moveData.doubleStrike.hit2.hit;
@@ -634,20 +635,27 @@ export class PTUActor extends Actor {
       crit: undefined
     }
     if (moveData.category.toLowerCase() != "status" && critType != CritOptions.CRIT_MISS) {
-      if(moveData.damageBase != "--" && moveData.damageBase) {
-          damageRolls.normal = await this._calculateDamageRoll(moveData, CritOptions.NORMAL, damageBonuses.total, abilityBonuses, this.data.data, targets[0]?.actor?.data.data).evaluate({ async: true });
-          damageRolls.crit = await this._calculateDamageRoll(moveData, CritOptions.CRIT_HIT, damageBonuses.total, abilityBonuses, this.data.data, targets[0]?.actor?.data.data).evaluate({ async: true });
+      if (moveData.damageBase != "--" && moveData.damageBase) {
+        damageRolls.normal = await this._calculateDamageRoll(moveData, CritOptions.NORMAL, damageBonuses.total, abilityBonuses, this.data.data, targets[0]?.actor?.data.data).evaluate({ async: true });
+        damageRolls.crit = await this._calculateDamageRoll(moveData, CritOptions.CRIT_HIT, damageBonuses.total, abilityBonuses, this.data.data, targets[0]?.actor?.data.data).evaluate({ async: true });
       }
     }
 
 
     //TODO: Play Sound & Show Visual Move Effects like hit/dodge etc.
-    //executeSFX(this, moveData)
     await PlayMoveAnimations(moveData, token, attacksData);
     await PlayMoveSounds(moveData, attacksData);
 
-    // TODO: Implement TakeAction to keep track of moves used.
-    //await game.ptu.combat.TakeAction(this, moveData);
+    await game.ptu.combat.TakeAction(this, {
+      actionType: match(moveData.range?.toLowerCase(), [
+        { test: (v) => v.includes("swift"), result: (v) => ActionTypes.SWIFT },
+        { test: (v) => v.includes("shift"), result: (v) => ActionTypes.SHIFT },
+        { test: (v) => v.includes("full action"), result: (v) => ActionTypes.FULL },
+        { test: (v) => true, result: (v) => ActionTypes.STANDARD },
+      ]),
+      actionSubType: moveData.category,
+      label: `R${game.combat?.current?.round ?? 0} - T${game.combat?.current?.turn ?? 0}: ${moveName}`
+    });
 
     return {
       acRoll,
@@ -808,7 +816,7 @@ export class PTUActor extends Actor {
       return diceResult === 1 ? CritOptions.CRIT_MISS : diceResult >= 20 - actor.data.data.modifiers.critRange?.total ? CritOptions.CRIT_HIT : CritOptions.NORMAL;
     }
 
-    function calculateFiveStrike() { 
+    function calculateFiveStrike() {
       return FiveStrikeHitsDictionary[Math.floor(Math.random() * (8 - 1 + 1)) + 1]
     }
   }
@@ -829,16 +837,16 @@ export class PTUActor extends Actor {
     let hitCount = 1;
     let isStab = false;
 
-    if(moveData.doubleStrike.is === true) {
-      if(critType == CritOptions.CRIT_HIT) {
+    if (moveData.doubleStrike.is === true) {
+      if (critType == CritOptions.CRIT_HIT) {
         critType = (moveData.doubleStrike.hit1.crit == CritOptions.CRIT_HIT) && (moveData.doubleStrike.hit2.crit == CritOptions.CRIT_HIT) ? CritOptions.DOUBLE_CRIT_HIT : CritOptions.CRIT_HIT;
       }
       hitCount = 0;
-      if(moveData.doubleStrike.hit1.hit === true) hitCount++;
-      if(moveData.doubleStrike.hit2.hit === true) hitCount++;
+      if (moveData.doubleStrike.hit1.hit === true) hitCount++;
+      if (moveData.doubleStrike.hit2.hit === true) hitCount++;
     }
 
-    if(moveData.fiveStrike.is === true) {
+    if (moveData.fiveStrike.is === true) {
       hitCount = moveData.fiveStrike.amount;
     }
 
@@ -856,25 +864,25 @@ export class PTUActor extends Actor {
 
     // Stored Power
     if (moveData.name.toLowerCase().includes("stored power")) {
-      const dbBonusFromStages = Math.min(20-db, (
+      const dbBonusFromStages = Math.min(20 - db, (
         (actorData.stats.atk.stage < 0 ? 0 : actorData.stats.atk.stage) +
         (actorData.stats.spatk.stage < 0 ? 0 : actorData.stats.spatk.stage) +
         (actorData.stats.def.stage < 0 ? 0 : actorData.stats.def.stage) +
         (actorData.stats.spdef.stage < 0 ? 0 : actorData.stats.spdef.stage) +
         (actorData.stats.spd.stage < 0 ? 0 : actorData.stats.spd.stage)) * 2);
 
-        dbBonus += dbBonusFromStages;
+      dbBonus += dbBonusFromStages;
     }
-    // TODO: Not yet implemented - Punishment
+    // Punishment
     if (moveData.name.toLowerCase().includes("punishment")) {
-      const dbBonusFromStages = Math.min(12-db,
+      const dbBonusFromStages = Math.min(12 - db,
         (targetData?.stats?.atk.stage < 0 ? 0 : targetData?.stats?.atk.stage) +
         (targetData?.stats?.spatk.stage < 0 ? 0 : targetData?.stats?.spatk.stage) +
         (targetData?.stats?.def.stage < 0 ? 0 : targetData?.stats?.def.stage) +
         (targetData?.stats?.spdef.stage < 0 ? 0 : targetData?.stats?.spdef.stage) +
         (targetData?.stats?.spd.stage < 0 ? 0 : targetData?.stats?.spd.stage));
 
-        dbBonus += dbBonusFromStages;
+      dbBonus += dbBonusFromStages;
     }
 
     // Normal Move
@@ -884,7 +892,7 @@ export class PTUActor extends Actor {
       roll: game.ptu.DbData[(db * hitCount) + dbBonus],
       baseRoll: game.ptu.DbData[db + dbBonus],
       bonus: damageBonus,
-      db: (db*hitCount + dbBonus),
+      db: (db * hitCount + dbBonus),
       isStab,
       hitCount
     })

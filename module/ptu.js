@@ -25,7 +25,7 @@ import { RollWithDb } from './utils/roll-calculator.js'
 import { InitCustomSpecies, UpdateCustomSpecies } from './custom-species.js'
 import { InitCustomTypings, UpdateCustomTypings } from './custom-typings.js'
 import { ChangeLog } from './forms/changelog-form.js'
-import { applyDamageToTargets, undoDamageToTargets, newApplyDamageToTargets, handleApplicatorItem } from './combat/damage-calc-tools.js'
+import { applyDamageToTargets, undoDamageToTargets, newApplyDamageToTargets, handleApplicatorItem, TakeAction } from './combat/damage-calc-tools.js'
 import CustomSpeciesFolder from './entities/custom-species-folder.js'
 import { CreateMonParser, GetSpeciesArt } from './utils/species-command-parser.js'
 import { FinishDexDragPokemonCreation } from './utils/species-command-parser.js'
@@ -123,6 +123,7 @@ Hooks.once('init', function () {
       CalculateAcRoll,
       newApplyDamageToTargets,
       handleApplicatorItem,
+      TakeAction,
     },
     combats: new Map(),
     cache: {
