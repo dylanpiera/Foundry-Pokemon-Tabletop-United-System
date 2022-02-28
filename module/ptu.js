@@ -66,6 +66,15 @@ export const LATEST_VERSION = "1.5-Beta-15";
 Hooks.once('init', function () {
   console.groupCollapsed("PTU Init");
 
+  /** TODO: Overwrite this until Foundry Update is out */
+  Number.fromString = (str) => {
+    if((typeof str === "number")) return str;
+    if ( (typeof str !== "string") || !str.length ) return NaN
+    // Remove whitespace.
+    str = str.replace(/\s+/g, "");
+    return Number(str);
+  }
+
   // Create a namespace within the game global
   game.ptu = {
     rollItemMacro,

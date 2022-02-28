@@ -61,6 +61,15 @@
                                 {{else}}{{term.total}}{{/if}}
                             {{/each}}
                         </div>
+                        {{#if acRoll2}}
+                            <div class="dice-formula" style="padding: 0px 0px; margin: 0px; font-size: 10px ! important;">  
+                                {{#each acRoll2.terms as | term |}}
+                                    {{#if term.faces}}
+                                        {{#each term.results as |result|}}<span class="roll die d{{term.faces}} {{minMaxDiceCheck result.result term.faces}}" style="padding: 0px; margin: 0px; font-size: 8px ! important;">{{result.result}}</span>{{#if @last}}{{else}}+{{/if}}{{/each}}
+                                    {{else}}{{term.total}}{{/if}}
+                                {{/each}}
+                            </div>
+                        {{/if}}
                         {{#if (biggerOrEqual targetAmount 1)}}
                             {{#each data as | value key |}}
                                 <span class="dice-total">
@@ -72,6 +81,16 @@
                                         <h6 style=" padding-top:0px !important; padding-bottom:0px !important; ">{{value.target.name}}'s<br>{{value.target.evasion.type}} Evasion</h6>
                                         <img src="{{value.target.image}}" style="max-height: 70px; border:none;">
                                     </span>
+                                    {{#if ../acRoll2}}
+                                        <h3 class="num-total">{{../acRoll2.total}}</h3>
+                                        <h5>vs.</h5>
+                                        <h3>{{value.target.evasion.value}}</h3>
+                                        <span class="img-row">
+                                            <img src="{{../actorImage}}" style="max-height: 70px; border:none;">
+                                            <h6 style=" padding-top:0px !important; padding-bottom:0px !important; ">{{value.target.name}}'s<br>{{value.target.evasion.type}} Evasion</h6>
+                                            <img src="{{value.target.image}}" style="max-height: 70px; border:none;">
+                                        </span>
+                                    {{/if}}
                                     {{#if ../crit}}
                                         {{#if (not ../crit "normal")}}
                                             <div class="swsh-header" style="padding: 0px ! important;background-color: #b3b3b3;">
@@ -84,13 +103,30 @@
                                                         </div>
                                                     </div>
                                                 {{else}}
-                                                    <div class="d-flex w-100 mt-0 mb-0" style="padding: 0px ! important;">
-                                                        <div class="col" style="padding: 0px ! important;  border: 1px solid #999; box-shadow: 0 0 2px #FFF inset; border-radius: 3px;">
-                                                            <span class="type-img">
-                                                                <img src="/systems/ptu/images/icons/CriticalMiss.png" style="width: 248px; height: auto; padding: 0px ! important;">
-                                                            </span>
+                                                    {{#if (is ../crit "double-hit")}}
+                                                        <div class="d-flex w-100 mt-0 mb-0" style="padding: 0px ! important;">
+                                                            <div class="col" style="padding: 0px ! important;  border: 1px solid #999; box-shadow: 0 0 2px #FFF inset; border-radius: 3px;">
+                                                                <span class="type-img">
+                                                                    <img src="/systems/ptu/images/icons/CriticalHit.png" style="width: 248px; height: auto; padding: 0px ! important;">
+                                                                </span>
+                                                            </div>
                                                         </div>
-                                                    </div>
+                                                        <div class="d-flex w-100 mt-0 mb-0" style="padding: 0px ! important;">
+                                                            <div class="col" style="padding: 0px ! important;  border: 1px solid #999; box-shadow: 0 0 2px #FFF inset; border-radius: 3px;">
+                                                                <span class="type-img">
+                                                                    <img src="/systems/ptu/images/icons/CriticalHit.png" style="width: 248px; height: auto; padding: 0px ! important;">
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                    {{else}}
+                                                        <div class="d-flex w-100 mt-0 mb-0" style="padding: 0px ! important;">
+                                                            <div class="col" style="padding: 0px ! important;  border: 1px solid #999; box-shadow: 0 0 2px #FFF inset; border-radius: 3px;">
+                                                                <span class="type-img">
+                                                                    <img src="/systems/ptu/images/icons/CriticalMiss.png" style="width: 248px; height: auto; padding: 0px ! important;">
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                    {{/if}}
                                                 {{/if}}
                                             </div>
                                         {{else}}
@@ -132,6 +168,12 @@
                                 <h3 class="num-total">{{acRoll.total}}</h3>
                                 <h6>vs. {{move.category}} Evasion</h6>
                             </span>
+                            {{#if acRoll2}}
+                                <span class="dice-total" style="display: inline-flex;justify-content: space-evenly; align-items: center;width:100%;font-family:Modesto Condensed;font-size:38px; color: rgb(0, 0, 0);">
+                                    <h3 class="num-total">{{acRoll2.total}}</h3>
+                                    <h6>vs. {{move.category}} Evasion</h6>
+                                </span>
+                            {{/if}}
                         {{/if}}
                     </div>
                 </div>

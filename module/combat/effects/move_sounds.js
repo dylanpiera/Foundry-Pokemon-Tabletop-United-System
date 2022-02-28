@@ -55,8 +55,8 @@ export async function PlayHitAndMissSounds(attacksData, moveCategory)
 
 	for(let target_token_id in attacksData) // Play *only* one of each applicable sound, to avoid blowing out someone's speakers 
 	{										// if they hit 10 targets at once or something. Future ideas include playing all sounds but randomly staggered.
-		console.log("attacksData[target_token_id]");
-		console.log(attacksData[target_token_id]);
+		// console.log("attacksData[target_token_id]");
+		// console.log(attacksData[target_token_id]);
 		if(attacksData[target_token_id].isHit && (attacksData[target_token_id].isCrit == 'hit'))
 		{
 			crit_count++;

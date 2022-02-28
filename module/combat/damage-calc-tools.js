@@ -381,3 +381,14 @@ async function updateApplicatorHtml(root, targetIds, mode, updateChatMessage = f
         await game.ptu.api.chatMessageUpdate(message, { content: newContent })
     }
 }
+
+export const FiveStrikeHitsDictionary = {
+    1: 1,
+    2: 2,
+    3: 2,
+    4: 3,
+    5: 3,
+    6: 3,
+    7: 4,
+    8: 5
+}
