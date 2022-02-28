@@ -635,8 +635,8 @@ export class PTUActor extends Actor {
     }
     if (moveData.category.toLowerCase() != "status" && critType != CritOptions.CRIT_MISS) {
       if(moveData.damageBase != "--" && moveData.damageBase) {
-          damageRolls.normal = await this._calculateDamageRoll(moveData, CritOptions.NORMAL, damageBonuses.total, abilityBonuses).evaluate({ async: true });
-          damageRolls.crit = await this._calculateDamageRoll(moveData, CritOptions.CRIT_HIT, damageBonuses.total, abilityBonuses).evaluate({ async: true });
+          damageRolls.normal = await this._calculateDamageRoll(moveData, CritOptions.NORMAL, damageBonuses.total, abilityBonuses, this.data.data, targets[0]?.actor?.data.data).evaluate({ async: true });
+          damageRolls.crit = await this._calculateDamageRoll(moveData, CritOptions.CRIT_HIT, damageBonuses.total, abilityBonuses, this.data.data, targets[0]?.actor?.data.data).evaluate({ async: true });
       }
     }
 
@@ -813,7 +813,7 @@ export class PTUActor extends Actor {
     }
   }
 
-  _calculateDamageRoll(moveData, critType, damageBonus, abilityBonuses) {
+  _calculateDamageRoll(moveData, critType, damageBonus, abilityBonuses, actorData, targetData) {
     if (moveData.category.toLowerCase() == "status") return;
 
     const db = Number(moveData.damageBase);
@@ -854,13 +854,27 @@ export class PTUActor extends Actor {
       isStab = true;
     }
 
-    // TODO: Not yet implemented - Stored Power
-    if (moveData.name.toLowerCase().includes("Stored Power")) {
-      return;
+    // Stored Power
+    if (moveData.name.toLowerCase().includes("stored power")) {
+      const dbBonusFromStages = Math.min(20-db, (
+        (actorData.stats.atk.stage < 0 ? 0 : actorData.stats.atk.stage) +
+        (actorData.stats.spatk.stage < 0 ? 0 : actorData.stats.spatk.stage) +
+        (actorData.stats.def.stage < 0 ? 0 : actorData.stats.def.stage) +
+        (actorData.stats.spdef.stage < 0 ? 0 : actorData.stats.spdef.stage) +
+        (actorData.stats.spd.stage < 0 ? 0 : actorData.stats.spd.stage)) * 2);
+
+        dbBonus += dbBonusFromStages;
     }
     // TODO: Not yet implemented - Punishment
-    if (moveData.name.toLowerCase().includes("Punishment")) {
-      return;
+    if (moveData.name.toLowerCase().includes("punishment")) {
+      const dbBonusFromStages = Math.min(12-db,
+        (targetData?.stats?.atk.stage < 0 ? 0 : targetData?.stats?.atk.stage) +
+        (targetData?.stats?.spatk.stage < 0 ? 0 : targetData?.stats?.spatk.stage) +
+        (targetData?.stats?.def.stage < 0 ? 0 : targetData?.stats?.def.stage) +
+        (targetData?.stats?.spdef.stage < 0 ? 0 : targetData?.stats?.spdef.stage) +
+        (targetData?.stats?.spd.stage < 0 ? 0 : targetData?.stats?.spd.stage));
+
+        dbBonus += dbBonusFromStages;
     }
 
     // Normal Move
