@@ -765,9 +765,9 @@ export class PTUActor extends Actor {
       let total = isNaN(Number(bonusDamage)) ? 0 : Number(bonusDamage);
       const modifierTexts = [];
 
-      if(total != 0) {
-        modifierTexts.push(`Including ${total>=0 ? "+" : ""}${total} damage from Sheet Bonus Damage Fields`)
-      }
+      // if(total != 0) {
+      //   modifierTexts.push(`Including ${total>=0 ? "+" : ""}${total} damage from Sheet Bonus Damage Fields`)
+      // }
 
       if (game.keyboard.downKeys.has("AltLeft")) {
         await Dialog.confirm({
@@ -875,7 +875,7 @@ export class PTUActor extends Actor {
     }
 
     // Calculate Stab Bonus
-    if (moveData.type == this.data.data.typing[0] || moveData.type == this.data.data.typing[1]) {
+    if (this.data.data.typing && (moveData.type == this.data.data.typing[0] || moveData.type == this.data.data.typing[1])) {
       if (abilityBonuses.hasAdaptability) dbBonus += 3;
       else dbBonus += 2;
       isStab = true;
