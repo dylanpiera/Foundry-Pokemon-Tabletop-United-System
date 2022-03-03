@@ -1,6 +1,9 @@
 # Welcome to the Beta!
 Hey there! You are on the Beta Branch. If you ever have any feedback please do share with us over on [Github](https://github.com/dylanpiera/Foundry-Pokemon-Tabletop-United-System/issues) or [Discord](https://discord.gg/fE3w59q)
 
+## 1.5-Beta 15.4 - Owner Bug Hotfix
+- Fixes the 'Owner' field on Pokemon.
+
 ## 1.5-Beta 15.3 - AE Bug Hotfix
 - Fixed AEs not applying properly in Foundry v9
 
