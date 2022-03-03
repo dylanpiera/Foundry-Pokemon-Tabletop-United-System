@@ -185,7 +185,7 @@ export class PTUGen8PokemonSheet extends ActorSheet {
 						speaker: ChatMessage.getSpeaker({
 							actor: this.actor
 						}),
-						name: item.name,
+						moveName: item.name,
 						move: item.data.data,
 						templateType: 'details'
 					});
@@ -461,6 +461,8 @@ export class PTUGen8PokemonSheet extends ActorSheet {
 			const moveData = duplicate(move.data);
 			if(damageBonus != 0) moveData.damageBonus += damageBonus;
 
+			return this.actor.executeMove(move._id);
+
 			let acRoll = CalculateAcRoll(moveData, this.actor.data);
 			let diceResult = GetDiceResult(acRoll)
 
@@ -499,71 +501,58 @@ export class PTUGen8PokemonSheet extends ActorSheet {
 			});
 		}
 
-		let RollDamage = () => {
-			let PerformDamage = (crit) => {
-				let damageRoll = CalculateDmgRoll(move.data, this.actor.data.data, crit)
+		// let RollDamage = () => {
+		// 	let PerformDamage = (crit) => {
+		// 		let damageRoll = CalculateDmgRoll(move.data, this.actor.data.data, crit)
 
-				sendMoveRollMessage(damageRoll, {
-					speaker: ChatMessage.getSpeaker({
-						actor: this.actor
-					}),
-					name: move.name,
-					move: move.data,
-					templateType: MoveMessageTypes.DAMAGE,
-					crit: crit,
-					isCrit: crit == CritOptions.CRIT_HIT
-				});
-			}
+		// 		sendMoveRollMessage(damageRoll, {
+		// 			speaker: ChatMessage.getSpeaker({
+		// 				actor: this.actor
+		// 			}),
+		// 			name: move.name,
+		// 			move: move.data,
+		// 			templateType: MoveMessageTypes.DAMAGE,
+		// 			crit: crit,
+		// 			isCrit: crit == CritOptions.CRIT_HIT
+		// 		});
+		// 	}
 
-			let d = new Dialog({
-				title: `${this.actor.data.name}'s ${move.name} Damage`,
-				content: `<div class="pb-1"><p>Is it a Crit?</p></div>`,
-				buttons: {
-					crit: {
-						icon: '<i class="fas fa-bullseye"></i>',
-						label: "Critical Hit!",
-						callback: () => PerformDamage(CritOptions.CRIT_HIT)
-					},
-					normal: {
-						icon: '<i class="fas fa-crosshairs"></i>',
-						label: "Regular Hit",
-						callback: () => PerformDamage(CritOptions.NORMAL)
-					}
-				},
-				default: "normal"
-			});
-			d.position.width = 650;
-			d.position.height = 125;
-			d.render(true)
-		}
+		// 	let d = new Dialog({
+		// 		title: `${this.actor.data.name}'s ${move.name} Damage`,
+		// 		content: `<div class="pb-1"><p>Is it a Crit?</p></div>`,
+		// 		buttons: {
+		// 			crit: {
+		// 				icon: '<i class="fas fa-bullseye"></i>',
+		// 				label: "Critical Hit!",
+		// 				callback: () => PerformDamage(CritOptions.CRIT_HIT)
+		// 			},
+		// 			normal: {
+		// 				icon: '<i class="fas fa-crosshairs"></i>',
+		// 				label: "Regular Hit",
+		// 				callback: () => PerformDamage(CritOptions.NORMAL)
+		// 			}
+		// 		},
+		// 		default: "normal"
+		// 	});
+		// 	d.position.width = 650;
+		// 	d.position.height = 125;
+		// 	d.render(true)
+		// }
 
 		/** Check for Shortcut */
 		// Instant full roll
 		if(event.shiftKey) {
-			if(event.altKey) {
-				Dialog.confirm({
-					title: `Apply Damage Bonus`,
-					content: `<input type="number" name="damage-bonus" value="0"></input>`,
-					yes: (html) => PerformFullAttack(parseInt(html.find('input[name="damage-bonus"]').val()))
-				});
-				return;
-			}
-			PerformFullAttack();
-			return;
+			return PerformFullAttack();
 		}
 		if(event.ctrlKey) {
 			sendMoveMessage({
 				speaker: ChatMessage.getSpeaker({
 					actor: this.actor
 				}),
-				name: move.name,
+				moveName: move.name,
 				move: move.data,
 				templateType: MoveMessageTypes.DETAILS
 			})
-			return;
-		}
-		if(event.altKey) {
-			RollDamage();
 			return;
 		}
 
@@ -584,7 +573,7 @@ export class PTUGen8PokemonSheet extends ActorSheet {
 						speaker: ChatMessage.getSpeaker({
 							actor: this.actor
 						}),
-						name: move.name,
+						moveName: move.name,
 						move: move.data,
 						templateType: MoveMessageTypes.DETAILS
 					})
@@ -592,13 +581,6 @@ export class PTUGen8PokemonSheet extends ActorSheet {
 			},
 			default: "roll"
 		});
-		if(move.data.category != "Status") {
-			d.data.buttons.rollDamage = {
-				icon: '<i class="fas fa-dice"></i>',
-				label: "Roll Damage",
-				callback: () => RollDamage()
-			};
-		}
 		d.position.width = 650;
 		d.position.height = 125;
 		
@@ -689,7 +671,7 @@ export async function sendMoveMessage(messageData = {}) {
 
 	if(!Hooks.call("ptu.preSendMoveToChat", messageData)) return;
 	
-	messageData.content = await renderTemplate(`/systems/ptu/templates/chat/moves/move-${messageData.templateType}.hbs`, messageData)
+	messageData.content = await renderTemplate(`/systems/ptu/templates/chat/moves/full-attack.hbs`, messageData)
 
 	Hooks.call("ptu.SendMoveToChat", duplicate(messageData));
 

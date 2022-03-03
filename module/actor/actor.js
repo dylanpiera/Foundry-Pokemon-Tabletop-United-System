@@ -479,7 +479,7 @@ export class PTUActor extends Actor {
       // rollDamageMoveWithBonus(actor , item, finalDB, typeStrategist);
       return;
     }
-    //await game.PTUMoveMaster.RollDamageMove(actor, item, item.name, finalDB, typeStrategist, 0);
+
     await this.rollMove(move, { targets })
   }
 
@@ -591,7 +591,7 @@ export class PTUActor extends Actor {
     const currentWeather = game.settings.get("ptu", "currentWeather");
     const abilityBonuses = calculateAbilityBonuses(moveData, this);
 
-    const damageBonuses = calculateTotalDamageBonus(moveData, bonusDamage, currentWeather, abilityBonuses, this)
+    const damageBonuses = await calculateTotalDamageBonus(moveData, bonusDamage, currentWeather, abilityBonuses, this)
 
     // Do AC Roll
     const acRoll = await game.ptu.combat.CalculateAcRoll(moveData, this.data).evaluate({ async: true });
@@ -761,9 +761,28 @@ export class PTUActor extends Actor {
       return output;
     }
 
-    function calculateTotalDamageBonus(moveData, bonusDamage, weather, abilityBonuses, actor) {
+    async function calculateTotalDamageBonus(moveData, bonusDamage, weather, abilityBonuses, actor) {
       let total = isNaN(Number(bonusDamage)) ? 0 : Number(bonusDamage);
       const modifierTexts = [];
+
+      if(total != 0) {
+        modifierTexts.push(`Including ${total>=0 ? "+" : ""}${total} damage from Sheet Bonus Damage Fields`)
+      }
+
+      if (game.keyboard.downKeys.has("AltLeft")) {
+        await Dialog.confirm({
+          title: `Apply Damage Bonus`,
+          content: `<input type="number" name="damage-bonus" value="0"></input>`,
+          yes: (html) => {
+            const bonus = (parseInt(html.find('input[name="damage-bonus"]').val()))
+            if (!isNaN(bonus)) {
+              total += bonus;
+              modifierTexts.push(`Including ${bonus>=0 ? "+" : ""}${bonus} damage from [Manual Modifier]`)
+            }
+          }
+        });
+        ;
+      }
 
       // Last Chance
       if (abilityBonuses.lastChanceApplies) {
