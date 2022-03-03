@@ -69,7 +69,7 @@ export class PTUGen8PokemonSheet extends ActorSheet {
 			data['canBeWild'] = true;
 		}
 
-		if(!data['owners'].includes(this.actor.data.data.owner)) {
+		if(!data['owners'].map(x => x.id).includes(this.actor.data.data.owner)) {
 			if(this.isEditable)
 				this.actor.update({"data.owner": data['canBeWild'] ? "0" : data['owners'][0]?.id})
 		}
