@@ -875,7 +875,7 @@ export class PTUActor extends Actor {
     }
 
     // Calculate Stab Bonus
-    if (this.data.data.typing && (moveData.type == this.data.data.typing?.[0] || moveData.type == this.data.data.typing?.[1])) {
+    if (this.data.data.typing && (moveData.type == this.data.data.typing[0] || moveData.type == this.data.data.typing[1])) {
       if (abilityBonuses.hasAdaptability) dbBonus += 3;
       else dbBonus += 2;
       isStab = true;
