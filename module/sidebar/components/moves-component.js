@@ -1,4 +1,5 @@
 import Component from '../../api/front-end/lib/component.js';
+import { sendMoveMessage } from '../../actor/pokemon-sheet-gen8.js'
 import { PrepareMoveData } from '../../ptu.js';
 import { CoatIcon, FullActionIcon, ShiftActionIcon, BlastIcon, BlessingIcon, BurstIcon, LineIcon, MeleeIcon, SelfIcon, RangeIcon, TriggerIcon, FieldIcon, SwiftActionIcon, HealingIcon, FriendlyIcon, SonicIcon, InterruptIcon, ShieldIcon, SocialIcon, FiveStrikeIcon, DoubleStrikeIcon, GroundsourceIcon, SmiteIcon, ExhaustIcon, PassIcon, SetupIcon, IllusionIcon } from '../constants.js';
 
@@ -64,9 +65,23 @@ export default class MovesList extends Component {
         this.element.html(output);
 
         for (const move of this.state.moves ?? []) {
-            $(`.movemaster-button[data-button="${move._id}"]`).on("click", (event) => {
+            $(`.movemaster-button[data-button="${move._id}"]`).on("mousedown", (event) => {
                 // Handle on move click here, for now just log that button is clicked
-                this.state.actor.executeMove(move._id)
+                switch(event.which) {
+                    case 3: // Right click
+                        sendMoveMessage({
+                            speaker: ChatMessage.getSpeaker({
+                                actor: this.state.actor
+                            }),
+                            moveName: move.name,
+                            move: move.data,
+                        })
+                        break;
+                    case 1: // Left click
+                    case 2: // Middle click
+                    default: // anything else??
+                        this.state.actor.executeMove(move._id)
+                }
             })
         }
 
