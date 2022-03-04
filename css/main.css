@@ -2214,6 +2214,50 @@ body.messages-dark-theme .chat-controls .roll-type-select {
 #ptu-sidebar .ptu-sidebar .pokedex-bottom {
   flex: 86px 0 0;
 }
+#ptu-sidebar .ptu-sidebar #belt-component {
+  display: flex;
+  flex-direction: row;
+  max-width: fit-content;
+  flex-wrap: wrap;
+  overflow: hidden;
+  justify-content: space-between;
+}
+#ptu-sidebar .ptu-sidebar #belt-component .belt-item {
+  padding-left: 2px;
+  margin-top: 2px;
+}
+#ptu-sidebar .ptu-sidebar #belt-component .belt-item img {
+  border: none;
+  max-width: 55px;
+  max-height: 55px;
+  padding: none;
+  margin: none;
+  filter: drop-shadow(1px 1px 2px black);
+}
+#ptu-sidebar .ptu-sidebar #belt-component .belt-item.green {
+  border-left: 5px solid green;
+  background-color: #00800050;
+}
+#ptu-sidebar .ptu-sidebar #belt-component .belt-item.lime {
+  border-left: 5px solid #4dab00;
+  background-color: #4dab0050;
+}
+#ptu-sidebar .ptu-sidebar #belt-component .belt-item.orange {
+  border-left: 5px solid #92790e;
+  background-color: #92790e50;
+}
+#ptu-sidebar .ptu-sidebar #belt-component .belt-item.red {
+  border-left: 5px solid #ab380e;
+  background-color: #ab380e50;
+}
+#ptu-sidebar .ptu-sidebar #belt-component .belt-item.darkred {
+  border-left: 5px solid #b51712;
+  background-color: #b5171250;
+}
+#ptu-sidebar .ptu-sidebar #belt-component .belt-item.black {
+  border-left: 5px solid black;
+  background-color: #00000050;
+}
 #ptu-sidebar .ptu-sidebar #abilities-list .movemaster-button {
   margin: 3px 0px;
   padding: 0;
@@ -2469,7 +2513,7 @@ body.messages-dark-theme .chat-controls .roll-type-select {
 .mm-move .automated-damage-button,
 .mm-damage-application .automated-damage-button {
   background-color: #800c0c00;
-  font-family: 'Modesto Condensed';
+  font-family: "Modesto Condensed";
   font-size: 28px;
   color: black;
 }
@@ -2478,11 +2522,11 @@ body.messages-dark-theme .chat-controls .roll-type-select {
   height: 12px;
   line-height: 0.8;
   background-color: #919191;
-  font-family: 'Segoe UI';
+  font-family: "Segoe UI";
   font-size: 10px;
   color: #b4b4b4;
-  margin-left: 0px ;
-  margin-right: 0px ;
+  margin-left: 0px;
+  margin-right: 0px;
   margin-top: 2px;
   margin-bottom: 2px;
   padding-left: 1px;

@@ -407,6 +407,70 @@ body.messages-dark-theme .chat-controls .roll-type-select {
       flex: 86px 0 0;
     }
 
+    #belt-component {
+      display: flex;
+      flex-direction: row;
+      max-width: fit-content;
+      flex-wrap: wrap;
+      overflow: hidden;
+      justify-content: space-between;
+
+      // .belt-list {
+      //   background-color: #333333;
+      //   color: #cccccc;
+      //   width: 100%;
+      //   color: #666;
+      //   height: 50px;
+      //   font-size: 16px;
+      //   font-family: "Modesto Condensed";
+      //   display: flex;
+      //   flex: 0 0 30%;
+      //   justify-content: center;
+      //   align-items: center;
+      // }
+      .belt-item {
+        padding-left: 2px;
+        margin-top: 2px;
+
+        img {
+          // position: absolute;
+          // top: 0;
+          // left: 0;
+          border: none;
+          max-width: 55px;
+          max-height: 55px;
+          padding: none;
+          margin: none;
+          filter: drop-shadow(1px 1px 2px black);
+        }
+
+        &.green {
+          border-left: 5px solid green;
+          background-color: #00800050;
+        }
+        &.lime {
+          border-left: 5px solid #4dab00;
+          background-color: #4dab0050;
+        }
+        &.orange {
+          border-left: 5px solid #92790e;
+          background-color: #92790e50;
+        }
+        &.red {
+          border-left: 5px solid #ab380e;
+          background-color: #ab380e50;
+        }
+        &.darkred {
+          border-left: 5px solid #b51712;
+          background-color: #b5171250;
+        }
+        &.black {
+          border-left: 5px solid black;
+          background-color: #00000050;
+        }
+      }
+    }
+
     #abilities-list {
       .movemaster-button {
         margin: 3px 0px;
@@ -616,7 +680,8 @@ body.messages-dark-theme .chat-controls .roll-type-select {
   }
 }*/
 
-.mm-move, .mm-damage-application {
+.mm-move,
+.mm-damage-application {
   img {
     border-radius: 0 !important;
   }
@@ -672,28 +737,28 @@ body.messages-dark-theme .chat-controls .roll-type-select {
   }
 
   .small-button-container {
-    height:12px;
-    margin: 0
+    height: 12px;
+    margin: 0;
   }
 
   .automated-damage-button {
-    background-color: #800c0c00; 
-    font-family:'Modesto Condensed';
-    font-size: 28px; 
-    color: black; 
+    background-color: #800c0c00;
+    font-family: "Modesto Condensed";
+    font-size: 28px;
+    color: black;
 
     &.small {
-      height:12px;
+      height: 12px;
       line-height: 0.8;
-      background-color: #919191; 
-      font-family:'Segoe UI';
-      font-size:10px;
-      color: rgb(180, 180, 180); 
-      margin-left: 0px ; 
-      margin-right: 0px ; 
-      margin-top: 2px; 
-      margin-bottom: 2px; 
-      padding-left: 1px; 
+      background-color: #919191;
+      font-family: "Segoe UI";
+      font-size: 10px;
+      color: rgb(180, 180, 180);
+      margin-left: 0px;
+      margin-right: 0px;
+      margin-top: 2px;
+      margin-bottom: 2px;
+      padding-left: 1px;
       padding-right: 1px;
     }
   }
@@ -704,8 +769,9 @@ body.messages-dark-theme .chat-controls .roll-type-select {
     flex-direction: column;
     flex-wrap: wrap;
     justify-content: space-evenly;
-  
-    .mon-list, .mon-list-header {
+
+    .mon-list,
+    .mon-list-header {
       flex-direction: row;
       flex-wrap: nowrap;
       justify-content: space-evenly;
@@ -715,21 +781,26 @@ body.messages-dark-theme .chat-controls .roll-type-select {
       &.disabled {
         filter: grayscale(1);
       }
-  
-      .mon-item, .mon-item-header {
+
+      .mon-item,
+      .mon-item-header {
         flex: 12% 0 1;
 
         font-size: 20px;
-        text-align: center;;
-        
+        text-align: center;
+
         &.icon {
           flex: 20% 0 1;
         }
 
-        .fas, &.applicators [data-mode="full"], &.applicators [data-mode="resist"]{
+        .fas,
+        &.applicators [data-mode="full"],
+        &.applicators [data-mode="resist"] {
           color: #18520b;
         }
-        .far, &.applicators [data-mode="half"], &.applicators [data-mode="weak"] {
+        .far,
+        &.applicators [data-mode="half"],
+        &.applicators [data-mode="weak"] {
           color: #aa0200;
         }
 
@@ -747,7 +818,7 @@ body.messages-dark-theme .chat-controls .roll-type-select {
         }
       }
     }
-    .mon-list-header { 
+    .mon-list-header {
       height: 25px;
       margin-bottom: 5px;
       border-bottom: 1px solid #919191;
@@ -764,9 +835,9 @@ body.messages-dark-theme .chat-controls .roll-type-select {
   .tooltip-content {
     visibility: hidden;
     width: 120px;
-    background-color:#272727;
-    color:#fff;
-    text-align:center;
+    background-color: #272727;
+    color: #fff;
+    text-align: center;
     padding: 5px 0;
     border-radius: 6px;
 
