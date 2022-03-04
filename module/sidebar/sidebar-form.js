@@ -48,7 +48,7 @@ export class PTUSidebar extends FormApplication {
       else {
         obj.setPosition({ left: $(window).width() - 510 })
       }
-      $('#ptu-sidebar .ptu-sidebar').height(obj.position.height-2);
+      $('#ptu-sidebar .ptu-sidebar').height(obj.position.height - 2);
     })
 
     // Return data
@@ -71,16 +71,24 @@ export class PTUSidebar extends FormApplication {
   }
 
   /** @override */
-  async close(options={}) {
+  async close(options = {}) {
     return; // Force app to be unclosable.
+  }
+
+  /** @override */
+  _onDragStart(event) {
+    let li = event.currentTarget.closest(".directory-item.belt-pokeball");
+    let dragData = { type: 'Actor', id: li.dataset.entityId };
+
+    event.dataTransfer.setData("text/plain", JSON.stringify(dragData));
   }
 
   /**
    * Used for external use through game.ptu.sidebar.stateHasChanged() - Forcing all components to evaluate a re-render.
    */
-  stateHasChanged(targetHasChanged = false) { 
-    if(targetHasChanged) this.store.dispatch("targetsHasChanged");
-    this._afterRender(); 
+  stateHasChanged(targetHasChanged = false) {
+    if (targetHasChanged) this.store.dispatch("targetsHasChanged");
+    this._afterRender();
   }
 
   /** @override */
@@ -89,10 +97,10 @@ export class PTUSidebar extends FormApplication {
 
     this._initializeState();
 
-    if(this.controlHook) Hooks.off("controlToken", this.controlHook);
+    if (this.controlHook) Hooks.off("controlToken", this.controlHook);
     this.controlHook = Hooks.on("controlToken", this._onTokenSelect.bind(this));
 
-    if(this.targetHook) Hooks.off("targetToken", this.targetHook);
+    if (this.targetHook) Hooks.off("targetToken", this.targetHook);
     this.targetHook = Hooks.on("targetToken", this._onTokenTarget.bind(this));
   }
 
@@ -102,19 +110,19 @@ export class PTUSidebar extends FormApplication {
     const self = this;
 
     // If more than 1 token is selected, stop.
-    if(canvas.tokens.controlled.length > 1) return;
-    
-    if(selected) { // Token selection became active
+    if (canvas.tokens.controlled.length > 1) return;
+
+    if (selected) { // Token selection became active
       const actor = game.actors.get(token.data.actorId);
-      if(actor) self.store.dispatch("setActor", token.data.actorId);
+      if (actor) self.store.dispatch("setActor", token.data.actorId);
     }
     else { // If token got unselected
       // only continue if no tokens are selected
-      if(canvas.tokens.controlled.length != 0) return;
+      if (canvas.tokens.controlled.length != 0) return;
 
       // Wait a moment to see if some other token *is* selected.
       setTimeout(async () => {
-        if(canvas.tokens.controlled.length != 0) return;
+        if (canvas.tokens.controlled.length != 0) return;
 
         // Select Actor 'undefined' == Unselect & hide
         self.store.dispatch("setActor");
@@ -123,13 +131,13 @@ export class PTUSidebar extends FormApplication {
   }
 
   async _onTokenTarget(user, token, selected) {
-    if(user.data._id != game.user.data._id) return;
+    if (user.data._id != game.user.data._id) return;
 
     const self = this;
 
-    if(selected) { // Targeted Token selection became active
+    if (selected) { // Targeted Token selection became active
       const actor = game.actors.get(token.data.actorId);
-      if(actor) self.store.dispatch("addTarget", token.data.actorId);
+      if (actor) self.store.dispatch("addTarget", token.data.actorId);
     }
     else { // If token got untargeted
       self.store.dispatch("removeTarget", token.data.actorId);
@@ -155,7 +163,7 @@ export class PTUSidebar extends FormApplication {
   }
 
   async _afterRender() {
-    $('#ptu-sidebar .ptu-sidebar').height(this.position.height-2);
+    $('#ptu-sidebar .ptu-sidebar').height(this.position.height - 2);
     for (const component of Object.values(this.components)) component.render();
   }
 

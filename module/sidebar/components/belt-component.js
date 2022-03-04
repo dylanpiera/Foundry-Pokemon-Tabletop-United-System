@@ -7,6 +7,7 @@ export default class BeltComponent extends Component {
             store,
             element: $('#belt-component')
         })
+        this._highlighted = undefined;
     }
 
     /**
@@ -49,6 +50,58 @@ export default class BeltComponent extends Component {
         }
 
         this.element.html(output);
+
+        const beltImages = this.element.children().children();
+
+        beltImages.on("dragstart", this._onDragStart.bind(this));
+        beltImages.hover(this._onHoverIn.bind(this), this._onHoverOut.bind(this));
+        beltImages.click(this._onClick.bind(this));
+    }
+
+    _onDragStart(event) {
+        const dragData = {
+            type: 'Actor',
+            id: event.target?.dataset?.entityId
+        }
+        event.originalEvent.dataTransfer.setData("text/plain", JSON.stringify(dragData));
+    }
+
+    _onHoverIn(event) {
+        event.preventDefault();
+        if (!canvas.ready) return;
+        const li = event.target;
+        const actorId = li.dataset.entityId
+        const tokens = game.actors.get(actorId).getActiveTokens(true);
+        if (tokens && tokens[0]?.isVisible) {
+            if (!tokens[0]._controlled) tokens[0]._onHoverIn(event);
+            this._highlighted= tokens[0];
+        }
+    }
+    _onHoverOut(event) {
+        event.preventDefault();
+        if ( this._highlighted ) this._highlighted._onHoverOut(event);
+        this._highlighted = null;
+    }
+    _onClick(event) {
+        event.preventDefault();
+
+        const li = event.target;
+        const actorId = li.dataset.entityId
+        const actor = game.actors.get(actorId)
+        const token = actor?.getActiveTokens(true)[0];
+        if ( !actor?.testUserPermission(game.user, "OBSERVED") ) return;
+        const now = Date.now();
+    
+        // Handle double-left click to open sheet
+        const dt = now - this._clickTime;
+        this._clickTime = now;
+        if ( dt <= 250 ) return actor?.sheet.render(true);
+    
+        // Control and pan to Token object
+        if ( token ) {
+          token.control({releaseOthers: true});
+          return canvas.animatePan({x: token.data.x, y: token.data.y});
+        }
     }
 
     _calculateColor(health) {
