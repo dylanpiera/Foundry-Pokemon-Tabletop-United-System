@@ -9,6 +9,7 @@ export default class AbilitiesList extends Component {
             element: $('#abilities-list')
         })
         this.updated = 0;
+        this._hidden = false;
     }
 
     /**
@@ -49,7 +50,7 @@ export default class AbilitiesList extends Component {
 
         let output = "";
         if(this.state.abilities.length > 0)
-            output += "<img src='systems/ptu/images/icons/DividerIcon_Abilities.png' style='border:none; width:200px;'>"
+            output += "<img class='divider-image' src='systems/ptu/images/icons/DividerIcon_Abilities.png' style='border:none; width:200px;'>"
 
         for (const ability of this.state.abilities ?? []) {
             // Ability data is prepared on a duplicate entry, otherwise the preperation data will be flagged as 
@@ -68,6 +69,17 @@ export default class AbilitiesList extends Component {
                 console.log(ability.name, "was clicked");
             })
         }
+
+        this.element.children(".divider-image").on("click", () => {
+            if(this._hidden) {
+                this.element.children(":not(.divider-image)").fadeIn();
+                this._hidden = false;
+            }
+            else {
+                this.element.children(":not(.divider-image)").fadeOut();
+                this._hidden = true;
+            }
+        })
 
         this.updated = 0;
     }

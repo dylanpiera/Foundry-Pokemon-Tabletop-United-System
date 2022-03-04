@@ -9,6 +9,7 @@ export default class FeaturesList extends Component {
             element: $('#features-list')
         })
         this.updated = 0;
+        this._hidden = false;
     }
 
     /**
@@ -50,7 +51,7 @@ export default class FeaturesList extends Component {
 
         let output = "";
         if(this.state.features.length > 0)
-            output += "<img src='systems/ptu/images/icons/DividerIcon_Features.png' style='border:none; width:200px;'>"
+            output += "<img class='divider-image' src='systems/ptu/images/icons/DividerIcon_Features.png' style='border:none; width:200px;'>"
 
         for (const feature of this.state.features ?? []) {
             // Feature data is prepared on a duplicate entry, otherwise the preperation data will be flagged as 
@@ -69,6 +70,17 @@ export default class FeaturesList extends Component {
                 console.log(feature.name, "was clicked");
             })
         }
+
+        this.element.children(".divider-image").on("click", () => {
+            if(this._hidden) {
+                this.element.children(":not(.divider-image)").fadeIn();
+                this._hidden = false;
+            }
+            else {
+                this.element.children(":not(.divider-image)").fadeOut();
+                this._hidden = true;
+            }
+        })
 
         this.updated = 0;
         this.store.dispatch("targetsUpdated");

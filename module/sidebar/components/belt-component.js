@@ -8,6 +8,7 @@ export default class BeltComponent extends Component {
             element: $('#belt-component')
         })
         this._highlighted = undefined;
+        this._hidden = false;
     }
 
     /**
@@ -24,7 +25,7 @@ export default class BeltComponent extends Component {
         }
         // Else display this component
 
-        const dividerIcon = "<img src='systems/ptu/images/icons/DividerIcon_PokeballBelt.png' style='border:none; width:200px;'>"
+        const dividerIcon = "<img class='divider-image' src='systems/ptu/images/icons/DividerIcon_PokeballBelt.png' style='border:none; width:200px;'>"
         const beltMons = [];
         let output = "";
 
@@ -56,6 +57,17 @@ export default class BeltComponent extends Component {
         beltImages.on("dragstart", this._onDragStart.bind(this));
         beltImages.hover(this._onHoverIn.bind(this), this._onHoverOut.bind(this));
         beltImages.click(this._onClick.bind(this));
+
+        this.element.children(".divider-image").on("click", () => {
+            if(this._hidden) {
+                this.element.children(":not(.divider-image)").fadeIn();
+                this._hidden = false;
+            }
+            else {
+                this.element.children(":not(.divider-image)").fadeOut();
+                this._hidden = true;
+            }
+        })
     }
 
     _onDragStart(event) {

@@ -10,6 +10,7 @@ export default class MovesList extends Component {
             element: $('#moves-list')
         })
         this.updated = 0;
+        this._hidden = false;
     }
 
     /**
@@ -51,7 +52,7 @@ export default class MovesList extends Component {
 
         let output = "";
         if(this.state.moves.length > 0)
-            output += "<img src='systems/ptu/images/icons/DividerIcon_Moves.png' style='border:none; width:200px;'>"
+            output += "<img class='divider-image' src='systems/ptu/images/icons/DividerIcon_Moves.png' style='border:none; width:200px;'>"
 
         for (const move of this.state.moves ?? []) {
             // Move data is prepared on a duplicate entry, otherwise the preperation data will be flagged as 
@@ -84,6 +85,17 @@ export default class MovesList extends Component {
                 }
             })
         }
+
+        this.element.children(".divider-image").on("click", () => {
+            if(this._hidden) {
+                this.element.children(":not(.divider-image)").fadeIn();
+                this._hidden = false;
+            }
+            else {
+                this.element.children(":not(.divider-image)").fadeOut();
+                this._hidden = true;
+            }
+        })
 
         this.updated = 0;
         this.store.dispatch("targetsUpdated");
