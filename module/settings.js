@@ -604,17 +604,17 @@ export function LoadSystemSettings() {
         //         default: true
         //     });
 
-        //     game.settings.register("PTUMoveMaster", "itemIconDirectory", {
-        //         name: "Item Icons Directory",
-        //         hint: "The directory where the user can upload item image files to be used by scripts or modules. Must end with a /",
-        //         scope: "world",
-        //         config: true,
-        //         type: String,
-        //         default: "item_icons/",
-        //         filePicker: true,
-        //         // onChange: (value) => CustomSpeciesFolder.updateFolderDisplay(value),
-        //         category: "other"
-        //     });
+        game.settings.register("ptu", "itemIconDirectory", {
+            name: "Item Icons Directory",
+            hint: "The directory where the user can upload item image files to be used by scripts or modules. Must end with a /",
+            scope: "world",
+            config: true,
+            type: String,
+            default: "item_icons/",
+            filePicker: true,
+            // onChange: (value) => CustomSpeciesFolder.updateFolderDisplay(value),
+            category: "other"
+        });
 
         //     game.settings.register("PTUMoveMaster", "pokedexNameSoundDirectory", {
         //         name: "Pokedex Name Sounds Directory",

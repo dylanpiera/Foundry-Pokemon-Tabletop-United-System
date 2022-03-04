@@ -51,6 +51,7 @@ import PreloadHandlebarsTemplates from './templates.js'
 import Store from "./api/front-end/lib/store.js";
 import Component from "./api/front-end/lib/component.js";
 import { PTUSidebar } from "./sidebar/sidebar-form.js";
+import './utils/item-piles-compatibility-handler.js';
 
 export let debug = (...args) => { if (game.settings.get("ptu", "showDebugInfo") ?? false) console.log("DEBUG: FVTT PTU | ", ...args) };
 export let log = (...args) => console.log("FVTT PTU | ", ...args);
