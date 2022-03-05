@@ -1,5 +1,27 @@
 import { debug, log } from "../../ptu.js";
 
+export const battle_sound_paths = {
+	"miss":{
+		"physical":	"systems/ptu/sounds/battle_sounds/miss.mp3",
+		"special":	"systems/ptu/sounds/battle_sounds/miss.mp3",
+		"status":	"systems/ptu/sounds/battle_sounds/miss.mp3"
+	},
+	"hit":{
+		"physical":	"systems/ptu/sounds/battle_sounds/hit_physical_damage.mp3",
+		"special":	"systems/ptu/sounds/battle_sounds/hit_special_damage.mp3",
+		"status":	"systems/ptu/sounds/battle_sounds/hit_status.mp3"
+	},
+	"crit":{
+		"physical":	"systems/ptu/sounds/battle_sounds/crit_physical_damage.mp3",
+		"special":	"systems/ptu/sounds/battle_sounds/crit_special_damage.mp3",
+		"status":	"systems/ptu/sounds/battle_sounds/hit_status.mp3"
+	},
+	"weak":{
+		"physical":	"systems/ptu/sounds/battle_sounds/weak_physical_damage.mp3",
+		"special":	"systems/ptu/sounds/battle_sounds/weak_special_damage.mp3",
+		"status":	"systems/ptu/sounds/battle_sounds/hit_status.mp3"
+	},
+}
 
 Hooks.on("renderChatMessage", (message) => {
 	if(!message.isRoll && (game.settings.get("ptu", "playMoveSounds") == true))
@@ -41,22 +63,12 @@ async function GetMoveSoundPath(move_name)
 
 export async function PlayHitAndMissSounds(attacksData, moveCategory)
 {
-    let move_sound_path = "sounds/dice.wav";
-
-    let base_sound_directory = game.settings.get("ptu", "moveSoundDirectory");
-    let miss_sound_file = "pokeball_sounds/"+"pokeball_miss.mp3";
-    let hit_sound_file = "Hit%20Normal%20Damage.mp3";
-    let crit_sound_file = "Hit%20Super%20Effective.mp3";
-    let status_sound_file = "Spark%20part%202.mp3";
-
 	let hit_count = 0;
 	let crit_count = 0;
 	let miss_count = 0;
 
 	for(let target_token_id in attacksData) // Play *only* one of each applicable sound, to avoid blowing out someone's speakers 
 	{										// if they hit 10 targets at once or something. Future ideas include playing all sounds but randomly staggered.
-		// console.log("attacksData[target_token_id]");
-		// console.log(attacksData[target_token_id]);
 		if(attacksData[target_token_id].isHit && (attacksData[target_token_id].isCrit == 'hit'))
 		{
 			crit_count++;
@@ -71,23 +83,21 @@ export async function PlayHitAndMissSounds(attacksData, moveCategory)
 		}
 	}
 
-	if(moveCategory.toLowerCase() == 'status')
-	{
-		hit_sound_file = status_sound_file;
-		crit_sound_file = status_sound_file;
-	}
+	let miss_sound_file = battle_sound_paths["miss"][moveCategory.toLowerCase()];
+	let hit_sound_file = battle_sound_paths["hit"][moveCategory.toLowerCase()];
+	let crit_sound_file = battle_sound_paths["crit"][moveCategory.toLowerCase()];
 
 	if(hit_count > 0)
 	{
-		await AudioHelper.play({src: (base_sound_directory+hit_sound_file), volume: 0.8, autoplay: true, loop: false}, true);
+		await AudioHelper.play({src: (hit_sound_file), volume: 0.8, autoplay: true, loop: false}, true);
 	}
 	if(crit_count > 0)
 	{
-		await AudioHelper.play({src: (base_sound_directory+crit_sound_file), volume: 0.8, autoplay: true, loop: false}, true);
+		await AudioHelper.play({src: (crit_sound_file), volume: 0.8, autoplay: true, loop: false}, true);
 	}
 	if(miss_count > 0)
 	{
-		await AudioHelper.play({src: (base_sound_directory+miss_sound_file), volume: 0.8, autoplay: true, loop: false}, true);
+		await AudioHelper.play({src: (miss_sound_file), volume: 0.8, autoplay: true, loop: false}, true);
 	}
 	
     return;
