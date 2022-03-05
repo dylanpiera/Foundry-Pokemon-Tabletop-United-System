@@ -605,9 +605,9 @@ export function LoadSystemSettings() {
         //         default: true
         //     });
 
-        game.settings.register("ptu", "itemIconDirectory", {
-            name: "Item Icons Directory",
-            hint: "The directory where the user can upload item image files to be used by scripts or modules. Must end with a /",
+        game.settings.register("ptu", "customItemIconDirectory", {
+            name: "Custom Item Icons Directory",
+            hint: "The directory where the user can upload item image files to be used for custom items. Must end with a /",
             scope: "world",
             config: true,
             type: String,
