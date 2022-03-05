@@ -130,8 +130,10 @@ export async function undoDamageToTargets(event) {
         target: event.currentTarget.dataset.target,
         type: event.currentTarget.dataset.targetType,
         oldHp: parseInt(event.currentTarget.dataset.oldValue),
+        oldInjuries: parseInt(event.currentTarget.dataset.oldInjuries),
         oldTempHp: parseInt(event.currentTarget.dataset.oldTemp),
         damage: parseInt(event.currentTarget.dataset.damage),
+        injuries: parseInt(event.currentTarget.dataset.injuries),
         tokenId: event.currentTarget.dataset.tokenTarget,
         msgId: event.currentTarget.dataset.originMessage,
     }
@@ -140,8 +142,8 @@ export async function undoDamageToTargets(event) {
     if (!actor) return;
 
 
-    log(`FVTT PTU | Undoing ${data.damage} damage to ${actor.data.name} - Old HP: ${data.oldHp} - Old Temp: ${data.oldTempHp}`);
-    await actor.update({ "data.health.value": data.oldHp, "data.tempHp.value": data.oldTempHp, "data.tempHp.max": data.oldTempHp })
+    log(`FVTT PTU | Undoing ${data.injuries} injuries and ${data.damage} damage to ${actor.data.name} - Old Injuries: ${data.oldInjuries} - Old HP: ${data.oldHp} - Old Temp: ${data.oldTempHp}`);
+    await actor.update({ "data.health.injuries":data.oldInjuries, "data.health.value": data.oldHp, "data.tempHp.value": data.oldTempHp, "data.tempHp.max": data.oldTempHp })
 
     if (data.tokenId && data.msgId) {
         await updateApplicatorHtml($(`[data-message-id="${data.msgId}"]`), [data.tokenId], undefined, true, true)
@@ -459,4 +461,87 @@ export const FiveStrikeHitsDictionary = {
     6: 3,
     7: 4,
     8: 5
+}
+
+
+export async function ApplyInjuries(target_actor, final_effective_damage, damage_type="Untyped")
+{
+	let targetHealthCurrent = target_actor.data.data.health.value;
+	let targetHealthMax = target_actor.data.data.health.total;
+
+	let hitPoints50Pct = targetHealthMax*0.50;
+	let hitPoints0Pct = 0;
+	let hitPointsNegative50Pct = targetHealthMax*(-0.50);
+	let hitPointsNegative100Pct = targetHealthMax*(-1.00);
+	let hitPointsNegative150Pct = targetHealthMax*(-1.50);
+	let hitPointsNegative200Pct = targetHealthMax*(-2.00);
+
+	let massiveDamageThreshold = hitPoints50Pct+1;
+
+	let injuryCount = 0;
+
+	if(game.settings.get("ptu", "autoApplyInjuries") == "true")
+		{
+			if(final_effective_damage >= massiveDamageThreshold)
+			{
+				injuryCount++;
+				// await game.PTUMoveMaster.chatMessage(target_actor, target_actor.name + " suffered massive damage and sustains an injury!");
+			}
+
+			if( (final_effective_damage >= 1) && (targetHealthCurrent > hitPoints50Pct) && ((targetHealthCurrent - final_effective_damage) <= hitPoints50Pct) )
+			{
+				injuryCount++;
+				// await game.PTUMoveMaster.chatMessage(target_actor, target_actor.name + " was damaged to below the 50% health threshold and sustains an injury!");
+			}
+
+			if( (final_effective_damage >= 1) && (targetHealthCurrent > hitPoints0Pct) && ((targetHealthCurrent - final_effective_damage) <= hitPoints0Pct) )
+			{
+				injuryCount++;
+				// await game.PTUMoveMaster.chatMessage(target_actor, target_actor.name + " was damaged to below the 0% health threshold and sustains an injury! "+target_actor.name+" has *fainted*!");
+			}
+
+			if( (final_effective_damage >= 1) && (targetHealthCurrent > hitPointsNegative50Pct) && ((targetHealthCurrent - final_effective_damage) <= hitPointsNegative50Pct) )
+			{
+				injuryCount++;
+				// await game.PTUMoveMaster.chatMessage(target_actor, target_actor.name + " was damaged to below the -50% health threshold and sustains an injury!");
+			}
+
+			if( (final_effective_damage >= 1) && (targetHealthCurrent > hitPointsNegative100Pct) && ((targetHealthCurrent - final_effective_damage) <= hitPointsNegative100Pct) )
+			{
+				injuryCount++;
+				// await game.PTUMoveMaster.chatMessage(target_actor, target_actor.name + " was damaged to below the -100% health threshold and sustains an injury!");
+			}
+
+			if( (final_effective_damage >= 1) && (targetHealthCurrent > hitPointsNegative150Pct) && ((targetHealthCurrent - final_effective_damage) <= hitPointsNegative150Pct) )
+			{
+				injuryCount++;
+				// await game.PTUMoveMaster.chatMessage(target_actor, target_actor.name + " was damaged to below the -150% health threshold and sustains an injury!");
+			}
+
+			if( (final_effective_damage >= 1) && (targetHealthCurrent > hitPointsNegative200Pct) && ((targetHealthCurrent - final_effective_damage) <= hitPointsNegative200Pct) )
+			{
+				injuryCount++;
+				// await game.PTUMoveMaster.chatMessage(target_actor, target_actor.name + " was damaged to below the -200% health threshold and sustains an injury! If using death rules, "+target_actor.name+" *dies*!");
+			}
+
+			await target_actor.update({'data.health.injuries': Number(target_actor.data.data.health.injuries + injuryCount) });
+			if(injuryCount)
+			{
+				// await game.PTUMoveMaster.injuryTokenSplash(target_actor);
+			}
+		}
+
+	// if( (targetHealthCurrent > 0) && (Number(targetHealthCurrent - final_effective_damage) <= 0) )
+	// {
+	// 	Dialog.confirm({
+	// 		title: "Fainted?",
+	// 		content: "Hit Points are 0 or below; Apply fainted condition?",
+	// 		yes: async () => {
+	// 			await game.PTUMoveMaster.enableCondition(target_actor, "fainted", "other");
+	// 		},
+	// 		defaultYes: false 
+	// 	})
+	// }
+	
+	return injuryCount;
 }

@@ -387,18 +387,19 @@ export function LoadSystemSettings() {
     })
     // Move Master Settings
     {
-        //     game.settings.register("PTUMoveMaster", "autoApplyInjuries", {
-        //         name: "GM Setting: Automatically Apply Injuries",
-        //         hint: "",
-        //         scope: "world",
-        //         config: true,
-        //         type: String,
-        //         choices: {
-        //             "true": "Automatically Apply Injuries Upon Applying Damage",
-        //             "false": "Don't Automatically Apply Injuries"
-        //         },
-        //         default: "true"
-        //     });
+        game.settings.register("ptu", "autoApplyInjuries", {
+            name: "Auto-Apply Injuries",
+            hint: "",
+            scope: "world",
+            config: true,
+            type: String,
+            choices: {
+                "true": "Automatically Apply Injuries Upon Applying Damage",
+                "false": "Don't Automatically Apply Injuries"
+            },
+            default: "true",
+            category: "combat"
+        });
 
         //     game.settings.register("PTUMoveMaster", "useInjurySplashes", {
         //         name: "GM Setting: Apply visual splashes of dirt/soot to tokens when they take auto-applied injuries.",

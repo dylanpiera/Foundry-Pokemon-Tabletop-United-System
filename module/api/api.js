@@ -1,4 +1,4 @@
-import { displayAppliedDamageToTargets } from '../combat/damage-calc-tools.js';
+import { displayAppliedDamageToTargets, ApplyInjuries } from '../combat/damage-calc-tools.js';
 import {debug, log} from '../ptu.js';
 import { dataFromPath } from '../utils/generic-helpers.js';
 
@@ -119,7 +119,7 @@ export default class Api {
                     documents.push(document);
                 }
 
-                const retVal = {result: [], appliedDamage: {}};
+                const retVal = {result: [], appliedDamage: {}, appliedInjuries: {}};
 
                 for(const document of documents) {
                     let actualDamage;
@@ -143,11 +143,13 @@ export default class Api {
                         type: document.data.actorLink ? "actor" : "token", 
                         old: {
                             value: duplicate(document.actor.data.data.health.value), 
-                            temp: duplicate(document.actor.data.data.tempHp.value)
+                            temp: duplicate(document.actor.data.data.tempHp.value),
+                            injuries: duplicate(document.actor.data.data.health.injuries)
                         },
+                        injuries: ( await ApplyInjuries(document.actor, actualDamage) ), 
                         tokenId: document.id,
                         msgId,
-                    };            
+                    };
                     retVal.result.push(await document.actor.modifyTokenAttribute("health", actualDamage*-1, true, true));
                 }
                 await displayAppliedDamageToTargets({data: retVal.appliedDamage, move: label});
