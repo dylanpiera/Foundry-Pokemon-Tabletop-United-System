@@ -13,6 +13,11 @@ async function GetItemArt(item_name, imgDirectoryPath, type = ".png") {
     }
 
     if(result.status === 404) {
+        path = basePath+"Generic Item"+".webp";
+        result = await fetch(path);
+    }
+
+    if(result.status === 404) {
         return undefined;
     }
     return path;
@@ -51,3 +56,75 @@ Hooks.on("item-piles-createItemPile", async function(created_token, options) {
     });
 });
 
+
+Hooks.on("renderPTUItemSheet", async function(item, init, css) {
+    
+    if(item?.object?.type != "item") {return true;}
+
+    let item_name = item?.object?.data?.name ?? "Generic Item";
+    item_name = item_name.replace("Thrown ","").replace("Broken ","");
+    let item_current_img = item?.object?.data?.img;
+
+    if((item_current_img == "icons/svg/mystery-man.svg") || (item_current_img == "icons/svg/item-bag.svg"))
+    {
+        let new_image = await GetItemArt(item_name, game.settings.get("ptu", "itemIconDirectory"));
+
+        console.log("renderPTUItemSheet: Default image detected, replacing with:");
+        console.log(new_image);
+
+        if(new_image != undefined)
+        {
+            await item.object.update({"img": new_image});
+        }
+    }
+});
+
+
+// Hooks.on("preCreateItem", async function(ptu_item, item, options, id) {
+    
+//     if((game.userId != id) || (item?.type != "item")) {return true;}
+
+//     let item_name = item?.name ?? "Generic Item";
+//     item_name = item_name.replace("Thrown ","").replace("Broken ","");
+//     let item_current_img = item?.img;
+
+//     if((item_current_img == "icons/svg/mystery-man.svg") || (item_current_img == "icons/svg/item-bag.svg"))
+//     {
+//         let new_image = await GetItemArt(item_name, game.settings.get("ptu", "itemIconDirectory"))
+
+//         console.log("preCreateItem: Default image detected, replacing with:");
+//         console.log(new_image);
+
+//         if(new_image != undefined)
+//         {
+//             item.img = new_image;
+//             ptu_item.data.img = new_image;
+//             // await ptu_item.update({"data.img": new_image});
+//         }
+//     }
+// });
+
+
+Hooks.on("createItem", async function(ptu_item, options, id) {
+    
+    if((game.userId != id) || (ptu_item?.type != "item")) {return true;}
+
+    let item_name = ptu_item?.name ?? "Generic Item";
+    item_name = item_name.replace("Thrown ","").replace("Broken ","");
+    let item_current_img = ptu_item?.img;
+
+    if((item_current_img == "icons/svg/mystery-man.svg") || (item_current_img == "icons/svg/item-bag.svg"))
+    {
+        let new_image = await GetItemArt(item_name, game.settings.get("ptu", "itemIconDirectory"))
+
+        console.log("preCreateItem: Default image detected, replacing with:");
+        console.log(new_image);
+
+        if(new_image != undefined)
+        {
+            // ptu_item.img = new_image;
+            // ptu_item.data.img = new_image;
+            await ptu_item.update({"img": new_image});
+        }
+    }
+});
