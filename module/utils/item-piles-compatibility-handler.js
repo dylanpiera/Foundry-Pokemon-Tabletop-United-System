@@ -9,7 +9,7 @@ async function GetItemArt(item_name, type = ".webp") {
     const basePath = imgDirectoryPath+(imgDirectoryPath.endsWith('/') ? '' : '/');
     const customBasePath = customImgDirectoryPath+(customImgDirectoryPath.endsWith('/') ? '' : '/');
 
-    let clean_item_name = item_name.replace("é", "e").toLowerCase();
+    let clean_item_name = item_name.replace("é", "e").replace(":", "").toLowerCase();
     if(clean_item_name.includes("tm"))
     {
         clean_item_name = "tm";
