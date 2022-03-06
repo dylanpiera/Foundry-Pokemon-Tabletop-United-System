@@ -2222,14 +2222,14 @@ body.messages-dark-theme .chat-controls .roll-type-select {
 #ptu-sidebar .ptu-sidebar #abilities-list .auto,
 #ptu-sidebar .ptu-sidebar #features-list .auto,
 #ptu-sidebar .ptu-sidebar #orders-list .auto {
-  background-size: 35px;
+  background-size: 25px;
   background-repeat: no-repeat;
   background-position: left center;
   background-color: #333333;
   color: #cccccc;
   width: 100%;
   margin: 0.2rem 0;
-  height: 35px;
+  height: 25px;
   font-size: 22px;
   font-family: "Modesto Condensed";
   display: flex;
@@ -2271,10 +2271,10 @@ body.messages-dark-theme .chat-controls .roll-type-select {
   flex: 0 0 70%;
 }
 #ptu-sidebar .ptu-sidebar #orders-list .order .item.gray {
-  border-left: 5px solid #ccc;
+  border-left: 4px solid #ccc;
 }
 #ptu-sidebar .ptu-sidebar #orders-list .order .item.green {
-  border-left: 5px solid #4dab00;
+  border-left: 4px solid #4dab00;
 }
 #ptu-sidebar .ptu-sidebar #orders-list .order .auto {
   font-size: 25px;
@@ -2285,11 +2285,11 @@ body.messages-dark-theme .chat-controls .roll-type-select {
   padding-left: unset;
 }
 #ptu-sidebar .ptu-sidebar #orders-list .order .auto.black {
-  border-left: 5px solid black;
+  border-left: 4px solid black;
   color: #b4b4b4;
 }
 #ptu-sidebar .ptu-sidebar #orders-list .order .auto.green {
-  border-left: 5px solid #4dab00;
+  border-left: 4px solid #4dab00;
   color: #4dab00;
 }
 #ptu-sidebar .ptu-sidebar #belt-component {
@@ -2313,27 +2313,27 @@ body.messages-dark-theme .chat-controls .roll-type-select {
   filter: drop-shadow(1px 1px 2px black);
 }
 #ptu-sidebar .ptu-sidebar #belt-component .belt-item.green {
-  border-left: 5px solid green;
+  border-left: 4px solid green;
   background-color: #00800050;
 }
 #ptu-sidebar .ptu-sidebar #belt-component .belt-item.lime {
-  border-left: 5px solid #4dab00;
+  border-left: 4px solid #4dab00;
   background-color: #4dab0050;
 }
 #ptu-sidebar .ptu-sidebar #belt-component .belt-item.orange {
-  border-left: 5px solid #92790e;
+  border-left: 4px solid #92790e;
   background-color: #92790e50;
 }
 #ptu-sidebar .ptu-sidebar #belt-component .belt-item.red {
-  border-left: 5px solid #ab380e;
+  border-left: 4px solid #ab380e;
   background-color: #ab380e50;
 }
 #ptu-sidebar .ptu-sidebar #belt-component .belt-item.darkred {
-  border-left: 5px solid #b51712;
+  border-left: 4px solid #b51712;
   background-color: #b5171250;
 }
 #ptu-sidebar .ptu-sidebar #belt-component .belt-item.black {
-  border-left: 5px solid black;
+  border-left: 4px solid black;
   background-color: #00000050;
 }
 #ptu-sidebar .ptu-sidebar #abilities-list .movemaster-button {
@@ -2344,7 +2344,7 @@ body.messages-dark-theme .chat-controls .roll-type-select {
 #ptu-sidebar .ptu-sidebar #abilities-list .movemaster-button .btn-body {
   background-color: #333333;
   color: #cccccc;
-  border-left: 5px solid;
+  border-left: 4px solid;
   padding-left: 0px;
   width: 200px;
   height: auto;
@@ -2384,7 +2384,7 @@ body.messages-dark-theme .chat-controls .roll-type-select {
 #ptu-sidebar .ptu-sidebar #moves-list .movemaster-button .btn-body {
   background-color: #333333;
   color: #cccccc;
-  border-left: 6px solid;
+  border-left: 4px solid;
   padding-left: 0px;
   width: 200px;
   min-height: 100px;
@@ -2404,7 +2404,7 @@ body.messages-dark-theme .chat-controls .roll-type-select {
 #ptu-sidebar .ptu-sidebar #moves-list .movemaster-button .btn-body .type-bar {
   height: auto;
   border: 0px !important;
-  width: 94px;
+  width: 98px;
   border-width: 0;
   display: flex;
 }
@@ -2725,7 +2725,7 @@ body.messages-dark-theme .chat-controls .roll-type-select {
 #ptu-sidebar .ptu-sidebar #features-list .movemaster-button .btn-body {
   background-color: #333333;
   color: #cccccc;
-  border-left: 5px solid;
+  border-left: 4px solid;
   padding-left: 0px;
   width: 200px;
   height: auto;
