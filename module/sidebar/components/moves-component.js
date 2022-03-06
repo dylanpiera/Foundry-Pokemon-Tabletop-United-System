@@ -59,6 +59,12 @@ export default class MovesList extends Component {
             // 'changed move data' during every re-render, causing infinite re-render loops.
             const moveData = duplicate(move);
             moveData.data = this.PrepareMoveData(moveData.data, this.state.actor.data.data, this.state.targetedActors);
+
+            // If fake move skip
+            if((moveData.data.damageBase == "--" && moveData.data.category == "--") || (moveData.data.damageBase == "" && moveData.data.category == "")) continue;
+
+            // If DB is not a number, 
+            if(isNaN(Number(moveData.data.damageBase))) moveData.data.damageBase = "--";
             const moveHtml = await renderTemplate('/systems/ptu/module/sidebar/components/moves-component.hbs', moveData);
             output += moveHtml;
         }
