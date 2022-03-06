@@ -67,9 +67,11 @@ export class PTUActor extends Actor {
         },
         stats: {
           spdef: {
-            stage: [
-              this.data.flags.ptu?.is_poisoned ? { label: "Poisoned", change: { type: CONST.ACTIVE_EFFECT_MODES.ADD, value: -2 } } : undefined,
-            ].filter(x => x !== undefined)
+            stage: {
+              mod: [
+                this.data.flags.ptu?.is_poisoned ? { label: "Poisoned", change: { type: CONST.ACTIVE_EFFECT_MODES.ADD, value: -2 } } : undefined,
+              ].filter(x => x !== undefined)
+            }
           }
         },
         skills: actorData.data.modifiers.skillBonus.total > 0 ? Object.keys(actorData.data.skills).map(skill => {
@@ -200,8 +202,74 @@ export class PTUActor extends Actor {
   }
 
   /** @override */
-  prepareDerivedData() {
+  async prepareDerivedData() {
     const actorData = this.data;
+
+    if (!isNaN(Number(actorData.data.stats.atk.mod))) {
+      const stats = duplicate(actorData.data.stats)
+      if (typeof stats.atk.mod === "object") return;
+      await this.update({
+        "data.stats": {
+          atk: {
+            mod: {
+              value: stats.atk.mod,
+              mod: 0
+            },
+            stage: {
+              value: stats.atk.stage,
+              mod: 0
+            }
+          },
+          def: {
+            mod: {
+              value: stats.def.mod,
+              mod: 0
+            },
+            stage: {
+              value: stats.def.stage,
+              mod: 0
+            }
+          },
+          hp: {
+            mod: {
+              value: stats.hp.mod,
+              mod: 0
+            }
+          },
+          spatk: {
+            mod: {
+              value: stats.spatk.mod,
+              mod: 0
+            },
+            stage: {
+              value: stats.spatk.stage,
+              mod: 0
+            }
+          },
+          spd: {
+            mod: {
+              value: stats.spd.mod,
+              mod: 0
+            },
+            stage: {
+              value: stats.spd.stage,
+              mod: 0
+            }
+          },
+          spdef: {
+            mod: {
+              value: stats.spdef.mod,
+              mod: 0
+            },
+            stage: {
+              value: stats.spdef.stage,
+              mod: 0
+            }
+          }
+        }
+      })
+      return;
+    }
 
     // Update data structures.
     {
@@ -347,7 +415,7 @@ export class PTUActor extends Actor {
     data.health.tick = Math.floor(data.health.total / 10);
 
     data.evasion = CalculateEvasions(data, actorData.flags?.ptu, actorData.items);
-    data.capabilities = CalculateTrainerCapabilities(data.skills, actorData.items, data.stats.spd.stage, actorData.flags?.ptu);
+    data.capabilities = CalculateTrainerCapabilities(data.skills, actorData.items, (data.stats.spd.stage.value + data.stats.spd.stage.mod), actorData.flags?.ptu);
 
     data.ap.max = 5 + Math.floor(data.level.current / 5);
 
@@ -425,7 +493,7 @@ export class PTUActor extends Actor {
 
     data.evasion = CalculateEvasions(data, actorData.flags?.ptu, actorData.items);
 
-    data.capabilities = CalculatePokemonCapabilities(speciesData, actorData.items.values(), data.stats.spd.stage, Number(data.modifiers.capabilities?.total ?? 0), actorData.flags?.ptu);
+    data.capabilities = CalculatePokemonCapabilities(speciesData, actorData.items.values(), (data.stats.spd.stage.value + data.stats.spd.stage.mod), Number(data.modifiers.capabilities?.total ?? 0), actorData.flags?.ptu);
 
     if (speciesData) data.egggroup = speciesData["Breeding Information"]["Egg Group"].join(" & ");
 
@@ -777,7 +845,7 @@ export class PTUActor extends Actor {
             const bonus = (parseInt(html.find('input[name="damage-bonus"]').val()))
             if (!isNaN(bonus)) {
               total += bonus;
-              modifierTexts.push(`Including ${bonus>=0 ? "+" : ""}${bonus} damage from [Manual Modifier]`)
+              modifierTexts.push(`Including ${bonus >= 0 ? "+" : ""}${bonus} damage from [Manual Modifier]`)
             }
           }
         });
@@ -884,22 +952,22 @@ export class PTUActor extends Actor {
     // Stored Power
     if (moveData.name.toLowerCase().includes("stored power")) {
       const dbBonusFromStages = Math.min(20 - db, (
-        (actorData.stats.atk.stage < 0 ? 0 : actorData.stats.atk.stage) +
-        (actorData.stats.spatk.stage < 0 ? 0 : actorData.stats.spatk.stage) +
-        (actorData.stats.def.stage < 0 ? 0 : actorData.stats.def.stage) +
-        (actorData.stats.spdef.stage < 0 ? 0 : actorData.stats.spdef.stage) +
-        (actorData.stats.spd.stage < 0 ? 0 : actorData.stats.spd.stage)) * 2);
+        ((actorData.stats.atk.stage.value + actorData.stats.atk.stage.mod) < 0 ? 0 : (actorData.stats.atk.stage.value + actorData.stats.atk.stage.mod)) +
+        ((actorData.stats.spatk.stage.value + actorData.stats.spatk.stage.mod) < 0 ? 0 : (actorData.stats.spatk.stage.value + actorData.stats.spatk.stage.mod)) +
+        ((actorData.stats.def.stage.value + actorData.stats.def.stage.mod) < 0 ? 0 : (actorData.stats.def.stage.value + actorData.stats.def.stage.mod)) +
+        ((actorData.stats.spdef.stage.value + actorData.stats.spdef.stage.mod) < 0 ? 0 : (actorData.stats.spdef.stage.value + actorData.stats.spdef.stage.mod)) +
+        ((actorData.stats.spd.stage.value + actorData.stats.spd.stage.mod) < 0 ? 0 : (actorData.stats.spd.stage.value + actorData.stats.spd.stage.mod))) * 2);
 
       dbBonus += dbBonusFromStages;
     }
     // Punishment
     if (moveData.name.toLowerCase().includes("punishment")) {
       const dbBonusFromStages = Math.min(12 - db,
-        (targetData?.stats?.atk.stage < 0 ? 0 : targetData?.stats?.atk.stage) +
-        (targetData?.stats?.spatk.stage < 0 ? 0 : targetData?.stats?.spatk.stage) +
-        (targetData?.stats?.def.stage < 0 ? 0 : targetData?.stats?.def.stage) +
-        (targetData?.stats?.spdef.stage < 0 ? 0 : targetData?.stats?.spdef.stage) +
-        (targetData?.stats?.spd.stage < 0 ? 0 : targetData?.stats?.spd.stage));
+        ((targetData?.stats?.atk.stage.value + targetData?.stats?.atk.stage.mod) < 0 ? 0 : (targetData?.stats?.atk.stage.value + targetData?.stats?.atk.stage.mod)) +
+        ((targetData?.stats?.spatk.stage.value + targetData?.stats?.spatk.stage.mod) < 0 ? 0 : (targetData?.stats?.spatk.stage.value + targetData?.stats?.spatk.stage.mod)) +
+        ((targetData?.stats?.def.stage.value + targetData?.stats?.def.stage.mod) < 0 ? 0 : (targetData?.stats?.def.stage.value + targetData?.stats?.def.stage.mod)) +
+        ((targetData?.stats?.spdef.stage.value + targetData?.stats?.spdef.stage.mod) < 0 ? 0 : (targetData?.stats?.spdef.stage.value + targetData?.stats?.spdef.stage.mod)) +
+        ((targetData?.stats?.spd.stage.value + targetData?.stats?.spd.stage.mod) < 0 ? 0 : (targetData?.stats?.spd.stage.value + targetData?.stats?.spd.stage.mod)));
 
       dbBonus += dbBonusFromStages;
     }

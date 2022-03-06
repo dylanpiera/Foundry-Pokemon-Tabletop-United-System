@@ -8,7 +8,7 @@ export const Afflictions = [
     ]},
     {id: "effect.persistent.burned", label: "Burned", icon: 'icons/svg/fire.svg', changes: [
         {key: "flags.ptu.is_burned", value: true, mode: CONST.ACTIVE_EFFECT_MODES.OVERRIDE, priority: 50},
-        {key: "data.stats.def.stage", value: -2, mode: CONST.ACTIVE_EFFECT_MODES.ADD, priority: 10}
+        {key: "data.stats.def.stage.mod", value: -2, mode: CONST.ACTIVE_EFFECT_MODES.ADD, priority: 10}
     ]},
     {id: "effect.persistent.frozen", label: "Frozen", icon: 'icons/svg/frozen.svg', changes: [
         {key: "flags.ptu.is_frozen", value: true, mode: CONST.ACTIVE_EFFECT_MODES.OVERRIDE, priority: 50},
