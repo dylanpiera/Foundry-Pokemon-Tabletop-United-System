@@ -93,9 +93,12 @@ Hooks.on("renderPTUItemSheet", async function(item, init, css) {
     if((item_current_img == "icons/svg/mystery-man.svg") || (item_current_img == "icons/svg/item-bag.svg") || (item_current_img == "systems/ptu/images/item_icons/generic item.webp"))
     {
         let new_image = await GetItemArt(item_name);
+        
+        // Default to item-bag icon instead of 'Old Gateau'
+        if(new_image === "systems/ptu/images/item_icons/generic item.webp")
+            new_image = "icons/svg/item-bag.svg";
 
-        console.log("renderPTUItemSheet: Default image detected, replacing with:");
-        console.log(new_image);
+        log("renderPTUItemSheet: Default image detected, replacing with:", new_image);
 
         if(new_image != undefined)
         {

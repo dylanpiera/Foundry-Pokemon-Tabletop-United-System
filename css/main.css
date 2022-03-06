@@ -2218,7 +2218,7 @@ body.messages-dark-theme .chat-controls .roll-type-select {
 #ptu-sidebar .ptu-sidebar #abilities-list .item,
 #ptu-sidebar .ptu-sidebar #features-list .item,
 #ptu-sidebar .ptu-sidebar #edges-list .item {
-  background-size: contain;
+  background-size: 35px;
   background-repeat: no-repeat;
   background-position: left center;
   background-color: #333333;
@@ -2237,13 +2237,14 @@ body.messages-dark-theme .chat-controls .roll-type-select {
 #ptu-sidebar .ptu-sidebar #abilities-list .item p,
 #ptu-sidebar .ptu-sidebar #features-list .item p,
 #ptu-sidebar .ptu-sidebar #edges-list .item p {
-  padding-left: 35px;
+  padding-left: 40px;
   white-space: nowrap;
   overflow: hidden;
 }
 #ptu-sidebar .ptu-sidebar #abilities-list .item,
 #ptu-sidebar .ptu-sidebar #features-list .item,
 #ptu-sidebar .ptu-sidebar #edges-list .item {
+  background-size: contain;
   justify-content: center;
 }
 #ptu-sidebar .ptu-sidebar #abilities-list .item p,
