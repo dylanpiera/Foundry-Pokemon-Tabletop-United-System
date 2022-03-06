@@ -2217,7 +2217,11 @@ body.messages-dark-theme .chat-controls .roll-type-select {
 #ptu-sidebar .ptu-sidebar #items-list .item,
 #ptu-sidebar .ptu-sidebar #abilities-list .item,
 #ptu-sidebar .ptu-sidebar #features-list .item,
-#ptu-sidebar .ptu-sidebar #edges-list .item {
+#ptu-sidebar .ptu-sidebar #orders-list .item,
+#ptu-sidebar .ptu-sidebar #items-list .auto,
+#ptu-sidebar .ptu-sidebar #abilities-list .auto,
+#ptu-sidebar .ptu-sidebar #features-list .auto,
+#ptu-sidebar .ptu-sidebar #orders-list .auto {
   background-size: 35px;
   background-repeat: no-repeat;
   background-position: left center;
@@ -2236,23 +2240,57 @@ body.messages-dark-theme .chat-controls .roll-type-select {
 #ptu-sidebar .ptu-sidebar #items-list .item p,
 #ptu-sidebar .ptu-sidebar #abilities-list .item p,
 #ptu-sidebar .ptu-sidebar #features-list .item p,
-#ptu-sidebar .ptu-sidebar #edges-list .item p {
+#ptu-sidebar .ptu-sidebar #orders-list .item p,
+#ptu-sidebar .ptu-sidebar #items-list .auto p,
+#ptu-sidebar .ptu-sidebar #abilities-list .auto p,
+#ptu-sidebar .ptu-sidebar #features-list .auto p,
+#ptu-sidebar .ptu-sidebar #orders-list .auto p {
   padding-left: 40px;
   white-space: nowrap;
   overflow: hidden;
 }
 #ptu-sidebar .ptu-sidebar #abilities-list .item,
 #ptu-sidebar .ptu-sidebar #features-list .item,
-#ptu-sidebar .ptu-sidebar #edges-list .item {
+#ptu-sidebar .ptu-sidebar #orders-list .item {
   background-size: contain;
   justify-content: center;
 }
 #ptu-sidebar .ptu-sidebar #abilities-list .item p,
 #ptu-sidebar .ptu-sidebar #features-list .item p,
-#ptu-sidebar .ptu-sidebar #edges-list .item p {
+#ptu-sidebar .ptu-sidebar #orders-list .item p {
   padding-left: unset;
   overflow: visible;
   max-width: 115px;
+}
+#ptu-sidebar .ptu-sidebar #orders-list .order {
+  width: 100%;
+  justify-content: space-between;
+}
+#ptu-sidebar .ptu-sidebar #orders-list .order .item {
+  font-size: 25px;
+  flex: 0 0 70%;
+}
+#ptu-sidebar .ptu-sidebar #orders-list .order .item.gray {
+  border-left: 5px solid #ccc;
+}
+#ptu-sidebar .ptu-sidebar #orders-list .order .item.green {
+  border-left: 5px solid #4dab00;
+}
+#ptu-sidebar .ptu-sidebar #orders-list .order .auto {
+  font-size: 25px;
+  justify-content: center;
+  flex: 0 0 25%;
+}
+#ptu-sidebar .ptu-sidebar #orders-list .order .auto p {
+  padding-left: unset;
+}
+#ptu-sidebar .ptu-sidebar #orders-list .order .auto.black {
+  border-left: 5px solid black;
+  color: #b4b4b4;
+}
+#ptu-sidebar .ptu-sidebar #orders-list .order .auto.green {
+  border-left: 5px solid #4dab00;
+  color: #4dab00;
 }
 #ptu-sidebar .ptu-sidebar #belt-component {
   display: flex;

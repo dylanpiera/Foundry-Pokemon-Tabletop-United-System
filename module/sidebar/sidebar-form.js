@@ -5,6 +5,7 @@ import AbilitiesList from './components/abilities-component.js';
 import FeaturesList from './components/features-component.js';
 import BeltComponent from './components/belt-component.js';
 import ItemsComponent from './components/items-component.js';
+import OrdersComponent from './components/order-component.js';
 
 /**
  * Extend the basic FormApplication with some very simple modifications
@@ -159,6 +160,7 @@ export class PTUSidebar extends FormApplication {
       featuresComponent: new FeaturesList(this.store),
       beltComponent: new BeltComponent(this.store),
       itemsComponent: new ItemsComponent(this.store),
+      ordersComponent: new OrdersComponent(this.store),
     }
 
     debug(this.store, this.components);
