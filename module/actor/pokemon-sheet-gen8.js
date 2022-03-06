@@ -311,14 +311,14 @@ export class PTUGen8PokemonSheet extends ActorSheet {
 				return;
 			}
 
-			const effectData = new ActiveEffect({
+			const effectData = {
 				changes: [{"key":path,"mode":5,"value":true,"priority":50}].concat(game.ptu.getTrainingChanges(training, isOrder).changes),
 				label: `${training.capitalize()} ${training == 'critical' ? "Moment" : isOrder ? "Order" : "Training"}`,
 				icon: "",
 				transfer: false,
-				'flags.ptu.editLocked': true,
+				"flags.ptu.editLocked": true,
 				_id: randomID()
-			}).data
+			}
 			return await this.actor.createEmbeddedDocuments("ActiveEffect", [effectData]);
 		})
 	}
@@ -343,14 +343,14 @@ export class PTUGen8PokemonSheet extends ActorSheet {
 		}
 
 		if(!effect) {
-			const effectData = new ActiveEffect({
+			const effectData = {
 				changes: calcHardenedChanges(value),
 				label: 'Hardened Injuries',
 				icon: "",
 				transfer: false,
-				'flags.ptu.editLocked': true,
+				"flags.ptu.editLocked": true,
 				_id: randomID()
-			}).data
+			}
 			return await this.actor.createEmbeddedDocuments("ActiveEffect", [effectData]);
 		}
 		await effect.update({changes: calcHardenedChanges(value)});

@@ -37,6 +37,11 @@ export default class ItemsComponent extends Component {
         }
         this.element.html(output);
 
+        this.element.children(".item").on("click", function(event) {
+            const {itemId, itemOwner} = event.currentTarget.dataset;
+            game.actors.get(itemOwner).items.get(itemId).sheet._toChat(); 
+        });
+
         this.element.children(".divider-image").on("click", () => {
             if(this._hidden) {
                 this.element.children(":not(.divider-image)").fadeIn();

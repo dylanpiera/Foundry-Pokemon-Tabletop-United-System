@@ -582,7 +582,7 @@ export class PTUActor extends Actor {
     // Apply Type Strategist
     if (attack.abilityBonuses.typeStratagistApplies) {
       const dr = (this.data.data.health.value < (this.data.data.health.total / 3)) ? 10 : 5;
-      const aeAffliction = new ActiveEffect({
+      const aeAffliction = {
         duration: { rounds: 1, turns: 1 },
         id: "effect.other.typestrategist",
         label: `Type Strategist (${moveData.type})`,
@@ -590,10 +590,10 @@ export class PTUActor extends Actor {
           { key: "flags.ptu.has_type_strategist", value: true, mode: CONST.ACTIVE_EFFECT_MODES.OVERRIDE, priority: 50 },
           { key: "data.modifiers.damageReduction.physical.value", value: dr, mode: CONST.ACTIVE_EFFECT_MODES.ADD, priority: 10 },
           { key: "data.modifiers.damageReduction.special.value", value: dr, mode: CONST.ACTIVE_EFFECT_MODES.ADD, priority: 10 }
-        ]
-
-      }, this);
-      await this.createEmbeddedDocuments("ActiveEffect", [aeAffliction.data]);
+        ],
+				"flags.ptu.editLocked": true,
+      };
+      await this.createEmbeddedDocuments("ActiveEffect", [aeAffliction]);
     }
 
     // Apply move effect parser

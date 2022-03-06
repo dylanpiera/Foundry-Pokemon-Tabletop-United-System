@@ -414,12 +414,13 @@ export async function TakeAction(actor, { actionType, actionSubType, label }) {
     }
 
     if (changesToApply.length > 0) {
-        const actionEffect = new ActiveEffect({
+        const actionEffect = {
             duration: { rounds: 1, turns: 0 },
             label,
-            changes: changesToApply
-        }, actor);
-        await actor.createEmbeddedDocuments("ActiveEffect", [actionEffect.data]);
+            changes: changesToApply,
+            "flags.ptu.editLocked": true,
+        };
+        await actor.createEmbeddedDocuments("ActiveEffect", [actionEffect]);
     }
 
     function addChanges(changesToApply, { actionType, actionSubType, isSupport }) {
