@@ -466,17 +466,22 @@ export const FiveStrikeHitsDictionary = {
 
 export async function ApplyInjuries(target_actor, final_effective_damage, damage_type="Untyped")
 {
-	let targetHealthCurrent = target_actor.data.data.health.value;
-	let targetHealthMax = target_actor.data.data.health.total;
+    const currentInjuries = Number(target_actor.data.data.health.injuries);
 
-	let hitPoints50Pct = targetHealthMax*0.50;
-	let hitPoints0Pct = 0;
-	let hitPointsNegative50Pct = targetHealthMax*(-0.50);
-	let hitPointsNegative100Pct = targetHealthMax*(-1.00);
-	let hitPointsNegative150Pct = targetHealthMax*(-1.50);
-	let hitPointsNegative200Pct = targetHealthMax*(-2.00);
+    // A mon can't have more then 10 injuries.
+    if(currentInjuries >= 10) return 0;
 
-	let massiveDamageThreshold = hitPoints50Pct+1;
+	const targetHealthCurrent = target_actor.data.data.health.value;
+	const targetHealthMax = target_actor.data.data.health.total;
+
+	const hitPoints50Pct = targetHealthMax*0.50;
+	const hitPoints0Pct = 0;
+	const hitPointsNegative50Pct = targetHealthMax*(-0.50);
+	const hitPointsNegative100Pct = targetHealthMax*(-1.00);
+	const hitPointsNegative150Pct = targetHealthMax*(-1.50);
+	const hitPointsNegative200Pct = targetHealthMax*(-2.00);
+
+	const massiveDamageThreshold = hitPoints50Pct+1;
 
 	let injuryCount = 0;
 
@@ -524,7 +529,10 @@ export async function ApplyInjuries(target_actor, final_effective_damage, damage
 				// await game.PTUMoveMaster.chatMessage(target_actor, target_actor.name + " was damaged to below the -200% health threshold and sustains an injury! If using death rules, "+target_actor.name+" *dies*!");
 			}
 
-			await target_actor.update({'data.health.injuries': Number(target_actor.data.data.health.injuries + injuryCount) });
+            const actualInjuries = Math.min(currentInjuries, 10);
+            if(currentInjuries+injuryCount > 10) injuryCount -= (currentInjuries+injuryCount) % 10;
+
+			await target_actor.update({'data.health.injuries': actualInjuries});
 			if(injuryCount)
 			{
 				// await game.PTUMoveMaster.injuryTokenSplash(target_actor);
