@@ -1,17 +1,3 @@
-<div class="row m-0 p-0">
-    <button type="button" class="movemaster-button" data-button="{{_id}}">
-        <div class="btn-body efc regular">
-            <h3>
-                <!-- Ability Name -->
-                <div class="pt-2 pb-2" {{!-- style="padding-top:5px;" --}} title="{{data.effect}}">
-                    {{name}}
-                </div>
-            </h3>
-            <!-- Frequency -->
-            <div class="d-flex icon-list">
-                <img src="{{calcFrequencyIconPath data.frequency '0'}}" title="{{data.frequency}} ({{'0'}} Remaining)"
-                    style="border-width: 0;">
-            </div>
-        </div>
-    </button>
+<div class="item" data-item-id="{{id}}" data-item-name="{{name}}" data-item-owner="{{owner}}" style='background-image: url("{{img}}");'>
+    <p title='{{effect}}'>{{name}} </p>
 </div>

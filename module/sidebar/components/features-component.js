@@ -57,19 +57,23 @@ export default class FeaturesList extends Component {
             // Feature data is prepared on a duplicate entry, otherwise the preperation data will be flagged as 
             // 'changed feature data' during every re-render, causing infinite re-render loops.
             const featureData = duplicate(feature);
-            featureData.data = this.PrepareFeatureData(featureData.data, this.state.actor.data.data, this.state.targetedActors);
-            const featureHtml = await renderTemplate('/systems/ptu/module/sidebar/components/features-component.hbs', featureData);
+            const frequencyIconPath = this._getFrequencyIcons(featureData.data.frequency);
+            const featureHtml = await renderTemplate('/systems/ptu/module/sidebar/components/features-component.hbs', {
+                name: featureData.name,
+                img: frequencyIconPath,
+                id: featureData._id,
+                effect: featureData.data.effect,
+                owner: this.state.actor.id
+            });
             output += featureHtml;
         }
 
         this.element.html(output);
 
-        for (const feature of this.state.features ?? []) {
-            $(`.movemaster-button[data-button="${feature._id}"]`).on("click", (event) => {
-                // Handle on feature click here, for now just log that button is clicked
-                console.log(feature.name, "was clicked");
-            })
-        }
+        this.element.children(".item").on("click", function(event) {
+            const {itemId, itemOwner} = event.currentTarget.dataset;
+            game.actors.get(itemOwner).items.get(itemId).sheet._toChat(); 
+        });
 
         this.element.children(".divider-image").on("click", () => {
             if(this._hidden) {
@@ -83,69 +87,27 @@ export default class FeaturesList extends Component {
         })
 
         this.updated = 0;
-        this.store.dispatch("targetsUpdated");
     }
 
-    PrepareFeatureData(featureData, actorData, targetIds) {
-        featureData.rangeIconsHtml = this._getRangeIcons(featureData.range);
-        featureData.effectiveness = 1;
+    _getFrequencyIcons(frequencyText) {
+        if(!frequencyText) return;
+        const frequency = frequencyText.toLowerCase();
 
-        return featureData;
-    }
-
-    _getRangeIcons(rangeText, actionType = "Standard") {
-        if(!rangeText) return;
-        const range = rangeText.toLowerCase().split(",").map(x => x.trim());
-
-        let o = "";
-        for(const r of range.slice(0, -1)) {
-            const x = getIcon(r);
-            if(x) o += `<span>${x}</span>`;
-        }
-        const x = getIcon(range[range.length-1]);
-        if(x) o += `<span>${x}</span>`;
-
-        function getIcon(range) {
-            if(!range) return;
+        return getIconPath(frequency);
+        
+        function getIconPath(frequency) {
+            if(!frequency) return;
+            const basePath = "systems/ptu/images/icons/"
             switch (true) {
-                case range.includes("see effect"): return range;
-                case range.includes("blessing"): return BlessingIcon; 
-                case range.includes("self"): return SelfIcon;
-                case range.includes("burst"): return BurstIcon + range.slice(range.indexOf("burst")+"burst".length).split(',')[0].trim();
-                case range.includes("line"): return LineIcon + range.slice(range.indexOf("line")+"line".length).split(',')[0].trim();
-                case range.includes("close blast"): return MeleeIcon + BlastIcon + range.slice(range.indexOf("close blast")+"close blast".length).split(',')[0].trim();
-                case range.includes("ranged blast"): return BlastIcon + range.slice(range.indexOf("ranged blast")+"ranged blast".length).split(',')[0].trim();
-                case range.includes("melee"): return MeleeIcon;
-                case range.includes("trigger"): return TriggerIcon;
-                case range.includes("field"): return FieldIcon;
-                case range.includes("swift action"): return SwiftActionIcon;
-                case range.includes("full action"): return FullActionIcon;
-                case range.includes("shift"): return ShiftActionIcon;
-                case range.includes("healing"): return HealingIcon;
-                case range.includes("friendly"): return FriendlyIcon;
-                case range.includes("sonic"): return SonicIcon;
-                case range.includes("interrupt"): return InterruptIcon;
-                case range.includes("shield"): return ShieldIcon;
-                case range.includes("social"): return SocialIcon;
-                case range.includes("five strike"): 
-                case range.includes("fivestrike"): return FiveStrikeIcon;
-                case range.includes("double strike"): 
-                case range.includes("doublestrike"): return DoubleStrikeIcon;
-                case range.includes("groundsource"): return GroundsourceIcon;
-                case range.includes("smite"): return SmiteIcon;
-                case range.includes("exhaust"): return ExhaustIcon;
-                case range.includes("pass"): return PassIcon;
-                case range.includes("set-up"): return SetupIcon;
-                case range.includes("illusion"): return IllusionIcon;
-                case range.includes("coat"): return CoatIcon;
-                case !isNaN(Number(range)): return RangeIcon + range.split(',')[0].trim()
-                default: {
-                    if(range.includes("1 target")) return "";
-                    return `${range}`;
-                }
+                case frequency.includes("swift action"): return basePath + "SwiftActionBackground.png";
+                case frequency.includes("standard action"): return basePath + "StandardActionBackground.png";
+                case frequency.includes("shift action"): return basePath + "ShiftActionBackground.png";
+                case frequency.includes("full action"): return basePath + "FullActionBackground.png";
+                case frequency.includes("static"): return basePath + "StaticBackground.png";
+                case frequency.includes("free action"): return basePath + "FreeActionBackground.png";
+                case frequency.includes("extended action"): return basePath + "ExtendedActionBackground.png";
+                default: return "";
             }
         }
-        
-        return o;
     }
 }
