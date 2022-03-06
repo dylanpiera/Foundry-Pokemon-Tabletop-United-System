@@ -6,7 +6,7 @@ import { CalcBaseStats, CalculateStatTotal, CalculatePoisonedCondition } from ".
 import { GetMonEffectiveness } from "./calculations/effectiveness-calculator.js";
 import { CritOptions } from "./character-sheet-gen8.js";
 import { warn, debug, log } from '../ptu.js'
-import { PlayMoveAnimations } from "../combat/effects/move_animations.js";
+import { PlayMoveAnimations, move_animation_delay_ms } from "../combat/effects/move_animations.js";
 import { PlayMoveSounds } from "../combat/effects/move_sounds.js";
 import { ActionTypes, FiveStrikeHitsDictionary } from "../combat/damage-calc-tools.js";
 
@@ -561,7 +561,7 @@ export class PTUActor extends Actor {
 
       // If auto combat is turned on automatically apply damage based on result
       // TODO: Apply Attack (+ effects) 
-    }, game.settings.get("ptu", "dramaticTiming") == true ? 1100 : 0);
+    }, game.settings.get("ptu", "dramaticTiming") == true ? move_animation_delay_ms : 0);
   }
 
   async _performFullAttack(moveData, token, { bonusDamage, targets, moveName }) {

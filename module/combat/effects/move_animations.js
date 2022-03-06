@@ -1,5 +1,6 @@
 import { debug, log } from "../../ptu.js";
 
+export const move_animation_delay_ms = 1100;
 
 export const move_animation_library = { // This is basically a list of Sequencer sequences, identified by lowercase move name.
     "attack order":{
@@ -156,6 +157,91 @@ export const move_type_impacts_status = {
 };
 
 
+const dodge_TMFX_params =
+[{
+    filterType: "transform",
+    filterId: "PTU_Dodge_Animation",
+    autoDestroy: true,
+    padding: 80,
+    animated:
+    {
+        translationY:
+        {
+            animType: "cosOscillation",
+            val1: 0,
+            val2: -0.225,
+            loops: 1,
+            loopDuration: 900
+        },
+        scaleY:
+        {
+            animType: "cosOscillation",
+            val1: 1,
+            val2: 0.65,
+            loops: 2,
+            loopDuration: 450,
+        },
+        scaleX:
+        {
+            animType: "cosOscillation",
+            val1: 1,
+            val2: 0.65,
+            loops: 2,
+            loopDuration: 450,
+        }
+    }
+}];
+
+const hit_TMFX_params = 
+[{
+    filterType: "transform",
+	filterId: "PTU_Hit_Animation",
+	autoDestroy: true,
+	padding: 80,
+	animated:
+	{
+		translationX:
+		{
+			animType: "sinOscillation",
+			val1: 0.05,
+			val2: -0.05,
+			loops: 5,
+			loopDuration: 100
+		},
+		translationX:
+		{
+			animType: "cosOscillation",
+			val1: 0.05,
+			val2: -0.05,
+			loops: 5,
+			loopDuration: 50
+		},
+	}
+}];
+
+
+export async function PlayHitShakeAnimation(moveTargetToken)
+{
+    if(!(game.modules.get("tokenmagic")?.active) || !(game.settings.get("ptu", "enableMoveAnimations") == true))
+    {
+        return false; // Either TMFX module is not installed, or config settings have disabled move animations, so stop here.
+    }
+
+    await TokenMagic.addFilters(moveTargetToken, hit_TMFX_params);
+}
+
+
+export async function PlayMissDodgeAnimation(moveTargetToken)
+{
+    if(!(game.modules.get("tokenmagic")?.active) || !(game.settings.get("ptu", "enableMoveAnimations") == true))
+    {
+        return false; // Either TMFX module is not installed, or config settings have disabled move animations, so stop here.
+    }
+
+    await TokenMagic.addFilters(moveTargetToken, dodge_TMFX_params);
+}
+
+
 async function PlayMoveTypeAura(move, moveUserToken) 
 {
     if(move_type_auras[move.type.toLowerCase()])
@@ -255,13 +341,16 @@ async function PlayMoveSuccessfulAttackAnimation(move, moveUserToken, moveTarget
                 .repeats(...repeats)
             .play();
     }
-    setTimeout( async () => { await PlayMoveTargetHitImpact(move, moveTargetToken) }, 1100);
+    setTimeout( async () => { 
+        await PlayMoveTargetHitImpact(move, moveTargetToken);
+        await PlayHitShakeAnimation(moveTargetToken);
+    }, move_animation_delay_ms);
 }
 
 
 async function PlayMoveMissedAttackAnimation(move, moveUserToken, moveTargetToken) 
 {
-    if(move_animation_library[move.name.toLowerCase()]?.miss)
+    if(move_animation_library[move.name.toLowerCase()]?.miss) // Use miss-specific animation if one exists...
     {
         let scale = move_animation_library[move.name.toLowerCase()].miss?.scale;
         let repeats = move_animation_library[move.name.toLowerCase()].miss?.repeats ? move_animation_library[move.name.toLowerCase()].miss?.repeats : [1, 0, 0];
@@ -282,7 +371,7 @@ async function PlayMoveMissedAttackAnimation(move, moveUserToken, moveTargetToke
                 .repeats(...repeats)
             .play();
     }
-    else if(move_animation_library[move.name.toLowerCase()]?.hit)
+    else if(move_animation_library[move.name.toLowerCase()]?.hit) // Otherwise just fallback to the normal animation.
     {
         let scale = move_animation_library[move.name.toLowerCase()].hit?.scale;
         let repeats = move_animation_library[move.name.toLowerCase()].hit?.repeats ? move_animation_library[move.name.toLowerCase()].hit?.repeats : [1, 0, 0];
@@ -303,6 +392,9 @@ async function PlayMoveMissedAttackAnimation(move, moveUserToken, moveTargetToke
                 .repeats(...repeats)
             .play();
     }
+    setTimeout( async () => { 
+        await PlayMissDodgeAnimation(moveTargetToken);
+    }, move_animation_delay_ms);
 }
 
 
