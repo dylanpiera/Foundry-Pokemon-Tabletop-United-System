@@ -53,7 +53,7 @@ export default class FeaturesList extends Component {
         if(this.state.features.length > 0)
             output += "<img class='divider-image' src='systems/ptu/images/icons/DividerIcon_Features.png' style='border:none; width:200px;'>"
 
-        for (const feature of this.state.features ?? []) {
+        for (const feature of this.state.features?.sort(this._sort.bind(this)) ?? []) {
             // Feature data is prepared on a duplicate entry, otherwise the preperation data will be flagged as 
             // 'changed feature data' during every re-render, causing infinite re-render loops.
             const featureData = duplicate(feature);
@@ -87,6 +87,20 @@ export default class FeaturesList extends Component {
         })
 
         this.updated = 0;
+    }
+
+    _sort(a, b) {
+        const ai = this._getFrequencyIcons(a.data.frequency);
+        const bi = this._getFrequencyIcons(b.data.frequency);
+        if (ai > bi) return 1;
+        if (bi > ai) return -1;
+
+        if (a.data.frequency > b.data.frequency) return 1;
+        if (b.data.frequency > a.data.frequency) return -1;
+
+        if (a.name > b.name) return 1;
+        if (b.name > a.name) return -1;
+        return 0;
     }
 
     _getFrequencyIcons(frequencyText) {

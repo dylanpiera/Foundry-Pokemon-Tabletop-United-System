@@ -52,7 +52,7 @@ export default class AbilitiesList extends Component {
         if(this.state.abilities.length > 0)
             output += "<img class='divider-image' src='systems/ptu/images/icons/DividerIcon_Abilities.png' style='border:none; width:200px;'>"
 
-        for (const ability of this.state.abilities ?? []) {
+        for (const ability of this.state.abilities?.sort(this._sort.bind(this)) ?? []) {
             // Ability data is prepared on a duplicate entry, otherwise the preperation data will be flagged as 
             // 'changed ability data' during every re-render, causing infinite re-render loops.
             const abilityData = duplicate(ability);
@@ -86,6 +86,20 @@ export default class AbilitiesList extends Component {
         })
 
         this.updated = 0;
+    }
+
+    _sort(a, b) {
+        const ai = this._getFrequencyIcons(a.data.frequency);
+        const bi = this._getFrequencyIcons(b.data.frequency);
+        if (ai > bi) return 1;
+        if (bi > ai) return -1;
+
+        if (a.data.frequency > b.data.frequency) return 1;
+        if (b.data.frequency > a.data.frequency) return -1;
+
+        if (a.name > b.name) return 1;
+        if (b.name > a.name) return -1;
+        return 0;
     }
 
     _getFrequencyIcons(frequencyText) {
