@@ -435,86 +435,87 @@ export async function RollCaptureChance(trainer, target, pokeball, to_hit_roll, 
                     .belowTokens(true)
                 .play();
             
+			// await AudioHelper.play({src: game.PTUMoveMaster.GetSoundDirectory()+"pokeball_sounds/"+"pokeball_catch_confirmed.mp3", volume: 0.8, autoplay: true, loop: false}, true);
+			// chatMessage(target, (target.name + " was captured! Capture DC was " + CaptureRate + ", and you rolled "+Number(roll._total)+"!"));
+			console.log((target.name + " was captured! Capture DC was " + CaptureRate + ", and you rolled "+Number(roll._total)+"!"));
+
+			// const strength = window.confetti.confettiStrength.high;
+			// const shootConfettiProps = window.confetti.getShootConfettiProps(strength);
+			
+			let users = trainer.data.permission
+			let non_gm_user;
+			// let pokemon_parent_actor = game.actors.get(target_token.data.actorId);
+
+			for(let user in users)
+			{
+				let user_object = game.users.get(user);
+				if(user_object)
+				{
+					if(user_object.data.role < 4)
+					{
+						non_gm_user = user_object;
+						break;
+					}
+				}
+				
+			}
+
+			let current_target = game.actors.get(target_token.data.actorId);
+
+			await game.ptu.api.transferOwnership(current_target, {pokeball:pokeball, timeout:15000, permission:{[non_gm_user.data._id]: CONST.ENTITY_PERMISSIONS.OWNER}});
+
+			// setTimeout( async () => {  window.confetti.shootConfetti(shootConfettiProps); }, 750);//364);
+			// setTimeout( async () => {  
+			//     await AudioHelper.play({src: game.PTUMoveMaster.GetSoundDirectory()+"pokeball_sounds/"+"pokeball_success_jingle.wav", volume: 0.8, autoplay: true, loop: false}, true);
+			// }, 750);
+
+			// game.PTUMoveMaster.RemoveThrownPokeball(trainer, pokeball_item);
+
+			let species = current_target.data.data.species;
+			let species_data = game.ptu.GetSpeciesData(species);
+			let species_number = 0;
+			if(species_data.number)
+			{
+				species_number = Number(species_data.number)
+			}
+
+			let current_actor_to_add_DEX_entry_for = trainer;
+
+			if(ActorHasItemWithName(current_actor_to_add_DEX_entry_for, species.toLowerCase(), "dexentry"))
+			{
+				for(let item of current_actor_to_add_DEX_entry_for.itemTypes.dexentry)
+				{
+					if(item.data.name)
+					{
+						if( (item.data.name.replace("é", "e") == species.toLowerCase()) || (item.data.name.replace("é", "e").toLowerCase().includes(species.toLowerCase())) )
+						{
+							item.update(
+								{
+									name: species.toLowerCase(), 
+									type: "dexentry", 
+									data: 
+									{
+										entry: "",
+										id: species_number,
+										owned: true
+									}
+								}
+							);
+							break;
+						}
+					}
+				}
+			}
+			else
+			{
+				await current_actor_to_add_DEX_entry_for.createEmbeddedDocuments("Item", [{name: species.toLowerCase(), type: "dexentry", data: {
+					entry: "",
+					id: species_number,
+					owned: true
+				}}]);
+			}
         }, 10000); 
-        // await AudioHelper.play({src: game.PTUMoveMaster.GetSoundDirectory()+"pokeball_sounds/"+"pokeball_catch_confirmed.mp3", volume: 0.8, autoplay: true, loop: false}, true);
-        // chatMessage(target, (target.name + " was captured! Capture DC was " + CaptureRate + ", and you rolled "+Number(roll._total)+"!"));
-        console.log((target.name + " was captured! Capture DC was " + CaptureRate + ", and you rolled "+Number(roll._total)+"!"));
-
-        // const strength = window.confetti.confettiStrength.high;
-        // const shootConfettiProps = window.confetti.getShootConfettiProps(strength);
         
-        let users = trainer.data.permission
-        let non_gm_user;
-        // let pokemon_parent_actor = game.actors.get(target_token.data.actorId);
-
-        for(let user in users)
-        {
-            let user_object = game.users.get(user);
-            if(user_object)
-            {
-                if(user_object.data.role < 4)
-                {
-                    non_gm_user = user_object;
-                    break;
-                }
-            }
-            
-        }
-
-        let current_target = game.actors.get(target_token.data.actorId);
-
-        await game.ptu.api.transferOwnership(current_target, {pokeball:pokeball, timeout:15000, permission:{[non_gm_user.data._id]: CONST.ENTITY_PERMISSIONS.OWNER}});
-
-        // setTimeout( async () => {  window.confetti.shootConfetti(shootConfettiProps); }, 750);//364);
-        // setTimeout( async () => {  
-        //     await AudioHelper.play({src: game.PTUMoveMaster.GetSoundDirectory()+"pokeball_sounds/"+"pokeball_success_jingle.wav", volume: 0.8, autoplay: true, loop: false}, true);
-        // }, 750);
-
-        // game.PTUMoveMaster.RemoveThrownPokeball(trainer, pokeball_item);
-
-        let species = current_target.data.data.species;
-        let species_data = game.ptu.GetSpeciesData(species);
-        let species_number = 0;
-        if(species_data.number)
-        {
-            species_number = Number(species_data.number)
-        }
-
-        let current_actor_to_add_DEX_entry_for = trainer;
-
-        if(ActorHasItemWithName(current_actor_to_add_DEX_entry_for, species.toLowerCase(), "dexentry"))
-        {
-            for(let item of current_actor_to_add_DEX_entry_for.itemTypes.dexentry)
-            {
-                if(item.data.name)
-                {
-                    if( (item.data.name.replace("é", "e") == species.toLowerCase()) || (item.data.name.replace("é", "e").toLowerCase().includes(species.toLowerCase())) )
-                    {
-                        item.update(
-                            {
-                                name: species.toLowerCase(), 
-                                type: "dexentry", 
-                                data: 
-                                {
-                                    entry: "",
-                                    id: species_number,
-                                    owned: true
-                                }
-                            }
-                        );
-                        break;
-                    }
-                }
-            }
-        }
-        else
-        {
-            await current_actor_to_add_DEX_entry_for.createEmbeddedDocuments("Item", [{name: species.toLowerCase(), type: "dexentry", data: {
-                entry: "",
-                id: species_number,
-                owned: true
-            }}]);
-        }
 
         return true;
     }
