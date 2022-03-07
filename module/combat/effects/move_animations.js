@@ -222,6 +222,47 @@ const hit_TMFX_params =
 }];
 
 
+const soot_splash_params =
+[{
+	filterType: "splash",
+	filterId: "sootSplash",
+	rank:5,
+	color: 0x999999,
+	padding: 30,
+	time: Math.random()*1000,
+	seed: Math.random(),
+	splashFactor: 1,
+	spread: 0.4,
+	blend: 1,
+	dimX: 2,
+	dimY: 2,
+	cut: false,
+	textureAlphaBlend: true,
+	anchorX: 0.32+(Math.random()*0.36),
+	anchorY: 0.32+(Math.random()*0.36)
+}];
+
+const blood_splash_params =
+[{
+	filterType: "splash",
+	filterId: "bloodSplash",
+	rank:5,
+	color: 0x990505,
+	padding: 30,
+	time: Math.random()*1000,
+	seed: Math.random(),
+	splashFactor: 1,
+	spread: 0.4,
+	blend: 1,
+	dimX: 2,
+	dimY: 2,
+	cut: false,
+	textureAlphaBlend: true,
+	anchorX: 0.32+(Math.random()*0.36),
+	anchorY: 0.32+(Math.random()*0.36)
+}];
+
+
 export async function PlayHitShakeAnimation(moveTargetToken)
 {
     if(!(game.modules.get("tokenmagic")?.active) || !(game.settings.get("ptu", "enableMoveAnimations") == true))
@@ -426,4 +467,27 @@ export async function PlayMoveAnimations(move, moveUserToken, attacksData)
     }
 
     return true;
+}
+
+
+export async function injuryTokenSplash(actor)
+{
+    if(!(game.modules.get("tokenmagic")?.active) || !(game.settings.get("ptu", "useInjurySplashes") == true))
+    {
+        return false; // Either TokenMagicFX module is not installed, or config settings have disabled injury splashes, so stop here.
+    }
+
+	let blood_allowed = game.settings.get("ptu", "useBloodSplashes");
+
+	let actor_tokens = actor.getActiveTokens();
+	let actor_token = actor_tokens[0];
+
+    if( (actor.data.data.health.injuries >= 5) && (blood_allowed) )
+    {
+        await actor_token.TMFXaddUpdateFilters(blood_splash_params);
+    }
+    else
+    {
+        await actor_token.TMFXaddUpdateFilters(soot_splash_params);
+    }
 }

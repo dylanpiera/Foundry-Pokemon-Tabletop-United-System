@@ -1,4 +1,5 @@
 import { debug, log } from "../ptu.js";
+import { injuryTokenSplash } from "../../module/combat/effects/move_animations.js";
 
 Hooks.on("renderChatMessage", (message, html, data) => {
     setTimeout(() => {
@@ -530,13 +531,13 @@ export async function ApplyInjuries(target_actor, final_effective_damage, damage
 				// await game.PTUMoveMaster.chatMessage(target_actor, target_actor.name + " was damaged to below the -200% health threshold and sustains an injury! If using death rules, "+target_actor.name+" *dies*!");
 			}
 
-            const actualInjuries = Math.min(currentInjuries, 10);
+            const actualInjuries = Math.min(Number(currentInjuries+injuryCount), 10);
             if(currentInjuries+injuryCount > 10) injuryCount -= (currentInjuries+injuryCount) % 10;
 
 			await target_actor.update({'data.health.injuries': actualInjuries});
 			if(injuryCount)
 			{
-				// await game.PTUMoveMaster.injuryTokenSplash(target_actor);
+				await injuryTokenSplash(target_actor);
 			}
 		}
 

@@ -298,7 +298,7 @@ export async function ThrowPokeball(throwing_actor, target_actor, pokeball_item)
         let label = `Pokeball throw vs ${target_actor.name}'s ${target_speed_evasion} Speed Evasion:`;
         roll.evaluate({async: false});
         
-    setTimeout( async () => { roll.toMessage({flavor: label}); }, 500);
+    setTimeout( async () => { roll.toMessage({flavor: label, sound:null}); }, 500);
 
     console.log("roll");
     console.log(roll);

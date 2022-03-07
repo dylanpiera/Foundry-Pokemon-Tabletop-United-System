@@ -421,7 +421,7 @@ export async function RollCaptureChance(trainer, target, pokeball, to_hit_roll, 
     let label = `Pokeball capture check vs ${target.name}'s ${CaptureRate} Capture Rate:`;
 
     setTimeout( async () => { 
-        await roll.toMessage({flavor: label}); 
+        await roll.toMessage({flavor: label, sound:null}); //message.data.sound = null; // Suppress dice sounds for Move Master roll templates
     }, 10000); 
     if(Number(roll._total) <= CaptureRate)
     {

@@ -401,23 +401,25 @@ export function LoadSystemSettings() {
             category: "combat"
         });
 
-        //     game.settings.register("PTUMoveMaster", "useInjurySplashes", {
-        //         name: "GM Setting: Apply visual splashes of dirt/soot to tokens when they take auto-applied injuries.",
-        //         hint: "",
-        //         scope: "world",
-        //         config: true,
-        //         type: Boolean,
-        //         default: true
-        //     });
+        game.settings.register("ptu", "useInjurySplashes", {
+            name: "Apply visual splashes of dirt/soot to tokens when they take auto-applied injuries.",
+            hint: "",
+            scope: "world",
+            config: true,
+            type: Boolean,
+            default: true,
+            category: "combat"
+        });
 
-        //     game.settings.register("PTUMoveMaster", "useBloodSplashes", {
-        //         name: "GM Setting: Apply visual splashes of blood to tokens when they take auto-applied injuries once they reach 5+ injuries.",
-        //         hint: "This might not fit the tone of more lighthearted games, so it can be turned off here.",
-        //         scope: "world",
-        //         config: true,
-        //         type: Boolean,
-        //         default: true
-        //     });
+        game.settings.register("ptu", "useBloodSplashes", {
+            name: "Apply visual splashes of blood to tokens when they take auto-applied injuries once they reach 5+ injuries.",
+            hint: "This might not fit the tone of more lighthearted games, so it can be turned off here.",
+            scope: "world",
+            config: true,
+            type: Boolean,
+            default: true,
+            category: "combat"
+        });
 
         //     game.settings.register("PTUMoveMaster", "showEffectiveness", {
         //         name: "GM Setting: Show move effectiveness on current target",
