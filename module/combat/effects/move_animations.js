@@ -15,7 +15,9 @@ export const move_animation_library = { // This is basically a list of Sequencer
         "hit":  { path:"modules/jb2a_patreon/Library/5th_Level/Cone_Of_Cold/ConeOfCold_01_Regular_Green_600x600.webm", scale: 1.75, repeats:[1, 0]}
     },
 
-
+    "zap cannon":{
+        "hit": { path:"modules/jb2a_patreon/Library/6th_Level/Chain_Lightning/ChainLightning_01_Regular_Green_30ft_Primary_1600x400.webm", scale: 1.2, repeats:[1, 0], anchor_x: 0.5, anchor_y: 0.5 }
+    },
 
 
 
@@ -27,7 +29,7 @@ export const move_animation_library = { // This is basically a list of Sequencer
     
     "hyper beam":{
         "self":  { path:"modules/jb2a_patreon/Library/TMFX/InPulse/Circle/InPulse_01_Circle_Normal_500.webm", scale: 1, anchor_x: 0.15, anchor_y: 0.5, speed:0.1, ease:false, melee:false, repeats:[1, 100, 500] },
-        "hit":  { path:"modules/jb2a_patreon/Library/Cantrip/Eldritch_Blast/EldritchBlast_01_Regular_Yellow_30ft_1600x400.webm", scale: 1.2, anchor_x: 0.15, anchor_y: 0.5, speed:0.1, ease:false, melee:false, repeats:[5, 100, 200] },
+        "hit":  { path:"modules/jb2a_patreon/Library/Cantrip/Eldritch_Blast/EldritchBlast_01_Regular_Yellow_30ft_1600x400.webm", scale: 1.2, anchor_x: 0.15, anchor_y: 0.5, speed:0.1, ease:false, melee:false, repeats:[1, 0] },
         // "miss": {}
     },
     "light screen":{

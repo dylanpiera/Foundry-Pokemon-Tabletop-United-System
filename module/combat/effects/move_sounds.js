@@ -21,6 +21,11 @@ export const battle_sound_paths = {
 		"special":	"systems/ptu/sounds/battle_sounds/weak_special_damage.mp3",
 		"status":	"systems/ptu/sounds/battle_sounds/hit_status.mp3"
 	},
+	"heal":{
+		"item": "systems/ptu/sounds/battle_sounds/heal.mp3",
+		"rest": "systems/ptu/sounds/battle_sounds/heal.mp3",
+		"pokecenter": "systems/ptu/sounds/battle_sounds/pokecenter_heal.mp3",
+	}
 }
 
 Hooks.on("renderChatMessage", (message) => {

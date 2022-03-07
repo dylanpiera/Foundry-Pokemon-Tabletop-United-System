@@ -2266,9 +2266,12 @@ body.messages-dark-theme .chat-controls .roll-type-select {
   width: 100%;
   justify-content: space-between;
 }
+#ptu-sidebar .ptu-sidebar #orders-list .order .p-1 {
+  padding: 0px !important;
+}
 #ptu-sidebar .ptu-sidebar #orders-list .order .item {
   font-size: 25px;
-  flex: 0 0 70%;
+  flex: 0 0 75%;
 }
 #ptu-sidebar .ptu-sidebar #orders-list .order .item.gray {
   border-left: 4px solid #ccc;
