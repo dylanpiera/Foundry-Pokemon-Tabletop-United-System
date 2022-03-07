@@ -369,7 +369,7 @@ export class PTUActor extends Actor {
   _prepareCharacterData(actorData) {
     const data = actorData.data;
 
-    let dexExpEnabled = "true" == game.settings.get("ptu", "useDexExp") ?? false;
+    const dexExpEnabled = "true" == game.settings.get("ptu", "useDexExp") ?? false;
 
     // Prepare data with Mods.
 
@@ -395,7 +395,7 @@ export class PTUActor extends Actor {
     // Use Data
 
     if (dexExpEnabled) {
-      data.level.dexexp = actorData.items.filter(x => x.type == "dexentry" && x.data.owned).length;
+      data.level.dexexp = actorData.items.filter(x => x.type == "dexentry" && x.data.data.owned).length;
       data.level.current = data.level.milestones + Math.trunc((data.level.dexexp + data.level.miscexp) / 10) + 1 > 50 ? 50 : data.level.milestones + Math.trunc((data.level.dexexp + data.level.miscexp) / 10) + 1;
     }
     else {
