@@ -2214,6 +2214,33 @@ body.messages-dark-theme .chat-controls .roll-type-select {
 #ptu-sidebar .ptu-sidebar .pokedex-bottom {
   flex: 86px 0 0;
 }
+#ptu-sidebar .ptu-sidebar #menu-component {
+  display: flex;
+  flex-direction: column;
+}
+#ptu-sidebar .ptu-sidebar #menu-component #menu-content .pokeball-item {
+  padding-left: 2px;
+  margin-top: 2px;
+}
+#ptu-sidebar .ptu-sidebar #menu-component #menu-content .pokeball-item img {
+  border: none;
+  max-width: 55px;
+  max-height: 55px;
+  padding: none;
+  margin: none;
+}
+#ptu-sidebar .ptu-sidebar #menu-component #menu-buttons {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+#ptu-sidebar .ptu-sidebar #menu-component #menu-buttons .menu-item {
+  margin-top: 5px;
+  font-size: 9px;
+  max-width: 45%;
+  flex: 0 0 45%;
+}
 #ptu-sidebar .ptu-sidebar #items-list .item,
 #ptu-sidebar .ptu-sidebar #abilities-list .item,
 #ptu-sidebar .ptu-sidebar #features-list .item,

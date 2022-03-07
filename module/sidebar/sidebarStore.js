@@ -65,6 +65,12 @@ export default function ({ form, actorId, targetActorId }) {
             },
             async targetsHasChanged(context) {
                 if (!context.state.targetHasChanged) await context.commit("targetsHasChanged");
+            },
+            async changeMenuOption(context, option) {
+                if(!option) return;
+                if(context.state.menuOption == option) return;
+
+                await context.commit("changeMenuOption", option);
             }
         },
         mutations: {
@@ -104,6 +110,10 @@ export default function ({ form, actorId, targetActorId }) {
             async targetsHasChanged(state) {
                 state.targetHasChanged = true;
                 return state;
+            },
+            async changeMenuOption(state, option) {
+                state.menuOption = option;
+                return state;
             }
         },
         state: {
@@ -114,7 +124,8 @@ export default function ({ form, actorId, targetActorId }) {
             moves: [],
             abilities: [],
             features: [],
-            form: form
+            form: form,
+            menuOption: "none"
         },
     })
 

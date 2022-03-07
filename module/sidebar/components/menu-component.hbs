@@ -1,0 +1,27 @@
+<div class="d-flex pb-1" id="menu-buttons">
+    <button class="menu-item p-1" id="struggle-button" data-type="struggle">Struggles</button>
+    <button disabled class="menu-item p-1" id="maneuver-button" data-type="maneuver">Maneuvers</button>
+    <button class="menu-item p-1" id="pokeball-button" data-type="pokeball">Pokéballs</button>
+    <button class="menu-item p-1" id="rest-button" data-type="rest">Resting</button>
+</div>
+
+<div class="d-flex" id="menu-content">
+    {{#if (is menu "struggle")}}
+        <!-- Struggle Menu -->
+    {{else}}
+    {{#if (is menu "maneuver")}}
+        <!-- Does not trigger as of now-->
+    {{else}}
+    {{#if (is menu "pokeball")}}
+        <!-- Pokeball Menu -->
+        {{#if ball}}
+            {{#each ball as | item |}}
+                <div title='{{name}}' class="pokeball-item">
+                    <img data-entity-id="{{id}}" data-owner-id="{{owner}}" data-ball-name="{{name}}" src="{{img}}"/>
+                </div>
+            {{/each}}
+        {{else}}
+            <h4>No Poké Balls found in inventory.</h4>
+        {{/if}}
+    {{/if}}{{/if}}{{/if}}
+</div>
