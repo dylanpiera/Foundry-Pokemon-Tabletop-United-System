@@ -324,7 +324,7 @@ export async function RollCaptureChance(trainer, target, pokeball, to_hit_roll, 
 		"Park Ball": {"Base Modifier": -15}
 	};
 	
-	if(pokeball_stats[pokeball]["Conditional Modifier"] && pokeball_stats[pokeball]["Conditions"])
+	if(pokeball_stats?.[pokeball]?.["Conditional Modifier"] && pokeball_stats?.[pokeball]?.["Conditions"])
 	{
 
 
@@ -360,7 +360,7 @@ export async function RollCaptureChance(trainer, target, pokeball, to_hit_roll, 
 	}
 	else
 	{
-		CaptureRollModifier += pokeball_stats[pokeball]["Base Modifier"];
+		CaptureRollModifier += pokeball_stats?.[pokeball]?.["Base Modifier"] ?? 0;
 	}
 	
 	CaptureRate -= PokemonLevel*2;

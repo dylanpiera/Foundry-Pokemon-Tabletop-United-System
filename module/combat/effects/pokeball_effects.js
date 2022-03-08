@@ -346,3 +346,16 @@ export async function ThrowPokeball(throwing_actor, target_actor, pokeball_item)
 	await AudioHelper.play({src: pokeball_sound_paths[hit_or_miss], volume: 0.8, autoplay: true, loop: false}, true);
     
 }
+
+
+export async function recallPokemon(target_actor)
+{
+	for(let affliction of VolatileAfflictions)
+	{
+		await cureActorAffliction(target_actor, affliction, true);
+	}
+
+	await ResetStagesToDefault(target_actor, true);
+
+	// chatMessage(target_actor, target_actor.name + ' was recalled! Stages reset to defaults, and all volatile conditions cured!');
+}

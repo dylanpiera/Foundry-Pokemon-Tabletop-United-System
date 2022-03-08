@@ -491,3 +491,13 @@ export async function injuryTokenSplash(actor)
         await actor_token.TMFXaddUpdateFilters(soot_splash_params);
     }
 }
+
+
+export async function cleanInjuryTokenSplash(actor)
+{
+	let actor_tokens = actor.getActiveTokens();
+	let actor_token = actor_tokens[0];
+
+	await actor_token.TMFXdeleteFilters("sootSplash");
+	await actor_token.TMFXdeleteFilters("bloodSplash");
+}

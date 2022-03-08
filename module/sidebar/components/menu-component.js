@@ -1,4 +1,36 @@
 import Component from '../../api/front-end/lib/component.js';
+import { pokeball_sound_paths } from '../../combat/effects/pokeball_effects.js';
+
+export const ui_sound_paths = {
+    "button":       "systems/ptu/sounds/ui_sounds/ui_button.wav",
+    "flip":         "systems/ptu/sounds/ui_sounds/ui_cardflip.wav",
+    "check_on":     "systems/ptu/sounds/ui_sounds/ui_checkbox_on.wav",
+    "check_off":    "systems/ptu/sounds/ui_sounds/ui_checkbox_off.wav",
+    "pokedex_scan": "systems/ptu/sounds/ui_sounds/ui_pokedex_ding.wav",
+    "warning":      "systems/ptu/sounds/ui_sounds/ui_warning.wav",
+};
+
+export async function getTrainerPokeballArray(trainer_actor)
+{
+    let pokeball_array = [];
+    let i = 0;
+
+    for(let item of trainer_actor.items)
+    {
+        if(item.type == "item" && item.name.toLowerCase().includes("ball"))
+        {
+            pokeball_array[i] = { //Array of ball objects, provide them in this format not just as the item itself (you'll prob just have to use .map)
+                name: item.name,
+                id: item.id,
+                owner: trainer_actor.id,
+                img: item.img
+            }
+            i++;
+        }
+    }
+    return pokeball_array;
+}
+
 
 export default class MenuComponent extends Component {
     constructor(store) {
@@ -30,9 +62,10 @@ export default class MenuComponent extends Component {
             break;
             case "pokeball":
                 output += await renderTemplate("/systems/ptu/module/sidebar/components/menu-component.hbs", {
-                    menu: "none"
+                    menu: "pokeball",
+                    ball: await getTrainerPokeballArray(this.state.actor)
                 })
-                output += "<p style='color: white;'>Pokeball Test</p>"
+                // output += "<p style='color: white;'>Pokeball Test</p>"
             break;
             case "maneuver":
 
@@ -52,16 +85,36 @@ export default class MenuComponent extends Component {
 
             switch(type) {
                 case "struggle":
-                    if(this.state.menuOption == type) this.store.dispatch('changeMenuOption', "none");
-                    else this.store.dispatch('changeMenuOption', type);
+                    if(this.state.menuOption == type) {
+                        this.store.dispatch('changeMenuOption', "none");
+                        AudioHelper.play({src: ui_sound_paths["check_off"], volume: 0.8, autoplay: true, loop: false}, false);
+                    }
+                    else {
+                        this.store.dispatch('changeMenuOption', type);
+                        AudioHelper.play({src: ui_sound_paths["check_on"], volume: 0.8, autoplay: true, loop: false}, false);
+                    }
                 break;
                 case "pokeball":
-                    if(this.state.menuOption == type) this.store.dispatch('changeMenuOption', "none");
-                    else this.store.dispatch('changeMenuOption', type);
+                    if(this.state.menuOption == type) {
+                        this.store.dispatch('changeMenuOption', "none");
+                        AudioHelper.play({src: pokeball_sound_paths["menu_close"], volume: 0.8, autoplay: true, loop: false}, false);
+                        AudioHelper.play({src: ui_sound_paths["check_off"], volume: 0.8, autoplay: true, loop: false}, false);
+                    }
+                    else {
+                        this.store.dispatch('changeMenuOption', type);
+                        AudioHelper.play({src: pokeball_sound_paths["menu_open"], volume: 0.8, autoplay: true, loop: false}, false);
+                        AudioHelper.play({src: ui_sound_paths["check_on"], volume: 0.8, autoplay: true, loop: false}, false);
+                    }
                 break;
                 case "maneuver":
-                    if(this.state.menuOption == type) this.store.dispatch('changeMenuOption', "none");
-                    else this.store.dispatch('changeMenuOption', type);
+                    if(this.state.menuOption == type) {
+                        this.store.dispatch('changeMenuOption', "none");
+                        AudioHelper.play({src: ui_sound_paths["check_off"], volume: 0.8, autoplay: true, loop: false}, false);
+                    }
+                    else {
+                        this.store.dispatch('changeMenuOption', type);
+                        AudioHelper.play({src: ui_sound_paths["check_on"], volume: 0.8, autoplay: true, loop: false}, false);
+                    }
                 break;
                 case "rest":
                     // Render rest pop-up

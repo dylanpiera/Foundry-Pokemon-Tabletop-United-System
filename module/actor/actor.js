@@ -598,7 +598,7 @@ export class PTUActor extends Actor {
 
     // Apply move effect parser
     //TODO: Implement Move Effect Parser direclty into PTU.
-    Hooks.call("ptu.moveUsed", this);
+    Hooks.call("ptu.moveUsed", this, move);
 
     // After effects have been parsed, display chat message with all info.
     const messageData = mergeObject({

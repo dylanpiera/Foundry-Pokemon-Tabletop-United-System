@@ -2218,14 +2218,19 @@ body.messages-dark-theme .chat-controls .roll-type-select {
   display: flex;
   flex-direction: column;
 }
+#ptu-sidebar .ptu-sidebar #menu-component #menu-content {
+  display: flex !important;
+  flex-direction: row !important;
+  flex-wrap: wrap !important;
+}
 #ptu-sidebar .ptu-sidebar #menu-component #menu-content .pokeball-item {
   padding-left: 2px;
   margin-top: 2px;
 }
 #ptu-sidebar .ptu-sidebar #menu-component #menu-content .pokeball-item img {
   border: none;
-  max-width: 55px;
-  max-height: 55px;
+  max-width: 38px;
+  max-height: 38px;
   padding: none;
   margin: none;
 }

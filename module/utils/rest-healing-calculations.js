@@ -1,4 +1,5 @@
-import {battle_sound_paths} from "../combat/effects/move_sounds"
+import {battle_sound_paths} from "../combat/effects/move_sounds.js";
+import {cleanInjuryTokenSplash} from "../combat/effects/move_animations.js";
 
 export async function cureActorAffliction(actor, affliction_name, silent=false)
 {
@@ -106,6 +107,8 @@ export async function healActorRest(actor, hours=8, bandage_used=false, pokecent
 	await AudioHelper.play({src: battle_sound_paths["heal"][healing_sound], volume: 0.8, autoplay: true, loop: false}, true);
 
 	await actor.update({'data.health.injuries': Math.max(Number(actor.data.data.health.injuries - injuries_healed), 0) });
+
+	await cleanInjuryTokenSplash(actor);
 
 
 	setTimeout( async () => {  
