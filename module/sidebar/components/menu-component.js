@@ -2,35 +2,13 @@ import Component from '../../api/front-end/lib/component.js';
 import { pokeball_sound_paths } from '../../combat/effects/pokeball_effects.js';
 
 export const ui_sound_paths = {
-    "button":       "systems/ptu/sounds/ui_sounds/ui_button.wav",
-    "flip":         "systems/ptu/sounds/ui_sounds/ui_cardflip.wav",
-    "check_on":     "systems/ptu/sounds/ui_sounds/ui_checkbox_on.wav",
-    "check_off":    "systems/ptu/sounds/ui_sounds/ui_checkbox_off.wav",
+    "button": "systems/ptu/sounds/ui_sounds/ui_button.wav",
+    "flip": "systems/ptu/sounds/ui_sounds/ui_cardflip.wav",
+    "check_on": "systems/ptu/sounds/ui_sounds/ui_checkbox_on.wav",
+    "check_off": "systems/ptu/sounds/ui_sounds/ui_checkbox_off.wav",
     "pokedex_scan": "systems/ptu/sounds/ui_sounds/ui_pokedex_ding.wav",
-    "warning":      "systems/ptu/sounds/ui_sounds/ui_warning.wav",
+    "warning": "systems/ptu/sounds/ui_sounds/ui_warning.wav",
 };
-
-export async function getTrainerPokeballArray(trainer_actor)
-{
-    let pokeball_array = [];
-    let i = 0;
-
-    for(let item of trainer_actor.items)
-    {
-        if(item.type == "item" && item.name.toLowerCase().includes("ball"))
-        {
-            pokeball_array[i] = { //Array of ball objects, provide them in this format not just as the item itself (you'll prob just have to use .map)
-                name: item.name,
-                id: item.id,
-                owner: trainer_actor.id,
-                img: item.img
-            }
-            i++;
-        }
-    }
-    return pokeball_array;
-}
-
 
 export default class MenuComponent extends Component {
     constructor(store) {
@@ -52,29 +30,30 @@ export default class MenuComponent extends Component {
 
         const dividerIcon = "<img class='divider-image' src='systems/ptu/images/icons/Divider.png' style='border:none; width:200px;'>"
         let output = dividerIcon;
-       
-        switch(this.state.menuOption) {
+
+        switch (this.state.menuOption) {
             case "struggle":
                 output += await renderTemplate("/systems/ptu/module/sidebar/components/menu-component.hbs", {
                     menu: "none"
                 })
                 output += "<p style='color: white;'>Struggle Test</p>"
-            break;
+                break;
             case "pokeball":
+                if(this.state.actor.type == "pokemon") return this.store.dispatch('changeMenuOption', "none");
+                
                 output += await renderTemplate("/systems/ptu/module/sidebar/components/menu-component.hbs", {
                     menu: "pokeball",
-                    ball: await getTrainerPokeballArray(this.state.actor)
+                    ball: await this._getTrainerPokeballArray(this.state.actor)
                 })
-                // output += "<p style='color: white;'>Pokeball Test</p>"
-            break;
+                break;
             case "maneuver":
 
-            break;
+                break;
             default:
                 output += await renderTemplate("/systems/ptu/module/sidebar/components/menu-component.hbs", {
                     menu: "none"
                 })
-            break;
+                break;
         }
 
         this.element.html(output);
@@ -83,47 +62,54 @@ export default class MenuComponent extends Component {
             event.preventDefault();
             const type = event.currentTarget.dataset.type;
 
-            switch(type) {
+            switch (type) {
                 case "struggle":
-                    if(this.state.menuOption == type) {
+                    if (this.state.menuOption == type) {
                         this.store.dispatch('changeMenuOption', "none");
-                        AudioHelper.play({src: ui_sound_paths["check_off"], volume: 0.8, autoplay: true, loop: false}, false);
+                        AudioHelper.play({ src: ui_sound_paths["check_off"], volume: 0.8, autoplay: true, loop: false }, false);
                     }
                     else {
                         this.store.dispatch('changeMenuOption', type);
-                        AudioHelper.play({src: ui_sound_paths["check_on"], volume: 0.8, autoplay: true, loop: false}, false);
+                        AudioHelper.play({ src: ui_sound_paths["check_on"], volume: 0.8, autoplay: true, loop: false }, false);
                     }
-                break;
+                    break;
                 case "pokeball":
-                    if(this.state.menuOption == type) {
+                    if (this.state.menuOption == type) {
                         this.store.dispatch('changeMenuOption', "none");
-                        AudioHelper.play({src: pokeball_sound_paths["menu_close"], volume: 0.8, autoplay: true, loop: false}, false);
-                        AudioHelper.play({src: ui_sound_paths["check_off"], volume: 0.8, autoplay: true, loop: false}, false);
+                        AudioHelper.play({ src: pokeball_sound_paths["menu_close"], volume: 0.8, autoplay: true, loop: false }, false);
+                        AudioHelper.play({ src: ui_sound_paths["check_off"], volume: 0.8, autoplay: true, loop: false }, false);
                     }
                     else {
                         this.store.dispatch('changeMenuOption', type);
-                        AudioHelper.play({src: pokeball_sound_paths["menu_open"], volume: 0.8, autoplay: true, loop: false}, false);
-                        AudioHelper.play({src: ui_sound_paths["check_on"], volume: 0.8, autoplay: true, loop: false}, false);
+                        AudioHelper.play({ src: pokeball_sound_paths["menu_open"], volume: 0.8, autoplay: true, loop: false }, false);
+                        AudioHelper.play({ src: ui_sound_paths["check_on"], volume: 0.8, autoplay: true, loop: false }, false);
                     }
-                break;
+                    break;
                 case "maneuver":
-                    if(this.state.menuOption == type) {
+                    if (this.state.menuOption == type) {
                         this.store.dispatch('changeMenuOption', "none");
-                        AudioHelper.play({src: ui_sound_paths["check_off"], volume: 0.8, autoplay: true, loop: false}, false);
+                        AudioHelper.play({ src: ui_sound_paths["check_off"], volume: 0.8, autoplay: true, loop: false }, false);
                     }
                     else {
                         this.store.dispatch('changeMenuOption', type);
-                        AudioHelper.play({src: ui_sound_paths["check_on"], volume: 0.8, autoplay: true, loop: false}, false);
+                        AudioHelper.play({ src: ui_sound_paths["check_on"], volume: 0.8, autoplay: true, loop: false }, false);
                     }
-                break;
+                    break;
                 case "rest":
                     // Render rest pop-up
-                break;
+                    break;
             }
         })
-      
+
+        this.element.children('#menu-content').children('.pokeball-item').on("click", (event) => {
+            const {entityId, ballName, ownerId} = event.target.dataset;
+
+            const owner = game.actors.get(ownerId);
+            game.ptu.ThrowPokeball(owner, game.user?.targets?.first(), owner?.items.get(entityId));
+        })
+
         this.element.children(".divider-image").on("click", () => {
-            if(this._hidden) {
+            if (this._hidden) {
                 this.element.children(":not(.divider-image)").fadeIn();
                 this._hidden = false;
             }
@@ -150,12 +136,12 @@ export default class MenuComponent extends Component {
         const tokens = game.actors.get(actorId).getActiveTokens(true);
         if (tokens && tokens[0]?.isVisible) {
             if (!tokens[0]._controlled) tokens[0]._onHoverIn(event);
-            this._highlighted= tokens[0];
+            this._highlighted = tokens[0];
         }
     }
     _onHoverOut(event) {
         event.preventDefault();
-        if ( this._highlighted ) this._highlighted._onHoverOut(event);
+        if (this._highlighted) this._highlighted._onHoverOut(event);
         this._highlighted = null;
     }
     _onClick(event) {
@@ -165,18 +151,18 @@ export default class MenuComponent extends Component {
         const actorId = li.dataset.entityId
         const actor = game.actors.get(actorId)
         const token = actor?.getActiveTokens(true)[0];
-        if ( !actor?.testUserPermission(game.user, "OBSERVED") ) return;
+        if (!actor?.testUserPermission(game.user, "OBSERVED")) return;
         const now = Date.now();
-    
+
         // Handle double-left click to open sheet
         const dt = now - this._clickTime;
         this._clickTime = now;
-        if ( dt <= 250 ) return actor?.sheet.render(true);
-    
+        if (dt <= 250) return actor?.sheet.render(true);
+
         // Control and pan to Token object
-        if ( token ) {
-          token.control({releaseOthers: true});
-          return canvas.animatePan({x: token.data.x, y: token.data.y});
+        if (token) {
+            token.control({ releaseOthers: true });
+            return canvas.animatePan({ x: token.data.x, y: token.data.y });
         }
     }
 
@@ -199,5 +185,17 @@ export default class MenuComponent extends Component {
             return "darkred";
         }
         return "black";
+    }
+
+    async _getTrainerPokeballArray(actor) {
+        return actor.items.filter(item => item.type == "item" && item.data.data.category.toLowerCase() == "pokeballs").map(item => {
+            return {
+                name: item.name,
+                id: item.id,
+                owner: actor.id,
+                img: item.img,
+                amount: item.data.data.quantity
+            }
+        });
     }
 }

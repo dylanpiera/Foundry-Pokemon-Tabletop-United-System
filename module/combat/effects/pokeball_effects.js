@@ -3,159 +3,154 @@ import { PlayMissDodgeAnimation, PlayHitShakeAnimation } from "./move_animations
 import { RollCaptureChance } from "../../utils/pokeball-capture-calculations.js"
 
 export const pokeball_sound_paths = {
-	"miss":             "systems/ptu/sounds/pokeball_sounds/pokeball_miss.mp3",
-	"hit":              "systems/ptu/sounds/pokeball_sounds/pokeball_hit.mp3",
-	"wiggle":           "systems/ptu/sounds/pokeball_sounds/pokeball_escape_attempt.mp3",
-    "capture_attempt":  "systems/ptu/sounds/pokeball_sounds/pokeball_catch_attempt.mp3",
-    "capture_success":  "systems/ptu/sounds/pokeball_sounds/pokeball_catch_confirmed.mp3",
-    "capture_jingle":   "systems/ptu/sounds/pokeball_sounds/pokeball_success_jingle.wav",
-    "menu_open":        "systems/ptu/sounds/pokeball_sounds/pokeball_grow.mp3",
-    "menu_close":       "systems/ptu/sounds/pokeball_sounds/pokeball_shrink.mp3",
-    "return":           "systems/ptu/sounds/pokeball_sounds/pokeball_return.mp3",
-    "release":          "systems/ptu/sounds/pokeball_sounds/pokeball_release.mp3",
+    "miss": "systems/ptu/sounds/pokeball_sounds/pokeball_miss.mp3",
+    "hit": "systems/ptu/sounds/pokeball_sounds/pokeball_hit.mp3",
+    "wiggle": "systems/ptu/sounds/pokeball_sounds/pokeball_escape_attempt.mp3",
+    "capture_attempt": "systems/ptu/sounds/pokeball_sounds/pokeball_catch_attempt.mp3",
+    "capture_success": "systems/ptu/sounds/pokeball_sounds/pokeball_catch_confirmed.mp3",
+    "capture_jingle": "systems/ptu/sounds/pokeball_sounds/pokeball_success_jingle.wav",
+    "menu_open": "systems/ptu/sounds/pokeball_sounds/pokeball_grow.mp3",
+    "menu_close": "systems/ptu/sounds/pokeball_sounds/pokeball_shrink.mp3",
+    "return": "systems/ptu/sounds/pokeball_sounds/pokeball_return.mp3",
+    "release": "systems/ptu/sounds/pokeball_sounds/pokeball_release.mp3",
 };
 
-const pokeball_capture_TMFX_params = 
-[
-    {
+const pokeball_capture_TMFX_params =
+    [
+        {
+            filterType: "transform",
+            filterId: "pokeballShoop",
+            bpRadiusPercent: 100,
+            //padding: 0,
+            autoDestroy: true,
+            animated:
+            {
+                bpStrength:
+                {
+                    animType: "cosOscillation",//"cosOscillation",
+                    val1: 0,
+                    val2: -0.99,//-0.65,
+                    loopDuration: 1500,
+                    loops: 1,
+                }
+            }
+        },
+
+        {
+            filterType: "glow",
+            filterId: "pokeballShoop",
+            outerStrength: 40,
+            innerStrength: 20,
+            color: 0xFFFFFF,//0x5099DD,
+            quality: 0.5,
+            //padding: 0,
+            //zOrder: 2,
+            autoDestroy: true,
+            animated:
+            {
+                color:
+                {
+                    active: true,
+                    loopDuration: 1500,
+                    loops: 1,
+                    animType: "colorOscillation",
+                    val1: 0xFFFFFF,//0x5099DD, 
+                    val2: 0xff0000,//0x90EEFF
+                }
+            }
+        },
+
+        {
+            filterType: "adjustment",
+            filterId: "pokeballShoop",
+            saturation: 1,
+            brightness: 10,
+            contrast: 1,
+            gamma: 1,
+            red: 1,
+            green: 1,
+            blue: 1,
+            alpha: 1,
+            autoDestroy: true,
+            animated:
+            {
+                alpha:
+                {
+                    active: true,
+                    loopDuration: 1500,
+                    loops: 1,
+                    animType: "syncCosOscillation",
+                    val1: 0.35,
+                    val2: 0.75
+                }
+            }
+        }
+    ];
+
+const pokeball_wiggle_TMFX_params =
+    [{
         filterType: "transform",
-        filterId: "pokeballShoop",
-        bpRadiusPercent: 100,
-        //padding: 0,
-        autoDestroy: true,
+        filterId: "pokeballWiggle",
+        padding: 50,
         animated:
         {
-            bpStrength:
+            translationX:
             {
-                animType: "cosOscillation",//"cosOscillation",
-                val1: 0,
-                val2: -0.99,//-0.65,
-                loopDuration: 1500,
-                loops: 1,
-            }
-        }
-    },
-
-    {
-        filterType: "glow",
-        filterId: "pokeballShoop",
-        outerStrength: 40,
-        innerStrength: 20,
-        color: 0xFFFFFF,//0x5099DD,
-        quality: 0.5,
-        //padding: 0,
-        //zOrder: 2,
-        autoDestroy: true,
-        animated:
-        {
-            color: 
+                animType: "sinOscillation",
+                val1: -0.0025,
+                val2: +0.0025,
+                loopDuration: 500,
+            },
+            translationY:
             {
-            active: true, 
-            loopDuration: 1500, 
-            loops: 1,
-            animType: "colorOscillation", 
-            val1:0xFFFFFF,//0x5099DD, 
-            val2:0xff0000,//0x90EEFF
-            }
+                animType: "cosOscillation",
+                val1: -0.00035,
+                val2: +0.00035,
+                loopDuration: 500,
+            },
+            rotation:
+            {
+                animType: "cosOscillation",
+                val1: 15,
+                val2: -15,
+                loopDuration: 1000,
+            },
         }
-    },
-
-    {
-        filterType: "adjustment",
-        filterId: "pokeballShoop",
-        saturation: 1,
-        brightness: 10,
-        contrast: 1,
-        gamma: 1,
-        red: 1,
-        green: 1,
-        blue: 1,
-        alpha: 1,
-        autoDestroy: true,
-        animated:
-        {
-            alpha: 
-            { 
-            active: true, 
-            loopDuration: 1500, 
-            loops: 1,
-            animType: "syncCosOscillation",
-            val1: 0.35,
-            val2: 0.75 }
-        }
-    }
-];
-
-const pokeball_wiggle_TMFX_params = 
-[{
-    filterType: "transform",
-    filterId: "pokeballWiggle",
-    padding: 50,
-    animated:
-    {
-        translationX:
-        {
-            animType: "sinOscillation",
-            val1: -0.0025,
-            val2: +0.0025,
-            loopDuration: 500,
-        },
-        translationY:
-        {
-            animType: "cosOscillation",
-            val1: -0.00035,
-            val2: +0.00035,
-            loopDuration: 500,
-        },
-        rotation:
-        {
-            animType: "cosOscillation",
-            val1: 15,
-            val2: -15,
-            loopDuration: 1000,
-        },    
-    }
-}];
+    }];
 
 
-export async function GetActorFromToken(token)
-{
-	let actor = game.actors.get(token.data.actorId);
-	return actor;
+export async function GetActorFromToken(token) {
+    let actor = game.actors.get(token.data.actorId);
+    return actor;
 };
 
 
-export async function GetTokenFromActor(actor)
-{
-	let actor_id = actor.id;
-	let scene_tokens = game.scenes.current.data.tokens;
+export async function GetTokenFromActor(actor) {
+    let actor_id = actor.id;
+    let scene_tokens = game.scenes.current.data.tokens;
 
-	let token = false;
+    let token = false;
 
-	for(let searched_token of scene_tokens)
-	{
-		if(searched_token.actor.id == actor_id)
-		{
-			token = searched_token;
-			break;
-		}
-	}
-	
-	return token;
+    for (let searched_token of scene_tokens) {
+        if (searched_token.actor.id == actor_id) {
+            token = searched_token;
+            break;
+        }
+    }
+
+    return token;
 };
 
 
-let pokeballPolymorphFunc = async function (pokeball_image_path, target_token) 
-{
+let pokeballPolymorphFunc = async function (pokeball_image_path, target_token) {
     let transitionType = 9;
     let targetImagePath = pokeball_image_path;
     let polymorphFilterId = "pokeball";
     let polymorph_params;
-    
+
     // Is the filter already activated on the placeable ? 
-    if (target_token.TMFXhasFilterId(polymorphFilterId)) 
-    {
-    
+    if (target_token.TMFXhasFilterId(polymorphFilterId)) {
+
         // Yes. So we update the type in the general section and loops + active in the progress animated section, to activate the animation for just one loop.
         // "type" to allow you to change the animation type
         // "active" to say at Token Magic : "Hey filter! It's time to work again!"
@@ -177,9 +172,8 @@ let pokeballPolymorphFunc = async function (pokeball_image_path, target_token)
                 }
             }];
 
-    } 
-    else 
-    {
+    }
+    else {
         // No. So we create the entirety of the filter
         polymorph_params =
             [{
@@ -213,49 +207,45 @@ let pokeballPolymorphFunc = async function (pokeball_image_path, target_token)
 };
 
 
-export async function PlayPokeballCaptureAnimation(target_token, pokeball_image_path, to_hit_roll, pokeball_item, throwing_actor, target_actor)
-{
-    if(!(game.modules.get("tokenmagic")?.active) || !(game.settings.get("ptu", "enableMoveAnimations") == true))
-    {
+export async function PlayPokeballCaptureAnimation(target_token, pokeball_image_path, to_hit_roll, pokeball_item, throwing_actor, target_actor, isCaptured) {
+    if (!(game.modules.get("tokenmagic")?.active) || !(game.settings.get("ptu", "enableMoveAnimations") == true)) {
         return false; // Either TMFX module is not installed, or config settings have disabled move animations, so stop here.
     }
 
     await TokenMagic.addFilters(target_token, pokeball_capture_TMFX_params);
 
-    let capture_roll_result = await RollCaptureChance(throwing_actor, target_actor, pokeball_item.name, to_hit_roll, target_token, pokeball_item);
-
-    setTimeout( async () => { 
+    setTimeout(async () => {
         await pokeballPolymorphFunc(pokeball_image_path, target_token);
     }, 500);
 
-    setTimeout( async () => { 
-        await AudioHelper.play({src: pokeball_sound_paths["wiggle"], volume: 0.8, autoplay: true, loop: false}, true);
+    setTimeout(async () => {
+        await AudioHelper.play({ src: pokeball_sound_paths["wiggle"], volume: 0.8, autoplay: true, loop: false }, true);
     }, 3000);
 
-    setTimeout( async () => { 
+    setTimeout(async () => {
         await TokenMagic.addFilters(target_token, pokeball_wiggle_TMFX_params);
     }, 4000);
 
-    setTimeout( async () => { 
+    setTimeout(async () => {
         target_token.TMFXdeleteFilters("pokeballWiggle");
 
-        if(capture_roll_result == true) // Captured!
+        if (isCaptured == true) // Captured!
         {
-            await AudioHelper.play({src: pokeball_sound_paths["capture_success"], volume: 0.8, autoplay: true, loop: false}, true);
-            setTimeout( async () => { 
-                await AudioHelper.play({src: pokeball_sound_paths["capture_jingle"], volume: 0.7, autoplay: true, loop: false}, true);
+            await AudioHelper.play({ src: pokeball_sound_paths["capture_success"], volume: 0.8, autoplay: true, loop: false }, true);
+            setTimeout(async () => {
+                await AudioHelper.play({ src: pokeball_sound_paths["capture_jingle"], volume: 0.7, autoplay: true, loop: false }, true);
             }, 1000);
 
         }
         else // Escaped!
         {
-            setTimeout( async () => { 
-                await AudioHelper.play({src: pokeball_sound_paths["release"], volume: 0.7, autoplay: true, loop: false}, true);
+            setTimeout(async () => {
+                await AudioHelper.play({ src: pokeball_sound_paths["release"], volume: 0.7, autoplay: true, loop: false }, true);
             }, 700);
-            setTimeout( async () => { 
+            setTimeout(async () => {
                 await TokenMagic.addFilters(target_token, pokeball_capture_TMFX_params);
             }, 900);
-            setTimeout( async () => { 
+            setTimeout(async () => {
                 await pokeballPolymorphFunc(pokeball_image_path, target_token);
             }, 1000);
         }
@@ -263,99 +253,87 @@ export async function PlayPokeballCaptureAnimation(target_token, pokeball_image_
 }
 
 
-export async function ThrowPokeball(throwing_actor, target_actor, pokeball_item)
-{
-    if(!target_actor)
-    {
+export async function ThrowPokeball(thrower, target, pokeball) {
+    if (!target) {
         console.log("No target to throw pokeball at.");
         return false;
     }
+    if (!thrower) return;
+    const throwerToken = thrower.actor ? thrower : thrower.getActiveTokens()[0];
+    if (!throwerToken) return;
+    
+    const targetToken = target.actor ? target : target.getActiveTokens()[0];
+    if (!targetToken) return;
+    if(targetToken.actor.type != "pokemon") return;
 
-    console.log("ThrowPokeball:");
-    console.log("throwing_actor");
-    console.log(throwing_actor);
-    console.log("target_actor");
-    console.log(target_actor);
-    console.log("pokeball_item");
-    console.log(pokeball_item);
 
+    const POKEBALL_IMAGE_PATH = pokeball?.img ?? "systems/ptu/images/item_icons/basic ball.webp";
 
-    let pokeball_image_path = pokeball_item?.img ?? "systems/ptu/images/item_icons/basic ball.webp";
-    let throwing_token = await GetTokenFromActor(throwing_actor);
-    let target_token = await GetTokenFromActor(target_actor);
+    const accuracyBonus = thrower?.data?.data?.modifiers?.acBonus?.total ?? 0; // TODO: Get actual value, factor in edges/features that effect this, etc.
+    const BASE_POKEBALL_AC = -6;
+    const targetEvasion = target?.data?.data?.evasion?.speed ?? 0;
 
-    console.log("throwing_token");
-    console.log(throwing_token);
-    console.log("target_token");
-    console.log(target_token);
+    const roll = new Roll("1d20+@accuracyBonus-@acCheck", {
+        accuracyBonus,
+        acCheck: BASE_POKEBALL_AC
+    });
 
-    let total_pokeball_accuracy = throwing_actor?.data?.data?.modifiers?.acBonus?.total ?? 0; // TODO: Get actual value, factor in edges/features that effect this, etc.
-    let pokeball_throw_AC = -6;
-    let target_speed_evasion = target_actor?.data?.data?.evasion?.speed ?? 0;
-    let hit_or_miss = "miss";
+    await roll.evaluate({ async: true });
 
-    let roll = new Roll("1d20" + "+" + total_pokeball_accuracy + pokeball_throw_AC, {});
-        let label = `Pokeball throw vs ${target_actor.name}'s ${target_speed_evasion} Speed Evasion:`;
-        roll.evaluate({async: false});
-        
-    setTimeout( async () => { roll.toMessage({flavor: label, sound:null}); }, 500);
+    setTimeout(async () => {
+        await roll.toMessage({ flavor: `Pokeball throw vs ${target.name}'s ${targetEvasion} Speed Evasion:`, sound: null });
+    }, 500);
 
-    console.log("roll");
-    console.log(roll);
+    const hitType = roll.total >= targetEvasion ? "hit": "miss";  
 
-    if(roll.total >= target_speed_evasion)
-    {
-        hit_or_miss = "hit";
-    }
-
-    if((game.modules.get("sequencer")?.active) && (game.settings.get("ptu", "enableMoveAnimations") == true))
-    {
+    if ((game.modules.get("sequencer")?.active) && (game.settings.get("ptu", "enableMoveAnimations") == true)) {
         new Sequence("PTU")
-        .effect()
-            .file( pokeball_image_path )
-            .atLocation(throwing_token)
+            .effect()
+            .file(POKEBALL_IMAGE_PATH)
+            .atLocation(throwerToken)
             .scale(0.3)
             .moveSpeed(1000)
-            .rotateIn(960, 5000, {ease: "easeOutCubic"})
-            .moveTowards(target_token, {ease: "easeOutBounce", rotate: true})
-            .missed( (hit_or_miss == "miss") )
-        .play();
+            .rotateIn(960, 5000, { ease: "easeOutCubic" })
+            .moveTowards(targetToken, { ease: "easeOutBounce", rotate: true })
+            .missed((hitType == "miss"))
+            .play();
     }
 
-    if((game.modules.get("tokenmagic")?.active) && (game.settings.get("ptu", "enableMoveAnimations") == true))
-    {
-        if(hit_or_miss == "hit") // Do hit-shake, then pokeball-shoop transformation
+    if ((game.modules.get("tokenmagic")?.active) && (game.settings.get("ptu", "enableMoveAnimations") == true)) {
+        if (hitType == "hit") // Do hit-shake, then pokeball-shoop transformation
         {
-            await AudioHelper.play({src: pokeball_sound_paths["capture_attempt"], volume: 0.8, autoplay: true, loop: false}, true);
+            await AudioHelper.play({ src: pokeball_sound_paths["capture_attempt"], volume: 0.8, autoplay: true, loop: false }, true);
 
-            setTimeout( async () => { 
-                PlayHitShakeAnimation(target_token._object);
+            setTimeout(async () => {
+                await PlayHitShakeAnimation(targetToken._object);
             }, 400);
 
-            setTimeout( async () => { 
-                PlayPokeballCaptureAnimation(target_token._object, pokeball_image_path, roll.total, pokeball_item, throwing_actor, target_actor);
+            setTimeout(async () => {
+                const isCaptured = hitType == "hit" ? await RollCaptureChance(thrower, target, pokeball.name, roll.total, targetToken) : false;
+                await PlayPokeballCaptureAnimation(targetToken._object, POKEBALL_IMAGE_PATH, roll.total, pokeball, thrower, target, isCaptured);
             }, 1000);
         }
         else // Do miss-dodge
         {
-            PlayMissDodgeAnimation(target_token._object);
+            await PlayMissDodgeAnimation(targetToken._object);
         }
     }
-    
+    else {
+        const isCaptured = hitType == "hit" ? await RollCaptureChance(thrower, target, pokeball.name, roll.total, targetToken) : false;
+    }
 
-	await AudioHelper.play({src: pokeball_sound_paths[hit_or_miss], volume: 0.8, autoplay: true, loop: false}, true);
-    
+
+    await AudioHelper.play({ src: pokeball_sound_paths[hitType], volume: 0.8, autoplay: true, loop: false }, true);
+
 }
 
 
-export async function recallPokemon(target_actor)
-{
-	for(let affliction of VolatileAfflictions)
-	{
-		await cureActorAffliction(target_actor, affliction, true);
-	}
+export async function recallPokemon(target_actor) {
+    for (let affliction of VolatileAfflictions) {
+        await cureActorAffliction(target_actor, affliction, true);
+    }
 
-	await ResetStagesToDefault(target_actor, true);
+    await ResetStagesToDefault(target_actor, true);
 
-	// chatMessage(target_actor, target_actor.name + ' was recalled! Stages reset to defaults, and all volatile conditions cured!');
+    // chatMessage(target_actor, target_actor.name + ' was recalled! Stages reset to defaults, and all volatile conditions cured!');
 }

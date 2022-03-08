@@ -16,7 +16,7 @@
         <!-- Pokeball Menu -->
         {{#if ball}}
             {{#each ball as | item |}}
-                <div title='{{name}}' class="pokeball-item">
+                <div title='{{name}} x{{amount}}' class="pokeball-item" data-entity-id="{{id}}" data-owner-id="{{owner}}" data-ball-name="{{name}}">
                     <img data-entity-id="{{id}}" data-owner-id="{{owner}}" data-ball-name="{{name}}" src="{{img}}"/>
                 </div>
             {{/each}}

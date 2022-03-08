@@ -2226,6 +2226,7 @@ body.messages-dark-theme .chat-controls .roll-type-select {
 #ptu-sidebar .ptu-sidebar #menu-component #menu-content .pokeball-item {
   padding-left: 2px;
   margin-top: 2px;
+  color: white;
 }
 #ptu-sidebar .ptu-sidebar #menu-component #menu-content .pokeball-item img {
   border: none;
