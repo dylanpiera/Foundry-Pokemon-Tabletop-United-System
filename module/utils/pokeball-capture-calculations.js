@@ -81,8 +81,14 @@ export function ActorHasItemWithName(actor, initial_item_name, item_category = "
 };
 
 
-export async function RollCaptureChance(trainer, target, pokeball, isCritCapture = false) {
+export async function RollCaptureChance(trainer, target, pokeball, to_hit_roll, target_token) {
 	const targetActor = target.actor;
+
+	let isCritCapture = false;
+	if(to_hit_roll.terms[0].results[0].result == 20)
+	{
+		isCritCapture = true;
+	}
 
 	const captureData = {
 		rate: 100,
@@ -351,8 +357,8 @@ export async function RollCaptureChance(trainer, target, pokeball, isCritCapture
 			return true;
 		}
 
-		// chatMessage(target, (target.name + " escaped the "+pokeball+"! Capture DC was " + CaptureRate + ", and you rolled "+Number(roll._total)+"."));
-		log((targetActor.name + " escaped the " + pokeballName + "! Capture DC was " + CaptureRate + ", and you rolled " + Number(roll._total) + "."));
+		// chatMessage(target, (target.name + " escaped the "+pokeball+"! Capture DC was " + captureData.rate + ", and you rolled "+Number(roll._total)+"."));
+		log((targetActor.name + " escaped the " + pokeball.name + "! Capture DC was " + captureData.rate + ", and you rolled " + Number(roll._total) + "."));
 		// game.PTUMoveMaster.BreakPokeball(trainer, pokeball_item);
 
 		setTimeout(async () => {
@@ -376,7 +382,7 @@ export async function RollCaptureChance(trainer, target, pokeball, isCritCapture
 			await applyCapture(trainer, target, pokeball, speciesData);
 			return true;
 		}
-		log((targetActor.name + " escaped the " + pokeballName + "! Capture DC was " + CaptureRate + ", and you rolled " + Number(roll._total) + "."));
+		log((targetActor.name + " escaped the " + pokeball.name + "! Capture DC was " + captureData.rate + ", and you rolled " + Number(roll._total) + "."));
 		return false;
 	}
 

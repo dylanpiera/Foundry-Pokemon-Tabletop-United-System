@@ -145,7 +145,7 @@ export async function GetTokenFromActor(actor) {
 let pokeballPolymorphFunc = async function (pokeball_image_path, target_token) {
     let transitionType = 9;
     let targetImagePath = pokeball_image_path;
-    let polymorphFilterId = "pokeball";
+    let polymorphFilterId = "pokeball_transform";
     let polymorph_params;
 
     // Is the filter already activated on the placeable ? 
@@ -227,7 +227,7 @@ export async function PlayPokeballCaptureAnimation(target_token, pokeball_image_
     }, 4000);
 
     setTimeout(async () => {
-        target_token.TMFXdeleteFilters("pokeballWiggle");
+        await target_token.TMFXdeleteFilters("pokeballWiggle");
 
         if (isCaptured == true) // Captured!
         {
@@ -235,6 +235,9 @@ export async function PlayPokeballCaptureAnimation(target_token, pokeball_image_
             setTimeout(async () => {
                 await AudioHelper.play({ src: pokeball_sound_paths["capture_jingle"], volume: 0.7, autoplay: true, loop: false }, true);
             }, 1000);
+            setTimeout(async () => {
+                await target_token.TMFXdeleteFilters("pokeball_transform");
+            }, 2000);
 
         }
         else // Escaped!
@@ -248,6 +251,9 @@ export async function PlayPokeballCaptureAnimation(target_token, pokeball_image_
             setTimeout(async () => {
                 await pokeballPolymorphFunc(pokeball_image_path, target_token);
             }, 1000);
+            setTimeout(async () => {
+                await target_token.TMFXdeleteFilters("pokeball_transform");
+            }, 2000);
         }
     }, 10000);
 }
@@ -305,21 +311,21 @@ export async function ThrowPokeball(thrower, target, pokeball) {
             await AudioHelper.play({ src: pokeball_sound_paths["capture_attempt"], volume: 0.8, autoplay: true, loop: false }, true);
 
             setTimeout(async () => {
-                await PlayHitShakeAnimation(targetToken._object);
+                await PlayHitShakeAnimation(targetToken);
             }, 400);
 
             setTimeout(async () => {
-                const isCaptured = hitType == "hit" ? await RollCaptureChance(thrower, target, pokeball.name, roll.total, targetToken) : false;
-                await PlayPokeballCaptureAnimation(targetToken._object, POKEBALL_IMAGE_PATH, roll.total, pokeball, thrower, target, isCaptured);
+                const isCaptured = hitType == "hit" ? await RollCaptureChance(thrower, target, pokeball.name, roll, targetToken) : false;
+                await PlayPokeballCaptureAnimation(targetToken, POKEBALL_IMAGE_PATH, roll.total, pokeball, thrower, target, isCaptured);
             }, 1000);
         }
         else // Do miss-dodge
         {
-            await PlayMissDodgeAnimation(targetToken._object);
+            await PlayMissDodgeAnimation(targetToken);
         }
     }
     else {
-        const isCaptured = hitType == "hit" ? await RollCaptureChance(thrower, target, pokeball.name, roll.total, targetToken) : false;
+        const isCaptured = hitType == "hit" ? await RollCaptureChance(thrower, target, pokeball.name, roll, targetToken) : false;
     }
 
 
