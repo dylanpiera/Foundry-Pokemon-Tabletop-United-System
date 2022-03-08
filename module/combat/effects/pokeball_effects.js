@@ -286,7 +286,7 @@ export async function ThrowPokeball(thrower, target, pokeball) {
 
     const hitType = roll.total >= targetEvasion ? "hit": "miss";  
 
-    if ((game.modules.get("sequencer")?.active) && (game.settings.get("ptu", "enableMoveAnimations") == true)) {
+    if ((game.modules.get("sequencer")?.active) && (game.modules.get("jb2a_patreon")?.active) && (game.settings.get("ptu", "enableMoveAnimations") == true)) {
         new Sequence("PTU")
             .effect()
             .file(POKEBALL_IMAGE_PATH)
