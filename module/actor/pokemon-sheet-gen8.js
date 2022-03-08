@@ -44,6 +44,7 @@ export class PTUGen8PokemonSheet extends ActorSheet {
 		data['owners'] = [];
 		let findActors = (key) => {
 			if(key == "default") return;
+			if(!game.users.get(key)) return;
 
 			let char = game.users.get(key).character
 			if(char) {
