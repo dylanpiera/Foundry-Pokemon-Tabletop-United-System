@@ -1,14 +1,77 @@
 # Welcome to the Beta!
 Hey there! You are on the Beta Branch. If you ever have any feedback please do share with us over on [Github](https://github.com/dylanpiera/Foundry-Pokemon-Tabletop-United-System/issues) or [Discord](https://discord.gg/fE3w59q)
 
-## 1.5-Beta 15 - Foundry 9 Compatibility (Hotfix)
+## 2.0-Beta-1
+It's finally time for another big release everyone!
+
+### Update Storytime
+VoidPhoenix (the developer of the Move Master module for PTU) and I decided a couple weeks—if not months—ago to migrate Move Master as a core functionality of the PTU System!
+
+I had always planned to have some implementation of a sidebar mechanic for the PTU system, but when Void first started work on the Move Master Module he just couldn't wait for me to get there so made it himself!
+
+This however means that Move Master is a little... unstable. Don't take me wrong! Void did an amazing job making what he did, but because it wasn't fully integrated into the system, and didn't know its full scope at the start of the project it became unsustainable. 
+
+But fear no longer!
+As Move Master is now a main feature in the PTU for FoundryVTT system!
+
+### The Actual Update
+This is the first 2.0 Beta, where we have integrated a huge chunk of Move Master and improved upon all of the parts we have implemented.
+Some of the features as of now are unfinished, and this might dissapoint some of you who enjoyed these features. But fear not, we will be adding them all back, better than ever before in one of the upcomming beta versions! The full timeline I'll describe down below.
+
+#### V2.0 & V2.1 Timeline
+Version 2.0 will contain the "basic" version of the PTU Sidebar, but will miss a couple of features. Most notably custom move/item effects.
+For version 2.1 we will be implementing a new 'Effect' system where using a (hopefully) intuitive UI anyone can create dynamic move effects for all the automation and homebrew goodness. This system will however be pretty big, so we decided to turn these into seperate updates, so we can still get the majority of the new features & bugfixes out while we work on it.
+
+**Move Master features that are missing for 2.0 but planned for 2.1**: 
+- Move Effects
+- (Use) Item Effects
+- Orders
+- Maneuvers
+
+**Move Master features that are planned for 2.0 but not in the current beta**:
+- Resting Automation
+- Auto roll initative when new token is created during combat
+- Struggle Menu
+
+### The Actual Changelog
+Oh- boi, this is 2 months worth of features... but here we go!
+#### New Features:
+- Integrated Move Master into PTU Main System.
+- Added the 'Damage Applicator' chat message, allowing both GMs/Players to select how damage should be applied to targets.
+- Item Icons & Pokemon Images are now included with the system. A 'lite' version without these will be released with the 2.0 update.
+- Item Compendium has icons pre-assigned.
+- Added seperate value/mod for the 'mod' and 'stage' fields of both Characters and Pokemon
+
+#### New Features (Move Master)
+These features were already in Move Master, but I've summarised them here for those who didn't use the module before:
+- Add a Sidebar that shows when you have selected a token, displaying useful combat information.
+- Automatically track Standard actions for conditions like Burn/Poison.
+- Added Last Chance & Type Strategist automation.
+- Added Double-Strike & Five-Strike Automation.
+- Automated Stored Power & Punishment DB calculation.
+- Automatically apply Technician.
+- Added Automatic Injury Application (configurable in settings).
+- Automatic Pokemon Capture mechanic, including calculation & transfering of ownership.
+- Added SFX to moves & certain other actions.
+- Added Animations for moves and certain other actions if [Sequencer](https://foundryvtt.com/packages/sequencer) and/or [Token Magic FX](https://foundryvtt.com/packages/tokenmagic/) is installed.
+- Integration for [JB2A's Premium Animation Assets](https://www.patreon.com/JB2A) module with the above two modules.
+- Added Automatic Item Icon Assignment whenever you open an item sheet with the default image set, if an image is found it will be set. (Configurable in settings)
+
+#### Bugfixes:
+- Fixed all bugs with the Owner field.
+- Fixed infinite spiraling Burn/Poison stage dropping.
+- Fixed Dex Experience not properly calculating.
+- Fixed 'EditLock' flag on Effects not applying properly.
+- Fixed several small style issues in Character Sheet.
+
+## 1.5-Beta-15 - Foundry 9 Compatibility (Hotfix)
 A quick hotfix for a couple v9 compatibility bugs that slipped past the last patch:
 
 - Fixed an issue where an error would prevent saving PTU Settings.
 - Fixed an issue where players could not delete tokens.
 - Fixed an error that occured when the user rolled damage on a move from the sheet.
 
-## 1.5-Beta 14 - Foundry 9 Compatibility
+## 1.5-Beta-14 - Foundry 9 Compatibility
 Hey all, just two things for today.
 
 - Migrated to Foundry core version 9
