@@ -34,13 +34,13 @@ export default class MenuComponent extends Component {
         switch (this.state.menuOption) {
             case "struggle":
                 output += await renderTemplate("/systems/ptu/module/sidebar/components/menu-component.hbs", {
-                    menu: "none"
+                    menu: "struggle",
+                    struggles: await this._getStruggles(this.state.actor)
                 })
-                output += "<p style='color: white;'>Struggle Test</p>"
                 break;
             case "pokeball":
-                if(this.state.actor.type == "pokemon") return this.store.dispatch('changeMenuOption', "none");
-                
+                if (this.state.actor.type == "pokemon") return this.store.dispatch('changeMenuOption', "none");
+
                 output += await renderTemplate("/systems/ptu/module/sidebar/components/menu-component.hbs", {
                     menu: "pokeball",
                     ball: await this._getTrainerPokeballArray(this.state.actor)
@@ -102,7 +102,7 @@ export default class MenuComponent extends Component {
         })
 
         this.element.children('#menu-content').children('.pokeball-item').on("click", (event) => {
-            const {entityId, ballName, ownerId} = event.target.dataset;
+            const { entityId, ballName, ownerId } = event.target.dataset;
 
             const owner = game.actors.get(ownerId);
             game.ptu.ThrowPokeball(owner, game.user?.targets?.first(), owner?.items.get(entityId));
@@ -185,6 +185,57 @@ export default class MenuComponent extends Component {
             return "darkred";
         }
         return "black";
+    }
+
+    async _getStruggles(actor) {
+        if (!actor) return;
+
+        const struggleAc = actor.data.data.skills.combat.value >= 5 ? 3 : 4;
+        const struggleDb = actor.data.data.skills.combat.value >= 5 ? 5 : 4;
+
+        const struggleCapabilities = {
+            "firestarter": { "type": "Fire" },
+            "fountain": { "type": "Water" },
+            "freezer": { "type": "Ice" },
+            "guster": { "type": "Flying" },
+            "materializer": { "type": "Rock" },
+            "telekinetic": { "type": "Normal" },
+            "zapper": { "type": "Electric" }
+        };
+        const isTelekinetic = actor.data.itemTypes.capability.includes("Telekinetic");
+
+        const struggles = [{
+            name: "Struggle",
+            type: "Normal",
+            category: "Physical",
+            ac: struggleAc,
+            db: struggleDb,
+            range: isTelekinetic ? actor.data.data.skills.focus.value.total : "Melee" + ", 1 Target"
+        }];
+
+        for (const item of actor.data.itemTypes.capability) {
+            const capability = struggleCapabilities[item.name.toLowerCase()];
+            if (!capability) continue;
+
+            struggles.push({
+                name: item.name,
+                type: capability.type,
+                ac: struggleAc,
+                db: struggleDb,
+                category: "Physical",
+                range: isTelekinetic ? actor.data.data.skills.focus.value.total : "Melee" + ", 1 Target"
+            });
+            struggles.push({
+                name: item.name,
+                type: capability.type,
+                ac: struggleAc,
+                db: struggleDb,
+                category: "Special",
+                range: isTelekinetic ? actor.data.data.skills.focus.value.total : "Melee" + ", 1 Target"
+            })
+        }
+
+        return struggles;
     }
 
     async _getTrainerPokeballArray(actor) {
