@@ -1,6 +1,10 @@
 # Welcome to the Beta!
 Hey there! You are on the Beta Branch. If you ever have any feedback please do share with us over on [Github](https://github.com/dylanpiera/Foundry-Pokemon-Tabletop-United-System/issues) or [Discord](https://discord.gg/fE3w59q)
 
+## 2.0-Beta-2 - Hotfix
+- Fixed issue where if an owner's id no longer exists you couldn't open a character sheet.
+- Fixed small style issue in sidebar.
+
 ## 2.0-Beta-1
 It's finally time for another big release everyone!
 
