@@ -401,6 +401,9 @@ body.messages-dark-theme .chat-controls .roll-type-select {
 
       & > div {
         margin-bottom: 10px;
+        &:empty {
+          margin-bottom: 0;
+        }
       }
     }
     .pokedex-bottom {
@@ -444,6 +447,10 @@ body.messages-dark-theme .chat-controls .roll-type-select {
           font-size: 9px;
           max-width: 45%;
           flex: 0 0 45%;
+
+          &[disabled] {
+            filter: brightness(0.75);
+          }
         }
       }
     }

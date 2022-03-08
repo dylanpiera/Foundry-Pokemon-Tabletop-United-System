@@ -2211,6 +2211,9 @@ body.messages-dark-theme .chat-controls .roll-type-select {
 #ptu-sidebar .ptu-sidebar .sidebar-content > div {
   margin-bottom: 10px;
 }
+#ptu-sidebar .ptu-sidebar .sidebar-content > div:empty {
+  margin-bottom: 0;
+}
 #ptu-sidebar .ptu-sidebar .pokedex-bottom {
   flex: 86px 0 0;
 }
@@ -2246,6 +2249,9 @@ body.messages-dark-theme .chat-controls .roll-type-select {
   font-size: 9px;
   max-width: 45%;
   flex: 0 0 45%;
+}
+#ptu-sidebar .ptu-sidebar #menu-component #menu-buttons .menu-item[disabled] {
+  filter: brightness(0.75);
 }
 #ptu-sidebar .ptu-sidebar #items-list .item,
 #ptu-sidebar .ptu-sidebar #abilities-list .item,

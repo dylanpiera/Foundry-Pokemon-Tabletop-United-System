@@ -388,7 +388,7 @@ export async function RollCaptureChance(trainer, target, pokeball, isCritCapture
 			return;
 		}
 
-		await game.ptu.api.transferOwnership(target.actor, { pokeball: pokeball.name, timeout: 15000, permission: { [newOwnerId]: CONST.ENTITY_PERMISSIONS.OWNER } });
+		await game.ptu.api.transferOwnership(target.actor, { pokeball: pokeball.name, timeout: 30000, permission: { [newOwnerId]: CONST.ENTITY_PERMISSIONS.OWNER } });
 
 		const dexentry = trainer.itemTypes.dexentry.find(item => item.name.toLowerCase() == speciesData._id.toLowerCase())
 		if (dexentry && !dexentry.data.data.owned) {

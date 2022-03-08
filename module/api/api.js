@@ -73,25 +73,29 @@ export default class Api {
                             yes: {
                                 icon: '<i class="fas fa-check"></i>',
                                 label: game.i18n.localize("Yes"),
-                                callback: _ => resolve(true)
+                                callback: _ => resolve("true")
                             },
                             no: {
                                 icon: '<i class="fas fa-times"></i>',
                                 label: game.i18n.localize("No"),
-                                callback: _ => resolve(false)
+                                callback: _ => resolve("false")
                             }
                         },
                         default: "no",
-                        close: () => resolve(false),
+                        close: () => resolve("timeout"),
                     });
                     dialog.render(true);
                     setTimeout(_ => {
                         dialog.close();
-                        resolve(false);
+                        resolve("timeout");
                     }, (data.content.options?.timeout ?? 15000) - 1000)
                 }); 
 
-                if(!allowed) return ref._returnBridge({result: new ApiError({message: "DM Denied owner transfer", type: 403})}, data);
+                if(allowed == "false") return ref._returnBridge({result: new ApiError({message: "DM Denied owner transfer", type: 403})}, data);
+                if(allowed == "timeout") {
+                    //TODO: Allow GM to retroactively apply request.
+                    return ref._returnBridge({result: new ApiError({message: "Request to DM for owner transfer timed out.", type: 403})}, data);
+                }
 
                 const newData = {
                     folder: pc.folder?.id,
