@@ -53,20 +53,24 @@
           "damageBonus": {
             "physical": {
               "value": 0,
+              "mod": 0,
               "keys": []
             },
             "special": {
               "value": 0,
+              "mod:": 0,
               "keys": []
             }
           },
           "damageReduction": {
             "physical": {
               "value": 0,
+              "mod:": 0,
               "keys": []
             },
             "special": {
               "value": 0,
+              "mod:": 0,
               "keys": []
             }
           }
@@ -456,7 +460,8 @@
         "name": "",
         "origin": "",
         "effect": "",
-        "snippet": ""
+        "snippet": "",
+        "useCount": 0
       },
       "interactions": {
         "sheerForce": false,

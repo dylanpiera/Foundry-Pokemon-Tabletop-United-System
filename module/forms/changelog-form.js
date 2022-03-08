@@ -38,9 +38,7 @@ export class ChangeLog extends FormApplication {
     html.find('button[data-action=dismiss-till-update]').click((event) => {
       event.preventDefault();
 
-      let x = game.settings.get("ptu", "dismissedVersion")
-      x[game.userId] = LATEST_VERSION;
-      game.settings.set("ptu", "dismissedVersion", x)
+      game.ptu.api.setChangelogRead();
 
       this.close();
     });

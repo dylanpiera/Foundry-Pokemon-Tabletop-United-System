@@ -40,7 +40,7 @@ export const insurgenceData = [{
       "JumpH": 0,
       "JumpL": 2,
       "Power": 2,
-      "WeightClass": "1",
+      "Weight Class": "1",
       "Naturewalk": ["Grassland", "Forest"],
       "Other": ["Underdog"]
     },
@@ -159,7 +159,7 @@ export const insurgenceData = [{
       "JumpH": 1,
       "JumpL": 1,
       "Power": 3,
-      "WeightClass": "2",
+      "Weight Class": "2",
       "Naturewalk": ["Grassland", "Forest"],
       "Other": ["Underdog"]
     },
@@ -275,7 +275,7 @@ export const insurgenceData = [{
       "JumpH": 2,
       "JumpL": 2,
       "Power": 8,
-      "WeightClass": "5",
+      "Weight Class": "5",
       "Naturewalk": ["Grassland", "Forest"],
       "Other": []
     },
@@ -394,7 +394,7 @@ export const insurgenceData = [{
       "JumpH": 1,
       "JumpL": 1,
       "Power": 2,
-      "WeightClass": "1",
+      "Weight Class": "1",
       "Naturewalk": ["Mountain"],
       "Other": ["Darkvision", "Dead Silent", "Glow", "Underdog"]
     },
@@ -507,7 +507,7 @@ export const insurgenceData = [{
       "JumpH": 1,
       "JumpL": 1,
       "Power": 4,
-      "WeightClass": "2",
+      "Weight Class": "2",
       "Naturewalk": ["Mountain"],
       "Other": ["Darkvision", "Dead Silent", "Glow", "Underdog"]
     },
@@ -614,7 +614,7 @@ export const insurgenceData = [{
       "JumpH": 2,
       "JumpL": 3,
       "Power": 8,
-      "WeightClass": "4",
+      "Weight Class": "4",
       "Naturewalk": ["Mountain"],
       "Other": ["Darkvision", "Dead Silent", "Glow", "Mountable 1"]
     },
@@ -730,7 +730,7 @@ export const insurgenceData = [{
       "JumpH": 1,
       "JumpL": 1,
       "Power": 2,
-      "WeightClass": "1",
+      "Weight Class": "1",
       "Naturewalk": ["Urban"],
       "Other": ["Darkvision", "Stealth", "Underdog"]
     },
@@ -849,7 +849,7 @@ export const insurgenceData = [{
       "JumpH": 1,
       "JumpL": 1,
       "Power": 5,
-      "WeightClass": "2",
+      "Weight Class": "2",
       "Naturewalk": ["Urban"],
       "Other": ["Darkvision", "Stealth", "Underdog"]
     },
@@ -964,7 +964,7 @@ export const insurgenceData = [{
       "JumpH": 1,
       "JumpL": 1,
       "Power": 10,
-      "WeightClass": "4",
+      "Weight Class": "4",
       "Naturewalk": ["Urban"],
       "Other": ["Darkvision", "Mountable 1", "Stealth"]
     },
@@ -1078,7 +1078,7 @@ export const insurgenceData = [{
       "JumpH": 1,
       "JumpL": 1,
       "Power": 2,
-      "WeightClass": "1",
+      "Weight Class": "1",
       "Naturewalk": [],
       "Other": ["Underdog"]
     },
@@ -1201,7 +1201,7 @@ export const insurgenceData = [{
       "JumpH": 1,
       "JumpL": 2,
       "Power": 7,
-      "WeightClass": "4",
+      "Weight Class": "4",
       "Naturewalk": [],
       "Other": []
     },
@@ -1323,7 +1323,7 @@ export const insurgenceData = [{
       "JumpH": 1,
       "JumpL": 1,
       "Power": 1,
-      "WeightClass": "1",
+      "Weight Class": "1",
       "Naturewalk": [],
       "Other": ["Underdog", "Zapper"]
     },
@@ -1445,7 +1445,7 @@ export const insurgenceData = [{
       "JumpH": 1,
       "JumpL": 1,
       "Power": 3,
-      "WeightClass": "2",
+      "Weight Class": "2",
       "Naturewalk": [],
       "Other": ["Underdog", "Zapper"]
     },
@@ -1563,7 +1563,7 @@ export const insurgenceData = [{
       "JumpH": 2,
       "JumpL": 1,
       "Power": 4,
-      "WeightClass": "3",
+      "Weight Class": "3",
       "Naturewalk": [],
       "Other": ["Zapper"]
     },
@@ -1684,7 +1684,7 @@ export const insurgenceData = [{
       "JumpH": 2,
       "JumpL": 2,
       "Power": 7,
-      "WeightClass": "4",
+      "Weight Class": "4",
       "Naturewalk": [],
       "Other": ["Zapper"]
     },
@@ -1801,7 +1801,7 @@ export const insurgenceData = [{
       "JumpH": 2,
       "JumpL": 2,
       "Power": 1,
-      "WeightClass": "1",
+      "Weight Class": "1",
       "Naturewalk": ["Urban"],
       "Other": ["Amorphous", "Firestarter", "Underdog"]
     },
@@ -1924,7 +1924,7 @@ export const insurgenceData = [{
       "JumpH": 2,
       "JumpL": 2,
       "Power": 3,
-      "WeightClass": "1",
+      "Weight Class": "1",
       "Naturewalk": [],
       "Other": ["Amorphous", "Firestarter", "Underdog"]
     },
@@ -2047,7 +2047,7 @@ export const insurgenceData = [{
       "JumpH": 1,
       "JumpL": 1,
       "Power": 3,
-      "WeightClass": "4",
+      "Weight Class": "4",
       "Naturewalk": ["Cave", "Mountain"],
       "Other": ["Underdog"]
     },
@@ -2173,7 +2173,7 @@ export const insurgenceData = [{
       "JumpH": 0,
       "JumpL": 1,
       "Power": 8,
-      "WeightClass": "6",
+      "Weight Class": "6",
       "Naturewalk": ["Cave", "Mountain"],
       "Other": ["Groundshaper", "Mountable 3"]
     },
@@ -2290,7 +2290,7 @@ export const insurgenceData = [{
       "JumpH": 2,
       "JumpL": 3,
       "Power": 6,
-      "WeightClass": "4",
+      "Weight Class": "4",
       "Naturewalk": ["Arctic", "Tundra"],
       "Other": ["(Arctic"]
     },
@@ -2419,7 +2419,7 @@ export const insurgenceData = [{
       "JumpH": 2,
       "JumpL": 3,
       "Power": 8,
-      "WeightClass": "5",
+      "Weight Class": "5",
       "Naturewalk": ["Arctic", "Tundra"],
       "Other": ["(Arctic"]
     },
@@ -2551,7 +2551,7 @@ export const insurgenceData = [{
       "JumpH": 1,
       "JumpL": 1,
       "Power": 4,
-      "WeightClass": "1",
+      "Weight Class": "1",
       "Naturewalk": ["Forest"],
       "Other": ["Stealth", "Underdog"]
     },
@@ -2674,7 +2674,7 @@ export const insurgenceData = [{
       "JumpH": 1,
       "JumpL": 1,
       "Power": 6,
-      "WeightClass": "3",
+      "Weight Class": "3",
       "Naturewalk": ["Forest"],
       "Other": ["Stealth"]
     },
@@ -2791,7 +2791,7 @@ export const insurgenceData = [{
       "JumpH": 1,
       "JumpL": 1,
       "Power": 1,
-      "WeightClass": "1",
+      "Weight Class": "1",
       "Naturewalk": [],
       "Other": ["Firestarter", "Heater", "Underdog"]
     },
@@ -2878,7 +2878,7 @@ export const insurgenceData = [{
       "JumpH": 1,
       "JumpL": 1,
       "Power": 3,
-      "WeightClass": "3",
+      "Weight Class": "3",
       "Naturewalk": [],
       "Other": ["Firestarter", "Heater"]
     },
@@ -2992,7 +2992,7 @@ export const insurgenceData = [{
       "JumpH": 1,
       "JumpL": 1,
       "Power": 2,
-      "WeightClass": "1",
+      "Weight Class": "1",
       "Naturewalk": [],
       "Other": ["Underdog", "Zapper"]
     },
@@ -3112,7 +3112,7 @@ export const insurgenceData = [{
       "JumpH": 1,
       "JumpL": 1,
       "Power": 4,
-      "WeightClass": "1",
+      "Weight Class": "1",
       "Naturewalk": [],
       "Other": ["Zapper"]
     },
@@ -3226,7 +3226,7 @@ export const insurgenceData = [{
       "JumpH": 1,
       "JumpL": 1,
       "Power": 1,
-      "WeightClass": "1",
+      "Weight Class": "1",
       "Naturewalk": ["Urban"],
       "Other": ["Darkvision", "Dead Silent", "Illusionist", "Stealth", "Underdog"]
     },
@@ -3352,7 +3352,7 @@ export const insurgenceData = [{
       "JumpH": 1,
       "JumpL": 1,
       "Power": 4,
-      "WeightClass": "3",
+      "Weight Class": "3",
       "Naturewalk": ["Urban"],
       "Other": ["Darkvision", "Dead Silent", "Illusionist", "Stealth"]
     },
@@ -3475,7 +3475,7 @@ export const insurgenceData = [{
       "JumpH": 0,
       "JumpL": 1,
       "Power": 1,
-      "WeightClass": "1",
+      "Weight Class": "1",
       "Naturewalk": ["Forest"],
       "Other": ["Darkvision", "Dead Silent", "Stealth", "Underdog"]
     },
@@ -3592,7 +3592,7 @@ export const insurgenceData = [{
       "JumpH": 1,
       "JumpL": 2,
       "Power": 6,
-      "WeightClass": "4",
+      "Weight Class": "4",
       "Naturewalk": ["Forest"],
       "Other": ["Darkvision", "Dead Silent", "Stealth"]
     },
@@ -3707,7 +3707,7 @@ export const insurgenceData = [{
       "JumpH": 1,
       "JumpL": 1,
       "Power": 1,
-      "WeightClass": "2",
+      "Weight Class": "2",
       "Naturewalk": ["Cave"],
       "Other": ["Firestarter", "Heater", "Underdog"]
     },
@@ -3821,7 +3821,7 @@ export const insurgenceData = [{
       "JumpH": 2,
       "JumpL": 2,
       "Power": 5,
-      "WeightClass": "6",
+      "Weight Class": "6",
       "Naturewalk": ["Cave"],
       "Other": ["Firestarter", "Glow", "Heater"]
     },
@@ -3932,7 +3932,7 @@ export const insurgenceData = [{
       "JumpH": 1,
       "JumpL": 2,
       "Power": 3,
-      "WeightClass": "3",
+      "Weight Class": "3",
       "Naturewalk": ["Cave"],
       "Other": ["Amorphous", "Firestarter", "Glow", "Heater"]
     },
@@ -4047,7 +4047,7 @@ export const insurgenceData = [{
       "JumpH": 1,
       "JumpL": 1,
       "Power": 2,
-      "WeightClass": "1",
+      "Weight Class": "1",
       "Naturewalk": ["Forest"],
       "Other": ["Tracker", "Underdog"]
     },
@@ -4162,7 +4162,7 @@ export const insurgenceData = [{
       "JumpH": 1,
       "JumpL": 2,
       "Power": 4,
-      "WeightClass": "3",
+      "Weight Class": "3",
       "Naturewalk": ["Forest"],
       "Other": ["Tracker", "Underdog"]
     },
@@ -4274,7 +4274,7 @@ export const insurgenceData = [{
       "JumpH": 1,
       "JumpL": 2,
       "Power": 5,
-      "WeightClass": "3",
+      "Weight Class": "3",
       "Naturewalk": ["Forest"],
       "Other": ["Mountable 1", "Tracker", "Underdog"]
     },
@@ -4388,7 +4388,7 @@ export const insurgenceData = [{
       "JumpH": 3,
       "JumpL": 4,
       "Power": 1,
-      "WeightClass": "2",
+      "Weight Class": "2",
       "Naturewalk": ["Forest"],
       "Other": ["Darkvision", "Stealth", "Underdog"]
     },
@@ -4514,7 +4514,7 @@ export const insurgenceData = [{
       "JumpH": 4,
       "JumpL": 5,
       "Power": 8,
-      "WeightClass": "4",
+      "Weight Class": "4",
       "Naturewalk": ["Forest"],
       "Other": ["Blender", "Darkvision", "Mountable 1", "Stealth"]
     },
@@ -4635,7 +4635,7 @@ export const insurgenceData = [{
       "JumpH": 1,
       "JumpL": 1,
       "Power": 1,
-      "WeightClass": "1",
+      "Weight Class": "1",
       "Naturewalk": [],
       "Other": ["Darkvision", "Stealth", "Underdog"]
     },
@@ -4729,7 +4729,7 @@ export const insurgenceData = [{
       "JumpH": 1,
       "JumpL": 2,
       "Power": 2,
-      "WeightClass": "1",
+      "Weight Class": "1",
       "Naturewalk": [],
       "Other": ["Darkvision", "Underdog"]
     },
@@ -4850,7 +4850,7 @@ export const insurgenceData = [{
       "JumpH": 2,
       "JumpL": 3,
       "Power": 4,
-      "WeightClass": "1",
+      "Weight Class": "1",
       "Naturewalk": [],
       "Other": ["Darkvision"]
     },
@@ -4973,7 +4973,7 @@ export const insurgenceData = [{
       "JumpH": 2,
       "JumpL": 1,
       "Power": 1,
-      "WeightClass": "1",
+      "Weight Class": "1",
       "Naturewalk": [],
       "Other": ["Glow", "Inflatable", "Shrinkable", "Underdog"]
     },
@@ -5090,7 +5090,7 @@ export const insurgenceData = [{
       "JumpH": 3,
       "JumpL": 3,
       "Power": 5,
-      "WeightClass": "2",
+      "Weight Class": "2",
       "Naturewalk": [],
       "Other": ["Glow", "Inflatable", "Shrinkable"]
     },
@@ -5204,7 +5204,7 @@ export const insurgenceData = [{
       "JumpH": 1,
       "JumpL": 1,
       "Power": 2,
-      "WeightClass": "3",
+      "Weight Class": "3",
       "Naturewalk": [],
       "Other": ["Amorphous", "Dead Silent", "Sticky Hold", "Underdog", "Wallclimber"]
     },
@@ -5330,7 +5330,7 @@ export const insurgenceData = [{
       "JumpH": 1,
       "JumpL": 1,
       "Power": 6,
-      "WeightClass": "3",
+      "Weight Class": "3",
       "Naturewalk": [],
       "Other": ["Amorphous", "Dead Silent", "Sticky Hold", "Wallclimber"]
     },
@@ -5453,7 +5453,7 @@ export const insurgenceData = [{
       "JumpH": 3,
       "JumpL": 3,
       "Power": 1,
-      "WeightClass": "1",
+      "Weight Class": "1",
       "Naturewalk": ["Forest"],
       "Other": ["Glow", "Underdog"]
     },
@@ -5564,7 +5564,7 @@ export const insurgenceData = [{
       "JumpH": 3,
       "JumpL": 3,
       "Power": 3,
-      "WeightClass": "4",
+      "Weight Class": "4",
       "Naturewalk": ["Forest"],
       "Other": ["Glow"]
     },
@@ -5669,7 +5669,7 @@ export const insurgenceData = [{
       "JumpH": 2,
       "JumpL": 3,
       "Power": 2,
-      "WeightClass": "4",
+      "Weight Class": "4",
       "Naturewalk": ["Forest", "Grassland"],
       "Other": ["Underdog"]
     },
@@ -5789,7 +5789,7 @@ export const insurgenceData = [{
       "JumpH": 2,
       "JumpL": 2,
       "Power": 12,
-      "WeightClass": "6",
+      "Weight Class": "6",
       "Naturewalk": ["Forest", "Grassland"],
       "Other": []
     },
@@ -5906,7 +5906,7 @@ export const insurgenceData = [{
       "JumpH": 1,
       "JumpL": 1,
       "Power": 2,
-      "WeightClass": "1",
+      "Weight Class": "1",
       "Naturewalk": [],
       "Other": ["Darkvision", "Dead Silent", "Invisibility", "Phasing", "Underdog"]
     },
@@ -6023,7 +6023,7 @@ export const insurgenceData = [{
       "JumpH": 1,
       "JumpL": 1,
       "Power": 3,
-      "WeightClass": "1",
+      "Weight Class": "1",
       "Naturewalk": [],
       "Other": ["Darkvision", "Dead Silent", "Invisibility", "Phasing", "Underdog"]
     },
@@ -6135,7 +6135,7 @@ export const insurgenceData = [{
       "JumpH": 1,
       "JumpL": 1,
       "Power": 2,
-      "WeightClass": "1",
+      "Weight Class": "1",
       "Naturewalk": [],
       "Other": ["Glow", "Underdog", "Zapper"]
     },
@@ -6256,7 +6256,7 @@ export const insurgenceData = [{
       "JumpH": 2,
       "JumpL": 2,
       "Power": 3,
-      "WeightClass": "2",
+      "Weight Class": "2",
       "Naturewalk": [],
       "Other": ["Glow", "Underdog", "Zapper"]
     },
@@ -6371,7 +6371,7 @@ export const insurgenceData = [{
       "JumpH": 2,
       "JumpL": 2,
       "Power": 6,
-      "WeightClass": "4",
+      "Weight Class": "4",
       "Naturewalk": [],
       "Other": ["Glow", "Storm Charge", "Zapper"]
     },
@@ -6486,7 +6486,7 @@ export const insurgenceData = [{
       "JumpH": 2,
       "JumpL": 2,
       "Power": 3,
-      "WeightClass": "1",
+      "Weight Class": "1",
       "Naturewalk": [],
       "Other": ["Underdog"]
     },
@@ -6604,7 +6604,7 @@ export const insurgenceData = [{
       "JumpH": 3,
       "JumpL": 3,
       "Power": 5,
-      "WeightClass": "2",
+      "Weight Class": "2",
       "Naturewalk": [],
       "Other": ["Underdog"]
     },
@@ -6722,7 +6722,7 @@ export const insurgenceData = [{
       "JumpH": 3,
       "JumpL": 3,
       "Power": 7,
-      "WeightClass": "4",
+      "Weight Class": "4",
       "Naturewalk": [],
       "Other": []
     },
@@ -6843,7 +6843,7 @@ export const insurgenceData = [{
       "JumpH": 1,
       "JumpL": 2,
       "Power": 1,
-      "WeightClass": "1",
+      "Weight Class": "1",
       "Naturewalk": [],
       "Other": ["Telepath", "Underdog"]
     },
@@ -6955,7 +6955,7 @@ export const insurgenceData = [{
       "JumpH": 2,
       "JumpL": 2,
       "Power": 4,
-      "WeightClass": "2",
+      "Weight Class": "2",
       "Naturewalk": [],
       "Other": ["Telekinetic", "Telepath", "Underdog"]
     },
@@ -7067,7 +7067,7 @@ export const insurgenceData = [{
       "JumpH": 3,
       "JumpL": 4,
       "Power": 7,
-      "WeightClass": "4",
+      "Weight Class": "4",
       "Naturewalk": [],
       "Other": ["Reader", "Glow", "Telekinetic", "Telepath"]
     },
@@ -7182,7 +7182,7 @@ export const insurgenceData = [{
       "JumpH": 1,
       "JumpL": 1,
       "Power": 3,
-      "WeightClass": "1",
+      "Weight Class": "1",
       "Naturewalk": [],
       "Other": ["Fountain", "Gilled", "Underdog"]
     },
@@ -7294,7 +7294,7 @@ export const insurgenceData = [{
       "JumpH": 1,
       "JumpL": 1,
       "Power": 4,
-      "WeightClass": "4",
+      "Weight Class": "4",
       "Naturewalk": [],
       "Other": ["Fountain", "Gilled", "Underdog"]
     },
@@ -7403,7 +7403,7 @@ export const insurgenceData = [{
       "JumpH": 1,
       "JumpL": 1,
       "Power": 7,
-      "WeightClass": "6",
+      "Weight Class": "6",
       "Naturewalk": [],
       "Other": ["Fountain", "Gilled", "Mountable"]
     },
@@ -7515,7 +7515,7 @@ export const insurgenceData = [{
       "JumpH": 1,
       "JumpL": 2,
       "Power": 3,
-      "WeightClass": "1",
+      "Weight Class": "1",
       "Naturewalk": [],
       "Other": ["Fountain", "Gilled", "Stealth", "Underdog"]
     },
@@ -7636,7 +7636,7 @@ export const insurgenceData = [{
       "JumpH": 2,
       "JumpL": 2,
       "Power": 3,
-      "WeightClass": "2",
+      "Weight Class": "2",
       "Naturewalk": [],
       "Other": ["Fountain", "Gilled", "Stealth", "Underdog"]
     },
@@ -7754,7 +7754,7 @@ export const insurgenceData = [{
       "JumpH": 3,
       "JumpL": 2,
       "Power": 5,
-      "WeightClass": "4",
+      "Weight Class": "4",
       "Naturewalk": [],
       "Other": ["Fountain", "Gilled", "Stealth"]
     },
@@ -7872,7 +7872,7 @@ export const insurgenceData = [{
       "JumpH": 2,
       "JumpL": 2,
       "Power": 2,
-      "WeightClass": "1",
+      "Weight Class": "1",
       "Naturewalk": ["Forest"],
       "Other": ["Underdog", "Wallclimber"]
     },
@@ -7990,7 +7990,7 @@ export const insurgenceData = [{
       "JumpH": 2,
       "JumpL": 3,
       "Power": 2,
-      "WeightClass": "1",
+      "Weight Class": "1",
       "Naturewalk": ["Forest"],
       "Other": ["Underdog", "Wallclimber"]
     },
@@ -8102,7 +8102,7 @@ export const insurgenceData = [{
       "JumpH": 3,
       "JumpL": 3,
       "Power": 2,
-      "WeightClass": "3",
+      "Weight Class": "3",
       "Naturewalk": ["Forest"],
       "Other": ["Firestarter", "Wallclimber"]
     },
@@ -8223,7 +8223,7 @@ export const insurgenceData = [{
       "JumpH": 1,
       "JumpL": 1,
       "Power": 1,
-      "WeightClass": "1",
+      "Weight Class": "1",
       "Naturewalk": [],
       "Other": ["Underdog"]
     },
@@ -8341,7 +8341,7 @@ export const insurgenceData = [{
       "JumpH": 2,
       "JumpL": 2,
       "Power": 3,
-      "WeightClass": "3",
+      "Weight Class": "3",
       "Naturewalk": [],
       "Other": ["Underdog"]
     },
@@ -8456,7 +8456,7 @@ export const insurgenceData = [{
       "JumpH": 3,
       "JumpL": 3,
       "Power": 5,
-      "WeightClass": "3",
+      "Weight Class": "3",
       "Naturewalk": [],
       "Other": ["Mountable"]
     },
@@ -8570,7 +8570,7 @@ export const insurgenceData = [{
       "JumpH": 0,
       "JumpL": 0,
       "Power": 1,
-      "WeightClass": "1",
+      "Weight Class": "1",
       "Naturewalk": [],
       "Other": ["Tremorsense", "Underdog"]
     },
@@ -8687,7 +8687,7 @@ export const insurgenceData = [{
       "JumpH": 0,
       "JumpL": 0,
       "Power": 2,
-      "WeightClass": "3",
+      "Weight Class": "3",
       "Naturewalk": [],
       "Other": ["Tremorsense", "Underdog"]
     },
@@ -8801,7 +8801,7 @@ export const insurgenceData = [{
       "JumpH": 1,
       "JumpL": 2,
       "Power": 3,
-      "WeightClass": "2",
+      "Weight Class": "2",
       "Naturewalk": [],
       "Other": ["Tracker", "Underdog"]
     },
@@ -8930,7 +8930,7 @@ export const insurgenceData = [{
       "JumpH": 2,
       "JumpL": 3,
       "Power": 8,
-      "WeightClass": "5",
+      "Weight Class": "5",
       "Naturewalk": [],
       "Other": ["Mountable 1", "Tracker"]
     },
@@ -9057,7 +9057,7 @@ export const insurgenceData = [{
       "JumpH": 0,
       "JumpL": 1,
       "Power": 3,
-      "WeightClass": "2",
+      "Weight Class": "2",
       "Naturewalk": [],
       "Other": ["Underdog"]
     },
@@ -9181,7 +9181,7 @@ export const insurgenceData = [{
       "JumpH": 0,
       "JumpL": 1,
       "Power": 8,
-      "WeightClass": "1",
+      "Weight Class": "1",
       "Naturewalk": [],
       "Other": ["Underdog"]
     },
@@ -9299,7 +9299,7 @@ export const insurgenceData = [{
       "JumpH": 1,
       "JumpL": 2,
       "Power": 10,
-      "WeightClass": "6",
+      "Weight Class": "6",
       "Naturewalk": [],
       "Other": ["Groundshaper", "Tremorsense"]
     },
@@ -9419,7 +9419,7 @@ export const insurgenceData = [{
       "JumpH": 1,
       "JumpL": 1,
       "Power": 2,
-      "WeightClass": "3",
+      "Weight Class": "3",
       "Naturewalk": ["Forest"],
       "Other": ["Underdog"]
     },
@@ -9545,7 +9545,7 @@ export const insurgenceData = [{
       "JumpH": 1,
       "JumpL": 1,
       "Power": 6,
-      "WeightClass": "4",
+      "Weight Class": "4",
       "Naturewalk": ["Forest"],
       "Other": ["Reach"]
     },
@@ -9668,7 +9668,7 @@ export const insurgenceData = [{
       "JumpH": 4,
       "JumpL": 5,
       "Power": 4,
-      "WeightClass": "3",
+      "Weight Class": "3",
       "Naturewalk": [],
       "Other": ["Telekinetic", "Telepath", "Underdog"]
     },
@@ -9785,7 +9785,7 @@ export const insurgenceData = [{
       "JumpH": 5,
       "JumpL": 7,
       "Power": 6,
-      "WeightClass": "4",
+      "Weight Class": "4",
       "Naturewalk": [],
       "Other": ["Mountable 1", "Telekinetic", "Telepath"]
     },
@@ -9896,7 +9896,7 @@ export const insurgenceData = [{
       "JumpH": 1,
       "JumpL": 1,
       "Power": 4,
-      "WeightClass": "3",
+      "Weight Class": "3",
       "Naturewalk": ["Desert"],
       "Other": ["Reach", "Tremorsense", "Underdog"]
     },
@@ -10028,7 +10028,7 @@ export const insurgenceData = [{
       "JumpH": 1,
       "JumpL": 1,
       "Power": 7,
-      "WeightClass": "5",
+      "Weight Class": "5",
       "Naturewalk": ["Desert"],
       "Other": ["Reach", "Tremorsense"]
     },
@@ -10156,7 +10156,7 @@ export const insurgenceData = [{
       "JumpH": 1,
       "JumpL": 1,
       "Power": 1,
-      "WeightClass": "1",
+      "Weight Class": "1",
       "Naturewalk": [],
       "Other": ["Amorphous", "Shapeshifter", "Underdog", "Wallclimber"]
     },
@@ -10240,7 +10240,7 @@ export const insurgenceData = [{
       "JumpH": 0,
       "JumpL": 1,
       "Power": 2,
-      "WeightClass": "2",
+      "Weight Class": "2",
       "Naturewalk": ["Rainforest"],
       "Other": ["Darkvision", "(Rainforest)", "Underdog"]
     },
@@ -10351,7 +10351,7 @@ export const insurgenceData = [{
       "JumpH": 1,
       "JumpL": 1,
       "Power": 2,
-      "WeightClass": "3",
+      "Weight Class": "3",
       "Naturewalk": ["Rainforest"],
       "Other": ["Darkvision", "(Rainforest)"]
     },
@@ -10463,7 +10463,7 @@ export const insurgenceData = [{
       "JumpH": 1,
       "JumpL": 1,
       "Power": 1,
-      "WeightClass": "1",
+      "Weight Class": "1",
       "Naturewalk": [],
       "Other": ["Gilled", "Underdog", "Zapper"]
     },
@@ -10581,7 +10581,7 @@ export const insurgenceData = [{
       "JumpH": 3,
       "JumpL": 3,
       "Power": 3,
-      "WeightClass": "2",
+      "Weight Class": "2",
       "Naturewalk": [],
       "Other": ["Gilled", "Underdog", "Zapper"]
     },
@@ -10693,7 +10693,7 @@ export const insurgenceData = [{
       "JumpH": 3,
       "JumpL": 4,
       "Power": 8,
-      "WeightClass": "6",
+      "Weight Class": "6",
       "Naturewalk": [],
       "Other": ["Gilled", "Mountable 1", "Zapper"]
     },
@@ -10810,7 +10810,7 @@ export const insurgenceData = [{
       "JumpH": 3,
       "JumpL": 3,
       "Power": 1,
-      "WeightClass": "2",
+      "Weight Class": "2",
       "Naturewalk": [],
       "Other": ["Darkvision", "Underdog"]
     },
@@ -10936,7 +10936,7 @@ export const insurgenceData = [{
       "JumpH": 3,
       "JumpL": 3,
       "Power": 3,
-      "WeightClass": "3",
+      "Weight Class": "3",
       "Naturewalk": [],
       "Other": ["Darkvision", "Underdog"]
     },
@@ -11053,7 +11053,7 @@ export const insurgenceData = [{
       "JumpH": 1,
       "JumpL": 1,
       "Power": 1,
-      "WeightClass": "2",
+      "Weight Class": "2",
       "Naturewalk": [],
       "Other": ["Darkvision", "Invisibility", "Phasing", "Underdog"]
     },
@@ -11176,7 +11176,7 @@ export const insurgenceData = [{
       "JumpH": 3,
       "JumpL": 2,
       "Power": 2,
-      "WeightClass": "2",
+      "Weight Class": "2",
       "Naturewalk": [],
       "Other": ["Darkvision", "Invisibility", "Phasing"]
     },
@@ -11303,7 +11303,7 @@ export const insurgenceData = [{
       "JumpH": 3,
       "JumpL": 4,
       "Power": 1,
-      "WeightClass": "1",
+      "Weight Class": "1",
       "Naturewalk": [],
       "Other": ["Underdog"]
     },
@@ -11397,7 +11397,7 @@ export const insurgenceData = [{
       "JumpH": 3,
       "JumpL": 4,
       "Power": 2,
-      "WeightClass": "1",
+      "Weight Class": "1",
       "Naturewalk": [],
       "Other": ["Underdog"]
     },
@@ -11527,7 +11527,7 @@ export const insurgenceData = [{
       "JumpH": 3,
       "JumpL": 4,
       "Power": 4,
-      "WeightClass": "3",
+      "Weight Class": "3",
       "Naturewalk": [],
       "Other": []
     },
@@ -11650,7 +11650,7 @@ export const insurgenceData = [{
       "JumpH": 2,
       "JumpL": 2,
       "Power": 2,
-      "WeightClass": "2",
+      "Weight Class": "2",
       "Naturewalk": ["Urban"],
       "Other": ["Darkvision", "Invisibility", "Phasing", "Underdog"]
     },
@@ -11764,7 +11764,7 @@ export const insurgenceData = [{
       "JumpH": 3,
       "JumpL": 4,
       "Power": 4,
-      "WeightClass": "2",
+      "Weight Class": "2",
       "Naturewalk": ["Urban"],
       "Other": ["Darkvision", "Invisibility", "Phasing"]
     },
@@ -11875,7 +11875,7 @@ export const insurgenceData = [{
       "JumpH": 1,
       "JumpL": 1,
       "Power": 3,
-      "WeightClass": "3",
+      "Weight Class": "3",
       "Naturewalk": [],
       "Other": ["Underdog"]
     },
@@ -11998,7 +11998,7 @@ export const insurgenceData = [{
       "JumpH": 1,
       "JumpL": 1,
       "Power": 5,
-      "WeightClass": "4",
+      "Weight Class": "4",
       "Naturewalk": [],
       "Other": ["Mountable"]
     },
@@ -12114,7 +12114,7 @@ export const insurgenceData = [{
       "JumpH": 2,
       "JumpL": 2,
       "Power": 4,
-      "WeightClass": "3",
+      "Weight Class": "3",
       "Naturewalk": [],
       "Other": ["Darkvision", "Mountable"]
     },
@@ -12236,7 +12236,7 @@ export const insurgenceData = [{
       "JumpH": 1,
       "JumpL": 1,
       "Power": 1,
-      "WeightClass": "2",
+      "Weight Class": "2",
       "Naturewalk": [],
       "Other": ["Darkvision", "Underdog"]
     },
@@ -12364,7 +12364,7 @@ export const insurgenceData = [{
       "JumpH": 0,
       "JumpL": 0,
       "Power": 4,
-      "WeightClass": "2",
+      "Weight Class": "2",
       "Naturewalk": [],
       "Other": []
     },
@@ -12496,7 +12496,7 @@ export const insurgenceData = [{
       "JumpH": 1,
       "JumpL": 1,
       "Power": 1,
-      "WeightClass": "2",
+      "Weight Class": "2",
       "Naturewalk": [],
       "Other": ["Firestarter", "Gilled", "Glow", "Heater", "Underdog"]
     },
@@ -12610,7 +12610,7 @@ export const insurgenceData = [{
       "JumpH": 1,
       "JumpL": 1,
       "Power": 4,
-      "WeightClass": "3",
+      "Weight Class": "3",
       "Naturewalk": [],
       "Other": ["Amorphous", "Firestarter", "Gilled", "Glow", "Heater"]
     },
@@ -12725,7 +12725,7 @@ export const insurgenceData = [{
       "JumpH": 1,
       "JumpL": 1,
       "Power": 3,
-      "WeightClass": "2",
+      "Weight Class": "2",
       "Naturewalk": ["Urban"],
       "Other": ["Materializer", "Underdog"]
     },
@@ -12843,7 +12843,7 @@ export const insurgenceData = [{
       "JumpH": 1,
       "JumpL": 2,
       "Power": 5,
-      "WeightClass": "3",
+      "Weight Class": "3",
       "Naturewalk": ["Urban"],
       "Other": ["Materializer"]
     },
@@ -12955,7 +12955,7 @@ export const insurgenceData = [{
       "JumpH": 2,
       "JumpL": 3,
       "Power": 7,
-      "WeightClass": "5",
+      "Weight Class": "5",
       "Naturewalk": ["Urban"],
       "Other": ["Materializer"]
     },
@@ -13073,7 +13073,7 @@ export const insurgenceData = [{
       "JumpH": 1,
       "JumpL": 1,
       "Power": 3,
-      "WeightClass": "2",
+      "Weight Class": "2",
       "Naturewalk": [],
       "Other": ["Fountain", "Underdog"]
     },
@@ -13191,7 +13191,7 @@ export const insurgenceData = [{
       "JumpH": 1,
       "JumpL": 1,
       "Power": 5,
-      "WeightClass": "3",
+      "Weight Class": "3",
       "Naturewalk": [],
       "Other": ["Fountain", "Gilled"]
     },
@@ -13303,7 +13303,7 @@ export const insurgenceData = [{
       "JumpH": 1,
       "JumpL": 1,
       "Power": 7,
-      "WeightClass": "4",
+      "Weight Class": "4",
       "Naturewalk": [],
       "Other": ["Fountain", "Gilled"]
     },
@@ -13418,7 +13418,7 @@ export const insurgenceData = [{
       "JumpH": 1,
       "JumpL": 1,
       "Power": 1,
-      "WeightClass": "1",
+      "Weight Class": "1",
       "Naturewalk": ["Grassland", "Forest"],
       "Other": ["Fountain", "Telekinetic", "Underdog"]
     },
@@ -13533,7 +13533,7 @@ export const insurgenceData = [{
       "JumpH": 1,
       "JumpL": 2,
       "Power": 3,
-      "WeightClass": "3",
+      "Weight Class": "3",
       "Naturewalk": ["Grassland", "Forest"],
       "Other": ["Fountain", "Telekinetic", "Underdog"]
     },
@@ -13645,7 +13645,7 @@ export const insurgenceData = [{
       "JumpH": 1,
       "JumpL": 2,
       "Power": 5,
-      "WeightClass": "4",
+      "Weight Class": "4",
       "Naturewalk": ["Grassland", "Forest"],
       "Other": ["Fountain", "Telekinetic"]
     },
@@ -13757,7 +13757,7 @@ export const insurgenceData = [{
       "JumpH": 2,
       "JumpL": 2,
       "Power": 1,
-      "WeightClass": "1",
+      "Weight Class": "1",
       "Naturewalk": ["Urban"],
       "Other": ["Glow", "Underdog", "Zapper"]
     },
@@ -13854,7 +13854,7 @@ export const insurgenceData = [{
       "JumpH": 1,
       "JumpL": 2,
       "Power": 4,
-      "WeightClass": "4",
+      "Weight Class": "4",
       "Naturewalk": ["Urban"],
       "Other": ["Underdog", "Zapper"]
     },
@@ -13963,7 +13963,7 @@ export const insurgenceData = [{
       "JumpH": 1,
       "JumpL": 2,
       "Power": 5,
-      "WeightClass": "4",
+      "Weight Class": "4",
       "Naturewalk": ["Urban"],
       "Other": ["Zapper"]
     },
@@ -14073,7 +14073,7 @@ export const insurgenceData = [{
       "JumpH": 2,
       "JumpL": 2,
       "Power": 3,
-      "WeightClass": "1",
+      "Weight Class": "1",
       "Naturewalk": ["Cave"],
       "Other": ["Darkvision", "Heater", "Stealth", "Underdog"]
     },
@@ -14207,7 +14207,7 @@ export const insurgenceData = [{
       "JumpH": 1,
       "JumpL": 1,
       "Power": 1,
-      "WeightClass": "2",
+      "Weight Class": "2",
       "Naturewalk": ["Forest"],
       "Other": ["Alluring", "Underdog"]
     },
@@ -14328,7 +14328,7 @@ export const insurgenceData = [{
       "JumpH": 0,
       "JumpL": 0,
       "Power": 5,
-      "WeightClass": "4",
+      "Weight Class": "4",
       "Naturewalk": ["Cave"],
       "Other": ["Amorphous", "Firestarter", "Glow", "Heater", "Underdog"]
     },
@@ -14458,7 +14458,7 @@ export const insurgenceData = [{
       "JumpH": 0,
       "JumpL": 1,
       "Power": 9,
-      "WeightClass": "5",
+      "Weight Class": "5",
       "Naturewalk": ["Cave"],
       "Other": ["Amorphous", "Firestarter", "Glow", "Heater", "Underdog"]
     },
@@ -14582,7 +14582,7 @@ export const insurgenceData = [{
       "JumpH": 0,
       "JumpL": 1,
       "Power": 13,
-      "WeightClass": "6",
+      "Weight Class": "6",
       "Naturewalk": ["Cave"],
       "Other": ["Amorphous", "Firestarter", "Glow", "Heater"]
     },
@@ -14705,7 +14705,7 @@ export const insurgenceData = [{
       "JumpH": 2,
       "JumpL": 3,
       "Power": 4,
-      "WeightClass": "1",
+      "Weight Class": "1",
       "Naturewalk": [],
       "Other": ["Underdog"]
     },
@@ -14831,7 +14831,7 @@ export const insurgenceData = [{
       "JumpH": 3,
       "JumpL": 4,
       "Power": 6,
-      "WeightClass": "3",
+      "Weight Class": "3",
       "Naturewalk": [],
       "Other": ["Reader", "Underdog"]
     },
@@ -14954,7 +14954,7 @@ export const insurgenceData = [{
       "JumpH": 1,
       "JumpL": 1,
       "Power": 5,
-      "WeightClass": "2",
+      "Weight Class": "2",
       "Naturewalk": [],
       "Other": ["Underdog"]
     },
@@ -15074,7 +15074,7 @@ export const insurgenceData = [{
       "JumpH": 1,
       "JumpL": 1,
       "Power": 10,
-      "WeightClass": "6",
+      "Weight Class": "6",
       "Naturewalk": [],
       "Other": []
     },
@@ -15190,7 +15190,7 @@ export const insurgenceData = [{
       "JumpH": 2,
       "JumpL": 3,
       "Power": 1,
-      "WeightClass": "1",
+      "Weight Class": "1",
       "Naturewalk": [],
       "Other": ["Firestarter", "Heater", "Underdog"]
     },
@@ -15324,7 +15324,7 @@ export const insurgenceData = [{
       "JumpH": 2,
       "JumpL": 3,
       "Power": 1,
-      "WeightClass": "1",
+      "Weight Class": "1",
       "Naturewalk": [],
       "Other": ["Chilled", "Freezer", "Underdog"]
     },
@@ -15459,7 +15459,7 @@ export const insurgenceData = [{
       "JumpH": 2,
       "JumpL": 2,
       "Power": 5,
-      "WeightClass": "5",
+      "Weight Class": "5",
       "Naturewalk": [],
       "Other": ["Chilled", "Freezer", "Mountable 2", "Underdog"]
     },
@@ -15582,7 +15582,7 @@ export const insurgenceData = [{
       "JumpH": 2,
       "JumpL": 2,
       "Power": 12,
-      "WeightClass": "5",
+      "Weight Class": "5",
       "Naturewalk": [],
       "Other": ["Chilled", "Freezer", "Mountable 20", "Underdog"]
     },
@@ -15702,7 +15702,7 @@ export const insurgenceData = [{
       "JumpH": 4,
       "JumpL": 4,
       "Power": 1,
-      "WeightClass": "1",
+      "Weight Class": "1",
       "Naturewalk": [],
       "Other": ["Darkvision", "Dead Silent", "Gilled", "Invisibility", "Phasing", "Underdog"]
     },
@@ -15786,7 +15786,7 @@ export const insurgenceData = [{
       "JumpH": 4,
       "JumpL": 4,
       "Power": 8,
-      "WeightClass": "5",
+      "Weight Class": "5",
       "Naturewalk": [],
       "Other": ["Darkvision", "Dead Silent", "Gilled", "Invisibility", "Mountable 4", "Phasing"]
     },
@@ -15907,7 +15907,7 @@ export const insurgenceData = [{
       "JumpH": 2,
       "JumpL": 1,
       "Power": 2,
-      "WeightClass": "4",
+      "Weight Class": "4",
       "Naturewalk": ["Ocean"],
       "Other": ["Gilled", "Pearl Creation", "Underdog"]
     },
@@ -15997,7 +15997,7 @@ export const insurgenceData = [{
       "JumpH": 2,
       "JumpL": 2,
       "Power": 3,
-      "WeightClass": "3",
+      "Weight Class": "3",
       "Naturewalk": ["Ocean"],
       "Other": ["Darkvision", "Gilled"]
     },
@@ -16114,7 +16114,7 @@ export const insurgenceData = [{
       "JumpH": 2,
       "JumpL": 2,
       "Power": 3,
-      "WeightClass": "2",
+      "Weight Class": "2",
       "Naturewalk": ["Ocean"],
       "Other": ["Gilled"]
     },
@@ -16232,7 +16232,7 @@ export const insurgenceData = [{
       "JumpH": 2,
       "JumpL": 2,
       "Power": 4,
-      "WeightClass": "4",
+      "Weight Class": "4",
       "Naturewalk": ["Forest"],
       "Other": ["Threaded", "Underdog", "Wallclimber"]
     },
@@ -16323,7 +16323,7 @@ export const insurgenceData = [{
       "JumpH": 2,
       "JumpL": 2,
       "Power": 8,
-      "WeightClass": "6",
+      "Weight Class": "6",
       "Naturewalk": ["Forest"],
       "Other": ["Threaded", "Mountable 1", "Underdog", "Wallclimber"]
     },
@@ -16435,7 +16435,7 @@ export const insurgenceData = [{
       "JumpH": 2,
       "JumpL": 2,
       "Power": 13,
-      "WeightClass": "6",
+      "Weight Class": "6",
       "Naturewalk": ["Forest"],
       "Other": ["Threaded", "Mountable 2", "Wallclimber"]
     },
@@ -16550,7 +16550,7 @@ export const insurgenceData = [{
       "JumpH": 1,
       "JumpL": 1,
       "Power": 5,
-      "WeightClass": "4",
+      "Weight Class": "4",
       "Naturewalk": ["Forest"],
       "Other": ["Underdog"]
     },
@@ -16629,7 +16629,7 @@ export const insurgenceData = [{
       "JumpH": 1,
       "JumpL": 1,
       "Power": 9,
-      "WeightClass": "6",
+      "Weight Class": "6",
       "Naturewalk": ["Forest"],
       "Other": ["Mountable 1", "Underdog"]
     },
@@ -16744,7 +16744,7 @@ export const insurgenceData = [{
       "JumpH": 1,
       "JumpL": 1,
       "Power": 14,
-      "WeightClass": "6",
+      "Weight Class": "6",
       "Naturewalk": ["Forest"],
       "Other": ["Mountable 2"]
     },
@@ -16861,7 +16861,7 @@ export const insurgenceData = [{
       "JumpH": 3,
       "JumpL": 2,
       "Power": 1,
-      "WeightClass": "1",
+      "Weight Class": "1",
       "Naturewalk": ["Urban"],
       "Other": ["Underdog"]
     },
@@ -16987,7 +16987,7 @@ export const insurgenceData = [{
       "JumpH": 5,
       "JumpL": 4,
       "Power": 2,
-      "WeightClass": "3",
+      "Weight Class": "3",
       "Naturewalk": ["Urban"],
       "Other": []
     },
@@ -17101,7 +17101,7 @@ export const insurgenceData = [{
       "JumpH": 1,
       "JumpL": 1,
       "Power": 3,
-      "WeightClass": "2",
+      "Weight Class": "2",
       "Naturewalk": [],
       "Other": ["Darkvision", "Underdog"]
     },
@@ -17209,7 +17209,7 @@ export const insurgenceData = [{
       "JumpH": 2,
       "JumpL": 3,
       "Power": 7,
-      "WeightClass": "4",
+      "Weight Class": "4",
       "Naturewalk": [],
       "Other": ["Reader", "Darkvision", "Tremorsense"]
     },
@@ -17326,7 +17326,7 @@ export const insurgenceData = [{
       "JumpH": 2,
       "JumpL": 3,
       "Power": 3,
-      "WeightClass": "2",
+      "Weight Class": "2",
       "Naturewalk": [],
       "Other": ["Firestarter", "Glow", "Heater", "Underdog"]
     },
@@ -17449,7 +17449,7 @@ export const insurgenceData = [{
       "JumpH": 3,
       "JumpL": 4,
       "Power": 8,
-      "WeightClass": "3",
+      "Weight Class": "3",
       "Naturewalk": [],
       "Other": ["Firestarter", "Glow", "Heater"]
     },
@@ -17570,7 +17570,7 @@ export const insurgenceData = [{
       "JumpH": 2,
       "JumpL": 2,
       "Power": 1,
-      "WeightClass": "1",
+      "Weight Class": "1",
       "Naturewalk": ["Cave", "Mountain"],
       "Other": ["Firestarter", "Glow", "Heater", "Underdog", "Wallclimber"]
     },
@@ -17691,7 +17691,7 @@ export const insurgenceData = [{
       "JumpH": 1,
       "JumpL": 1,
       "Power": 3,
-      "WeightClass": "4",
+      "Weight Class": "4",
       "Naturewalk": ["Cave", "Mountain"],
       "Other": ["Firestarter", "Glow", "Heater", "Underdog"]
     },
@@ -17809,7 +17809,7 @@ export const insurgenceData = [{
       "JumpH": 2,
       "JumpL": 2,
       "Power": 6,
-      "WeightClass": "6",
+      "Weight Class": "6",
       "Naturewalk": ["Cave", "Mountain"],
       "Other": ["Firestarter", "Glow", "Heater", "Mountable 1", "Wallclimber"]
     },
@@ -17929,7 +17929,7 @@ export const insurgenceData = [{
       "JumpH": 1,
       "JumpL": 1,
       "Power": 2,
-      "WeightClass": "1",
+      "Weight Class": "1",
       "Naturewalk": ["Ocean"],
       "Other": ["Glow", "Heater", "Underdog"]
     },
@@ -18052,7 +18052,7 @@ export const insurgenceData = [{
       "JumpH": 1,
       "JumpL": 1,
       "Power": 4,
-      "WeightClass": "2",
+      "Weight Class": "2",
       "Naturewalk": ["Ocean"],
       "Other": ["Glow", "Heater"]
     },
@@ -18187,7 +18187,7 @@ export const insurgenceData = [{
       "JumpH": 1,
       "JumpL": 1,
       "Power": 2,
-      "WeightClass": "1",
+      "Weight Class": "1",
       "Naturewalk": [],
       "Other": ["Underdog"]
     },
@@ -18310,7 +18310,7 @@ export const insurgenceData = [{
       "JumpH": 1,
       "JumpL": 1,
       "Power": 4,
-      "WeightClass": "2",
+      "Weight Class": "2",
       "Naturewalk": [],
       "Other": []
     },
@@ -18443,7 +18443,7 @@ export const insurgenceData = [{
       "JumpH": 1,
       "JumpL": 1,
       "Power": 1,
-      "WeightClass": "1",
+      "Weight Class": "1",
       "Naturewalk": [],
       "Other": ["Darkvision", "Dead Silent", "Materializer", "Underdog"]
     },
@@ -18567,7 +18567,7 @@ export const insurgenceData = [{
       "JumpH": 1,
       "JumpL": 1,
       "Power": 2,
-      "WeightClass": "1",
+      "Weight Class": "1",
       "Naturewalk": [],
       "Other": ["Darkvision", "Dead Silent", "Materializer", "Underdog"]
     },
@@ -18688,7 +18688,7 @@ export const insurgenceData = [{
       "JumpH": 2,
       "JumpL": 1,
       "Power": 7,
-      "WeightClass": "2",
+      "Weight Class": "2",
       "Naturewalk": [],
       "Other": ["Darkvision", "Dead Silent", "Materializer"]
     },
@@ -18811,7 +18811,7 @@ export const insurgenceData = [{
       "JumpH": 1,
       "JumpL": 1,
       "Power": 2,
-      "WeightClass": "3",
+      "Weight Class": "3",
       "Naturewalk": ["Urban"],
       "Other": ["Darkvision", "Phasing", "Underdog"]
     },
@@ -18934,7 +18934,7 @@ export const insurgenceData = [{
       "JumpH": 1,
       "JumpL": 2,
       "Power": 8,
-      "WeightClass": "4",
+      "Weight Class": "4",
       "Naturewalk": ["Urban"],
       "Other": ["Darkvision", "Phasing"]
     },
@@ -19056,7 +19056,7 @@ export const insurgenceData = [{
       "JumpH": 1,
       "JumpL": 1,
       "Power": 4,
-      "WeightClass": "3",
+      "Weight Class": "3",
       "Naturewalk": ["Urban"],
       "Other": []
     },
@@ -19188,7 +19188,7 @@ export const insurgenceData = [{
       "JumpH": 1,
       "JumpL": 1,
       "Power": 2,
-      "WeightClass": "2",
+      "Weight Class": "2",
       "Naturewalk": ["Forest"],
       "Other": ["Planter (Berries)", "Underdog"]
     },
@@ -19314,7 +19314,7 @@ export const insurgenceData = [{
       "JumpH": 1,
       "JumpL": 1,
       "Power": 5,
-      "WeightClass": "6",
+      "Weight Class": "6",
       "Naturewalk": ["Forest"],
       "Other": ["Planter (Berries"]
     },
@@ -19437,7 +19437,7 @@ export const insurgenceData = [{
       "JumpH": 1,
       "JumpL": 1,
       "Power": 2,
-      "WeightClass": "2",
+      "Weight Class": "2",
       "Naturewalk": ["Forest"],
       "Other": ["Alluring", "Chilled", "Underdog"]
     },
@@ -19557,7 +19557,7 @@ export const insurgenceData = [{
       "JumpH": 1,
       "JumpL": 1,
       "Power": 5,
-      "WeightClass": "6",
+      "Weight Class": "6",
       "Naturewalk": ["Forest"],
       "Other": ["Alluring", "Chilled"]
     },
@@ -19674,7 +19674,7 @@ export const insurgenceData = [{
       "JumpH": 2,
       "JumpL": 2,
       "Power": 2,
-      "WeightClass": "1",
+      "Weight Class": "1",
       "Naturewalk": [],
       "Other": ["Amorphous", "Glow", "Underdog"]
     },
@@ -19791,7 +19791,7 @@ export const insurgenceData = [{
       "JumpH": 1,
       "JumpL": 1,
       "Power": 7,
-      "WeightClass": "4",
+      "Weight Class": "4",
       "Naturewalk": [],
       "Other": []
     },
@@ -19904,7 +19904,7 @@ export const insurgenceData = [{
       "JumpH": 2,
       "JumpL": 2,
       "Power": 2,
-      "WeightClass": "1",
+      "Weight Class": "1",
       "Naturewalk": ["Forest"],
       "Other": ["Firestarter"]
     },
@@ -20027,7 +20027,7 @@ export const insurgenceData = [{
       "JumpH": 1,
       "JumpL": 2,
       "Power": 2,
-      "WeightClass": "1",
+      "Weight Class": "1",
       "Naturewalk": ["Forest"],
       "Other": ["Underdog"]
     },
@@ -20147,7 +20147,7 @@ export const insurgenceData = [{
       "JumpH": 1,
       "JumpL": 2,
       "Power": 4,
-      "WeightClass": "3",
+      "Weight Class": "3",
       "Naturewalk": ["Forest"],
       "Other": []
     },
@@ -20267,7 +20267,7 @@ export const insurgenceData = [{
       "JumpH": 1,
       "JumpL": 1,
       "Power": 2,
-      "WeightClass": "1",
+      "Weight Class": "1",
       "Naturewalk": ["Grassland"],
       "Other": ["Darkvision", "Shrinkable", "Stealth", "Underdog"]
     },
@@ -20387,7 +20387,7 @@ export const insurgenceData = [{
       "JumpH": 1,
       "JumpL": 1,
       "Power": 4,
-      "WeightClass": "1",
+      "Weight Class": "1",
       "Naturewalk": ["Grassland"],
       "Other": ["Darkvision", "Shrinkable", "Stealth"]
     },
@@ -20505,7 +20505,7 @@ export const insurgenceData = [{
       "JumpH": 1,
       "JumpL": 1,
       "Power": 1,
-      "WeightClass": "1",
+      "Weight Class": "1",
       "Naturewalk": [],
       "Other": ["Firestarter", "Glow", "Heater", "Shrinkable", "Underdog"]
     },
@@ -20632,7 +20632,7 @@ export const insurgenceData = [{
       "JumpH": 1,
       "JumpL": 1,
       "Power": 2,
-      "WeightClass": "2",
+      "Weight Class": "2",
       "Naturewalk": [],
       "Other": ["Firestarter", "Glow", "Heater", "Shrinkable"]
     },
@@ -20753,7 +20753,7 @@ export const insurgenceData = [{
       "JumpH": 1,
       "JumpL": 1,
       "Power": 3,
-      "WeightClass": "2",
+      "Weight Class": "2",
       "Naturewalk": [],
       "Other": ["Firestarter", "Glow", "Heater", "Shrinkable"]
     },
@@ -20874,7 +20874,7 @@ export const insurgenceData = [{
       "JumpH": 1,
       "JumpL": 1,
       "Power": 3,
-      "WeightClass": "2",
+      "Weight Class": "2",
       "Naturewalk": ["Ocean"],
       "Other": ["Gilled", "Underdog"]
     },
@@ -20998,7 +20998,7 @@ export const insurgenceData = [{
       "JumpH": 2,
       "JumpL": 2,
       "Power": 3,
-      "WeightClass": "3",
+      "Weight Class": "3",
       "Naturewalk": ["Ocean"],
       "Other": ["Gilled", "Underdog"]
     },
@@ -21119,7 +21119,7 @@ export const insurgenceData = [{
       "JumpH": 2,
       "JumpL": 2,
       "Power": 8,
-      "WeightClass": "5",
+      "Weight Class": "5",
       "Naturewalk": [],
       "Other": ["Gilled"]
     },
@@ -21242,7 +21242,7 @@ export const insurgenceData = [{
       "JumpH": 1,
       "JumpL": 1,
       "Power": 7,
-      "WeightClass": "4",
+      "Weight Class": "4",
       "Naturewalk": [],
       "Other": ["Underdog"]
     },
@@ -21362,7 +21362,7 @@ export const insurgenceData = [{
       "JumpH": 2,
       "JumpL": 2,
       "Power": 14,
-      "WeightClass": "6",
+      "Weight Class": "6",
       "Naturewalk": [],
       "Other": []
     },
@@ -21478,7 +21478,7 @@ export const insurgenceData = [{
       "JumpH": 2,
       "JumpL": 2,
       "Power": 4,
-      "WeightClass": "5",
+      "Weight Class": "5",
       "Naturewalk": ["Urban"],
       "Other": []
     },
@@ -21605,7 +21605,7 @@ export const insurgenceData = [{
       "JumpH": 1,
       "JumpL": 1,
       "Power": 3,
-      "WeightClass": "2",
+      "Weight Class": "2",
       "Naturewalk": ["Desert"],
       "Other": ["Blindsense", "Underdog"]
     },
@@ -21729,7 +21729,7 @@ export const insurgenceData = [{
       "JumpH": 1,
       "JumpL": 1,
       "Power": 4,
-      "WeightClass": "4",
+      "Weight Class": "4",
       "Naturewalk": ["Desert"],
       "Other": ["Blindsense", "Lock", "Underdog"]
     },
@@ -21850,7 +21850,7 @@ export const insurgenceData = [{
       "JumpH": 1,
       "JumpL": 1,
       "Power": 6,
-      "WeightClass": "5",
+      "Weight Class": "5",
       "Naturewalk": ["Desert"],
       "Other": ["Lock"]
     },
@@ -21973,7 +21973,7 @@ export const insurgenceData = [{
       "JumpH": 1,
       "JumpL": 1,
       "Power": 2,
-      "WeightClass": "3",
+      "Weight Class": "3",
       "Naturewalk": [],
       "Other": ["Teleporter 2", "Chilled", "Darkvision", "Underdog"]
     },
@@ -22084,7 +22084,7 @@ export const insurgenceData = [{
       "JumpH": 1,
       "JumpL": 1,
       "Power": 3,
-      "WeightClass": "3",
+      "Weight Class": "3",
       "Naturewalk": [],
       "Other": ["Teleporter 4", "Chilled", "Darkvision"]
     },
@@ -22198,7 +22198,7 @@ export const insurgenceData = [{
       "JumpH": 1,
       "JumpL": 1,
       "Power": 2,
-      "WeightClass": "3",
+      "Weight Class": "3",
       "Naturewalk": ["Ocean"],
       "Other": ["Fountain", "Underdog"]
     },
@@ -22327,7 +22327,7 @@ export const insurgenceData = [{
       "JumpH": 1,
       "JumpL": 1,
       "Power": 8,
-      "WeightClass": "6",
+      "Weight Class": "6",
       "Naturewalk": ["Ocean"],
       "Other": ["Fountain", "Mountable 2"]
     },
@@ -22454,7 +22454,7 @@ export const insurgenceData = [{
       "JumpH": 0,
       "JumpL": 0,
       "Power": 1,
-      "WeightClass": "1",
+      "Weight Class": "1",
       "Naturewalk": [],
       "Other": ["Amorphous", "Underdog"]
     },
@@ -22563,7 +22563,7 @@ export const insurgenceData = [{
       "JumpH": 0,
       "JumpL": 1,
       "Power": 2,
-      "WeightClass": "2",
+      "Weight Class": "2",
       "Naturewalk": [],
       "Other": ["Amorphous", "Underdog"]
     },
@@ -22666,7 +22666,7 @@ export const insurgenceData = [{
       "JumpH": 2,
       "JumpL": 2,
       "Power": 8,
-      "WeightClass": "5",
+      "Weight Class": "5",
       "Naturewalk": [],
       "Other": ["Amorphous"]
     },
@@ -22776,7 +22776,7 @@ export const insurgenceData = [{
       "JumpH": 0,
       "JumpL": 0,
       "Power": 11,
-      "WeightClass": "6",
+      "Weight Class": "6",
       "Naturewalk": ["Desert"],
       "Other": ["Amorphous", "Groundshaper"]
     },
@@ -22889,7 +22889,7 @@ export const insurgenceData = [{
       "JumpH": 0,
       "JumpL": 0,
       "Power": 11,
-      "WeightClass": "5",
+      "Weight Class": "5",
       "Naturewalk": ["Ocean"],
       "Other": ["Amorphous", "Fountain"]
     },
@@ -23002,7 +23002,7 @@ export const insurgenceData = [{
       "JumpH": 0,
       "JumpL": 0,
       "Power": 11,
-      "WeightClass": "6",
+      "Weight Class": "6",
       "Naturewalk": ["Cave", "Mountain"],
       "Other": ["Amorphous", "Glow", "Firestarter", "Heater"]
     },
@@ -23115,7 +23115,7 @@ export const insurgenceData = [{
       "JumpH": 3,
       "JumpL": 3,
       "Power": 3,
-      "WeightClass": "6",
+      "Weight Class": "6",
       "Naturewalk": [],
       "Other": ["Darkvision", "Dead Silent", "Forme Change", "Stealth"]
     },
@@ -23234,7 +23234,7 @@ export const insurgenceData = [{
       "JumpH": 3,
       "JumpL": 3,
       "Power": 3,
-      "WeightClass": "6",
+      "Weight Class": "6",
       "Naturewalk": [],
       "Other": ["Teleporter 4", "Darkvision", "Forme Change", "Invisibility", "Stealth"]
     },
@@ -23353,7 +23353,7 @@ export const insurgenceData = [{
       "JumpH": 2,
       "JumpL": 2,
       "Power": 2,
-      "WeightClass": "1",
+      "Weight Class": "1",
       "Naturewalk": [],
       "Other": ["Confined", "Forme Change", "Guster"]
     },
@@ -23478,7 +23478,7 @@ export const insurgenceData = [{
       "JumpH": 4,
       "JumpL": 4,
       "Power": 8,
-      "WeightClass": "6",
+      "Weight Class": "6",
       "Naturewalk": [],
       "Other": ["Forme Change", "Guster"]
     },
@@ -23643,7 +23643,7 @@ export const sageData = [
       "JumpH": 2,
       "JumpL": 2,
       "Power": 1,
-      "WeightClass": "1",
+      "Weight Class": "1",
       "Naturewalk": [
         "Forest"
       ],
@@ -23878,7 +23878,7 @@ export const sageData = [
       "JumpH": 3,
       "JumpL": 3,
       "Power": 2,
-      "WeightClass": "1",
+      "Weight Class": "1",
       "Naturewalk": [
         "Forest"
       ],
@@ -24110,7 +24110,7 @@ export const sageData = [
       "JumpH": 3,
       "JumpL": 3,
       "Power": 3,
-      "WeightClass": "2",
+      "Weight Class": "2",
       "Naturewalk": [
         "Forest"
       ],
@@ -24345,7 +24345,7 @@ export const sageData = [
       "JumpH": 1,
       "JumpL": 2,
       "Power": 3,
-      "WeightClass": "1",
+      "Weight Class": "1",
       "Naturewalk": [
         "Mountain"
       ],
@@ -24585,7 +24585,7 @@ export const sageData = [
       "JumpH": 1,
       "JumpL": 2,
       "Power": 6,
-      "WeightClass": "3",
+      "Weight Class": "3",
       "Naturewalk": [
         "Mountain"
       ],
@@ -24825,7 +24825,7 @@ export const sageData = [
       "JumpH": 2,
       "JumpL": 3,
       "Power": 8,
-      "WeightClass": "5",
+      "Weight Class": "5",
       "Naturewalk": [
         "Mountain"
       ],
@@ -25076,7 +25076,7 @@ export const sageData = [
       "JumpH": 1,
       "JumpL": 1,
       "Power": 3,
-      "WeightClass": "1",
+      "Weight Class": "1",
       "Naturewalk": [
         "Ocean"
       ],
@@ -25323,7 +25323,7 @@ export const sageData = [
       "JumpH": 1,
       "JumpL": 1,
       "Power": 5,
-      "WeightClass": "3",
+      "Weight Class": "3",
       "Naturewalk": [
         "Ocean"
       ],
@@ -25575,7 +25575,7 @@ export const sageData = [
       "JumpH": 2,
       "JumpL": 2,
       "Power": 8,
-      "WeightClass": "5",
+      "Weight Class": "5",
       "Naturewalk": [
         "Ocean"
       ],
@@ -25836,7 +25836,7 @@ export const sageData = [
       "JumpH": 2,
       "JumpL": 2,
       "Power": 2,
-      "WeightClass": "1",
+      "Weight Class": "1",
       "Naturewalk": [],
       "Other": [
         "Guster",
@@ -26073,7 +26073,7 @@ export const sageData = [
       "JumpH": 2,
       "JumpL": 2,
       "Power": 4,
-      "WeightClass": "2",
+      "Weight Class": "2",
       "Naturewalk": [],
       "Other": [
         "Guster",
@@ -26299,7 +26299,7 @@ export const sageData = [
       "JumpH": 3,
       "JumpL": 3,
       "Power": 5,
-      "WeightClass": "2",
+      "Weight Class": "2",
       "Naturewalk": [],
       "Other": [
         "Guster"
@@ -26526,7 +26526,7 @@ export const sageData = [
       "JumpH": 1,
       "JumpL": 1,
       "Power": 1,
-      "WeightClass": "1",
+      "Weight Class": "1",
       "Naturewalk": [],
       "Other": [
         "Heater",
@@ -26760,7 +26760,7 @@ export const sageData = [
       "JumpH": 2,
       "JumpL": 2,
       "Power": 3,
-      "WeightClass": "3",
+      "Weight Class": "3",
       "Naturewalk": [],
       "Other": [
         "Heater",
@@ -26987,7 +26987,7 @@ export const sageData = [
       "JumpH": 2,
       "JumpL": 2,
       "Power": 3,
-      "WeightClass": "2",
+      "Weight Class": "2",
       "Naturewalk": [
         "Tundra"
       ],
@@ -27206,7 +27206,7 @@ export const sageData = [
       "JumpH": 2,
       "JumpL": 3,
       "Power": 6,
-      "WeightClass": "3",
+      "Weight Class": "3",
       "Naturewalk": [
         "Tundra"
       ],
@@ -27436,7 +27436,7 @@ export const sageData = [
       "JumpH": 2,
       "JumpL": 2,
       "Power": 1,
-      "WeightClass": "2",
+      "Weight Class": "2",
       "Naturewalk": [
         "Forest",
         "Tundra"
@@ -27656,7 +27656,7 @@ export const sageData = [
       "JumpH": 2,
       "JumpL": 2,
       "Power": 4,
-      "WeightClass": "4",
+      "Weight Class": "4",
       "Naturewalk": [
         "Forest",
         "Tundra"
@@ -27870,7 +27870,7 @@ export const sageData = [
       "JumpH": 3,
       "JumpL": 3,
       "Power": 8,
-      "WeightClass": "5",
+      "Weight Class": "5",
       "Naturewalk": [
         "Forest",
         "Tundra"
@@ -28083,7 +28083,7 @@ export const sageData = [
       "JumpH": 1,
       "JumpL": 1,
       "Power": 3,
-      "WeightClass": "3",
+      "Weight Class": "3",
       "Naturewalk": [
         "Tundra"
       ],
@@ -28325,7 +28325,7 @@ export const sageData = [
       "JumpH": 1,
       "JumpL": 1,
       "Power": 6,
-      "WeightClass": "5",
+      "Weight Class": "5",
       "Naturewalk": [
         "Tundra"
       ],
@@ -28561,7 +28561,7 @@ export const sageData = [
       "JumpH": 2,
       "JumpL": 2,
       "Power": 2,
-      "WeightClass": "1",
+      "Weight Class": "1",
       "Naturewalk": [
         "Tundra"
       ],
@@ -28787,7 +28787,7 @@ export const sageData = [
       "JumpH": 3,
       "JumpL": 3,
       "Power": 3,
-      "WeightClass": "2",
+      "Weight Class": "2",
       "Naturewalk": [
         "Tundra"
       ],
@@ -29021,7 +29021,7 @@ export const sageData = [
       "JumpH": 1,
       "JumpL": 1,
       "Power": 2,
-      "WeightClass": "2",
+      "Weight Class": "2",
       "Naturewalk": [
         "Cave"
       ],
@@ -29250,7 +29250,7 @@ export const sageData = [
       "JumpH": 2,
       "JumpL": 2,
       "Power": 7,
-      "WeightClass": "4",
+      "Weight Class": "4",
       "Naturewalk": [
         "Mountain"
       ],
@@ -29488,7 +29488,7 @@ export const sageData = [
       "JumpH": 1,
       "JumpL": 1,
       "Power": 7,
-      "WeightClass": "5",
+      "Weight Class": "5",
       "Naturewalk": [
         "Cave"
       ],
@@ -29738,7 +29738,7 @@ export const sageData = [
       "JumpH": 1,
       "JumpL": 1,
       "Power": 2,
-      "WeightClass": "2",
+      "Weight Class": "2",
       "Naturewalk": [
         "Mountain"
       ],
@@ -29977,7 +29977,7 @@ export const sageData = [
       "JumpH": 1,
       "JumpL": 1,
       "Power": 5,
-      "WeightClass": "4",
+      "Weight Class": "4",
       "Naturewalk": [
         "Mountain"
       ],
@@ -30215,7 +30215,7 @@ export const sageData = [
       "JumpH": 2,
       "JumpL": 2,
       "Power": 8,
-      "WeightClass": "5",
+      "Weight Class": "5",
       "Naturewalk": [
         "Mountain"
       ],
@@ -30463,7 +30463,7 @@ export const sageData = [
       "JumpH": 2,
       "JumpL": 3,
       "Power": 2,
-      "WeightClass": "2",
+      "Weight Class": "2",
       "Naturewalk": [
         "Forest"
       ],
@@ -30695,7 +30695,7 @@ export const sageData = [
       "JumpH": 1,
       "JumpL": 1,
       "Power": 2,
-      "WeightClass": "2",
+      "Weight Class": "2",
       "Naturewalk": [
         "Tundra"
       ],
@@ -30930,7 +30930,7 @@ export const sageData = [
       "JumpH": 1,
       "JumpL": 1,
       "Power": 7,
-      "WeightClass": "5",
+      "Weight Class": "5",
       "Naturewalk": [
         "Tundra"
       ],
@@ -31167,7 +31167,7 @@ export const sageData = [
       "JumpH": 2,
       "JumpL": 2,
       "Power": 3,
-      "WeightClass": "1",
+      "Weight Class": "1",
       "Naturewalk": [],
       "Other": [
         "Underdog"
@@ -31419,7 +31419,7 @@ export const sageData = [
       "JumpH": 2,
       "JumpL": 2,
       "Power": 5,
-      "WeightClass": "5",
+      "Weight Class": "5",
       "Naturewalk": [],
       "Other": []
     },
@@ -31676,7 +31676,7 @@ export const sageData = [
       "JumpH": 1,
       "JumpL": 1,
       "Power": 1,
-      "WeightClass": "1",
+      "Weight Class": "1",
       "Naturewalk": [],
       "Other": [
         "Split Evolution",
@@ -31863,7 +31863,7 @@ export const sageData = [
       "JumpH": 2,
       "JumpL": 3,
       "Power": 3,
-      "WeightClass": "1",
+      "Weight Class": "1",
       "Naturewalk": [],
       "Other": [
         "Threaded",
@@ -32080,7 +32080,7 @@ export const sageData = [
       "JumpH": 1,
       "JumpL": 1,
       "Power": 2,
-      "WeightClass": "1",
+      "Weight Class": "1",
       "Naturewalk": [],
       "Other": [
         "Glow",
@@ -32305,7 +32305,7 @@ export const sageData = [
       "JumpH": 1,
       "JumpL": 1,
       "Power": 4,
-      "WeightClass": "2",
+      "Weight Class": "2",
       "Naturewalk": [],
       "Other": [
         "Threaded",
@@ -32521,7 +32521,7 @@ export const sageData = [
       "JumpH": 1,
       "JumpL": 1,
       "Power": 1,
-      "WeightClass": "1",
+      "Weight Class": "1",
       "Naturewalk": [
         "Forest"
       ],
@@ -32760,7 +32760,7 @@ export const sageData = [
       "JumpH": 2,
       "JumpL": 2,
       "Power": 1,
-      "WeightClass": "2",
+      "Weight Class": "2",
       "Naturewalk": [
         "Forest"
       ],
@@ -32981,7 +32981,7 @@ export const sageData = [
       "JumpH": 2,
       "JumpL": 2,
       "Power": 6,
-      "WeightClass": "3",
+      "Weight Class": "3",
       "Naturewalk": [
         "Forest"
       ],
@@ -33250,7 +33250,7 @@ export const sageData = [
       "JumpH": 1,
       "JumpL": 1,
       "Power": 1,
-      "WeightClass": "1",
+      "Weight Class": "1",
       "Naturewalk": [
         "Grassland"
       ],
@@ -33485,7 +33485,7 @@ export const sageData = [
       "JumpH": 1,
       "JumpL": 1,
       "Power": 3,
-      "WeightClass": "1",
+      "Weight Class": "1",
       "Naturewalk": [
         "Grassland"
       ],
@@ -33711,7 +33711,7 @@ export const sageData = [
       "JumpH": 1,
       "JumpL": 1,
       "Power": 1,
-      "WeightClass": "1",
+      "Weight Class": "1",
       "Naturewalk": [
         "Grassland"
       ],
@@ -33953,7 +33953,7 @@ export const sageData = [
       "JumpH": 1,
       "JumpL": 1,
       "Power": 2,
-      "WeightClass": "2",
+      "Weight Class": "2",
       "Naturewalk": [
         "Grassland"
       ],
@@ -34175,7 +34175,7 @@ export const sageData = [
       "JumpH": 1,
       "JumpL": 2,
       "Power": 2,
-      "WeightClass": "2",
+      "Weight Class": "2",
       "Naturewalk": [],
       "Other": [
         "Darkvision",
@@ -34415,7 +34415,7 @@ export const sageData = [
       "JumpH": 2,
       "JumpL": 2,
       "Power": 5,
-      "WeightClass": "3",
+      "Weight Class": "3",
       "Naturewalk": [
         "Grassland",
         "Urban"
@@ -34674,7 +34674,7 @@ export const sageData = [
       "JumpH": 1,
       "JumpL": 1,
       "Power": 1,
-      "WeightClass": "1",
+      "Weight Class": "1",
       "Naturewalk": [],
       "Other": [
         "Darkvision",
@@ -34911,7 +34911,7 @@ export const sageData = [
       "JumpH": 1,
       "JumpL": 1,
       "Power": 3,
-      "WeightClass": "4",
+      "Weight Class": "4",
       "Naturewalk": [],
       "Other": [
         "Alluring",
@@ -35142,7 +35142,7 @@ export const sageData = [
       "JumpH": 1,
       "JumpL": 1,
       "Power": 3,
-      "WeightClass": "4",
+      "Weight Class": "4",
       "Naturewalk": [],
       "Other": [
         "Darkvision",
@@ -35379,7 +35379,7 @@ export const sageData = [
       "JumpH": 1,
       "JumpL": 1,
       "Power": 3,
-      "WeightClass": "3",
+      "Weight Class": "3",
       "Naturewalk": [],
       "Other": [
         "Darkvision",
@@ -35620,7 +35620,7 @@ export const sageData = [
       "JumpH": 1,
       "JumpL": 1,
       "Power": 2,
-      "WeightClass": "3",
+      "Weight Class": "3",
       "Naturewalk": [],
       "Other": [
         "Firestarter",
@@ -35866,7 +35866,7 @@ export const sageData = [
       "JumpH": 1,
       "JumpL": 1,
       "Power": 5,
-      "WeightClass": "5",
+      "Weight Class": "5",
       "Naturewalk": [],
       "Other": [
         "Firestarter",
@@ -36104,7 +36104,7 @@ export const sageData = [
       "JumpH": 2,
       "JumpL": 2,
       "Power": 9,
-      "WeightClass": "6",
+      "Weight Class": "6",
       "Naturewalk": [],
       "Other": [
         "Firestarter",
@@ -36345,7 +36345,7 @@ export const sageData = [
       "JumpH": 1,
       "JumpL": 3,
       "Power": 3,
-      "WeightClass": "2",
+      "Weight Class": "2",
       "Naturewalk": [
         "Forest"
       ],
@@ -36585,7 +36585,7 @@ export const sageData = [
       "JumpH": 2,
       "JumpL": 4,
       "Power": 5,
-      "WeightClass": "4",
+      "Weight Class": "4",
       "Naturewalk": [
         "Forest"
       ],
@@ -36821,7 +36821,7 @@ export const sageData = [
       "JumpH": 1,
       "JumpL": 1,
       "Power": 1,
-      "WeightClass": "1",
+      "Weight Class": "1",
       "Naturewalk": [],
       "Other": [
         "Glow",
@@ -37075,7 +37075,7 @@ export const sageData = [
       "JumpH": 1,
       "JumpL": 1,
       "Power": 2,
-      "WeightClass": "1",
+      "Weight Class": "1",
       "Naturewalk": [],
       "Other": [
         "Glow",
@@ -37325,7 +37325,7 @@ export const sageData = [
       "JumpH": 2,
       "JumpL": 1,
       "Power": 1,
-      "WeightClass": "1",
+      "Weight Class": "1",
       "Naturewalk": [
         "Forest"
       ],
@@ -37561,7 +37561,7 @@ export const sageData = [
       "JumpH": 3,
       "JumpL": 2,
       "Power": 2,
-      "WeightClass": "1",
+      "Weight Class": "1",
       "Naturewalk": [
         "Forest"
       ],
@@ -37786,7 +37786,7 @@ export const sageData = [
       "JumpH": 3,
       "JumpL": 2,
       "Power": 4,
-      "WeightClass": "2",
+      "Weight Class": "2",
       "Naturewalk": [
         "Forest"
       ],
@@ -38031,7 +38031,7 @@ export const sageData = [
       "JumpH": 1,
       "JumpL": 1,
       "Power": 3,
-      "WeightClass": "1",
+      "Weight Class": "1",
       "Naturewalk": [
         "Ocean"
       ],
@@ -38272,7 +38272,7 @@ export const sageData = [
       "JumpH": 2,
       "JumpL": 2,
       "Power": 5,
-      "WeightClass": "3",
+      "Weight Class": "3",
       "Naturewalk": [
         "Ocean"
       ],
@@ -38521,7 +38521,7 @@ export const sageData = [
       "JumpH": 1,
       "JumpL": 1,
       "Power": 1,
-      "WeightClass": "1",
+      "Weight Class": "1",
       "Naturewalk": [],
       "Other": [
         "Threaded",
@@ -38657,7 +38657,7 @@ export const sageData = [
       "JumpH": 1,
       "JumpL": 1,
       "Power": 1,
-      "WeightClass": "1",
+      "Weight Class": "1",
       "Naturewalk": [],
       "Other": [
         "Threaded",
@@ -38803,7 +38803,7 @@ export const sageData = [
       "JumpH": 2,
       "JumpL": 2,
       "Power": 3,
-      "WeightClass": "3",
+      "Weight Class": "3",
       "Naturewalk": [],
       "Other": [
         "Threaded",
@@ -39027,7 +39027,7 @@ export const sageData = [
       "JumpH": 2,
       "JumpL": 2,
       "Power": 1,
-      "WeightClass": "1",
+      "Weight Class": "1",
       "Naturewalk": [],
       "Other": [
         "Mindlock",
@@ -39276,7 +39276,7 @@ export const sageData = [
       "JumpH": 3,
       "JumpL": 3,
       "Power": 3,
-      "WeightClass": "2",
+      "Weight Class": "2",
       "Naturewalk": [],
       "Other": [
         "Mindlock",
@@ -39453,7 +39453,7 @@ export const sageData = [
       "JumpH": 1,
       "JumpL": 1,
       "Power": 1,
-      "WeightClass": "1",
+      "Weight Class": "1",
       "Naturewalk": [],
       "Other": [
         "Fountain",
@@ -39677,7 +39677,7 @@ export const sageData = [
       "JumpH": 1,
       "JumpL": 1,
       "Power": 2,
-      "WeightClass": "2",
+      "Weight Class": "2",
       "Naturewalk": [],
       "Other": [
         "Fountain",
@@ -39899,7 +39899,7 @@ export const sageData = [
       "JumpH": 1,
       "JumpL": 1,
       "Power": 3,
-      "WeightClass": "1",
+      "Weight Class": "1",
       "Naturewalk": [],
       "Other": [
         "Fountain",
@@ -40139,7 +40139,7 @@ export const sageData = [
       "JumpH": 2,
       "JumpL": 2,
       "Power": 4,
-      "WeightClass": "3",
+      "Weight Class": "3",
       "Naturewalk": [],
       "Other": [
         "Fountain",
@@ -40378,7 +40378,7 @@ export const sageData = [
       "JumpH": 3,
       "JumpL": 2,
       "Power": 5,
-      "WeightClass": "3",
+      "Weight Class": "3",
       "Naturewalk": [],
       "Other": [
         "Fountain",
@@ -40622,7 +40622,7 @@ export const sageData = [
       "JumpH": 0,
       "JumpL": 1,
       "Power": 6,
-      "WeightClass": "3",
+      "Weight Class": "3",
       "Naturewalk": [
         "Forest"
       ],
@@ -40850,7 +40850,7 @@ export const sageData = [
       "JumpH": 0,
       "JumpL": 1,
       "Power": 10,
-      "WeightClass": "6",
+      "Weight Class": "6",
       "Naturewalk": [
         "Forest"
       ],
@@ -41074,7 +41074,7 @@ export const sageData = [
       "JumpH": 1,
       "JumpL": 1,
       "Power": 4,
-      "WeightClass": "2",
+      "Weight Class": "2",
       "Naturewalk": [
         "Wetland"
       ],
@@ -41321,7 +41321,7 @@ export const sageData = [
       "JumpH": 1,
       "JumpL": 1,
       "Power": 6,
-      "WeightClass": "4",
+      "Weight Class": "4",
       "Naturewalk": [
         "Wetland"
       ],
@@ -41559,7 +41559,7 @@ export const sageData = [
       "JumpH": 2,
       "JumpL": 2,
       "Power": 1,
-      "WeightClass": "1",
+      "Weight Class": "1",
       "Naturewalk": [
         "Ocean"
       ],
@@ -41772,7 +41772,7 @@ export const sageData = [
       "JumpH": 3,
       "JumpL": 3,
       "Power": 2,
-      "WeightClass": "2",
+      "Weight Class": "2",
       "Naturewalk": [
         "Ocean"
       ],
@@ -41983,7 +41983,7 @@ export const sageData = [
       "JumpH": 2,
       "JumpL": 2,
       "Power": 6,
-      "WeightClass": "5",
+      "Weight Class": "5",
       "Naturewalk": [],
       "Other": [
         "Firestarter"
@@ -42198,7 +42198,7 @@ export const sageData = [
       "JumpH": 2,
       "JumpL": 2,
       "Power": 3,
-      "WeightClass": "2",
+      "Weight Class": "2",
       "Naturewalk": [],
       "Other": [
         "Fortune",
@@ -42454,7 +42454,7 @@ export const sageData = [
       "JumpH": 2,
       "JumpL": 2,
       "Power": 4,
-      "WeightClass": "2",
+      "Weight Class": "2",
       "Naturewalk": [
         "Mountain"
       ],
@@ -42709,7 +42709,7 @@ export const sageData = [
       "JumpH": 2,
       "JumpL": 2,
       "Power": 7,
-      "WeightClass": "5",
+      "Weight Class": "5",
       "Naturewalk": [
         "Mountain"
       ],
@@ -42963,7 +42963,7 @@ export const sageData = [
       "JumpH": 2,
       "JumpL": 2,
       "Power": 1,
-      "WeightClass": "1",
+      "Weight Class": "1",
       "Naturewalk": [],
       "Other": [
         "Fountain",
@@ -43219,7 +43219,7 @@ export const sageData = [
       "JumpH": 3,
       "JumpL": 3,
       "Power": 4,
-      "WeightClass": "4",
+      "Weight Class": "4",
       "Naturewalk": [],
       "Other": [
         "Fountain",
@@ -43461,7 +43461,7 @@ export const sageData = [
       "JumpH": 2,
       "JumpL": 3,
       "Power": 4,
-      "WeightClass": "3",
+      "Weight Class": "3",
       "Naturewalk": [
         "Desert"
       ],
@@ -43697,7 +43697,7 @@ export const sageData = [
       "JumpH": 2,
       "JumpL": 3,
       "Power": 4,
-      "WeightClass": "3",
+      "Weight Class": "3",
       "Naturewalk": [
         "Mountain"
       ],
@@ -43949,7 +43949,7 @@ export const sageData = [
       "JumpH": 1,
       "JumpL": 3,
       "Power": 1,
-      "WeightClass": "1",
+      "Weight Class": "1",
       "Naturewalk": [
         "Ocean"
       ],
@@ -44202,7 +44202,7 @@ export const sageData = [
       "JumpH": 2,
       "JumpL": 2,
       "Power": 3,
-      "WeightClass": "2",
+      "Weight Class": "2",
       "Naturewalk": [
         "Ocean"
       ],
@@ -44451,7 +44451,7 @@ export const sageData = [
       "JumpH": 2,
       "JumpL": 2,
       "Power": 1,
-      "WeightClass": "1",
+      "Weight Class": "1",
       "Naturewalk": [],
       "Other": [
         "Blender",
@@ -44697,7 +44697,7 @@ export const sageData = [
       "JumpH": 3,
       "JumpL": 3,
       "Power": 4,
-      "WeightClass": "4",
+      "Weight Class": "4",
       "Naturewalk": [],
       "Other": [
         "Blender",
@@ -44942,7 +44942,7 @@ export const sageData = [
       "JumpH": 2,
       "JumpL": 2,
       "Power": 1,
-      "WeightClass": "1",
+      "Weight Class": "1",
       "Naturewalk": [],
       "Other": [
         "Guster",
@@ -45181,7 +45181,7 @@ export const sageData = [
       "JumpH": 2,
       "JumpL": 2,
       "Power": 2,
-      "WeightClass": "2",
+      "Weight Class": "2",
       "Naturewalk": [],
       "Other": [
         "Guster",
@@ -45414,7 +45414,7 @@ export const sageData = [
       "JumpH": 3,
       "JumpL": 3,
       "Power": 4,
-      "WeightClass": "4",
+      "Weight Class": "4",
       "Naturewalk": [],
       "Other": [
         "Guster"
@@ -45654,7 +45654,7 @@ export const sageData = [
       "JumpH": 2,
       "JumpL": 2,
       "Power": 3,
-      "WeightClass": "2",
+      "Weight Class": "2",
       "Naturewalk": [],
       "Other": [
         "Underdog"
@@ -45884,7 +45884,7 @@ export const sageData = [
       "JumpH": 3,
       "JumpL": 3,
       "Power": 6,
-      "WeightClass": "4",
+      "Weight Class": "4",
       "Naturewalk": [],
       "Other": []
     },
@@ -46107,7 +46107,7 @@ export const sageData = [
       "JumpH": 2,
       "JumpL": 2,
       "Power": 1,
-      "WeightClass": "1",
+      "Weight Class": "1",
       "Naturewalk": [
         "Forest",
         "Grassland"
@@ -46324,7 +46324,7 @@ export const sageData = [
       "JumpH": 3,
       "JumpL": 3,
       "Power": 3,
-      "WeightClass": "2",
+      "Weight Class": "2",
       "Naturewalk": [
         "Forest",
         "Grassland"
@@ -46531,7 +46531,7 @@ export const sageData = [
       "JumpH": 1,
       "JumpL": 1,
       "Power": 4,
-      "WeightClass": "2",
+      "Weight Class": "2",
       "Naturewalk": [],
       "Other": [
         "Tremorsense"
@@ -46774,7 +46774,7 @@ export const sageData = [
       "JumpH": 1,
       "JumpL": 1,
       "Power": 1,
-      "WeightClass": "1",
+      "Weight Class": "1",
       "Naturewalk": [],
       "Other": [
         "Darkvision",
@@ -47020,7 +47020,7 @@ export const sageData = [
       "JumpH": 1,
       "JumpL": 1,
       "Power": 1,
-      "WeightClass": "1",
+      "Weight Class": "1",
       "Naturewalk": [],
       "Other": [
         "Darkvision",
@@ -47267,7 +47267,7 @@ export const sageData = [
       "JumpH": 1,
       "JumpL": 1,
       "Power": 3,
-      "WeightClass": "1",
+      "Weight Class": "1",
       "Naturewalk": [],
       "Other": [
         "Darkvision",
@@ -47500,7 +47500,7 @@ export const sageData = [
       "JumpH": 1,
       "JumpL": 1,
       "Power": 3,
-      "WeightClass": "1",
+      "Weight Class": "1",
       "Naturewalk": [],
       "Other": [
         "Chilled",
@@ -47739,7 +47739,7 @@ export const sageData = [
       "JumpH": 2,
       "JumpL": 2,
       "Power": 3,
-      "WeightClass": "1",
+      "Weight Class": "1",
       "Naturewalk": [],
       "Other": [
         "Amorphous",
@@ -47971,7 +47971,7 @@ export const sageData = [
       "JumpH": 1,
       "JumpL": 1,
       "Power": 1,
-      "WeightClass": "1",
+      "Weight Class": "1",
       "Naturewalk": [],
       "Other": [
         "Magenetic",
@@ -48224,7 +48224,7 @@ export const sageData = [
       "JumpH": 1,
       "JumpL": 1,
       "Power": 1,
-      "WeightClass": "1",
+      "Weight Class": "1",
       "Naturewalk": [],
       "Other": [
         "Magenetic",
@@ -48472,7 +48472,7 @@ export const sageData = [
       "JumpH": 1,
       "JumpL": 1,
       "Power": 3,
-      "WeightClass": "1",
+      "Weight Class": "1",
       "Naturewalk": [
         "Forest"
       ],
@@ -48717,7 +48717,7 @@ export const sageData = [
       "JumpH": 3,
       "JumpL": 3,
       "Power": 3,
-      "WeightClass": "2",
+      "Weight Class": "2",
       "Naturewalk": [
         "Forest"
       ],
@@ -48951,7 +48951,7 @@ export const sageData = [
       "JumpH": 2,
       "JumpL": 2,
       "Power": 6,
-      "WeightClass": "4",
+      "Weight Class": "4",
       "Naturewalk": [],
       "Other": [
         "Darkvision",
@@ -49212,7 +49212,7 @@ export const sageData = [
       "JumpH": 0,
       "JumpL": 1,
       "Power": 2,
-      "WeightClass": "3",
+      "Weight Class": "3",
       "Naturewalk": [],
       "Other": [
         "Telekinetic",
@@ -49442,7 +49442,7 @@ export const sageData = [
       "JumpH": 0,
       "JumpL": 1,
       "Power": 5,
-      "WeightClass": "5",
+      "Weight Class": "5",
       "Naturewalk": [],
       "Other": [
         "Telekinetic"
@@ -49660,7 +49660,7 @@ export const sageData = [
       "JumpH": 1,
       "JumpL": 1,
       "Power": 12,
-      "WeightClass": "6",
+      "Weight Class": "6",
       "Naturewalk": [],
       "Other": [
         "Groundshaper",
@@ -49905,7 +49905,7 @@ export const sageData = [
       "JumpH": 1,
       "JumpL": 1,
       "Power": 2,
-      "WeightClass": "1",
+      "Weight Class": "1",
       "Naturewalk": [
         "Cave"
       ],
@@ -50158,7 +50158,7 @@ export const sageData = [
       "JumpH": 2,
       "JumpL": 2,
       "Power": 5,
-      "WeightClass": "2",
+      "Weight Class": "2",
       "Naturewalk": [
         "Cave"
       ],
@@ -50405,7 +50405,7 @@ export const sageData = [
       "JumpH": 0,
       "JumpL": 1,
       "Power": 1,
-      "WeightClass": "1",
+      "Weight Class": "1",
       "Naturewalk": [],
       "Other": [
         "Planter (Herbs",
@@ -50646,7 +50646,7 @@ export const sageData = [
       "JumpH": 0,
       "JumpL": 1,
       "Power": 3,
-      "WeightClass": "3",
+      "Weight Class": "3",
       "Naturewalk": [],
       "Other": [
         "Planter (Herbs",
@@ -50878,7 +50878,7 @@ export const sageData = [
       "JumpH": 0,
       "JumpL": 1,
       "Power": 9,
-      "WeightClass": "6",
+      "Weight Class": "6",
       "Naturewalk": [],
       "Other": [
         "Planter (Herbs",
@@ -51115,7 +51115,7 @@ export const sageData = [
       "JumpH": 2,
       "JumpL": 2,
       "Power": 2,
-      "WeightClass": "1",
+      "Weight Class": "1",
       "Naturewalk": [],
       "Other": [
         "Threaded",
@@ -51369,7 +51369,7 @@ export const sageData = [
       "JumpH": 3,
       "JumpL": 3,
       "Power": 6,
-      "WeightClass": "5",
+      "Weight Class": "5",
       "Naturewalk": [],
       "Other": [
         "Threaded",
@@ -51623,7 +51623,7 @@ export const sageData = [
       "JumpH": 1,
       "JumpL": 1,
       "Power": 2,
-      "WeightClass": "1",
+      "Weight Class": "1",
       "Naturewalk": [
         "Desert"
       ],
@@ -51898,7 +51898,7 @@ export const sageData = [
       "JumpH": 1,
       "JumpL": 1,
       "Power": 5,
-      "WeightClass": "3",
+      "Weight Class": "3",
       "Naturewalk": [
         "Desert"
       ],
@@ -52175,7 +52175,7 @@ export const sageData = [
       "JumpH": 1,
       "JumpL": 1,
       "Power": 3,
-      "WeightClass": "2",
+      "Weight Class": "2",
       "Naturewalk": [
         "Desert"
       ],
@@ -52412,7 +52412,7 @@ export const sageData = [
       "JumpH": 1,
       "JumpL": 1,
       "Power": 3,
-      "WeightClass": "4",
+      "Weight Class": "4",
       "Naturewalk": [
         "Desert"
       ],
@@ -52677,7 +52677,7 @@ export const sageData = [
       "JumpH": 1,
       "JumpL": 1,
       "Power": 2,
-      "WeightClass": "4",
+      "Weight Class": "4",
       "Naturewalk": [],
       "Other": [
         "Dead Silent",
@@ -52944,7 +52944,7 @@ export const sageData = [
       "JumpH": 1,
       "JumpL": 1,
       "Power": 7,
-      "WeightClass": "6",
+      "Weight Class": "6",
       "Naturewalk": [],
       "Other": [
         "Dead Silent",
@@ -53207,7 +53207,7 @@ export const sageData = [
       "JumpH": 1,
       "JumpL": 1,
       "Power": 2,
-      "WeightClass": "3",
+      "Weight Class": "3",
       "Naturewalk": [
         "Desert"
       ],
@@ -53447,7 +53447,7 @@ export const sageData = [
       "JumpH": 1,
       "JumpL": 1,
       "Power": 4,
-      "WeightClass": "4",
+      "Weight Class": "4",
       "Naturewalk": [
         "Desert"
       ],
@@ -53687,7 +53687,7 @@ export const sageData = [
       "JumpH": 1,
       "JumpL": 1,
       "Power": 2,
-      "WeightClass": "2",
+      "Weight Class": "2",
       "Naturewalk": [
         "Mountain"
       ],
@@ -53921,7 +53921,7 @@ export const sageData = [
       "JumpH": 1,
       "JumpL": 1,
       "Power": 4,
-      "WeightClass": "3",
+      "Weight Class": "3",
       "Naturewalk": [
         "Mountain"
       ],
@@ -54153,7 +54153,7 @@ export const sageData = [
       "JumpH": 2,
       "JumpL": 2,
       "Power": 4,
-      "WeightClass": "5",
+      "Weight Class": "5",
       "Naturewalk": [
         "Mountain"
       ],
@@ -54403,7 +54403,7 @@ export const sageData = [
       "JumpH": 1,
       "JumpL": 1,
       "Power": 1,
-      "WeightClass": "1",
+      "Weight Class": "1",
       "Naturewalk": [
         "Desert"
       ],
@@ -54648,7 +54648,7 @@ export const sageData = [
       "JumpH": 2,
       "JumpL": 2,
       "Power": 2,
-      "WeightClass": "1",
+      "Weight Class": "1",
       "Naturewalk": [
         "Desert"
       ],
@@ -54885,7 +54885,7 @@ export const sageData = [
       "JumpH": 3,
       "JumpL": 3,
       "Power": 3,
-      "WeightClass": "3",
+      "Weight Class": "3",
       "Naturewalk": [
         "Desert"
       ],
@@ -55121,7 +55121,7 @@ export const sageData = [
       "JumpH": 2,
       "JumpL": 2,
       "Power": 3,
-      "WeightClass": "2",
+      "Weight Class": "2",
       "Naturewalk": [
         "Ocean"
       ],
@@ -55336,7 +55336,7 @@ export const sageData = [
       "JumpH": 1,
       "JumpL": 1,
       "Power": 7,
-      "WeightClass": "5",
+      "Weight Class": "5",
       "Naturewalk": [
         "Ocean"
       ],
@@ -55563,7 +55563,7 @@ export const sageData = [
       "JumpH": 0,
       "JumpL": 1,
       "Power": 6,
-      "WeightClass": "5",
+      "Weight Class": "5",
       "Naturewalk": [],
       "Other": [
         "Groundshaper",
@@ -55779,7 +55779,7 @@ export const sageData = [
       "JumpH": 0,
       "JumpL": 1,
       "Power": 11,
-      "WeightClass": "6",
+      "Weight Class": "6",
       "Naturewalk": [],
       "Other": [
         "Groundshaper",
@@ -55995,7 +55995,7 @@ export const sageData = [
       "JumpH": 3,
       "JumpL": 3,
       "Power": 2,
-      "WeightClass": "1",
+      "Weight Class": "1",
       "Naturewalk": [],
       "Other": [
         "Guster"
@@ -56234,7 +56234,7 @@ export const sageData = [
       "JumpH": 2,
       "JumpL": 2,
       "Power": 5,
-      "WeightClass": "5",
+      "Weight Class": "5",
       "Naturewalk": [],
       "Other": [
         "Gilled"
@@ -56473,7 +56473,7 @@ export const sageData = [
       "JumpH": 2,
       "JumpL": 2,
       "Power": 2,
-      "WeightClass": "2",
+      "Weight Class": "2",
       "Naturewalk": [
         "Forest"
       ],
@@ -56735,7 +56735,7 @@ export const sageData = [
       "JumpH": 2,
       "JumpL": 2,
       "Power": 2,
-      "WeightClass": "3",
+      "Weight Class": "3",
       "Naturewalk": [
         "Forest"
       ],
@@ -56987,7 +56987,7 @@ export const sageData = [
       "JumpH": 2,
       "JumpL": 2,
       "Power": 4,
-      "WeightClass": "2",
+      "Weight Class": "2",
       "Naturewalk": [
         "Wetland"
       ],
@@ -57217,7 +57217,7 @@ export const sageData = [
       "JumpH": 3,
       "JumpL": 3,
       "Power": 6,
-      "WeightClass": "3",
+      "Weight Class": "3",
       "Naturewalk": [
         "Wetland"
       ],
@@ -57446,7 +57446,7 @@ export const sageData = [
       "JumpH": 1,
       "JumpL": 1,
       "Power": 2,
-      "WeightClass": "1",
+      "Weight Class": "1",
       "Naturewalk": [],
       "Other": [
         "Darkvision",
@@ -57685,7 +57685,7 @@ export const sageData = [
       "JumpH": 1,
       "JumpL": 1,
       "Power": 2,
-      "WeightClass": "2",
+      "Weight Class": "2",
       "Naturewalk": [],
       "Other": [
         "Darkvision",
@@ -57922,7 +57922,7 @@ export const sageData = [
       "JumpH": 2,
       "JumpL": 2,
       "Power": 1,
-      "WeightClass": "1",
+      "Weight Class": "1",
       "Naturewalk": [
         "Forest"
       ],
@@ -58177,7 +58177,7 @@ export const sageData = [
       "JumpH": 3,
       "JumpL": 3,
       "Power": 2,
-      "WeightClass": "2",
+      "Weight Class": "2",
       "Naturewalk": [
         "Forest"
       ],
@@ -58417,7 +58417,7 @@ export const sageData = [
       "JumpH": 1,
       "JumpL": 1,
       "Power": 1,
-      "WeightClass": "1",
+      "Weight Class": "1",
       "Naturewalk": [],
       "Other": [
         "Stealth",
@@ -58674,7 +58674,7 @@ export const sageData = [
       "JumpH": 2,
       "JumpL": 2,
       "Power": 1,
-      "WeightClass": "1",
+      "Weight Class": "1",
       "Naturewalk": [],
       "Other": [
         "Alluring",
@@ -58926,7 +58926,7 @@ export const sageData = [
       "JumpH": 1,
       "JumpL": 1,
       "Power": 7,
-      "WeightClass": "3",
+      "Weight Class": "3",
       "Naturewalk": [
         "Forest"
       ],
@@ -59178,7 +59178,7 @@ export const sageData = [
       "JumpH": 1,
       "JumpL": 1,
       "Power": 2,
-      "WeightClass": "1",
+      "Weight Class": "1",
       "Naturewalk": [],
       "Other": [
         "Darkvision",
@@ -59411,7 +59411,7 @@ export const sageData = [
       "JumpH": 1,
       "JumpL": 1,
       "Power": 4,
-      "WeightClass": "3",
+      "Weight Class": "3",
       "Naturewalk": [],
       "Other": [
         "Darkvision",
@@ -59666,7 +59666,7 @@ export const sageData = [
       "JumpH": 2,
       "JumpL": 2,
       "Power": 5,
-      "WeightClass": "4",
+      "Weight Class": "4",
       "Naturewalk": [],
       "Other": [
         "Darkvision",
@@ -59914,7 +59914,7 @@ export const sageData = [
       "JumpH": 2,
       "JumpL": 2,
       "Power": 3,
-      "WeightClass": "1",
+      "Weight Class": "1",
       "Naturewalk": [],
       "Other": [
         "Gardener",
@@ -60152,7 +60152,7 @@ export const sageData = [
       "JumpH": 1,
       "JumpL": 1,
       "Power": 3,
-      "WeightClass": "3",
+      "Weight Class": "3",
       "Naturewalk": [],
       "Other": [
         "Blindsense",
@@ -60408,7 +60408,7 @@ export const sageData = [
       "JumpH": 1,
       "JumpL": 1,
       "Power": 1,
-      "WeightClass": "1",
+      "Weight Class": "1",
       "Naturewalk": [],
       "Other": [
         "Underdog",
@@ -60642,7 +60642,7 @@ export const sageData = [
       "JumpH": 1,
       "JumpL": 1,
       "Power": 2,
-      "WeightClass": "1",
+      "Weight Class": "1",
       "Naturewalk": [],
       "Other": [
         "Wallclimber"
@@ -60883,7 +60883,7 @@ export const sageData = [
       "JumpH": 1,
       "JumpL": 1,
       "Power": 4,
-      "WeightClass": "4",
+      "Weight Class": "4",
       "Naturewalk": [
         "Cave",
         "Mountain"
@@ -61105,7 +61105,7 @@ export const sageData = [
       "JumpH": 1,
       "JumpL": 1,
       "Power": 7,
-      "WeightClass": "5",
+      "Weight Class": "5",
       "Naturewalk": [
         "Cave",
         "Mountain"
@@ -61323,7 +61323,7 @@ export const sageData = [
       "JumpH": 2,
       "JumpL": 2,
       "Power": 11,
-      "WeightClass": "6",
+      "Weight Class": "6",
       "Naturewalk": [
         "Cave",
         "Mountain"
@@ -61545,7 +61545,7 @@ export const sageData = [
       "JumpH": 1,
       "JumpL": 1,
       "Power": 2,
-      "WeightClass": "2",
+      "Weight Class": "2",
       "Naturewalk": [],
       "Other": [
         "Underdog"
@@ -61808,7 +61808,7 @@ export const sageData = [
       "JumpH": 1,
       "JumpL": 1,
       "Power": 2,
-      "WeightClass": "2",
+      "Weight Class": "2",
       "Naturewalk": [],
       "Other": [
         "Fountain",
@@ -62047,7 +62047,7 @@ export const sageData = [
       "JumpH": 2,
       "JumpL": 2,
       "Power": 7,
-      "WeightClass": "4",
+      "Weight Class": "4",
       "Naturewalk": [],
       "Other": [
         "Fountain"
@@ -62291,7 +62291,7 @@ export const sageData = [
       "JumpH": 2,
       "JumpL": 2,
       "Power": 4,
-      "WeightClass": "2",
+      "Weight Class": "2",
       "Naturewalk": [],
       "Other": [
         "Underdog"
@@ -62503,7 +62503,7 @@ export const sageData = [
       "JumpH": 2,
       "JumpL": 2,
       "Power": 6,
-      "WeightClass": "4",
+      "Weight Class": "4",
       "Naturewalk": [],
       "Other": []
     },
@@ -62730,7 +62730,7 @@ export const sageData = [
       "JumpH": 2,
       "JumpL": 2,
       "Power": 8,
-      "WeightClass": "2",
+      "Weight Class": "2",
       "Naturewalk": [],
       "Other": []
     },
@@ -62966,7 +62966,7 @@ export const sageData = [
       "JumpH": 2,
       "JumpL": 2,
       "Power": 1,
-      "WeightClass": "1",
+      "Weight Class": "1",
       "Naturewalk": [],
       "Other": [
         "Fountain",
@@ -63167,7 +63167,7 @@ export const sageData = [
       "JumpH": 3,
       "JumpL": 3,
       "Power": 7,
-      "WeightClass": "4",
+      "Weight Class": "4",
       "Naturewalk": [],
       "Other": [
         "Fountain",
@@ -63376,7 +63376,7 @@ export const sageData = [
       "JumpH": 3,
       "JumpL": 3,
       "Power": 5,
-      "WeightClass": "3",
+      "Weight Class": "3",
       "Naturewalk": [],
       "Other": [
         "Guster"
@@ -63638,7 +63638,7 @@ export const sageData = [
       "JumpH": 1,
       "JumpL": 2,
       "Power": 1,
-      "WeightClass": "1",
+      "Weight Class": "1",
       "Naturewalk": [
         "Forest"
       ],
@@ -63885,7 +63885,7 @@ export const sageData = [
       "JumpH": 1,
       "JumpL": 2,
       "Power": 3,
-      "WeightClass": "2",
+      "Weight Class": "2",
       "Naturewalk": [
         "Forest"
       ],
@@ -64124,7 +64124,7 @@ export const sageData = [
       "JumpH": 2,
       "JumpL": 3,
       "Power": 5,
-      "WeightClass": "4",
+      "Weight Class": "4",
       "Naturewalk": [
         "Forest"
       ],
@@ -64368,7 +64368,7 @@ export const sageData = [
       "JumpH": 1,
       "JumpL": 1,
       "Power": 1,
-      "WeightClass": "1",
+      "Weight Class": "1",
       "Naturewalk": [],
       "Other": [
         "Amorphous",
@@ -64599,7 +64599,7 @@ export const sageData = [
       "JumpH": 2,
       "JumpL": 2,
       "Power": 6,
-      "WeightClass": "6",
+      "Weight Class": "6",
       "Naturewalk": [],
       "Other": [
         "Amorphous",
@@ -64828,7 +64828,7 @@ export const sageData = [
       "JumpH": 1,
       "JumpL": 1,
       "Power": 1,
-      "WeightClass": "1",
+      "Weight Class": "1",
       "Naturewalk": [
         "Forest"
       ],
@@ -65012,7 +65012,7 @@ export const sageData = [
       "JumpH": 2,
       "JumpL": 4,
       "Power": 2,
-      "WeightClass": "1",
+      "Weight Class": "1",
       "Naturewalk": [
         "Forest"
       ],
@@ -65229,7 +65229,7 @@ export const sageData = [
       "JumpH": 3,
       "JumpL": 4,
       "Power": 3,
-      "WeightClass": "2",
+      "Weight Class": "2",
       "Naturewalk": [
         "Forest"
       ],
@@ -65455,7 +65455,7 @@ export const sageData = [
       "JumpH": 2,
       "JumpL": 2,
       "Power": 1,
-      "WeightClass": "2",
+      "Weight Class": "2",
       "Naturewalk": [],
       "Other": [
         "Gilled",
@@ -65690,7 +65690,7 @@ export const sageData = [
       "JumpH": 2,
       "JumpL": 2,
       "Power": 4,
-      "WeightClass": "3",
+      "Weight Class": "3",
       "Naturewalk": [],
       "Other": [
         "Gilled",
@@ -65939,7 +65939,7 @@ export const sageData = [
       "JumpH": 2,
       "JumpL": 2,
       "Power": 3,
-      "WeightClass": "2",
+      "Weight Class": "2",
       "Naturewalk": [
         "Forest"
       ],
@@ -66181,7 +66181,7 @@ export const sageData = [
       "JumpH": 2,
       "JumpL": 2,
       "Power": 5,
-      "WeightClass": "3",
+      "Weight Class": "3",
       "Naturewalk": [
         "Forest"
       ],
@@ -66407,7 +66407,7 @@ export const sageData = [
       "JumpH": 3,
       "JumpL": 3,
       "Power": 8,
-      "WeightClass": "5",
+      "Weight Class": "5",
       "Naturewalk": [
         "Forest"
       ],
@@ -66639,7 +66639,7 @@ export const sageData = [
       "JumpH": 1,
       "JumpL": 1,
       "Power": 1,
-      "WeightClass": "1",
+      "Weight Class": "1",
       "Naturewalk": [
         "Grassland"
       ],
@@ -66860,7 +66860,7 @@ export const sageData = [
       "JumpH": 1,
       "JumpL": 1,
       "Power": 2,
-      "WeightClass": "2",
+      "Weight Class": "2",
       "Naturewalk": [
         "Grassland"
       ],
@@ -67101,7 +67101,7 @@ export const sageData = [
       "JumpH": 1,
       "JumpL": 1,
       "Power": 2,
-      "WeightClass": "1",
+      "Weight Class": "1",
       "Naturewalk": [],
       "Other": [
         "Invisibility",
@@ -67352,7 +67352,7 @@ export const sageData = [
       "JumpH": 3,
       "JumpL": 3,
       "Power": 7,
-      "WeightClass": "4",
+      "Weight Class": "4",
       "Naturewalk": [],
       "Other": [
         "Invisibility",
@@ -67607,7 +67607,7 @@ export const sageData = [
       "JumpH": 2,
       "JumpL": 2,
       "Power": 3,
-      "WeightClass": "2",
+      "Weight Class": "2",
       "Naturewalk": [
         "Ocean"
       ],
@@ -67841,7 +67841,7 @@ export const sageData = [
       "JumpH": 3,
       "JumpL": 3,
       "Power": 5,
-      "WeightClass": "5",
+      "Weight Class": "5",
       "Naturewalk": [
         "Ocean"
       ],
@@ -68064,7 +68064,7 @@ export const sageData = [
       "JumpH": 1,
       "JumpL": 1,
       "Power": 2,
-      "WeightClass": "1",
+      "Weight Class": "1",
       "Naturewalk": [
         "Forest"
       ],
@@ -68316,7 +68316,7 @@ export const sageData = [
       "JumpH": 2,
       "JumpL": 2,
       "Power": 4,
-      "WeightClass": "3",
+      "Weight Class": "3",
       "Naturewalk": [
         "Forest"
       ],
@@ -68552,7 +68552,7 @@ export const sageData = [
       "JumpH": 1,
       "JumpL": 1,
       "Power": 1,
-      "WeightClass": "1",
+      "Weight Class": "1",
       "Naturewalk": [],
       "Other": [
         "Darkvision",
@@ -68801,7 +68801,7 @@ export const sageData = [
       "JumpH": 2,
       "JumpL": 2,
       "Power": 2,
-      "WeightClass": "1",
+      "Weight Class": "1",
       "Naturewalk": [],
       "Other": [
         "Darkvision",
@@ -69036,7 +69036,7 @@ export const sageData = [
       "JumpH": 1,
       "JumpL": 1,
       "Power": 3,
-      "WeightClass": "2",
+      "Weight Class": "2",
       "Naturewalk": [
         "Ocean"
       ],
@@ -69263,7 +69263,7 @@ export const sageData = [
       "JumpH": 3,
       "JumpL": 3,
       "Power": 8,
-      "WeightClass": "6",
+      "Weight Class": "6",
       "Naturewalk": [
         "Ocean"
       ],
@@ -69517,7 +69517,7 @@ export const sageData = [
       "JumpH": 1,
       "JumpL": 1,
       "Power": 2,
-      "WeightClass": "1",
+      "Weight Class": "1",
       "Naturewalk": [
         "Grassland"
       ],
@@ -69759,7 +69759,7 @@ export const sageData = [
       "JumpH": 0,
       "JumpL": 1,
       "Power": 4,
-      "WeightClass": "4",
+      "Weight Class": "4",
       "Naturewalk": [
         "Grassland"
       ],
@@ -69988,7 +69988,7 @@ export const sageData = [
       "JumpH": 0,
       "JumpL": 1,
       "Power": 6,
-      "WeightClass": "6",
+      "Weight Class": "6",
       "Naturewalk": [
         "Grassland"
       ],
@@ -70235,7 +70235,7 @@ export const sageData = [
       "JumpH": 2,
       "JumpL": 2,
       "Power": 2,
-      "WeightClass": "1",
+      "Weight Class": "1",
       "Naturewalk": [
         "Forest",
         "Grassland"
@@ -70484,7 +70484,7 @@ export const sageData = [
       "JumpH": 2,
       "JumpL": 2,
       "Power": 3,
-      "WeightClass": "3",
+      "Weight Class": "3",
       "Naturewalk": [
         "Forest",
         "Grassland"
@@ -70730,7 +70730,7 @@ export const sageData = [
       "JumpH": 3,
       "JumpL": 3,
       "Power": 5,
-      "WeightClass": "4",
+      "Weight Class": "4",
       "Naturewalk": [
         "Forest",
         "Grassland"
@@ -70986,7 +70986,7 @@ export const sageData = [
       "JumpH": 2,
       "JumpL": 2,
       "Power": 6,
-      "WeightClass": "3",
+      "Weight Class": "3",
       "Naturewalk": [],
       "Other": [
         "Darkvision",
@@ -71244,7 +71244,7 @@ export const sageData = [
       "JumpH": 0,
       "JumpL": 1,
       "Power": 1,
-      "WeightClass": "1",
+      "Weight Class": "1",
       "Naturewalk": [],
       "Other": [
         "Amorphous",
@@ -71483,7 +71483,7 @@ export const sageData = [
       "JumpH": 0,
       "JumpL": 1,
       "Power": 3,
-      "WeightClass": "5",
+      "Weight Class": "5",
       "Naturewalk": [],
       "Other": [
         "Amorphous",
@@ -71719,7 +71719,7 @@ export const sageData = [
       "JumpH": 1,
       "JumpL": 1,
       "Power": 3,
-      "WeightClass": "2",
+      "Weight Class": "2",
       "Naturewalk": [
         "Tundra"
       ],
@@ -71943,7 +71943,7 @@ export const sageData = [
       "JumpH": 2,
       "JumpL": 2,
       "Power": 6,
-      "WeightClass": "4",
+      "Weight Class": "4",
       "Naturewalk": [
         "Tundra"
       ],
@@ -72182,7 +72182,7 @@ export const sageData = [
       "JumpH": 2,
       "JumpL": 2,
       "Power": 4,
-      "WeightClass": "2",
+      "Weight Class": "2",
       "Naturewalk": [
         "Mountain"
       ],
@@ -72445,7 +72445,7 @@ export const sageData = [
       "JumpH": 2,
       "JumpL": 2,
       "Power": 4,
-      "WeightClass": "2",
+      "Weight Class": "2",
       "Naturewalk": [
         "Mountain"
       ],
@@ -72709,7 +72709,7 @@ export const sageData = [
       "JumpH": 1,
       "JumpL": 1,
       "Power": 5,
-      "WeightClass": "1",
+      "Weight Class": "1",
       "Naturewalk": [],
       "Other": [
         "Underdog",
@@ -72950,7 +72950,7 @@ export const sageData = [
       "JumpH": 2,
       "JumpL": 2,
       "Power": 10,
-      "WeightClass": "6",
+      "Weight Class": "6",
       "Naturewalk": [],
       "Other": [
         "Zapper"
@@ -73195,7 +73195,7 @@ export const sageData = [
       "JumpH": 1,
       "JumpL": 1,
       "Power": 1,
-      "WeightClass": "1",
+      "Weight Class": "1",
       "Naturewalk": [
         "Forest"
       ],
@@ -73381,7 +73381,7 @@ export const sageData = [
       "JumpH": 0,
       "JumpL": 0,
       "Power": 1,
-      "WeightClass": "2",
+      "Weight Class": "2",
       "Naturewalk": [
         "Forest"
       ],
@@ -73571,7 +73571,7 @@ export const sageData = [
       "JumpH": 2,
       "JumpL": 2,
       "Power": 9,
-      "WeightClass": "5",
+      "Weight Class": "5",
       "Naturewalk": [
         "Forest"
       ],
@@ -73826,7 +73826,7 @@ export const sageData = [
       "JumpH": 0,
       "JumpL": 1,
       "Power": 4,
-      "WeightClass": "4",
+      "Weight Class": "4",
       "Naturewalk": [
         "Cave"
       ],
@@ -74066,7 +74066,7 @@ export const sageData = [
       "JumpH": 0,
       "JumpL": 1,
       "Power": 6,
-      "WeightClass": "5",
+      "Weight Class": "5",
       "Naturewalk": [
         "Cave"
       ],
@@ -74297,7 +74297,7 @@ export const sageData = [
       "JumpH": 2,
       "JumpL": 2,
       "Power": 8,
-      "WeightClass": "6",
+      "Weight Class": "6",
       "Naturewalk": [
         "Cave"
       ],
@@ -74547,7 +74547,7 @@ export const sageData = [
       "JumpH": 2,
       "JumpL": 2,
       "Power": 2,
-      "WeightClass": "2",
+      "Weight Class": "2",
       "Naturewalk": [
         "Forest"
       ],
@@ -74774,7 +74774,7 @@ export const sageData = [
       "JumpH": 2,
       "JumpL": 2,
       "Power": 2,
-      "WeightClass": "4",
+      "Weight Class": "4",
       "Naturewalk": [
         "Forest"
       ],
@@ -75013,7 +75013,7 @@ export const sageData = [
       "JumpH": 2,
       "JumpL": 3,
       "Power": 3,
-      "WeightClass": "2",
+      "Weight Class": "2",
       "Naturewalk": [],
       "Other": [
         "Firestarter",
@@ -75244,7 +75244,7 @@ export const sageData = [
       "JumpH": 3,
       "JumpL": 4,
       "Power": 7,
-      "WeightClass": "4",
+      "Weight Class": "4",
       "Naturewalk": [],
       "Other": [
         "Firestarter",
@@ -75482,7 +75482,7 @@ export const sageData = [
       "JumpH": 1,
       "JumpL": 1,
       "Power": 2,
-      "WeightClass": "2",
+      "Weight Class": "2",
       "Naturewalk": [
         "Ocean"
       ],
@@ -75717,7 +75717,7 @@ export const sageData = [
       "JumpH": 2,
       "JumpL": 2,
       "Power": 7,
-      "WeightClass": "5",
+      "Weight Class": "5",
       "Naturewalk": [
         "Ocean"
       ],
@@ -75945,7 +75945,7 @@ export const sageData = [
       "JumpH": 2,
       "JumpL": 2,
       "Power": 8,
-      "WeightClass": "6",
+      "Weight Class": "6",
       "Naturewalk": [],
       "Other": [
         "Firestarter",
@@ -76176,7 +76176,7 @@ export const sageData = [
       "JumpH": 2,
       "JumpL": 2,
       "Power": 8,
-      "WeightClass": "6",
+      "Weight Class": "6",
       "Naturewalk": [],
       "Other": []
     },
@@ -76403,7 +76403,7 @@ export const sageData = [
       "JumpH": 2,
       "JumpL": 2,
       "Power": 8,
-      "WeightClass": "6",
+      "Weight Class": "6",
       "Naturewalk": [],
       "Other": [
         "Glow",
@@ -76635,7 +76635,7 @@ export const sageData = [
       "JumpH": 2,
       "JumpL": 2,
       "Power": 4,
-      "WeightClass": "4",
+      "Weight Class": "4",
       "Naturewalk": [
         "Forest"
       ],
@@ -76862,7 +76862,7 @@ export const sageData = [
       "JumpH": 2,
       "JumpL": 2,
       "Power": 4,
-      "WeightClass": "4",
+      "Weight Class": "4",
       "Naturewalk": [
         "Desert"
       ],
@@ -77087,7 +77087,7 @@ export const sageData = [
       "JumpH": 2,
       "JumpL": 2,
       "Power": 4,
-      "WeightClass": "4",
+      "Weight Class": "4",
       "Naturewalk": [
         "Ocean"
       ],
@@ -77315,7 +77315,7 @@ export const sageData = [
       "JumpH": 3,
       "JumpL": 3,
       "Power": 14,
-      "WeightClass": "6",
+      "Weight Class": "6",
       "Naturewalk": [
         "Mountain"
       ],
@@ -77572,7 +77572,7 @@ export const sageData = [
       "JumpH": 3,
       "JumpL": 3,
       "Power": 12,
-      "WeightClass": "6",
+      "Weight Class": "6",
       "Naturewalk": [
         "Mountain"
       ],
@@ -77835,7 +77835,7 @@ export const sageData = [
       "JumpH": 2,
       "JumpL": 2,
       "Power": 4,
-      "WeightClass": "2",
+      "Weight Class": "2",
       "Naturewalk": [
         "Forest",
         "Grassland"
@@ -78104,7 +78104,7 @@ export const sageData = [
       "JumpH": 2,
       "JumpL": 2,
       "Power": 5,
-      "WeightClass": "3",
+      "Weight Class": "3",
       "Naturewalk": [
         "Forest",
         "Grassland"
@@ -78377,7 +78377,7 @@ export const uraniumData = [
       "JumpH": 1,
       "JumpL": 2,
       "Power": 3,
-      "WeightClass": "1",
+      "Weight Class": "1",
       "Naturewalk": [
         "Forest"
       ],
@@ -78590,7 +78590,7 @@ export const uraniumData = [
       "JumpH": 2,
       "JumpL": 3,
       "Power": 6,
-      "WeightClass": "5",
+      "Weight Class": "5",
       "Naturewalk": [
         "Forest"
       ],
@@ -78802,7 +78802,7 @@ export const uraniumData = [
       "JumpH": 1,
       "JumpL": 1,
       "Power": 2,
-      "WeightClass": "1",
+      "Weight Class": "1",
       "Naturewalk": [],
       "Other": [
         "Firestarter",
@@ -79011,7 +79011,7 @@ export const uraniumData = [
       "JumpH": 2,
       "JumpL": 2,
       "Power": 6,
-      "WeightClass": "4",
+      "Weight Class": "4",
       "Naturewalk": [],
       "Other": [
         "Firestarter",
@@ -79219,7 +79219,7 @@ export const uraniumData = [
       "JumpH": 1,
       "JumpL": 1,
       "Power": 1,
-      "WeightClass": "ov",
+      "Weight Class": "ov",
       "Naturewalk": [],
       "Other": [
         "Fountain",
@@ -79440,7 +79440,7 @@ export const uraniumData = [
       "JumpH": 1,
       "JumpL": 2,
       "Power": 5,
-      "WeightClass": "reedin",
+      "Weight Class": "reedin",
       "Naturewalk": [],
       "Other": [
         "Fountain",
@@ -79654,7 +79654,7 @@ export const uraniumData = [
       "JumpH": 1,
       "JumpL": 2,
       "Power": 2,
-      "WeightClass": "1",
+      "Weight Class": "1",
       "Naturewalk": [
         "Forest"
       ],
@@ -79858,7 +79858,7 @@ export const uraniumData = [
       "JumpH": 2,
       "JumpL": 3,
       "Power": 5,
-      "WeightClass": "2",
+      "Weight Class": "2",
       "Naturewalk": [
         "Forest"
       ],
@@ -80056,7 +80056,7 @@ export const uraniumData = [
       "JumpH": 2,
       "JumpL": 2,
       "Power": 1,
-      "WeightClass": "1",
+      "Weight Class": "1",
       "Naturewalk": [],
       "Other": [
         "Glow",
@@ -80290,7 +80290,7 @@ export const uraniumData = [
       "JumpH": 3,
       "JumpL": 3,
       "Power": 2,
-      "WeightClass": "2",
+      "Weight Class": "2",
       "Naturewalk": [],
       "Other": [
         "Glow",
@@ -80510,7 +80510,7 @@ export const uraniumData = [
       "JumpH": 3,
       "JumpL": 3,
       "Power": 2,
-      "WeightClass": "3",
+      "Weight Class": "3",
       "Naturewalk": [],
       "Other": [
         "Glow",
@@ -80733,7 +80733,7 @@ export const uraniumData = [
       "JumpH": 1,
       "JumpL": 1,
       "Power": 1,
-      "WeightClass": "1",
+      "Weight Class": "1",
       "Naturewalk": [
         "Forest"
       ],
@@ -80940,7 +80940,7 @@ export const uraniumData = [
       "JumpH": 2,
       "JumpL": 2,
       "Power": 2,
-      "WeightClass": "1",
+      "Weight Class": "1",
       "Naturewalk": [
         "Forest"
       ],
@@ -81159,7 +81159,7 @@ export const uraniumData = [
       "JumpH": 3,
       "JumpL": 3,
       "Power": 5,
-      "WeightClass": "2",
+      "Weight Class": "2",
       "Naturewalk": [
         "Forest"
       ],
@@ -81390,7 +81390,7 @@ export const uraniumData = [
       "JumpH": 0,
       "JumpL": 0,
       "Power": 4,
-      "WeightClass": "5",
+      "Weight Class": "5",
       "Naturewalk": [
         "Cave",
         "Mountain"
@@ -81608,7 +81608,7 @@ export const uraniumData = [
       "JumpH": 1,
       "JumpL": 1,
       "Power": 7,
-      "WeightClass": "5",
+      "Weight Class": "5",
       "Naturewalk": [
         "Cave",
         "Mountain"
@@ -81813,7 +81813,7 @@ export const uraniumData = [
       "JumpH": 2,
       "JumpL": 2,
       "Power": 11,
-      "WeightClass": "5",
+      "Weight Class": "5",
       "Naturewalk": [
         "Cave",
         "Mountain"
@@ -82012,7 +82012,7 @@ export const uraniumData = [
       "JumpH": 1,
       "JumpL": 1,
       "Power": 2,
-      "WeightClass": "2",
+      "Weight Class": "2",
       "Naturewalk": [],
       "Other": [
         "Darkvision",
@@ -82216,7 +82216,7 @@ export const uraniumData = [
       "JumpH": 1,
       "JumpL": 1,
       "Power": 9,
-      "WeightClass": "4",
+      "Weight Class": "4",
       "Naturewalk": [],
       "Other": [
         "Darkvision",
@@ -82416,7 +82416,7 @@ export const uraniumData = [
       "JumpH": 2,
       "JumpL": 2,
       "Power": 2,
-      "WeightClass": "1",
+      "Weight Class": "1",
       "Naturewalk": [],
       "Other": [
         "Darkvision",
@@ -82623,7 +82623,7 @@ export const uraniumData = [
       "JumpH": 1,
       "JumpL": 1,
       "Power": 7,
-      "WeightClass": "4",
+      "Weight Class": "4",
       "Naturewalk": [],
       "Other": [
         "Darkvision",
@@ -82821,7 +82821,7 @@ export const uraniumData = [
       "JumpH": 5,
       "JumpL": 5,
       "Power": 9,
-      "WeightClass": "5",
+      "Weight Class": "5",
       "Naturewalk": [],
       "Other": [
         "Darkvision",
@@ -83097,7 +83097,7 @@ export const uraniumData = [
       "JumpH": 0,
       "JumpL": 1,
       "Power": 4,
-      "WeightClass": "4",
+      "Weight Class": "4",
       "Naturewalk": [],
       "Other": [
         "Fountain",
@@ -83305,7 +83305,7 @@ export const uraniumData = [
       "JumpH": 1,
       "JumpL": 2,
       "Power": 5,
-      "WeightClass": "4",
+      "Weight Class": "4",
       "Naturewalk": [
         "Wetland"
       ],
@@ -83502,7 +83502,7 @@ export const uraniumData = [
       "JumpH": 2,
       "JumpL": 2,
       "Power": 7,
-      "WeightClass": "4",
+      "Weight Class": "4",
       "Naturewalk": [
         "Wetland"
       ],
@@ -83718,7 +83718,7 @@ export const uraniumData = [
       "JumpH": 1,
       "JumpL": 2,
       "Power": 2,
-      "WeightClass": "2",
+      "Weight Class": "2",
       "Naturewalk": [],
       "Other": [
         "Darkvision",
@@ -83920,7 +83920,7 @@ export const uraniumData = [
       "JumpH": 2,
       "JumpL": 3,
       "Power": 4,
-      "WeightClass": "2",
+      "Weight Class": "2",
       "Naturewalk": [],
       "Other": [
         "Darkvision",
@@ -84144,7 +84144,7 @@ export const uraniumData = [
       "JumpH": 2,
       "JumpL": 3,
       "Power": 9,
-      "WeightClass": "5",
+      "Weight Class": "5",
       "Naturewalk": [],
       "Other": [
         "Darkvision",
@@ -84375,7 +84375,7 @@ export const uraniumData = [
       "JumpH": 3,
       "JumpL": 5,
       "Power": 10,
-      "WeightClass": "4",
+      "Weight Class": "4",
       "Naturewalk": [
         "Forest",
         "Mountain"
@@ -84622,7 +84622,7 @@ export const uraniumData = [
       "JumpH": 2,
       "JumpL": 2,
       "Power": 1,
-      "WeightClass": "1",
+      "Weight Class": "1",
       "Naturewalk": [],
       "Other": [
         "Darkvision",
@@ -84840,7 +84840,7 @@ export const uraniumData = [
       "JumpH": 3,
       "JumpL": 3,
       "Power": 3,
-      "WeightClass": "2",
+      "Weight Class": "2",
       "Naturewalk": [],
       "Other": [
         "Darkvision",
@@ -85044,7 +85044,7 @@ export const uraniumData = [
       "JumpH": 1,
       "JumpL": 1,
       "Power": 2,
-      "WeightClass": "1",
+      "Weight Class": "1",
       "Naturewalk": [],
       "Other": [
         "Firestarter",
@@ -85246,7 +85246,7 @@ export const uraniumData = [
       "JumpH": 2,
       "JumpL": 2,
       "Power": 6,
-      "WeightClass": "2",
+      "Weight Class": "2",
       "Naturewalk": [],
       "Other": [
         "Firestarter",
@@ -85449,7 +85449,7 @@ export const uraniumData = [
       "JumpH": 1,
       "JumpL": 1,
       "Power": 2,
-      "WeightClass": "2",
+      "Weight Class": "2",
       "Naturewalk": [],
       "Other": [
         "Blindsense",
@@ -85666,7 +85666,7 @@ export const uraniumData = [
       "JumpH": 2,
       "JumpL": 2,
       "Power": 8,
-      "WeightClass": "5",
+      "Weight Class": "5",
       "Naturewalk": [],
       "Other": [
         "Gilled",
@@ -85873,7 +85873,7 @@ export const uraniumData = [
       "JumpH": 1,
       "JumpL": 1,
       "Power": 3,
-      "WeightClass": "1",
+      "Weight Class": "1",
       "Naturewalk": [],
       "Other": [
         "Darkvision",
@@ -86081,7 +86081,7 @@ export const uraniumData = [
       "JumpH": 1,
       "JumpL": 1,
       "Power": 3,
-      "WeightClass": "3",
+      "Weight Class": "3",
       "Naturewalk": [],
       "Other": [
         "Darkvision",
@@ -86276,7 +86276,7 @@ export const uraniumData = [
       "JumpH": 1,
       "JumpL": 1,
       "Power": 2,
-      "WeightClass": "1",
+      "Weight Class": "1",
       "Naturewalk": [],
       "Other": [
         "Fountain",
@@ -86480,7 +86480,7 @@ export const uraniumData = [
       "JumpH": 2,
       "JumpL": 2,
       "Power": 6,
-      "WeightClass": "2",
+      "Weight Class": "2",
       "Naturewalk": [],
       "Other": [
         "Fountain",
@@ -86685,7 +86685,7 @@ export const uraniumData = [
       "JumpH": 2,
       "JumpL": 2,
       "Power": 1,
-      "WeightClass": "1",
+      "Weight Class": "1",
       "Naturewalk": [],
       "Other": [
         "Warmer",
@@ -86903,7 +86903,7 @@ export const uraniumData = [
       "JumpH": 3,
       "JumpL": 3,
       "Power": 3,
-      "WeightClass": "2",
+      "Weight Class": "2",
       "Naturewalk": [],
       "Other": [
         "Warmer",
@@ -87114,7 +87114,7 @@ export const uraniumData = [
       "JumpH": 4,
       "JumpL": 4,
       "Power": 6,
-      "WeightClass": "3",
+      "Weight Class": "3",
       "Naturewalk": [],
       "Other": [
         "Warmer",
@@ -87316,7 +87316,7 @@ export const uraniumData = [
       "JumpH": 2,
       "JumpL": 2,
       "Power": 2,
-      "WeightClass": "1",
+      "Weight Class": "1",
       "Naturewalk": [
         "Grassland"
       ],
@@ -87571,7 +87571,7 @@ export const uraniumData = [
       "JumpH": 1,
       "JumpL": 1,
       "Power": 5,
-      "WeightClass": "4",
+      "Weight Class": "4",
       "Naturewalk": [
         "Cave",
         "Mountain"
@@ -87826,7 +87826,7 @@ export const uraniumData = [
       "JumpH": 2,
       "JumpL": 2,
       "Power": 7,
-      "WeightClass": "6",
+      "Weight Class": "6",
       "Naturewalk": [],
       "Other": [
         "Darkvision",
@@ -88070,7 +88070,7 @@ export const uraniumData = [
       "JumpH": 3,
       "JumpL": 3,
       "Power": 7,
-      "WeightClass": "6",
+      "Weight Class": "6",
       "Naturewalk": [],
       "Other": [
         "Darkvision",
@@ -88317,7 +88317,7 @@ export const uraniumData = [
       "JumpH": 1,
       "JumpL": 1,
       "Power": 2,
-      "WeightClass": "1",
+      "Weight Class": "1",
       "Naturewalk": [
         "Grassland"
       ],
@@ -88532,7 +88532,7 @@ export const uraniumData = [
       "JumpH": 1,
       "JumpL": 1,
       "Power": 4,
-      "WeightClass": "3",
+      "Weight Class": "3",
       "Naturewalk": [
         "Grassland"
       ],
@@ -88751,7 +88751,7 @@ export const uraniumData = [
       "JumpH": 2,
       "JumpL": 3,
       "Power": 6,
-      "WeightClass": "4",
+      "Weight Class": "4",
       "Naturewalk": [
         "Grassland"
       ],
@@ -88974,7 +88974,7 @@ export const uraniumData = [
       "JumpH": 2,
       "JumpL": 2,
       "Power": 2,
-      "WeightClass": "1",
+      "Weight Class": "1",
       "Naturewalk": [],
       "Other": [
         "Threaded",
@@ -89177,7 +89177,7 @@ export const uraniumData = [
       "JumpH": 3,
       "JumpL": 3,
       "Power": 6,
-      "WeightClass": "2",
+      "Weight Class": "2",
       "Naturewalk": [],
       "Other": [
         "Glow",
@@ -89380,7 +89380,7 @@ export const uraniumData = [
       "JumpH": 2,
       "JumpL": 2,
       "Power": 3,
-      "WeightClass": "1",
+      "Weight Class": "1",
       "Naturewalk": [],
       "Other": [
         "Telekinetic",
@@ -89606,7 +89606,7 @@ export const uraniumData = [
       "JumpH": 2,
       "JumpL": 2,
       "Power": 6,
-      "WeightClass": "4",
+      "Weight Class": "4",
       "Naturewalk": [],
       "Other": [
         "Telekinetic"
@@ -89824,7 +89824,7 @@ export const uraniumData = [
       "JumpH": 2,
       "JumpL": 2,
       "Power": 2,
-      "WeightClass": "1",
+      "Weight Class": "1",
       "Naturewalk": [],
       "Other": [
         "Darkvision",
@@ -90056,7 +90056,7 @@ export const uraniumData = [
       "JumpH": 3,
       "JumpL": 3,
       "Power": 8,
-      "WeightClass": "4",
+      "Weight Class": "4",
       "Naturewalk": [],
       "Other": [
         "Darkvision",
@@ -90295,7 +90295,7 @@ export const uraniumData = [
       "JumpH": 2,
       "JumpL": 2,
       "Power": 2,
-      "WeightClass": "2",
+      "Weight Class": "2",
       "Naturewalk": [],
       "Other": [
         "Darkvision",
@@ -90550,7 +90550,7 @@ export const uraniumData = [
       "JumpH": 3,
       "JumpL": 3,
       "Power": 4,
-      "WeightClass": "4",
+      "Weight Class": "4",
       "Naturewalk": [],
       "Other": [
         "Darkvision",
@@ -90799,7 +90799,7 @@ export const uraniumData = [
       "JumpH": 1,
       "JumpL": 1,
       "Power": 4,
-      "WeightClass": "3",
+      "Weight Class": "3",
       "Naturewalk": [
         "Cave"
       ],
@@ -91042,7 +91042,7 @@ export const uraniumData = [
       "JumpH": 2,
       "JumpL": 2,
       "Power": 8,
-      "WeightClass": "5",
+      "Weight Class": "5",
       "Naturewalk": [
         "Cave"
       ],
@@ -91282,7 +91282,7 @@ export const uraniumData = [
       "JumpH": 1,
       "JumpL": 1,
       "Power": 2,
-      "WeightClass": "2",
+      "Weight Class": "2",
       "Naturewalk": [],
       "Other": [
         "Fountain",
@@ -91517,7 +91517,7 @@ export const uraniumData = [
       "JumpH": 1,
       "JumpL": 1,
       "Power": 4,
-      "WeightClass": "4",
+      "Weight Class": "4",
       "Naturewalk": [],
       "Other": [
         "Fountain",
@@ -91744,7 +91744,7 @@ export const uraniumData = [
       "JumpH": 1,
       "JumpL": 1,
       "Power": 8,
-      "WeightClass": "6",
+      "Weight Class": "6",
       "Naturewalk": [],
       "Other": [
         "Fountain",
@@ -91966,7 +91966,7 @@ export const uraniumData = [
       "JumpH": 1,
       "JumpL": 1,
       "Power": 5,
-      "WeightClass": "4",
+      "Weight Class": "4",
       "Naturewalk": [
         "Ocean"
       ],
@@ -92201,7 +92201,7 @@ export const uraniumData = [
       "JumpH": 2,
       "JumpL": 2,
       "Power": 5,
-      "WeightClass": "4",
+      "Weight Class": "4",
       "Naturewalk": [],
       "Other": [
         "Darkvision",
@@ -92416,7 +92416,7 @@ export const uraniumData = [
       "JumpH": 3,
       "JumpL": 3,
       "Power": 11,
-      "WeightClass": "6",
+      "Weight Class": "6",
       "Naturewalk": [],
       "Other": [
         "Darkvision",
@@ -92626,7 +92626,7 @@ export const uraniumData = [
       "JumpH": 0,
       "JumpL": 1,
       "Power": 3,
-      "WeightClass": "2",
+      "Weight Class": "2",
       "Naturewalk": [],
       "Other": [
         "Fountain",
@@ -92857,7 +92857,7 @@ export const uraniumData = [
       "JumpH": 0,
       "JumpL": 1,
       "Power": 6,
-      "WeightClass": "4",
+      "Weight Class": "4",
       "Naturewalk": [],
       "Other": [
         "Fountain",
@@ -93071,7 +93071,7 @@ export const uraniumData = [
       "JumpH": 1,
       "JumpL": 2,
       "Power": 10,
-      "WeightClass": "6",
+      "Weight Class": "6",
       "Naturewalk": [],
       "Other": [
         "Fountain",
@@ -93283,7 +93283,7 @@ export const uraniumData = [
       "JumpH": 0,
       "JumpL": 1,
       "Power": 1,
-      "WeightClass": "1",
+      "Weight Class": "1",
       "Naturewalk": [],
       "Other": [
         "Amorphous",
@@ -93495,7 +93495,7 @@ export const uraniumData = [
       "JumpH": 2,
       "JumpL": 2,
       "Power": 6,
-      "WeightClass": "3",
+      "Weight Class": "3",
       "Naturewalk": [],
       "Other": [
         "Amorphous",
@@ -93704,7 +93704,7 @@ export const uraniumData = [
       "JumpH": 2,
       "JumpL": 2,
       "Power": 6,
-      "WeightClass": "4",
+      "Weight Class": "4",
       "Naturewalk": [],
       "Other": [
         "Stealth",
@@ -93913,7 +93913,7 @@ export const uraniumData = [
       "JumpH": 1,
       "JumpL": 2,
       "Power": 2,
-      "WeightClass": "2",
+      "Weight Class": "2",
       "Naturewalk": [],
       "Other": [
         "Amorphous",
@@ -94135,7 +94135,7 @@ export const uraniumData = [
       "JumpH": 2,
       "JumpL": 3,
       "Power": 5,
-      "WeightClass": "4",
+      "Weight Class": "4",
       "Naturewalk": [],
       "Other": [
         "Amorphous",
@@ -94343,7 +94343,7 @@ export const uraniumData = [
       "JumpH": 1,
       "JumpL": 1,
       "Power": 1,
-      "WeightClass": "2",
+      "Weight Class": "2",
       "Naturewalk": [],
       "Other": [
         "Teleporter 4",
@@ -94598,7 +94598,7 @@ export const uraniumData = [
       "JumpH": 1,
       "JumpL": 1,
       "Power": 6,
-      "WeightClass": "4",
+      "Weight Class": "4",
       "Naturewalk": [],
       "Other": [
         "Teleporter 6",
@@ -94855,7 +94855,7 @@ export const uraniumData = [
       "JumpH": 1,
       "JumpL": 1,
       "Power": 4,
-      "WeightClass": "3",
+      "Weight Class": "3",
       "Naturewalk": [],
       "Other": [
         "Underdog"
@@ -95098,7 +95098,7 @@ export const uraniumData = [
       "JumpH": 2,
       "JumpL": 2,
       "Power": 6,
-      "WeightClass": "4",
+      "Weight Class": "4",
       "Naturewalk": [],
       "Other": []
     },
@@ -95330,7 +95330,7 @@ export const uraniumData = [
       "JumpH": 1,
       "JumpL": 2,
       "Power": 2,
-      "WeightClass": "1",
+      "Weight Class": "1",
       "Naturewalk": [
         "Forest"
       ],
@@ -95548,7 +95548,7 @@ export const uraniumData = [
       "JumpH": 2,
       "JumpL": 4,
       "Power": 6,
-      "WeightClass": "3",
+      "Weight Class": "3",
       "Naturewalk": [
         "Forest"
       ],
@@ -95756,7 +95756,7 @@ export const uraniumData = [
       "JumpH": 2,
       "JumpL": 2,
       "Power": 3,
-      "WeightClass": "1",
+      "Weight Class": "1",
       "Naturewalk": [
         "Mountain"
       ],
@@ -95979,7 +95979,7 @@ export const uraniumData = [
       "JumpH": 3,
       "JumpL": 3,
       "Power": 8,
-      "WeightClass": "4",
+      "Weight Class": "4",
       "Naturewalk": [
         "Mountain"
       ],
@@ -96194,7 +96194,7 @@ export const uraniumData = [
       "JumpH": 2,
       "JumpL": 2,
       "Power": 3,
-      "WeightClass": "3",
+      "Weight Class": "3",
       "Naturewalk": [],
       "Other": [
         "Underdog"
@@ -96426,7 +96426,7 @@ export const uraniumData = [
       "JumpH": 2,
       "JumpL": 2,
       "Power": 3,
-      "WeightClass": "4",
+      "Weight Class": "4",
       "Naturewalk": [],
       "Other": [
         "Firestarter"
@@ -96665,7 +96665,7 @@ export const uraniumData = [
       "JumpH": 1,
       "JumpL": 1,
       "Power": 3,
-      "WeightClass": "2",
+      "Weight Class": "2",
       "Naturewalk": [],
       "Other": [
         "Threaded",
@@ -96861,7 +96861,7 @@ export const uraniumData = [
       "JumpH": 2,
       "JumpL": 2,
       "Power": 6,
-      "WeightClass": "3",
+      "Weight Class": "3",
       "Naturewalk": [],
       "Other": [
         "Wallclimber"
@@ -97089,7 +97089,7 @@ export const uraniumData = [
       "JumpH": 2,
       "JumpL": 2,
       "Power": 1,
-      "WeightClass": "1",
+      "Weight Class": "1",
       "Naturewalk": [
         "Forest"
       ],
@@ -97318,7 +97318,7 @@ export const uraniumData = [
       "JumpH": 2,
       "JumpL": 2,
       "Power": 5,
-      "WeightClass": "2",
+      "Weight Class": "2",
       "Naturewalk": [
         "Forest"
       ],
@@ -97549,7 +97549,7 @@ export const uraniumData = [
       "JumpH": 3,
       "JumpL": 3,
       "Power": 9,
-      "WeightClass": "5",
+      "Weight Class": "5",
       "Naturewalk": [
         "Forest"
       ],
@@ -97779,7 +97779,7 @@ export const uraniumData = [
       "JumpH": 0,
       "JumpL": 1,
       "Power": 10,
-      "WeightClass": "5",
+      "Weight Class": "5",
       "Naturewalk": [
         "Cave",
         "Mountain"
@@ -97999,7 +97999,7 @@ export const uraniumData = [
       "JumpH": 1,
       "JumpL": 1,
       "Power": 6,
-      "WeightClass": "5",
+      "Weight Class": "5",
       "Naturewalk": [
         "Tundra"
       ],
@@ -98217,7 +98217,7 @@ export const uraniumData = [
       "JumpH": 1,
       "JumpL": 2,
       "Power": 11,
-      "WeightClass": "6",
+      "Weight Class": "6",
       "Naturewalk": [
         "Tundra"
       ],
@@ -98448,7 +98448,7 @@ export const uraniumData = [
       "JumpH": 1,
       "JumpL": 1,
       "Power": 4,
-      "WeightClass": "3",
+      "Weight Class": "3",
       "Naturewalk": [
         "Forest"
       ],
@@ -98682,7 +98682,7 @@ export const uraniumData = [
       "JumpH": 3,
       "JumpL": 3,
       "Power": 8,
-      "WeightClass": "6",
+      "Weight Class": "6",
       "Naturewalk": [
         "Forest"
       ],
@@ -98896,7 +98896,7 @@ export const uraniumData = [
       "JumpH": 1,
       "JumpL": 2,
       "Power": 8,
-      "WeightClass": "6",
+      "Weight Class": "6",
       "Naturewalk": [
         "Ocean"
       ],
@@ -99129,7 +99129,7 @@ export const uraniumData = [
       "JumpH": 2,
       "JumpL": 2,
       "Power": 1,
-      "WeightClass": "1",
+      "Weight Class": "1",
       "Naturewalk": [],
       "Other": [
         "Darkvision",
@@ -99363,7 +99363,7 @@ export const uraniumData = [
       "JumpH": 3,
       "JumpL": 3,
       "Power": 3,
-      "WeightClass": "2",
+      "Weight Class": "2",
       "Naturewalk": [],
       "Other": [
         "Darkvision",
@@ -99586,7 +99586,7 @@ export const uraniumData = [
       "JumpH": 3,
       "JumpL": 3,
       "Power": 6,
-      "WeightClass": "4",
+      "Weight Class": "4",
       "Naturewalk": [],
       "Other": [
         "Darkvision",
@@ -99812,7 +99812,7 @@ export const uraniumData = [
       "JumpH": 1,
       "JumpL": 1,
       "Power": 2,
-      "WeightClass": "2",
+      "Weight Class": "2",
       "Naturewalk": [],
       "Other": [
         "Alluring",
@@ -100018,7 +100018,7 @@ export const uraniumData = [
       "JumpH": 1,
       "JumpL": 1,
       "Power": 5,
-      "WeightClass": "3",
+      "Weight Class": "3",
       "Naturewalk": [],
       "Other": [
         "Alluring",
@@ -100220,7 +100220,7 @@ export const uraniumData = [
       "JumpH": 1,
       "JumpL": 1,
       "Power": 2,
-      "WeightClass": "2",
+      "Weight Class": "2",
       "Naturewalk": [],
       "Other": [
         "Alluring"
@@ -100447,7 +100447,7 @@ export const uraniumData = [
       "JumpH": 3,
       "JumpL": 2,
       "Power": 2,
-      "WeightClass": "2",
+      "Weight Class": "2",
       "Naturewalk": [],
       "Other": [
         "Illusionist",
@@ -100679,7 +100679,7 @@ export const uraniumData = [
       "JumpH": 5,
       "JumpL": 4,
       "Power": 2,
-      "WeightClass": "3",
+      "Weight Class": "3",
       "Naturewalk": [],
       "Other": [
         "Illusionist",
@@ -100897,7 +100897,7 @@ export const uraniumData = [
       "JumpH": 2,
       "JumpL": 2,
       "Power": 2,
-      "WeightClass": "1",
+      "Weight Class": "1",
       "Naturewalk": [],
       "Other": [
         "Shapeshifter",
@@ -101051,7 +101051,7 @@ export const uraniumData = [
       "JumpH": 2,
       "JumpL": 2,
       "Power": 3,
-      "WeightClass": "2",
+      "Weight Class": "2",
       "Naturewalk": [],
       "Other": [
         "Glow",
@@ -101247,7 +101247,7 @@ export const uraniumData = [
       "JumpH": 1,
       "JumpL": 1,
       "Power": 1,
-      "WeightClass": "2",
+      "Weight Class": "2",
       "Naturewalk": [
         "Urban"
       ],
@@ -101428,7 +101428,7 @@ export const uraniumData = [
       "JumpH": 2,
       "JumpL": 2,
       "Power": 4,
-      "WeightClass": "4",
+      "Weight Class": "4",
       "Naturewalk": [
         "Urban"
       ],
@@ -101592,7 +101592,7 @@ export const uraniumData = [
       "JumpH": 2,
       "JumpL": 2,
       "Power": 7,
-      "WeightClass": "6",
+      "Weight Class": "6",
       "Naturewalk": [],
       "Other": [
         "Dead Silent",
@@ -101808,7 +101808,7 @@ export const uraniumData = [
       "JumpH": 2,
       "JumpL": 2,
       "Power": 1,
-      "WeightClass": "1",
+      "Weight Class": "1",
       "Naturewalk": [],
       "Other": [
         "Amorphous",
@@ -102046,7 +102046,7 @@ export const uraniumData = [
       "JumpH": 3,
       "JumpL": 3,
       "Power": 4,
-      "WeightClass": "3",
+      "Weight Class": "3",
       "Naturewalk": [],
       "Other": [
         "Amorphous",
@@ -102278,7 +102278,7 @@ export const uraniumData = [
       "JumpH": 1,
       "JumpL": 2,
       "Power": 4,
-      "WeightClass": "3",
+      "Weight Class": "3",
       "Naturewalk": [],
       "Other": [
         "Darkvision",
@@ -102502,7 +102502,7 @@ export const uraniumData = [
       "JumpH": 3,
       "JumpL": 3,
       "Power": 8,
-      "WeightClass": "4",
+      "Weight Class": "4",
       "Naturewalk": [],
       "Other": [
         "Darkvision",
@@ -102731,7 +102731,7 @@ export const uraniumData = [
       "JumpH": 1,
       "JumpL": 1,
       "Power": 6,
-      "WeightClass": "4",
+      "Weight Class": "4",
       "Naturewalk": [],
       "Other": [
         "Darkvision",
@@ -102941,7 +102941,7 @@ export const uraniumData = [
       "JumpH": 2,
       "JumpL": 2,
       "Power": 9,
-      "WeightClass": "4",
+      "Weight Class": "4",
       "Naturewalk": [],
       "Other": [
         "Darkvision",
@@ -103151,7 +103151,7 @@ export const uraniumData = [
       "JumpH": 1,
       "JumpL": 1,
       "Power": 1,
-      "WeightClass": "1",
+      "Weight Class": "1",
       "Naturewalk": [
         "Tundra"
       ],
@@ -103364,7 +103364,7 @@ export const uraniumData = [
       "JumpH": 2,
       "JumpL": 4,
       "Power": 4,
-      "WeightClass": "3",
+      "Weight Class": "3",
       "Naturewalk": [
         "Tundra"
       ],
@@ -103578,7 +103578,7 @@ export const uraniumData = [
       "JumpH": 3,
       "JumpL": 3,
       "Power": 6,
-      "WeightClass": "4",
+      "Weight Class": "4",
       "Naturewalk": [
         "Tundra"
       ],
@@ -103801,7 +103801,7 @@ export const uraniumData = [
       "JumpH": 1,
       "JumpL": 1,
       "Power": 2,
-      "WeightClass": "3",
+      "Weight Class": "3",
       "Naturewalk": [
         "Tundra"
       ],
@@ -104010,7 +104010,7 @@ export const uraniumData = [
       "JumpH": 1,
       "JumpL": 1,
       "Power": 2,
-      "WeightClass": "3",
+      "Weight Class": "3",
       "Naturewalk": [
         "Tundra"
       ],
@@ -104220,7 +104220,7 @@ export const uraniumData = [
       "JumpH": 1,
       "JumpL": 1,
       "Power": 6,
-      "WeightClass": "3",
+      "Weight Class": "3",
       "Naturewalk": [
         "Tundra"
       ],
@@ -104449,7 +104449,7 @@ export const uraniumData = [
       "JumpH": 1,
       "JumpL": 1,
       "Power": 5,
-      "WeightClass": "4",
+      "Weight Class": "4",
       "Naturewalk": [
         "Tundra"
       ],
@@ -104685,7 +104685,7 @@ export const uraniumData = [
       "JumpH": 1,
       "JumpL": 1,
       "Power": 10,
-      "WeightClass": "5",
+      "Weight Class": "5",
       "Naturewalk": [
         "Tundra"
       ],
@@ -104913,7 +104913,7 @@ export const uraniumData = [
       "JumpH": 1,
       "JumpL": 1,
       "Power": 2,
-      "WeightClass": "2",
+      "Weight Class": "2",
       "Naturewalk": [
         "Ocean"
       ],
@@ -105121,7 +105121,7 @@ export const uraniumData = [
       "JumpH": 2,
       "JumpL": 2,
       "Power": 4,
-      "WeightClass": "3",
+      "Weight Class": "3",
       "Naturewalk": [
         "Ocean"
       ],
@@ -105315,7 +105315,7 @@ export const uraniumData = [
       "JumpH": 1,
       "JumpL": 1,
       "Power": 6,
-      "WeightClass": "5",
+      "Weight Class": "5",
       "Naturewalk": [],
       "Other": [
         "Firestarter",
@@ -105541,7 +105541,7 @@ export const uraniumData = [
       "JumpH": 1,
       "JumpL": 1,
       "Power": 3,
-      "WeightClass": "2",
+      "Weight Class": "2",
       "Naturewalk": [],
       "Other": [
         "Darkvision",
@@ -105778,7 +105778,7 @@ export const uraniumData = [
       "JumpH": 2,
       "JumpL": 2,
       "Power": 5,
-      "WeightClass": "4",
+      "Weight Class": "4",
       "Naturewalk": [],
       "Other": [
         "Darkvision",
@@ -106006,7 +106006,7 @@ export const uraniumData = [
       "JumpH": 2,
       "JumpL": 2,
       "Power": 5,
-      "WeightClass": "4",
+      "Weight Class": "4",
       "Naturewalk": [],
       "Other": [
         "Chilled",
@@ -106226,7 +106226,7 @@ export const uraniumData = [
       "JumpH": 2,
       "JumpL": 2,
       "Power": 6,
-      "WeightClass": "4",
+      "Weight Class": "4",
       "Naturewalk": [],
       "Other": [
         "Glow",
@@ -106451,7 +106451,7 @@ export const uraniumData = [
       "JumpH": 0,
       "JumpL": 2,
       "Power": 5,
-      "WeightClass": "4",
+      "Weight Class": "4",
       "Naturewalk": [
         "Forest",
         "Wetland"
@@ -106675,7 +106675,7 @@ export const uraniumData = [
       "JumpH": 1,
       "JumpL": 2,
       "Power": 9,
-      "WeightClass": "5",
+      "Weight Class": "5",
       "Naturewalk": [
         "Forest",
         "Wetland"
@@ -106903,7 +106903,7 @@ export const uraniumData = [
       "JumpH": 1,
       "JumpL": 1,
       "Power": 2,
-      "WeightClass": "3",
+      "Weight Class": "3",
       "Naturewalk": [],
       "Other": [
         "Amorphous",
@@ -107133,7 +107133,7 @@ export const uraniumData = [
       "JumpH": 1,
       "JumpL": 1,
       "Power": 2,
-      "WeightClass": "4",
+      "Weight Class": "4",
       "Naturewalk": [],
       "Other": [
         "Amorphous",
@@ -107356,7 +107356,7 @@ export const uraniumData = [
       "JumpH": 2,
       "JumpL": 4,
       "Power": 2,
-      "WeightClass": "3",
+      "Weight Class": "3",
       "Naturewalk": [],
       "Other": [
         "Glow",
@@ -107566,7 +107566,7 @@ export const uraniumData = [
       "JumpH": 2,
       "JumpL": 3,
       "Power": 5,
-      "WeightClass": "4",
+      "Weight Class": "4",
       "Naturewalk": [],
       "Other": [
         "Glow",
@@ -107770,7 +107770,7 @@ export const uraniumData = [
       "JumpH": 3,
       "JumpL": 4,
       "Power": 5,
-      "WeightClass": "4",
+      "Weight Class": "4",
       "Naturewalk": [],
       "Other": [
         "Glow",
@@ -107965,7 +107965,7 @@ export const uraniumData = [
       "JumpH": 1,
       "JumpL": 1,
       "Power": 3,
-      "WeightClass": "3",
+      "Weight Class": "3",
       "Naturewalk": [
         "Urban"
       ],
@@ -108167,7 +108167,7 @@ export const uraniumData = [
       "JumpH": 1,
       "JumpL": 2,
       "Power": 6,
-      "WeightClass": "3",
+      "Weight Class": "3",
       "Naturewalk": [],
       "Other": [
         "Wallclimber"
@@ -108398,7 +108398,7 @@ export const uraniumData = [
       "JumpH": 2,
       "JumpL": 2,
       "Power": 4,
-      "WeightClass": "3",
+      "Weight Class": "3",
       "Naturewalk": [
         "Forest"
       ],
@@ -108622,7 +108622,7 @@ export const uraniumData = [
       "JumpH": 3,
       "JumpL": 3,
       "Power": 8,
-      "WeightClass": "6",
+      "Weight Class": "6",
       "Naturewalk": [
         "Forest"
       ],
@@ -108837,7 +108837,7 @@ export const uraniumData = [
       "JumpH": 3,
       "JumpL": 3,
       "Power": 8,
-      "WeightClass": "6",
+      "Weight Class": "6",
       "Naturewalk": [
         "Forest"
       ],
@@ -109063,7 +109063,7 @@ export const uraniumData = [
       "JumpH": 1,
       "JumpL": 1,
       "Power": 2,
-      "WeightClass": "3",
+      "Weight Class": "3",
       "Naturewalk": [
         "Forest"
       ],
@@ -109302,7 +109302,7 @@ export const uraniumData = [
       "JumpH": 2,
       "JumpL": 2,
       "Power": 4,
-      "WeightClass": "3",
+      "Weight Class": "3",
       "Naturewalk": [
         "Forest"
       ],
@@ -109526,7 +109526,7 @@ export const uraniumData = [
       "JumpH": 3,
       "JumpL": 3,
       "Power": 7,
-      "WeightClass": "5",
+      "Weight Class": "5",
       "Naturewalk": [
         "Forest"
       ],
@@ -109740,7 +109740,7 @@ export const uraniumData = [
       "JumpH": 1,
       "JumpL": 1,
       "Power": 4,
-      "WeightClass": "3",
+      "Weight Class": "3",
       "Naturewalk": [],
       "Other": [
         "Glow",
@@ -109962,7 +109962,7 @@ export const uraniumData = [
       "JumpH": 1,
       "JumpL": 1,
       "Power": 4,
-      "WeightClass": "3",
+      "Weight Class": "3",
       "Naturewalk": [],
       "Other": [
         "Glow",
@@ -110196,7 +110196,7 @@ export const uraniumData = [
       "JumpH": 3,
       "JumpL": 2,
       "Power": 3,
-      "WeightClass": "2",
+      "Weight Class": "2",
       "Naturewalk": [
         "Mountain"
       ],
@@ -110441,7 +110441,7 @@ export const uraniumData = [
       "JumpH": 3,
       "JumpL": 3,
       "Power": 4,
-      "WeightClass": "3",
+      "Weight Class": "3",
       "Naturewalk": [
         "Mountain"
       ],
@@ -110670,7 +110670,7 @@ export const uraniumData = [
       "JumpH": 3,
       "JumpL": 4,
       "Power": 7,
-      "WeightClass": "5",
+      "Weight Class": "5",
       "Naturewalk": [
         "Mountain"
       ],
@@ -110907,7 +110907,7 @@ export const uraniumData = [
       "JumpH": 2,
       "JumpL": 2,
       "Power": 1,
-      "WeightClass": "1",
+      "Weight Class": "1",
       "Naturewalk": [],
       "Other": [
         "Underdog",
@@ -111162,7 +111162,7 @@ export const uraniumData = [
       "JumpH": 2,
       "JumpL": 2,
       "Power": 4,
-      "WeightClass": "3",
+      "Weight Class": "3",
       "Naturewalk": [],
       "Other": [
         "Underdog",
@@ -111411,7 +111411,7 @@ export const uraniumData = [
       "JumpH": 3,
       "JumpL": 3,
       "Power": 6,
-      "WeightClass": "4",
+      "Weight Class": "4",
       "Naturewalk": [],
       "Other": [
         "Guster",
@@ -111663,7 +111663,7 @@ export const uraniumData = [
       "JumpH": 2,
       "JumpL": 2,
       "Power": 3,
-      "WeightClass": "3",
+      "Weight Class": "3",
       "Naturewalk": [],
       "Other": [
         "Darkvision",
@@ -111904,7 +111904,7 @@ export const uraniumData = [
       "JumpH": 2,
       "JumpL": 3,
       "Power": 6,
-      "WeightClass": "4",
+      "Weight Class": "4",
       "Naturewalk": [],
       "Other": [
         "Darkvision",
@@ -112138,7 +112138,7 @@ export const uraniumData = [
       "JumpH": 2,
       "JumpL": 3,
       "Power": 10,
-      "WeightClass": "5",
+      "Weight Class": "5",
       "Naturewalk": [],
       "Other": [
         "Darkvision",
@@ -112366,7 +112366,7 @@ export const uraniumData = [
       "JumpH": 2,
       "JumpL": 2,
       "Power": 12,
-      "WeightClass": "6",
+      "Weight Class": "6",
       "Naturewalk": [],
       "Other": [
         "Darkvision",
@@ -112597,7 +112597,7 @@ export const uraniumData = [
       "JumpH": 3,
       "JumpL": 3,
       "Power": 5,
-      "WeightClass": "3",
+      "Weight Class": "3",
       "Naturewalk": [],
       "Other": [
         "Wielder"
@@ -112814,7 +112814,7 @@ export const uraniumData = [
       "JumpH": 2,
       "JumpL": 2,
       "Power": 11,
-      "WeightClass": "6",
+      "Weight Class": "6",
       "Naturewalk": [
         "Cave",
         "Mountain"
@@ -113035,7 +113035,7 @@ export const uraniumData = [
       "JumpH": 2,
       "JumpL": 2,
       "Power": 13,
-      "WeightClass": "6",
+      "Weight Class": "6",
       "Naturewalk": [
         "Cave",
         "Mountain"
@@ -113253,7 +113253,7 @@ export const uraniumData = [
       "JumpH": 2,
       "JumpL": 2,
       "Power": 4,
-      "WeightClass": "4",
+      "Weight Class": "4",
       "Naturewalk": [],
       "Other": [
         "Teleporter 4",
@@ -113467,7 +113467,7 @@ export const uraniumData = [
       "JumpH": 2,
       "JumpL": 2,
       "Power": 8,
-      "WeightClass": "6",
+      "Weight Class": "6",
       "Naturewalk": [],
       "Other": [
         "Teleporter 4",

@@ -35,7 +35,7 @@
               <div class="col-sm-12 col-md-5">
                 <div class="d-flex align-items-end flex-column h-100">
                   <!-- Skills -->
-                  <div class="swsh-box mt-auto w-100 mb-2">
+                  <div class="swsh-box w-100 mb-2">
                     <div class="swsh-header skill skill-block" style="padding: 0;">
                       <div class="row no-gutters header w-100">
                         <div class="col-sm-3 pt-2 pb-2">{{localize "PTU.SkillLabel"}}</div>
@@ -430,12 +430,12 @@
                       </div>
                       <div class="stats {{key}} mod col-sm-2">
                         {{> "systems/ptu/templates/partials/mod-field.hbs" 
-                          path=(concat "data.stats." key ".mod") 
-                          value=stat.mod
-                          dtype="Number" 
-                          mod=""
+                          mod=stat.mod.mod
+                          path=(concat "data.stats." key ".mod.value") 
+                          value=stat.mod.value
                           total="ignored"
-                          modOrigins=(getProperty ../actor.origins (concat "data.stats." key ".mod"))
+                          dtype="Number" 
+                          modOrigins=(getProperty ../origins (concat "data.stats." key ".mod.mod"))
                           flipped=(gt 3 @index)}}
                       </div>
                       <div class="stats {{key}} levelUp col-sm-2">
@@ -451,12 +451,12 @@
                       <div class="stats stage stage col-sm-2">
                         {{#if (isdefined stat.stage)}}
                           {{> "systems/ptu/templates/partials/mod-field.hbs" 
-                            path=(concat "data.stats." key ".stage") 
-                            value=stat.stage
-                            dtype="Number" 
-                            mod=""
+                            mod=stat.stage.mod
+                            path=(concat "data.stats." key ".stage.value") 
+                            value=stat.stage.value
                             total="ignored"
-                            modOrigins=(getProperty ../actor.origins (concat "data.stats." key ".stage"))
+                            dtype="Number" 
+                            modOrigins=(getProperty ../origins (concat "data.stats." key ".stage.mod"))
                             flipped=(gt 3 @index)}}
                         {{/if}}
                       </div>

@@ -56,12 +56,7 @@ export class PTUFeatSheet extends ItemSheet {
 			label: "Send to Chat",
 			class: ".to-chat",
 			icon: "fas fa-comment",
-			onclick: () => sendItemMessage({
-        item: this.object,
-        speaker: ChatMessage.getSpeaker({
-          actor: this.actor
-        })
-      })
+			onclick: () => this._toChat
 		});
     
     buttons.unshift({
@@ -73,6 +68,19 @@ export class PTUFeatSheet extends ItemSheet {
 
 		return buttons;
 	}
+
+  /**
+   * Handle To Chat call.
+   * @private
+   */
+   _toChat() {
+    return sendItemMessage({
+      item: this.object,
+      speaker: ChatMessage.getSpeaker({
+        actor: this.actor
+      })
+    });
+  }
 
 	async _loadEffectSheet() {
 		if(this.object.effects.size == 0) {

@@ -28,3 +28,9 @@ export function dataFromPath(obj, path, rec = false) {
     if(loc.length > 1) return dataFromPath(obj[loc[0]], loc.slice(1), true)
     return obj[loc[0]];
 }
+
+window.match = function(value, patterns) {
+    for(const p of patterns) {
+        if(p.test(value)) return p.result(value);
+    }
+}

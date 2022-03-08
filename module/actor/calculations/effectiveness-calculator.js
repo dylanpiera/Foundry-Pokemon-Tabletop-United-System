@@ -22,9 +22,8 @@ export function GetMonEffectiveness(data) {
         delete typeCalc["Nuclear"];
     }
 
-    /** TODO: Add Abilities - See Issue #27 */
     let abilities = {
-        "Desert Weather": {active: false, execute: function(typeCalc) {return typeCalc;}}, //TODO: Add this ability once we have weather implemented
+        "Desert Weather": {active: false, execute: function(typeCalc) {if(game.settings.get("ptu", "currentWeather") == "Sunny") {typeCalc["Fire"] *= 0.5} return typeCalc;}},
         "Cave Crasher": {active: false, execute: function(typeCalc) {typeCalc["Ground"] *= 0.5; typeCalc["Rock"] *= 0.5; return typeCalc;}},
         "Dry Skin": {active: false, execute: function(typeCalc) {typeCalc["Water"] *= 0; return typeCalc;}},
         "Storm Drain": {active: false, execute: function(typeCalc) {typeCalc["Water"] *= 0; return typeCalc;}},

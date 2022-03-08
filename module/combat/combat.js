@@ -55,7 +55,7 @@ Hooks.on("endOfCombat", async function (combat, participants) {
 
     if (actor.data.data.modifiers.flinch_count.value > 0) {
       log(`Reseting ${actor.name} (${actor.id})'s flinch count.`);
-      await actor.update({"data.modifiers.flinch_count": {value: 0, keys: []}})
+      await actor.update({ "data.modifiers.flinch_count": { value: 0, keys: [] } })
     }
     if (game.settings.get("ptu", "removeVolatileConditionsAfterCombat") && effectIdsToDelete.length > 0) {
       log(`Deleting Volatile conditions for ${actor.name} (${actor.id}).`);
@@ -94,11 +94,11 @@ export default class PTUCombat {
     this.data = backupData
       ? backupData.data
       : {
-          _combat: combat,
-          options: options,
-          lastTurn: { round: combat.round, turn: combat.turn },
-          participants: [],
-        };
+        _combat: combat,
+        options: options,
+        lastTurn: { round: combat.round, turn: combat.turn },
+        participants: [],
+      };
 
     this._initHooks();
 
@@ -518,6 +518,7 @@ export default class PTUCombat {
     sender,
     isStartOfTurn
   ) {
+    if (!combatant.actor.data.flags?.ptu) return;
     const afflictions = Object.keys(combatant.actor.data.flags.ptu)
       .filter((x) => x.startsWith("is_"))
       .map((x) => x.slice(3));
