@@ -1,6 +1,6 @@
 // Initiative revamp sort code
 
-export default class PTUCombatOverrides extends Combat {
+export class PTUCombatOverrides extends Combat {
 
   async nextTurn() {
           console.log('new code path', this.turns);
@@ -57,3 +57,11 @@ export default class PTUCombatOverrides extends Combat {
 
 }
 
+export class PTUCombatTrackerOverrides extends CombatTracker {
+  static  get defaultOptions() {
+    return mergeObject(super.defaultOptions,{
+      template: "modules/ptu/templates/sidebar/combat-tracker.html"
+    });
+
+}
+}

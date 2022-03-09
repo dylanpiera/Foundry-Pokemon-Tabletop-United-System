@@ -40,7 +40,7 @@ import { ActorGenerator } from './utils/actor-generator.js'
 import { GetOrCacheAbilities, GetOrCacheCapabilities, GetOrCacheMoves } from './utils/cache-helper.js'
 import { Afflictions } from './combat/effects/afflictions.js'
 import PTUCombat from './combat/combat.js'
-import PTUCombatOverrides from './combat/ptu_overrides.js'
+import { PTUCombatOverrides, PTUCombatTrackerOverrides } from './combat/ptu_overrides.js'
 import Api from './api/api.js'
 import RenderDex from './utils/pokedex.js'
 import TMsData from './data/tm-data.js'
@@ -145,6 +145,9 @@ Hooks.once('init', function () {
   };
   // Initialize custom initative hooks
   CONFIG.Combat.documentClass=PTUCombatOverrides;
+
+  // Define custom combat tracker
+  CONFIG.ui.combat = PTUCombatTrackerOverrides;
 
   // Define custom Entity classes
   CONFIG.Actor.documentClass = PTUActor;
