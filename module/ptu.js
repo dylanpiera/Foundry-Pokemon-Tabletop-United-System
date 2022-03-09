@@ -37,6 +37,7 @@ import { ActorGenerator } from './utils/actor-generator.js'
 import { GetOrCacheAbilities, GetOrCacheCapabilities, GetOrCacheMoves} from './utils/cache-helper.js'
 import {Afflictions} from './combat/effects/afflictions.js'
 import PTUCombat from './combat/combat.js'
+import PTUCombatOverrides from './combat/ptu_overrides.js'
 import Api from './api/api.js'
 import RenderDex from './utils/pokedex.js'
 import TMsData from './data/tm-data.js'
@@ -129,6 +130,10 @@ Hooks.once('init', function() {
     formula: "@initiative.value + (1d20 * 0.01)",
     decimals: 2
   };
+
+  // Initialize custom initative hooks
+  CONFIG.Combat.documentClass=PTUCombatOverrides;
+
 
   // Define custom Entity classes
   CONFIG.Actor.documentClass = PTUActor;

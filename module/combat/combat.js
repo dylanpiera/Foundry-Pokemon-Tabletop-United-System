@@ -213,10 +213,15 @@ export default class PTUCombat {
 
     async _onStartOfTurn(combat, combatant, lastTurn, options, sender) {
         if(combat.id != this.combat.id) return;
-        if(!combatant.actor.data.flags.ptu) return;
         
         // Only worry about effects if the combat has started
         if(!combat.started) return;
+        // Mark this turn as the last turn in which this combatant acted
+        await combatant.setFlag("ptu","last_turn_acted", combat.round );
+	console.log("Setting last turn acted",combatant.actor.data.name,combat.round,combatant.getFlag("ptu","last_turn_acted"));
+	// We should always update last turn taken regardless of flag status
+        if(!combatant.actor.data.flags.ptu) return;
+	    
 
         if(options.turn.direction == CONFIG.PTUCombat.DirectionOptions.FORWARD) {
             for(let effect of combatant.actor.effects) {
