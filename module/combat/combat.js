@@ -218,8 +218,7 @@ export default class PTUCombat {
         if(!combat.started) return;
         // Mark this turn as the last turn in which this combatant acted
         await combatant.setFlag("ptu","last_turn_acted", combat.round );
-	console.log("Setting last turn acted",combatant.actor.data.name,combat.round,combatant.getFlag("ptu","last_turn_acted"));
-	// We should always update last turn taken regardless of flag status
+        // We should always update last turn taken regardless of flag status
         if(!combatant.actor.data.flags.ptu) return;
 	    
 
