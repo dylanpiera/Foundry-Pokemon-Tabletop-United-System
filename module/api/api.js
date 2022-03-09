@@ -2,6 +2,7 @@ import { displayAppliedDamageToTargets, ApplyInjuries } from '../combat/damage-c
 import { LATEST_VERSION } from '../ptu.js'
 import { debug, log } from '../ptu.js';
 import { dataFromPath } from '../utils/generic-helpers.js';
+import { PlayPokeballReturnAnimation } from '../combat/effects/pokeball_effects.js';
 
 class ApiError {
     constructor({ message, type }) {
@@ -51,7 +52,7 @@ export default class Api {
                 }
 
                 const retVal = { result: [] };
-                for (const document of documents) retVal.result.push(await document.delete());
+                for (const document of documents) retVal.result.push( await PlayPokeballReturnAnimation(document) );
                 ref._returnBridge(retVal, data);
             },
             async messageUpdate(data) {

@@ -15,7 +15,7 @@ export const pokeball_sound_paths = {
     "release": "systems/ptu/sounds/pokeball_sounds/pokeball_release.mp3",
 };
 
-const pokeball_capture_TMFX_params =
+export const pokeball_capture_TMFX_params =
     [
         {
             filterType: "transform",
@@ -349,6 +349,7 @@ export async function PlayReleaseOwnedPokemonAnimation(token) {
     
     let tokenData = token.data;
     let actor = game.actors.get(tokenData.actorId);
+    if(actor.type != "pokemon") {return false}
     let item_icon_path = "systems/ptu/images/item_icons/"
     let pokeball = (actor?.data?.data?.pokeball.toLowerCase()) ?? "basic ball";
     if(pokeball == "")
@@ -421,7 +422,7 @@ export async function PlayReleaseOwnedPokemonAnimation(token) {
 
                 if(enable_pokeball_animation)
                 { 
-                    if(game.modules.get("sequencer")?.active)
+                    if(game.modules.get("sequencer")?.active && actor_token)
                     {
                         new Sequence("PTU")
                             .effect()
@@ -619,5 +620,40 @@ export async function PlayReleaseOwnedPokemonAnimation(token) {
                 await target_token.document.update({/*"name": (current_token_nature+current_token_species),*/ "alpha": (1) });
             }	
         }
+    }
+}
+
+
+export async function PlayPokeballReturnAnimation(pokemon_token)
+{
+    let pokemon_actor = await GetActorFromToken(pokemon_token);
+    if(pokemon_actor?.type == "pokemon")
+    {
+        let trainer_actor = game.actors.get(pokemon_token.actor.data.data.owner)
+        // let on_field_trainer_token = GetTokenFromActor(trainer_actor);
+        let trainer_tokens = await trainer_actor.getActiveTokens();
+        let on_field_trainer_token = trainer_tokens[0];
+    
+        if (on_field_trainer_token && (game.modules.get("sequencer")?.active) && (game.modules.get("jb2a_patreon")?.active) && (game.settings.get("ptu", "enableMoveAnimations") == true)) {
+            new Sequence("PTU")
+                .effect()
+                .file("modules/jb2a_patreon/Library/Generic/Energy/EnergyBeam_02_Regular_GreenYellow_30ft_1600x400.webm")
+                .tint("#FF0000")
+                .atLocation(pokemon_token.object)
+                .stretchTo(on_field_trainer_token)
+            .play();
+        }
+    
+        if ((game.modules.get("tokenmagic")?.active) && (game.settings.get("ptu", "enableMoveAnimations") == true)) {
+            await TokenMagic.addFilters(pokemon_token.object, pokeball_capture_TMFX_params);
+        }
+    
+        await AudioHelper.play({ src: pokeball_sound_paths["return"], volume: 0.7, autoplay: true, loop: false }, true);
+    
+        setTimeout( async () => { await pokemon_token.delete() }, 2000);
+    }
+    else
+    {
+        await pokemon_token.delete();
     }
 }
