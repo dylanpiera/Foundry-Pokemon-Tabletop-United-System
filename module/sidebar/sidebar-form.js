@@ -7,6 +7,7 @@ import BeltComponent from './components/belt-component.js';
 import ItemsComponent from './components/items-component.js';
 import OrdersComponent from './components/order-component.js';
 import MenuComponent from './components/menu-component.js';
+import { ui_sound_paths } from "./components/menu-component.js";
 
 /**
  * Extend the basic FormApplication with some very simple modifications
@@ -117,7 +118,11 @@ export class PTUSidebar extends FormApplication {
 
     if (selected) { // Token selection became active
       const actor = game.actors.get(token.data.actorId);
-      if (actor) self.store.dispatch("setActor", token.data.actorId);
+      if (actor) 
+      {
+        self.store.dispatch("setActor", token.data.actorId);
+        AudioHelper.play({ src: ui_sound_paths["flip"], volume: 0.3, autoplay: true, loop: false }, false);
+      }
     }
     else { // If token got unselected
       // only continue if no tokens are selected

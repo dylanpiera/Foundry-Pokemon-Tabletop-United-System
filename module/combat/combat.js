@@ -1,6 +1,7 @@
 import { warn, debug, log } from "../ptu.js";
 import { PTUCombatTrackerConfig } from "../forms/combat-tracker-config-form.js";
 import { EffectFns } from "./effects/afflictions.js";
+import { PlayReleaseOwnedPokemonAnimation } from "./effects/pokeball_effects.js"
 
 CONFIG.PTUCombat = {
   DirectionOptions: {
@@ -593,3 +594,41 @@ export default class PTUCombat {
     log("Deleted combat with ID: ", this.id);
   }
 }
+
+Hooks.on("createToken", async (token, options, id) => { 
+  // If an owned Pokemon is dropped onto the field, play pokeball release sound, and create lightshow, (TODO)
+  // And if there is an active combat and the token is a character or pokemon, add to combat and roll initiative
+
+	if((game.userId == id) && (token.data.flags["item-piles"] == undefined))
+	{
+    let target_token;
+    let actor = game.actors.get(token.data.actorId);
+	
+    if(token.data.actorLink == false)
+    {
+      target_token = canvas.tokens.get(token.id); // The thrown pokemon
+    }
+    else
+    {
+      target_token = game.actors.get(actor.id).getActiveTokens().slice(-1)[0]; // The thrown pokemon
+    }
+
+    PlayReleaseOwnedPokemonAnimation(token);
+
+		setTimeout( async () => {
+      if(game.combat)
+      {
+        await target_token.toggleCombat().then(() => game.combat.rollAll({rollMode: 'gmroll'}));
+      }
+		}, 500);
+
+    setTimeout( async () => {
+      if(actor.data.type == "pokemon")
+      {
+        await game.ptu.PlayPokemonCry(actor.data.data.species);
+      }
+		}, 1500);
+
+	}
+
+});

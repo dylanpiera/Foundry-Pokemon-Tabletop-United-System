@@ -2239,15 +2239,17 @@ body.messages-dark-theme .chat-controls .roll-type-select {
 }
 #ptu-sidebar .ptu-sidebar #menu-component #menu-buttons {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   flex-wrap: wrap;
   justify-content: space-between;
 }
 #ptu-sidebar .ptu-sidebar #menu-component #menu-buttons .menu-item {
-  margin-top: 5px;
+  margin-top: 1px;
   font-size: 9px;
-  max-width: 45%;
-  flex: 0 0 45%;
+  max-width: 50%;
+  flex: 0 0 50%;
+  height: 20px;
+  line-height: 9px !important;
 }
 #ptu-sidebar .ptu-sidebar #menu-component #menu-buttons .menu-item[disabled] {
   filter: brightness(0.75);

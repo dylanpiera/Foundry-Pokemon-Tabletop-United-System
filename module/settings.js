@@ -449,35 +449,35 @@ export function LoadSystemSettings() {
         //         default: "true"
         //     });
 
-        //     game.settings.register("PTUMoveMaster", "alwaysDisplayTokenNames", {
-        //         name: "GM Setting: Always Display Species in Token Name for Wild Pokemon",
-        //         hint: "Always set wild pokemon's tokens to display their species name to everyone when they're dragged out.",
-        //         scope: "world",
-        //         config: true,
-        //         type: Boolean,
-        //         default: true
-        //     });
+        game.settings.register("ptu", "alwaysDisplayTokenNames", {
+            name: "Always Display Species in Token Name for Wild Pokemon",
+            hint: "Always set wild pokemon's tokens to display their species name to everyone when they're dragged out.",
+            scope: "world",
+            config: true,
+            type: Boolean,
+            default: true
+        });
 
-        //     game.settings.register("PTUMoveMaster", "alwaysDisplayTokenHealth", {
-        //         name: "GM Setting: Always Display Token Health for Wild Pokemon",
-        //         hint: "Always set wild pokemon's tokens to display their health as a bar to everyone when they're dragged out.",
-        //         scope: "world",
-        //         config: true,
-        //         type: Boolean,
-        //         default: true
-        //     });
+        game.settings.register("ptu", "alwaysDisplayTokenHealth", {
+            name: "Always Display Token Health for Wild Pokemon",
+            hint: "Always set wild pokemon's tokens to display their health as a bar to everyone when they're dragged out.",
+            scope: "world",
+            config: true,
+            type: Boolean,
+            default: true
+        });
 
-        //     game.settings.register("PTUMoveMaster", "alwaysDisplayTokenNature", {
-        //         name: "GM Setting: Always Display Token Nature in Names of Wild Pokemon.",
-        //         hint: "Always set wild pokemon's tokens to display their nature, as an appendation to their names, to everyone when they're dragged out. Note that this will have no effect if Always Display Species in Token Name for Wild Pokemon is not also active.",
-        //         scope: "world",
-        //         config: true,
-        //         type: Boolean,
-        //         default: true
-        //     });
+        game.settings.register("ptu", "alwaysDisplayTokenNature", {
+            name: "Always Display Token Nature in Names of Wild Pokemon.",
+            hint: "Always set wild pokemon's tokens to display their nature, as an appendation to their names, to everyone when they're dragged out. Note that this will have no effect if Always Display Species in Token Name for Wild Pokemon is not also active.",
+            scope: "world",
+            config: true,
+            type: Boolean,
+            default: true
+        });
 
         game.settings.register("ptu", "pokepsychologistCanReplaceCommand", {
-            name: "GM Setting: Pokepsychologist allows replacing Command with Pokemon Education for Loyalty checks.",
+            name: "Pokepsychologist allows replacing Command with Pokemon Education for Loyalty checks.",
             hint: "As written, Pokepsychologist is relatively worthless, and technically does not allow for one of the uses a casual reading of it might imply. This homebrew option allows trainers with Pokepsychologist to use Pokemon Education in place of Command for Loyalty checks.",
             scope: "world",
             config: true,
@@ -495,14 +495,14 @@ export function LoadSystemSettings() {
         //         default: false
         //     });
 
-        //     game.settings.register("PTUMoveMaster", "usePokeballAnimationOnDragOut", {
-        //         name: "GM Setting: Use an animated pokeball effect when dragging an owned pokemon onto a field with their trainer present.",
-        //         hint: "Disable this if you are having problems with the effects.",
-        //         scope: "world",
-        //         config: true,
-        //         type: Boolean,
-        //         default: true
-        //     });
+        game.settings.register("ptu", "usePokeballAnimationOnDragOut", {
+            name: "Use an animated pokeball effect when dragging an owned pokemon onto a field with their trainer present.",
+            hint: "Disable this if you are having problems with the effects.",
+            scope: "world",
+            config: true,
+            type: Boolean,
+            default: true
+        });
 
         //     game.settings.register("PTUMoveMaster", "useAlternateChatStyling", {
         //         name: "Player Setting: Styles the chat to have (what I think is) a more readable font, compact size, and low-contrast look.",

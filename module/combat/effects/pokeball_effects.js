@@ -343,3 +343,281 @@ export async function recallPokemon(target_actor) {
 
     // chatMessage(target_actor, target_actor.name + ' was recalled! Stages reset to defaults, and all volatile conditions cured!');
 }
+
+
+export async function PlayReleaseOwnedPokemonAnimation(token) {
+    
+    let tokenData = token.data;
+    let actor = game.actors.get(tokenData.actorId);
+    let item_icon_path = "systems/ptu/images/item_icons/"
+    let pokeball = (actor?.data?.data?.pokeball.toLowerCase()) ?? "basic ball";
+    if(pokeball == "")
+    {
+        pokeball = "basic ball";
+    }
+    let display_token_nature = game.settings.get("ptu", "alwaysDisplayTokenNature");
+    let enable_pokeball_animation = game.settings.get("ptu", "usePokeballAnimationOnDragOut");
+    let always_display_token_name = game.settings.get("ptu", "alwaysDisplayTokenNames");
+    let always_display_token_health = game.settings.get("ptu", "alwaysDisplayTokenHealth");
+
+    function capitalizeFirstLetter(string) {
+        return string[0].toUpperCase() + string.slice(1);
+    }
+
+    if(actor)
+    {
+        let target_token;
+
+        if(tokenData.actorLink == false)
+        {
+            target_token = canvas.tokens.get(token.id);//.slice(-1)[0]; // The thrown pokemon
+        }
+        else
+        {
+            target_token = game.actors.get(actor.id).getActiveTokens().slice(-1)[0]; // The thrown pokemon
+        }
+
+        let current_token_species = actor.name;
+        if(actor.data.data.species)
+        {
+            current_token_species = capitalizeFirstLetter((actor.data.data.species).toLowerCase());
+        }
+        
+        let current_token_nature = "";
+        if(actor.data.data.nature && display_token_nature)
+        {
+            current_token_nature = capitalizeFirstLetter((actor.data.data.nature.value).toLowerCase())+" ";
+        }
+
+        if(actor.data.type == "pokemon" && (actor.data.data.owner != "0" && actor.data.data.owner != "")) // Owned Pokemon
+        {
+            let trainer_actor = game.actors.get(actor.data.data.owner);
+            let trainer_tokens = trainer_actor.getActiveTokens();
+            let actor_token = trainer_tokens[0]; // The throwing trainer
+
+            // let throwRange = trainer_actor.data.data.capabilities["Throwing Range"];
+            // let rangeToTarget = GetDistanceBetweenTokens(actor_token, tokenData);
+
+            // if(!await IsWithinPokeballThrowRange(actor_token, target_token, pokeball))
+            // {
+            //     // ui.notifications.warn(`Target square is ${rangeToTarget}m away, which is outside your ${throwRange}m throwing range!`);
+                
+            //     await game.ptu.api.tokensDelete(game.actors.get(actor.id).getActiveTokens().slice(-1)[0]);
+            // }
+            // else
+            // {
+                // setTimeout( async () => { game.ptu.PlayPokemonCry(current_token_species); }, 2000);
+                
+                if(enable_pokeball_animation)
+                {
+                    await target_token.document.update({ "alpha": (0) });
+                }
+
+                // ui.notifications.info(`Target square is ${rangeToTarget}m away, which is within your ${throwRange}m throwing range!`);
+                await AudioHelper.play({src: pokeball_sound_paths["miss"], volume: 0.5, autoplay: true, loop: false}, true);
+
+                let transitionType = 9;
+                let targetImagePath = item_icon_path+pokeball+".webp";
+
+                if(enable_pokeball_animation)
+                { 
+                    if(game.modules.get("sequencer")?.active)
+                    {
+                        new Sequence("PTU")
+                            .effect()
+                            .file(targetImagePath)
+                            .atLocation(actor_token)
+                            .scale(0.3)
+                            .moveSpeed(1000)
+                            .rotateIn(960, 5000, { ease: "easeOutCubic" })
+                            .moveTowards(token, { ease: "easeOutBounce", rotate: true })
+                            .missed(false)
+                        .play();
+                    }
+                    // function castSpell(effect) {
+                    //     canvas.specials.drawSpecialToward(effect, actor_token, game.actors.get(actor.id).getActiveTokens().slice(-1)[0]);//target_token);
+                    // }
+                    
+
+                    // castSpell({
+                    //     file:
+                    //         item_icon_path+pokeball+".webm",
+                    //     anchor: {
+                    //         x: -0.08,
+                    //         y: 0.5,
+                    //     },
+                    //     speed: "auto",//1,
+                    //     angle: 0,
+                    //     scale: {
+                    //         x: 0.5,
+                    //         y: 0.5,
+                    //     },
+                    // });
+                    
+
+                    // setTimeout( async () => { await target_token.TMFXaddUpdateFilters(pokeball_polymorph_params); }, 1000);
+
+                    let pokeballShoop_params =
+                    [
+                        {
+                            filterType: "transform",
+                            filterId: "pokeballShoop",
+                            bpRadiusPercent: 100,
+                            //padding: 0,
+                            autoDestroy: true,
+                            animated:
+                            {
+                                bpStrength:
+                                {
+                                    animType: "cosOscillation",//"cosOscillation",
+                                    val1: 0,
+                                    val2: -0.99,//-0.65,
+                                    loopDuration: 1500,
+                                    loops: 1,
+                                }
+                            }
+                        },
+
+                        {
+                            filterType: "glow",
+                            filterId: "pokeballShoop",
+                            outerStrength: 40,
+                            innerStrength: 20,
+                            color: 0xFFFFFF,//0x5099DD,
+                            quality: 0.5,
+                            //padding: 0,
+                            //zOrder: 2,
+                            autoDestroy: true,
+                            animated:
+                            {
+                                color: 
+                                {
+                                active: true, 
+                                loopDuration: 1500, 
+                                loops: 1,
+                                animType: "colorOscillation", 
+                                val1:0xFFFFFF,//0x5099DD, 
+                                val2:0xff0000,//0x90EEFF
+                                }
+                            }
+                        },
+
+                        {
+                            filterType: "adjustment",
+                            filterId: "pokeballShoop",
+                            saturation: 1,
+                            brightness: 10,
+                            contrast: 1,
+                            gamma: 1,
+                            red: 1,
+                            green: 1,
+                            blue: 1,
+                            alpha: 1,
+                            autoDestroy: true,
+                            animated:
+                            {
+                                alpha: 
+                                { 
+                                active: true, 
+                                loopDuration: 1500, 
+                                loops: 1,
+                                animType: "syncCosOscillation",
+                                val1: 0.35,
+                                val2: 0.75 }
+                            }
+                        }
+                    ];
+
+                    setTimeout( async () => {  
+                        await target_token.TMFXaddUpdateFilters(pokeballShoop_params); 
+                        await target_token.document.update({ "alpha": (1) });
+                    }, 1000);
+                }
+                setTimeout( async () => {  
+
+                    if(always_display_token_name)
+                    {
+                        if(always_display_token_health == true)
+                        {
+                            await target_token.document.update({
+                                // "scale": original_scale,
+                                "bar1.attribute": "health",
+                                "displayBars": 50,
+                                "displayName": 50,
+                                "alpha": (1) 
+                            });  
+                        }
+                        else
+                        {
+                            await target_token.document.update({
+                                // "scale": original_scale,
+                                "displayName": 50,
+                                "alpha": (1)
+                            });  
+                        }
+                    }
+                    else if (always_display_token_health == true)
+                    {
+                        await target_token.document.update({
+                            // "scale": original_scale,
+                            "bar1.attribute": "health",
+                            "displayBars": 50,
+                            "alpha": (1)
+                        });  
+                    }
+                    else
+                    {
+                        // await target_token.document.update({"scale": original_scale, "alpha": (1) });
+                        await target_token.document.update({ "alpha": (1) });
+                    }
+
+                    // setTimeout( async() =>{
+                    // 	await target_token.document.update({"scale": original_scale});
+                    // }, 500);
+                    
+                }, 2000);
+
+                setTimeout( async () => { 
+                    await AudioHelper.play({src: pokeball_sound_paths["release"], volume: 0.5, autoplay: true, loop: false}, true); 
+                }, 500);
+            // }
+        }
+        else if (actor.data.type == "pokemon")
+        {
+            if(always_display_token_name)
+            {
+                if(always_display_token_health)
+                {
+                    await target_token.document.update({
+                        "name": (current_token_nature+current_token_species),
+                        "bar1.attribute": "health",
+                        "displayBars": 50,
+                        "displayName": 50,
+                        "alpha": (1)
+                    });  
+                }
+                else
+                {
+                    await target_token.document.update({
+                        "name": (current_token_nature+current_token_species),
+                        "displayName": 50,
+                        "alpha": (1)
+                    });  
+                }
+            }
+            else if (always_display_token_health)
+            {
+                await target_token.document.update({
+                    // "name": (current_token_nature+current_token_species),
+                    "bar1.attribute": "health",
+                    "displayBars": 50,
+                    "alpha": (1)
+                });  
+            }
+            else
+            {
+                await target_token.document.update({/*"name": (current_token_nature+current_token_species),*/ "alpha": (1) });
+            }	
+        }
+    }
+}
