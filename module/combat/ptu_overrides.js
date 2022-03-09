@@ -60,7 +60,7 @@ export class PTUCombatOverrides extends Combat {
 export class PTUCombatTrackerOverrides extends CombatTracker {
   static  get defaultOptions() {
     return mergeObject(super.defaultOptions,{
-      template: "modules/ptu/templates/sidebar/combat-tracker.html"
+      template: "systems/ptu/templates/sidebar/combat-tracker.html"
     });
 
 }
