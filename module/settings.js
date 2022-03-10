@@ -90,37 +90,37 @@ export function LoadSystemSettings() {
         category: "general"
     })
 
-    game.settings.register("ptu", "combatRollPreference", {
-        name: "Combat Roll Preference",
-        hint: "Choose whether crits should always be rolled, or only when the to-hit is an actual crit.",
-        scope: "world",
-        config: true,
-        type: String,
-        choices: {
-            "situational": "Show damage situationally",
-            "always-normal": "Always roll normal damage",
-            "always-crit": "Always roll crit damage",
-            "both": "Always roll both"
-        },
-        default: "situational",
-        category: "combat"
-    });
+    // game.settings.register("ptu", "combatRollPreference", {
+    //     name: "Combat Roll Preference",
+    //     hint: "Choose whether crits should always be rolled, or only when the to-hit is an actual crit.",
+    //     scope: "world",
+    //     config: true,
+    //     type: String,
+    //     choices: {
+    //         "situational": "Show damage situationally",
+    //         "always-normal": "Always roll normal damage",
+    //         "always-crit": "Always roll crit damage",
+    //         "both": "Always roll both"
+    //     },
+    //     default: "situational",
+    //     category: "combat"
+    // });
 
-    game.settings.register("ptu", "combatDescPreference", {
-        name: "Combat Description Preference",
-        hint: "Choose whether the move effect should be displayed when rolling To-Hit/Damage.",
-        scope: "world",
-        config: true,
-        type: String,
-        choices: {
-            "none": "Don't show move effect",
-            "snippet": "Show move snippet, or nothing if unset",
-            "snippet-or-full": "Show move snippet, or full effect if unset",
-            "show": "Show full effect"
-        },
-        default: "snippet",
-        category: "combat"
-    });
+    // game.settings.register("ptu", "combatDescPreference", {
+    //     name: "Combat Description Preference",
+    //     hint: "Choose whether the move effect should be displayed when rolling To-Hit/Damage.",
+    //     scope: "world",
+    //     config: true,
+    //     type: String,
+    //     choices: {
+    //         "none": "Don't show move effect",
+    //         "snippet": "Show move snippet, or nothing if unset",
+    //         "snippet-or-full": "Show move snippet, or full effect if unset",
+    //         "show": "Show full effect"
+    //     },
+    //     default: "snippet",
+    //     category: "combat"
+    // });
 
     game.settings.register("ptu", "defaultPokemonImageDirectory", {
         name: "Default Pokemon Image Directory",
@@ -407,7 +407,7 @@ export function LoadSystemSettings() {
             scope: "world",
             config: true,
             type: Boolean,
-            default: true,
+            default: false,
             category: "combat"
         });
 

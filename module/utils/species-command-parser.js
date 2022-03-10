@@ -102,6 +102,15 @@ export async function GetSpeciesArt(mon, imgDirectoryPath, type = ".png", shiny 
     }
 
     if(animated && (result.status === 404)) {
+        path = basePath+lpad(mon?.number, 4)+shiny_path+animated_type;
+        result = await fetch(path);
+    }
+    if(result.status === 404) {
+        path = basePath+lpad(mon?.number, 4)+shiny_path+type;
+        result = await fetch(path);
+    }
+
+    if(animated && (result.status === 404)) {
         path = basePath+mon?._id+shiny_path+animated_type;
         result = await fetch(path);
     }
