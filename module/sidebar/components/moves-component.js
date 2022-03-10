@@ -54,7 +54,7 @@ export default class MovesList extends Component {
         if(this.state.moves.length > 0)
             output += "<img class='divider-image' src='systems/ptu/images/icons/DividerIcon_Moves.png' style='border:none; width:200px;'>"
 
-        for (const move of this.state.moves ?? []) {
+        for (const move of this.state.moves.sort(this._sort) ?? []) {
             // Move data is prepared on a duplicate entry, otherwise the preperation data will be flagged as 
             // 'changed move data' during every re-render, causing infinite re-render loops.
             const moveData = duplicate(move);
@@ -138,6 +138,10 @@ export default class MovesList extends Component {
         }
 
         return moveData;
+    }
+
+    _sort(a,b) {
+        return a.sort - b.sort;
     }
 
     _getRangeIcons(rangeText, actionType = "Standard") {
