@@ -59,7 +59,7 @@
     </header>
 
     <ol id="combat-tracker" class="directory-list">
-	    {{#each turns as |turn i}}}
+	    {{#each turns as |turn i|}}
                 {{#with (lookup ../combat/turns @index)}}
                 <a class="toggleTurnStatus" data-combatant-id="{{this.id}}">{{#if this.data.flags.ptu.has_acted}}Acted{{else}}Up Soon{{/if}}</a>
                 {{/with}}
