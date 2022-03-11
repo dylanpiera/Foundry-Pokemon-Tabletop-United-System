@@ -59,7 +59,11 @@
     </header>
 
     <ol id="combat-tracker" class="directory-list">
-        {{#each turns}}
+	    {{#each turns as |turn i}}}
+                {{#with (lookup ../combat/turns @index)}}
+                <a class="toggleTurnStatus" data-combatant-id="{{this.id}}">{{#if this.data.flags.ptu.has_acted}}Acted{{else}}Up Soon{{/if}}</a>
+                {{/with}}
+
         <li class="combatant actor directory-item flexrow {{this.css}}" data-combatant-id="{{this.id}}">
             <img class="token-image" data-src="{{this.img}}" title="{{this.name}}"/>
             <div class="token-name flexcol">
