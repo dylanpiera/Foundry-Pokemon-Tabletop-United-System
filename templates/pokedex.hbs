@@ -1,4 +1,4 @@
-<div class='container'>
+<div class='container pokedex'>
     <div class='row'>
         <div class='col' style='text-align: center;'>
         <img src='{{img}}' style='border: 0; max-height: 200px;'>
@@ -9,7 +9,7 @@
         <div class='col'>
             <h3><strong>Quick Information</strong></h3>
 
-            <div class='container'>
+            <div class='container quick-info'>
                 <div class='row'>
                     <div class='col'>
                         <strong>Pokémon:</strong> 
@@ -76,6 +76,19 @@
                         {{#each speciesData.Diet as |diet|}}
                             {{diet}}{{#unless @last}},{{/unless}}
                         {{/each}}
+                    </div>
+                </div>
+
+                <div class='row'>
+                    <div class='col'>
+                        <strong>Egg Groups:</strong> 
+                    </div>
+                    <div class='col'>
+                        <ul>
+                            {{#each speciesData.[Breeding Information].[Egg Group] as |egg|}} 
+                                <li>{{egg}}</li>
+                            {{/each}}
+                        </ul>
                     </div>
                 </div>
 

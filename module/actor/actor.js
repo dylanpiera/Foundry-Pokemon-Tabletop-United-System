@@ -127,7 +127,12 @@ export class PTUActor extends Actor {
           }
           c.priority = c.priority ?? c.mode * 10;
 
-          const n = parseFloat(c.value)
+          let n = parseFloat(c.value)
+          if(isNaN(n) && c.value?.startsWith("[")) {
+            n = parseFloat(dataFromPath(this.data, c.value.replace("[","").replace("]","")))
+            console.log(c.value, n);
+            if(!isNaN(n)) c.value = n;
+          } 
           if (String(n) === c.value) {
             c.value = n;
           }

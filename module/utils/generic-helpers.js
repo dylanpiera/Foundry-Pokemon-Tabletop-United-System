@@ -23,14 +23,26 @@ export function excavateObj(input, basePath = "") {
     return arr;
 }
 
+window.excavateObj = excavateObj;
+
 export function dataFromPath(obj, path, rec = false) {
     let loc = rec ? path : path.split('.');
-    if(loc.length > 1) return dataFromPath(obj[loc[0]], loc.slice(1), true)
-    return obj[loc[0]];
+    if(loc.length > 1) return dataFromPath(obj?.[loc?.[0]], loc?.slice(1), true)
+    return obj?.[loc?.[0]];
 }
+
+window.dataFromPath = dataFromPath
 
 window.match = function(value, patterns) {
     for(const p of patterns) {
         if(p.test(value)) return p.result(value);
     }
+}
+
+export function timeout(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+export function capitalizeFirstLetter(string) {
+    return string[0].toUpperCase() + string.slice(1);
 }
