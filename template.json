@@ -288,50 +288,44 @@
         "stats": {
           "hp": {
             "value": 10,
-            "mod": 0,
+            "mod": {"value": 0, "mod": 0},
             "levelUp": 0,
-            "label": "Hit Points",
-            "modifier": 0
+            "label": "Hit Points"
           },
           "atk": {
             "value": 5,
-            "mod": 0,
-            "stage": 0,
+            "mod": {"value": 0, "mod": 0},
+            "stage": {"value": 0, "mod": 0},
             "levelUp": 0,
-            "label": "Attack",
-            "modifier": 0
+            "label": "Attack"
           },
           "def": {
             "value": 5,
-            "mod": 0,
-            "stage": 0,
+            "mod": {"value": 0, "mod": 0},
+            "stage": {"value": 0, "mod": 0},
             "levelUp": 0,
-            "label": "Defense",
-            "modifier": 0
+            "label": "Defense"
           },
           "spatk": {
             "value": 5,
-            "mod": 0,
-            "stage": 0,
+            "mod": {"value": 0, "mod": 0},
+            "stage": {"value": 0, "mod": 0},
             "levelUp": 0,
-            "label": "Special Attack",
-            "modifier": 0
+            "label": "Special Attack"
           },
           "spdef": {
             "value": 5,
-            "mod": 0,
-            "stage": 0,
+            "mod": {"value": 0, "mod": 0},
+            "stage": {"value": 0, "mod": 0},
             "levelUp": 0,
-            "label": "Special Defense",
-            "modifier": 0
+            "label": "Special Defense"
           },
           "spd": {
             "value": 5,
-            "mod": 0,
-            "stage": 0,
+            "mod": {"value": 0, "mod": 0},
+            "stage": {"value": 0, "mod": 0},
             "levelUp": 0,
-            "label": "Speed",
-            "modifier": 0
+            "label": "Speed"
           }
         }
       },
@@ -432,6 +426,10 @@
       "shiny": false,
       "loyalty": 3,
       "pokeball": "",
+      "boss": {
+        "is": false,
+        "turns": 1
+      },
 
       "training": {
         "agility": {
