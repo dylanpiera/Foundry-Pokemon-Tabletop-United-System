@@ -33,11 +33,79 @@ export class PTUCombatOverrides extends Combat {
   async nextRound() {
     //Reset has acted flags
     for (let [i, t] of this.turns.entries()) {
-      if(i == 0) continue;
+      if (i == 0) continue;
       t.setFlag('ptu', 'has_acted', false);
     }
-    
+
     await super.nextRound();
+  }
+
+  _onUpdateEmbeddedDocuments(embeddedName, documents, result, options, userId) {
+    for (const d of documents) {
+      const c = this.combatants.get(d?.id);
+
+      if (c.actor.data.data.boss?.is) this._handleBoss(c.actor, c);
+    }
+
+    super._onUpdateEmbeddedDocuments(embeddedName, documents, result, options, userId);
+  }
+
+  _handleBoss(actor, combatant) {
+    const turns = actor.data.data.boss.turns;
+    const combatants = this.turns.filter(c => c.actor.id == actor.id);
+
+    if (combatants.length < turns) {
+      const newCombatants = []
+      for (let i = combatants.length; i < turns; i++) {
+        const init = (combatant.initiative - (5 * i));
+        const actualInit = init >= 0 ? init : (combatant.initiative + (-5 * ((Math.ceil(init / 5) - 1))))
+
+        newCombatants.push({
+          actorId: combatant.data.actorId,
+          defeated: combatant.data.defeated,
+          hidden: combatant.data.hidden,
+          initiative: actualInit,
+          sceneId: combatant.data.sceneId,
+          tokenId: combatant.data.tokenId
+        })
+      }
+      return this.setFlag("ptu", "mainBossCombatant", { id: combatant.id, initiative: combatant.initiative }).then(_ => game.combat.createEmbeddedDocuments("Combatant", newCombatants));
+    }
+
+    const boss = this.getFlag("ptu", "mainBossCombatant");
+    if (boss) {
+      if (boss.id != combatant.id) return;
+      if (boss.initiative != combatant.initiative) {
+        return this.setFlag("ptu", "mainBossCombatant", {
+          id: boss.id,
+          initiative: combatant.initiative
+        }).then(_ => {
+          let i = 0;
+          const inits = [];
+          combatants.forEach((c) => {
+            if (c.id == boss.id) return;
+
+            const init = (combatant.initiative - (5 * ++i));
+            const negInit = (combatant.initiative + (-5 * ((Math.ceil(init / 5) - 1))))
+            const actualInit = init >= 0 ? init : negInit;
+            inits.push(actualInit);
+          })
+          console.log(inits);
+          
+          inits.sort((a,b) => b-a)
+          i = 0;
+
+          combatants.forEach((c) => {
+            if (c.id == boss.id) return;
+            return c.update({ "initiative": inits[i++] });
+          })
+          
+        }
+        );
+      }
+    } 
+    else
+      return this.setFlag("ptu", "mainBossCombatant", { id: combatant.id, initiative: combatant.initiative });
   }
 
 
@@ -58,9 +126,6 @@ export class PTUCombatOverrides extends Combat {
     if (ci !== 0) return ci;
     return a.id > b.id ? 1 : -1;
   }
-
-
-
 }
 
 export class PTUCombatTrackerOverrides extends CombatTracker {
@@ -80,7 +145,7 @@ export class PTUCombatTrackerOverrides extends CombatTracker {
     const combat = this.viewed;
     const c = combat.combatants.get(li.dataset.combatantId);
     const flag = !(c.getFlag("ptu", "has_acted"));
-    
+
     await c.setFlag("ptu", "has_acted", flag);
   }
   activateListeners(html) {

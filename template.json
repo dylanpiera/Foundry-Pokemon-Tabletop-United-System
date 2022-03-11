@@ -426,6 +426,10 @@
       "shiny": false,
       "loyalty": 3,
       "pokeball": "",
+      "boss": {
+        "is": false,
+        "turns": 1
+      },
 
       "training": {
         "agility": {

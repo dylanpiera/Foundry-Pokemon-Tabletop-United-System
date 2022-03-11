@@ -143,6 +143,9 @@
     "PTU.SkillDown": "Skill down",
     "PTU.SelectNone": "None",
     "PTU.Pokeball": "Pokéball",
+    "PTU.BossSettings": "Boss Settings",
+    "PTU.BossIs": "Is boss?",
+    "PTU.BossTurns": "Turns",
 
     "PTU.SkillLabel": "Skill",
     "PTU.SkillMod": "Mod",
