@@ -1487,6 +1487,13 @@ li.system {
 .pokedex .quick-info .col {
   align-self: center;
 }
+#combat li.combatant.acted {
+  color: #999;
+}
+#combat li.combatant.acted img {
+  transform: scale(0.75);
+  opacity: 0.75;
+}
 .w-25 {
   width: 25% !important;
 }

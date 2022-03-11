@@ -293,7 +293,8 @@ export default class PTUCombat {
 
     // Mark this turn as the last turn in which this combatant acted
     await combatant.setFlag("ptu","last_turn_acted", combat.round );
-    await combatant.setFlag("ptu","has_acted", true );
+    if(!combatant.getFlag("ptu", "has_acted"))
+      await combatant.setFlag("ptu","has_acted", true );
     if (!combatant.actor.data.flags.ptu) return;
 
     if (options.turn.direction == CONFIG.PTUCombat.DirectionOptions.FORWARD) {
