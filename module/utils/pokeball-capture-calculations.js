@@ -1,4 +1,5 @@
 import { debug, log } from "../ptu.js";
+import { timeout } from "./generic-helpers.js";
 
 export function ActorHasItemWithName(actor, initial_item_name, item_category = "Any", precise_naming = false) {
 	let item_name = initial_item_name.replace("é", "e").toLowerCase();
@@ -81,7 +82,8 @@ export function ActorHasItemWithName(actor, initial_item_name, item_category = "
 };
 
 
-export async function RollCaptureChance(trainer, target, pokeball, to_hit_roll, target_token) {
+export async function RollCaptureChance(trainer, target, pokeball, to_hit_roll, target_token) 
+{
 	const targetActor = target.actor;
 
 	let isCritCapture = false;
@@ -324,60 +326,52 @@ export async function RollCaptureChance(trainer, target, pokeball, to_hit_roll, 
 	const roll = await new Roll(`1d100+@mod`, { mod: captureData.mod }).roll({ async: true });
 
 	if (game.modules.get("sequencer")?.active) {
-		setTimeout(async () => {
-			await roll.toMessage({ flavor: `Pokeball capture check vs ${targetActor.name}'s ${captureData.rate} Capture Rate:`, sound: null }); //message.data.sound = null; // Suppress dice sounds for Move Master roll templates
-		}, 10000);
-		if (Number(roll.total) <= captureData.rate) {
-			setTimeout(async () => {
 
-				new Sequence("PTU")
-					.effect()
-					.file("modules/jb2a_patreon/Library/TMFX/InPulse/Circle/InPulse_01_Circle_Fast_500.webm")
-					.atLocation(target_token)
-					.scaleToObject(3)
-					.belowTokens(true)
-					.play();
+		await roll.toMessage({ flavor: `Pokeball capture check vs ${targetActor.name}'s ${captureData.rate} Capture Rate:`, sound: null }); //message.data.sound = null; // Suppress dice sounds for Move Master roll templates
 
-				// await AudioHelper.play({src: game.PTUMoveMaster.GetSoundDirectory()+"pokeball_sounds/"+"pokeball_catch_confirmed.mp3", volume: 0.8, autoplay: true, loop: false}, true);
-				// chatMessage(target, (target.name + " was captured! Capture DC was " + CaptureRate + ", and you rolled "+Number(roll._total)+"!"));
-				log((targetActor.name + " was captured! Capture DC was " + captureData.rate + ", and you rolled " + Number(roll.total) + "!"));
+		if (Number(roll.total) <= captureData.rate)
+		{
+			new Sequence("PTU")
+				.effect()
+				.file("modules/jb2a_patreon/Library/TMFX/InPulse/Circle/InPulse_01_Circle_Fast_500.webm")
+				.atLocation(target_token)
+				.scaleToObject(3)
+				.belowTokens(true)
+			.play();
 
-				// const strength = window.confetti.confettiStrength.high;
-				// const shootConfettiProps = window.confetti.getShootConfettiProps(strength);
+			log((targetActor.name + " was captured! Capture DC was " + captureData.rate + ", and you rolled " + Number(roll.total) + "!"));
 
-				// setTimeout( async () => {  window.confetti.shootConfetti(shootConfettiProps); }, 750);//364);
-				// setTimeout( async () => {  
-				//     await AudioHelper.play({src: game.PTUMoveMaster.GetSoundDirectory()+"pokeball_sounds/"+"pokeball_success_jingle.wav", volume: 0.8, autoplay: true, loop: false}, true);
-				// }, 750);
+			if(game.modules.get("confetti")?.active)
+			{
+				const strength = window.confetti.confettiStrength.low;
+  				const shootConfettiProps = window.confetti.getShootConfettiProps(strength);
+				window.confetti.shootConfetti(shootConfettiProps);
+			}
 
-				// game.PTUMoveMaster.RemoveThrownPokeball(trainer, pokeball_item);
-				await applyCapture(trainer, target, pokeball, speciesData);
+			// game.PTUMoveMaster.RemoveThrownPokeball(trainer, pokeball_item);
+			await applyCapture(trainer, target, pokeball, speciesData);
 
-			}, 10000);
 			return true;
 		}
-
-		// chatMessage(target, (target.name + " escaped the "+pokeball+"! Capture DC was " + captureData.rate + ", and you rolled "+Number(roll._total)+"."));
-		log((targetActor.name + " escaped the " + pokeball.name + "! Capture DC was " + captureData.rate + ", and you rolled " + Number(roll._total) + "."));
-		// game.PTUMoveMaster.BreakPokeball(trainer, pokeball_item);
-
-		setTimeout(async () => {
-
+		else
+		{
+			log((targetActor.name + " escaped the " + pokeball.name + "! Capture DC was " + captureData.rate + ", and you rolled " + Number(roll._total) + "."));
+			// game.PTUMoveMaster.BreakPokeball(trainer, pokeball_item);
+	
+			// await timeout(1000);
 			new Sequence("PTU")
 				.effect()
 				.file("modules/jb2a_patreon/Library/1st_Level/Thunderwave/Thunderwave_01_Bright_Orange_Center_600x600.webm")
 				.atLocation(target_token)
 				.scaleToObject(1.5)
 				.belowTokens(true)
-				.play();
-
-		}, 11000);
-
-		return false;
-
-
+			.play();
+	
+			return false;
+		}
 	}
-	else {
+	else 
+	{
 		if (Number(roll.total) <= captureData.rate) {
 			await applyCapture(trainer, target, pokeball, speciesData);
 			return true;

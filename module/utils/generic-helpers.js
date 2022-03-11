@@ -38,3 +38,11 @@ window.match = function(value, patterns) {
         if(p.test(value)) return p.result(value);
     }
 }
+
+export function timeout(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+export function capitalizeFirstLetter(string) {
+    return string[0].toUpperCase() + string.slice(1);
+}

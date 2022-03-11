@@ -1,7 +1,8 @@
 import { warn, debug, log } from "../ptu.js";
 import { PTUCombatTrackerConfig } from "../forms/combat-tracker-config-form.js";
 import { EffectFns } from "./effects/afflictions.js";
-import { PlayReleaseOwnedPokemonAnimation } from "./effects/pokeball_effects.js"
+import { PlayReleaseOwnedPokemonAnimation } from "./effects/pokeball_effects.js";
+import { timeout } from "../utils/generic-helpers.js";
 
 CONFIG.PTUCombat = {
   DirectionOptions: {
@@ -601,6 +602,7 @@ Hooks.on("createToken", async (token, options, id) => {
 
 	if((game.userId == id) && (token.data.flags["item-piles"] == undefined))
 	{
+    await timeout(100);
     let target_token;
     let actor = game.actors.get(token.data.actorId);
 	
@@ -613,22 +615,13 @@ Hooks.on("createToken", async (token, options, id) => {
       target_token = game.actors.get(actor.id).getActiveTokens().slice(-1)[0]; // The thrown pokemon
     }
 
-    PlayReleaseOwnedPokemonAnimation(token);
+    await PlayReleaseOwnedPokemonAnimation(token);
 
-		setTimeout( async () => {
-      if(game.combat)
-      {
-        await target_token.toggleCombat().then(() => game.combat.rollAll({rollMode: 'gmroll'}));
-      }
-		}, 500);
-
-    setTimeout( async () => {
-      if(actor.data.type == "pokemon")
-      {
-        await game.ptu.PlayPokemonCry(actor.data.data.species);
-      }
-		}, 1500);
-
+		await timeout(500);
+    if(game.combat)
+    {
+      await target_token.toggleCombat().then(() => game.combat.rollAll({rollMode: 'gmroll'}));
+    }
 	}
 
 });

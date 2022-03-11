@@ -455,7 +455,7 @@ export function LoadSystemSettings() {
             scope: "world",
             config: true,
             type: Boolean,
-            default: true
+            default: false
         });
 
         game.settings.register("ptu", "alwaysDisplayTokenHealth", {
@@ -464,7 +464,7 @@ export function LoadSystemSettings() {
             scope: "world",
             config: true,
             type: Boolean,
-            default: true
+            default: false
         });
 
         game.settings.register("ptu", "alwaysDisplayTokenNature", {
@@ -473,7 +473,7 @@ export function LoadSystemSettings() {
             scope: "world",
             config: true,
             type: Boolean,
-            default: true
+            default: false
         });
 
         game.settings.register("ptu", "pokepsychologistCanReplaceCommand", {
