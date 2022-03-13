@@ -1,6 +1,6 @@
 import { debug, log } from "../../ptu.js";
 import { PlayMissDodgeAnimation, PlayHitShakeAnimation } from "./move_animations.js";
-import { RollCaptureChance } from "../../utils/pokeball-capture-calculations.js"
+import { RollCaptureChance, applyCapture } from "../../utils/pokeball-capture-calculations.js"
 import { timeout, capitalizeFirstLetter } from "../../utils/generic-helpers.js";
 
 export const pokeball_sound_paths = {
@@ -17,6 +17,8 @@ export const pokeball_sound_paths = {
 };
 
 const pokeball_return_beam_FX_path = "modules/jb2a_patreon/Library/Generic/Energy/EnergyBeam_02_Regular_GreenYellow_30ft_1600x400.webm";
+const pokeball_capture_pulse_FX_path = "modules/jb2a_patreon/Library/TMFX/InPulse/Circle/InPulse_01_Circle_Fast_500.webm";
+const pokeball_escape_burst_FX_path = "modules/jb2a_patreon/Library/1st_Level/Thunderwave/Thunderwave_01_Bright_Orange_Center_600x600.webm";
 
 export const pokeball_capture_TMFX_params =
 [
@@ -277,43 +279,6 @@ let pokeballPolymorphFunc = async function (pokeball_image_path, target_token) {
 };
 
 
-export async function PlayPokeballCaptureAnimation(target_token, pokeball_image_path, to_hit_roll, pokeball_item, throwing_actor, target_actor, isCaptured) 
-{
-    if (!(game.modules.get("tokenmagic")?.active) || !(game.settings.get("ptu", "enableMoveAnimations") == true)) {
-        return false; // Either TMFX module is not installed, or config settings have disabled move animations, so stop here.
-    }
-
-    await TokenMagic.addFilters(target_token, pokeball_capture_TMFX_params);
-    await pokeballPolymorphFunc(pokeball_image_path, target_token);
-
-    await timeout(2500);
-    AudioHelper.play({ src: pokeball_sound_paths["wiggle"], volume: 0.8, autoplay: true, loop: false }, true);
-    await TokenMagic.addFilters(target_token, pokeball_wiggle_TMFX_params);
-
-    await timeout(4000);
-    await target_token.TMFXdeleteFilters("pokeballWiggle");
-
-    if (isCaptured == true) // Captured!
-    {
-        AudioHelper.play({ src: pokeball_sound_paths["capture_success"], volume: 0.8, autoplay: true, loop: false }, true);
-
-        await timeout(1000);
-        AudioHelper.play({ src: pokeball_sound_paths["capture_jingle"], volume: 0.7, autoplay: true, loop: false }, true);
-    }
-    else // Escaped!
-    {
-        AudioHelper.play({ src: pokeball_sound_paths["release"], volume: 0.7, autoplay: true, loop: false }, true);
-        await TokenMagic.addFilters(target_token, pokeball_capture_TMFX_params);
-
-        await timeout(100);
-        await pokeballPolymorphFunc(pokeball_image_path, target_token);
-
-        await timeout(1000);
-        await target_token.TMFXdeleteFilters("pokeball_transform");
-    }
-}
-
-
 export async function ThrowPokeball(thrower, target, pokeball) {
     if (!target) {
         console.log("No target to throw pokeball at.");
@@ -357,30 +322,58 @@ export async function ThrowPokeball(thrower, target, pokeball) {
 
     AudioHelper.play({ src: pokeball_sound_paths[hitType], volume: 0.8, autoplay: true, loop: false }, true);
 
-    if ((game.modules.get("tokenmagic")?.active) && (game.settings.get("ptu", "enableMoveAnimations") == true)) 
+    await timeout(1000);
+    await roll.toMessage({ flavor: `Pokeball throw vs ${target.name}'s ${targetEvasion} Speed Evasion:`, sound: null });
+
+    if (hitType == "hit") // Do hit-shake, then pokeball-shoop transformation
     {
-        await timeout(200);
+        await PlayHitShakeAnimation(targetToken);
 
-        if (hitType == "hit") // Do hit-shake, then pokeball-shoop transformation
+        let captureData = await RollCaptureChance(thrower, target, pokeball.name, roll, targetToken);
+        const isCaptured = (Number(captureData.roll.total) <= captureData.rate) ? true : false;
+
+        await timeout(1000);
+
+        await PlayPokeballShoopFX(targetToken, POKEBALL_IMAGE_PATH, roll.total, pokeball, thrower, target, isCaptured);
+        // await timeout(1500);
+
+        await PlayPokeballWiggleFX(targetToken);
+        await timeout(10000); // Wiggle sound last for approx 7 seconds
+        await target.TMFXdeleteFilters("pokeballWiggle");
+
+        await PlayPokeballCatchOrEscapeFX(isCaptured, targetToken);
+        await timeout(1000);
+
+        await captureData.roll.toMessage({ flavor: `Pokeball capture check vs ${target.name}'s ${captureData.rate} Capture Rate:`, sound: null }); //message.data.sound = null; // Suppress dice sounds for Move Master roll templates
+
+        if (isCaptured == true) // Captured!
         {
-            await roll.toMessage({ flavor: `Pokeball throw vs ${target.name}'s ${targetEvasion} Speed Evasion:`, sound: null });
+            await AudioHelper.play({ src: pokeball_sound_paths["capture_success"], volume: 0.8, autoplay: true, loop: false }, true);
+    
+            await timeout(1000);
+            await AudioHelper.play({ src: pokeball_sound_paths["capture_jingle"], volume: 0.7, autoplay: true, loop: false }, true);
 
-            PlayHitShakeAnimation(targetToken);
-            AudioHelper.play({ src: pokeball_sound_paths["capture_attempt"], volume: 0.8, autoplay: true, loop: false }, true);
-            await timeout(7000);
-
-            const isCaptured = hitType == "hit" ? await RollCaptureChance(thrower, target, pokeball.name, roll, targetToken) : false;
-            await PlayPokeballCaptureAnimation(targetToken, POKEBALL_IMAGE_PATH, roll.total, pokeball, thrower, target, isCaptured);
+            await applyCapture(thrower, target, pokeball, game.ptu.GetSpeciesData(target.actor.data.data.species)); 
         }
-        else // Do miss-dodge
+        else // Escaped!
         {
-            await PlayMissDodgeAnimation(targetToken);
+            await AudioHelper.play({ src: pokeball_sound_paths["release"], volume: 0.7, autoplay: true, loop: false }, true);
+            await TokenMagic.addFilters(target, pokeball_capture_TMFX_params);
+    
+            await timeout(100);
+            await pokeballPolymorphFunc(POKEBALL_IMAGE_PATH, target);
+    
+            await timeout(1000);
+            await target.TMFXdeleteFilters("pokeball_transform");
         }
-    }
-    else {
-        const isCaptured = hitType == "hit" ? await RollCaptureChance(thrower, target, pokeball.name, roll, targetToken) : false;
-    }
 
+        return isCaptured;
+    }
+    else // Do miss-dodge
+    {
+        await PlayMissDodgeAnimation(targetToken);
+        return false;
+    }
 }
 
 
@@ -584,4 +577,72 @@ export async function PlayPokeballReturnAnimation(pokemon_token)
     {
         await pokemon_token.delete();
     }
+}
+
+
+export async function PlayPokeballShoopFX(target_token, pokeball_image_path, to_hit_roll, pokeball_item, throwing_actor, target_actor, isCaptured) 
+{
+    if ((game.modules.get("tokenmagic")?.active) && (game.settings.get("ptu", "enableMoveAnimations") == true)) 
+    {
+        await TokenMagic.addFilters(target_token, pokeball_capture_TMFX_params);
+        await pokeballPolymorphFunc(pokeball_image_path, target_token);
+    }
+
+    await AudioHelper.play({ src: pokeball_sound_paths["capture_attempt"], volume: 0.8, autoplay: true, loop: false }, true);
+}
+
+
+export async function PlayPokeballCatchOrEscapeFX(isCaptured, targetToken)
+{
+    if (isCaptured)
+    {
+        if((game.modules.get("sequencer")?.active) && (game.settings.get("ptu", "enableMoveAnimations") == true)) 
+        {
+            new Sequence("PTU")
+                .effect()
+                .file(pokeball_capture_pulse_FX_path)
+                .atLocation(targetToken)
+                .scaleToObject(3)
+                .belowTokens(true)
+            .play();
+        }
+
+        if((game.modules.get("confetti")?.active) && (game.settings.get("ptu", "enableMoveAnimations") == true))
+        {
+            const strength = window.confetti.confettiStrength.high;
+            const shootConfettiProps = window.confetti.getShootConfettiProps(strength);
+            window.confetti.shootConfetti(shootConfettiProps);
+        }
+
+        return true;
+    }
+    else
+    {
+        if((game.modules.get("sequencer")?.active) && (game.settings.get("ptu", "enableMoveAnimations") == true)) 
+        {
+            new Sequence("PTU")
+                .effect()
+                .file(pokeball_escape_burst_FX_path)
+                .atLocation(targetToken)
+                .scaleToObject(1.5)
+                .belowTokens(true)
+            .play();
+        }
+
+        return false;
+    }
+}
+
+
+export async function PlayPokeballWiggleFX(target_token)
+{
+    await AudioHelper.play({ src: pokeball_sound_paths["wiggle"], volume: 0.8, autoplay: true, loop: false }, true);
+
+    if (!(game.modules.get("tokenmagic")?.active) || !(game.settings.get("ptu", "enableMoveAnimations") == true))
+    {
+        await TokenMagic.addFilters(target_token, pokeball_wiggle_TMFX_params);
+
+    }
+    
+    return true;
 }

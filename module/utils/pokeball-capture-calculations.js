@@ -323,100 +323,49 @@ export async function RollCaptureChance(trainer, target, pokeball, to_hit_roll, 
 
 	captureData.rate += (targetActor.data.data.health.injuries * 5)
 
-	const roll = await new Roll(`1d100+@mod`, { mod: captureData.mod }).roll({ async: true });
+	captureData.roll = await new Roll(`1d100+@mod`, { mod: captureData.mod }).roll({ async: true });
 
-	if (game.modules.get("sequencer")?.active) {
-
-		await roll.toMessage({ flavor: `Pokeball capture check vs ${targetActor.name}'s ${captureData.rate} Capture Rate:`, sound: null }); //message.data.sound = null; // Suppress dice sounds for Move Master roll templates
-
-		if (Number(roll.total) <= captureData.rate)
-		{
-			new Sequence("PTU")
-				.effect()
-				.file("modules/jb2a_patreon/Library/TMFX/InPulse/Circle/InPulse_01_Circle_Fast_500.webm")
-				.atLocation(target_token)
-				.scaleToObject(3)
-				.belowTokens(true)
-			.play();
-
-			log((targetActor.name + " was captured! Capture DC was " + captureData.rate + ", and you rolled " + Number(roll.total) + "!"));
-
-			if(game.modules.get("confetti")?.active)
-			{
-				const strength = window.confetti.confettiStrength.low;
-  				const shootConfettiProps = window.confetti.getShootConfettiProps(strength);
-				window.confetti.shootConfetti(shootConfettiProps);
-			}
-
-			// game.PTUMoveMaster.RemoveThrownPokeball(trainer, pokeball_item);
-			await applyCapture(trainer, target, pokeball, speciesData);
-
-			return true;
-		}
-		else
-		{
-			log((targetActor.name + " escaped the " + pokeball.name + "! Capture DC was " + captureData.rate + ", and you rolled " + Number(roll._total) + "."));
-			// game.PTUMoveMaster.BreakPokeball(trainer, pokeball_item);
-	
-			// await timeout(1000);
-			new Sequence("PTU")
-				.effect()
-				.file("modules/jb2a_patreon/Library/1st_Level/Thunderwave/Thunderwave_01_Bright_Orange_Center_600x600.webm")
-				.atLocation(target_token)
-				.scaleToObject(1.5)
-				.belowTokens(true)
-			.play();
-	
-			return false;
-		}
-	}
-	else 
-	{
-		if (Number(roll.total) <= captureData.rate) {
-			await applyCapture(trainer, target, pokeball, speciesData);
-			return true;
-		}
-		log((targetActor.name + " escaped the " + pokeball.name + "! Capture DC was " + captureData.rate + ", and you rolled " + Number(roll._total) + "."));
-		return false;
-	}
-
-	async function applyCapture(trainer, target, pokeball, speciesData) {
-		const newOwnerId = game.user.character?.id == trainer.id ? trainer.id : getTokenOwner(trainer);
-
-		if (!newOwnerId) {
-			ui.notifications.warn("Oops! Could not find trainer to assign newly captured mon to!")
-			return;
-		}
-
-		await game.ptu.api.transferOwnership(target.actor, { pokeball: pokeball.name, timeout: 30000, permission: { [newOwnerId]: CONST.ENTITY_PERMISSIONS.OWNER } });
-
-		const dexentry = trainer.itemTypes.dexentry.find(item => item.name.toLowerCase() == speciesData._id.toLowerCase())
-		if (dexentry && !dexentry.data.data.owned) {
-			await dexentry.update({
-				data: {
-					owned: true
-				}
-			})
-		}
-		else {
-			await trainer.createEmbeddedDocuments("Item", [{
-				name: Handlebars.helpers.capitalizeFirst(speciesData._id.toLowerCase()),
-				type: "dexentry",
-				data: {
-					entry: "",
-					id: Number(speciesData.number),
-					owned: true
-				}
-			}])
-		}
-
-		function getTokenOwner(trainer) {
-			for (const [id, level] of Object.entries(trainer.data.permission)) {
-				if (level < 3) continue;
-
-				const user = game.users.get(id);
-				if (user && user.data.role < 4) return id;
-			}
-		}
-	}
+	return captureData;
 };
+
+
+export async function applyCapture(trainer, target, pokeball, speciesData) 
+{
+	const newOwnerId = game.user.character?.id == trainer.id ? trainer.id : getTokenOwner(trainer);
+
+	if (!newOwnerId) {
+		ui.notifications.warn("Oops! Could not find trainer to assign newly captured mon to!")
+		return;
+	}
+
+	await game.ptu.api.transferOwnership(target.actor, { pokeball: pokeball.name, timeout: 30000, permission: { [newOwnerId]: CONST.ENTITY_PERMISSIONS.OWNER } });
+
+	const dexentry = trainer.itemTypes.dexentry.find(item => item.name.toLowerCase() == speciesData._id.toLowerCase())
+	if (dexentry && !dexentry.data.data.owned) {
+		await dexentry.update({
+			data: {
+				owned: true
+			}
+		})
+	}
+	else {
+		await trainer.createEmbeddedDocuments("Item", [{
+			name: Handlebars.helpers.capitalizeFirst(speciesData._id.toLowerCase()),
+			type: "dexentry",
+			data: {
+				entry: "",
+				id: Number(speciesData.number),
+				owned: true
+			}
+		}])
+	}
+
+	function getTokenOwner(trainer) {
+		for (const [id, level] of Object.entries(trainer.data.permission)) {
+			if (level < 3) continue;
+
+			const user = game.users.get(id);
+			if (user && user.data.role < 4) return id;
+		}
+	}
+}
