@@ -128,7 +128,7 @@ export function LoadSystemSettings() {
         scope: "world",
         config: true,
         type: String,
-        default: "Gen4-Art/",
+        default: "systems/ptu/images/pokemon_sprites/",
         filePicker: true,
         category: "general"
     });
