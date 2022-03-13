@@ -79,7 +79,7 @@ export async function CreateMonParser(input, andCreate = false) {
     return commands;
 }
 
-export async function GetSpeciesArt(mon, imgDirectoryPath, type = ".png", shiny = false, animated = false, animated_type = ".webm") {
+export async function GetSpeciesArt(mon, imgDirectoryPath, type = ".webp", shiny = false, animated = false, animated_type = ".webm") {
     const basePath = imgDirectoryPath+(imgDirectoryPath.endsWith('/') ? '' : '/')
 
     const shiny_path = shiny ? "s" : "";
@@ -241,7 +241,7 @@ export async function FinishDexDragPokemonCreation(formData, update)
     protoToken.displayName=  40; 
     protoToken.bar1.attribute = "health";
 
-    protoToken.img = await GetSpeciesArt(game.ptu.GetSpeciesData(new_actor.data.data.species), imgSrc, ".png", new_actor.data.data.shiny, true);
+    protoToken.img = await GetSpeciesArt(game.ptu.GetSpeciesData(new_actor.data.data.species), imgSrc, ".webp", new_actor.data.data.shiny, true);
     
     new_actor = await new_actor.update({"token": protoToken});
 
