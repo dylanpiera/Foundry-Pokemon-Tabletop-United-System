@@ -31,13 +31,12 @@ export class PTUCombatOverrides extends Combat {
   }
 
   async nextRound() {
+    await super.nextRound();
     //Reset has acted flags
     for (let [i, t] of this.turns.entries()) {
-      if (i == 0) continue;
-      t.setFlag('ptu', 'has_acted', false);
+      await t.setFlag('ptu', 'has_acted', false);
     }
 
-    await super.nextRound();
   }
 
   _onUpdateEmbeddedDocuments(embeddedName, documents, result, options, userId) {

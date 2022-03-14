@@ -243,6 +243,12 @@ export default class PTUCombat {
   async _onEndOfTurn(combat, combatant, lastTurn, options, sender) {
     // if different combat is updated
     if (combat.id != this.combat.id) return;
+
+    // Mark this turn as the last turn in which this combatant acted
+    await combatant.setFlag("ptu","last_turn_acted", combat.round );
+    if(!combatant.getFlag("ptu", "has_acted"))
+      await combatant.setFlag("ptu","has_acted", true );
+
     // if this combatant doesn't have special PTU Flags, it can be ignored.
     if (!combatant?.actor?.data?.flags?.ptu) return;
     // Only worry about effects if the combat has started
@@ -290,11 +296,6 @@ export default class PTUCombat {
     if (combat.id != this.combat.id) return;
     // Only worry about effects if the combat has started
     if (!combat.started) return;
-
-    // Mark this turn as the last turn in which this combatant acted
-    await combatant.setFlag("ptu","last_turn_acted", combat.round );
-    if(!combatant.getFlag("ptu", "has_acted"))
-      await combatant.setFlag("ptu","has_acted", true );
     if (!combatant.actor.data.flags.ptu) return;
 
     if (options.turn.direction == CONFIG.PTUCombat.DirectionOptions.FORWARD) {
