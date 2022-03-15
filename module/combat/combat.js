@@ -169,6 +169,7 @@ export default class PTUCombat {
   /** Hooks */
   async _onCreateCombatant(combatant, options, sender) {
     if (combatant.parent.id != this.combat.id) return;
+    if(!combatant.token) return;
 
     if (combatant.token.isLinked) {
       if (!this.data.participants.includes(game.actors.get(combatant.actor.id).uuid)) {
@@ -244,11 +245,6 @@ export default class PTUCombat {
     // if different combat is updated
     if (combat.id != this.combat.id) return;
 
-    // Mark this turn as the last turn in which this combatant acted
-    await combatant.setFlag("ptu","last_turn_acted", combat.round );
-    if(!combatant.getFlag("ptu", "has_acted"))
-      await combatant.setFlag("ptu","has_acted", true );
-
     // if this combatant doesn't have special PTU Flags, it can be ignored.
     if (!combatant?.actor?.data?.flags?.ptu) return;
     // Only worry about effects if the combat has started
@@ -266,6 +262,7 @@ export default class PTUCombat {
     // TODO: Maybe merge this into its own function
     // Checks to see if an effect should be deleted based on its duration, as well as updating the effect's "roundsElapsed" flag, for stuff like toxic.
     for (let effect of combatant.actor.effects) {
+      if(effect.data.duration.round == undefined && effect.data.duration.turns == undefined) continue;
       if (options.turn.direction == CONFIG.PTUCombat.DirectionOptions.FORWARD) {
         const curRound =
           options.round.direction == CONFIG.PTUCombat.DirectionOptions.FORWARD
@@ -503,7 +500,7 @@ export default class PTUCombat {
       return;
     if (!this.flags?.ptu?.leagueBattle) return;
 
-    const combatant = this.combat.getCombatantByToken(token.id);
+    const combatant = this.combat.getCombatantByToken(token?.id);
     if (!combatant) return;
     if (combatant.actor.data.type != "character") return;
 
