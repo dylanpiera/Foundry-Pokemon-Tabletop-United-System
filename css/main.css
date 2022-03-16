@@ -1494,6 +1494,13 @@ li.system {
   transform: scale(0.75);
   opacity: 0.75;
 }
+.fxmaster .config label {
+  color: #000;
+  display: inline;
+}
+.fxmaster .config span {
+  color: #000;
+}
 .w-25 {
   width: 25% !important;
 }
