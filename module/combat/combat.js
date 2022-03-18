@@ -184,9 +184,6 @@ export default class PTUCombat {
     }
 
     if (!this.combat.started) return;
-
-    // Handle League Battle Init
-    this._updateLeagueInitiative(combatant.token);
   }
 
   _onUpdateCombatant(combatant, changes, options, sender) {
@@ -198,9 +195,6 @@ export default class PTUCombat {
       // Logic for when battle hasn't started yet
     }
     // Logic that runs regardless of whether battle has started or not
-
-    // Handle League Battle Init
-    this._updateLeagueInitiative(combatant.token);
   }
 
   _onRenderCombatTracker(tracker, htmlElement, sender) {
@@ -493,25 +487,6 @@ export default class PTUCombat {
         );
       }
     }
-  }
-
-  async _updateLeagueInitiative(token) {
-    if (!game.settings.get("ptu", "leagueBattleInvertTrainerInitiative"))
-      return;
-    if (!this.flags?.ptu?.leagueBattle) return;
-
-    const combatant = this.combat.getCombatantByToken(token?.id);
-    if (!combatant) return;
-    if (combatant.actor.data.type != "character") return;
-
-    const decimal = Number(
-      combatant.initiative - Math.trunc(combatant.initiative).toFixed(2)
-    );
-    if (decimal == 0) return;
-    await this.combat.setInitiative(
-      combatant.id,
-      1000 - combatant.actor.data.data.initiative.value + decimal
-    );
   }
 
   async _handleAfflictions(

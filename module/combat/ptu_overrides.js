@@ -3,6 +3,19 @@
 import { debug } from "../ptu.js";
 
 export class PTUCombatOverrides extends Combat {
+  async startCombat() {
+    const result=super.startCombat();
+    // I'm annoyed that this is necessary, but it avoids weird behavior
+    // As far as I can tell, this is necessary to reset things that happened
+    // while setting up combat
+    for(let combatant of this.turns){
+      await combatant.setFlag('ptu','has_acted',false);
+      await combatant.unsetFlag('ptu','last_turn_acted');
+
+    }
+    return result;
+  }
+
   async nextTurn() {
     let turn = this.turn ?? -1;
     let skip = this.settings.skipDefeated;
@@ -15,8 +28,6 @@ export class PTUCombatOverrides extends Combat {
       if (t.isDefeated) continue;
       if (i == turn) continue;
       if (t.getFlag("ptu", "has_acted")) continue;
-      if (t.getFlag("ptu", "last_turn_acted") < round)
-        debug("found skipped turn", i);
       next = i;
       break;
     }
@@ -152,16 +163,62 @@ export class PTUCombatOverrides extends Combat {
       });
   }
 
+  setupTurns() {
+    if (game.settings.get("ptu", "leagueBattleInvertTrainerInitiative") &&  this.getFlag('ptu','leagueBattle'))  {
+      // League initiative. Sort players backwards, then pokemon in normal order.
+      let playerTurns = [];
+      let pokemonTurns = [];
+      for (let currentCombatant of this.combatants){
+        if ( currentCombatant.actor.type =='pokemon' ){
+          pokemonTurns.push(currentCombatant);
+        }else
+        {
+          playerTurns.push(currentCombatant);
+        }
+      }
+      const turns = [].concat(playerTurns.sort(this._sortLeaguePlayerCombatants), pokemonTurns.sort(this._sortCombatants));
+      //const turns = this.combatants.contents.sort(this._sortCombatants);
+      if ( this.turn !== null) this.data.turn = Math.clamped(this.data.turn, 0, turns.length-1);
+
+            // Update state tracking
+      let c = turns[this.data.turn];
+      this.current = {
+        round: this.data.round,
+        turn: this.data.turn,
+        combatantId: c ? c.id : null,
+        tokenId: c ? c.data.tokenId : null
+      };
+      return this.turns = turns;
+
+
+      }
+    else {
+      // Determine the turn order and the current turn
+      const turns = this.combatants.contents.sort(this._sortCombatants);
+      if ( this.turn !== null) this.data.turn = Math.clamped(this.data.turn, 0, turns.length-1);
+
+            // Update state tracking
+      let c = turns[this.data.turn];
+      this.current = {
+        round: this.data.round,
+        turn: this.data.turn,
+        combatantId: c ? c.id : null,
+        tokenId: c ? c.data.tokenId : null
+      };
+      return this.turns = turns;
+     }
+
+   }
+
+  _sortLeaguePlayerCombatants(a, b) {
+    const ia = Number.isNumeric(a.initiative) ? a.initiative : -9999;
+    const ib = Number.isNumeric(b.initiative) ? b.initiative : -9999;
+    const ci = ia - ib;
+    if (ci !== 0) return ci;
+    return a.id > b.id ? -1 : 1;
+  }
+
   _sortCombatants(a, b, turn) {
-    const lastTurnA = Number(a.getFlag("ptu", "last_turn_acted") ?? -9999);
-    const lastTurnB = Number(b.getFlag("ptu", "last_turn_acted") ?? -9999);
-    if (lastTurnA >= turn && lastTurnB < turn) {
-      //Actor A has acted and B hasn't. This means that B is always going to be sorted lower.
-      return 1;
-    } else if (lastTurnA < turn && lastTurnB >= turn) {
-      //Actor A has not acted and B has. This means that A is always going to be sorted lower.
-      return 0;
-    }
     const ia = Number.isNumeric(a.initiative) ? a.initiative : -9999;
     const ib = Number.isNumeric(b.initiative) ? b.initiative : -9999;
     const ci = ib - ia;
