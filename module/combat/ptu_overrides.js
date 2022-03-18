@@ -39,7 +39,22 @@ export class PTUCombatOverrides extends Combat {
 
     // Update the encounter
     const advanceTime = CONFIG.time.turnTime;
-    return this.update({ round: round, turn: next }, { advanceTime });
+    return this.update(
+      {
+        round: round,
+        turn: next,
+        combatants: [
+          {
+            _id: this.turns[this.turn].id,
+            "flags.ptu": {
+              last_turn_acted: this.round,
+              has_acted: true,
+            },
+          },
+        ],
+      },
+      { advanceTime }
+    );
   }
 
   /** @override */
