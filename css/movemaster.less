@@ -420,6 +420,13 @@ body.messages-dark-theme .chat-controls .roll-type-select {
         flex-direction: row !important;
         flex-wrap: wrap !important;
 
+        .struggle-row {
+          flex: 0 0 100%;
+          .btn-body {
+            min-height: 60px !important;
+          }
+        }
+
         .pokeball-item {
           padding-left: 2px;
           margin-top: 2px;
@@ -642,7 +649,7 @@ body.messages-dark-theme .chat-controls .roll-type-select {
         }
       }
     }
-    #moves-list {
+    #moves-list, .struggle-row {
       .movemaster-button {
         margin: 3px 0px;
         padding: 0;

@@ -1,5 +1,7 @@
 import Component from '../../api/front-end/lib/component.js';
+import { sendMoveMessage } from '../../actor/pokemon-sheet-gen8.js'
 import { pokeball_sound_paths } from '../../combat/effects/pokeball_effects.js';
+import { timeout } from '../../utils/generic-helpers.js';
 
 export const ui_sound_paths = {
     "button": "systems/ptu/sounds/ui_sounds/ui_button.wav",
@@ -108,6 +110,26 @@ export default class MenuComponent extends Component {
             game.ptu.ThrowPokeball(owner, game.user?.targets?.first(), owner?.items.get(entityId));
         })
 
+        this.element.children("#menu-content").children(".struggle-row").children(".movemaster-button[data-button]").on("mousedown", (event) => {
+            // Handle on move click here, for now just log that button is clicked
+            console.log(event);
+            switch (event.which) {
+                case 3: // Right click
+                    sendMoveMessage({
+                        speaker: ChatMessage.getSpeaker({
+                            actor: this.state.actor
+                        }),
+                        moveName: move.name,
+                        move: move.data,
+                    })
+                    break;
+                case 1: // Left click
+                case 2: // Middle click
+                default: // anything else??
+                    this.state.actor.executeMove(move._id)
+            }
+        })
+
         this.element.children(".divider-image").on("click", () => {
             if (this._hidden) {
                 this.element.children(":not(.divider-image)").fadeIn();
@@ -188,55 +210,134 @@ export default class MenuComponent extends Component {
     }
 
     async _getStruggles(actor) {
-        if (!actor) return;
+        if (this.lock) return;
+        this.lock = true;
 
-        const struggleAc = actor.data.data.skills.combat.value >= 5 ? 3 : 4;
-        const struggleDb = actor.data.data.skills.combat.value >= 5 ? 5 : 4;
+        const currentStruggles = [];
+        actor.itemTypes.move.forEach(m => {
+            if (m.data.data.isStruggle || (m.name.includes("Struggle") && m.data.data.type != "" && m.data.data.type != "--")) currentStruggles.push(m);
+        })
+
+        const foundStruggles = ["default"];
 
         const struggleCapabilities = {
+            "default": { "type": "Normal" },
             "firestarter": { "type": "Fire" },
             "fountain": { "type": "Water" },
             "freezer": { "type": "Ice" },
             "guster": { "type": "Flying" },
             "materializer": { "type": "Rock" },
             "telekinetic": { "type": "Normal" },
-            "zapper": { "type": "Electric" }
+            "zapper": { "type": "Electric" },
+            "groundshaper": { "type": "Ground" }
         };
-        const isTelekinetic = actor.data.itemTypes.capability.includes("Telekinetic");
 
-        const struggles = [{
-            name: "Struggle",
-            type: "Normal",
-            category: "Physical",
-            ac: struggleAc,
-            db: struggleDb,
-            range: isTelekinetic ? actor.data.data.skills.focus.value.total : "Melee" + ", 1 Target"
-        }];
+        const isTelekinetic = actor.itemTypes.capability.includes("Telekinetic");
 
-        for (const item of actor.data.itemTypes.capability) {
-            const capability = struggleCapabilities[item.name.toLowerCase()];
-            if (!capability) continue;
+        for (const item of actor.itemTypes.capability) {
+            const name = item.name.toLowerCase();
+            if (!struggleCapabilities[name]) continue;
 
-            struggles.push({
-                name: item.name,
-                type: capability.type,
-                ac: struggleAc,
-                db: struggleDb,
-                category: "Physical",
-                range: isTelekinetic ? actor.data.data.skills.focus.value.total : "Melee" + ", 1 Target"
-            });
-            struggles.push({
-                name: item.name,
-                type: capability.type,
-                ac: struggleAc,
-                db: struggleDb,
-                category: "Special",
-                range: isTelekinetic ? actor.data.data.skills.focus.value.total : "Melee" + ", 1 Target"
-            })
+            foundStruggles.push(name);
         }
 
-        return struggles;
+        const strugglesToCreate = [];
+        const strugglesToDisplay = [];
+
+        for (const struggle of foundStruggles) {
+            const { type } = struggleCapabilities[struggle];
+
+            if (struggle != "telekinetic") {
+                const move = currentStruggles.find(m => m.data.data.type == type && m.data.data.category == "Physical");
+                if (!move) strugglesToCreate.push(this._prepareNewStruggle(actor, type, isTelekinetic));
+                else strugglesToDisplay.push(move);
+            }
+            if (struggle == "default") continue;
+
+            const move = currentStruggles.find(m => m.data.data.type == type && m.data.data.category == "Special");
+            if (!move) strugglesToCreate.push(this._prepareNewStruggle(actor, type, isTelekinetic, false));
+            else strugglesToDisplay.push(move);
+        }
+
+        if (strugglesToCreate.length > 0) strugglesToDisplay.push(...(await actor.createEmbeddedDocuments("Item", strugglesToCreate)));
+
+        await timeout(150);
+        this.lock = false;
+
+        return strugglesToDisplay.map(m => m.data);
     }
+
+    _prepareNewStruggle(actor, type, isTelekinetic, isPhysical = true) {
+        const isStrugglePlus = actor.data.data.skills.combat.value >= 5;
+
+        return {
+            name: `Struggle (${type})`,
+            type: "move",
+            data: {
+                isStruggle: true,
+                ac: isStrugglePlus ? "3" : "4",
+                category: isPhysical ? "Physical" : "Special",
+                damageBase: isStrugglePlus ? "5" : "4",
+                type: type,
+                range: (isTelekinetic ? actor.data.data.skills.focus.value.total : "Melee") + ", 1 Target",
+                frequency: "At-Will",
+                effect: "--",
+            }
+        }
+    }
+
+
+
+    // async _getStruggles(actor) {
+    //     if (!actor) return;
+
+    //     const struggleAc = actor.data.data.skills.combat.value >= 5 ? 3 : 4;
+    //     const struggleDb = actor.data.data.skills.combat.value >= 5 ? 5 : 4;
+
+    //     const struggleCapabilities = {
+    //         "firestarter": { "type": "Fire" },
+    //         "fountain": { "type": "Water" },
+    //         "freezer": { "type": "Ice" },
+    //         "guster": { "type": "Flying" },
+    //         "materializer": { "type": "Rock" },
+    //         "telekinetic": { "type": "Normal" },
+    //         "zapper": { "type": "Electric" }
+    //     };
+    //     const isTelekinetic = actor.data.itemTypes.capability.includes("Telekinetic");
+
+    //     const struggles = [{
+    //         name: "Struggle",
+    //         type: "Normal",
+    //         category: "Physical",
+    //         ac: struggleAc,
+    //         db: struggleDb,
+    //         range: isTelekinetic ? actor.data.data.skills.focus.value.total : "Melee" + ", 1 Target"
+    //     }];
+
+    //     for (const item of actor.data.itemTypes.capability) {
+    //         const capability = struggleCapabilities[item.name.toLowerCase()];
+    //         if (!capability) continue;
+
+    //         struggles.push({
+    //             name: item.name,
+    //             type: capability.type,
+    //             ac: struggleAc,
+    //             db: struggleDb,
+    //             category: "Physical",
+    //             range: isTelekinetic ? actor.data.data.skills.focus.value.total : "Melee" + ", 1 Target"
+    //         });
+    //         struggles.push({
+    //             name: item.name,
+    //             type: capability.type,
+    //             ac: struggleAc,
+    //             db: struggleDb,
+    //             category: "Special",
+    //             range: isTelekinetic ? actor.data.data.skills.focus.value.total : "Melee" + ", 1 Target"
+    //         })
+    //     }
+
+    //     return struggles;
+    // }
 
     async _getTrainerPokeballArray(actor) {
         return actor.items.filter(item => item.type == "item" && item.data.data.category.toLowerCase() == "pokeballs").map(item => {

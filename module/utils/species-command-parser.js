@@ -149,7 +149,7 @@ function handleChatMessage(chatlog, messageText, chatData) {
         CreateMonParser(messageText.replace("/ptug","").trimStart()).then(result => {
             if(result) {
                 ui.notifications.notify(`Generating ${result["generate"]} pokemon using species: ${result["pokemon"].map(x => x._id).join(",")} with levels: ${result["level"].join(",")}`, "info")
-    
+
                 createMons(result);
             }
         });
