@@ -16,7 +16,7 @@ export const pokeball_sound_paths = {
     "release": "systems/ptu/sounds/pokeball_sounds/pokeball_release.mp3",
 };
 
-const pokeball_return_beam_FX_path = "modules/jb2a_patreon/Library/Generic/Energy/EnergyBeam_02_Regular_GreenYellow_30ft_1600x400.webm";
+const pokeball_return_beam_FX_path = "modules/jb2a_patreon/Library/Generic/Energy/EnergyBeam_02_Regular_Red_30ft_1600x400.webm";
 const pokeball_capture_pulse_FX_path = "modules/jb2a_patreon/Library/TMFX/InPulse/Circle/InPulse_01_Circle_Fast_500.webm";
 const pokeball_escape_burst_FX_path = "modules/jb2a_patreon/Library/1st_Level/Thunderwave/Thunderwave_01_Bright_Orange_Center_600x600.webm";
 
@@ -551,14 +551,14 @@ export async function PlayPokeballReturnAnimation(pokemon_token)
     if(pokemon_actor?.type == "pokemon")
     {
         let trainer_actor = game.actors.get(pokemon_token.actor.data.data.owner)
-        let trainer_tokens = await trainer_actor.getActiveTokens();
-        let on_field_trainer_token = trainer_tokens[0];
+        let trainer_tokens = await trainer_actor?.getActiveTokens();
+        let on_field_trainer_token = trainer_tokens?.[0];
     
         if (on_field_trainer_token && (game.modules.get("sequencer")?.active) && (game.modules.get("jb2a_patreon")?.active) && (game.settings.get("ptu", "enableMoveAnimations") == true)) {
             new Sequence("PTU")
                 .effect()
                 .file(pokeball_return_beam_FX_path)
-                .tint("#FF0000") // TODO: This red tint doesn't seem to do anything.
+                // .tint("#FF0000") // TODO: This red tint doesn't seem to do anything.
                 .atLocation(pokemon_token.object)
                 .stretchTo(on_field_trainer_token)
             .play();
