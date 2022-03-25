@@ -80,6 +80,8 @@ export async function CreateMonParser(input, andCreate = false) {
 }
 
 export async function GetSpeciesArt(mon, imgDirectoryPath, type = ".webp", shiny = false, animated = false, animated_type = ".webm") {
+
+    const alt_type = ".png";
     const basePath = imgDirectoryPath+(imgDirectoryPath.endsWith('/') ? '' : '/')
 
     const shiny_path = shiny ? "s" : "";
@@ -100,6 +102,10 @@ export async function GetSpeciesArt(mon, imgDirectoryPath, type = ".webp", shiny
         path = basePath+lpad(mon?.number, 3)+shiny_path+type;
         result = await fetch(path);
     }
+    if(result.status === 404 && mon?.number < 1000) {
+        path = basePath+lpad(mon?.number, 3)+shiny_path+alt_type;
+        result = await fetch(path);
+    }
 
     if(animated && (result.status === 404)) {
         path = basePath+lpad(mon?.number, 4)+shiny_path+animated_type;
@@ -107,6 +113,10 @@ export async function GetSpeciesArt(mon, imgDirectoryPath, type = ".webp", shiny
     }
     if(result.status === 404) {
         path = basePath+lpad(mon?.number, 4)+shiny_path+type;
+        result = await fetch(path);
+    }
+    if(result.status === 404) {
+        path = basePath+lpad(mon?.number, 4)+shiny_path+alt_type;
         result = await fetch(path);
     }
 
@@ -118,6 +128,10 @@ export async function GetSpeciesArt(mon, imgDirectoryPath, type = ".webp", shiny
         path = basePath+mon?._id+shiny_path+type;
         result = await fetch(path);
     }
+    if(result.status === 404) {
+        path = basePath+mon?._id+shiny_path+alt_type;
+        result = await fetch(path);
+    }
 
     if(animated && (result.status === 404)) {
         path = basePath+mon?._id?.toLowerCase()+shiny_path+animated_type;
@@ -125,6 +139,10 @@ export async function GetSpeciesArt(mon, imgDirectoryPath, type = ".webp", shiny
     }
     if(result.status === 404) {
         path = basePath+mon?._id?.toLowerCase()+shiny_path+type;
+        result = await fetch(path);
+    }
+    if(result.status === 404) {
+        path = basePath+mon?._id?.toLowerCase()+shiny_path+alt_type;
         result = await fetch(path);
     }
 
