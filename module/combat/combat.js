@@ -1,6 +1,8 @@
 import { warn, debug, log } from "../ptu.js";
 import { PTUCombatTrackerConfig } from "../forms/combat-tracker-config-form.js";
 import { EffectFns } from "./effects/afflictions.js";
+import { PlayReleaseOwnedPokemonAnimation } from "./effects/pokeball_effects.js";
+import { timeout } from "../utils/generic-helpers.js";
 
 CONFIG.PTUCombat = {
   DirectionOptions: {
@@ -167,6 +169,7 @@ export default class PTUCombat {
   /** Hooks */
   async _onCreateCombatant(combatant, options, sender) {
     if (combatant.parent.id != this.combat.id) return;
+    if(!combatant.token) return;
 
     if (combatant.token.isLinked) {
       if (!this.data.participants.includes(game.actors.get(combatant.actor.id).uuid)) {
@@ -174,16 +177,13 @@ export default class PTUCombat {
         await this._saveData();
       }
     } else {
-      if (!this.data.participants.includes(combatant.token.document.uuid)) {
-        this.data.participants.push(combatant.token.document.uuid);
+      if (!this.data.participants.includes(combatant.token.uuid)) {
+        this.data.participants.push(combatant.token.uuid);
         await this._saveData();
       }
     }
 
     if (!this.combat.started) return;
-
-    // Handle League Battle Init
-    this._updateLeagueInitiative(combatant.token);
   }
 
   _onUpdateCombatant(combatant, changes, options, sender) {
@@ -195,9 +195,6 @@ export default class PTUCombat {
       // Logic for when battle hasn't started yet
     }
     // Logic that runs regardless of whether battle has started or not
-
-    // Handle League Battle Init
-    this._updateLeagueInitiative(combatant.token);
   }
 
   _onRenderCombatTracker(tracker, htmlElement, sender) {
@@ -241,6 +238,7 @@ export default class PTUCombat {
   async _onEndOfTurn(combat, combatant, lastTurn, options, sender) {
     // if different combat is updated
     if (combat.id != this.combat.id) return;
+
     // if this combatant doesn't have special PTU Flags, it can be ignored.
     if (!combatant?.actor?.data?.flags?.ptu) return;
     // Only worry about effects if the combat has started
@@ -258,6 +256,7 @@ export default class PTUCombat {
     // TODO: Maybe merge this into its own function
     // Checks to see if an effect should be deleted based on its duration, as well as updating the effect's "roundsElapsed" flag, for stuff like toxic.
     for (let effect of combatant.actor.effects) {
+      if(effect.data.duration.round == undefined && effect.data.duration.turns == undefined) continue;
       if (options.turn.direction == CONFIG.PTUCombat.DirectionOptions.FORWARD) {
         const curRound =
           options.round.direction == CONFIG.PTUCombat.DirectionOptions.FORWARD
@@ -286,10 +285,15 @@ export default class PTUCombat {
 
   async _onStartOfTurn(combat, combatant, lastTurn, options, sender) {
     if (combat.id != this.combat.id) return;
-    if (!combatant.actor.data.flags.ptu) return;
-
     // Only worry about effects if the combat has started
     if (!combat.started) return;
+
+    if (options.turn.direction == CONFIG.PTUCombat.DirectionOptions.FORWARD) {
+      await AudioHelper.play({src: ("systems/ptu/sounds/ui_sounds/ui_button.wav"), volume: 0.5, autoplay: true, loop: false}, true);
+      await game.ptu.PlayPokemonCry(combatant?.actor?.data?.data?.species);
+    }
+
+    if (!combatant.actor.data.flags.ptu) return;
 
     if (options.turn.direction == CONFIG.PTUCombat.DirectionOptions.FORWARD) {
       for (let effect of combatant.actor.effects) {
@@ -491,25 +495,6 @@ export default class PTUCombat {
     }
   }
 
-  async _updateLeagueInitiative(token) {
-    if (!game.settings.get("ptu", "leagueBattleInvertTrainerInitiative"))
-      return;
-    if (!this.flags?.ptu?.leagueBattle) return;
-
-    const combatant = this.combat.getCombatantByToken(token.id);
-    if (!combatant) return;
-    if (combatant.actor.data.type != "character") return;
-
-    const decimal = Number(
-      combatant.initiative - Math.trunc(combatant.initiative).toFixed(2)
-    );
-    if (decimal == 0) return;
-    await this.combat.setInitiative(
-      combatant.id,
-      1000 - combatant.actor.data.data.initiative.value + decimal
-    );
-  }
-
   async _handleAfflictions(
     combat,
     combatant,
@@ -593,3 +578,33 @@ export default class PTUCombat {
     log("Deleted combat with ID: ", this.id);
   }
 }
+
+Hooks.on("createToken", async (token, options, id) => { 
+  // If an owned Pokemon is dropped onto the field, play pokeball release sound, and create lightshow, (TODO)
+  // And if there is an active combat and the token is a character or pokemon, add to combat and roll initiative
+
+	if((game.userId == id) && (token.data.flags["item-piles"] == undefined))
+	{
+    await timeout(100);
+    let target_token;
+    let actor = game.actors.get(token.data.actorId);
+	
+    if(token.data.actorLink == false)
+    {
+      target_token = canvas.tokens.get(token.id); // The thrown pokemon
+    }
+    else
+    {
+      target_token = game.actors.get(actor.id).getActiveTokens().slice(-1)[0]; // The thrown pokemon
+    }
+
+    await PlayReleaseOwnedPokemonAnimation(token);
+
+		await timeout(500);
+    if(game.combat)
+    {
+      await target_token.toggleCombat().then(() => game.combat.rollAll({rollMode: 'gmroll'}));
+    }
+	}
+
+});

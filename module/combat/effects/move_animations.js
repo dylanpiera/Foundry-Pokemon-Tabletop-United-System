@@ -443,7 +443,7 @@ async function PlayMoveMissedAttackAnimation(move, moveUserToken, moveTargetToke
 
 export async function PlayMoveAnimations(move, moveUserToken, attacksData) 
 {
-    if(!(game.modules.get("sequencer")?.active) || !(game.settings.get("ptu", "enableMoveAnimations") == true))
+    if(!((game.modules.get("sequencer")?.active) && (game.modules.get("jb2a_patreon")?.active)) || !(game.settings.get("ptu", "enableMoveAnimations") == true))
     {
         return false; // Either Sequencer module is not installed, or config settings have disabled move animations, so stop here.
     }

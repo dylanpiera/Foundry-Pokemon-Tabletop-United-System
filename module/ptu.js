@@ -40,6 +40,7 @@ import { ActorGenerator } from './utils/actor-generator.js'
 import { GetOrCacheAbilities, GetOrCacheCapabilities, GetOrCacheMoves } from './utils/cache-helper.js'
 import { Afflictions } from './combat/effects/afflictions.js'
 import PTUCombat from './combat/combat.js'
+import { PTUCombatOverrides, PTUCombatTrackerOverrides } from './combat/ptu_overrides.js'
 import Api from './api/api.js'
 import RenderDex from './utils/pokedex.js'
 import TMsData from './data/tm-data.js'
@@ -60,7 +61,7 @@ export let log = (...args) => console.log("FVTT PTU | ", ...args);
 export let warn = (...args) => console.warn("FVTT PTU | ", ...args);
 export let error = (...args) => console.error("FVTT PTU | ", ...args)
 
-export const LATEST_VERSION = "2.0-Beta-2";
+export const LATEST_VERSION = "2.0-Beta-4";
 
 /* -------------------------------------------- */
 /*  Foundry VTT Initialization                  */
@@ -142,6 +143,11 @@ Hooks.once('init', function () {
     formula: "@initiative.value + (1d20 * 0.01)",
     decimals: 2
   };
+  // Initialize custom initative hooks
+  CONFIG.Combat.documentClass=PTUCombatOverrides;
+
+  // Define custom combat tracker
+  CONFIG.ui.combat = PTUCombatTrackerOverrides;
 
   // Define custom Entity classes
   CONFIG.Actor.documentClass = PTUActor;
@@ -785,6 +791,7 @@ function _onPokedexMacro() {
 }
 
 export async function PlayPokemonCry(species) {
+  if(!species) return;
   if (game.settings.get("ptu", "playPokemonCriesOnDrop")) {
     let CryDirectory = game.settings.get("ptu", "pokemonCryDirectory");
     let SpeciesCryFilename = species.toString().toLowerCase();
@@ -808,7 +815,7 @@ Hooks.on("updateInitiative", function (actor) {
 
   if (!actor.canUserModify(game.user, "update")) return;
 
-  const combatant = game.combats.active.combatants.find(x => x.actor?.id == actor.id)
+  const combatant = game.combats.active.combatants.get(actor.id);
   if (!combatant) return;
 
   const decimal = Number((combatant.initiative - Math.trunc(combatant.initiative).toFixed(2)));

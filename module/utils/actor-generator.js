@@ -48,7 +48,7 @@ export class ActorGenerator {
         return this;
     }
 
-    async PrepareArt(imgSrc, imgExt = ".png") {
+    async PrepareArt(imgSrc, imgExt = ".webp") {
         if(imgSrc === undefined) {
             imgSrc = game.settings.get("ptu", "defaultPokemonImageDirectory");
             if(!imgSrc) return this;

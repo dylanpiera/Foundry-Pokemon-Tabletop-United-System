@@ -49,7 +49,6 @@ import { log } from "../ptu.js";
     
     if(this.object) {
       await this.object.setFlag("ptu", "leagueBattle", formData.leagueBattle);
-      for(let c of this.object.combatants) await game.ptu.combats.get(this.object.id)._updateLeagueInitiative(c.token);
     }
     
     return result;

@@ -1,4 +1,5 @@
 import { debug, log } from "../ptu.js";
+import { timeout } from "./generic-helpers.js";
 
 export function ActorHasItemWithName(actor, initial_item_name, item_category = "Any", precise_naming = false) {
 	let item_name = initial_item_name.replace("é", "e").toLowerCase();
@@ -81,8 +82,15 @@ export function ActorHasItemWithName(actor, initial_item_name, item_category = "
 };
 
 
-export async function RollCaptureChance(trainer, target, pokeball, isCritCapture = false) {
+export async function RollCaptureChance(trainer, target, pokeball, to_hit_roll, target_token) 
+{
 	const targetActor = target.actor;
+
+	let isCritCapture = false;
+	if(to_hit_roll.terms[0].results[0].result == 20)
+	{
+		isCritCapture = true;
+	}
 
 	const captureData = {
 		rate: 100,
@@ -315,108 +323,49 @@ export async function RollCaptureChance(trainer, target, pokeball, isCritCapture
 
 	captureData.rate += (targetActor.data.data.health.injuries * 5)
 
-	const roll = await new Roll(`1d100+@mod`, { mod: captureData.mod }).roll({ async: true });
+	captureData.roll = await new Roll(`1d100+@mod`, { mod: captureData.mod }).roll({ async: true });
 
-	if (game.modules.get("sequencer")?.active) {
-		setTimeout(async () => {
-			await roll.toMessage({ flavor: `Pokeball capture check vs ${targetActor.name}'s ${captureData.rate} Capture Rate:`, sound: null }); //message.data.sound = null; // Suppress dice sounds for Move Master roll templates
-		}, 10000);
-		if (Number(roll.total) <= captureData.rate) {
-			setTimeout(async () => {
-
-				new Sequence("PTU")
-					.effect()
-					.file("modules/jb2a_patreon/Library/TMFX/InPulse/Circle/InPulse_01_Circle_Fast_500.webm")
-					.atLocation(target_token)
-					.scaleToObject(3)
-					.belowTokens(true)
-					.play();
-
-				// await AudioHelper.play({src: game.PTUMoveMaster.GetSoundDirectory()+"pokeball_sounds/"+"pokeball_catch_confirmed.mp3", volume: 0.8, autoplay: true, loop: false}, true);
-				// chatMessage(target, (target.name + " was captured! Capture DC was " + CaptureRate + ", and you rolled "+Number(roll._total)+"!"));
-				log((targetActor.name + " was captured! Capture DC was " + captureData.rate + ", and you rolled " + Number(roll.total) + "!"));
-
-				// const strength = window.confetti.confettiStrength.high;
-				// const shootConfettiProps = window.confetti.getShootConfettiProps(strength);
-
-				// setTimeout( async () => {  window.confetti.shootConfetti(shootConfettiProps); }, 750);//364);
-				// setTimeout( async () => {  
-				//     await AudioHelper.play({src: game.PTUMoveMaster.GetSoundDirectory()+"pokeball_sounds/"+"pokeball_success_jingle.wav", volume: 0.8, autoplay: true, loop: false}, true);
-				// }, 750);
-
-				// game.PTUMoveMaster.RemoveThrownPokeball(trainer, pokeball_item);
-				await applyCapture(trainer, target, pokeball, speciesData);
-
-			}, 10000);
-			return true;
-		}
-
-		// chatMessage(target, (target.name + " escaped the "+pokeball+"! Capture DC was " + CaptureRate + ", and you rolled "+Number(roll._total)+"."));
-		log((targetActor.name + " escaped the " + pokeballName + "! Capture DC was " + CaptureRate + ", and you rolled " + Number(roll._total) + "."));
-		// game.PTUMoveMaster.BreakPokeball(trainer, pokeball_item);
-
-		setTimeout(async () => {
-
-			new Sequence("PTU")
-				.effect()
-				.file("modules/jb2a_patreon/Library/1st_Level/Thunderwave/Thunderwave_01_Bright_Orange_Center_600x600.webm")
-				.atLocation(target_token)
-				.scaleToObject(1.5)
-				.belowTokens(true)
-				.play();
-
-		}, 11000);
-
-		return false;
+	return captureData;
+};
 
 
+export async function applyCapture(trainer, target, pokeball, speciesData) 
+{
+	const newOwnerId = game.user.character?.id == trainer.id ? trainer.id : getTokenOwner(trainer);
+
+	if (!newOwnerId) {
+		ui.notifications.warn("Oops! Could not find trainer to assign newly captured mon to!")
+		return;
+	}
+
+	await game.ptu.api.transferOwnership(target.actor, { pokeball: pokeball.name, timeout: 30000, permission: { [newOwnerId]: CONST.ENTITY_PERMISSIONS.OWNER } });
+
+	const dexentry = trainer.itemTypes.dexentry.find(item => item.name.toLowerCase() == speciesData._id.toLowerCase())
+	if (dexentry && !dexentry.data.data.owned) {
+		await dexentry.update({
+			data: {
+				owned: true
+			}
+		})
 	}
 	else {
-		if (Number(roll.total) <= captureData.rate) {
-			await applyCapture(trainer, target, pokeball, speciesData);
-			return true;
-		}
-		log((targetActor.name + " escaped the " + pokeballName + "! Capture DC was " + CaptureRate + ", and you rolled " + Number(roll._total) + "."));
-		return false;
-	}
-
-	async function applyCapture(trainer, target, pokeball, speciesData) {
-		const newOwnerId = game.user.character?.id == trainer.id ? trainer.id : getTokenOwner(trainer);
-
-		if (!newOwnerId) {
-			ui.notifications.warn("Oops! Could not find trainer to assign newly captured mon to!")
-			return;
-		}
-
-		await game.ptu.api.transferOwnership(target.actor, { pokeball: pokeball.name, timeout: 30000, permission: { [newOwnerId]: CONST.ENTITY_PERMISSIONS.OWNER } });
-
-		const dexentry = trainer.itemTypes.dexentry.find(item => item.name.toLowerCase() == speciesData._id.toLowerCase())
-		if (dexentry && !dexentry.data.data.owned) {
-			await dexentry.update({
-				data: {
-					owned: true
-				}
-			})
-		}
-		else {
-			await trainer.createEmbeddedDocuments("Item", [{
-				name: Handlebars.helpers.capitalizeFirst(speciesData._id.toLowerCase()),
-				type: "dexentry",
-				data: {
-					entry: "",
-					id: Number(speciesData.number),
-					owned: true
-				}
-			}])
-		}
-
-		function getTokenOwner(trainer) {
-			for (const [id, level] of Object.entries(trainer.data.permission)) {
-				if (level < 3) continue;
-
-				const user = game.users.get(id);
-				if (user && user.data.role < 4) return id;
+		await trainer.createEmbeddedDocuments("Item", [{
+			name: Handlebars.helpers.capitalizeFirst(speciesData._id.toLowerCase()),
+			type: "dexentry",
+			data: {
+				entry: "",
+				id: Number(speciesData.number),
+				owned: true
 			}
+		}])
+	}
+
+	function getTokenOwner(trainer) {
+		for (const [id, level] of Object.entries(trainer.data.permission)) {
+			if (level < 3) continue;
+
+			const user = game.users.get(id);
+			if (user && user.data.role < 4) return id;
 		}
 	}
-};
+}

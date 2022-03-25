@@ -30,9 +30,12 @@ export default class BeltComponent extends Component {
         let output = "";
 
         // select all owned pokemon in the same folder as this actor.
-        for (const actor of this.state.actor.folder?.content) {
-            if (actor.data.data.owner == this.state.actor.id) {
-                beltMons.push(actor);
+        if(this.state.actor?.folder)
+        {
+            for (const actor of this.state.actor?.folder?.content) {
+                if (actor.data.data.owner == this.state.actor.id) {
+                    beltMons.push(actor);
+                }
             }
         }
 
