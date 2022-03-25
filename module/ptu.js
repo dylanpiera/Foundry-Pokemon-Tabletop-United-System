@@ -791,6 +791,7 @@ function _onPokedexMacro() {
 }
 
 export async function PlayPokemonCry(species) {
+  if(!species) return;
   if (game.settings.get("ptu", "playPokemonCriesOnDrop")) {
     let CryDirectory = game.settings.get("ptu", "pokemonCryDirectory");
     let SpeciesCryFilename = species.toString().toLowerCase();

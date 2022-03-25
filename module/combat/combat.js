@@ -287,6 +287,12 @@ export default class PTUCombat {
     if (combat.id != this.combat.id) return;
     // Only worry about effects if the combat has started
     if (!combat.started) return;
+
+    if (options.turn.direction == CONFIG.PTUCombat.DirectionOptions.FORWARD) {
+      await AudioHelper.play({src: ("systems/ptu/sounds/ui_sounds/ui_button.wav"), volume: 0.5, autoplay: true, loop: false}, true);
+      await game.ptu.PlayPokemonCry(combatant?.actor?.data?.data?.species);
+    }
+
     if (!combatant.actor.data.flags.ptu) return;
 
     if (options.turn.direction == CONFIG.PTUCombat.DirectionOptions.FORWARD) {

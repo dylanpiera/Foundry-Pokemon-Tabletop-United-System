@@ -327,8 +327,8 @@ export function LoadSystemSettings() {
     });
 
     game.settings.register("ptu", "playPokemonCriesOnDrop", {
-        name: "Play Pokémon Cry when dragged from Dex",
-        hint: "This will play a Pokémon's cry when it is drag-and-dropped from the pokedex compendium.",
+        name: "Play Pokémon Cry when dragged from Dex and on turn start",
+        hint: "This will play a Pokémon's cry when it is drag-and-dropped from the pokedex compendium, and in combat at the start of a Pokemon's turn.",
         scope: "world",
         config: true,
         type: Boolean,
