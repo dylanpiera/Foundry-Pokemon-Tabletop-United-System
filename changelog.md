@@ -1,8 +1,10 @@
 # Welcome to the Beta!
 Hey there! You are on the Beta Branch. If you ever have any feedback please do share with us over on [Github](https://github.com/dylanpiera/Foundry-Pokemon-Tabletop-United-System/issues) or [Discord](https://discord.gg/fE3w59q)
 
-## 2.0-Beta-2
+## 2.0-Beta-4
+This update fixes a few bugs around Pokeball effects, as well as a significant revamp (thanks to Colton who spearheaded this) of the initiative system, adding support for Boss Initiative and League Initiative, as well as a UI toggle (checkmark/X) in the combat tracker that automatically checks off and fades-out actors in the list when they finish their turns, and skips up or down the list to the highest not-gone-yet actor when the turn is advanced if initiative has shuffled around due to speed changes or the like.
 
+No more forgetting who's already gone after someone uses Agility and jumps around on turn order, you can just hit Next Turn and it'll figure it out for you!
 
 ## 2.0-Beta-1
 It's finally time for another big release everyone!
