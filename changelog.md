@@ -6,6 +6,10 @@ This update fixes a few bugs around Pokeball effects, as well as a significant r
 
 No more forgetting who's already gone after someone uses Agility and jumps around on turn order, you can just hit Next Turn and it'll figure it out for you!
 
+## 2.0-Beta-2 - Hotfix
+- Fixed issue where if an owner's id no longer exists you couldn't open a character sheet.
+- Fixed small style issue in sidebar.
+
 ## 2.0-Beta-1
 It's finally time for another big release everyone!
 
