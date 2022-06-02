@@ -225,7 +225,7 @@ export default class Api {
             async tokensUpdate(data) {
                 if (!ref._isMainGM()) return;
 
-                const { scale, x, y, tint, height, width, img, brightSight, dimSight, brightLight, dimLight, lightColor, lightAnimation } = data.content.options;
+                const { scale, x, y, tint, height, width, img, brightSight, dimSight, light } = data.content.options;
 
                 const documents = [];
                 for (const uuid of data.content.uuids) {
@@ -235,19 +235,56 @@ export default class Api {
                 }
 
                 const newData = {};
-                if (scale) newData["scale"] = scale;
-                if (x) newData["x"] = x;
-                if (y) newData["y"] = y;
-                if (tint) newData["tint"] = tint;
-                if (height) newData["height"] = height;
-                if (width) newData["width"] = width;
-                if (img) newData["img"] = img;
-                if (brightSight) newData["brightSight"] = brightSight;
-                if (dimSight) newData["dimSight"] = dimSight;
-                if (brightLight) newData["brightLight"] = brightLight;
-                if (dimLight) newData["dimLight"] = dimLight;
-                if (lightColor) newData["lightColor"] = lightColor;
-                if (lightAnimation) newData["lightAnimation"] = lightAnimation;
+
+                if(scale !== undefined) newData["scale"] = scale;
+                if(x !== undefined) newData["x"] = x;
+                if(y !== undefined) newData["y"] = y;
+                if(tint !== undefined) newData["tint"] = tint;
+                if(height !== undefined) newData["height"] = height;
+                if(width !== undefined) newData["width"] = width;
+                if(img !== undefined) newData["img"] = img;
+                if(brightSight !== undefined) newData["brightSight"] = brightSight;
+                if(dimSight !== undefined) newData["dimSight"] = dimSight;
+
+                if(light){
+                    const newLight = {}
+                    const {alpha, angle, animation, bright, color, coloration, contrast, darkness, dim, gradual, luminosity, rotation, saturation, seed, shadows, vision, walls} = light
+                    if(alpha !== undefined) newLight["alpha"] = alpha;
+                    if(angle !== undefined) newLight["angle"] = angle;
+                    if(bright !== undefined) newLight["bright"] = bright;
+                    if(color !== undefined) newLight["color"] = color;
+                    if(coloration !== undefined) newLight["coloration"] = coloration;
+                    if(contrast !== undefined) newLight["contrast"] = contrast;
+                    if(dim !== undefined) newLight["dim"] = dim;
+                    if(gradual !== undefined) newLight["gradual"] = gradual;
+                    if(luminosity !== undefined) newLight["luminosity"] = luminosity;
+                    if(rotation !== undefined) newLight["rotation"] = rotation;
+                    if(saturation !== undefined) newLight["saturation"] = saturation;
+                    if(seed !== undefined) newLight["seed"] = seed;
+                    if(shadows !== undefined) newLight["shadows"] = shadows;
+                    if(vision !== undefined) newLight["vision"] = vision;
+                    if(walls !== undefined) newLight["walls"] = walls;
+
+                    if(animation){
+                        const newAnimation = {}
+                        const {type, speed, intensity, reverse} = animation
+                        if(type !== undefined) newAnimation["type"] = type
+                        if(speed !== undefined) newAnimation["speed"] = speed
+                        if(intensity !== undefined) newAnimation["intensity"] = intensity
+                        if(reverse !== undefined) newAnimation["reverse"] = reverse
+                        newLight["animation"] = newAnimation
+                    }
+                    if(darkness){
+                        const newDarkness = {}
+                        const {min, max} = darkness
+                        if(min !== undefined) newDarkness["min"] = min
+                        if(max !== undefined) newDarkness["max"] = max
+                        newLight["darkness"] = newDarkness
+                    }
+                    newData["light"] = newLight
+                }
+
+
 
                 const retVal = { result: [] };
                 for (const document of documents) retVal.result.push(await document.update(newData));
