@@ -2087,502 +2087,502 @@
   {
     "name": "TM01 - Work Up",
     "cost": 1200,
-    "effect": "Scene x2 - 2, 1 Target, Social - Normal - Status - The target falls Asleep at the end of its next turn. Yawn cannot miss."
+    "effect": "EOT - Self - Normal - Status - Raise the user’s Attack and Special Attack by +1 CS each."
   },
   {
     "name": "TM02 - Dragon Claw",
     "cost": 2400,
-    "effect": "EOT - Melee, 1 Target or Line 3 - Dragon - Physical - DB9 - AC2"
+    "effect": "At-Will - Melee, 1 Target - Dragon - Physical - DB8 - AC2"
   },
   {
     "name": "TM03 - Psyshock",
     "cost": 2900,
-    "effect": "Scene - Blessing - Psychic - Status - Blessing – Any user affected by Reflect may activate it when receiving Physical Damage to resist the Damage one step. Reflect may be activated 2 times, and then disappears."
+    "effect": "At-Will - 4, 1 Target - Psychic - Special - DB8 - AC2 - When calculating damage, the target subtracts their Defense from Psyshock's damage instead of their Special Defense. Psyshock is still otherwise Special (Special Evasion is used to avoid it, Mirror Coat can reflect it, etc.)"
   },
   {
     "name": "TM04 - Calm Mind",
     "cost": 1200,
-    "effect": "EOT - Melee, 1 Target - Psychic - Special - DB10 - AC2 - Dream Eater can only target Sleeping Pokémon or Trainers. After the target takes damage, the user gains Hit Points equal to half of the damage they dealt to the target. Dream Eater does not wake up sleeping targets."
+    "effect": "EOT - Self - Psychic - Status - Raise the user’s Special Attack 1 Combat Stage and raise the user’s Special Defense 1 Combat Stage."
   },
   {
     "name": "TM05 - Roar",
     "cost": 1000,
-    "effect": "Scene - Blessing - Normal - Status - Blessing – Any user affected by Safeguard may activate it when receiving a Status Affliction to ignore the effects of that Status Affliction on their next turn. Safeguard may be activated 3 times, and then disappears."
+    "effect": "Scene - Burst 1, Sonic, Social - Normal - Status - AC2 - When declaring Roar, the user does nothing. At the end of the round, the user Shifts and uses Roar. Targets hit by Roar immediately Shift away from the user using their highest useable movement capability, towards their Trainer if possible. If the target is an owned Pokémon and ends this shift within 6 meters of their Poké Ball, they are immediately recalled to their Poké Ball. If that Trainer sends out a replacement, they do not lose their Command action."
   },
   {
     "name": "TM06 - Toxic",
     "cost": 1900,
-    "effect": "EOT - Cone 2 - Poison - Status - All Poisoned targets have their Attack, Special Attack, and Speed lowered by -1 CS. Venom Drench cannot miss."
+    "effect": "Scene x2 - 4, 1 Target - Poison - Status - AC4 - The target is Badly Poisoned. If the user is Poison Type, Toxic cannot miss."
   },
   {
     "name": "TM07 - Hail",
     "cost": 1500,
-    "effect": "EOT - 4, 1 Target - Ice - Special - DB9 - AC2 - Ice Beam Freezes on 19+."
+    "effect": "Daily x2 - Field, Weather - Ice - Status - The weather changes to Hail for 5 rounds. While it is Hailing, all non-Ice Type Pokemon lose a Tick of Hit Points at the beginning of their turn."
   },
   {
     "name": "TM08 - Bulk Up",
     "cost": 1200,
-    "effect": "Scene x2 - Melee, 1 Target, Reaction, Trigger - Fighting - Physical - Counter may be used as a Reaction when the user is hit by a damaging Physical Attack. Resolve the Triggering Attack, with Counter's user resisting the attack one step further. After the attack is resolved, if Counter's user was not Fainted, the triggering foe then loses Hit Points equal to twice the amount of Hit Points lost by the user from the triggering attack. Note that Counter is Physical, and while it cannot miss, it cannot hit targets immune to Fighting-Type Moves."
+    "effect": "EOT - Self - Fighting - Status - Raise the user’s Attack and Defense by +1 CS each."
   },
   {
     "name": "TM09 - Venoshock",
     "cost": 2300,
-    "effect": "Scene - 6, 1 Target, Interrupt - Psychic - Status - Ally Switch may be declared during a foe’s turn as an Interrupt. The user chooses one willing ally within 6 meters; the target and the user switch places. If the ally was a target of a Move, the user is now the target; If the user was a target of a Move, the ally is now the target."
+    "effect": "Scene x2 - 6, 1 Target - Poison - Special - DB7 - AC2 - If the target is Poisoned, Venoshock has a Damage Base of 13 (4d10+10 / 35) instead."
   },
   {
     "name": "TM10 - Hidden Power",
     "cost": 1500,
-    "effect": "Daily - Melee, 1 Target, Execute - Normal - Status - Roll 1d100. This roll may not be modified in any way. If you roll X or lower, the target Faints. X is equal to 30 + The User's Level - The Target's Level."
+    "effect": "EOT - Burst 1 - Normal - Special - DB6 - AC2 - When a Pokémon first obtains the Move Hidden Power, roll 1d20. Hidden Power’s Elemental Type will be changed from Normal to Bug on a result of 1; Dark on 2; Dragon on 3; Electric on 4; Fairy on 5; Fighting on 6; Fire on 7; Flying on 8; Ghost on 9; Grass on 10; Ground on 11; Ice on 12; Normal on 13; Poison on 14; Psychic on 15; Rock on 16; Steel on 17; Water on 18; and on 19 or 20, reroll until you roll another number. This effect is permanent – if Hidden Power is forgotten and relearned, the chosen Type remains the same."
   },
   {
     "name": "TM11 - Sunny Day",
     "cost": 1500,
-    "effect": "Frequency - Range - Type - Category - DBDamage base - ACAC - Effects"
+    "effect": "Daily x2 - Field, Weather - Fire - Status - The weather becomes Sunny for 5 rounds. While Sunny, Fire-Type Attacks gain a +5 bonus to Damage Rolls, and Water-Type Attacks suffer a -5 Damage penalty."
   },
   {
     "name": "TM12 - Taunt",
     "cost": 1000,
-    "effect": "EOT - 6, 1 Target - Dark - Status - AC4 - The target’s Combat Stages are inverted; +1 Stage becomes -1 Stage, -3 Stages becomes +3 Stages, etc."
+    "effect": "EOT - 6, 1 Target, Social - Dark - Status - AC3 - The target becomes Enraged."
   },
   {
     "name": "TM13 - Ice Beam",
     "cost": 4200,
-    "effect": "EOT - Melee, 1 Target - Ice - Physical - DB10 - AC4 - Lower the user's Speed by -1 CS."
+    "effect": "EOT - 4, 1 Target - Ice - Special - DB9 - AC2 - Ice Beam Freezes on 19+."
   },
   {
     "name": "TM14 - Blizzard",
     "cost": 5100,
-    "effect": "EOT - 4, 1 Target - Ice - Special - DB6 - AC3 - If Frost Breath hits, it is a Critical Hit. *Grants: Freezer"
+    "effect": "Scene x2 - 4, Ranged Blast 2, Smite - Ice - Special - DB11 - AC7 - Blizzard Freezes all legal target on 15+. If the target is in Hailing Weather, Blizzard cannot miss."
   },
   {
     "name": "TM15 - Hyper Beam",
     "cost": 5000,
-    "effect": "Daily - 6, Ranged Blast 3, Smite - Normal - Special - DB10 - AC2 - Judgment's Type can be whatever Elemental Type the user wants it to be."
+    "effect": "Daily x2 - 10, 1 Target, Exhaust, Smite - Normal - Special - DB15 - AC4"
   },
   {
     "name": "TM16 - Light Screen",
     "cost": 1500,
-    "effect": "Frequency - Range - Type - Category - DBDamage base - ACAC - Effects"
+    "effect": "Scene - Blessing - Psychic - Status - Blessing – Any user affected by Light Screen may activate it when receiving Special Damage to resist the Damage one step. Light Screen may be activated 2 times, and then disappears."
   },
   {
     "name": "TM17 - Protect",
     "cost": 2500,
-    "effect": "At-Will - Melee, 1 Target, Spirit Surge - Normal - Physical - DB2 - AC2 - The user becomes Enraged. Until the end of the user’s next turn, if the user is Enraged, the user gains +1 Attack Combat Stage whenever they are damaged by an Damaging Move or Attack."
+    "effect": "Scene - Self, Interrupt, Shield, Trigger - Normal - Status - If the user is hit by a Move, the user may use Protect. The user is instead not hit by the Move. The user does not take any damage nor is affected by any of the Move's effect."
   },
   {
     "name": "TM18 - Rain Dance",
     "cost": 1500,
-    "effect": "EOT - Melee, 1 Target, Dash - Water - Physical - DB8 - AC3 - Razor Shell lowers the target's Defense by -1 CS on an Even-Numbered Roll."
+    "effect": "Daily x2 - Field, Weather - Water - Status - The weather becomes Rainy for 5 rounds. While Rainy, Water-Type Attacks gain a +5 bonus to Damage Rolls, and Fire-Type Attacks suffer a -5 Damage penalty."
   },
   {
     "name": "TM19 - Roost",
     "cost": 2500,
-    "effect": "Scene - Blessing - Flying - Status - For the remainder of the encounter, all allied trainers and Pokémon gain +5 to their Initiative. Multiple instances of Tailwind cannot stack. *Grants: Guster"
+    "effect": "Daily x2 - Self - Flying - Status - The user regains HP equal to half of its full HP. If the user is a Flying Type, it loses the Flying Type until the start of their next turn."
   },
   {
     "name": "TM20 - Safeguard",
     "cost": 1000,
-    "effect": "EOT - Burst 2, Friendly, Sonic - Normal - Status - AC4 - Lower the Defense of all legal targets by -2 CS."
+    "effect": "Scene - Blessing - Normal - Status - Blessing – Any user affected by Safeguard may activate it when receiving a Status Affliction to ignore the effect of that Status Affliction on their next turn. Safeguard may be activated 3 times, and then disappears."
   },
   {
     "name": "TM21 - Frustration",
     "cost": 3000,
-    "effect": "Daily x2 - Melee, 1 Target, Dash, Exhaust, Smite - Normal - Physical - DB15 - AC4"
+    "effect": "At-Will - Melee, 1 Target - Normal - Physical - DBX, See Effect - AC2 - Frustration's Damage Base is equal to 9 minus the user's Loyalty Value. Using Frustration may make your Pokémon dislike you."
   },
   {
     "name": "TM22 - Solar Beam",
     "cost": 4600,
-    "effect": "Scene - 4, 1 Target, Powder - Grass - Status - The target falls Asleep."
+    "effect": "Scene x2 - Line 6, 1 Target, Set-Up - Grass - Special - DB12 - AC2 - Set-Up Effect: If the weather is not Sunny, the user’s turn ends. If the weather is Sunny, immediately proceed to the Resolution Effect instead and this Move loses the Set-Up keyword. Resolution Effect: The user attacks with Solar Beam. If the weather is Rainy, Sandstorming, or Hailing, Solar Beam’s Damage Base is lowered to 6 (2d6+8 / 15)."
   },
   {
     "name": "TM23 - Smack Down",
     "cost": 2500,
-    "effect": "Scene - Field, Hazard - Rock - Status - Set 4 square meters of Stealth Rock hazards within 6 meters. If a foe moves within 2 meters of a space occupied by Rocks, move at most one Rock to the offender, then destroy the Rock. When that happens, the Stealth Rock causes a foe to lose a Tick of Hit Points. Stealth Rock is considered to be dealing damage; Apply Weakness and Resistance. Do not apply stats. A Pokémon who has been hit by a Stealth Rock Hazard cannot get hit by another in the same encounter until it is returned to a Poké Ball and then sent back out. *Grants Materializer"
+    "effect": "Scene x2 - 8, 1 Target - Rock - Physical - DB5 - AC2 - The target is knocked down to ground level, and loses all Sky or Levitate Speeds for 3 turns. During this time, they may be hit by Ground-Type Moves even if normally immune."
   },
   {
     "name": "TM24 - Thunderbolt",
     "cost": 4200,
-    "effect": "Scene x2 - 6, 1 Target - Electric - Status - Thunder Wave cannot miss. Thunder Wave Paralyzes the target. Pokémon immune to Electric Attacks are immune to Thunder Wave's effects."
+    "effect": "EOT - 4, 1 Target - Electric - Special - DB9 - AC2 - Thunderbolt Paralyzes the target on 19+."
   },
   {
     "name": "TM25 - Thunder",
     "cost": 5100,
-    "effect": "At-Will - Melee, 1 Target - Electric - Physical - DB8 - AC2 - Thunder Punch Paralyzes the target on 19+."
+    "effect": "Scene x2 - 12, 1 Target, Smite - Electric - Special - DB11 - AC7 - Thunder Paralyzes the target on 15+. If the target is in Sunny Weather, Thunder's Accuracy Check is 11. If the target is in Rainy Weather, Thunder cannot miss. If the target is airborne as a result of Bounce, Fly, or Sky Drop, Thunder cannot miss."
   },
   {
     "name": "TM26 - Earthquake",
     "cost": 4000,
-    "effect": "Scene x2 - Burst 5, Friendly, Groundsource - Ground - Physical - DB9 - AC2 - *Grants: Groundshaper"
+    "effect": "Scene - Burst 3, Groundsource - Ground - Physical - DB10 - AC2 - Earthquake can hit targets that are underground, including those using the Move Dig. *Grants Groundshaper"
   },
   {
     "name": "TM27 - Return",
     "cost": 3000,
-    "effect": "At-Will - Melee, 1 Target, Dash - Normal - Physical - DB8 - AC5 - Rock Climb Confuses the target on 17+."
+    "effect": "At-Will - Melee, 1 Target - Normal - Physical - DBX, See Effect - AC2 - Return's DB is equal to 3 plus the user's Loyalty Value."
   },
   {
     "name": "TM28 - Leech Life",
     "cost": 3000,
-    "effect": "EOT - 6, 1 Target, Five Strike - Bug - Physical - DB3 - AC4"
+    "effect": "Scene x2 - Melee, 1 Target - Bug - Physical - DB8 - AC2 - After the target takes damage, the user gains HP equal to half of the damage they dealt to the target."
   },
   {
     "name": "TM29 - Psychic",
     "cost": 3000,
-    "effect": "Scene - 8, Ranged Blast 3, Smite - Psychic - Special - DB14 - AC4 - Lower the user's Special Attack by -2 Combat Stages after damage is resolved."
+    "effect": "EOT - 5, 1 Target, Push - Psychic - Special - DB9 - AC2 - The target is Pushed 1 meter in any direction. Psychic lowers the target’s Special Defense 1 Combat Stage on 17+.  Grants Telekinetic."
   },
   {
     "name": "TM30 - Shadow Ball",
     "cost": 2700,
-    "effect": "Daily x3 - Melee, 1 Target, Set-Up - Ghost - Physical - DB12 - AC2 - Set-Up Effect: The user is removed from the field, and their turn ends. Resolution Effect: Shadow Force’s user appears adjacent to any legal target on the field, ignoring Movement Capabilities, and then uses Shadow Force’s attack. Shadow Force cannot be avoided by Moves with the Shield Keyword, the Dodge Ability, or similar effects, and Intercepts may not be attempted in response."
+    "effect": "EOT - 8, 1 Target - Ghost - Special - DB8 - AC2 - Shadow Ball lowers the target's Special Defense by -1 CS on 17+."
   },
   {
     "name": "TM31 - Brick Break",
     "cost": 2400,
-    "effect": "Scene x2 - Melee, 1 Target, Dash - Fighting - Physical - DB12 - AC2 - Lower the user’s Defense and Special Defense by -1 CS each after damage."
+    "effect": "At-Will - Melee, 1 Target - Fighting - Physical - DB8 - AC2 - Light Screen and Reflect may not be activated in response to Brick Break."
   },
   {
     "name": "TM32 - Double Team",
     "cost": 2500,
-    "effect": "EOT - 3, 1 Target, Sonic - Normal - Special - DB4 - AC2 - If Echoed Voice was used by any Pokémon or Trainer in the Encounter on the previous round, increase its Damage Base by +4. If Echoed Voice was used by any Pokémon or Trainers during both the previous two rounds, increase its Damage Base by +8."
+    "effect": "Scene - Self, Illusion, Coat - Normal - Status - The user gains 3 activations of Double Team. The user may either activate Double Team when being targeted by an attack to increase their Evasion by +2 against that attack or when making an attack to increase their Accuracy by +2 for that attack."
   },
   {
     "name": "TM33 - Reflect",
     "cost": 1500,
-    "effect": "Scene - Melee, 1 Target - Psychic - Status - The user loses one of their Abilities, selected by the user, and gains one the target’s Abilities, selected at random, for the remainder of encounter. The target loses the copied Ability, and gains the user’s lost Ability. This effect ends if either the target or the user is Switched out or Fainted, but only for that Pokémon or Trainer."
+    "effect": "Scene - Blessing - Psychic - Status - Blessing – Any user affected by Reflect may activate it when receiving Physical Damage to resist the Damage one step. Reflect may be activated 2 times, and then disappears."
   },
   {
     "name": "TM34 - Sludge Wave",
     "cost": 4200,
-    "effect": "EOT - 6, Hazard - Poison - Status - Set 8 square meters of Toxic Spikes within the range such that all 8 meters are adjacent with at least one other space of Toxic Spikes. Toxic Spikes cause Terrain to become Slow Terrain, and a grounded foe that runs into the hazard becomes Poisoned and Slowed until the end of their next turn. If there are 2 layers of Toxic Spikes on the same space, it Badly Poisons the foes instead. Poison-Type Pokemon may move over Toxic Spikes harmlessly, destroying the Hazards as they do so."
+    "effect": "Scene x2 - Burst 1 or Close Blast 2 - Poison - Special - DB10 - AC2 - Sludge Wave Poisons all legal targets on 19+."
   },
   {
     "name": "TM35 - Flamethrower",
     "cost": 4200,
-    "effect": "EOT - Melee, 1 Target, Dash - Fire - Physical - DB4 - AC2 - For each weight class the user is above the target, increase Heavy Crash's damage base by +2."
+    "effect": "EOT - 4, 1 Target - Fire - Special - DB9 - AC2 - Flamethrower Burns the target on 19+."
   },
   {
     "name": "TM36 - Sludge Bomb",
     "cost": 4300,
-    "effect": "Scene x2 - 4, 1 Target - Poison - Status - AC4 - The target is Badly Poisoned. If the user is Poison Type, Toxic cannot miss."
+    "effect": "EOT - 8, 1 Target - Poison - Special - DB9 - AC2 - Sludge Bomb Poisons the target on 15+."
   },
   {
     "name": "TM37 - Sandstorm",
     "cost": 1500,
-    "effect": "Scene x2 - 8, 1 Target - Rock - Physical - DB5 - AC2 - The target is knocked down to ground level, and loses all Sky or Levitate Speeds for 3 turns. During this time, they may be hit by Ground-Type Moves even if normally immune."
+    "effect": "Daily x2 - Field, Weather - Rock - Status - The weather changes to a Sandstorm for 5 rounds. While it is Sandstorming, all non-Ground, Rock, or Steel Type Pokémon lose a Tick of Hit Points at the beginning of their turn."
   },
   {
     "name": "TM38 - Fire Blast",
     "cost": 5100,
-    "effect": "Scene - 6, 1 Target, Pledge - Fire - Special - DB8 - AC2 - If an ally uses Grass Pledge or Water Pledge, you may use Fire Pledge as Priority (Advanced) immediately after their turn to target the same foe. If used in conjunction with Grass Pledge, Fire Hazards are created in a Brust 1 around the target. If used in conjucntion with Water Pledge, a Rainbow is created that lasts for 5 rouns. Counsult the Pledge keyword for additional details."
+    "effect": "Scene x2 - 6, 1 Target, Smite - Fire - Special - DB11 - AC4 - Fire Blast burns the target on 19+."
   },
   {
     "name": "TM39 - Rock Tomb",
     "cost": 2800,
-    "effect": "Daily x2 - Melee, 1 Target, Dash, Exhaust, Smite - Rock - Physical - DB15 - AC4 - *Grants Materializer"
+    "effect": "At-Will - 6, 1 Target - Rock - Physical - DB6 - AC5 - Rock Tomb lowers the target's Speed by -1 CS. *Grants Materializer"
   },
   {
     "name": "TM40 - Aerial Ace",
     "cost": 2800,
-    "effect": "EOT - 6, 1 Target - Flying - Special - DB8 - AC3 - Air Slash Flinches the target on 15+."
+    "effect": "EOT - Melee, 1 Target - Flying - Physical - DB6 - Aerial Ace cannot miss."
   },
   {
     "name": "TM41 - Torment",
     "cost": 1000,
-    "effect": "Scene x2 - 6, 1 Target or Burst 1, Sonic - Dragon - Special - DB11 - AC2 - The user adds half their Defense Stat to Clanging Scale's Damage Roll. After the Move is resolved, the user's Defense is lowered by 1 CS."
+    "effect": "Scene x2 - 10, 1 Target, Social - Dark - Status - AC2 - The target becomes Suppressed."
   },
   {
     "name": "TM42 - Facade",
     "cost": 3100,
-    "effect": "At-Will - Melee, Pass - Normal - Physical - DB4 - AC2 - False Swipe's damage cannot bring a target lower than 1 HP."
+    "effect": "EOT - Melee, 1 Target - Normal - Physical - DB7 - AC2 - If the user is afflicted with a Persistent Status Affliction, Facade's Damage Base is doubled to DB 14 (4d10+15 / 40)."
   },
   {
     "name": "TM43 - Flame Charge",
     "cost": 2100,
-    "effect": "Scene x2 - Melee, 1 Target, Dash, Recoil 1/3 - Fire - Physical - DB12 - AC2 - Flare Blitz Burns the target on 19+."
+    "effect": "At-Will - Melee, 1 Target, Dash - Fire - Physical - DB5 - AC2 - Raise the user’s Speed 1 Combat Stage."
   },
   {
     "name": "TM44 - Rest",
     "cost": 2000,
-    "effect": "Scene - Melee, 1 Target - Psychic - Status - AC2 - The user and the target trade Initiative values."
+    "effect": "Scene - Self, Healing - Psychic - Status - The user is set to their full Hit Point value. The user is cured of any Status ailments. Then, the user falls Asleep. The user cannot make Sleep Checks at the beginning of their turn. They are cured of the Sleep at the end of their turn in 2 rounds."
   },
   {
     "name": "TM45 - Attract",
     "cost": 1200,
-    "effect": "Scene - Self - Normal - Status - The user gains +6 Attack CS and loses HP equal to 1/2 of their Max HP."
+    "effect": "Scene x2 - 3, 1 Target, Social - Normal - Status - AC2 - Attract Infatuates the target if its gender is the opposite of the user’s. Attract fails when used by or against Genderless targets."
   },
   {
     "name": "TM46 - Thief",
     "cost": 2200,
-    "effect": "Scene x2 - 10, 1 Target, Social - Dark - Status - AC2 - The target becomes Suppressed."
+    "effect": "At-Will - Melee, 1 Target - Dark - Physical - DB6 - AC2 - Thief takes the target's held item and attaches it to Thief's user if the user is not holding anything."
   },
   {
     "name": "TM47 - Low Sweep",
     "cost": 2400,
-    "effect": "Daily x2 - Burst 1, Smite, Exhaust - Fighting - Physical - DB15 - AC2"
+    "effect": "EOT - Melee, 1 Target - Fighting - Physical - DB7 - AC2 - Lower the target’s Speed by -1 CS."
   },
   {
     "name": "TM48 - Round",
     "cost": 2800,
-    "effect": "At-Will - Melee, Pass - Normal - Physical - DB4 - AC2"
+    "effect": "EOT - Burst 1, Sonic - Normal - Special - DBX, See Effect - AC2 - Round's Damage Base is equal to 6, plus +2 more for each use of Round by any Trainer or Pokémon this round, up to a maximum of DB 12 (3d12+10 / 30)."
   },
   {
     "name": "TM49 - Echoed Voice",
     "cost": 1500,
-    "effect": "Scene - Melee, 1 Target, Dash - Normal - Physical - AC2 - The target loses a Tick of Hit Points for each Injury the user has."
+    "effect": "EOT - 3, 1 Target, Sonic - Normal - Special - DB4 - AC2 - If Echoed Voice was used by any Pokémon or Trainer in the Encounter on the previous round, increase its Damage Base by +4. If Echoed Voice was used by any Pokémon or Trainers during both the previous two rounds, increase its Damage Base by +8."
   },
   {
     "name": "TM50 - Overheat",
     "cost": 5100,
-    "effect": "EOT - Burst 1 - Fire - Special - DB10 - AC2 - Searing Shot Burns all targets on 15+."
+    "effect": "Scene - 8, Ranged Blast 3, Smite - Fire - Special - DB13 - AC4 - Lower the user's Special Attack 2 Combat Stages after damage."
   },
   {
     "name": "TM51 - Steel Wing",
     "cost": 2200,
-    "effect": "Scene x2 - Close Blast 2 - Steel - Physical - DB10 - AC2 - This Move ignores any Abilities that would cause it to fail or miss; those Abilities cannot be activated in response to Sunsteel Strike (ex: Dodge, Wonder Guard)"
+    "effect": "At-Will - Melee, Pass, Spirit Surge - Steel - Physical - DB7 - AC3 - Steel Wing raises the user's Defense by +1 CS on 15+."
   },
   {
     "name": "TM52 - Focus Blast",
     "cost": 4400,
-    "effect": "EOT - Melee, 1 Target - Fighting - Physical - DB10 - AC3 - The user lowers their Speed by -1 CS."
+    "effect": "Scene x2 - 6, 1 Target, Smite, Aura - Fighting - Special - DB12 - AC7 - Focus Blast lowers the target's Special Defense by -1 CS on 18+."
   },
   {
     "name": "TM53 - Energy Ball",
     "cost": 2700,
-    "effect": "Scene x2 - 6, 1 Target - Grass - Special - DB8 - AC2 - After the target takes damage, the user gains HP equal to half of the damage they dealt to the target."
+    "effect": "EOT - 8, 1 Target - Grass - Special - DB9 - AC2 - Energy Ball lowers the foe’s Special Defense 1 Combat Stage on 17+."
   },
   {
     "name": "TM54 - False Swipe",
     "cost": 1200,
-    "effect": "EOT - Cone 2 - Normal - Status - AC2 - Lower the Accuracy of all legal targets by -1. *Grants Glow"
+    "effect": "At-Will - Melee, Pass - Normal - Physical - DB4 - AC2 - False Swipe's damage cannot bring a target lower than 1 HP."
   },
   {
     "name": "TM55 - Scald",
     "cost": 3000,
-    "effect": "EOT - 8, 1 Target - Water - Special - DB8 - AC2 - Snipe Shot is a Critical Hit on 18+. This Move may not be Intercepted, nor may any Abilities, Moves, or Features be activated to change this Move’s target. Any of those existing effects (such as Follow Me) fail."
+    "effect": "Scene x2 - 5, 1 Target - Water - Special - DB8 - AC2 - Scald Burns the target on 15+."
   },
   {
     "name": "TM56 - Fling",
     "cost": 2000,
-    "effect": "Daily - Burst 2 - Dark - Physical - DB10 - AC2 - Interrupts may not be triggered against Hyperspace Fury. The user's Defense is lowered by -1 Combat Stage."
+    "effect": "Scene x2 - 6, 1 Target, Fling - Dark - Physical - DBSee Effect - AC2 - The user throws a held item, determining the effect of Fling."
   },
   {
     "name": "TM57 - Charge Beam",
     "cost": 2300,
-    "effect": "Daily x2 - Field - Electric - Status - The field becomes Electrified for 5 rounds. While the field is Electrified, Pokemon and Trainers touching the ground are immune to Sleep, and Electric-Type attacks used by Pokemon and Trainers touching the ground gain a +10 Bonus to Damage Rolls."
+    "effect": "At-Will - 6, 1 Target - Electric - Special - DB5 - AC4 - If Charge Beam successfully hits a target, roll 1d20. On a roll of 7+, the user's Special Attack is raised by +1 Combat Stage."
   },
   {
     "name": "TM58 - Sky Drop",
     "cost": 2800,
-    "effect": "Scene x2 - Melee, 1 Target - Electric - Physical - DB9 - AC2 - Against targets with a lower initiative that have not yet acted this round, Bolt Beak deals +10 damage."
+    "effect": "Scene x2 - Melee, 1 Target, Set-Up - Flying - Physical - DB6 - AC3 - Set-Up Effect: Make Sky Drop's Accuracy Check. If the user hits, the user and target are moved 25 meters into the air. The target forfeits their next turn and cannot Shift or take actions until Sky Drop is resolved. Resolution Effect: Shift while in the air and lower both the user and the target heights back to the ground. Then apply Sky Drop's damage. If the target has a Sky or Levitate Speed, Sky Drop fails to deal damage. If the user is Fainted after the Set-Up but before the Resolution, the target falls to the ground and takes damage as if Sky Drop had a Damage Base of 3 (1d6+5/8) unless they have a Sky or Levitate Speed, in which case they take no damage."
   },
   {
     "name": "TM59 - Brutal Swing",
     "cost": 2800,
-    "effect": "EOT - Melee, 1 Target - Dark - Status - AC4 - The target falls Asleep. Once per Scene, Dark Void may be used as if its range were “Burst 5, Friendly” instead."
+    "effect": "EOT - Burst 1 - Dark - Physical - DB6 - AC2"
   },
   {
     "name": "TM60 - Quash",
     "cost": 1000,
-    "effect": "At-Will - Melee, 1 Target, Trigger, Interrupt - Dark - Physical - DB8 - AC2 - If an adjacent foe targets the user with a Damaging Attack, Sucker Punch may be used as an Interrupt Move against the triggering foe."
+    "effect": "At-Will - 10, 1 Target, Social - Dark - Status - AC2 - Change the target's Initiative to 0 for the remainder of the round."
   },
   {
     "name": "TM61 - Will-O-Wisp",
     "cost": 2200,
-    "effect": "EOT - Melee, 1 Target - Flying - Physical - DB6 - Aerial Ace cannot miss."
+    "effect": "EOT - 6, 1 Target - Fire - Status - AC5 - The target is Burned."
   },
   {
     "name": "TM62 - Acrobatics",
     "cost": 2800,
-    "effect": "At-Will - Cone 2 - Flying - Special - DB6 - AC2 - Air Cutter is a Critical Hit on 18+."
+    "effect": "EOT - Melee, Dash, 1 Target - Flying - Physical - DB6 - AC2 - If the user is not holding an item, Acrobatics instead has a Damage Base of 11 (3d10+10/27)"
   },
   {
     "name": "TM63 - Embargo",
     "cost": 1000,
-    "effect": "EOT - Melee, 1 Target - Dark - Physical - DB6 - Feint Attack Cannot Miss."
+    "effect": "At-Will - 6, 1 Target - Dark - Status - AC2 - The target cannot use or benefit from held items for the remainder of the encounter. Embargo may only affect one target at a time; if Embargo is used on a new target, the previous target is freed from the effect."
   },
   {
     "name": "TM64 - Explosion",
     "cost": 7500,
-    "effect": "EOT - Melee, 1 Target - Normal - Physical - DB7 - AC2 - If the user is afflicted with a Persistent Status Affliction, Facade's Damage Base is doubled to DB 14 (4d10+15 / 40)."
+    "effect": "Daily - Burst 2 - Normal - Physical - DB25 - AC2 - The user's HP is set to -50% of their full HP. This HP loss cannot be prevented or reduced in any way. The user's loyalty toward its trainer may be lowered."
   },
   {
     "name": "TM65 - Shadow Claw",
     "cost": 2400,
-    "effect": "At-Will - Melee, 1 Target, Priority - Ghost - Physical - DB4 - AC2"
+    "effect": "EOT - Melee, Pass - Ghost - Physical - DB7 - AC2 - Shadow Claw is a Critical Hit on 18+."
   },
   {
     "name": "TM66 - Payback",
     "cost": 2500,
-    "effect": "At-Will - Melee, 1 Target - Dark - Physical - DB4 - AC2 - If the foe is fleeing or being switched out, Pursuit may be used as an Interrupt, targeting the triggering foe. When used as an Interrupt, Pursuit grants the user a +5 bonus to all Movement Speeds, and has a Damage Base of 8 (2d8+10/19)."
+    "effect": "EOT - Melee, 1 Target - Dark - Physical - DB5 - AC2 - If the target hit the user with a Damaging Move on the previous turn, Payback has a Damage Base of 10 (3d8+10 / 24) instead."
   },
   {
     "name": "TM67 - Smart Strike",
     "cost": 2800,
-    "effect": "Daily - Cone 3, Smite - Steel - Special - DB14 - AC3 - The user’s Hit Points are reduced by 50% of their full Hit Point value. This Hit Point loss cannot be prevented or reduced in any way."
+    "effect": "EOT - Melee, 1 Target - Steel - Physical - DB7 - AC2 - Smart Strike cannot miss."
   },
   {
     "name": "TM68 - Giga Impact",
     "cost": 5000,
-    "effect": "EOT - Self - Normal - Status - Raise the user's Attack and Special Attack by +1 CS each. If it is Sunny, double the amount of Combat Stages gained. *Grants Inflatable"
+    "effect": "Daily x2 - Melee, 1 Target, Dash, Exhaust, Smite - Normal - Physical - DB15 - AC4"
   },
   {
     "name": "TM69 - Rock Polish",
     "cost": 1200,
-    "effect": "Scene x2 - 6, Ranged Blast 3 - Rock - Physical - DB8 - AC4 - Rock Slide Flinches all legal targets on 17+."
+    "effect": "EOT - Self - Rock - Status - Raise the user's Speed by +2 CS."
   },
   {
     "name": "TM70 - Aurora Veil",
     "cost": 1500,
-    "effect": "EOT - 6, 1 Target - Ice - Special - DB7 - AC2 - When calculating Weakness and Resistance for Freeze-Dry, Water-Typed targets calculate damage as if Water was weak to Ice."
+    "effect": "Scene - Blessing - Ice - Status - Blessing – Any user affected by Aurora Veil may activate it when receiving Damage to resist the Damage one step. Aurora Veil may be activated 2 times, and then disappears. Special: Auora Veil can only be used when the user is in Hailing Weather. The Blessings persist even after Hailing Weather has ended, however."
   },
   {
     "name": "TM71 - Stone Edge",
     "cost": 3900,
-    "effect": "Scene - Melee, 1 Target - Psychic - Status - The user and the target trade Combat Stage values for the Attack Stat, and then for the Special Attack Stat."
+    "effect": "EOT - 8, 1 Target - Rock - Physical - DB10 - AC5 - Stone Edge is a Critical Hit on 17+."
   },
   {
     "name": "TM72 - Volt Switch",
     "cost": 3100,
-    "effect": "At-Will - 12, 1 Target - Electric - Special - DB12 - AC9 - Zap Cannon Paralyzes the target. Zap Cannon ignores the target's Evasion if their are no other combatants or Rough or Blocking Terrain within 2 meters of the target."
+    "effect": "At-Will - 5, 1 Target - Electric - Special - DB7 - AC2 - If Volt Switch successfully hits its target, the user deals damage and then immediately is returned to its Poke Ball in the same turn. A New Pokemon may immediately be sent out. Using Volt Switch lets a Trapped user be recalled"
   },
   {
     "name": "TM73 - Thunder Wave",
     "cost": 2200,
-    "effect": "At-Will - Melee, 1 Target, Dash, Recoil 1/4 - Electric - Physical - DB9 - AC2"
+    "effect": "Scene x2 - 6, 1 Target - Electric - Status - AC4 - Thunder Wave cannot miss. Thunder Wave Paralyzes the target. Pokémon immune to Electric Attacks are immune to Thunder Wave's effect."
   },
   {
     "name": "TM74 - Gyro Ball",
     "cost": 2500,
-    "effect": "EOT - Melee, 1 Target - Steel - Physical - DB4 - AC2 - For each weight class the user is above the target, increase Heavy Slam's Damage Base by +2."
+    "effect": "Scene x2 - 6, 1 Target - Steel - Physical - DB6 - AC2 - The target reveals their Speed Stat (including Combat Stages). If it is higher than the user’s (including Combat Stages), subtract the user’s Speed Stat from the target’s and apply the difference as Bonus Damage."
   },
   {
     "name": "TM75 - Swords Dance",
     "cost": 1200,
-    "effect": "EOT - Melee, 1 Target, Five Strike - Normal - Physical - DB3 - AC4"
+    "effect": "EOT - Self - Normal - Status - Raise the user's Attack by +2 CS."
   },
   {
     "name": "TM76 - Fly",
     "cost": 3200,
-    "effect": "Scene x2 - 6, 1 Target, Illusion - Flying - Status - Use the Move the target has used on their last turn. You may choose new targets for the Move. Mirror Move cannot miss."
+    "effect": "At-Will - Melee, Dash, Set-Up - Flying - Physical - DB8 - AC3 - Set-Up Effect: The user is moved up 25 meters into the air. Resolution Effect: The user may shift twice while in the air, using their overland or sky speed, and then comes down next to a legal target, and attacks with Fly. *Grants: Sky +3"
   },
   {
     "name": "TM77 - Psych Up",
     "cost": 2100,
-    "effect": "At-Will - Melee, 1 Target, Spirit Surge - Normal - Physical - DB2 - AC2 - Rapid Spin destroys all Hazards within 5 meters, removes Leech Seeds, and removes the user's Trapped or Stuck status."
+    "effect": "Scene - 6, 1 Target - Normal - Status - The user's Combat Stages are changed to match the target's Combat Stages. Psych Up cannot miss."
   },
   {
     "name": "TM78 - Bulldoze",
     "cost": 2400,
-    "effect": "EOT - 6, 1 Target, Groundsource - Ground - Special - DB9 - AC2 - Earth Power lowers the Special Defense of all Legal Targets 1 Combat Stage on 16+."
+    "effect": "EOT - Burst 1 - Ground - Physical - DB6 - AC2 - All Legal Targets are lowered 1 Speed Combat Stage."
   },
   {
     "name": "TM79 - Frost Breath",
     "cost": 1000,
-    "effect": "Scene x2 - Field - Ice - Status - The Combat Stages of the user and all Pokémon and Trainers in the encounter are set to their default state (usually 0)."
+    "effect": "EOT - 4, 1 Target - Ice - Special - DB6 - AC3 - If Frost Breath hits, it is a Critical Hit. *Grants: Freezer"
   },
   {
     "name": "TM80 - Rock Slide",
     "cost": 4200,
-    "effect": "At-Will - 6, 1 Target - Rock - Physical - DB5 - AC4"
+    "effect": "Scene x2 - 6, Ranged Blast 3 - Rock - Physical - DB8 - AC4 - Rock Slide Flinches all legal targets on 17+."
   },
   {
     "name": "TM81 - X-Scissor",
     "cost": 2400,
-    "effect": "EOT - Melee, 1 Target - Dark - Physical - The user and up to two allies adjacent to the target may each make a Struggle Attack against the target. These Struggle Attacks hit for Dark-Type Damage instead of their usual Type. Beat Up may trigger Pack Hunt only once, no matter the number of attacks."
+    "effect": "At-Will - Melee, 1 Target, Dash - Bug - Physical - DB8 - AC2"
   },
   {
     "name": "TM82 - Dragon Tail",
     "cost": 2800,
-    "effect": "Scene x2 - 6, 1 Target - Dragon - Special - DB10 - AC2 - The DB of Dynamax Cannon increases by +2 for each positive CS the target has, to a maximum of DB 20."
+    "effect": "At-Will - Melee, 1 Target, Push - Dragon - Physical - DB6 - AC3 - The target is Pushed 6 meters minus their Weight Class. The target is also Tripped on 15+."
   },
   {
     "name": "TM83 - Infestation",
     "cost": 2200,
-    "effect": "EOT - Melee, 1 Target - Bug - Physical - DB8 - AC2 - Lunge may be used as a Free Action at the end of a Sprint Maneuver taken as a Standard Action, as long as the user Shifted at least 3 meters in a straight line towards the target. When used this way, Lunge's target receives a -5 penalty to damage rolls for 1 round."
+    "effect": "Scene x2 - 3, 1 Target - Bug - Special - DB4 - AC4 - The target is put in a Vortex."
   },
   {
     "name": "TM84 - Poison Jab",
     "cost": 3000,
-    "effect": "At-Will - Melee, 1 Target - Poison - Physical - DB5 - AC2 - Poison Tail is a Critical Hit on 18+ and Poisons the target on 19+."
+    "effect": "EOT - Melee, 1 Target - Poison - Physical - DB8 - AC2 - Poison Jab Poisons the target on 15+."
   },
   {
     "name": "TM85 - Dream Eater",
     "cost": 3000,
-    "effect": "Daily x2 - Field - Psychic - Status - For 5 rounds, the area is considered Warped. While Warped, Moves that involve the user being airborne may not be used. Pokémon cannot use Sky or Levitate Capabilities to end their turn at an altitude higher than 1 meter. Flying-Types and Pokémon with the Ability Levitate are no longer immune to Ground-Type Moves. All Accuracy Rolls receive a +2 Bonus."
+    "effect": "EOT - Melee, 1 Target - Psychic - Special - DB10 - AC2 - Dream Eater can only target Sleeping Pokémon or Trainers. After the target takes damage, the user gains Hit Points equal to half of the damage they dealt to the target. Dream Eater does not wake up sleeping targets."
   },
   {
     "name": "TM86 - Grass Knot",
     "cost": 2900,
-    "effect": "Daily x2 - Field - Grass - Status - The area becomes Grassy for 5 rounds. While Grassy, all Pokémon and Trainers standing on the ground recover 1/10th of their maximum Hit Points at the start of every turn, and Grass-Type attacks performed by grounded Pokémon and Trainers gain a +10 bonus to Damage Rolls."
+    "effect": "EOT - 5, 1 Target, Weight Class - Grass - Special - DBX, See Effect - AC2 - Grass Knot's Damage Base is equal to twice the target's Weight Class."
   },
   {
     "name": "TM87 - Swagger",
     "cost": 1000,
-    "effect": "EOT - 8, Ranged Blast 2, Friendly - Normal - Special - DB6 - Swift cannot Miss."
+    "effect": "EOT - 6, 1 Target, Social - Normal - Status - AC5 - Raise the target's Attack by +2 CS. The target is Confused."
   },
   {
-    "name": "TM88 - Sleep talk",
+    "name": "TM88 - Sleep Talk",
     "cost": 1500,
-    "effect": "EOT - 5, Ranged Blast 3 - Normal - Status - Smokescreen creates a blast of Smoke that covers the target area; the Smoke persists until the end of the encounter, or until Defog or Whirlwind are used. All targets attacking from or into the Smoke receive a -3 penalty to Accuracy."
+    "effect": "Scene - Self - Normal - Status - Select another of the user’s Moves at random; this turn, the user may Shift and use that Move despite being Asleep. Sleep Talk can be only be used by Sleeping targets."
   },
   {
     "name": "TM89 - U-Turn",
     "cost": 3100,
-    "effect": "At-Will - Melee, 1 Target - Dark - Physical - DB6 - AC2 - If Assurance’s target has already been damaged by a Move on the same round Assurance is being used, Assurance has a Damage Base of 12 (3d12+10 / 30) instead. This effect may trigger only once per Scene per Target."
+    "effect": "At-Will - Melee, 1 Target, Dash - Bug - Physical - DB7 - AC2 - The user deals damage and then is immediately recalled to its Poké Ball in the same turn. A New Pokémon may immediately be sent out. Using U-Turn lets a Trapped user be recalled."
   },
   {
     "name": "TM90 - Substitute",
     "cost": 2000,
-    "effect": "EOT - 6, 1 Target, Social - Normal - Status - AC4 - Raise the target's Attack by +2 CS. The target is Confused."
+    "effect": "Scene - Self, Illusion, Coat - Normal - Status - The user loses 1/4 of their maximum Hit Points. This Hit Point loss cannot be prevented in any way. The user creates an Illusory Substitute Coat, which has Hit Points equal to 1/4th of the user’s full Hit Points +1. If the user would be hit by a Move or attack, instead the Substitute gets hit. Apply weakness, resistance and stats to the Substitute. The Substitute is immune to Status Afflictions and Status Moves. Moves with the Social or Sonic keywords completely ignore and bypass the Substitute. Once the Substitute has been destroyed, the user may be hit as normal. Substitute cannot be used if the user has less than 1/4 of their full Hit Points."
   },
   {
     "name": "TM91 - Flash Cannon",
     "cost": 2700,
-    "effect": "EOT - Melee, 1 Target, Double Strike - Steel - Physical - DB5 - AC3"
+    "effect": "EOT - 6, 1 Target - Steel - Special - DB8 - AC2 - Flash Cannon lowers the target's Special Defense by -1 CS on 17+."
   },
   {
     "name": "TM92 - Trick Room",
     "cost": 2000,
-    "effect": "Frequency - Range - Type - Category - DBDamage base - ACAC - Effects"
+    "effect": "Daily x2 - Field - Psychic - Status - Starting at the beginning of the next round, for 5 rounds, the area is considered Rewinding. While Rewinding, Initiative is reversed, and participants instead go from lowest Initiative to highest."
   },
   {
     "name": "TM93 - Wild Charge",
     "cost": 2500,
-    "effect": "Frequency - Range - Type - Category - DBDamage base - ACAC - Effects"
+    "effect": "At-Will - Melee, 1 Target, Dash, Recoil 1/4 - Electric - Physical - DB9 - AC2"
   },
   {
     "name": "TM94 - Surf",
     "cost": 5000,
-    "effect": "At-Will - 4, 1 Target - Water - Special - DB4 - AC2 - *Grants Fountain"
+    "effect": "EOT - Line 6 - Water - Special - DB9 - AC2 - As a Shift Action, the user may Move to any open square in Surf ’s area of effect without provoking any Attacks of Opportunity."
   },
   {
     "name": "TM95 - Snarl",
     "cost": 2400,
-    "effect": "At-Will - Melee, 1 Target, Trigger, Interrupt - Dark - Physical - DB7 - AC2 - If an adjacent foe targets the user with a Damaging Attack, Sucker Punch may be used as an Interrupt Move against the triggering foe."
+    "effect": "EOT - Cone 2, Sonic - Dark - Special - DB6 - AC3 - Lower the Special Attack of all legal targets by -1 CS."
   },
   {
     "name": "TM96 - Nature Power",
     "cost": 2000,
-    "effect": "Daily x2 - 4, 1 Target - Normal - Status - The user and the target both lose 1/2 of their current Hit Points. Add the amount of Hit Points the user and the target lost together, and divide the value by 2. Both the target and the user gain Hit Points equal to this value. Do not add Injuries from Pain Split from Hit Point Markers until the full effect of the Move has been resolved. Pain Split never causes Massive Damage. Hit Point loss from Pain Split cannot be prevented in any way."
+    "effect": "EOT - See Effect - Normal - Status - DBSee Effect - ACSee Effect - Nature Power uses a Move defined by the Environ keyword."
   },
   {
     "name": "TM97 - Dark Pulse",
     "cost": 2700,
-    "effect": "EOT - Melee, 1 Target - Dark - Physical - DB9 - AC2 - This Move ignores the target’s positive Defense Combat Stages and all Damage Reduction."
+    "effect": "EOT - 8, 1 Target, Aura - Dark - Special - DB8 - AC2 - Dark Pulse Flinches the target on 17+."
   },
   {
     "name": "TM98 - Waterfall",
     "cost": 3700,
-    "effect": "Scene x2 - 3, 1 Target - Water - Special - DB4 - AC4 - The target is put in a Vortex."
+    "effect": "EOT - Melee, 1 Target - Water - Physical - DB8 - AC2 - Waterfall Flinches the target on 17+."
   },
   {
     "name": "TM99 - Dazzling Gleam",
     "cost": 2700,
-    "effect": "EOT - Melee, 1 Target - Fairy - Special - DB5 - AC2 - The user gains HP equal to half of the damage the user dealt to the target."
+    "effect": "EOT - Cone 2 - Fairy - Special - DB8 - AC2"
   },
   {
     "name": "TM100 - Confide",
     "cost": 1000,
-    "effect": "At-Will - Self - Normal - Status - The user becomes the elemental Type of their choice as long as the Type resists the elemental Type of the Move it last took damage from until the end of the encounter. Replace all other Types."
+    "effect": "At-Will - 4, 1 Target, Social - Normal - Status - AC2 - Lower the target's Special Attack by -1 CS."
   },
   {
     "name": "Dome Fossil",
