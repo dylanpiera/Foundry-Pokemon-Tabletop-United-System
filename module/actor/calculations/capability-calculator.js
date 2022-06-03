@@ -48,12 +48,6 @@ export function CalculateTrainerCapabilities(trainerSkills, items, speedCombatSt
             continue;
         }
 
-        /* Abilities */
-        if (item.type == "ability" && (item.name == "Sprint" || item.name == "Sprint [Playtest]")) {
-            mods["Overland"] += 2;
-            continue;
-        }
-
         /* Edges */
         if (item.name == "Traveler" && item.type == "edge") {
             mods["Traveler"] = true;
@@ -146,12 +140,10 @@ export function CalculatePokemonCapabilities(speciesData, items, speedCombatStag
 
     for (let item of items) {
         // Abilities
-        if (item.name == "Rocket [Playtest]" && item.type == "ability") speciesData.Capabilities["Sky"] += 2;
         if (item.name == "Levitate" && item.type == "ability") {
             if (speciesData.Capabilities["Levitate"] > 0) speciesData.Capabilities["Levitate"] += 2;
             else speciesData.Capabilities["Levitate"] += 4;
         }
-        if (item.type == "ability" && (item.name == "Sprint" || item.name == "Sprint [Playtest]")) speciesData.Capabilities["Overland"] += 2;
 
         // Moves
         if (item.name == "Bounce" && item.type == "move") speciesData.Capabilities["High Jump"] += 1;
@@ -166,8 +158,6 @@ export function CalculatePokemonCapabilities(speciesData, items, speedCombatStag
         if (item.name == "Dig" && item.type == "move") speciesData.Capabilities["Burrow"] += 3;
 
         // Poké Edges
-        if (item.name == "Advanced Mobility (Overland)" && item.type == "pokeedge") speciesData.Capabilities["Overland"] += 2;
-        if (item.name == "Advanced Mobility (Swim)" && item.type == "pokeedge") speciesData.Capabilities["Swim"] += 2;
         if (item.name == "Advanced Mobility (Sky)" && item.type == "pokeedge") {
             if (speciesData.Capabilities["Sky"] > 0) speciesData.Capabilities["Sky"] += 2;
         }
