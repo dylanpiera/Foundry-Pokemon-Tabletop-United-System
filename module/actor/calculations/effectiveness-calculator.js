@@ -83,6 +83,11 @@ export function GetMonEffectiveness(data) {
         }
     }
 
+    // When both Solid Rock and Filter are active, Super Effective multiplications should only be changed
+    // once, not twice. If both Abilites are there, only calculate one and leave the conditional Damage
+    // reduction to the player
+    if(abilities["Solid Rock"].active && abilities["Filter"].active) abilities["Filter"].active = false
+
     for(const [key,value] of Object.entries(abilities).filter(x => x[1].active == true)) {
         typeCalc = value.execute(typeCalc);
     }
