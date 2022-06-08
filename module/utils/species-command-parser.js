@@ -229,6 +229,7 @@ export async function FinishDexDragPokemonCreation(formData, update)
     let shiny_chance = parseInt(formData["data.shiny_chance"]);
     let stat_randomness = parseInt(formData["data.stat_randomness"]);
     let prevent_evolution = Number(formData["data.prevent_evolution"]);
+    let wildcard_token = Boolean(formData["data.wildcard_token"])
 
     let new_actor = await game.ptu.monGenerator.ActorGenerator.Create({
         exists: false,
@@ -260,7 +261,15 @@ export async function FinishDexDragPokemonCreation(formData, update)
     protoToken.bar1.attribute = "health";
 
     protoToken.img = await GetSpeciesArt(game.ptu.GetSpeciesData(new_actor.data.data.species), imgSrc, ".webp", new_actor.data.data.shiny, true);
-    
+
+    if(protoToken.img && wildcard_token){
+        protoToken.randomImg = true
+        protoToken.flags = {"token-hud-wildcard": {"default": protoToken.img}}
+        // To still allow dots being used anywhere in the path, we substitute the last . with *., but in reverse, so .*
+        protoToken.img = [...[...protoToken.img].reverse().join("").replace(".", ".*")].reverse().join("")
+
+    }
+
     new_actor = await new_actor.update({"token": protoToken});
 
     protoToken.x = Math.floor(drop_coordinates_x / game.scenes.viewed.data.grid) * game.scenes.viewed.data.grid;

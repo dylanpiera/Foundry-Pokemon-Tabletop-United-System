@@ -13,7 +13,7 @@ export class PTUDexDragOptions extends FormApplication {
         classes: ["ptu", "charactermancer", "pokemon", "dex_drag_in"],
         template: "systems/ptu/templates/forms/dex-drag-options-form.hbs",
         width: 250,
-        height: 375,
+        height: 430,
         title: "Dex Drag-In",
         tabs: [{ navSelector: ".sheet-tabs", contentSelector: ".sheet-body", initial: "stats" }]
       });
@@ -31,6 +31,7 @@ export class PTUDexDragOptions extends FormApplication {
       data.shinyChanceDefault = game.settings.get("ptu", "defaultDexDragInShinyChance");
       data.statRandomnessDefault = game.settings.get("ptu", "defaultDexDragInStatRandomness");
       data.preventDefault = game.settings.get("ptu", "defaultDexDragInPreventEvolution");
+      data.wildcardToken = game.settings.get("ptu", "defaultDexDragInWildcardToken");
       data.species = this.object.item.name;
 
       return data;

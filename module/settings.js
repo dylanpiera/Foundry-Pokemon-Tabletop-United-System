@@ -270,6 +270,16 @@ export function LoadSystemSettings() {
         category: "generation"
     });
 
+    game.settings.register("ptu", "defaultDexDragInWildcardToken", {
+        name: "Default Dex Drag-In Token With Wildcards",
+        hint: "Default setting for wildcarding Tokens of generated Pokemon by dragging them from the Dex. When 'wildcarded' and a picture such as my/path/001.png is found, the wildcard token will be my/path/001*.png (or any other suitable file extension as without wildcarding). Probably best experienced with 'Token HUD Wildcard'.",
+        scope: "world",
+        config: true,
+        type: Boolean,
+        default: false,
+        category: "generation"
+    });
+
     game.settings.register("ptu", "customSpecies", {
         name: "Custom Species json (Requires Refresh)",
         hint: "Please specify the path of a custom species file (inside the world directory) if you wish to add Homebrew Pokémon. [Currently in Beta!]",
