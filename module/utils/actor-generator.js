@@ -283,7 +283,8 @@ function PrepareCapabilities(allCapabilities) {
     return this;
 }
 
-function PrepareShiny(shiny_chance = 0) {    
-    this.actor.data.data.shiny = ( getRandomIntInclusive(1, 100) <= shiny_chance ? true : false );
+function PrepareShiny(shiny_chance_percentage = 0.0) {
+    // Math.random() return form inclusive 0 to exclusive 1
+    this.actor.data.data.shiny = Math.random() * 100 < shiny_chance_percentage
     return this;
 }
