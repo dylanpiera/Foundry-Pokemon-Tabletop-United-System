@@ -50,15 +50,9 @@ async function GetMoveSoundPath(moveData)
 
 	if(moveData.fiveStrike && moveData.fiveStrike.is)
 	{
-
-		if(moveData.fiveStrike.amount < 2 )
-		{
-			move_name_path = (move_name + " 1hit.mp3");
-		}
-		else
-		{
-			move_name_path = (move_name + " 2hit.mp3");
-		}
+		// Make it somewhere between 1 and 5, just in case
+		const count = Math.min(5,Math.max(1, moveData.fiveStrike.amount ?? 1))
+		move_name_path = `${move_name} ${count}hit.mp3`
 	}
 
     let move_sound_path = base_sound_directory + move_name_path;
