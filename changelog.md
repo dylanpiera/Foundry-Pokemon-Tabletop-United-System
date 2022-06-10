@@ -8,6 +8,7 @@ Either way! A quick and small update with a bunch of fixes thanks to Muhsigbokz#
 - Fixed Filter & Solid Rock both applying if added to the same Pokémon
 - Fixed TM item descriptions being shuffled in the compendium (will not retroactively fix them in your actors / game world!!)
 - Shiny chance now accepts decimal, enjoy making your shinies 0.00001% likely to happen! Or 99.99% and watch your players face in pure horror when they get that normal mon.
+- Fixed an issue with Pin Missile and audio.
 - Fixed some small issues with the TokensUpdate API for macro developers.
 
 ## 2.0-Beta-4
