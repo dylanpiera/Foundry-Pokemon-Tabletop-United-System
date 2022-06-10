@@ -1,6 +1,15 @@
 # Welcome to the Beta!
 Hey there! You are on the Beta Branch. If you ever have any feedback please do share with us over on [Github](https://github.com/dylanpiera/Foundry-Pokemon-Tabletop-United-System/issues) or [Discord](https://discord.gg/fE3w59q)
 
+## 2.0-Beta-6 - Bugfixes & Small Features Part 1.
+Where did beta 5 go? No idea.
+
+Either way! A quick and small update with a bunch of fixes thanks to Muhsigbokz#8821 over on Discord.
+- Fixed Filter & Solid Rock both applying if added to the same Pokémon
+- Fixed TM item descriptions being shuffled in the compendium (will not retroactively fix them in your actors / game world!!)
+- Shiny chance now accepts decimal, enjoy making your shinies 0.00001% likely to happen! Or 99.99% and watch your players face in pure horror when they get that normal mon.
+- Fixed some small issues with the TokensUpdate API for macro developers.
+
 ## 2.0-Beta-4
 This update fixes a few bugs around Pokeball effects, as well as a significant revamp (thanks to Colton who spearheaded this) of the initiative system, adding support for Boss Initiative and League Initiative, as well as a UI toggle (checkmark/X) in the combat tracker that automatically checks off and fades-out actors in the list when they finish their turns, and skips up or down the list to the highest not-gone-yet actor when the turn is advanced if initiative has shuffled around due to speed changes or the like.
 
