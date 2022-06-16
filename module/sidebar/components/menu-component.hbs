@@ -1,5 +1,5 @@
 <div class="d-flex pb-1" id="menu-buttons">
-    <button title="Coming Soon" disabled class="menu-item p-1" id="struggle-button" data-type="struggle">Struggles</button>
+    <button title="Coming Soon" class="menu-item p-1" id="struggle-button" data-type="struggle">Struggles</button>
     <button title="Coming Soon" disabled class="menu-item p-1" id="maneuver-button" data-type="maneuver">Maneuvers</button>
     <button title="Pokeball Menu" class="menu-item p-1" id="pokeball-button" data-type="pokeball">Pokeballs</button>
     <button title="Coming Soon" disabled class="menu-item p-1" id="rest-button" data-type="rest">Resting</button>
@@ -10,13 +10,13 @@
         <!-- Struggle Menu -->
         {{#if struggles}}
             {{#each struggles as | struggle |}}
-                <div class="row m-0 p-0">
-                    <button type="button" class="movemaster-button" data-button="{{struggle._id}}">
-                        <div class="btn-body efc {{getEffectivenessColor struggle.data.effectiveness}}" >
+                <div class="struggle-row">
+                    <button type="button" class="movemaster-button" data-struggle-id="{{struggle._id}}">
+                        <div class="btn-body efc none" >
                             <h3>
                                 <!-- Move Name -->
-                                <div class="pt-2 pb-1" {{!-- style="padding-top:5px;" --}} title="{{struggle.data.effect}}">
-                                    {{struggle.name}}
+                                <div class="pt-2 pb-1" {{!-- style="padding-top:5px;" --}} title="{{struggle.name}}">
+                                    Struggle
                                 </div>
                                 <!-- Frequency -->
                                 <img src="{{calcFrequencyIconPath struggle.data.frequency '0'}}" title="{{struggle.data.frequency}} ({{'0'}} Remaining)"
@@ -27,14 +27,6 @@
                                     <img src="systems/ptu/images/icons/{{struggle.data.type}}IC.png" />
                                 </div>
                             </h3>
-                            <!-- Stab Bar -->
-                            {{#if struggle.data.stab}}
-                            <div class="col p-0">
-                                <span class="type-img">
-                                    <img src="/systems/ptu/images/icons/STAB_Border.png" style="height: 1px;" />
-                                </span>
-                            </div>
-                            {{/if}}
                             <!-- Damage Base Bar -->
                             {{!-- {{#if (and (not data.damageBase "--") (not (contains "damage" (data.damageBase)) true)) }} --}}
                             {{#unless (is struggle.data.damageBase "--")}}
@@ -45,15 +37,6 @@
                                 </span>
                             </div>
                             {{/unless}}
-                            <!-- Other Icons (to be done) -->
-                            <div class="d-flex icon-list">
-                                {{{struggle.data.rangeIconsHtml}}}
-                                {{#unless (is struggle.data.effectiveness "-1")}}
-                                    <span style="font-size:30px">
-                                        / x {{struggle.data.effectiveness}}
-                                    </span>
-                                {{/unless}}
-                            </div>
                         </div>
                     </button>
                 </div>

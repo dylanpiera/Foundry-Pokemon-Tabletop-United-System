@@ -2251,6 +2251,12 @@ body.messages-dark-theme .chat-controls .roll-type-select {
   flex-direction: row !important;
   flex-wrap: wrap !important;
 }
+#ptu-sidebar .ptu-sidebar #menu-component #menu-content .struggle-row {
+  flex: 0 0 100%;
+}
+#ptu-sidebar .ptu-sidebar #menu-component #menu-content .struggle-row .btn-body {
+  min-height: 60px !important;
+}
 #ptu-sidebar .ptu-sidebar #menu-component #menu-content .pokeball-item {
   padding-left: 2px;
   margin-top: 2px;
@@ -2442,12 +2448,14 @@ body.messages-dark-theme .chat-controls .roll-type-select {
   height: 22px;
   border-width: 0px;
 }
-#ptu-sidebar .ptu-sidebar #moves-list .movemaster-button {
+#ptu-sidebar .ptu-sidebar #moves-list .movemaster-button,
+#ptu-sidebar .ptu-sidebar .struggle-row .movemaster-button {
   margin: 3px 0px;
   padding: 0;
   text-align: center;
 }
-#ptu-sidebar .ptu-sidebar #moves-list .movemaster-button .btn-body {
+#ptu-sidebar .ptu-sidebar #moves-list .movemaster-button .btn-body,
+#ptu-sidebar .ptu-sidebar .struggle-row .movemaster-button .btn-body {
   background-color: #333333;
   color: #cccccc;
   border-left: 4px solid;
@@ -2458,7 +2466,8 @@ body.messages-dark-theme .chat-controls .roll-type-select {
   font-family: "Modesto Condensed";
   line-height: 0.6;
 }
-#ptu-sidebar .ptu-sidebar #moves-list .movemaster-button .btn-body h3 {
+#ptu-sidebar .ptu-sidebar #moves-list .movemaster-button .btn-body h3,
+#ptu-sidebar .ptu-sidebar .struggle-row .movemaster-button .btn-body h3 {
   padding: 0px;
   font-family: "Modesto Condensed";
   font-size: 24px;
@@ -2467,32 +2476,38 @@ body.messages-dark-theme .chat-controls .roll-type-select {
   overflow-wrap: normal !important;
   word-break: keep-all !important;
 }
-#ptu-sidebar .ptu-sidebar #moves-list .movemaster-button .btn-body .type-bar {
+#ptu-sidebar .ptu-sidebar #moves-list .movemaster-button .btn-body .type-bar,
+#ptu-sidebar .ptu-sidebar .struggle-row .movemaster-button .btn-body .type-bar {
   height: auto;
   border: 0px !important;
   width: 98px;
   border-width: 0;
   display: flex;
 }
-#ptu-sidebar .ptu-sidebar #moves-list .movemaster-button .btn-body .type-bar img {
+#ptu-sidebar .ptu-sidebar #moves-list .movemaster-button .btn-body .type-bar img,
+#ptu-sidebar .ptu-sidebar .struggle-row .movemaster-button .btn-body .type-bar img {
   border: unset;
 }
-#ptu-sidebar .ptu-sidebar #moves-list .movemaster-button .btn-body .type-img img {
+#ptu-sidebar .ptu-sidebar #moves-list .movemaster-button .btn-body .type-img img,
+#ptu-sidebar .ptu-sidebar .struggle-row .movemaster-button .btn-body .type-img img {
   width: 248px;
   height: auto;
   padding: 0px !important;
 }
-#ptu-sidebar .ptu-sidebar #moves-list .movemaster-button .btn-body .icon-list {
+#ptu-sidebar .ptu-sidebar #moves-list .movemaster-button .btn-body .icon-list,
+#ptu-sidebar .ptu-sidebar .struggle-row .movemaster-button .btn-body .icon-list {
   padding-top: 4px;
   padding-bottom: 0;
   font-size: 14px;
   align-items: center;
   justify-content: center;
 }
-#ptu-sidebar .ptu-sidebar #moves-list .movemaster-button .btn-body .icon-list span {
+#ptu-sidebar .ptu-sidebar #moves-list .movemaster-button .btn-body .icon-list span,
+#ptu-sidebar .ptu-sidebar .struggle-row .movemaster-button .btn-body .icon-list span {
   margin: 0 4px;
 }
-#ptu-sidebar .ptu-sidebar #moves-list .movemaster-button .btn-body .icon-list img {
+#ptu-sidebar .ptu-sidebar #moves-list .movemaster-button .btn-body .icon-list img,
+#ptu-sidebar .ptu-sidebar .struggle-row .movemaster-button .btn-body .icon-list img {
   height: 22px;
   border-width: 0px;
 }

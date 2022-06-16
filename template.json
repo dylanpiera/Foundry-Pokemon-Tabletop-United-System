@@ -504,7 +504,8 @@
       "range": "",
       "contestType": "",
       "stab": false,
-      "damageBonus": 0
+      "damageBonus": 0,
+      "isStruggle": false
     },
     "capability": {
       "templates": ["base"]
