@@ -61,7 +61,7 @@ export default class MovesList extends Component {
             moveData.data = this.PrepareMoveData(moveData.data, this.state.actor.data.data, this.state.targetedActors);
 
             // If fake move skip
-            if((moveData.data.damageBase == "--" && moveData.data.category == "--") || (moveData.data.damageBase == "" && moveData.data.category == "")) continue;
+            if((moveData.data.damageBase == "--" && moveData.data.category == "--") || (moveData.data.damageBase == "" && moveData.data.category == "") || (moveData.data.isStruggle)) continue;
 
             // If DB is not a number, 
             if(isNaN(Number(moveData.data.damageBase))) moveData.data.damageBase = "--";
