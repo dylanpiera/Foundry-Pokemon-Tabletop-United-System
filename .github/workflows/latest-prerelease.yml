@@ -33,3 +33,4 @@ jobs:
         prerelease: true
         token: ${{ secrets.GITHUB_TOKEN }}
         artifacts: './system.json,./system.zip'
+        tag: ${{ steps.get-version.outputs.version }}
