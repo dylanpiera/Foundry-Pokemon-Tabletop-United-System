@@ -110,9 +110,9 @@ export default class MenuComponent extends Component {
             game.ptu.ThrowPokeball(owner, game.user?.targets?.first(), owner?.items.get(entityId));
         })
 
-        this.element.children("#menu-content").children(".struggle-row").children(".movemaster-button[data-button]").on("mousedown", (event) => {
+        this.element.children("#menu-content").children(".struggle-row").children(".movemaster-button[data-struggle-id]").on("mousedown", (event) => {
             // Handle on move click here, for now just log that button is clicked
-            console.log(event);
+            const move = this.state.actor.items.get(event.currentTarget?.dataset?.struggleId);
             switch (event.which) {
                 case 3: // Right click
                     sendMoveMessage({
@@ -120,13 +120,14 @@ export default class MenuComponent extends Component {
                             actor: this.state.actor
                         }),
                         moveName: move.name,
-                        move: move.data,
+                        move: move.data.data,
+                        templateType: 'details'
                     })
                     break;
                 case 1: // Left click
                 case 2: // Middle click
                 default: // anything else??
-                    this.state.actor.executeMove(move._id)
+                    this.state.actor.executeMove(move.id)
             }
         })
 
