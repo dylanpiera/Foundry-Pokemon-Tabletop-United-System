@@ -1,6 +1,17 @@
 # Welcome to the Beta!
 Hey there! You are on the Beta Branch. If you ever have any feedback please do share with us over on [Github](https://github.com/dylanpiera/Foundry-Pokemon-Tabletop-United-System/issues) or [Discord](https://discord.gg/fE3w59q)
 
+## 2.0-Beta-7 - Struggle Menu is Back!
+Well... It's been a while but finally the struggle menu is back!
+
+**Please Note**: Struggles will not show in your 'moves' section on your sheet or in the side bar. But only under the 'Struggle' button of the side bar.
+Please feel free to delete all struggles you own on Pokémon to clean out their sheets.
+
+### Changes:
+- Added 'Pokebot' Capability simulating the type effectiveness changes of a Pokebot
+- Added Struggle Menu to the sidebar
+- Struggle menu will show struggles based on the mon's capabilities.
+
 ## 2.0-Beta-6 - Bugfixes & Small Features Part 1.
 Where did beta 5 go? No idea.
 

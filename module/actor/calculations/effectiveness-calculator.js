@@ -92,6 +92,28 @@ export function GetMonEffectiveness(data) {
         typeCalc = value.execute(typeCalc);
     }
 
+    let capabilities = {
+        "Pokébot": {active: false, execute: function (typeCalc) {
+                typeCalc["Fire"] *= 2;
+                typeCalc["Electric"] *= 2;
+                typeCalc["Ground"] *= 2;
+                return typeCalc;
+            }}
+    }
+
+    for(let capability of data.items.filter(x => x.type == "capability")) {
+        for(let key of Object.keys(capabilities)) {
+            if(capability.name?.toLowerCase().replace("[playtest]","").trim() == key.toLowerCase()) {
+                capabilities[key].active = true;
+                break;
+            }
+        }
+    }
+
+    for(const [key,value] of Object.entries(capabilities).filter(x => x[1].active == true)) {
+        typeCalc = value.execute(typeCalc);
+    }
+
     const effectivenessModifier = data.data.modifiers?.resistanceSteps?.total ?? 0;
     if(effectivenessModifier != 0) {
         const timesMod = Math.pow((effectivenessModifier > 0 ? 0.5 : 2), Math.abs(effectivenessModifier));

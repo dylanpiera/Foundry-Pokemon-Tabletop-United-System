@@ -1050,7 +1050,7 @@ export class PTUActor extends Actor {
 
 export function GetSpeciesData(species) {
   debug("Loading data for " + species)
-  if (species != "") {
+  if (species) {
     let preJson;
     let extra = { isCustomSpecies: false };
     if (parseInt(species)) {
