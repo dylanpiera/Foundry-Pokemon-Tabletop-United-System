@@ -71,14 +71,25 @@ export function LoadSystemSettings() {
         type: Number,
         choices: {
             1: "Disable Pokédex",
-            2: "Only on owned Tokens",
-            3: "Only on owned Mons (checks trainer's dex tab)",
+            6: "Dexentry description only (Basic description and details only)",
+            2: "Full details on owned Tokens, Dexentry description on un-owned tokens",
+            3: "Full details on owned Mons (checks trainer's dex tab), Dexentry Description on un-owned mons",
             4: "GM Prompt (**NOT YET IMPLEMENTED**)",
-            5: "Always allow Pokédex",
+            5: "Always Full Details",
         },
         default: 1,
         category: "general"
     })
+
+    game.settings.register("ptu", "auto-add-to-dex", {
+        name: "Automatically add pokemon to Seen",
+        hint: "Automatically add pokemon to player's seen list when scanned with pokedex",
+        scope: "world",
+        config: true,
+        type: Boolean,
+        default: true,
+        category: "general"
+    });
 
     game.settings.register("ptu", "move-effectiveness-visible", {
         name: "Move Effectiveness",

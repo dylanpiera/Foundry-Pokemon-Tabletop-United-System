@@ -751,6 +751,7 @@ function _onMoveMacro(actor, item) {
 
 function _onPokedexMacro() {
   const permSetting = game.settings.get("ptu", "dex-permission");
+  const addToDex = game.settings.get("ptu", "auto-add-to-dex");
   for (let token of game.user.targets.size > 0 ? game.user.targets.values() : canvas.tokens.controlled) {
     if (token.actor.data.type != "pokemon") continue;
     if (game.user.isGM) {
@@ -759,17 +760,20 @@ function _onPokedexMacro() {
       continue;
     }
 
+    if(addToDex && !game.user.isGM){
+      if (!game.user.character) return ui.notifications.warn("Please make sure you have a trainer as your Selected Player Character");
+      game.ptu.addToDex(token.actor.data.data.species);
+    }
+
     switch (permSetting) {
-      case 1: { // Never
+      case 1: { // Pokedex Disabled
         game.ptu.renderDesc(token.actor.data.data.species);
-        game.ptu.addToDex(token.actor.data.data.species);
         //return ui.notifications.info("DM has turned off the Pokedex.");
         break;
       }
       case 2: { // Only owned tokens
         if (!token.owner) {
           game.ptu.renderDesc(token.actor.data.data.species);
-          game.ptu.addToDex(token.actor.data.data.species);
           //ui.notifications.warn("Only owned tokens can be identified by the Pokédex.");
           continue;
         }
@@ -782,7 +786,6 @@ function _onPokedexMacro() {
 
         if (!game.user.character.itemTypes.dexentry.some(entry => entry.data.name === game.ptu.GetSpeciesData(token.actor.data.data.species)?.id?.toLowerCase() && entry.data.data.owned)) {
           game.ptu.renderDesc(token.actor.data.data.species);
-          game.ptu.addToDex(token.actor.data.data.species);
           //ui.notifications.warn("Only owned species can be identified by the Pokédex.");
           continue;
         }
@@ -795,6 +798,9 @@ function _onPokedexMacro() {
       case 5: { // Always
         game.ptu.renderDex(token.actor.data.data.species);
         break;
+      }
+      case 6: { //pokemon description only
+        game.ptu.renderDesc(token.actor.data.data.species);
       }
     }
   }
