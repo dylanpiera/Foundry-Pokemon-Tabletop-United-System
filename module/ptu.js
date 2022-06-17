@@ -42,7 +42,7 @@ import { Afflictions } from './combat/effects/afflictions.js'
 import PTUCombat from './combat/combat.js'
 import { PTUCombatOverrides, PTUCombatTrackerOverrides } from './combat/ptu_overrides.js'
 import Api from './api/api.js'
-import RenderDex from './utils/pokedex.js'
+import RenderDex, { AddMontoPokedex, RenderDescription } from './utils/pokedex.js'
 import TMsData from './data/tm-data.js'
 import PTUActiveEffectConfig from './forms/active-effect-config.js';
 import getTrainingChanges from './data/training-data.js';
@@ -76,6 +76,8 @@ Hooks.once('init', function () {
     moveMacro: _onMoveMacro,
     pokedexMacro: _onPokedexMacro,
     renderDex: RenderDex,
+    renderDesc: RenderDescription,
+    addToDex: AddMontoPokedex,
     PTUActor,
     PTUItem,
     PTUPokemonCharactermancer,
@@ -752,17 +754,23 @@ function _onPokedexMacro() {
   for (let token of game.user.targets.size > 0 ? game.user.targets.values() : canvas.tokens.controlled) {
     if (token.actor.data.type != "pokemon") continue;
     if (game.user.isGM) {
-      game.ptu.renderDex(token.actor.data.data.species)
+      game.ptu.renderDex(token.actor.data.data.species);
+      game.ptu.renderDesc(token.actor.data.data.species);
       continue;
     }
 
     switch (permSetting) {
       case 1: { // Never
-        return ui.notifications.info("DM has turned off the Pokedex.");
+        game.ptu.renderDesc(token.actor.data.data.species);
+        game.ptu.addToDex(token.actor.data.data.species);
+        //return ui.notifications.info("DM has turned off the Pokedex.");
+        break;
       }
       case 2: { // Only owned tokens
         if (!token.owner) {
-          ui.notifications.warn("Only owned tokens can be identified by the Pokédex.");
+          game.ptu.renderDesc(token.actor.data.data.species);
+          game.ptu.addToDex(token.actor.data.data.species);
+          //ui.notifications.warn("Only owned tokens can be identified by the Pokédex.");
           continue;
         }
 
@@ -772,18 +780,20 @@ function _onPokedexMacro() {
       case 3: { // Only owned mons
         if (!game.user.character) return ui.notifications.warn("Please make sure you have a trainer as your Selected Player Character");
 
-        if (!game.user.character.itemTypes.dexentry.some(entry => entry.data.name == game.ptu.GetSpeciesData(token.actor.data.data.species)?.id?.toLowerCase() && entry.data.data.owned)) {
-          ui.notifications.warn("Only owned species can be identified by the Pokédex.");
+        if (!game.user.character.itemTypes.dexentry.some(entry => entry.data.name === game.ptu.GetSpeciesData(token.actor.data.data.species)?.id?.toLowerCase() && entry.data.data.owned)) {
+          game.ptu.renderDesc(token.actor.data.data.species);
+          game.ptu.addToDex(token.actor.data.data.species);
+          //ui.notifications.warn("Only owned species can be identified by the Pokédex.");
           continue;
         }
-        game.ptu.renderDex(token.actor.data.data.species)
+        game.ptu.renderDex(token.actor.data.data.species);
         break;
       }
       case 4: { // GM Prompt
         return ui.notifications.warn("The GM prompt feature has yet to be implemented. Please ask your DM to change to a different Dex Permission Setting");
       }
       case 5: { // Always
-        game.ptu.renderDex(token.actor.data.data.species)
+        game.ptu.renderDex(token.actor.data.data.species);
         break;
       }
     }
