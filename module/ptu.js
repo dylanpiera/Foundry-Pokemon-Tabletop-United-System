@@ -771,7 +771,10 @@ function _onPokedexMacro() {
         //return ui.notifications.info("DM has turned off the Pokedex.");
         break;
       }
-      case 2: { // Only owned tokens
+      case 2: { //pokemon description only
+        game.ptu.renderDesc(token.actor.data.data.species);
+      }
+      case 3: { // Only owned tokens
         if (!token.owner) {
           game.ptu.renderDesc(token.actor.data.data.species);
           //ui.notifications.warn("Only owned tokens can be identified by the Pokédex.");
@@ -781,7 +784,7 @@ function _onPokedexMacro() {
         game.ptu.renderDex(token.actor.data.data.species);
         break;
       }
-      case 3: { // Only owned mons
+      case 4: { // Only owned mons
         if (!game.user.character) return ui.notifications.warn("Please make sure you have a trainer as your Selected Player Character");
 
         if (!game.user.character.itemTypes.dexentry.some(entry => entry.data.name === game.ptu.GetSpeciesData(token.actor.data.data.species)?.id?.toLowerCase() && entry.data.data.owned)) {
@@ -792,15 +795,12 @@ function _onPokedexMacro() {
         game.ptu.renderDex(token.actor.data.data.species);
         break;
       }
-      case 4: { // GM Prompt
+      case 5: { // GM Prompt
         return ui.notifications.warn("The GM prompt feature has yet to be implemented. Please ask your DM to change to a different Dex Permission Setting");
       }
-      case 5: { // Always
+      case 6: { // Always Full Details
         game.ptu.renderDex(token.actor.data.data.species);
         break;
-      }
-      case 6: { //pokemon description only
-        game.ptu.renderDesc(token.actor.data.data.species);
       }
     }
   }
