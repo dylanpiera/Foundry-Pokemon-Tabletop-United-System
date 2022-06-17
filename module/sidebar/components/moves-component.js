@@ -19,6 +19,7 @@ export default class MovesList extends Component {
      * @returns {void}
      */
     async render() {
+        const effVisible = game.settings.get("ptu", "move-effectiveness-visible");
         // If it appears we're stuck in a recursive loop stop attempting to update the data and instead just render. 
         // In testing this should only occur if an item has doubly nested arrays. For example, an Effect.
         // But as moves shouldn't have effects anyways this can safely be ignored.
@@ -65,6 +66,21 @@ export default class MovesList extends Component {
 
             // If DB is not a number, 
             if(isNaN(Number(moveData.data.damageBase))) moveData.data.damageBase = "--";
+            switch (effVisible){
+                case 3: //visible to all
+                    break;
+                case 2: //visible to GMs only
+                    if(game.user.isGM){
+                        break;
+                    } else {
+                        moveData.data.effectiveness = -1; //don't show effectiveness
+                        break;
+                    }
+                case 1: //disabled
+                    moveData.data.effectiveness = -1; //don't show effectiveness
+                
+            }
+
             const moveHtml = await renderTemplate('/systems/ptu/module/sidebar/components/moves-component.hbs', moveData);
             output += moveHtml;
         }

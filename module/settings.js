@@ -80,6 +80,21 @@ export function LoadSystemSettings() {
         category: "general"
     })
 
+    game.settings.register("ptu", "move-effectiveness-visible", {
+        name: "Move Effectiveness",
+        hint: "Whether the players will be able to see how effective their Pokémon's moves are",
+        scope: "world",
+        config: true,
+        type: Number,
+        choices: {
+            1: "Disable Effectiveness",
+            2: "Visible to GMs Only",
+            3: "Visible to All Players"
+        },
+        default: 1,
+        category: "general"
+    })
+    
     game.settings.register("ptu", "showCharactermancerEvolutions", {
         name: "Show evolutions in Charactermancer",
         hint: "Allow players to see evolutions in the Charactermancer. DMs ignore this setting.",
