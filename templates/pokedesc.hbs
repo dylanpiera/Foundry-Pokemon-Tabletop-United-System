@@ -1,0 +1,78 @@
+<div class='container pokedex'>
+    <div class='row'>
+        <div class='col' style='text-align: center;'>
+        <img src='{{img}}' style='border: 0; max-height: 200px;'>
+        </div>
+    </div>
+
+    <div class='row readable'>
+        <div class='col'>
+            <h3><strong>{{speciesData._id}}</strong></h3>
+
+            <div class='row'>
+                {{dexEntry.data.data.entry}}
+            </div>
+
+            <div class='container quick-info' style="margin-top:10px;">
+                <div class='row'>
+                    <div class='col'>
+                        <strong>Number:</strong> 
+                    </div>
+                    <div class='col'>
+                        {{speciesData.number}}
+                    </div>
+                </div>
+
+                <div class='row'>
+                    <div class='col'>
+                        <strong>Type:</strong> 
+                    </div>
+                    <div class='col'>
+                        {{{loadTypeImages speciesData.Type}}}
+                    </div>
+                </div>
+
+                <div class='row'>
+                    <div class='col'>
+                        <strong>Height:</strong> 
+                    </div>
+                    <div class='col'>
+                        {{speciesData.Height}}m ({{speciesData.[Size Class]}})
+                    </div>
+                </div>
+
+                <div class='row'>
+                    <div class='col'>
+                        <strong>Weight:</strong> 
+                    </div>
+                    <div class='col'>
+                        {{speciesData.Weight}} kg
+                    </div>
+                </div>
+
+                <div class='row'>
+                    <div class='col'>
+                        <strong>Habitat:</strong> 
+                    </div>
+                    <div class='col'>
+                        <ul>
+                            {{#each speciesData.Habitat as |habitat|}} 
+                                <li>{{habitat}}</li>
+                            {{/each}}
+                        </ul>
+                    </div>
+                </div>
+
+                <div class='row'>
+                    <div class='col'>
+                        <strong>Diet:</strong> 
+                    </div>
+                    <div class='col'>
+                        {{#each speciesData.Diet as |diet|}}
+                            {{diet}}{{#unless @last}},{{/unless}}
+                        {{/each}}
+                    </div>
+                </div>
+            </div>
+    </div>
+</div>
