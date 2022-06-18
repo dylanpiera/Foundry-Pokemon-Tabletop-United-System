@@ -100,7 +100,9 @@ export function LoadSystemSettings() {
         choices: {
             1: "Disable Effectiveness",
             2: "Visible to GMs Only",
-            3: "Visible to All Players"
+            3: "Visible on Seen Pokémon Only (Checks Pokédex)",
+            4: "Visible on owned Pokémon Only (Checks Pokédex)",
+            5: "Always Visible"
         },
         default: 1,
         category: "general"

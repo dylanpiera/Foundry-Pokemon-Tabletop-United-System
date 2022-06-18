@@ -59,27 +59,72 @@ export default class MovesList extends Component {
             // Move data is prepared on a duplicate entry, otherwise the preperation data will be flagged as 
             // 'changed move data' during every re-render, causing infinite re-render loops.
             const moveData = duplicate(move);
+            
             moveData.data = this.PrepareMoveData(moveData.data, this.state.actor.data.data, this.state.targetedActors);
 
             // If fake move skip
             if((moveData.data.damageBase == "--" && moveData.data.category == "--") || (moveData.data.damageBase == "" && moveData.data.category == "") || (moveData.data.isStruggle)) continue;
-
+            
             // If DB is not a number, 
-            if(isNaN(Number(moveData.data.damageBase))) moveData.data.damageBase = "--";
-            switch (effVisible){
-                case 3: //visible to all
-                    break;
-                case 2: //visible to GMs only
-                    if(game.user.isGM){
+                if(isNaN(Number(moveData.data.damageBase))) moveData.data.damageBase = "--";
+                switch (effVisible){
+                    case 5: //visible to all
                         break;
-                    } else {
+                    case 4: //visible only on owned mons
+                        if(game.user.isGM){
+                            break; //visible to GMs
+                        }
+
+                        if (!game.user.character) {
+                            ui.notifications.warn("Please make sure you have a trainer as your Selected Player Character");
+                            moveData.data.effectiveness = -1;
+                            break;
+                        }
+
+                        if (game.user.targets.size < 1) {
+                            moveData.data.effectiveness = -1;
+                            break;
+                        }
+
+                        for (let token of game.user.targets.size > 0 ? game.user.targets.values() : canvas.tokens.controlled) {
+                            if((!game.user.character.itemTypes.dexentry.some(entry => entry.data.name.toLowerCase() === game.ptu.GetSpeciesData(token.actor.data.data.species)?._id?.toLowerCase() && entry.data.data.owned)))
+                                moveData.data.effectiveness = -1;
+                        }
+
+                        break;
+                    case 3: //visible on seen mons
+                        if(game.user.isGM){
+                            break; //visible to GMs
+                        }
+
+                        if (!game.user.character) {
+                            ui.notifications.warn("Please make sure you have a trainer as your Selected Player Character");
+                            moveData.data.effectiveness = -1;
+                            break;
+                        }
+                        
+                        if (game.user.targets.size < 1) {
+                            moveData.data.effectiveness = -1;
+                        }
+
+                        for (let token of game.user.targets.size > 0 ? game.user.targets.values() : canvas.tokens.controlled) {
+                            if(!game.user.character.itemTypes.dexentry.some(entry => entry.data.name.toLowerCase() === game.ptu.GetSpeciesData(token.actor.data.data.species)?._id?.toLowerCase()))
+                                moveData.data.effectiveness = -1;
+                        }
+
+                        break;
+                    case 2: //visible to GMs only
+                        if(game.user.isGM){
+                            break; //visible to GMs
+                        }
+
                         moveData.data.effectiveness = -1; //don't show effectiveness
                         break;
-                    }
-                case 1: //disabled
-                    moveData.data.effectiveness = -1; //don't show effectiveness
-                
-            }
+
+                    case 1: //disabled
+                        moveData.data.effectiveness = -1; //don't show effectiveness
+                    
+                }
 
             const moveHtml = await renderTemplate('/systems/ptu/module/sidebar/components/moves-component.hbs', moveData);
             output += moveHtml;
