@@ -385,7 +385,8 @@ function registerHandlebars() {
     let total = actor.data.data.money;
     actor.inventory.forEach(item => {
       if (item.data.type = 'item') 
-        total += item.data.cost
+        if(!isNaN(item.data.cost))
+          total += (item.data.cost * item.data.quantity);
     })
     return total
   });
