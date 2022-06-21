@@ -381,6 +381,27 @@ function registerHandlebars() {
 
   Handlebars.registerHelper("tmName", function (tmNum) { return game.ptu.TMsData.get(tmNum) });
 
+  Handlebars.registerHelper("totalWealth", function (actor) {
+    let total = actor.data.data.money;
+    actor.inventory.forEach(item => {
+      if (item.data.type = 'item') 
+        total += item.data.cost
+    })
+    return total
+  });
+
+  function TryParseInt(str, defValue) {
+    var retValue = defValue;
+    if(str !== null) {
+      if(str?.length > 0) {
+        if(!isNaN(str)) {
+          retValue = parseInt(str);
+        }
+      }
+    }
+    return retValue;
+  }
+
   /** If furnace ain't installed... */
   if (!Object.keys(Handlebars.helpers).includes("divide")) {
 

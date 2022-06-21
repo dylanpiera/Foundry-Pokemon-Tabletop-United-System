@@ -495,6 +495,14 @@ input[name="data.money"] {
   background-repeat: no-repeat;
   background-position: 2px 4px;
 }
+
+input[name="totalwealth"] {
+  background-image: url(/systems/ptu/css/images/Pokémon_Dollar_sign.svg);
+  padding-left: 20px;
+  background-size: 12px 16px;
+  background-repeat: no-repeat;
+  background-position: 2px 4px;
+}
 .rollable:hover {
   text-shadow: 0 0 10px #ff0000a0;
   cursor: pointer;
