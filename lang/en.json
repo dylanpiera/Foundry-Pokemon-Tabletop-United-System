@@ -191,7 +191,9 @@
     "PTU.Dreams": "Dreams",
     "PTU.Obsessions": "Obsessions",
 
-    
+    "dexButton.ButtonName": "Pokédex",
+    "dexButton.ButtonHint": "Scan the pokemon with your pokédex",
+    "dexButton.ButtonFAIcon": "fas fa-tablet-alt",
 
     "SETTINGS.ptu": ""
 }
