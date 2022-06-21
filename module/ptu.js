@@ -767,8 +767,8 @@ function _onPokedexMacro() {
 
     switch (permSetting) {
       case 1: { // Pokedex Disabled
-        game.ptu.renderDesc(token.actor.data.data.species);
-        //return ui.notifications.info("DM has turned off the Pokedex.");
+        //game.ptu.renderDesc(token.actor.data.data.species);
+        return ui.notifications.info("DM has turned off the Pokedex.");
         break;
       }
       case 2: { //pokemon description only
