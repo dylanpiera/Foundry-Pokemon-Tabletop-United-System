@@ -390,18 +390,6 @@ function registerHandlebars() {
     return total
   });
 
-  function TryParseInt(str, defValue) {
-    var retValue = defValue;
-    if(str !== null) {
-      if(str?.length > 0) {
-        if(!isNaN(str)) {
-          retValue = parseInt(str);
-        }
-      }
-    }
-    return retValue;
-  }
-
   /** If furnace ain't installed... */
   if (!Object.keys(Handlebars.helpers).includes("divide")) {
 
