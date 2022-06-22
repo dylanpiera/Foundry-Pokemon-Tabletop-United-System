@@ -124,7 +124,7 @@ Hooks.once('init', function () {
     },
     combats: new Map(),
     cache: {
-      GetOrCreateCachedItem
+      GetOrCreateCachedItem,
     },
     api: new Api(),
     getTrainingChanges,

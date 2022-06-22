@@ -6,8 +6,8 @@ export default async function RenderDex(species, type = "desc") {
     if (!speciesData) return;
     const imageBasePath = game.settings.get("ptu", "defaultPokemonImageDirectory");
 
-    const dexEntries = await game.packs.get("ptu.dex-entries").getDocuments();
-    const dexEntry = dexEntries.find( x => x.data.name.toLowerCase() === speciesData._id.toLowerCase());
+    const dexEntries = await game.ptu.cache.GetOrCreateCachedItem("dexentries", _cacheDexEntries)
+    const dexEntry = dexEntries.find( x => x.data.name?.toLowerCase() === speciesData._id.toLowerCase());
 
     const pokedexDialog = new Dialog({
         title: "Pokédex information for " + speciesData._id.toLowerCase(),
@@ -33,8 +33,8 @@ export async function AddMontoPokedex(species) {
     });  
 
     //get description from db
-    const dexEntries = await game.packs.get("ptu.dex-entries").getDocuments();
-    var dexEntry = dexEntries.find( x => x.data.name.toLowerCase() === speciesData._id.toLowerCase());
+    const dexEntries = await game.ptu.cache.GetOrCreateCachedItem("dexentries", _cacheDexEntries)
+    var dexEntry = dexEntries.find( x => x.data.name?.toLowerCase() === speciesData._id.toLowerCase());
     
     if(dexEntry != null)
     {
@@ -44,4 +44,9 @@ export async function AddMontoPokedex(species) {
 			data: dexEntry.data.data
 		}]);
     }
+}
+
+async function _cacheDexEntries() {
+    const dexEntries = await game.packs.get("ptu.dex-entries").getDocuments();
+    return game.items.filter(i => i.type == "dexentry").concat(dexEntries);
 }
