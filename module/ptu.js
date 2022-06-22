@@ -862,32 +862,15 @@ Hooks.on("preCreateItem", async function (item, data, options, sender) {
   await item.data.update({ "data.origin": origin });
 });
 
-class dexButton extends Application {
-  constructor() {
-      super();
-  }
-}
-
 Hooks.on('getSceneControlButtons', function(hudButtons) {
-  let hud = hudButtons.find(val => { return val.name == "token"; })
+  const hud = hudButtons.find(val => val.name == "token")
   if (hud) {
       hud.tools.push({
-          name: "dexButton.ButtonName",
-          title: "dexButton.ButtonHint",
-          icon: game.i18n.localize("dexButton.ButtonFAIcon"),
+          name: "PTU.DexButtonName",
+          title: "PTU.DexButtonHint",
+          icon: "fas fa-tablet-alt",
           button: true,
-          onClick: async () => {
-              let db = new dexButton();
-              db.render(true);
-              game.ptu.pokedexMacro();
-          }
+          onClick: () => game.ptu.pokedexMacro()
       });
   }
 });
-
-Hooks.once('ready', async function() {
-  game.socket.on("system.ptu", data => {
-      let db = new dexButton();
-      db.render(true);
-  })
-})
