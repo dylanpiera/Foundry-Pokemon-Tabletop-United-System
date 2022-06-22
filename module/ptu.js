@@ -42,7 +42,7 @@ import { Afflictions } from './combat/effects/afflictions.js'
 import PTUCombat from './combat/combat.js'
 import { PTUCombatOverrides, PTUCombatTrackerOverrides } from './combat/ptu_overrides.js'
 import Api from './api/api.js'
-import RenderDex, { AddMontoPokedex, RenderDescription } from './utils/pokedex.js'
+import RenderDex, { AddMontoPokedex } from './utils/pokedex.js'
 import TMsData from './data/tm-data.js'
 import PTUActiveEffectConfig from './forms/active-effect-config.js';
 import getTrainingChanges from './data/training-data.js';
@@ -76,7 +76,6 @@ Hooks.once('init', function () {
     moveMacro: _onMoveMacro,
     pokedexMacro: _onPokedexMacro,
     renderDex: RenderDex,
-    renderDesc: RenderDescription,
     addToDex: AddMontoPokedex,
     PTUActor,
     PTUItem,
@@ -735,7 +734,7 @@ function rollItemMacro(actorId, itemId, sceneId, tokenId) {
     }
     case 'item': {
       if (item.data.name == "Pokédex") {
-        game.ptu.pokedexMacro();
+        return game.ptu.pokedexMacro();
       }
 
       return;
@@ -749,57 +748,49 @@ function _onMoveMacro(actor, item) {
   return actor.sheet._onMoveRoll(new Event(''), { actor, item });;
 }
 
-function _onPokedexMacro() {
+async function _onPokedexMacro() {
   const permSetting = game.settings.get("ptu", "dex-permission");
   const addToDex = game.settings.get("ptu", "auto-add-to-dex");
   for (let token of game.user.targets.size > 0 ? game.user.targets.values() : canvas.tokens.controlled) {
     if (token.actor.data.type != "pokemon") continue;
+    
+    // No checks needed; just show full dex.
     if (game.user.isGM) {
-      game.ptu.renderDex(token.actor.data.data.species);
-      game.ptu.renderDesc(token.actor.data.data.species);
+      game.ptu.renderDex(token.actor.data.data.species, "full");
       continue;
     }
 
     if(addToDex && !game.user.isGM){
       if (!game.user.character) return ui.notifications.warn("Please make sure you have a trainer as your Selected Player Character");
-      game.ptu.addToDex(token.actor.data.data.species);
+      await game.ptu.addToDex(token.actor.data.data.species);
     }
 
     switch (permSetting) {
       case 1: { // Pokedex Disabled
         //game.ptu.renderDesc(token.actor.data.data.species);
         return ui.notifications.info("DM has turned off the Pokedex.");
-        break;
       }
       case 2: { //pokemon description only
-        game.ptu.renderDesc(token.actor.data.data.species);
+        game.ptu.renderDex(token.actor.data.data.species);
+        break;
       }
       case 3: { // Only owned tokens
-        if (!token.owner) {
-          game.ptu.renderDesc(token.actor.data.data.species);
-          //ui.notifications.warn("Only owned tokens can be identified by the Pokédex.");
-          continue;
-        }
-
-        game.ptu.renderDex(token.actor.data.data.species);
+        game.ptu.renderDex(token.actor.data.data.species, token.owner ? "full" : "desc");
         break;
       }
       case 4: { // Only owned mons
         if (!game.user.character) return ui.notifications.warn("Please make sure you have a trainer as your Selected Player Character");
 
-        if (!game.user.character.itemTypes.dexentry.some(entry => entry.data.name === game.ptu.GetSpeciesData(token.actor.data.data.species)?.id?.toLowerCase() && entry.data.data.owned)) {
-          game.ptu.renderDesc(token.actor.data.data.species);
-          //ui.notifications.warn("Only owned species can be identified by the Pokédex.");
-          continue;
-        }
-        game.ptu.renderDex(token.actor.data.data.species);
+        game.ptu.renderDex(token.actor.data.data.species, 
+          game.user.character.itemTypes.dexentry.some(entry => entry.data.data.owned && entry.data.name === game.ptu.GetSpeciesData(token.actor.data.data.species)?.id?.toLowerCase())
+          ? "full" : "desc");
         break;
       }
       case 5: { // GM Prompt
         return ui.notifications.warn("The GM prompt feature has yet to be implemented. Please ask your DM to change to a different Dex Permission Setting");
       }
       case 6: { // Always Full Details
-        game.ptu.renderDex(token.actor.data.data.species);
+        game.ptu.renderDex(token.actor.data.data.species, "full");
         break;
       }
     }
