@@ -86,10 +86,10 @@ export default class MovesList extends Component {
                             break;
                         }
 
-                        for (let token of game.user.targets.size > 0 ? game.user.targets.values() : canvas.tokens.controlled) {
-                            if((!game.user.character.itemTypes.dexentry.some(entry => entry.data.name.toLowerCase() === game.ptu.GetSpeciesData(token.actor.data.data.species)?._id?.toLowerCase() && entry.data.data.owned)))
-                                moveData.data.effectiveness = -1;
-                        }
+                        const token4 = game.user.targets.size > 0 ? game.user.targets.values() : canvas.tokens.controlled
+                        if((!game.user.character.itemTypes.dexentry.some(entry => entry.data.name.toLowerCase() === game.ptu.GetSpeciesData(token4.actor.data.data.species)?._id?.toLowerCase() && entry.data.data.owned)))
+                            moveData.data.effectiveness = -1;
+                        
 
                         break;
                     case 3: //visible on seen mons
@@ -107,10 +107,9 @@ export default class MovesList extends Component {
                             moveData.data.effectiveness = -1;
                         }
 
-                        for (let token of game.user.targets.size > 0 ? game.user.targets.values() : canvas.tokens.controlled) {
-                            if(!game.user.character.itemTypes.dexentry.some(entry => entry.data.name.toLowerCase() === game.ptu.GetSpeciesData(token.actor.data.data.species)?._id?.toLowerCase()))
-                                moveData.data.effectiveness = -1;
-                        }
+                        const token3 = game.user.targets.size > 0 ? game.user.targets.values() : canvas.tokens.controlled
+                        if(!game.user.character.itemTypes.dexentry.some(entry => entry.data.name.toLowerCase() === game.ptu.GetSpeciesData(token3.actor.data.data.species)?._id?.toLowerCase()))
+                            moveData.data.effectiveness = -1;
 
                         break;
                     case 2: //visible to GMs only
