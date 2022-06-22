@@ -381,16 +381,6 @@ function registerHandlebars() {
 
   Handlebars.registerHelper("tmName", function (tmNum) { return game.ptu.TMsData.get(tmNum) });
 
-  Handlebars.registerHelper("totalWealth", function (actor) {
-    let total = actor.data.data.money;
-    actor.inventory.forEach(item => {
-      if (item.data.type = 'item') 
-        if(!isNaN(item.data.cost))
-          total += (item.data.cost * item.data.quantity);
-    })
-    return total
-  });
-
   /** If furnace ain't installed... */
   if (!Object.keys(Handlebars.helpers).includes("divide")) {
 
