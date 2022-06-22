@@ -6,28 +6,306 @@
     </div>
 
     <div class='row readable'>
-        <div class='col'>
-            <h3><strong>Quick Information</strong></h3>
+        {{#if (is type "full")}}
+            <div class='col'>
+                <h3><strong>Quick Information</strong></h3>
 
-            <div class='container quick-info'>
-                <div class='row'>
-                    <div class='col'>
-                        <strong>Pokémon:</strong> 
+                <div class='container quick-info'>
+                    <div class='row'>
+                        <div class='col'>
+                            <strong>Pokémon:</strong> 
+                        </div>
+                        <div class='col'>
+                            {{speciesData._id}}
+                        </div>
                     </div>
-                    <div class='col'>
-                        {{speciesData._id}}
+
+                    <div class='row'>
+                        <div class='col'>
+                            <strong>Number:</strong> 
+                        </div>
+                        <div class='col'>
+                            {{speciesData.number}}
+                        </div>
+                    </div>
+
+                    <div class='row'>
+                        <div class='col'>
+                            <strong>Type:</strong> 
+                        </div>
+                        <div class='col'>
+                            {{{loadTypeImages speciesData.Type}}}
+                        </div>
+                    </div>
+
+                    <div class='row'>
+                        <div class='col'>
+                            <strong>Height:</strong> 
+                        </div>
+                        <div class='col'>
+                            {{speciesData.Height}}m ({{speciesData.[Size Class]}})
+                        </div>
+                    </div>
+
+                    <div class='row'>
+                        <div class='col'>
+                            <strong>Weight:</strong> 
+                        </div>
+                        <div class='col'>
+                            {{speciesData.Weight}} kg
+                        </div>
+                    </div>
+
+                    <div class='row'>
+                        <div class='col'>
+                            <strong>Habitat:</strong> 
+                        </div>
+                        <div class='col'>
+                            <ul>
+                                {{#each speciesData.Habitat as |habitat|}} 
+                                    <li>{{habitat}}</li>
+                                {{/each}}
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class='row'>
+                        <div class='col'>
+                            <strong>Diet:</strong> 
+                        </div>
+                        <div class='col'>
+                            {{#each speciesData.Diet as |diet|}}
+                                {{diet}}{{#unless @last}},{{/unless}}
+                            {{/each}}
+                        </div>
+                    </div>
+
+                    <div class='row'>
+                        <div class='col'>
+                            <strong>Egg Groups:</strong> 
+                        </div>
+                        <div class='col'>
+                            <ul>
+                                {{#each speciesData.[Breeding Information].[Egg Group] as |egg|}} 
+                                    <li>{{egg}}</li>
+                                {{/each}}
+                            </ul>
+                        </div>
+                    </div>
+
+
+                </div>
+
+                <h3><strong>Evolution</strong></h3>
+                <div class='container'>
+                    {{#each speciesData.Evolution as |evolution|}}
+                    {{log evolution}}
+                        <div class='row'>
+                            <div class='col'>
+                                {{evolution.[0]}} - {{evolution.[1]}}
+                            </div>
+                            <div class='col'>
+                                {{#if (gt evolution.[2] 0)}}
+                                    Minimum {{evolution.[2]}}
+                                {{/if}}
+                            </div>
+                        </div>
+                    {{/each}}
+                </div>
+
+                <h3><strong>Base Stats</strong></h3>
+                <div class='container'>
+                    <div class='row'>
+                        <div class='col'>
+                            <strong>HP:</strong> 
+                        </div>
+                        <div class='col'>
+                            {{speciesData.[Base Stats].[HP]}}
+                        </div>
+                    </div>
+
+                    <div class='row'>
+                        <div class='col'>
+                            <strong>Attack:</strong> 
+                        </div>
+                        <div class='col'>
+                            {{speciesData.[Base Stats].[Attack]}}
+                        </div>
+                    </div>
+
+                    <div class='row'>
+                        <div class='col'>
+                            <strong>Defense:</strong> 
+                        </div>
+                        <div class='col'>
+                            {{speciesData.[Base Stats].[Defense]}}
+                        </div>
+                    </div>
+
+                    <div class='row'>
+                        <div class='col'>
+                            <strong>Special Attack:</strong> 
+                        </div>
+                        <div class='col'>
+                            {{speciesData.[Base Stats].[Special Attack]}}
+                        </div>
+                    </div>
+
+                    <div class='row'>
+                        <div class='col'>
+                            <strong>Special Defense:</strong> 
+                        </div>
+                        <div class='col'>
+                            {{speciesData.[Base Stats].[Special Defense]}}
+                        </div>
+                    </div>
+
+                    <div class='row'>
+                        <div class='col'>
+                            <strong>Speed:</strong> 
+                        </div>
+                        <div class='col'>
+                            {{speciesData.[Base Stats].[Speed]}}
+                        </div>
+                    </div>
+
+                </div>
+
+                <h3><strong>Abilities</strong></h3>
+                <div class='container'>
+                    {{#each speciesData.Abilities.Basic as |ability|}}
+                        <div class='row'>
+                            <div class='col'>
+                                <strong>Basic Ability #{{inc @index}}:</strong> 
+                            </div>
+                            <div class='col'>
+                                {{ability}}
+                            </div>
+                        </div>
+                    {{/each}}
+                    {{#each speciesData.Abilities.Advanced as |ability|}}
+                        <div class='row'>
+                            <div class='col-6' style="white-space: nowrap">
+                                <strong>Advanced Ability #{{inc @index}}:</strong> 
+                            </div>
+                            <div class='col'>
+                                {{ability}}
+                            </div>
+                        </div>
+                    {{/each}}
+                    {{#each speciesData.Abilities.High as |ability|}}
+                        <div class='row'>
+                            <div class='col'>
+                                <strong>High Ability #{{inc @index}}:</strong> 
+                            </div>
+                            <div class='col'>
+                                {{ability}}
+                            </div>
+                        </div>
+                    {{/each}}
+                </div>
+
+                <h3><strong>Capabilities</strong></h3>
+                <div class='container'>
+                    <div class='row'>
+                        <div class='col pokedexflex'>
+                            {{#each speciesData.Capabilities as |value key|}}
+                                {{#unless (or (is key "Other") (is key "Naturewalk"))}}
+                                    {{#if value}}
+                                        <span><b>{{key}}</b>: {{value}}{{#unless @last}},{{/unless}}</span>
+                                    {{/if}}
+                                {{/unless}}
+                            {{/each}}
+                            {{#if speciesData.Capabilities.Naturewalk}}<span style="flex: 1 0 100%;"><b>Naturewalk</b>: {{#each speciesData.Capabilities.Naturewalk as |value|}}{{value}}{{#unless @last}}, {{/unless}}{{/each}}</span>{{/if}}
+                            {{#if speciesData.Capabilities.Other}}<span style="flex: 1 0 100%;"><b>Other</b>: {{#each speciesData.Capabilities.Other as |value|}}{{value}}{{#unless @last}}, {{/unless}}{{/each}}</span>{{/if}}
+                        </div>
                     </div>
                 </div>
 
-                <div class='row'>
-                    <div class='col'>
-                        <strong>Number:</strong> 
-                    </div>
-                    <div class='col'>
-                        {{speciesData.number}}
+                <h3><strong>Skills</strong></h3>
+                <div class='container'>
+                    <div class='row'>
+                        <div class='col pokedexflex'>
+                            {{#each speciesData.Skills as |value key|}}
+                                <span><b>{{key}}</b>: {{value.Dice}}d6{{#if value.Mod}}+{{value.Mod}}{{/if}}{{#unless @last}},{{/unless}}</span>
+                            {{/each}}
+                        </div>
                     </div>
                 </div>
 
+            </div>
+            <div class='col'>
+                <h3><strong>Level Up Movelist</strong></h3>
+                <div class='container'>
+                    <div class='row'>
+                        <div class='col'>
+                        {{#each speciesData.[Level Up Move List] as |move|}}
+                            <div class="row">
+                                <div class="col">
+                                    <strong>{{move.Move}}</strong>
+                                </div>
+                                <div class="col">
+                                    Level {{move.Level}}
+                                </div>
+                            </div>
+                        {{/each}}
+                        </div>
+                    </div>
+                </div>
+
+                {{#if speciesData.[Tutor Move List]}}
+                    <h3><strong>Tutor Movelist</strong></h3>
+                    <div class='container'>
+                        <div class='row'>
+                            <div class='col'>
+                                {{#each speciesData.[Tutor Move List] as |move|}}
+                                    {{move}}{{#unless @last}},{{/unless}}
+                                {{/each}}
+                            </div>
+                        </div>
+                    </div>
+                {{/if}}
+
+                {{#if speciesData.[Egg Move List]}}
+                    <h3><strong>Egg Movelist</strong></h3>
+                    <div class='container'>
+                        <div class='row'>
+                            <div class='col'>
+                                {{#each speciesData.[Egg Move List] as |move|}}
+                                    {{move}}{{#unless @last}},{{/unless}}
+                                {{/each}}
+                            </div>
+                        </div>
+                    </div>
+                {{/if}}
+
+                {{#if speciesData.[TM Move List]}}
+                    <h3><strong>TM Movelist</strong></h3>
+                    <div class='container'>
+                        <div class='row'>
+                            <div class='col'>
+                                {{#each speciesData.[TM Move List] as |TM|}}
+                                    {{TM}} {{tmName TM}}{{#unless @last}},{{/unless}}
+                                {{/each}}
+                            </div>
+                        </div>
+                    </div>
+                {{/if}}
+            </div>
+        {{else}}
+            <div class='col'>
+                <h3><strong>Quick Information</strong></h3>
+
+                <div class='container quick-info'>
+                    <div class='row'>
+                        <div class='col'>
+                            <strong>Number:</strong> 
+                        </div>
+                        <div class='col'>
+                            {{speciesData.number}}
+                        </div>
+                    </div>
+                </div>
                 <div class='row'>
                     <div class='col'>
                         <strong>Type:</strong> 
@@ -78,218 +356,22 @@
                         {{/each}}
                     </div>
                 </div>
-
-                <div class='row'>
-                    <div class='col'>
-                        <strong>Egg Groups:</strong> 
-                    </div>
-                    <div class='col'>
-                        <ul>
-                            {{#each speciesData.[Breeding Information].[Egg Group] as |egg|}} 
-                                <li>{{egg}}</li>
-                            {{/each}}
-                        </ul>
-                    </div>
-                </div>
-
-
             </div>
-
-            <h3><strong>Evolution</strong></h3>
-            <div class='container'>
-                {{#each speciesData.Evolution as |evolution|}}
-                {{log evolution}}
-                    <div class='row'>
-                        <div class='col'>
-                            {{evolution.[0]}} - {{evolution.[1]}}
-                        </div>
-                        <div class='col'>
-                            {{#if (gt evolution.[2] 0)}}
-                                Minimum {{evolution.[2]}}
-                            {{/if}}
-                        </div>
-                    </div>
-                {{/each}}
+            <div class='col'>
+                
             </div>
-
-            <h3><strong>Base Stats</strong></h3>
-            <div class='container'>
-                <div class='row'>
-                    <div class='col'>
-                        <strong>HP:</strong> 
-                    </div>
-                    <div class='col'>
-                        {{speciesData.[Base Stats].[HP]}}
-                    </div>
-                </div>
-
-                <div class='row'>
-                    <div class='col'>
-                        <strong>Attack:</strong> 
-                    </div>
-                    <div class='col'>
-                        {{speciesData.[Base Stats].[Attack]}}
-                    </div>
-                </div>
-
-                <div class='row'>
-                    <div class='col'>
-                        <strong>Defense:</strong> 
-                    </div>
-                    <div class='col'>
-                        {{speciesData.[Base Stats].[Defense]}}
-                    </div>
-                </div>
-
-                <div class='row'>
-                    <div class='col'>
-                        <strong>Special Attack:</strong> 
-                    </div>
-                    <div class='col'>
-                        {{speciesData.[Base Stats].[Special Attack]}}
-                    </div>
-                </div>
-
-                <div class='row'>
-                    <div class='col'>
-                        <strong>Special Defense:</strong> 
-                    </div>
-                    <div class='col'>
-                        {{speciesData.[Base Stats].[Special Defense]}}
-                    </div>
-                </div>
-
-                <div class='row'>
-                    <div class='col'>
-                        <strong>Speed:</strong> 
-                    </div>
-                    <div class='col'>
-                        {{speciesData.[Base Stats].[Speed]}}
-                    </div>
-                </div>
-
-            </div>
-
-            <h3><strong>Abilities</strong></h3>
-            <div class='container'>
-                {{#each speciesData.Abilities.Basic as |ability|}}
-                    <div class='row'>
-                        <div class='col'>
-                            <strong>Basic Ability #{{inc @index}}:</strong> 
-                        </div>
-                        <div class='col'>
-                            {{ability}}
-                        </div>
-                    </div>
-                {{/each}}
-                {{#each speciesData.Abilities.Advanced as |ability|}}
-                    <div class='row'>
-                        <div class='col-6' style="white-space: nowrap">
-                            <strong>Advanced Ability #{{inc @index}}:</strong> 
-                        </div>
-                        <div class='col'>
-                            {{ability}}
-                        </div>
-                    </div>
-                {{/each}}
-                {{#each speciesData.Abilities.High as |ability|}}
-                    <div class='row'>
-                        <div class='col'>
-                            <strong>High Ability #{{inc @index}}:</strong> 
-                        </div>
-                        <div class='col'>
-                            {{ability}}
-                        </div>
-                    </div>
-                {{/each}}
-            </div>
-
-            <h3><strong>Capabilities</strong></h3>
-            <div class='container'>
-                <div class='row'>
-                    <div class='col pokedexflex'>
-                        {{#each speciesData.Capabilities as |value key|}}
-                            {{#unless (or (is key "Other") (is key "Naturewalk"))}}
-                                {{#if value}}
-                                    <span><b>{{key}}</b>: {{value}}{{#unless @last}},{{/unless}}</span>
-                                {{/if}}
-                            {{/unless}}
-                        {{/each}}
-                        {{#if speciesData.Capabilities.Naturewalk}}<span style="flex: 1 0 100%;"><b>Naturewalk</b>: {{#each speciesData.Capabilities.Naturewalk as |value|}}{{value}}{{#unless @last}}, {{/unless}}{{/each}}</span>{{/if}}
-                        {{#if speciesData.Capabilities.Other}}<span style="flex: 1 0 100%;"><b>Other</b>: {{#each speciesData.Capabilities.Other as |value|}}{{value}}{{#unless @last}}, {{/unless}}{{/each}}</span>{{/if}}
-                    </div>
-                </div>
-            </div>
-
-            <h3><strong>Skills</strong></h3>
-            <div class='container'>
-                <div class='row'>
-                    <div class='col pokedexflex'>
-                        {{#each speciesData.Skills as |value key|}}
-                            <span><b>{{key}}</b>: {{value.Dice}}d6{{#if value.Mod}}+{{value.Mod}}{{/if}}{{#unless @last}},{{/unless}}</span>
-                        {{/each}}
-                    </div>
-                </div>
-            </div>
-
-        </div>
-        <div class='col'>
-            <h3><strong>Level Up Movelist</strong></h3>
-            <div class='container'>
-                <div class='row'>
-                    <div class='col'>
-                    {{#each speciesData.[Level Up Move List] as |move|}}
-                        <div class="row">
-                            <div class="col">
-                                <strong>{{move.Move}}</strong>
-                            </div>
-                            <div class="col">
-                                Level {{move.Level}}
-                            </div>
-                        </div>
-                    {{/each}}
-                    </div>
-                </div>
-            </div>
-
-            {{#if speciesData.[Tutor Move List]}}
-                <h3><strong>Tutor Movelist</strong></h3>
-                <div class='container'>
-                    <div class='row'>
-                        <div class='col'>
-                            {{#each speciesData.[Tutor Move List] as |move|}}
-                                {{move}}{{#unless @last}},{{/unless}}
-                            {{/each}}
-                        </div>
-                    </div>
-                </div>
-            {{/if}}
-
-            {{#if speciesData.[Egg Move List]}}
-                <h3><strong>Egg Movelist</strong></h3>
-                <div class='container'>
-                    <div class='row'>
-                        <div class='col'>
-                            {{#each speciesData.[Egg Move List] as |move|}}
-                                {{move}}{{#unless @last}},{{/unless}}
-                            {{/each}}
-                        </div>
-                    </div>
-                </div>
-            {{/if}}
-
-            {{#if speciesData.[TM Move List]}}
-                <h3><strong>TM Movelist</strong></h3>
-                <div class='container'>
-                    <div class='row'>
-                        <div class='col'>
-                            {{#each speciesData.[TM Move List] as |TM|}}
-                                {{TM}} {{tmName TM}}{{#unless @last}},{{/unless}}
-                            {{/each}}
-                        </div>
-                    </div>
-                </div>
-            {{/if}}
-        </div>
+        {{/if}}
     </div>
+
+    {{#if dexEntry}}
+        {{#if dexEntry.data.data.entry}}
+            <div class='row readable pt-2'>
+                <div class='col' style='text-align: left;'>
+                    <h3><strong>Dex Entry</strong></h3>
+                
+                    {{{dexEntry.data.data.entry}}}
+                </div>
+            </div>
+        {{/if}}
+    {{/if}}
 </div>

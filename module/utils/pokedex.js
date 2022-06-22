@@ -1,55 +1,40 @@
 import { debug, log} from '../ptu.js'
 
-export default async function RenderDex(species) {
+export default async function RenderDex(species, type = "desc") {
     if (!species) return;
     const speciesData = game.ptu.GetSpeciesData(species);  
+    if (!speciesData) return;
     const imageBasePath = game.settings.get("ptu", "defaultPokemonImageDirectory");
 
-    let d2 = new Dialog({
+    const dexEntries = await game.ptu.cache.GetOrCreateCachedItem("dexentries", _cacheDexEntries)
+    const dexEntry = dexEntries.find( x => x.data.name?.toLowerCase() === speciesData._id.toLowerCase());
+
+    const pokedexDialog = new Dialog({
         title: "Pokédex information for " + speciesData._id.toLowerCase(),
-        content: await renderTemplate('/systems/ptu/templates/pokedex.hbs', {img: await game.ptu.monGenerator.GetSpeciesArt(speciesData, imageBasePath),speciesData}),
+        content: await renderTemplate('/systems/ptu/templates/pokedex.hbs', {img: await game.ptu.monGenerator.GetSpeciesArt(speciesData, imageBasePath),speciesData, dexEntry, type}),
         buttons: {}
     });
-    d2.position.width = 800;
-    d2.position.height = 900;
-    d2.render(true);
+    pokedexDialog.position.width = 800;
+    pokedexDialog.position.height = 900;
+    pokedexDialog.render(true);
 
-}
-
-export async function RenderDescription(species) {
-    const speciesData = game.ptu.GetSpeciesData(species);
-    const imageBasePath = game.settings.get("ptu", "defaultPokemonImageDirectory");
-
-    //get description from db
-    const dexEntries = await game.packs.get("ptu.dex-entries").getDocuments();
-    var dexEntry = dexEntries.find( x => x.data.name.toLowerCase() === speciesData._id.toLowerCase());
-
-
-    //display
-    let d2 = new Dialog({
-        title: "Pokédex information for " + speciesData._id.toLowerCase(),
-        content: await renderTemplate('/systems/ptu/templates/pokedesc.hbs', {img: await GetSpeciesArt(speciesData, imageBasePath),speciesData, dexEntry}),
-        buttons: {}
-    });
-    d2. position.width = 800;
-    d2.position.height = 900;
-    d2.render(true);
 }
 
 export async function AddMontoPokedex(species) {
     if(!species || !game.user.character) return;
 
     const speciesData = game.ptu.GetSpeciesData(species);
-
-    //get description from db
-    const dexEntries = await game.packs.get("ptu.dex-entries").getDocuments();
-    var dexEntry = dexEntries.find( x => x.data.name.toLowerCase() === speciesData._id.toLowerCase());
-
+    if (!speciesData) return;
+    
     //check if species already on actor dex
     game.user.character.items.forEach(x => {
         if (game.user.character.itemTypes.dexentry.some(entry => entry.data.name === speciesData._id?.toLowerCase()))
             return; //pokemon already in dex
     });  
+
+    //get description from db
+    const dexEntries = await game.ptu.cache.GetOrCreateCachedItem("dexentries", _cacheDexEntries)
+    var dexEntry = dexEntries.find( x => x.data.name?.toLowerCase() === speciesData._id.toLowerCase());
     
     if(dexEntry != null)
     {
@@ -59,4 +44,9 @@ export async function AddMontoPokedex(species) {
 			data: dexEntry.data.data
 		}]);
     }
+}
+
+async function _cacheDexEntries() {
+    const dexEntries = await game.packs.get("ptu.dex-entries").getDocuments();
+    return game.items.filter(i => i.type == "dexentry").concat(dexEntries);
 }
