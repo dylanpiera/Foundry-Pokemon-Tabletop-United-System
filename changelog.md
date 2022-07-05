@@ -1,6 +1,26 @@
 # Welcome to the Beta!
 Hey there! You are on the Beta Branch. If you ever have any feedback please do share with us over on [Github](https://github.com/dylanpiera/Foundry-Pokemon-Tabletop-United-System/issues) or [Discord](https://discord.gg/fE3w59q)
 
+## 2.0-Beta-8 - Bugfixes and Small Features Part 2.
+And another set of improvements and bugfixes.
+
+### New Features
+- Post a 'redo capture request' button in the chat if DM denies a capture / the request times out.
+- Added back 'Hold shift for bonus damage' when executing a move.
+- Add Pokedex button to sidebar, so you no longer have to turn it into a Macro!
+- Made all 'PokeEdge Capability Training' work (through Active Effects where possible)
+
+### Bugfixes
+- Capture automation now works if TokenMagic is not installed
+- Fixed Toxic Damage not applying properly
+- Fixed Initiative no longer automatically updating
+- Fixed "Next Turn" combat button not working for players.
+- Fixed turning non-crits into crits not applying critical damage.
+
+### Other Changes
+- Capture automation doesn't force you to wait 10 years if you have animations turned off (or not installed)
+- Cleaned up the Damage Applicator menu
+
 ## 2.0-Beta-7 - Struggle Menu is Back!
 Well... It's been a while but finally the struggle menu is back!
 

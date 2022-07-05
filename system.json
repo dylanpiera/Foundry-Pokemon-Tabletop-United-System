@@ -4,9 +4,36 @@
   "description": "A Pen and Paper Roleplaying Game Set in the World of Pokemon",
   "minimumCoreVersion": "9",
   "compatibleCoreVersion": "9",
-  "version": "2.0-Beta-7",
+  "version": "2.0-Beta-8",
   "templateVersion": 2,
-  "author": "Dylan Piera, Tymo Wessel, Jeffrey Hollander, Efren A. Mariño & Cody Swendrowski",
+  "authors": [
+    {
+      "name": "Ashe Piera",
+      "email": "ptu@soaringnetwork.com",
+      "url": "https://github.com/dylanpiera/Foundry-Pokemon-Tabletop-United-System"
+    },
+    {
+      "name": "GSV A Nest of Kindled Embers"
+    },
+    {
+      "name": "Ellam Fox"
+    },
+    {
+      "name": "Muhsigbokz"
+    },
+    {
+      "name": "Tymo Wessel"
+    },
+    {
+      "name": "Jeffrey Hollander"
+    },
+    {
+      "name": "Efren A. Mariño"
+    },
+    {
+      "name": "Cody Swendrowski"
+    }
+  ],
   "esmodules": ["module/ptu.js"],
   "socket": true,
   "styles": [
