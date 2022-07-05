@@ -72,7 +72,7 @@
                         {{/if}}
                         {{#if (biggerOrEqual targetAmount 1)}}
                             {{#each data as | value key |}}
-                                <span class="dice-total">
+                                <span class="dice-total p-1">
                                     <h3 class="num-total">{{../acRoll.total}}</h3>
                                     <h5>vs.</h5>
                                     <h3>{{value.target.evasion.value}}</h3>
@@ -164,12 +164,12 @@
                                 </span>
                             {{/each}}
                         {{else}}
-                            <span class="dice-total" style="display: inline-flex;justify-content: space-evenly; align-items: center;width:100%;font-family:Modesto Condensed;font-size:38px; color: rgb(0, 0, 0);">
+                            <span class="dice-total p-1" style="display: inline-flex;justify-content: space-evenly; align-items: center;width:100%;font-family:Modesto Condensed;font-size:38px; color: rgb(0, 0, 0);">
                                 <h3 class="num-total">{{acRoll.total}}</h3>
                                 <h6>vs. {{move.category}} Evasion</h6>
                             </span>
                             {{#if acRoll2}}
-                                <span class="dice-total" style="display: inline-flex;justify-content: space-evenly; align-items: center;width:100%;font-family:Modesto Condensed;font-size:38px; color: rgb(0, 0, 0);">
+                                <span class="dice-total p-1" style="display: inline-flex;justify-content: space-evenly; align-items: center;width:100%;font-family:Modesto Condensed;font-size:38px; color: rgb(0, 0, 0);">
                                     <h3 class="num-total">{{acRoll2.total}}</h3>
                                     <h6>vs. {{move.category}} Evasion</h6>
                                 </span>
@@ -243,14 +243,33 @@
                                     {{else}}{{term.total}}{{/if}}
                                 {{/each}}
                             </div>
-                            <span class="dice-total p-0 m-0">
-                                <h4 class="num-total">{{damageRolls.normal.total}}</h4>
-                                <h6>
-                                    <button class="automated-damage-button p-0" data-move-name="{{moveName}}" data-damage="{{damageRolls.normal.total}}" data-type="{{move.type}}" data-category="{{move.category}}" data-target="{{key data}}" data-mode="full" data-crit="false">
-                                        Apply Damage
-                                    </button>
-                                </h6>
-                            </span>
+                            <div class="d-flex">
+                            <div class="d-flex" style="flex: 0 0 70%; flex-direction: column;">
+                                <span class="dice-total p-0 m-0">
+                                    <h4 class="num-total">{{damageRolls.normal.total}}</h4>
+                                    <p class="mt-1 mb-1" style="text-transform: uppercase; font-weight: 100;">
+                                        Normal
+                                    </p>
+                                </span>
+                                {{#if damageRolls.crit}}
+                                    <span class="dice-total p-0 m-0">
+                                        <h4 class="num-total">{{damageRolls.crit.total}}</h4>
+                                        <p class="mt-1 mb-1" style="text-transform: uppercase; font-weight: 100;">
+                                            Critical
+                                        </p>
+                                    </span>
+                                {{/if}}
+                            </div>
+                            <div class="d-flex" style="flex: 0 0 30%;">
+                                <span class="dice-total p-0 m-0" style="flex: 1;">
+                                    <h6>
+                                        <button class="automated-damage-button p-0" data-move-name="{{moveName}}" data-damage="{{damageRolls.normal.total}}" data-crit-damage="{{damageRolls.crit.total}}" data-type="{{move.type}}" data-category="{{move.category}}" data-target="many" data-mode="full">
+                                            Apply
+                                        </button>
+                                    </h6>
+                                </span>
+                            </div>
+                        </div>
                             <div class="row justify-content-center w-100 ml-0 mr-0" style="height: 18px; border: 1px solid #999; box-shadow: 0 0 2px #FFF inset; border-radius: 3px; background: rgba(0, 0, 0, 0.1);">
                                 <div class="small-button-container"><button class="automated-damage-button small" data-move-name="{{moveName}}" data-damage="{{damageRolls.normal.total}}" data-type="{{move.type}}" data-category="{{move.category}}" data-target="{{key data}}" data-mode="weak" data-crit="false">Resist Less</button></div>
                                 <div class="small-button-container"><button class="automated-damage-button small" data-move-name="{{moveName}}" data-damage="{{damageRolls.normal.total}}" data-type="{{move.type}}" data-category="{{move.category}}" data-target="{{key data}}" data-mode="resist" data-crit="false">Resist More</button></div>
@@ -259,33 +278,6 @@
                             </div>
                         </div>
                     </div>
-                    {{#if damageRolls.crit}}
-                        <div class="dice-roll w-100 pt-1 pb-1">
-                            <div class="dice-result p-0">
-                                <div class="dice-formula p-0 m-0">  
-                                    {{#each damageRolls.crit.terms as | term |}}
-                                        {{#if term.faces}}
-                                            {{#each term.results as |result|}}<span class="roll die d{{term.faces}} {{minMaxDiceCheck result.result term.faces}} p-0 m-0">{{result.result}}</span>{{#if @last}}{{else}}+{{/if}}{{/each}}
-                                        {{else}}{{term.total}}{{/if}}
-                                    {{/each}}
-                                </div>
-                                <span class="dice-total p-0 m-0">
-                                    <h4 class="num-total">{{damageRolls.crit.total}}</h4>
-                                    <h5>
-                                        <button class="automated-damage-button p-0" data-move-name="{{moveName}}" data-damage="{{damageRolls.crit.total}}" data-type="{{move.type}}" data-category="{{move.category}}" data-target="{{key data}}" data-mode="full" data-crit="true">
-                                            Critical Damage
-                                        </button>
-                                    </h5>
-                                </span>
-                                <div class="row justify-content-center w-100 ml-0 mr-0" style="height: 18px; border: 1px solid #999; box-shadow: 0 0 2px #FFF inset; border-radius: 3px; background: rgba(0, 0, 0, 0.1);">
-                                    <div class="small-button-container"><button class="automated-damage-button small" data-move-name="{{moveName}}" data-damage="{{damageRolls.crit.total}}" data-type="{{move.type}}" data-category="{{move.category}}" data-target="{{key data}}" data-mode="weak" data-crit="true">Resist Less</button></div>
-                                    <div class="small-button-container"><button class="automated-damage-button small" data-move-name="{{moveName}}" data-damage="{{damageRolls.crit.total}}" data-type="{{move.type}}" data-category="{{move.category}}" data-target="{{key data}}" data-mode="resist" data-crit="true">Resist More</button></div>
-                                    <div class="small-button-container"><button class="automated-damage-button small" data-move-name="{{moveName}}" data-damage="{{damageRolls.crit.total}}" data-type="{{move.type}}" data-category="{{move.category}}" data-target="{{key data}}" data-mode="half" data-crit="true">1/2 DMG</button></div>
-                                    <div class="small-button-container"><button class="automated-damage-button small" data-move-name="{{moveName}}" data-damage="{{damageRolls.crit.total}}" data-type="{{move.type}}" data-category="{{move.category}}" data-target="{{key data}}" data-mode="flat" data-crit="true">Flat DMG</button></div>
-                                </div>
-                            </div>
-                        </div>
-                    {{/if}}
                 </div>
             {{/if}}
         {{/unless}}

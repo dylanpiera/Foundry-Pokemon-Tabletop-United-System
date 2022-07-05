@@ -1,0 +1,18 @@
+<div class="content flexrow pt-1" style="font-variant: normal;">
+    <div class="swsh-box">
+        <div class="swsh-header">
+            <div class="d-flex w-100 mt-1 mb-1 justify-content-center">
+                <span style="padding:5px;text-align:center;word-break:break-word;">Capture of {{target.name}}</span>
+            </div>
+        </div>
+        <div class="swsh-body">
+            
+            <div class="d-flex flex-row" style="flex: 0 0 100%; align-items: center;">
+                <p class="fs-9 m-1" style="flex: 0 0 67%; word-break:break-word;">{{trainer.name}} succeeded in capturing <br><br> @Actor[{{target.id}}]{ {{target.name}} }<br><br> but the capture request timed out!</p>
+                <button class="redo-capture fs-10" style="padding-left: 0; flex: 0 0 30%;" data-trainer-id="{{trainer.id}}" data-target-id="{{target.id}}" data-pokeball="{{pokeball}}">
+                    capture
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

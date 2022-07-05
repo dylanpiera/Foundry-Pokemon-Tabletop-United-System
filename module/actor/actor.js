@@ -9,6 +9,7 @@ import { warn, debug, log } from '../ptu.js'
 import { PlayMoveAnimations, move_animation_delay_ms } from "../combat/effects/move_animations.js";
 import { PlayMoveSounds } from "../combat/effects/move_sounds.js";
 import { ActionTypes, FiveStrikeHitsDictionary } from "../combat/damage-calc-tools.js";
+import { timeout } from "../utils/generic-helpers.js";
 
 /**
  * Extend the base Actor entity by defining a custom roll data structure which is ideal for the Simple system.
@@ -549,8 +550,14 @@ export class PTUActor extends Actor {
 
     const targets = [...game.user.targets];
     if (game.keyboard.downKeys.has("ShiftLeft")) {
-      // rollDamageMoveWithBonus(actor , item, finalDB, typeStrategist);
-      return;
+      const bonusDamage = await new Promise((resolve, reject) => {
+        Dialog.confirm({
+            title: `Apply Damage Bonus`,
+            content: `<input type="number" name="damage-bonus" value="0"></input>`,
+            yes: (html) => resolve(parseInt(html.find('input[name="damage-bonus"]').val()))
+        });
+      });
+      return await this.rollMove(move, { targets , bonusDamage});
     }
 
     await this.rollMove(move, { targets })
@@ -628,7 +635,7 @@ export class PTUActor extends Actor {
         const applicatorMessageData = duplicate(messageData);
         applicatorMessageData.damageRolls = messageData.damageRolls;
         applicatorMessageData.content = await renderTemplate('/systems/ptu/templates/chat/moves/damage-application.hbs', applicatorMessageData);
-
+        timeout(100);
         const applicatorMsg = await ChatMessage.create(applicatorMessageData, {});
       }
 

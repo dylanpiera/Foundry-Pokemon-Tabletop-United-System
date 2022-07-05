@@ -17,6 +17,10 @@ export class PTUCombatOverrides extends Combat {
   }
 
   async nextTurn() {
+    if(!game.ptu.api._isMainGM()) {
+      return await game.ptu.api.nextTurn(this.id);
+    }
+
     let turn = this.turn ?? -1;
     let skip = this.settings.skipDefeated;
     let round = this.round;

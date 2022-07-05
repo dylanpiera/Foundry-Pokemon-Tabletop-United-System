@@ -1007,8 +1007,15 @@ p.summary {
 }
 .message-content .dice-roll .dice-formula,
 .message-content .dice-roll .dice-total {
-  flex: 0 0 100% !important;
   word-break: break-word !important;
+}
+.message-content .dice-roll .dice-formula h6,
+.message-content .dice-roll .dice-total h6 {
+  flex: 1 !important;
+}
+.message-content .dice-roll .dice-formula h7,
+.message-content .dice-roll .dice-total h7 {
+  flex: 46% 0 1 !important;
 }
 div.hover-button {
   display: none;

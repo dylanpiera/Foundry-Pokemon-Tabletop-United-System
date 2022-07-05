@@ -67,7 +67,7 @@ export default class Api {
             async transferOwnership(data) {
                 if (!ref._isMainGM()) return;
 
-                const sender = game.users.get(data.user);
+                const sender = game.users.get(data.content.options?.newOwnerId ?? data.user);
                 const pc = sender.character;
                 const document = await ref._documentFromUuid(data.content.uuid);
                 if (!pc) return ref._returnBridge({ result: new ApiError({ message: "Player does not have a Character set to transfer ownership too", type: 400 }) }, data);
@@ -288,6 +288,15 @@ export default class Api {
 
                 const retVal = { result: [] };
                 for (const document of documents) retVal.result.push(await document.update(newData));
+                ref._returnBridge(retVal, data);
+            },
+            async nextTurn(data) {
+                if (!ref._isMainGM()) return;
+
+                const combat = game.combats.get(data.content.id);
+                if (!combat) return;
+
+                const retVal = { result: await combat.nextTurn() }
                 ref._returnBridge(retVal, data);
             },
         }
@@ -578,6 +587,20 @@ export default class Api {
         return this._handlerBridge(content, "tokensUpdate");
     }
 
+    /**
+     * 
+     * @param {*} object - Instance of PTUCombatOverrides or UUID string
+     * @returns 
+     */
+     async nextTurn(object) {
+        if (!object) return;
+
+        if (!object.id) object = game.combats.get(object);
+        if (!object?.id) return;
+
+        const content = { id: object.id };
+        return this._handlerBridge(content, "nextTurn");
+    }
 
     /** API Methods */
     _isMainGM() {
