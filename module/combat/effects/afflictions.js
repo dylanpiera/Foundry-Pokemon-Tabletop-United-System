@@ -34,7 +34,7 @@ export const Afflictions = [
         id: "effect.persistent.badly_poisoned", label: "Badly Poisoned", icon: 'icons/svg/biohazard.svg', changes: [
             { key: "flags.ptu.is_poisoned", value: true, mode: CONST.ACTIVE_EFFECT_MODES.OVERRIDE, priority: 50 },
             { key: "flags.ptu.is_badly_poisoned", value: true, mode: CONST.ACTIVE_EFFECT_MODES.OVERRIDE, priority: 50 },
-        ]
+        ], duration: {rounds: Number.MAX_SAFE_INTEGER, turns: 1}
     },
     {
         id: "effect.volatile.confused", label: "Confused", icon: 'icons/svg/daze.svg', changes: [
@@ -204,7 +204,8 @@ export const EffectFns = new Map([
         let applyPoison = async () => {
             const token = canvas.tokens.get(lastCombatant.token.id);
             const badly_poisoned_effect = token.actor.effects.find(x => x.data.label == "Badly Poisoned");
-            await ApplyFlatDamage([token], "Toxic Damage", (5 * (badly_poisoned_effect.data.flags.ptu?.roundsElapsed ?? 0)) + 5);
+            const toxicDamage = (a,b=5) => a > 0 ? toxicDamage(a-1,b+b) : b;
+            await ApplyFlatDamage([token], "Toxic Damage", toxicDamage(badly_poisoned_effect.data.flags.ptu?.roundsElapsed ?? 0));
         }
 
         const actions_taken = actor.data.flags.ptu?.actions_taken;
