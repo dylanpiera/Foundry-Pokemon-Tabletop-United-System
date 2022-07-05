@@ -239,12 +239,12 @@ export async function RollCaptureChance(trainer, target, pokeball, to_hit_roll, 
 		"Park Ball": { "Base Modifier": -15 }
 	};
 
-	if (pokeball_stats[pokeball?.name]?.["Conditional Modifier"] && pokeball_stats[pokeball?.name]?.["Conditions"]) {
+	if (pokeball_stats[pokeball]?.["Conditional Modifier"] && pokeball_stats[pokeball]?.["Conditions"]) {
 		const result = await new Promise((resolve, reject) => {
 			//Do the blocking action, f.e. 
 			const dialog = new Dialog({
 				title: "Pokeball conditions?",
-				content: ("Is this Pokeball's special condition fulfilled? \n" + pokeball_stats[pokeball?.name]["Conditions"]),
+				content: ("Is this Pokeball's special condition fulfilled? \n" + pokeball_stats[pokeball]["Conditions"]),
 				buttons: {
 					yes: {
 						label: "Yes",
@@ -262,14 +262,14 @@ export async function RollCaptureChance(trainer, target, pokeball, to_hit_roll, 
 		});
 
 		if (result) {
-			captureData.mod += pokeball_stats[pokeball.name]["Conditional Modifier"];
+			captureData.mod += pokeball_stats[pokeball]["Conditional Modifier"];
 		}
 		else {
-			captureData.mod += pokeball_stats[pokeball.name]["Base Modifier"];
+			captureData.mod += pokeball_stats[pokeball]["Base Modifier"];
 		}
 	}
 	else {
-		captureData.mod += pokeball_stats?.[pokeball.name]?.["Base Modifier"] ?? 0;
+		captureData.mod += pokeball_stats?.[pokeball]?.["Base Modifier"] ?? 0;
 	}
 
 	captureData.rate -= targetData.level * 2;
@@ -335,29 +335,33 @@ export async function applyCapture(trainer, target, pokeball, speciesData)
 
 	if (!newOwnerId) {
 		ui.notifications.warn("Oops! Could not find trainer to assign newly captured mon to!")
-		return;
+		return await failedCapture(trainer, target, pokeball, speciesData);
 	}
 
-	await game.ptu.api.transferOwnership(target.actor, { pokeball: pokeball.name, timeout: 30000, permission: { [newOwnerId]: CONST.ENTITY_PERMISSIONS.OWNER } });
-
-	const dexentry = trainer.itemTypes.dexentry.find(item => item.name.toLowerCase() == speciesData._id.toLowerCase())
-	if (dexentry && !dexentry.data.data.owned) {
-		await dexentry.update({
-			data: {
-				owned: true
-			}
-		})
-	}
-	else {
-		await trainer.createEmbeddedDocuments("Item", [{
-			name: Handlebars.helpers.capitalizeFirst(speciesData._id.toLowerCase()),
-			type: "dexentry",
-			data: {
-				entry: "",
-				id: Number(speciesData.number),
-				owned: true
-			}
-		}])
+	var result = await game.ptu.api.transferOwnership(target.actor, { pokeball: pokeball.name, timeout: 30000, permission: { [newOwnerId]: CONST.ENTITY_PERMISSIONS.OWNER } });
+	debug(result, result?._id, target.actor.id)
+	if(result._id == target.actor.id) {
+		const dexentry = trainer.itemTypes.dexentry.find(item => item.name.toLowerCase() == speciesData._id.toLowerCase())
+		if (dexentry && !dexentry.data.data.owned) {
+			await dexentry.update({
+				data: {
+					owned: true
+				}
+			})
+		}
+		else {
+			await trainer.createEmbeddedDocuments("Item", [{
+				name: Handlebars.helpers.capitalizeFirst(speciesData._id.toLowerCase()),
+				type: "dexentry",
+				data: {
+					entry: "",
+					id: Number(speciesData.number),
+					owned: true
+				}
+			}])
+		}
+	} else {
+		return await failedCapture(trainer, target, pokeball, speciesData);
 	}
 
 	function getTokenOwner(trainer) {
@@ -369,3 +373,7 @@ export async function applyCapture(trainer, target, pokeball, speciesData)
 		}
 	}
 }
+
+async function failedCapture(trainer, target, pokeball, speciesData) {
+
+}	

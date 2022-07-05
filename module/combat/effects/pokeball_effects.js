@@ -332,16 +332,19 @@ export async function ThrowPokeball(thrower, target, pokeball) {
         let captureData = await RollCaptureChance(thrower, target, pokeball.name, roll, targetToken);
         const isCaptured = (Number(captureData.roll.total) <= captureData.rate) ? true : false;
 
-        await timeout(1000);
+        if ((game.modules.get("tokenmagic")?.active) && (game.settings.get("ptu", "enableMoveAnimations") == true))
+        {
+            await timeout(1000);
 
-        await PlayPokeballShoopFX(targetToken, POKEBALL_IMAGE_PATH, roll.total, pokeball, thrower, target, isCaptured);
-        // await timeout(1500);
+            await PlayPokeballShoopFX(targetToken, POKEBALL_IMAGE_PATH, roll.total, pokeball, thrower, target, isCaptured);
+            // await timeout(1500);
 
-        await PlayPokeballWiggleFX(targetToken);
-        await timeout(10000); // Wiggle sound last for approx 7 seconds
-        await target.TMFXdeleteFilters("pokeballWiggle");
+            await PlayPokeballWiggleFX(targetToken);
+            await timeout(10000); // Wiggle sound last for approx 7 seconds
+            await target.TMFXdeleteFilters("pokeballWiggle");
 
-        await PlayPokeballCatchOrEscapeFX(isCaptured, targetToken);
+            await PlayPokeballCatchOrEscapeFX(isCaptured, targetToken);
+        }
         await timeout(1000);
 
         await captureData.roll.toMessage({ flavor: `Pokeball capture check vs ${target.name}'s ${captureData.rate} Capture Rate:`, sound: null }); //message.data.sound = null; // Suppress dice sounds for Move Master roll templates
@@ -358,13 +361,16 @@ export async function ThrowPokeball(thrower, target, pokeball) {
         else // Escaped!
         {
             await AudioHelper.play({ src: pokeball_sound_paths["release"], volume: 0.7, autoplay: true, loop: false }, true);
-            await TokenMagic.addFilters(target, pokeball_capture_TMFX_params);
-    
-            await timeout(100);
-            await pokeballPolymorphFunc(POKEBALL_IMAGE_PATH, target);
-    
-            await timeout(1000);
-            await target.TMFXdeleteFilters("pokeball_transform");
+            if ((game.modules.get("tokenmagic")?.active) && (game.settings.get("ptu", "enableMoveAnimations") == true))
+            {
+                await TokenMagic.addFilters(target, pokeball_capture_TMFX_params);
+                
+                await timeout(100);
+                await pokeballPolymorphFunc(POKEBALL_IMAGE_PATH, target);
+                
+                await timeout(1000);
+                await target.TMFXdeleteFilters("pokeball_transform");
+            }
         }
 
         return isCaptured;
@@ -638,10 +644,9 @@ export async function PlayPokeballWiggleFX(target_token)
 {
     await AudioHelper.play({ src: pokeball_sound_paths["wiggle"], volume: 0.8, autoplay: true, loop: false }, true);
 
-    if (!(game.modules.get("tokenmagic")?.active) || !(game.settings.get("ptu", "enableMoveAnimations") == true))
+    if ((game.modules.get("tokenmagic")?.active) && (game.settings.get("ptu", "enableMoveAnimations") == true))
     {
         await TokenMagic.addFilters(target_token, pokeball_wiggle_TMFX_params);
-
     }
     
     return true;
