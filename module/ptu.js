@@ -815,7 +815,7 @@ Hooks.on("updateInitiative", function (actor) {
 
   if (!actor.canUserModify(game.user, "update")) return;
 
-  const combatant = game.combats.active.combatants.get(actor.id);
+  const combatant = game.combats.active.getCombatantByActor(actor.id);
   if (!combatant) return;
 
   const decimal = Number((combatant.initiative - Math.trunc(combatant.initiative).toFixed(2)));
