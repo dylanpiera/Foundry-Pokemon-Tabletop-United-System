@@ -168,8 +168,7 @@ export async function newApplyDamageToTargets(event) {
         type: dataset.type,
         category: dataset.category,
         damage: dataset.damage,
-        mode: dataset.mode,
-        crit: dataset.crit == "true"
+        mode: dataset.mode
     }
 
     let dr = 0;
@@ -183,7 +182,7 @@ export async function newApplyDamageToTargets(event) {
             const token = canvas.tokens.get(i?.dataset?.target);
             console.log(token.name, i.dataset, i.dataset.hit, i.dataset.hit == 'true')
             if (token && (i.dataset.hit == 'true')) {
-                if (i.dataset.crit == "hit" || i.dataset.crit == "double-hit")
+                if (i.dataset.crit == "hit" || i.dataset.crit == "crit" || i.dataset.crit == "double-hit")
                     critTargets.push(token);
                 else
                     targets.push(token);
