@@ -331,16 +331,20 @@ export async function RollCaptureChance(trainer, target, pokeball, to_hit_roll, 
 
 export async function applyCapture(trainer, target, pokeball, speciesData) 
 {
-	const newOwnerId = game.user.character?.id == trainer.id ? trainer.id : getTokenOwner(trainer);
+	const newOwnerId = game.user.character?.id == trainer.id ? game.user.id : getTokenOwner(trainer);
+	if(trainer.id == target.data.data.owner) {
+		ui.notifications.warn("Trainer already owns this mon.")
+		return true;
+	}
 
 	if (!newOwnerId) {
 		ui.notifications.warn("Oops! Could not find trainer to assign newly captured mon to!")
 		return await failedCapture(trainer, target, pokeball, speciesData);
 	}
 
-	var result = await game.ptu.api.transferOwnership(target.actor, { pokeball: pokeball.name, timeout: 30000, permission: { [newOwnerId]: CONST.ENTITY_PERMISSIONS.OWNER } });
-	debug(result, result?._id, target.actor.id)
-	if(result._id == target.actor.id) {
+	const result = await game.ptu.api.transferOwnership(target, {reason:"capture", pokeball: pokeball.name, timeout: 30000, /*permission: { [newOwnerId]: CONST.ENTITY_PERMISSIONS.OWNER },*/ newOwnerId});
+
+	if((result?._id ?? result?.id) == target.id) {
 		const dexentry = trainer.itemTypes.dexentry.find(item => item.name.toLowerCase() == speciesData._id.toLowerCase())
 		if (dexentry && !dexentry.data.data.owned) {
 			await dexentry.update({
@@ -360,7 +364,11 @@ export async function applyCapture(trainer, target, pokeball, speciesData)
 				}
 			}])
 		}
+
+		ChatMessage.create({content: `<h4>${result.name} Captured!</h4><p class="pt-2">Don't forget to write off your pokeball ;)</p>`})
+		return true;
 	} else {
+		if(result === undefined) return true;
 		return await failedCapture(trainer, target, pokeball, speciesData);
 	}
 
@@ -375,5 +383,33 @@ export async function applyCapture(trainer, target, pokeball, speciesData)
 }
 
 async function failedCapture(trainer, target, pokeball, speciesData) {
+	const messageData = {
+        user: game.user.id,
+        content: await renderTemplate("/systems/ptu/templates/chat/automation/capture-redo.hbs", {trainer, target, pokeball: pokeball?.name ?? pokeball}),
+        type: CONST.CHAT_MESSAGE_TYPES.WHISPER,
+        whisper: game.users.filter(x => x.isGM)
+    }
 
+    await ChatMessage.create(messageData, {});
+
+	return false;
 }	
+
+Hooks.on("renderChatMessage", (message, html, data) => {
+    setTimeout(() => {
+        $(html).find(".redo-capture").on("click", async (event) => {
+			debug(event);
+			const {trainerId, targetId, pokeball} = event.currentTarget.dataset;
+
+			const trainer = game.actors.get(trainerId);
+			const target = game.actors.get(targetId);
+			const speciesData = game.ptu.GetSpeciesData(target.data.data.species);
+			const result = await applyCapture(trainer,target,pokeball,speciesData);
+
+			if(result) {
+				const messageId = $(event.currentTarget).parents("[data-message-id]").data("messageId");
+				await game.messages.get(messageId).delete();
+			}
+		});
+    }, 500);
+});

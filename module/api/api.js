@@ -67,7 +67,7 @@ export default class Api {
             async transferOwnership(data) {
                 if (!ref._isMainGM()) return;
 
-                const sender = game.users.get(data.user);
+                const sender = game.users.get(data.content.options?.newOwnerId ?? data.user);
                 const pc = sender.character;
                 const document = await ref._documentFromUuid(data.content.uuid);
                 if (!pc) return ref._returnBridge({ result: new ApiError({ message: "Player does not have a Character set to transfer ownership too", type: 400 }) }, data);

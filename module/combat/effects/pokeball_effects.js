@@ -356,7 +356,7 @@ export async function ThrowPokeball(thrower, target, pokeball) {
             await timeout(1000);
             await AudioHelper.play({ src: pokeball_sound_paths["capture_jingle"], volume: 0.7, autoplay: true, loop: false }, true);
 
-            await applyCapture(thrower, target, pokeball, game.ptu.GetSpeciesData(target.actor.data.data.species)); 
+            await applyCapture(thrower, target.actor, pokeball, game.ptu.GetSpeciesData(target.actor.data.data.species)); 
         }
         else // Escaped!
         {
