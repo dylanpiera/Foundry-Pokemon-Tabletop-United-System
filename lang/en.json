@@ -191,7 +191,8 @@
     "PTU.Dreams": "Dreams",
     "PTU.Obsessions": "Obsessions",
 
-    
+    "PTU.DexButtonName": "Pokédex",
+    "PTU.DexButtonHint": "Scan the pokemon with your pokédex",
 
     "SETTINGS.ptu": ""
 }

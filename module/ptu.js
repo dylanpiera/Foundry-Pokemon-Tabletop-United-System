@@ -861,3 +861,16 @@ Hooks.on("preCreateItem", async function (item, data, options, sender) {
   // In preCreate[document] hook, you can update a document's data class using `document.data.update` before it is committed to the database and actually created.
   await item.data.update({ "data.origin": origin });
 });
+
+Hooks.on('getSceneControlButtons', function(hudButtons) {
+  const hud = hudButtons.find(val => val.name == "token")
+  if (hud) {
+      hud.tools.push({
+          name: "PTU.DexButtonName",
+          title: "PTU.DexButtonHint",
+          icon: "fas fa-tablet-alt",
+          button: true,
+          onClick: () => game.ptu.pokedexMacro()
+      });
+  }
+});
