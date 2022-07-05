@@ -396,6 +396,8 @@ export async function recallPokemon(target_actor) {
 
 
 export async function PlayReleaseOwnedPokemonAnimation(token) {
+
+    if (!game.modules.get("tokenmagic")?.active || (game.settings.get("ptu", "enableMoveAnimations") == false)) return;
     
     let tokenData = token.data;
     let actor = game.actors.get(tokenData.actorId);
