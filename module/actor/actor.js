@@ -550,8 +550,14 @@ export class PTUActor extends Actor {
 
     const targets = [...game.user.targets];
     if (game.keyboard.downKeys.has("ShiftLeft")) {
-      // rollDamageMoveWithBonus(actor , item, finalDB, typeStrategist);
-      return;
+      const bonusDamage = await new Promise((resolve, reject) => {
+        Dialog.confirm({
+            title: `Apply Damage Bonus`,
+            content: `<input type="number" name="damage-bonus" value="0"></input>`,
+            yes: (html) => resolve(parseInt(html.find('input[name="damage-bonus"]').val()))
+        });
+      });
+      return await this.rollMove(move, { targets , bonusDamage});
     }
 
     await this.rollMove(move, { targets })
