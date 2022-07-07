@@ -549,16 +549,16 @@ export class PTUActor extends Actor {
     }
 
     const targets = [...game.user.targets];
-    if (game.keyboard.downKeys.has("ShiftLeft")) {
-      const bonusDamage = await new Promise((resolve, reject) => {
-        Dialog.confirm({
-            title: `Apply Damage Bonus`,
-            content: `<input type="number" name="damage-bonus" value="0"></input>`,
-            yes: (html) => resolve(parseInt(html.find('input[name="damage-bonus"]').val()))
-        });
-      });
-      return await this.rollMove(move, { targets , bonusDamage});
-    }
+    // if (game.keyboard.downKeys.has("ShiftLeft")) {
+    //   const bonusDamage = await new Promise((resolve, reject) => {
+    //     Dialog.confirm({
+    //         title: `Apply Damage Bonus`,
+    //         content: `<input type="number" name="damage-bonus" value="0"></input>`,
+    //         yes: (html) => resolve(parseInt(html.find('input[name="damage-bonus"]').val()))
+    //     });
+    //   });
+    //   return await this.rollMove(move, { targets , bonusDamage});
+    // }
 
     await this.rollMove(move, { targets })
   }
@@ -845,11 +845,12 @@ export class PTUActor extends Actor {
       let total = isNaN(Number(bonusDamage)) ? 0 : Number(bonusDamage);
       const modifierTexts = [];
 
-      // if(total != 0) {
-      //   modifierTexts.push(`Including ${total>=0 ? "+" : ""}${total} damage from Sheet Bonus Damage Fields`)
-      // }
+      if(moveData.damageBonus > 0) {
+        total += moveData.damageBonus;
+        modifierTexts.push(`Including ${moveData.damageBonus>=0 ? "+" : ""}${moveData.damageBonus} damage from [Move Damage Modifier Field]`)
+      }
 
-      if (game.keyboard.downKeys.has("AltLeft")) {
+      if (game.keyboard.downKeys.has("ShiftLeft")) {
         await Dialog.confirm({
           title: `Apply Damage Bonus`,
           content: `<input type="number" name="damage-bonus" value="0"></input>`,
