@@ -270,7 +270,7 @@ export async function PlayHitShakeAnimation(moveTargetToken)
         return false; // Either TMFX module is not installed, or config settings have disabled move animations, so stop here.
     }
 
-    await TokenMagic.addFilters(moveTargetToken, hit_TMFX_params);
+    await game.ptu.api.addTokenMagicFilters(moveTargetToken, game.canvas.scene.id, hit_TMFX_params);
 }
 
 
@@ -281,7 +281,7 @@ export async function PlayMissDodgeAnimation(moveTargetToken)
         return false; // Either TMFX module is not installed, or config settings have disabled move animations, so stop here.
     }
 
-    await TokenMagic.addFilters(moveTargetToken, dodge_TMFX_params);
+    await game.ptu.api.addTokenMagicFilters(moveTargetToken, game.canvas.scene.id, dodge_TMFX_params);
 }
 
 
@@ -484,11 +484,13 @@ export async function injuryTokenSplash(actor)
 
     if( (actor.data.data.health.injuries >= 5) && (blood_allowed) )
     {
-        await actor_token.TMFXaddUpdateFilters(blood_splash_params);
+        // await actor_token.TMFXaddUpdateFilters(blood_splash_params);
+        await game.ptu.api.addTokenMagicFilters(actor_token, game.canvas.scene, blood_splash_params);
     }
     else
     {
-        await actor_token.TMFXaddUpdateFilters(soot_splash_params);
+        // await actor_token.TMFXaddUpdateFilters(soot_splash_params);
+        await game.ptu.api.addTokenMagicFilters(actor_token, game.canvas.scene, blood_splash_params);
     }
 }
 
@@ -498,6 +500,8 @@ export async function cleanInjuryTokenSplash(actor)
 	let actor_tokens = actor.getActiveTokens();
 	let actor_token = actor_tokens[0];
 
-	await actor_token.TMFXdeleteFilters("sootSplash");
-	await actor_token.TMFXdeleteFilters("bloodSplash");
+	// await actor_token.TMFXdeleteFilters("sootSplash");
+	// await actor_token.TMFXdeleteFilters("bloodSplash");
+    await game.ptu.api.removeTokenMagicFilters(target, game.canvas.scene.id, "sootSplash");
+    await game.ptu.api.removeTokenMagicFilters(target, game.canvas.scene.id, "bloodSplash");
 }

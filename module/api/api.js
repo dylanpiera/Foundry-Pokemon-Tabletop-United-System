@@ -299,6 +299,38 @@ export default class Api {
                 const retVal = { result: await combat.nextTurn() }
                 ref._returnBridge(retVal, data);
             },
+            async addTokenMagicFilters(data) {
+                if (!ref._isMainGM()) return;
+                debug(data);
+
+                if(!(game.modules.get("tokenmagic")?.active) || !(game.settings.get("ptu", "enableMoveAnimations") == true))
+                    return; // Either TMFX module is not installed, or config settings have disabled move animations, so stop here.
+
+                const scene = game.scenes.get(data.content.sceneId);
+                if(!scene) return ref._returnBridge({ result: new ApiError({ message: "Scene not found.", type: 500 }) }, data);
+
+                const token = scene.tokens.get(data.content.tokenId);
+                if(!token) return ref._returnBridge({ result: new ApiError({ message: "Token not found.", type: 500 }) }, data);;
+
+                const retVal = { result: await TokenMagic.addFilters(token.object, data.content.filters) }
+                ref._returnBridge(retVal, data);
+            },
+            async removeTokenMagicFilters(data) {
+                if (!ref._isMainGM()) return;
+                debug(data);
+
+                if(!(game.modules.get("tokenmagic")?.active) || !(game.settings.get("ptu", "enableMoveAnimations") == true))
+                    return; // Either TMFX module is not installed, or config settings have disabled move animations, so stop here.
+
+                const scene = game.scenes.get(data.content.sceneId);
+                if(!scene) return ref._returnBridge({ result: new ApiError({ message: "Scene not found.", type: 500 }) }, data);
+
+                const token = scene.tokens.get(data.content.tokenId);
+                if(!token) return ref._returnBridge({ result: new ApiError({ message: "Token not found.", type: 500 }) }, data);;
+
+                const retVal = { result: await TokenMagic.deleteFilters(token.object, data.content.filters) }
+                ref._returnBridge(retVal, data);
+            },
         }
     }
 
@@ -600,6 +632,58 @@ export default class Api {
 
         const content = { id: object.id };
         return this._handlerBridge(content, "nextTurn");
+    }
+
+    /**
+     * 
+     * @param {*} token - Token ID
+     * @param {*} scene - Scene ID
+     * @param {*} filters - TokenMagic Filters
+     * @returns 
+     */
+     async addTokenMagicFilters(token, scene, filters) {
+        if (!token || !scene || !filters) return;
+
+        if(!(game.modules.get("tokenmagic")?.active) || !(game.settings.get("ptu", "enableMoveAnimations") == true))
+        {
+            return; // Either TMFX module is not installed, or config settings have disabled move animations, so stop here.
+        }
+
+        if(!scene.id ) scene = game.scenes.get(scene);
+        if(!scene) return;
+
+        if(!token.id) token = scene.tokens.get(token);
+        if(!token) return;
+
+        const content = { tokenId: token.id, sceneId: scene.id, filters };
+        debug(content);
+        return this._handlerBridge(content, "addTokenMagicFilters");
+    }
+
+    /**
+     * 
+     * @param {*} token - Token ID
+     * @param {*} scene - Scene ID
+     * @param {*} filters - TokenMagic Filters
+     * @returns 
+     */
+     async removeTokenMagicFilters(token, scene, filters) {
+        if (!token || !scene || !filters) return;
+
+        if(!(game.modules.get("tokenmagic")?.active) || !(game.settings.get("ptu", "enableMoveAnimations") == true))
+        {
+            return; // Either TMFX module is not installed, or config settings have disabled move animations, so stop here.
+        }
+
+        if(!scene.id ) scene = game.scenes.get(scene);
+        if(!scene) return;
+
+        if(!token.id) token = scene.tokens.get(token);
+        if(!token) return;
+
+        const content = { tokenId: token.id, sceneId: scene.id, filters };
+        debug(content);
+        return this._handlerBridge(content, "removeTokenMagicFilters");
     }
 
     /** API Methods */

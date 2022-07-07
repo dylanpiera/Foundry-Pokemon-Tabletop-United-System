@@ -275,7 +275,8 @@ let pokeballPolymorphFunc = async function (pokeball_image_path, target_token) {
     // otherwise, data persistence may not works.
     // this is the reason why we use an async function (we cant use await in a non-async function)
     // avoid awaiting in a forEach loop, use "for" or "for/of" loop.
-    await target_token.TMFXaddUpdateFilters(polymorph_params);
+    // await target_token.TMFXaddUpdateFilters(polymorph_params);
+    await game.ptu.api.addTokenMagicFilters(target_token, game.canvas.scene, polymorph_params);
 };
 
 
@@ -341,7 +342,8 @@ export async function ThrowPokeball(thrower, target, pokeball) {
 
             await PlayPokeballWiggleFX(targetToken);
             await timeout(10000); // Wiggle sound last for approx 7 seconds
-            await target.TMFXdeleteFilters("pokeballWiggle");
+            // await target.TMFXdeleteFilters("pokeballWiggle");
+            await game.ptu.api.removeTokenMagicFilters(target, game.canvas.scene.id, "pokeballWiggle");
 
             await PlayPokeballCatchOrEscapeFX(isCaptured, targetToken);
         }
@@ -363,13 +365,14 @@ export async function ThrowPokeball(thrower, target, pokeball) {
             await AudioHelper.play({ src: pokeball_sound_paths["release"], volume: 0.7, autoplay: true, loop: false }, true);
             if ((game.modules.get("tokenmagic")?.active) && (game.settings.get("ptu", "enableMoveAnimations") == true))
             {
-                await TokenMagic.addFilters(target, pokeball_capture_TMFX_params);
+                await game.ptu.api.addTokenMagicFilters(target, game.canvas.scene.id, pokeball_capture_TMFX_params);
                 
                 await timeout(100);
                 await pokeballPolymorphFunc(POKEBALL_IMAGE_PATH, target);
                 
                 await timeout(1000);
-                await target.TMFXdeleteFilters("pokeball_transform");
+                // await target.TMFXdeleteFilters("pokeball_transform");
+                await game.ptu.api.removeTokenMagicFilters(target, game.canvas.scene.id, "pokeball_transform");
             }
         }
 
@@ -444,7 +447,8 @@ export async function PlayReleaseOwnedPokemonAnimation(token) {
             
             if(enable_pokeball_animation)
             {
-                await target_token.document.update({ "alpha": (0) });
+                // await target_token.document.update({ "alpha": (0) });
+                await game.ptu.api.updateToken(target_token, {alpha: 0})
             }
 
             await AudioHelper.play({src: pokeball_sound_paths["miss"], volume: 0.5, autoplay: true, loop: false}, true);
@@ -471,8 +475,10 @@ export async function PlayReleaseOwnedPokemonAnimation(token) {
                 await AudioHelper.play({src: pokeball_sound_paths["release"], volume: 0.5, autoplay: true, loop: false}, true); 
 
                 await timeout(500);
-                await target_token.TMFXaddUpdateFilters(pokeballShoop_params); 
-                await target_token.document.update({ "alpha": (1) });
+                // await target_token.TMFXaddUpdateFilters(pokeballShoop_params); 
+                await game.ptu.api.addTokenMagicFilters(target_token, game.canvas.scene, pokeballShoop_params);
+                // await target_token.document.update({ "alpha": (1) });
+                await game.ptu.api.updateToken(target_token, {alpha: 1})
             }
 
             await timeout(2000);
@@ -573,7 +579,7 @@ export async function PlayPokeballReturnAnimation(pokemon_token)
         }
     
         if ((game.modules.get("tokenmagic")?.active) && (game.settings.get("ptu", "enableMoveAnimations") == true)) {
-            await TokenMagic.addFilters(pokemon_token.object, pokeball_capture_TMFX_params);
+            await game.ptu.api.addTokenMagicFilters(pokemon_token.object, game.canvas.scene.id, pokeball_capture_TMFX_params);
         }
     
         await AudioHelper.play({ src: pokeball_sound_paths["return"], volume: 0.7, autoplay: true, loop: false }, true);
@@ -592,7 +598,7 @@ export async function PlayPokeballShoopFX(target_token, pokeball_image_path, to_
 {
     if ((game.modules.get("tokenmagic")?.active) && (game.settings.get("ptu", "enableMoveAnimations") == true)) 
     {
-        await TokenMagic.addFilters(target_token, pokeball_capture_TMFX_params);
+        await game.ptu.api.addTokenMagicFilters(target_token, game.canvas.scene.id, pokeball_capture_TMFX_params);
         await pokeballPolymorphFunc(pokeball_image_path, target_token);
     }
 
@@ -648,7 +654,7 @@ export async function PlayPokeballWiggleFX(target_token)
 
     if ((game.modules.get("tokenmagic")?.active) && (game.settings.get("ptu", "enableMoveAnimations") == true))
     {
-        await TokenMagic.addFilters(target_token, pokeball_wiggle_TMFX_params);
+        await game.ptu.api.addTokenMagicFilters(target_token, game.canvas.scene.id, pokeball_wiggle_TMFX_params);
     }
     
     return true;
