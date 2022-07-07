@@ -1,4 +1,5 @@
 {{#if move}}
+{{log this}}
 <div class="mm-move content flexrow p-0" style="font-variant: normal;">
     <div class="swsh-box">
         <div class="swsh-header p-0" style="border-bottom: 0px solid #272727; text-align: center; background-color: #b3b3b3;">
@@ -263,7 +264,7 @@
                             <div class="d-flex" style="flex: 0 0 30%;">
                                 <span class="dice-total p-0 m-0" style="flex: 1;">
                                     <h6>
-                                        <button class="automated-damage-button p-0" data-move-name="{{moveName}}" data-damage="{{damageRolls.normal.total}}" data-crit-damage="{{damageRolls.crit.total}}" data-type="{{move.type}}" data-category="{{move.category}}" data-target="many" data-mode="full">
+                                        <button class="automated-damage-button p-0" data-move-name="{{moveName}}" data-damage="{{#if (is crit "hit")}}{{damageRolls.crit.total}}{{else}}{{damageRolls.normal.total}}{{/if}}" data-type="{{move.type}}" data-category="{{move.category}}" data-target="{{key data}}" data-mode="full" data-crit="{{#if (is crit "hit")}}true{{else}}false{{/if}}">
                                             Apply
                                         </button>
                                     </h6>
@@ -271,10 +272,10 @@
                             </div>
                         </div>
                             <div class="row justify-content-center w-100 ml-0 mr-0" style="height: 18px; border: 1px solid #999; box-shadow: 0 0 2px #FFF inset; border-radius: 3px; background: rgba(0, 0, 0, 0.1);">
-                                <div class="small-button-container"><button class="automated-damage-button small" data-move-name="{{moveName}}" data-damage="{{damageRolls.normal.total}}" data-type="{{move.type}}" data-category="{{move.category}}" data-target="{{key data}}" data-mode="weak" data-crit="false">Resist Less</button></div>
-                                <div class="small-button-container"><button class="automated-damage-button small" data-move-name="{{moveName}}" data-damage="{{damageRolls.normal.total}}" data-type="{{move.type}}" data-category="{{move.category}}" data-target="{{key data}}" data-mode="resist" data-crit="false">Resist More</button></div>
-                                <div class="small-button-container"><button class="automated-damage-button small" data-move-name="{{moveName}}" data-damage="{{damageRolls.normal.total}}" data-type="{{move.type}}" data-category="{{move.category}}" data-target="{{key data}}" data-mode="half" data-crit="false">1/2 DMG</button></div>
-                                <div class="small-button-container"><button class="automated-damage-button small" data-move-name="{{moveName}}" data-damage="{{damageRolls.normal.total}}" data-type="{{move.type}}" data-category="{{move.category}}" data-target="{{key data}}" data-mode="flat" data-crit="false">Flat DMG</button></div>
+                                <div class="small-button-container"><button class="automated-damage-button small" data-move-name="{{moveName}}" data-damage="{{#if (is crit "hit")}}{{damageRolls.crit.total}}{{else}}{{damageRolls.normal.total}}{{/if}}" data-type="{{move.type}}" data-category="{{move.category}}" data-target="{{key data}}" data-mode="weak" data-crit="{{#if (is crit "hit")}}true{{else}}false{{/if}}">Resist Less</button></div>
+                                <div class="small-button-container"><button class="automated-damage-button small" data-move-name="{{moveName}}" data-damage="{{#if (is crit "hit")}}{{damageRolls.crit.total}}{{else}}{{damageRolls.normal.total}}{{/if}}" data-type="{{move.type}}" data-category="{{move.category}}" data-target="{{key data}}" data-mode="resist" data-crit="{{#if (is crit "hit")}}true{{else}}false{{/if}}">Resist More</button></div>
+                                <div class="small-button-container"><button class="automated-damage-button small" data-move-name="{{moveName}}" data-damage="{{#if (is crit "hit")}}{{damageRolls.crit.total}}{{else}}{{damageRolls.normal.total}}{{/if}}" data-type="{{move.type}}" data-category="{{move.category}}" data-target="{{key data}}" data-mode="half" data-crit="{{#if (is crit "hit")}}true{{else}}false{{/if}}">1/2 DMG</button></div>
+                                <div class="small-button-container"><button class="automated-damage-button small" data-move-name="{{moveName}}" data-damage="{{#if (is crit "hit")}}{{damageRolls.crit.total}}{{else}}{{damageRolls.normal.total}}{{/if}}" data-type="{{move.type}}" data-category="{{move.category}}" data-target="{{key data}}" data-mode="flat" data-crit="{{#if (is crit "hit")}}true{{else}}false{{/if}}">Flat DMG</button></div>
                             </div>
                         </div>
                     </div>
