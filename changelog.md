@@ -1,6 +1,11 @@
 # Welcome to the Beta!
 Hey there! You are on the Beta Branch. If you ever have any feedback please do share with us over on [Github](https://github.com/dylanpiera/Foundry-Pokemon-Tabletop-United-System/issues) or [Discord](https://discord.gg/fE3w59q)
 
+## 2.0-Beta-9 - Small Bugfixes
+- Fixed a permission error in TokenMagicFX Integration
+- Fixed "Apply Damage" not working on un-targeted attacks.
+- Fixed "Damage Bonus" field in move items not being taken into account.
+
 ## 2.0-Beta-8 - Bugfixes and Small Features Part 2.
 And another set of improvements and bugfixes.
 
