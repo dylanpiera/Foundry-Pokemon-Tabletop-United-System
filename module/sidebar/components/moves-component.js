@@ -66,6 +66,7 @@ export default class MovesList extends Component {
             if((moveData.data.damageBase == "--" && moveData.data.category == "--") || (moveData.data.damageBase == "" && moveData.data.category == "") || (moveData.data.isStruggle)) continue;
             
             const tokens = game.user.targets.size > 0 ? [...game.user.targets] : canvas.tokens.controlled
+            const monData = game.ptu.GetSpeciesData(tokens[0]?.actor?.data?.data?.species);
 
             // If DB is not a number, 
                 if(isNaN(Number(moveData.data.damageBase))) moveData.data.damageBase = "--";
@@ -88,7 +89,7 @@ export default class MovesList extends Component {
                             break;
                         }
                         
-                        if((!game.user.character.itemTypes.dexentry.some(entry => entry.data.name.toLowerCase() === game.ptu.GetSpeciesData(tokens[0].actor.data.data.species)?._id?.toLowerCase() && entry.data.data.owned)))
+                        if((!game.user.character.itemTypes.dexentry.some(entry => entry.data.name.toLowerCase() === monData?._id?.toLowerCase() && entry.data.data.owned)))
                             moveData.data.effectiveness = -1;
                         
 
@@ -108,7 +109,7 @@ export default class MovesList extends Component {
                             moveData.data.effectiveness = -1;
                         }
 
-                        if(!game.user.character.itemTypes.dexentry.some(entry => entry.data.name.toLowerCase() === game.ptu.GetSpeciesData(tokens[0].actor.data.data.species)?._id?.toLowerCase()))
+                        if(!game.user.character.itemTypes.dexentry.some(entry => entry.data.name.toLowerCase() === monData?._id?.toLowerCase()))
                             moveData.data.effectiveness = -1;
 
                         break;
