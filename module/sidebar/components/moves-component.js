@@ -65,6 +65,8 @@ export default class MovesList extends Component {
             // If fake move skip
             if((moveData.data.damageBase == "--" && moveData.data.category == "--") || (moveData.data.damageBase == "" && moveData.data.category == "") || (moveData.data.isStruggle)) continue;
             
+            const tokens = game.user.targets.size > 0 ? [...game.user.targets] : canvas.tokens.controlled
+
             // If DB is not a number, 
                 if(isNaN(Number(moveData.data.damageBase))) moveData.data.damageBase = "--";
                 switch (effVisible){
@@ -81,13 +83,12 @@ export default class MovesList extends Component {
                             break;
                         }
 
-                        if (game.user.targets.size < 1) {
+                        if (game.user.targets.size != 1) {
                             moveData.data.effectiveness = -1;
                             break;
                         }
-
-                        const token4 = game.user.targets.size > 0 ? game.user.targets.values() : canvas.tokens.controlled
-                        if((!game.user.character.itemTypes.dexentry.some(entry => entry.data.name.toLowerCase() === game.ptu.GetSpeciesData(token4.actor.data.data.species)?._id?.toLowerCase() && entry.data.data.owned)))
+                        
+                        if((!game.user.character.itemTypes.dexentry.some(entry => entry.data.name.toLowerCase() === game.ptu.GetSpeciesData(tokens[0].actor.data.data.species)?._id?.toLowerCase() && entry.data.data.owned)))
                             moveData.data.effectiveness = -1;
                         
 
@@ -103,12 +104,11 @@ export default class MovesList extends Component {
                             break;
                         }
                         
-                        if (game.user.targets.size < 1) {
+                        if (game.user.targets.size != 1) {
                             moveData.data.effectiveness = -1;
                         }
 
-                        const token3 = game.user.targets.size > 0 ? game.user.targets.values() : canvas.tokens.controlled
-                        if(!game.user.character.itemTypes.dexentry.some(entry => entry.data.name.toLowerCase() === game.ptu.GetSpeciesData(token3.actor.data.data.species)?._id?.toLowerCase()))
+                        if(!game.user.character.itemTypes.dexentry.some(entry => entry.data.name.toLowerCase() === game.ptu.GetSpeciesData(tokens[0].actor.data.data.species)?._id?.toLowerCase()))
                             moveData.data.effectiveness = -1;
 
                         break;

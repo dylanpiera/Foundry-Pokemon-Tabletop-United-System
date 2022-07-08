@@ -82,6 +82,46 @@ export class PTUItemSheet extends ItemSheet {
 		});
 
 		if(this.object.type == "move") return buttons;
+		if(this.object.type == "dexentry") {
+			buttons.unshift({
+				label: "Pokedex",
+				class: "open-dex",
+				icon: "fas fa-tablet-alt",
+				onclick: () => {
+					const permSetting = game.settings.get("ptu", "dex-permission");
+					const mon = this.object.data?.data?.id ?? this.object.name;
+
+					// No checks needed; just show full dex.
+					if (game.user.isGM) {
+						return game.ptu.renderDex(mon, "full");
+					}
+				
+					switch (permSetting) {
+						case 1: { // Pokedex Disabled
+							return ui.notifications.info("DM has turned off the Pokedex.");
+						}
+						case 2:
+						case 3: { //pokemon description only
+							return game.ptu.renderDex(mon);
+						}
+						case 4: { // Only owned mons
+							if (!game.user.character) return ui.notifications.warn("Please make sure you have a trainer as your Selected Player Character");
+				
+							return game.ptu.renderDex(mon, 
+								game.user.character.itemTypes.dexentry.some(entry => entry.data.data.owned && entry.data.name === game.ptu.GetSpeciesData(mon)?.id?.toLowerCase())
+								? "full" : "desc");
+						}
+						case 5: { // GM Prompt
+							return ui.notifications.warn("The GM prompt feature has yet to be implemented. Please ask your DM to change to a different Dex Permission Setting");
+						}
+						case 6: { // Always Full Details
+							return game.ptu.renderDex(mon, "full");
+						}
+					}
+				}
+			});	
+			return buttons;
+		}
 
 		buttons.unshift({
 			label: "Effects",

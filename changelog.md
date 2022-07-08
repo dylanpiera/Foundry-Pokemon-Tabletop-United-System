@@ -1,6 +1,10 @@
 # Welcome to the Beta!
 Hey there! You are on the Beta Branch. If you ever have any feedback please do share with us over on [Github](https://github.com/dylanpiera/Foundry-Pokemon-Tabletop-United-System/issues) or [Discord](https://discord.gg/fE3w59q)
 
+## 2.0-Beta-11 - Hotfix & Quick Feature
+- Fixed an error in the move effectiveness calculation causing the sidebar to break.
+- Added a 'Pokedex' button to 'dexentry' items.
+
 ## 2.0-Beta-10 - Small Features Part 3
 ...If you were wondering where the bugfixes went... Well that was Beta 9 :p
 
