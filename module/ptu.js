@@ -61,7 +61,7 @@ export let log = (...args) => console.log("FVTT PTU | ", ...args);
 export let warn = (...args) => console.warn("FVTT PTU | ", ...args);
 export let error = (...args) => console.error("FVTT PTU | ", ...args)
 
-export const LATEST_VERSION = "2.0-Beta-11";
+export const LATEST_VERSION = "2.0-Beta-11.2";
 
 /* -------------------------------------------- */
 /*  Foundry VTT Initialization                  */
@@ -781,8 +781,10 @@ async function _onPokedexMacro() {
       case 4: { // Only owned mons
         if (!game.user.character) return ui.notifications.warn("Please make sure you have a trainer as your Selected Player Character");
 
+        const monData = game.ptu.GetSpeciesData(token.actor.data.data.species);
+
         game.ptu.renderDex(token.actor.data.data.species, 
-          game.user.character.itemTypes.dexentry.some(entry => entry.data.data.owned && entry.data.name === game.ptu.GetSpeciesData(token.actor.data.data.species)?.id?.toLowerCase())
+          game.user.character.itemTypes.dexentry.some(entry => entry.data.data.owned && entry.data.name === monData?._id?.toLowerCase())
           ? "full" : "desc");
         break;
       }

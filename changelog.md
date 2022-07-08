@@ -5,6 +5,10 @@ Hey there! You are on the Beta Branch. If you ever have any feedback please do s
 - Fixed an error in the move effectiveness calculation causing the sidebar to break.
 - Added a 'Pokedex' button to 'dexentry' items.
 
+### 11.2 - Hotfix
+- Fixed issues with the new Pokedex Macro
+- Fixed memory issues with new features.
+
 ## 2.0-Beta-10 - Small Features Part 3
 ...If you were wondering where the bugfixes went... Well that was Beta 9 :p
 
