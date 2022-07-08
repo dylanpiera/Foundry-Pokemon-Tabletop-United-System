@@ -1,6 +1,14 @@
 # Welcome to the Beta!
 Hey there! You are on the Beta Branch. If you ever have any feedback please do share with us over on [Github](https://github.com/dylanpiera/Foundry-Pokemon-Tabletop-United-System/issues) or [Discord](https://discord.gg/fE3w59q)
 
+## 2.0-Beta-10 - Small Features Part 3
+...If you were wondering where the bugfixes went... Well that was Beta 9 :p
+
+- Added a 'Total Wealth' display in a Trainer's inventory.
+- Added more settings for Pokedex functionality
+- Added the option to disable effectiveness calculation for sidebar (or base it on dex knowledge)
+- Automatically add Pokemon to a trainer's dex tab when scanned with the Pokedex.
+
 ## 2.0-Beta-9 - Small Bugfixes
 - Fixed a permission error in TokenMagicFX Integration
 - Fixed "Apply Damage" not working on un-targeted attacks.
