@@ -4275,3 +4275,10 @@ h6 {
   font-weight: bold;
   padding-bottom: 10px;
 }
+input[name="totalwealth"] {
+  background-image: url(/systems/ptu/css/images/Pokémon_Dollar_sign.svg);
+  padding-left: 20px;
+  background-size: 12px 16px;
+  background-repeat: no-repeat;
+  background-position: 2px 4px;
+}

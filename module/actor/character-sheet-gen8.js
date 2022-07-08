@@ -32,6 +32,7 @@ export class PTUGen8CharacterSheet extends ActorSheet {
 		if (this.actor.data.type == 'character') {
 			this._prepareCharacterItems(data);
 		}
+		data['totalWealth'] = this.actor.itemTypes.item.reduce((total, item) => total + (!isNaN(item.data.data.cost) ? item.data.data.cost * (item.data.data.quantity ?? 0) : 0), this.actor.data.data.money);
 		data.data = this.actor.data.data;
 		// data['origins'] = this.actor.origins;
 
