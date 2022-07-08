@@ -71,15 +71,43 @@ export function LoadSystemSettings() {
         type: Number,
         choices: {
             1: "Disable Pokédex",
-            2: "Only on owned Tokens",
-            3: "Only on owned Mons (checks trainer's dex tab)",
-            4: "GM Prompt (**NOT YET IMPLEMENTED**)",
-            5: "Always allow Pokédex",
+            2: "Dexentry description only (Basic description and details only)",
+            3: "Full details on owned Tokens, Dexentry description on un-owned tokens",
+            4: "Full details on owned Mons (checks trainer's dex tab), Dexentry Description on un-owned mons",
+            5: "GM Prompt (**NOT YET IMPLEMENTED**)",
+            6: "Always Full Details",
         },
         default: 1,
         category: "general"
     })
 
+    game.settings.register("ptu", "auto-add-to-dex", {
+        name: "Automatically add pokemon to Seen",
+        hint: "Automatically add pokemon to player's seen list when scanned with pokedex",
+        scope: "world",
+        config: true,
+        type: Boolean,
+        default: true,
+        category: "general"
+    });
+
+    game.settings.register("ptu", "move-effectiveness-visible", {
+        name: "Move Effectiveness",
+        hint: "Whether the players will be able to see how effective their Pokémon's moves are",
+        scope: "world",
+        config: true,
+        type: Number,
+        choices: {
+            1: "Disable Effectiveness",
+            2: "Visible to GMs Only",
+            3: "Visible on Seen Pokémon Only (Checks Pokédex)",
+            4: "Visible on owned Pokémon Only (Checks Pokédex)",
+            5: "Always Visible"
+        },
+        default: 1,
+        category: "general"
+    })
+    
     game.settings.register("ptu", "showCharactermancerEvolutions", {
         name: "Show evolutions in Charactermancer",
         hint: "Allow players to see evolutions in the Charactermancer. DMs ignore this setting.",
