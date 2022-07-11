@@ -7,7 +7,7 @@ export default async function RenderDex(species, type = "desc") {
     const imageBasePath = game.settings.get("ptu", "defaultPokemonImageDirectory");
 
     const dexEntries = await game.ptu.cache.GetOrCreateCachedItem("dexentries", _cacheDexEntries)
-    const dexEntry = dexEntries.find( x => x.data.name?.toLowerCase() === speciesData._id.toLowerCase());
+    const dexEntry = dexEntries.find( x => (x.name?.toLowerCase() === speciesData._id.toLowerCase()));
 
     const pokedexDialog = new Dialog({
         title: "Pokédex information for " + speciesData._id.toLowerCase(),
@@ -34,7 +34,7 @@ export async function AddMontoPokedex(species) {
 
     //get description from db
     const dexEntries = await game.ptu.cache.GetOrCreateCachedItem("dexentries", _cacheDexEntries)
-    var dexEntry = dexEntries.find( x => x.data.name?.toLowerCase() === speciesData._id.toLowerCase());
+    const dexEntry = dexEntries.find( x => (x.name?.toLowerCase() === speciesData._id.toLowerCase()));
     
     if(dexEntry != null)
     {
