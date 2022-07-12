@@ -116,7 +116,6 @@ export async function RollCaptureChance(trainer, target, pokeball, to_hit_roll, 
 			persistentCount: 0,
 			volatileCount: 0
 		}
-		/** volatileConditionCount, persistentConditionCount */
 	}
 
 	function hasMovementMoreThanSeven(capabilities) {
@@ -150,7 +149,7 @@ export async function RollCaptureChance(trainer, target, pokeball, to_hit_roll, 
 
 	const currentRound = game.combat ? game.combat.round : 1;
 
-	const quickBallMod = currentRound == 1 ? -20 : currentRound == 2 ? +5 : currentRound == 3 ? +10 : +20;
+	const quickBallMod = currentRound == 1 ? -20 : currentRound == 2 ? -15 : currentRound == 3 ? -10 : 0;
 
 
 	const flags = targetActor.data.flags.ptu;
@@ -226,7 +225,7 @@ export async function RollCaptureChance(trainer, target, pokeball, to_hit_roll, 
 		"Fast Ball": { "Base Modifier": (targetData.movementAtLeastSeven ? -20 : 0) },
 		"Sport Ball": { "Base Modifier": 0 },
 		"Premier Ball": { "Base Modifier": 0 },
-		"Repeat Ball": { "Base Modifier": 0 }, // TODO: -20 Modifier if you already own a Pokémon of the target’s species.
+		"Repeat Ball": { "Base Modifier": 0 , "Conditions": "-20 Modifier if the user already owns a Pokémon of the target's species.", "Conditional Modifier": -20 },
 		"Timer Ball": { "Base Modifier": Math.max((5 - ((currentRound - 1) * 5)), Number(-20)) },
 		"Nest Ball": { "Base Modifier": (targetData.level < 10 ? -20 : 0) },
 		"Net Ball": { "Base Modifier": (targetData.isWaterOrBug ? -20 : 0) },
