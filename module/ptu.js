@@ -313,19 +313,29 @@ function registerHandlebars() {
   });
 
   Handlebars.registerHelper("loadTypeImages", function (types, includeSlash = true) {
+    // TypeEffectiveness here is imported from source and only contains the default types
+    // in contract, game.ptu.TypeEffectiveness contains custom types as well
+    const isTypeDefaultType = (typeName) => Object.keys(TypeEffectiveness).includes(typeName)
+    let customDir = game.settings.get("ptu", "typeEffectivenessCustomImageDirectory");
+    if (customDir.slice(-1) !== "/") customDir += "/"
+    if (customDir.charAt(0) !== "/") customDir = "/" + customDir
     if (!types) return;
     return types.reduce((html, type, index, array) => {
       if (type == "null") type = "Untyped";
-      return html += `<img class="mr-1 ml-1" src="/systems/ptu/css/images/types/${type}IC.webp">` + (includeSlash ? (index != (array.length - 1) ? "<span>/</span>" : "") : "");
+      if (isTypeDefaultType(type)) return html += `<img class="mr-1 ml-1" src="/systems/ptu/css/images/types/${type}IC.webp">` + (includeSlash ? (index != (array.length - 1) ? "<span>/</span>" : "") : "");
+      else return html += `<img class="mr-1 ml-1" src="${customDir}${type}IC.webp">` + (includeSlash ? (index != (array.length - 1) ? "<span>/</span>" : "") : "");
     }, "")
-
-    if (!types) return;
-    if (types[1] != "null") return `<img class="mr-1" src="/systems/ptu/css/images/types/${types[0]}IC.webp"><span>/</span><img class="ml-1" src="/systems/ptu/css/images/types/${types[1]}IC.webp">`;
-    return `<img src="/systems/ptu/css/images/types/${types[0]}IC.webp">`;
   });
 
   Handlebars.registerHelper("loadTypeImage", function (type) {
-    return `<img src="/systems/ptu/css/images/types/${type}IC.webp">`;
+    // TypeEffectiveness here is imported from source and only contains the default types
+    // in contract, game.ptu.TypeEffectiveness contains custom types as well
+    const isTypeDefaultType = (typeName) => Object.keys(TypeEffectiveness).includes(typeName)
+    let customDir = game.settings.get("ptu", "typeEffectivenessCustomImageDirectory");
+    if (customDir.slice(-1) !== "/") customDir += "/"
+    if (customDir.charAt(0) !== "/") customDir = "/" + customDir
+    if (isTypeDefaultType(type)) return `<img src="/systems/ptu/css/images/types/${type}IC.webp">`;
+    else return `<img src="${customDir}${type}IC.webp">`
   });
 
   Handlebars.registerHelper("isGm", function () {

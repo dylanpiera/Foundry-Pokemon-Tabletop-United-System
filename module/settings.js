@@ -323,6 +323,17 @@ export function LoadSystemSettings() {
         default: undefined
     })
 
+    game.settings.register("ptu", "typeEffectivenessCustomImageDirectory", {
+        name: "Custom Type Image Directory",
+        hint: "Directory from which Images for Custom Types are attempted to load. Looks for [CaseSensitiveTypeName]IC.webp.",
+        scope: "world",
+        config: true,
+        type: String,
+        default: "custom_types/",
+        filePicker: true,
+        category: "other"
+    })
+
     game.settings.register("ptu", "showDebugInfo", {
         name: "Show Debug Info",
         hint: "Only for debug purposes. Logs extra debug messages & shows hidden folders/items",
