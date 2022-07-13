@@ -296,12 +296,32 @@ export async function ThrowPokeball(thrower, target, pokeball) {
 
     const POKEBALL_IMAGE_PATH = pokeball?.img ?? "systems/ptu/images/item_icons/basic ball.webp";
 
-    const accuracyBonus = thrower?.data?.data?.modifiers?.acBonus?.total ?? 0; // TODO: Get actual value, factor in edges/features that effect this, etc.
+    let accuracyBonus = thrower?.data?.data?.modifiers?.acBonus?.total ?? 0;
+    // The only thing I know of that gives a bonus would be Tools of the Trade, +2AC
+
+    function probablyHasToolsOfTheTrade(actor){
+        // So, TotT (Tools of the Trade) is not a Feature. We do not know how people track it explicitly. So, there are two things to look for
+        // If a Feature includes the string Tools of the Trade in the Title, we guess the Trainer has it
+        // Same for a Feature Description, EXCEPT we must exclude the occurence from the default Description that lists all Capture Techniques.
+        // Otherwise, the default Capture Specialist would trigger it very time.
+        const snippetThatListsAllCaptureTechniques = "Capture Techniques: Capture Skills, Curve Ball, Devitalizing Throw, Fast Pitch, Snare, Tools of the Trade, Catch Combo, False Strike, Relentless Pursuit";
+        if (! actor.feats) return false;
+        for (let feature of actor.feats){
+            if (feature.name.toLowerCase().includes("tools of the trade")) return true;
+            let description = feature.data.effect;
+            if (description.includes(snippetThatListsAllCaptureTechniques)) description = description.replaceAll(snippetThatListsAllCaptureTechniques, "kek");
+            if (description.toLowerCase().includes("tools of the trade")) return true;
+        }
+        return false;
+    }
+
+    if (probablyHasToolsOfTheTrade(thrower)) accuracyBonus += 2;
+
     const BASE_POKEBALL_AC = -6;
     const targetEvasion = target?.data?.data?.evasion?.speed ?? 0;
 
-    const roll = new Roll("1d20+@accuracyBonus-@acCheck", {
-        accuracyBonus,
+    const roll = new Roll("1d20+@accuracyBonus -@acCheck", {
+        accuracyBonus: accuracyBonus,
         acCheck: BASE_POKEBALL_AC
     });
 
