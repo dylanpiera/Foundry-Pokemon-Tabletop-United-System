@@ -250,7 +250,15 @@ export class PTUGen8CharacterSheet extends ActorSheet {
 				//if(!item.data.owned) item.update({"data.owned": true});
 				return false;
 			}
-		})
+		});
+
+		document.getElementsByName('data.ap.value input')[0].addEventListener('change', (e) => {
+			const value = parseInt(e.currentTarget.value);
+			if (isNaN(value)) return;
+			this.actor.update({
+				"data.ap.value": value
+			});
+		});
 	}
 
 	async _onDrop(event) {
@@ -356,9 +364,6 @@ export class PTUGen8CharacterSheet extends ActorSheet {
 	async _onRoll(event) {
 		event.preventDefault();
 		const element = event.currentTarget;
-
-		console.log(element);
-
 		const dataset = element.dataset;
 
 		if (dataset.roll) {
