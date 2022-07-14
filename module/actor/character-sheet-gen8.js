@@ -371,8 +371,8 @@ export class PTUGen8CharacterSheet extends ActorSheet {
 			let label = dataset.label ? `Rolling ${dataset.label}` : '';
 
 			// Add +1 to the roll if shift is held on click
-			const shift = event.shiftKey;
-			if (shift && this.actor.data.data.ap.value > 0) { // Only if AP are available
+			const alt = event.altKey;
+			if (alt && this.useAP()) { // Only if AP are available
 				// Does the character have Instinctive Aptitude?
 				let instinctiveAptitude = false;
 				this.actor.edges.forEach((e) => {
@@ -382,12 +382,9 @@ export class PTUGen8CharacterSheet extends ActorSheet {
 				})
 
 				instinctiveAptitude ? rolldata += "+2" : rolldata += "+1";
-
-				this.actor.update({ "data.ap.value": this.actor.data.data.ap.value - 1 }); // Spend AP
 				label += "<br>using 1 AP</br>";
 			}
-			else if (shift) { // Display Error if no AP are available
-				ui.notifications.error("You don't have any AP to spend!");
+			else if (alt) {
 				return;
 			}
 
@@ -448,7 +445,12 @@ export class PTUGen8CharacterSheet extends ActorSheet {
 			const moveData = duplicate(move.data);
 			if (damageBonus != 0) moveData.damageBonus += damageBonus;
 
-			return this.actor.executeMove(move._id);
+			const useAP = event.altKey && this.useAP();
+			if (event.altKey && !useAP) return;
+			let APBonus = this.hasInstinctiveAptitude() ? 2 : 1;
+			APBonus = useAP ? APBonus : 0;
+
+			return this.actor.executeMove(move._id, {}, APBonus);
 
 			let acRoll = CalculateAcRoll(moveData, this.actor.data);
 			let diceResult = GetDiceResult(acRoll)
@@ -573,14 +575,31 @@ export class PTUGen8CharacterSheet extends ActorSheet {
 
 		d.render(true);
 	}
+
+	useAP(value = 1) {
+		const currentAP = this.actor.data.data.ap.value;
+		if (currentAP >= value) {
+			this.actor.update({
+				'data.ap.value': currentAP - value
+			});
+			return true;
+		}
+		ui.notifications.error(`${this.actor.data.name} does not have enough AP for this action.`);
+		return false;
+	}
+
+	hasInstinctiveAptitude() {
+		return this.actor.edges.some((e) => e.name === "Instinctive Aptitude");
+	}
 }
 
 /** Pure Functions */
 
-export function CalculateAcRoll(moveData, actor) {
-	return new Roll('1d20-@ac+@acBonus', {
+export function CalculateAcRoll(moveData, actor, APBonus = 0) {
+	return new Roll('1d20-@ac+@acBonus@apBonus', {
 		ac: (parseInt(moveData.ac) || 0),
-		acBonus: (parseInt(actor.data.modifiers.acBonus?.total) || 0)
+		acBonus: (parseInt(actor.data.modifiers.acBonus?.total) || 0),
+		apBonus: (APBonus == 0 ? "" : "+" + APBonus.toString())
 	})
 }
 
