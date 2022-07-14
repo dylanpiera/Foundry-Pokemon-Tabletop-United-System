@@ -398,15 +398,27 @@ export class PTUGen8PokemonSheet extends ActorSheet {
 	 * @param {Event} event   The originating click event
 	 * @private
 	 */
-	_onSkillRoll(event) {
+	async _onSkillRoll(event) {
 		event.preventDefault();
 		const element = event.currentTarget;
 		const dataset = element.dataset;
 
 		if (dataset.roll) {
-			let roll = new Roll(dataset.roll, this.actor.data.data);
+			let rolldata = dataset.roll;
 			let label = dataset.label ? `Rolling ${dataset.label}` : '';
-			roll.evaluate({async: false}).toMessage({
+
+			// Add +1 to the roll if shift is held on click
+			const alt = event.altKey;
+			if (alt && this.useOwnerAP()) { // Only if AP are available
+				rolldata += "+1";
+				label += "<br>using 1 AP</br>";
+			}
+			else if (alt) {
+				return;
+			}
+
+			let roll = new Roll(rolldata, this.actor.data.data);
+			(await roll.evaluate({ async: true })).toMessage({
 				speaker: ChatMessage.getSpeaker({
 					actor: this.actor
 				}),
@@ -460,9 +472,13 @@ export class PTUGen8PokemonSheet extends ActorSheet {
 		/** Option Callbacks */
 		let PerformFullAttack = (damageBonus = 0) => {
 			const moveData = duplicate(move.data);
-			if(damageBonus != 0) moveData.damageBonus += damageBonus;
+			if (damageBonus != 0) moveData.damageBonus += damageBonus;
 
-			return this.actor.executeMove(move._id);
+			const useAP = event.altKey && this.useOwnerAP();
+			if (event.altKey && !useAP) return;
+			const APBonus = useAP ? 1 : 0;
+
+			return this.actor.executeMove(move._id, {}, APBonus);
 
 			let acRoll = CalculateAcRoll(moveData, this.actor.data);
 			let diceResult = GetDiceResult(acRoll)
@@ -586,6 +602,24 @@ export class PTUGen8PokemonSheet extends ActorSheet {
 		d.position.height = 125;
 		
 		d.render(true);
+	}
+
+	useOwnerAP(amount = 1) {
+		if (this.actor.data.data.owner == 0) {
+			ui.notifications.error(`${this.actor.data.name} does not have an owner.`);
+			return false;
+		}
+		const owner = game.actors.get(this.actor.data.data.owner);
+		if (!owner) return;
+		let remainingAP = owner.data.data.ap.value;
+		if (remainingAP >= amount) {
+			owner.update({
+				'data.ap.value': remainingAP - amount
+			});
+			return true;
+		}
+		ui.notifications.error(`${owner.data.name} does not have enough AP for this action.`);
+		return false;
 	}
 }
 
