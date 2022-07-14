@@ -373,7 +373,16 @@ export class PTUGen8CharacterSheet extends ActorSheet {
 			// Add +1 to the roll if shift is held on click
 			const shift = event.shiftKey;
 			if (shift && this.actor.data.data.ap.value > 0) { // Only if AP are available
-				rolldata += "+1";
+				// Does the character have Instinctive Aptitude?
+				let instinctiveAptitude = false;
+				this.actor.edges.forEach((e) => {
+					if (e.name === "Instinctive Aptitude") {
+						instinctiveAptitude = true;
+					}
+				})
+
+				instinctiveAptitude ? rolldata += "+2" : rolldata += "+1";
+
 				this.actor.update({ "data.ap.value": this.actor.data.data.ap.value - 1 }); // Spend AP
 				label += "<br>using 1 AP</br>";
 			}
