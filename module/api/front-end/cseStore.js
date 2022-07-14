@@ -130,7 +130,7 @@ export default function({speciesData, form}) {
             async addMove(context, moveData) {
                 if(!moveData) return;
 
-                await context.commit('addMove', {id: moveData.id, name: moveData.name, level: moveData.level ?? 1, evo: moveData.evo ?? false, egg: moveData.egg ?? false, tutor: moveData.tutor ?? false, tm: moveData.tm ?? false,});
+                await context.commit('addMove', {id: moveData.id ?? moveData._id, name: moveData.name, level: moveData.level ?? 1, evo: moveData.evo ?? false, egg: moveData.egg ?? false, tutor: moveData.tutor ?? false, tm: moveData.tm ?? false,});
             },
             async addMoves(context, movesData) {
                 if(!movesData) return;
