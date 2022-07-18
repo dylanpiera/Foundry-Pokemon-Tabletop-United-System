@@ -942,8 +942,8 @@ export class PTUActor extends Actor {
         critType = (moveData.doubleStrike.hit1.crit == CritOptions.CRIT_HIT) && (moveData.doubleStrike.hit2.crit == CritOptions.CRIT_HIT) ? CritOptions.DOUBLE_CRIT_HIT : CritOptions.CRIT_HIT;
       }
       hitCount = 0;
-      if (moveData.doubleStrike.hit1.hit === true) hitCount++;
-      if (moveData.doubleStrike.hit2.hit === true) hitCount++;
+      if (!targetData || moveData.doubleStrike.hit1.hit === true) hitCount++;
+      if (!targetData || moveData.doubleStrike.hit2.hit === true) hitCount++;
     }
 
     if (moveData.fiveStrike.is === true) {
