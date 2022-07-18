@@ -7,7 +7,7 @@ export default async function RenderDex(species, type = "desc") {
     const imageBasePath = game.settings.get("ptu", "defaultPokemonImageDirectory");
 
     const dexEntries = await game.ptu.cache.GetOrCreateCachedItem("dexentries", _cacheDexEntries)
-    const dexEntry = dexEntries.find( x => x.data.name?.toLowerCase() === speciesData._id.toLowerCase());
+    const dexEntry = dexEntries.find( x => (x.name?.toLowerCase() === speciesData._id.toLowerCase()));
 
     const pokedexDialog = new Dialog({
         title: "Pokédex information for " + speciesData._id.toLowerCase(),
@@ -25,25 +25,34 @@ export async function AddMontoPokedex(species) {
 
     const speciesData = game.ptu.GetSpeciesData(species);
     if (!speciesData) return;
+
+    var alreadySeen = false;
     
     //check if species already on actor dex
     game.user.character.items.forEach(x => {
-        if (game.user.character.itemTypes.dexentry.some(entry => entry.data.name === speciesData._id?.toLowerCase()))
-            return; //pokemon already in dex
-    });  
-
-    //get description from db
-    const dexEntries = await game.ptu.cache.GetOrCreateCachedItem("dexentries", _cacheDexEntries)
-    var dexEntry = dexEntries.find( x => x.data.name?.toLowerCase() === speciesData._id.toLowerCase());
+        if (game.user.character.itemTypes.dexentry.some(x => x.data.name.toLowerCase() === speciesData._id?.toLowerCase()))
+            {
+                alreadySeen=true;
+            }   
+    });
     
-    if(dexEntry != null)
+
+    if (!alreadySeen)
     {
-        await game.user.character.createEmbeddedDocuments("Item", [{
-			name: Handlebars.helpers.capitalizeFirst(dexEntry.name.toLowerCase()),
-			type: "dexentry",
-			data: dexEntry.data.data
-		}]);
+        //get description from db
+        const dexEntries = await game.ptu.cache.GetOrCreateCachedItem("dexentries", _cacheDexEntries)
+        const dexEntry = dexEntries.find( x => (x.name?.toLowerCase() === speciesData._id.toLowerCase()));
+
+        if(dexEntry != null)
+        {
+            await game.user.character.createEmbeddedDocuments("Item", [{
+                name: Handlebars.helpers.capitalizeFirst(dexEntry.name.toLowerCase()),
+                type: "dexentry",
+                data: dexEntry.data.data
+            }]);
+        }
     }
+    
 }
 
 async function _cacheDexEntries() {

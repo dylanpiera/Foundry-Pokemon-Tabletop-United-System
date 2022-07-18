@@ -803,7 +803,7 @@ async function _onPokedexMacro() {
         const monData = game.ptu.GetSpeciesData(token.actor.data.data.species);
 
         game.ptu.renderDex(token.actor.data.data.species, 
-          game.user.character.itemTypes.dexentry.some(entry => entry.data.data.owned && entry.data.name === monData?._id?.toLowerCase())
+          game.user.character.itemTypes.dexentry.some(entry => entry.data.data.owned && entry.data.name.toLowerCase() === monData?._id?.toLowerCase())
           ? "full" : "desc");
         break;
       }
