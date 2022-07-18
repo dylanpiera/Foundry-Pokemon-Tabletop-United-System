@@ -27,6 +27,7 @@ export class ActorGenerator {
         this.PrepareMoves = PrepareMoves;
         this.PrepareAbilities = PrepareAbilities;
         this.PrepareCapabilities = PrepareCapabilities;
+        this.PrepareShiny = PrepareShiny;
     }
 
     data = { data: {}}
@@ -47,17 +48,17 @@ export class ActorGenerator {
         return this;
     }
 
-    async PrepareArt(imgSrc, imgExt = ".png") {
+    async PrepareArt(imgSrc, imgExt = ".webp") {
         if(imgSrc === undefined) {
             imgSrc = game.settings.get("ptu", "defaultPokemonImageDirectory");
             if(!imgSrc) return this;
         }
-        let imgPath = await GetSpeciesArt(this.species.data, imgSrc, imgExt);
+        let imgPath = await GetSpeciesArt(this.species.data, imgSrc, imgExt, this.actor.data.data.shiny);
         if(imgPath) this.data.img = imgPath;
         return this;
     }
 
-    Generate(statMethod = "weighted", allMoves = undefined, allAbilities = undefined, allCapabilities = undefined) {
+    Generate(statMethod = "weighted", allMoves = undefined, allAbilities = undefined, allCapabilities = undefined, stat_randomness = undefined, shiny_chance = undefined, prevent_evolution = undefined) {
         if(allMoves === undefined) {
             if(game.ptu.cache.moves) allMoves = game.ptu.cache.moves;
             else throw 'Moves not cached, please provide moves.';
@@ -70,10 +71,16 @@ export class ActorGenerator {
             if(game.ptu.cache.capabilities) allCapabilities = game.ptu.cache.capabilities;
             else throw 'Capabilities not cached, please provide moves.';
         }
-        return this.PrepareEvolution().PrepareGender().PrepareStats(statMethod).PrepareMoves(allMoves).PrepareAbilities(allAbilities).PrepareCapabilities(allCapabilities);
+
+        let stat_rng = 0.1;
+        if(stat_randomness)
+        {
+            stat_rng = Number(stat_randomness/100);
+        }
+        return this.PrepareEvolution(prevent_evolution).PrepareGender().PrepareStats(statMethod, stat_rng).PrepareMoves(allMoves).PrepareAbilities(allAbilities).PrepareCapabilities(allCapabilities).PrepareShiny(shiny_chance);
     }
 
-    static PrepareData(species, exp, name = undefined, nature = undefined) {
+    static PrepareData(species, exp, name = undefined, nature = undefined, shiny = undefined) {
         return {
             name: name ? name : species.toLowerCase().capitalize(),
             type: "pokemon",
@@ -92,9 +99,14 @@ export class ActorGenerator {
 
     static async Create(options = {}) {
         let ag;
+
+        const stat_randomness = options?.stat_randomness ?? 20;
+
+        const prevent_evolution = options?.prevent_evolution ?? false;
+
         if(options.exists) { 
             if(!options.actor) throw "actor field required in options";
-            ag = new ActorGenerator(actor);
+            ag = new ActorGenerator(options.actor);
         }
         else {
             if(!options.species) throw "species field required in options";
@@ -112,7 +124,9 @@ export class ActorGenerator {
         }
         await GetOrCacheAbilities(); await GetOrCacheMoves(); await GetOrCacheCapabilities();
 
-        await ag.Generate().PrepareArt(options.imgpath ?? undefined);
+        if(options.exists) return ag;
+
+        await ag.Generate("weighted", undefined, undefined, undefined, stat_randomness, options.shiny_chance, prevent_evolution).PrepareArt(options.imgpath ?? undefined);
         debug("Generating an actor using the following generator",ag);
         return await ag.ApplyChanges();
     }
@@ -130,7 +144,9 @@ async function ApplyChanges() {
     return this.actor;
 }
 
-function PrepareEvolution() {
+function PrepareEvolution(prevent_evolution = undefined) {
+    if(prevent_evolution) return this;
+
     let stages = this.species.data.Evolution.map(x => {return {stage: x[0], name: x[1], level: x[2] == "Null" ? 0 : x[2]}});
 
     let current;
@@ -204,7 +220,7 @@ function PrepareMoves(allMoves) {
     let evoMoves = this.species.data["Level Up Move List"].filter(x => x.Level == "Evo");
 
     let newMoves = evoMoves ? evoMoves : [];
-    for(let levelUpMove of levelUpMoves.slice(Math.max(levelUpMoves.length - 6 + newMoves.length ,0))) {
+    for(let levelUpMove of levelUpMoves.slice(Math.max(levelUpMoves.length - 6 + newMoves.length, 0))) {
         newMoves.push(levelUpMove);
     }
 
@@ -264,5 +280,11 @@ function PrepareCapabilities(allCapabilities) {
     }
     
     this.items = this.items.concat(newCapabilities.filter(x => x !== undefined));
+    return this;
+}
+
+function PrepareShiny(shiny_chance_percentage = 0.0) {
+    // Math.random() return form inclusive 0 to exclusive 1
+    this.actor.data.data.shiny = Math.random() * 100 < shiny_chance_percentage
     return this;
 }

@@ -1,9 +1,11 @@
-import { displayAppliedDamageToTargets } from '../combat/damage-calc-tools.js';
-import {debug, log} from '../ptu.js';
+import { displayAppliedDamageToTargets, ApplyInjuries } from '../combat/damage-calc-tools.js';
+import { LATEST_VERSION } from '../ptu.js'
+import { debug, log } from '../ptu.js';
 import { dataFromPath } from '../utils/generic-helpers.js';
+import { PlayPokeballReturnAnimation } from '../combat/effects/pokeball_effects.js';
 
 class ApiError {
-    constructor({message, type}) {
+    constructor({ message, type }) {
         this.message = message;
         this.type = type;
     }
@@ -17,40 +19,62 @@ export default class Api {
 
         this._registerSocket();
     }
-   
+
     _setupHandlers() {
         const ref = this;
         return {
-            async tokensDelete(data) {
-                if(!ref._isMainGM()) return;
+            async setChangelogRead(data) {
+                if (!ref._isMainGM()) return;
+                                
+                const {userId, version} = data.content;
+                if(!userId || !version) return ref._returnBridge({ result: new ApiError({ message: "userId or version is undefined.", type: 404 }) }, data);
+
+                const setting = game.settings.get("ptu", "dismissedVersion")
+                if(setting[userId] == version) return ref._returnBridge({ result: new ApiError({ message: "Setting is already up-to-date.", type: 403 }) }, data);
                 
+                setting[userId] = version;
+
+                ref._returnBridge({result: [await game.settings.set("ptu", "dismissedVersion", setting)]}, data)
+            },
+            async tokensDelete(data) {
+                if (!ref._isMainGM()) return;
+
                 const documents = [];
-                for(const uuid of data.content.uuids) {
+                for (const uuid of data.content.uuids) {
                     const document = await ref._documentFromUuid(uuid);
-                    if(!document) continue;
-                    if(document.data.locked || !document.actor.canUserModify(game.users.get(data.user), "delete")) continue;
+                    if (!document) continue;
+                    if (document.data.locked || !document.actor.canUserModify(game.users.get(data.user), "delete")) continue;
                     documents.push(document);
                 }
 
-                if(data.user != game.user.id) {
-                    if(!game.settings.get("ptu", "canPlayersDeleteTokens")) return ref._returnBridge({result: new ApiError({message: "setting: `ptu.canPlayersDeleteTokens` has been turned off.", type: 403})}, data)
+                if (data.user != game.user.id) {
+                    if (!game.settings.get("ptu", "canPlayersDeleteTokens")) return ref._returnBridge({ result: new ApiError({ message: "setting: `ptu.canPlayersDeleteTokens` has been turned off.", type: 403 }) }, data)
                 }
 
-                const retVal = {result: []}; 
-                for(const document of documents) retVal.result.push(await document.delete());
+                const retVal = { result: [] };
+                for (const document of documents) retVal.result.push( await PlayPokeballReturnAnimation(document) );
+                ref._returnBridge(retVal, data);
+            },
+            async messageUpdate(data) {
+                if (!ref._isMainGM()) return;
+
+                const message = game.messages.get(data.content.id);
+                if (!message) return;
+
+                const retVal = { result: await message.update(data.content.options) }
                 ref._returnBridge(retVal, data);
             },
             async transferOwnership(data) {
-                if(!ref._isMainGM()) return;
+                if (!ref._isMainGM()) return;
 
-                const sender = game.users.get(data.user);
+                const sender = game.users.get(data.content.options?.newOwnerId ?? data.user);
                 const pc = sender.character;
                 const document = await ref._documentFromUuid(data.content.uuid);
-                if(!pc) return ref._returnBridge({result: new ApiError({message: "Player does not have a Character set to transfer ownership too", type: 400})},data);
-                if(!document) return ref._returnBridge({result: new ApiError({message: "Referenced document doesn't exist.", type: 400})},data);            
+                if (!pc) return ref._returnBridge({ result: new ApiError({ message: "Player does not have a Character set to transfer ownership too", type: 400 }) }, data);
+                if (!document) return ref._returnBridge({ result: new ApiError({ message: "Referenced document doesn't exist.", type: 400 }) }, data);
 
                 let reason;
-                switch(data.content.reason) {
+                switch (data.content.reason) {
                     case "capture": reason = "They claim they succeeded a capture roll!"; break;
                     default: reason = ""; break;
                 }
@@ -64,56 +88,61 @@ export default class Api {
                             yes: {
                                 icon: '<i class="fas fa-check"></i>',
                                 label: game.i18n.localize("Yes"),
-                                callback: _ => resolve(true)
+                                callback: _ => resolve("true")
                             },
                             no: {
                                 icon: '<i class="fas fa-times"></i>',
                                 label: game.i18n.localize("No"),
-                                callback: _ => resolve(false)
+                                callback: _ => resolve("false")
                             }
                         },
                         default: "no",
-                        close: () => resolve(false),
+                        close: () => resolve("timeout"),
                     });
                     dialog.render(true);
                     setTimeout(_ => {
                         dialog.close();
-                        resolve(false);
+                        resolve("timeout");
                     }, (data.content.options?.timeout ?? 15000) - 1000)
-                }); 
+                });
 
-                if(!allowed) return ref._returnBridge({result: new ApiError({message: "DM Denied owner transfer", type: 403})}, data);
+                if (allowed == "false") return ref._returnBridge({ result: new ApiError({ message: "DM Denied owner transfer", type: 403 }) }, data);
+                if (allowed == "timeout") {
+                    //TODO: Allow GM to retroactively apply request.
+                    return ref._returnBridge({ result: new ApiError({ message: "Request to DM for owner transfer timed out.", type: 403 }) }, data);
+                }
 
                 const newData = {
-                    folder: pc.folder.id,
+                    folder: pc.folder?.id,
                     permission: mergeObject({
+                        "default": game.settings.get("ptu", "transferOwnershipDefaultValue") ?? 0,
                         [sender.id]: 3
                     }, data.content.options?.permission ?? {}),
                     "data.owner": pc.id,
                     "data.pokeball": data.content.options?.pokeball ?? "Basic Ball"
                 }
 
-                return ref._returnBridge({result : await document.update(newData)}, data);
+                return ref._returnBridge({ result: await document.update(newData) }, data);
             },
             async applyDamage(data) {
-                if(!ref._isMainGM()) return;
-                
-                const {damageType, damageCategory, uuids} = data.content;
-                const {label = "", isFlat = false, isHalf = false, isResist = false, damageReduction = 0} = data.content.options;
+                if (!ref._isMainGM()) return;
+
+                const { damageType, damageCategory, uuids } = data.content;
+                const { label = "", isFlat = false, isHalf = false, isResist = false, isWeak = false, damageReduction = 0, msgId } = data.content.options;
                 const damage = isHalf ? Math.max(1, Math.floor(data.content.damage / 2)) : data.content.damage;
-                
+
                 const documents = [];
-                for(const uuid of uuids) {
+                for (const uuid of uuids) {
                     const document = await ref._documentFromUuid(uuid);
-                    if(!document || document.data.locked) continue;
+                    if (!document || document.data.locked) continue;
                     documents.push(document);
                 }
 
-                const retVal = {result: [], appliedDamage: {}};
+                const retVal = { result: [], appliedDamage: {}, appliedInjuries: {} };
 
-                for(const document of documents) {
+                for (const document of documents) {
                     let actualDamage;
-                    if(isFlat) {
+                    if (isFlat) {
                         actualDamage = damage;
                     }
                     else {
@@ -122,92 +151,184 @@ export default class Api {
 
                         const effectiveness = document.actor.data.data.effectiveness?.All[damageType] ?? 1;
 
-                        actualDamage = Math.max((effectiveness === 0 ? 0 : 1), Math.floor((damage - parseInt(defense) - dr - parseInt(damageReduction)) * (effectiveness - (isResist ? (effectiveness > 1 ? 0.5 : effectiveness*0.5) : 0))))
+                        actualDamage = Math.max(
+                            (effectiveness === 0 ? 0 : 1),
+                            Math.floor((damage - parseInt(defense) - dr - parseInt(damageReduction)) * (effectiveness + (isResist ? (effectiveness > 1 ? -0.5 : effectiveness * -0.5) : isWeak ? (effectiveness >= 1 ? effectiveness >= 2 ? 1 : 0.5 : effectiveness) : 0))))
                     }
-                    log(`Dealing ${actualDamage} damage to ${document.name}`); 
-                    retVal.appliedDamage[document.data.actorLink ? document.actor.id : document.data._id] = {name: document.actor.data.name, damage: actualDamage, type: document.data.actorLink ? "actor" : "token", old: {value: duplicate(document.actor.data.data.health.value), temp: duplicate(document.actor.data.data.tempHp.value)}};            
-                    retVal.result.push(await document.actor.modifyTokenAttribute("health", actualDamage*-1, true, true));
+                    log(`Dealing ${actualDamage} damage to ${document.name}`);
+                    retVal.appliedDamage[document.data.actorLink ? document.actor.id : document.data._id] = {
+                        name: document.actor.data.name,
+                        damage: actualDamage,
+                        type: document.data.actorLink ? "actor" : "token",
+                        old: {
+                            value: duplicate(document.actor.data.data.health.value),
+                            temp: duplicate(document.actor.data.data.tempHp.value),
+                            injuries: duplicate(document.actor.data.data.health.injuries)
+                        },
+                        injuries: (await ApplyInjuries(document.actor, actualDamage)),
+                        tokenId: document.id,
+                        msgId,
+                    };
+                    retVal.result.push(await document.actor.modifyTokenAttribute("health", actualDamage * -1, true, true));
                 }
-                await displayAppliedDamageToTargets({data: retVal.appliedDamage, move: label});
+                await displayAppliedDamageToTargets({ data: retVal.appliedDamage, move: label });
 
                 ref._returnBridge(retVal, data);
             },
             async toggleEffect(data) {
-                if(!ref._isMainGM()) return;
-                
-                const {uuids, effect} = data.content;
+                if (!ref._isMainGM()) return;
+
+                const { uuids, effect } = data.content;
                 const documents = [];
-                for(const uuid of uuids) {
+                for (const uuid of uuids) {
                     const document = await ref._documentFromUuid(uuid);
-                    if(!document || document.data.locked) continue;
+                    if (!document || document.data.locked) continue;
                     documents.push(document);
                 }
 
-                const retVal = {result: []}; 
-                for(const document of documents) retVal.result.push(await document.layer.get(document.id).toggleEffect(effect));
+                const retVal = { result: [] };
+                for (const document of documents) retVal.result.push(await document.layer.get(document.id).toggleEffect(effect));
                 ref._returnBridge(retVal, data);
             },
             async addActiveEffect(data) {
-                if(!ref._isMainGM()) return;
-                
-                const {uuids, effects} = data.content;
+                if (!ref._isMainGM()) return;
+
+                const { uuids, effects } = data.content;
                 const documents = [];
-                for(const uuid of uuids) {
+                for (const uuid of uuids) {
                     const document = await ref._documentFromUuid(uuid);
-                    if(!document || document.data.locked) continue;
+                    if (!document || document.data.locked) continue;
                     documents.push(document);
                 }
 
-                const retVal = {result: []}; 
-                for(const document of documents) 
+                const retVal = { result: [] };
+                for (const document of documents)
                     retVal.result.push(await document.actor.createEmbeddedDocuments("ActiveEffect", effects));
                 ref._returnBridge(retVal, data);
             },
             async removeActiveEffect(data) {
-                if(!ref._isMainGM()) return;
-                
-                const {uuids, effectIds} = data.content;
+                if (!ref._isMainGM()) return;
+
+                const { uuids, effectIds } = data.content;
                 const documents = [];
-                for(const uuid of uuids) {
+                for (const uuid of uuids) {
                     const document = await ref._documentFromUuid(uuid);
-                    if(!document || document.data.locked) continue;
+                    if (!document || document.data.locked) continue;
                     documents.push(document);
                 }
 
-                const retVal = {result: []}; 
-                for(const document of documents) 
+                const retVal = { result: [] };
+                for (const document of documents)
                     retVal.result.push(await document.actor.deleteEmbeddedDocuments("ActiveEffect", effectIds));
                 ref._returnBridge(retVal, data);
             },
             async tokensUpdate(data) {
-                if(!ref._isMainGM()) return;
+                if (!ref._isMainGM()) return;
 
-                const {scale, x, y, tint, height, width, img, brightSight, dimSight, brightLight, dimLight, lightColor, lightAnimation} = data.content.options;
-                
+                const { scale, x, y, tint, height, width, img, brightSight, dimSight, light } = data.content.options;
+
                 const documents = [];
-                for(const uuid of data.content.uuids) {
+                for (const uuid of data.content.uuids) {
                     const document = await ref._documentFromUuid(uuid);
-                    if(!document || document.data.locked) continue;
+                    if (!document || document.data.locked) continue;
                     documents.push(document);
                 }
 
                 const newData = {};
-                if(scale) newData["scale"] = scale;
-                if(x) newData["x"] = x;
-                if(y) newData["y"] = y;
-                if(tint) newData["tint"] = tint;
-                if(height) newData["height"] = height;
-                if(width) newData["width"] = width;
-                if(img) newData["img"] = img;
-                if(brightSight) newData["brightSight"] = brightSight;
-                if(dimSight) newData["dimSight"] = dimSight;
-                if(brightLight) newData["brightLight"] = brightLight;
-                if(dimLight) newData["dimLight"] = dimLight;
-                if(lightColor) newData["lightColor"] = lightColor;
-                if(lightAnimation) newData["lightAnimation"] = lightAnimation;
 
-                const retVal = {result: []}; 
-                for(const document of documents) retVal.result.push(await document.update(newData));
+                if(scale !== undefined) newData["scale"] = scale;
+                if(x !== undefined) newData["x"] = x;
+                if(y !== undefined) newData["y"] = y;
+                if(tint !== undefined) newData["tint"] = tint;
+                if(height !== undefined) newData["height"] = height;
+                if(width !== undefined) newData["width"] = width;
+                if(img !== undefined) newData["img"] = img;
+                if(brightSight !== undefined) newData["brightSight"] = brightSight;
+                if(dimSight !== undefined) newData["dimSight"] = dimSight;
+
+                if(light){
+                    const newLight = {}
+                    const {alpha, angle, animation, bright, color, coloration, contrast, darkness, dim, gradual, luminosity, rotation, saturation, seed, shadows, vision, walls} = light
+                    if(alpha !== undefined) newLight["alpha"] = alpha;
+                    if(angle !== undefined) newLight["angle"] = angle;
+                    if(bright !== undefined) newLight["bright"] = bright;
+                    if(color !== undefined) newLight["color"] = color;
+                    if(coloration !== undefined) newLight["coloration"] = coloration;
+                    if(contrast !== undefined) newLight["contrast"] = contrast;
+                    if(dim !== undefined) newLight["dim"] = dim;
+                    if(gradual !== undefined) newLight["gradual"] = gradual;
+                    if(luminosity !== undefined) newLight["luminosity"] = luminosity;
+                    if(rotation !== undefined) newLight["rotation"] = rotation;
+                    if(saturation !== undefined) newLight["saturation"] = saturation;
+                    if(seed !== undefined) newLight["seed"] = seed;
+                    if(shadows !== undefined) newLight["shadows"] = shadows;
+                    if(vision !== undefined) newLight["vision"] = vision;
+                    if(walls !== undefined) newLight["walls"] = walls;
+
+                    if(animation){
+                        const newAnimation = {}
+                        const {type, speed, intensity, reverse} = animation
+                        if(type !== undefined) newAnimation["type"] = type
+                        if(speed !== undefined) newAnimation["speed"] = speed
+                        if(intensity !== undefined) newAnimation["intensity"] = intensity
+                        if(reverse !== undefined) newAnimation["reverse"] = reverse
+                        newLight["animation"] = newAnimation
+                    }
+                    if(darkness){
+                        const newDarkness = {}
+                        const {min, max} = darkness
+                        if(min !== undefined) newDarkness["min"] = min
+                        if(max !== undefined) newDarkness["max"] = max
+                        newLight["darkness"] = newDarkness
+                    }
+                    newData["light"] = newLight
+                }
+
+
+
+                const retVal = { result: [] };
+                for (const document of documents) retVal.result.push(await document.update(newData));
+                ref._returnBridge(retVal, data);
+            },
+            async nextTurn(data) {
+                if (!ref._isMainGM()) return;
+
+                const combat = game.combats.get(data.content.id);
+                if (!combat) return;
+
+                const retVal = { result: await combat.nextTurn() }
+                ref._returnBridge(retVal, data);
+            },
+            async addTokenMagicFilters(data) {
+                if (!ref._isMainGM()) return;
+                debug(data);
+
+                if(!(game.modules.get("tokenmagic")?.active) || !(game.settings.get("ptu", "enableMoveAnimations") == true))
+                    return; // Either TMFX module is not installed, or config settings have disabled move animations, so stop here.
+
+                const scene = game.scenes.get(data.content.sceneId);
+                if(!scene) return ref._returnBridge({ result: new ApiError({ message: "Scene not found.", type: 500 }) }, data);
+
+                const token = scene.tokens.get(data.content.tokenId);
+                if(!token) return ref._returnBridge({ result: new ApiError({ message: "Token not found.", type: 500 }) }, data);;
+
+                const retVal = { result: await TokenMagic.addFilters(token.object, data.content.filters) }
+                ref._returnBridge(retVal, data);
+            },
+            async removeTokenMagicFilters(data) {
+                if (!ref._isMainGM()) return;
+                debug(data);
+
+                if(!(game.modules.get("tokenmagic")?.active) || !(game.settings.get("ptu", "enableMoveAnimations") == true))
+                    return; // Either TMFX module is not installed, or config settings have disabled move animations, so stop here.
+
+                const scene = game.scenes.get(data.content.sceneId);
+                if(!scene) return ref._returnBridge({ result: new ApiError({ message: "Scene not found.", type: 500 }) }, data);
+
+                const token = scene.tokens.get(data.content.tokenId);
+                if(!token) return ref._returnBridge({ result: new ApiError({ message: "Token not found.", type: 500 }) }, data);;
+
+                const retVal = { result: await TokenMagic.deleteFilters(token.object, data.content.filters) }
                 ref._returnBridge(retVal, data);
             },
         }
@@ -215,15 +336,15 @@ export default class Api {
 
     _registerSocket() {
         this.socketId = game.socket.on(`system.ptu`, async (data) => {
-            if(data.operation === "return"){
+            if (data.operation === "return") {
                 const resolve = this._requestResolvers[data.randomID];
-                if (resolve){
+                if (resolve) {
                     delete this._requestResolvers[data.randomID];
-                    if(data.retVal.uuid) data.retVal.result = await this._documentFromUuid(data.retVal.result) //recompose from UUID if it was minified down to it
+                    if (data.retVal.uuid) data.retVal.result = await this._documentFromUuid(data.retVal.result) //recompose from UUID if it was minified down to it
                     resolve(data.retVal)
                 }
             } else {
-                if(data.operation)
+                if (data.operation)
                     this.handlers[data.operation](data);
             }
         });
@@ -232,34 +353,64 @@ export default class Api {
     /** API Operations */
     /**
      * 
+     * @param {*} userId - User ID that wishes to hide the changelog till next update
+     * @param {*} version - Current Version
+     */
+    async setChangelogRead(userId, version) {
+        if (!userId) userId = game.userId;
+        if (!version) version = LATEST_VERSION;
+
+        const setting = game.settings.get("ptu", "dismissedVersion")
+        if(setting[userId] == version) return false;
+
+        return this._handlerBridge({userId, version}, "setChangelogRead");
+    }
+    /**
+     * 
      * @param {*} object - Instance of or array of either PTUActor, Token, TokenDocument or UUID string. Passing in an Actor will delete all of its tokens in any scene.
      * @param {*} options
      * @returns 
      */
     async tokensDelete(object, options) {
-        if(!object) return;
+        if (!object) return;
         const objects = (object instanceof Array) ? object : [object];
         const tokens = [];
 
-        for(const o of objects) {
-            if(o instanceof game.ptu.PTUActor) 
+        for (const o of objects) {
+            if (o instanceof game.ptu.PTUActor)
                 tokens.push(...(await o.getActiveTokens()));
 
-            if(o instanceof TokenDocument || o instanceof Token)
+            if (o instanceof TokenDocument || o instanceof Token)
                 tokens.push(o);
 
-            if(typeof o === "string")
-                tokens.push(await this._documentFromUuid(o));      
+            if (typeof o === "string")
+                tokens.push(await this._documentFromUuid(o));
         }
-        
 
-        if(tokens.length === 0) {
+
+        if (tokens.length === 0) {
             ui.notifications.notify(`${object?.uuid ?? object} has no tokens linked to it`, 'error');
             return false;
         }
 
-        const content = {uuids: tokens.map(t => t.uuid), options};
+        const content = { uuids: tokens.map(t => t.uuid), options };
         return this._handlerBridge(content, "tokensDelete");
+    }
+
+    /**
+     * 
+     * @param {*} object - Instance of ChatMessage or UUID string.
+     * @param {*} options - Data object to update the ChatMessage with.
+     * @returns 
+     */
+    async chatMessageUpdate(object, options) {
+        if (!object) return;
+
+        if (!object.id) object = game.messages.get(object);
+        if (!object?.id) return;
+
+        const content = { id: object.id, options };
+        return this._handlerBridge(content, "messageUpdate");
     }
 
     /**
@@ -275,20 +426,20 @@ export default class Api {
      */
     async transferOwnership(object, options) {
         let actor;
-        if(object instanceof game.ptu.PTUActor) 
+        if (object instanceof game.ptu.PTUActor)
             actor = object;
-        else if(object instanceof TokenDocument || object instanceof Token)
+        else if (object instanceof TokenDocument || object instanceof Token)
             actor = object.actor;
-        else if(typeof object === "string")
+        else if (typeof object === "string")
             actor = await this._documentFromUuid(o);
-            
-        if(!actor) {
+
+        if (!actor) {
             ui.notifications.notify(`Unable to find an actor associated with: ${object?.uuid ?? object}`, 'error');
             return false;
         }
 
-        const content = {uuid: actor.uuid, options};
-        return this._handlerBridge(content, "transferOwnership",options?.timeout ?? 15000);
+        const content = { uuid: actor.uuid, options };
+        return this._handlerBridge(content, "transferOwnership", options?.timeout ?? 15000);
     }
 
     /**
@@ -306,24 +457,24 @@ export default class Api {
      * @returns {ActorData[]}
      */
     async applyDamage(object, damage, damageType, damageCategory, options) {
-        if(!object || !damage) return;
+        if (!object || !damage) return;
         const objects = (object instanceof Array) ? object : [object];
         const tokens = [];
 
-        for(const o of objects) {
-            if(o instanceof TokenDocument || o instanceof Token)
+        for (const o of objects) {
+            if (o instanceof TokenDocument || o instanceof Token)
                 tokens.push(o);
 
-            if(typeof o === "string")
-                tokens.push(await this._documentFromUuid(o));      
+            if (typeof o === "string")
+                tokens.push(await this._documentFromUuid(o));
         }
 
-        if(tokens.length === 0) {
+        if (tokens.length === 0) {
             ui.notifications.notify(`${object?.uuid ?? object} has no tokens linked to it`, 'error');
             return false;
         }
 
-        const content = {uuids: tokens.map(t => t.uuid), damage, damageType, damageCategory, options};
+        const content = { uuids: tokens.map(t => t.document.uuid), damage, damageType, damageCategory, options };
         return this._handlerBridge(content, "applyDamage");
     }
 
@@ -333,38 +484,38 @@ export default class Api {
      * @param {*} options 
      */
     async toggleEffect(object, effect, options) {
-        if(!object || !effect) return;
+        if (!object || !effect) return;
 
         let actualEffect;
-        if(typeof effect === "object") 
+        if (typeof effect === "object")
             actualEffect = effect;
-        else if(typeof effect === "string")
+        else if (typeof effect === "string")
             actualEffect = CONFIG.statusEffects.find(x => x.id == effect);
 
-        if(!actualEffect) {
+        if (!actualEffect) {
             ui.notifications.notify(`Could not find effect with details: ${effect}`, 'error');
             return false;
         }
 
         const objects = (object instanceof Array) ? object : [object];
         const tokens = [];
-        for(const o of objects) {
-            if(o instanceof game.ptu.PTUActor) 
+        for (const o of objects) {
+            if (o instanceof game.ptu.PTUActor)
                 tokens.push(...(await o.getActiveTokens()));
 
-            if(o instanceof TokenDocument || o instanceof Token)
+            if (o instanceof TokenDocument || o instanceof Token)
                 tokens.push(o);
 
-            if(typeof o === "string")
-                tokens.push(await this._documentFromUuid(o));      
+            if (typeof o === "string")
+                tokens.push(await this._documentFromUuid(o));
         }
 
-        if(tokens.length === 0) {
+        if (tokens.length === 0) {
             ui.notifications.notify(`${object?.uuid ?? object} has no tokens linked to it`, 'error');
             return false;
         }
 
-        const content = {uuids: tokens.map(t => t.uuid), effect: actualEffect, options};
+        const content = { uuids: tokens.map(t => t.document.uuid), effect: actualEffect, options };
         return this._handlerBridge(content, "toggleEffect");
     }
 
@@ -374,31 +525,31 @@ export default class Api {
      * @param {*} options 
      */
     async addActiveEffects(object, effects, options) {
-        if(!object || !effects) return;
+        if (!object || !effects) return;
 
         const actualEffects = [];
-        for(const e of (effects instanceof Array) ? effects : [effects]) {
-            if(typeof e === 'object')
+        for (const e of (effects instanceof Array) ? effects : [effects]) {
+            if (typeof e === 'object')
                 actualEffects.push(e);
         }
 
         const tokens = [];
-        for(const o of (object instanceof Array) ? object : [object]) {
-            if(o instanceof game.ptu.PTUActor) 
+        for (const o of (object instanceof Array) ? object : [object]) {
+            if (o instanceof game.ptu.PTUActor)
                 tokens.push(...(await o.getActiveTokens()));
 
-            if(o instanceof TokenDocument || o instanceof Token)
+            if (o instanceof TokenDocument || o instanceof Token)
                 tokens.push(o);
 
-            if(typeof o === "string")
-                tokens.push(await this._documentFromUuid(o));      
+            if (typeof o === "string")
+                tokens.push(await this._documentFromUuid(o));
         }
-        if(tokens.length === 0) {
+        if (tokens.length === 0) {
             ui.notifications.notify(`${object?.uuid ?? object} has no tokens linked to it`, 'error');
             return false;
         }
 
-        const content = {uuids: tokens.map(t => t.uuid), effects: actualEffects, options};
+        const content = { uuids: tokens.map(t => t.document.uuid), effects: actualEffects, options };
         return this._handlerBridge(content, "addActiveEffect");
     }
 
@@ -408,33 +559,33 @@ export default class Api {
      * @param {*} options 
      */
     async removeActiveEffects(object, effects, options) {
-        if(!object || !effects) return;
+        if (!object || !effects) return;
 
         const effectIds = [];
-        for(const e of (effects instanceof Array) ? effects : [effects]) {
-            if(typeof e === 'object')
+        for (const e of (effects instanceof Array) ? effects : [effects]) {
+            if (typeof e === 'object')
                 effectIds.push(e.id ? e.id : e._id);
-            if(typeof e === 'string')
+            if (typeof e === 'string')
                 effectIds.push(e);
         }
 
         const tokens = [];
-        for(const o of (object instanceof Array) ? object : [object]) {
-            if(o instanceof game.ptu.PTUActor) 
+        for (const o of (object instanceof Array) ? object : [object]) {
+            if (o instanceof game.ptu.PTUActor)
                 tokens.push(...(await o.getActiveTokens()));
 
-            if(o instanceof TokenDocument || o instanceof Token)
+            if (o instanceof TokenDocument || o instanceof Token)
                 tokens.push(o);
 
-            if(typeof o === "string")
-                tokens.push(await this._documentFromUuid(o));      
+            if (typeof o === "string")
+                tokens.push(await this._documentFromUuid(o));
         }
-        if(tokens.length === 0) {
+        if (tokens.length === 0) {
             ui.notifications.notify(`${object?.uuid ?? object} has no tokens linked to it`, 'error');
             return false;
         }
 
-        const content = {uuids: tokens.map(t => t.uuid), effectIds, options};
+        const content = { uuids: tokens.map(t => t.document.uuid), effectIds, options };
         return this._handlerBridge(content, "removeActiveEffect");
     }
 
@@ -443,34 +594,100 @@ export default class Api {
      * @param {*} options - Data to update should be included on the options object. Only certain data will be updated.
      * @returns 
      */
-     async tokensUpdate(object, options) {
-        if(!object) return;
+    async tokensUpdate(object, options) {
+        if (!object) return;
         const objects = (object instanceof Array) ? object : [object];
         const tokens = [];
 
-        for(const o of objects) {
-            if(o instanceof game.ptu.PTUActor) 
+        for (const o of objects) {
+            if (o instanceof game.ptu.PTUActor)
                 tokens.push(...(await o.getActiveTokens()));
 
-            if(o instanceof TokenDocument || o instanceof Token)
+            if (o instanceof TokenDocument || o instanceof Token)
                 tokens.push(o);
 
-            if(typeof o === "string")
-                tokens.push(await this._documentFromUuid(o));      
+            if (typeof o === "string")
+                tokens.push(await this._documentFromUuid(o));
         }
 
-        if(tokens.length === 0) {
+        if (tokens.length === 0) {
             ui.notifications.notify(`${object?.uuid ?? object} has no tokens linked to it`, 'error');
             return false;
         }
 
-        const content = {uuids: tokens.map(t => t.uuid), options};
+        const content = { uuids: tokens.map(t => t.document.uuid), options };
         return this._handlerBridge(content, "tokensUpdate");
     }
 
+    /**
+     * 
+     * @param {*} object - Instance of PTUCombatOverrides or UUID string
+     * @returns 
+     */
+     async nextTurn(object) {
+        if (!object) return;
+
+        if (!object.id) object = game.combats.get(object);
+        if (!object?.id) return;
+
+        const content = { id: object.id };
+        return this._handlerBridge(content, "nextTurn");
+    }
+
+    /**
+     * 
+     * @param {*} token - Token ID
+     * @param {*} scene - Scene ID
+     * @param {*} filters - TokenMagic Filters
+     * @returns 
+     */
+     async addTokenMagicFilters(token, scene, filters) {
+        if (!token || !scene || !filters) return;
+
+        if(!(game.modules.get("tokenmagic")?.active) || !(game.settings.get("ptu", "enableMoveAnimations") == true))
+        {
+            return; // Either TMFX module is not installed, or config settings have disabled move animations, so stop here.
+        }
+
+        if(!scene.id ) scene = game.scenes.get(scene);
+        if(!scene) return;
+
+        if(!token.id) token = scene.tokens.get(token);
+        if(!token) return;
+
+        const content = { tokenId: token.id, sceneId: scene.id, filters };
+        debug(content);
+        return this._handlerBridge(content, "addTokenMagicFilters");
+    }
+
+    /**
+     * 
+     * @param {*} token - Token ID
+     * @param {*} scene - Scene ID
+     * @param {*} filters - TokenMagic Filters
+     * @returns 
+     */
+     async removeTokenMagicFilters(token, scene, filters) {
+        if (!token || !scene || !filters) return;
+
+        if(!(game.modules.get("tokenmagic")?.active) || !(game.settings.get("ptu", "enableMoveAnimations") == true))
+        {
+            return; // Either TMFX module is not installed, or config settings have disabled move animations, so stop here.
+        }
+
+        if(!scene.id ) scene = game.scenes.get(scene);
+        if(!scene) return;
+
+        if(!token.id) token = scene.tokens.get(token);
+        if(!token) return;
+
+        const content = { tokenId: token.id, sceneId: scene.id, filters };
+        debug(content);
+        return this._handlerBridge(content, "removeTokenMagicFilters");
+    }
 
     /** API Methods */
-    _isMainGM(){
+    _isMainGM() {
         return game.user === game.users.find((u) => u.isGM && u.active)
     }
 
@@ -486,16 +703,16 @@ export default class Api {
         return window.randomID();
     }
 
-    async _handlerBridge(content, functionName, timeOutMs = 5000){  //if the user is the main GM, executes the handler directly.  otherwise, emits an instruction to execute over a socket.
-        if(!this._isGMOnline()) return ui.notifications.notify(`Oops. To execute ${functionName} a GM needs to be online!`, 'warning');
-        
+    async _handlerBridge(content, functionName, timeOutMs = 5000) {  //if the user is the main GM, executes the handler directly.  otherwise, emits an instruction to execute over a socket.
+        if (!this._isGMOnline()) return ui.notifications.notify(`Oops. To execute ${functionName} a GM needs to be online!`, 'warning');
+
         const methodResponse = await new Promise((resolve, reject) => {
             const randomID = this._getRandomId();
             this._requestResolvers[randomID] = resolve;
             const user = game.user.id;
-            if ((!content.userID && this._isMainGM() ) || content.userID === user){ //if content doesn't specify a user, this is to be run by the GM.  If it does, it's to be run by the user specified
-                this.handlers[functionName]({content, randomID, user})
-            }else{ 
+            if ((!content.userID && this._isMainGM()) || content.userID === user) { //if content doesn't specify a user, this is to be run by the GM.  If it does, it's to be run by the user specified
+                this.handlers[functionName]({ content, randomID, user })
+            } else {
                 game.socket.emit('system.ptu', {
                     operation: functionName,
                     user,
@@ -503,23 +720,23 @@ export default class Api {
                     randomID
                 })
             }
-            setTimeout(() =>{
+            setTimeout(() => {
                 delete this._requestResolvers[randomID];
-                reject(new Error ("timed out waiting for GM execution"));
-            }, timeOutMs+100)
+                reject(new Error("timed out waiting for GM execution"));
+            }, timeOutMs + 100)
         })
-    
+
         if (methodResponse.error)
             throw new Error(methodResponse.error)
         else
             return methodResponse.result;
     }
 
-    _returnBridge(retVal, data){
-        debug(`API ${data.operation}`,retVal)
-        if (data.user === game.user.id){
+    _returnBridge(retVal, data) {
+        debug(`API ${data.operation}`, retVal)
+        if (data.user === game.user.id) {
             const resolve = this._requestResolvers[data.randomID];
-            if (resolve){
+            if (resolve) {
                 delete this._requestResolvers[data.randomID];
                 resolve(retVal)
             }

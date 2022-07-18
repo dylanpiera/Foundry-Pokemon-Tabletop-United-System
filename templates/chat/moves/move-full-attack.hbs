@@ -42,18 +42,24 @@
         {{/if}}
         <div class="swsh-body">
             {{#if roll}}
-                <div class="dice-roll w-100" style="padding: 10px 5px;">
-                    <div class="dice-result">
-                        <div class="dice-formula">  
-                            {{#each roll.terms as | term |}}
-                                {{#if term.faces}}
-                                    {{#each term.results as |result|}}<span class="roll die d{{term.faces}} {{minMaxDiceCheck result.result term.faces}}">{{result.result}}</span>{{#if @last}}{{else}}+{{/if}}{{/each}}
-                                {{else}}{{#if term.operator}}{{term.operator}}{{else}}{{term.number}}{{/if}}{{/if}}
-                            {{/each}}
+                {{#unless (is move.ac "--")}}
+                    <div class="dice-roll w-100" style="padding: 10px 5px;">
+                        <div class="dice-result">
+                            <div class="dice-formula">  
+                                {{#each roll.terms as | term |}}
+                                    {{#if term.faces}}
+                                        {{#each term.results as |result|}}<span class="roll die d{{term.faces}} {{minMaxDiceCheck result.result term.faces}}">{{result.result}}</span>{{#if @last}}{{else}}+{{/if}}{{/each}}
+                                    {{else}}{{#if term.operator}}{{term.operator}}{{else}}{{term.number}}{{/if}}{{/if}}
+                                {{/each}}
+                            </div>
+                            <span class="dice-total" style="display: inline-flex;justify-content: space-evenly; align-items: center;width:100%;"><h4 class="num-total">{{roll._total}}</h4><h5>To Hit</h5></span>
                         </div>
-                        <span class="dice-total" style="display: inline-flex;justify-content: space-evenly; align-items: center;width:100%;"><h4 class="num-total">{{roll._total}}</h4><h5>To Hit</h5></span>
                     </div>
-                </div>
+                {{else}}
+                    <div class="d-flex w-100 pt-1 pb-1" style="word-break: break-word;text-align: center;padding: 5px;">
+                        <h4>{{name}} cannot Miss!</h4>
+                    </div>
+                {{/unless}}
             {{/if}}
             {{#if crit}}
                 {{#if (not crit "normal")}}

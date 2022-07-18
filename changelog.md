@@ -1,3 +1,273 @@
+# Welcome to the Beta!
+Hey there! You are on the Beta Branch. If you ever have any feedback please do share with us over on [Github](https://github.com/dylanpiera/Foundry-Pokemon-Tabletop-United-System/issues) or [Discord](https://discord.gg/fE3w59q)
+
+## Version 2.1
+Hey everyone! With the release of PTUVTT 2.1 we now have officially moved over to support Foundry V9!
+
+And there are Loooooads of features and bug fixes that have been added in this version, as many beta versions were created before this stable release.
+Because there are so many changes and basically everyone who is using the system has already been using the beta... Well, no real reason to consilidate them.
+But in case you're wondering you're free to read the individual updates down below.
+
+Up next we will start the 3.0 beta which will be for Foundry V10.
+**Please be aware that if you stay on the Beta branch you WILL need to update your foundry to V10 starting the first v3 beta. So we recommend upgrading to stable until Foundry V10 has fully launched as a stable update.**
+
+## 2.0-Beta-12 - All the PR Merges
+Since this version will never actually go live and is just a changelog for you guys in the discord server... A quick update!
+
+## New Features:
+- Tools of the Trade have been automated for Pokeball Captures
+- Added a custom type image setting for those that need it.
+- Alt clicking a skill roll will consume 1AP to add +1 to a skill check.
+
+## Bugfixes:
+- Added 'Sticky Hold' capability.
+- Fixed Quick Ball & Repeat Ball capture calculations.
+- Pokeball Throws now take trainer accuracy into account.
+- Dex entry settings have now been fully fixed and optimized.
+- Fixed Double Strike moves during untargeted combat.
+
+## 2.0-Beta-11 - Hotfix & Quick Feature
+- Fixed an error in the move effectiveness calculation causing the sidebar to break.
+- Added a 'Pokedex' button to 'dexentry' items.
+
+### 11.2 - Hotfix
+- Fixed issues with the new Pokedex Macro
+- Fixed memory issues with new features.
+
+## 2.0-Beta-10 - Small Features Part 3
+...If you were wondering where the bugfixes went... Well that was Beta 9 :p
+
+- Added a 'Total Wealth' display in a Trainer's inventory.
+- Added more settings for Pokedex functionality
+- Added the option to disable effectiveness calculation for sidebar (or base it on dex knowledge)
+- Automatically add Pokemon to a trainer's dex tab when scanned with the Pokedex.
+
+## 2.0-Beta-9 - Small Bugfixes
+- Fixed a permission error in TokenMagicFX Integration
+- Fixed "Apply Damage" not working on un-targeted attacks.
+- Fixed "Damage Bonus" field in move items not being taken into account.
+
+## 2.0-Beta-8 - Bugfixes and Small Features Part 2.
+And another set of improvements and bugfixes.
+
+### New Features
+- Post a 'redo capture request' button in the chat if DM denies a capture / the request times out.
+- Added back 'Hold shift for bonus damage' when executing a move.
+- Add Pokedex button to sidebar, so you no longer have to turn it into a Macro!
+- Made all 'PokeEdge Capability Training' work (through Active Effects where possible)
+
+### Bugfixes
+- Capture automation now works if TokenMagic is not installed
+- Fixed Toxic Damage not applying properly
+- Fixed Initiative no longer automatically updating
+- Fixed "Next Turn" combat button not working for players.
+- Fixed turning non-crits into crits not applying critical damage.
+
+### Other Changes
+- Capture automation doesn't force you to wait 10 years if you have animations turned off (or not installed)
+- Cleaned up the Damage Applicator menu
+
+## 2.0-Beta-7 - Struggle Menu is Back!
+Well... It's been a while but finally the struggle menu is back!
+
+**Please Note**: Struggles will not show in your 'moves' section on your sheet or in the side bar. But only under the 'Struggle' button of the side bar.
+Please feel free to delete all struggles you own on Pokémon to clean out their sheets.
+
+### Changes:
+- Added 'Pokebot' Capability simulating the type effectiveness changes of a Pokebot
+- Added Struggle Menu to the sidebar
+- Struggle menu will show struggles based on the mon's capabilities.
+
+## 2.0-Beta-6 - Bugfixes & Small Features Part 1.
+Where did beta 5 go? No idea.
+
+Either way! A quick and small update with a bunch of fixes thanks to Muhsigbokz#8821 over on Discord.
+- Fixed Filter & Solid Rock both applying if added to the same Pokémon
+- Fixed TM item descriptions being shuffled in the compendium (will not retroactively fix them in your actors / game world!!)
+- Shiny chance now accepts decimal, enjoy making your shinies 0.00001% likely to happen! Or 99.99% and watch your players face in pure horror when they get that normal mon.
+- Fixed an issue with Pin Missile and audio.
+- Fixed some small issues with the TokensUpdate API for macro developers.
+
+## 2.0-Beta-4
+This update fixes a few bugs around Pokeball effects, as well as a significant revamp (thanks to Colton who spearheaded this) of the initiative system, adding support for Boss Initiative and League Initiative, as well as a UI toggle (checkmark/X) in the combat tracker that automatically checks off and fades-out actors in the list when they finish their turns, and skips up or down the list to the highest not-gone-yet actor when the turn is advanced if initiative has shuffled around due to speed changes or the like.
+
+No more forgetting who's already gone after someone uses Agility and jumps around on turn order, you can just hit Next Turn and it'll figure it out for you!
+
+## 2.0-Beta-2 - Hotfix
+- Fixed issue where if an owner's id no longer exists you couldn't open a character sheet.
+- Fixed small style issue in sidebar.
+
+## 2.0-Beta-1
+It's finally time for another big release everyone!
+
+### Update Storytime
+VoidPhoenix (the developer of the Move Master module for PTU) and I decided a couple weeks—if not months—ago to migrate Move Master as a core functionality of the PTU System!
+
+I had always planned to have some implementation of a sidebar mechanic for the PTU system, but when Void first started work on the Move Master Module he just couldn't wait for me to get there so made it himself!
+
+This however means that Move Master is a little... unstable. Don't take me wrong! Void did an amazing job making what he did, but because it wasn't fully integrated into the system, and didn't know its full scope at the start of the project it became unsustainable. 
+
+But fear no longer!
+As Move Master is now a main feature in the PTU for FoundryVTT system!
+
+### The Actual Update
+This is the first 2.0 Beta, where we have integrated a huge chunk of Move Master and improved upon all of the parts we have implemented.
+Some of the features as of now are unfinished, and this might dissapoint some of you who enjoyed these features. But fear not, we will be adding them all back, better than ever before in one of the upcomming beta versions! The full timeline I'll describe down below.
+
+#### V2.0 & V2.1 Timeline
+Version 2.0 will contain the "basic" version of the PTU Sidebar, but will miss a couple of features. Most notably custom move/item effects.
+For version 2.1 we will be implementing a new 'Effect' system where using a (hopefully) intuitive UI anyone can create dynamic move effects for all the automation and homebrew goodness. This system will however be pretty big, so we decided to turn these into seperate updates, so we can still get the majority of the new features & bugfixes out while we work on it.
+
+**Move Master features that are missing for 2.0 but planned for 2.1**: 
+- Move Effects
+- (Use) Item Effects
+- Orders
+- Maneuvers
+
+**Move Master features that are planned for 2.0 but not in the current beta**:
+- Resting Automation
+- Auto roll initative when new token is created during combat
+- Struggle Menu
+
+### The Actual Changelog
+Oh- boi, this is 2 months worth of features... but here we go!
+#### New Features:
+- Integrated Move Master into PTU Main System.
+- Added the 'Damage Applicator' chat message, allowing both GMs/Players to select how damage should be applied to targets.
+- Item Icons & Pokemon Images are now included with the system. A 'lite' version without these will be released with the 2.0 update.
+- Item Compendium has icons pre-assigned.
+- Added seperate value/mod for the 'mod' and 'stage' fields of both Characters and Pokemon
+
+#### New Features (Move Master)
+These features were already in Move Master, but I've summarised them here for those who didn't use the module before:
+- Add a Sidebar that shows when you have selected a token, displaying useful combat information.
+- Automatically track Standard actions for conditions like Burn/Poison.
+- Added Last Chance & Type Strategist automation.
+- Added Double-Strike & Five-Strike Automation.
+- Automated Stored Power & Punishment DB calculation.
+- Automatically apply Technician.
+- Added Automatic Injury Application (configurable in settings).
+- Automatic Pokemon Capture mechanic, including calculation & transfering of ownership.
+- Added SFX to moves & certain other actions.
+- Added Animations for moves and certain other actions if [Sequencer](https://foundryvtt.com/packages/sequencer) and/or [Token Magic FX](https://foundryvtt.com/packages/tokenmagic/) is installed.
+- Integration for [JB2A's Premium Animation Assets](https://www.patreon.com/JB2A) module with the above two modules.
+- Added Automatic Item Icon Assignment whenever you open an item sheet with the default image set, if an image is found it will be set. (Configurable in settings)
+
+#### Bugfixes:
+- Fixed all bugs with the Owner field.
+- Fixed infinite spiraling Burn/Poison stage dropping.
+- Fixed Dex Experience not properly calculating.
+- Fixed 'EditLock' flag on Effects not applying properly.
+- Fixed several small style issues in Character Sheet.
+
+## 1.5-Beta 15.4 - Owner Bug Hotfix
+- Fixes the 'Owner' field on Pokemon.
+
+## 1.5-Beta 15.3 - AE Bug Hotfix
+- Fixed AEs not applying properly in Foundry v9
+
+## 1.5-Beta 15 - Foundry 9 Compatibility (Hotfix)
+A quick hotfix for a couple v9 compatibility bugs that slipped past the last patch:
+
+- Fixed an issue where an error would prevent saving PTU Settings.
+- Fixed an issue where players could not delete tokens.
+- Fixed an error that occured when the user rolled damage on a move from the sheet.
+
+## 1.5-Beta-14 - Foundry 9 Compatibility
+Hey all, just two things for today.
+
+- Migrated to Foundry core version 9
+- Added support for .webm images during pokemon generation.
+
+Thanks to VoidPhoenix#6487 for this update!
+
+## 1.5-Beta-11 - 13 - Custom Typings!
+Hey all! For the 2nd part of the Homebrew update I present: the Custom Type Editor!
+
+Currently both the CSE & CTE are still lacking in some features, namely the species editor is missing evolution settings, while the type editor is missing a way to add your own images. Both of these will be added in an upcoming beta.
+For now I thought I'd let you guys play around with the new CTE first!
+
+- Added support for Custom Types using the Custom Type Editor.
+- Existing type effectiveness can now be modded if so desired.
+
+Please note: By default types are only updated on actors after a refresh, if you want to you can use the 'Sync Changes' button in the CTE to apply it to all currently logged in players (including yourself).
+This however forces every single Pokémon in your game to refresh it's data, so if you have a lot of mons, this can create a lot of lagg. 
+
+## 1.5-Beta-10
+- Hotfix for 'null' typing showing up in mons with only a single type.
+
+## 1.5-Beta-9 - Custom Species Editor Upgrade
+Hi all! This is a bigger beta release as the CSE- Custom Species Editor, has received a complete overhaul!
+
+- Added new Custom Species Editor.
+- Added support for Moves & Abilities to the CSE.
+- Added drag & drop support to the CSE for Moves, Abilities & Other Capabilities.
+- Added support for mons with more than 2 types
+- Replaced 'null' typing with 'Untyped' for internal calculations.
+
+## 1.5-Beta-8 - Small Patch
+- Fixed Evolution entries for some Pokémon that would break their generation.
+- Added an option for the Virtuoso Dice Pool Limit to be ignored.
+
+## 1.5-Beta-7 - Fixes & Small Enhancements
+Today we have mostly bug fixes and small enhancements.
+
+### Enhancements:
+- Added Uranium & Sage dex Compendium.
+- Skill dice pools now max out at 6 dice, so virutoso doesn't change the pool to 8d6.
+- Moves with "--" initiative will now always hit.
+- Blindness now applies the accuracy lowering debuff through AE instead of a hidden modifier.
+- Throwing Mastery edge now has an AE that increases the Actor's throwing range capability by 2.
+
+### Bugfixes:
+- Fixed Darmanitan-Normal being unable to be generated.
+- Fixed Move-snippets not working at all for Trainer Moves.
+
+## 1.5-Beta-6 - Dex Drag-in Update
+Hey everyone! It's been a while since I've last seen you guys. It's been about a month and a half since the last beta release, yikes!
+Either way, I needed a summer break, but now I'm back and ready to continue work on the system. So expect more updates in the near future!
+
+For today I've brought you changes in regards to the Dex Drag-In system courtesy of VoidPhoenix, thanks a ton man for adding these missing features, and sorry that it took a while before I could validate them haha.
+
+### Dex Drag-In changes
+- Newly generated actors are put in a folder with the same name as the current scene.
+- Added support for (random) Shiny Generation.
+- Added Level Range (min-max), Shiny Chance, Stat Randomness & Prevent Evolution options to the pop-up.
+  - Default options can be set in settings.
+
+### Other Changes
+- Fixed Trainer AP not showing as a bar option.
+- Automated Tangled Feet abilities.
+- Added a default setting for what the Transfer Ownership api should set the "default" permission to.
+
+## 1.5-Beta-5 - Bug Fixes Pt. 2
+- Fixed allowing dex entries to be created multiple times on a sheet when dragged in from compendium.
+- Fixed small error when transfer ownership API was being used with a PC that was not residing in any folder.
+- Fixed Move Master breaking the Player Token Deletion operation due to editing main body classes.
+
+## 1.5-Beta-4 - Bug Fixes
+- Fix Accidentally deleting tokens when trying to press 'delete' or 'backspace' in a character sheet
+- Add "Send to Chat" buttons to Pokémon & Trainer sheets for all items.
+- Add prePlayerDeleteToken hook for module developers.
+- Fixed some typos in settings.
+
+## 1.5-Beta-3 - Move Origins
+- Automatically guess the origin of a move on a Pokémon's sheet.
+  - Whenever you add a move to a mon, it will check it's Level-Up, Egg, TM & Tutor list (in that order) to see how it is supposed to get this move, and set that as the assumed origin
+
+## 1.5-Beta-2 - Where's Sentret?
+- Added Sentret dex entry to compendium
+- Fixed the 'ActorGenerator.Create' method to allow quick creation of actors that already exist.
+
+## 1.5-Beta-1 - Auto Delete Volatile Conditions
+- Volatile Conditions are now automatically removed at the end of Combat
+  - This can be disabled in the settings.
+- Combat now remembers who has joined a Combat, deleting flinch from all mons that participated, not those that are just currently on the field.
+- Added the 'endOfCombat' hook with params: 'Combat, participantUuids[]'
+
+## 1.5-Beta-0 - Release 1.4 Dev Branch
+Welcome on the 1.5 dev branch, this is the exact same codebase as the 1.4.0 release.
+
 ## 1.4.0 - Foundry 0.8 Release!
 Hey everyone! With the release of PTUVTT 1.4.0 we now have officially moved over to support Foundry 0.8.6!
 

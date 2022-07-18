@@ -1,0 +1,144 @@
+<form class="{{cssClass}} container-fluid" autocomplete="off">
+    <div class="row justify-content-between h-100">
+        <div class="col-sm-12" style="padding-left: unset;">
+            <div style="
+        width: 100%;
+        height: 100%;
+        display: block;
+        position: absolute;
+        z-index: 1;
+        background: #C42835;
+        clip-path: polygon(0 0, 52% 0, 22% 100%, 0% 100%);">
+            </div>
+            <div style="
+        width: 100%;
+        height: 100%;
+        display: block;
+        position: absolute;
+        z-index: 0;
+        background: linear-gradient(45deg, #ECDBEB, #DFFFFE);
+        clip-path: polygon(100% 0, 45% 0, 15% 100%, 100% 100%);">
+            </div>
+            <div style="
+        width: 100%;
+        height: 100%;
+        display: block;
+        position: absolute;
+        z-index: 2;
+        background: #E33242;
+        clip-path: polygon(0 0, 44% 0, 14% 100%, 0% 100%);">
+            </div>
+            <div class="panel cte h-100">
+                <div class="sheet-body no-hd h-100">
+                    <!-- Base Tab -->
+                    {{!-- <div class="tab details stats h-100" data-group="primary" data-tab="stats"> --}}
+                        <div class="d-flex h-100" style="flex: 1 0 100%">
+                            <div class="d-flex align-items-end flex-column h-100" style="padding: 0 15px; flex: 0 0 30%">
+                                <div class="swsh-box m-1 w-100" style="max-height: 900px; overflow-y: scroll;overflow: auto;">
+                                    <div class="swsh-header p-1 justify-content-end text-align-center d-flex">
+                                        <div class="item-controls flexcol" style="flex: 0 0 15%;">
+                                            <a class="item-control item-create" title="Add type" data-type="type"><i class="fas fa-plus-circle" style="margin-right: 3px;"></i><span class="readable">Add</span></a>
+                                        </div>
+                                    </div>
+                                    <div class="swsh-header d-flex">
+                                        <div class="inventory-header flexrow w-100" style="padding: 0 0 0 0.5em">
+                                            <div class="item-name item-species flexcol align-items-center align-self-center"
+                                                style="flex: 1 0 35%;">
+                                                <h4>Type</h4>
+                                            </div>
+                                            <div class="item-name flexcol align-items-center align-self-center"
+                                                style="flex: 0 0 45%;">
+                                                <h4>Img</h4>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex swsh-body p-0">
+                                        <ol class="inventory-list w-100 p-0 m-0" id="typing-list"
+                                            style="padding: 0 0 0 0.5em;">
+                                            {{#each types as |data type|}}
+                                            <li class="item flexrow" data-type="{{type}}">
+                                                <div class="item-name item-species flexcol align-items-center align-self-center"
+                                                    style="flex: 1 0 35%; word-break: break-word; text-align: center;">
+                                                    <h4>{{type}}</h4>
+                                                </div>
+                                                <div class="item-name flexcol align-items-center align-self-center"
+                                                    style="flex: 0 0 45%;">
+                                                        <span class="type-img">{{{loadTypeImage type}}}</span>
+                                                </div>
+                                            </li>
+                                            {{/each}}
+                                        </ol>
+                                    </div>
+                                </div>
+                                <!-- Menu Controls -->
+                                <div class="swsh-box w-100 mt-auto m-1">
+                                    <div class="swsh-header flexcol p-1 w-100" style="justify-content: center;border-radius: 5px 5px 0 0;">
+                                        <h4>Sync Type Changes</h4>
+                                        <small class="pb-2" style="word-break: break-word;">All changes will be applied on restart, alternatively you can click this button to have all type info synced between you & players. Warning: This can lagg a lot.</small>
+                                        <button class="sync-cte pt-1 pb-1">Sync Changes</button>
+                                    </div>
+                                </div>
+                                <div class="swsh-box w-100 mt-2 m-1">
+                                    <div class="swsh-header flexcol p-1 w-100" style="justify-content: center;border-radius: 5px 5px 0 0;">
+                                        <h4>Reset all typings to default</h4>
+                                        <button class="reset-cte pt-1 pb-1">Reset All Types</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="m-1 h-100 w-100" id="cte-mon-editor">
+                                    {{#if object}}
+                                        <div class="swsh-box w-100">
+                                            <div class="swsh-body w-100">
+                                                <div class="swsh-header p-1 justify-content-center w-100">
+                                                    <input style="text-align: center;width:fit-content;" type="text" value="{{object.type}}" name="type"/>
+                                                    <input type="hidden" value="{{object.type}}" name="oldType"/>
+                                                </div>
+                                                <div class="d-flex flexrow w-100 justify-content-between" style="flex-wrap:wrap;">
+                                                    {{#each object.data as |data type|}}
+                                                        <div class="flexcol p-1" style="flex: 0 0 45%
+                                                        ">
+                                                            <div class="swsh-header p-1" style="justify-content: center;border-radius: 5px 5px 0 0;">
+                                                                <label for="{{object.type}}.{{type}}">{{type}}</label>
+                                                            </div>
+                                                            {{!-- <input class="p-1" style="text-align: center;" required type="number" name="{{object.type}}.{{type}}" value="{{data}}"/> --}}
+                                                            <select class="p-1" style="text-align: center;" name="{{type}}">
+                                                                <option value="0" {{#if (is data 0)}}selected{{/if}}>Immune</option>
+                                                                <option value="0.5" {{#if (is data 0.5)}}selected{{/if}}>Resistant</option>
+                                                                <option value="1" {{#if (is data 1)}}selected{{/if}}>Neutral</option>
+                                                                <option value="2" {{#if (is data 2)}}selected{{/if}}>Weakness</option>
+                                                            </select>
+                                                        </div>
+                                                    {{/each}}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- Controls -->
+                                        <div class="d-flex mt-2" style="justify-content: space-evenly;">
+                                            <div class="col-sm-5">
+                                                <button class="save-cte">Save Changes</button>
+                                            </div>
+                                            <div class="col-sm-5">
+                                                <button class="delete-cte" {{#if (is object.type "Untyped")}}disabled{{/if}}>Delete Type</button>
+                                            </div>
+                                        </div>
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </div>
+                    {{!-- </div> --}}
+                </div>
+            </div>
+        </div>
+    </div>
+    {{!-- <div class="sheet-footer">
+        <div class="tabs">
+            <ul class="sheet-tabs tabs buttons" data-group="primary">
+                <li><button class="item" data-tab="stats">Stats</button></li>
+                <li><button class="item" data-tab="moves">Moves</button></li>
+                <li><button class="item" data-tab="abilities">Abilities</button></li>
+            </ul>
+        </div>
+    </div> --}}
+</form>

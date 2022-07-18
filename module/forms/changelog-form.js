@@ -25,7 +25,7 @@ export class ChangeLog extends FormApplication {
     const data = super.getData();
     data.dtypes = ["String", "Number", "Boolean"];
 
-    data.text = marked(this.object.replace(/[\r]/g,""));
+    data.text = marked.parse(this.object.replace(/[\r]/g,""));
 
     return data;
   }
@@ -38,9 +38,7 @@ export class ChangeLog extends FormApplication {
     html.find('button[data-action=dismiss-till-update]').click((event) => {
       event.preventDefault();
 
-      let x = game.settings.get("ptu", "dismissedVersion")
-      x[game.userId] = LATEST_VERSION;
-      game.settings.set("ptu", "dismissedVersion", x)
+      game.ptu.api.setChangelogRead();
 
       this.close();
     });

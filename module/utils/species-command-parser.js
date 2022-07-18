@@ -79,23 +79,73 @@ export async function CreateMonParser(input, andCreate = false) {
     return commands;
 }
 
-export async function GetSpeciesArt(mon, imgDirectoryPath, type = ".png") {
+export async function GetSpeciesArt(mon, imgDirectoryPath, type = ".webp", shiny = false, animated = false, animated_type = ".webm") {
+
+    const alt_type = ".png";
     const basePath = imgDirectoryPath+(imgDirectoryPath.endsWith('/') ? '' : '/')
 
-    let path = basePath+lpad(mon?.number, 4)+type;
+    const shiny_path = shiny ? "s" : "";
+
+    let path = basePath+lpad(mon?.number, 4)+shiny_path+type;
+
+    if(animated)
+    {
+        path = basePath+lpad(mon?.number, 4)+shiny_path+animated_type;
+    }
     let result = await fetch(path);
+
+    if(animated && (result.status === 404 && mon?.number < 1000)) {
+        path = basePath+lpad(mon?.number, 3)+shiny_path+animated_type;
+        result = await fetch(path);
+    }
     if(result.status === 404 && mon?.number < 1000) {
-        path = basePath+lpad(mon?.number, 3)+type;
+        path = basePath+lpad(mon?.number, 3)+shiny_path+type;
+        result = await fetch(path);
+    }
+    if(result.status === 404 && mon?.number < 1000) {
+        path = basePath+lpad(mon?.number, 3)+shiny_path+alt_type;
+        result = await fetch(path);
+    }
+
+    if(animated && (result.status === 404)) {
+        path = basePath+lpad(mon?.number, 4)+shiny_path+animated_type;
         result = await fetch(path);
     }
     if(result.status === 404) {
-        path = basePath+mon?._id+type;
+        path = basePath+lpad(mon?.number, 4)+shiny_path+type;
         result = await fetch(path);
     }
     if(result.status === 404) {
-        path = basePath+mon?._id?.toLowerCase()+type;
+        path = basePath+lpad(mon?.number, 4)+shiny_path+alt_type;
         result = await fetch(path);
     }
+
+    if(animated && (result.status === 404)) {
+        path = basePath+mon?._id+shiny_path+animated_type;
+        result = await fetch(path);
+    }
+    if(result.status === 404) {
+        path = basePath+mon?._id+shiny_path+type;
+        result = await fetch(path);
+    }
+    if(result.status === 404) {
+        path = basePath+mon?._id+shiny_path+alt_type;
+        result = await fetch(path);
+    }
+
+    if(animated && (result.status === 404)) {
+        path = basePath+mon?._id?.toLowerCase()+shiny_path+animated_type;
+        result = await fetch(path);
+    }
+    if(result.status === 404) {
+        path = basePath+mon?._id?.toLowerCase()+shiny_path+type;
+        result = await fetch(path);
+    }
+    if(result.status === 404) {
+        path = basePath+mon?._id?.toLowerCase()+shiny_path+alt_type;
+        result = await fetch(path);
+    }
+
     if(result.status === 404) {
         return undefined;
     }
@@ -117,7 +167,7 @@ function handleChatMessage(chatlog, messageText, chatData) {
         CreateMonParser(messageText.replace("/ptug","").trimStart()).then(result => {
             if(result) {
                 ui.notifications.notify(`Generating ${result["generate"]} pokemon using species: ${result["pokemon"].map(x => x._id).join(",")} with levels: ${result["level"].join(",")}`, "info")
-    
+
                 createMons(result);
             }
         });
@@ -164,23 +214,31 @@ Hooks.on("dropCanvasData", (canvas, update) => {
         if(item) update.item = item;
     }
     if(update.item)
-        new game.ptu.PTUDexDragOptions(update, {"submitOnChange": false, "submitOnClose": true}).render(true);
+        new game.ptu.PTUDexDragOptions(update, {"submitOnChange": false, "submitOnClose": false}).render(true);
 });
 
 export async function FinishDexDragPokemonCreation(formData, update)
 {
+    const imgSrc = game.settings.get("ptu", "defaultPokemonImageDirectory");
     let species_name = update["item"].name;
 
     let drop_coordinates_x = update["x"];
     let drop_coordinates_y = update["y"];
     
     let level = parseInt(formData["data.level"]);
+    // .replace(",", ".") for comman notation, as parseFloat expects a decimal point
+    let shiny_chance = parseFloat(formData["data.shiny_chance"].replace(",", "."));
+    let stat_randomness = parseInt(formData["data.stat_randomness"]);
+    let prevent_evolution = Number(formData["data.prevent_evolution"]);
 
     let new_actor = await game.ptu.monGenerator.ActorGenerator.Create({
         exists: false,
         species: species_name,
         exp: game.ptu.levelProgression[level],
-        folder: "Dex Drag-in"
+        folder: game.scenes.current.name,
+        shiny_chance: shiny_chance,
+        stat_randomness: stat_randomness,
+        prevent_evolution: prevent_evolution
     })
 
     const protoToken = duplicate(new_actor.data.token);
@@ -201,6 +259,8 @@ export async function FinishDexDragPokemonCreation(formData, update)
     protoToken.displayBars = 20;
     protoToken.displayName=  40; 
     protoToken.bar1.attribute = "health";
+
+    protoToken.img = await GetSpeciesArt(game.ptu.GetSpeciesData(new_actor.data.data.species), imgSrc, ".webp", new_actor.data.data.shiny, true);
     
     new_actor = await new_actor.update({"token": protoToken});
 

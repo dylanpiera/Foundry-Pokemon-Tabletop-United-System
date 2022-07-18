@@ -31,20 +31,20 @@ function _calculateStatWithNature(nature, statKey, stat) {
 
 export function CalculateStatTotal(levelUpPoints, stats, {twistedPower, ignoreStages}) {
     for (const [key, value] of Object.entries(stats)) {
-        const sub = value["value"] + value["mod"] + value["levelUp"];
+        const sub = value["value"] + value["mod"].value + value["mod"].mod + value["levelUp"];
         levelUpPoints -= value["levelUp"];
 
         if(ignoreStages) {
             value["total"] = sub; continue;
         }
 
-        if (value["stage"] > 0) {
-            value["total"] = Math.floor(sub * value["stage"] * 0.2 + sub);
+        if ((value["stage"]?.value + value["stage"]?.mod) > 0) {
+            value["total"] = Math.floor(sub * (value["stage"]?.value + value["stage"]?.mod) * 0.2 + sub);
         } else {
             if (key == "hp") {
                 value["total"] = sub;
             } else {
-                value["total"] = Math.ceil(sub * value["stage"] * 0.1 + sub);
+                value["total"] = Math.ceil(sub * (value["stage"]?.value + value["stage"]?.mod) * 0.1 + sub);
             }
         }
     }
@@ -68,6 +68,6 @@ export function CalculatePoisonedCondition(stats, ptuFlags) {
     if(ptuFlags?.is_poisoned == undefined) return stats;
 
     /** TODO: Add Potent Venom check */
-    stats.spdef.stage -= 2;
+    stats.spdef.stage.mod -= 2;
     return stats;
 }

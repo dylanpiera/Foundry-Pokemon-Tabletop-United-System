@@ -4,6 +4,7 @@ export const PTUSettingCategories = [
     {id: "general", label: "General", icon: "fas fa-cogs"},
     {id: "combat", label: "Combat", icon: "fas fa-fist-raised", subtext: "Combat Rules & Preferences"},
     {id: "rules", label: "Rules", icon: "fas fa-book", subtext: "System rules, like which erratas to use."},
+    {id: "generation", label: "Generation", icon: "fas fa-cogs", subtext: "Settings in regards to Pokémon Generation (through Dex-Dragin)"},
     {id: "preferences", label: "Player Preferences", icon: "fas fa-users", subtext: "These settings only apply to the current user.", settings: {}},
     {id: "other", label: "Other", icon: "fas fa-atlas"},
 ]
@@ -49,7 +50,7 @@ export class PTUSettings extends FormApplication {
             const s = duplicate(setting);
             s.name = game.i18n.localize(s.name);
             s.hint = game.i18n.localize(s.hint);
-            s.value = game.settings.get(s.module, s.key);
+            s.value = game.settings.get(s.namespace, s.key);
             s.type = setting.type instanceof Function ? setting.type.name : "String";
             s.isCheckbox = setting.type === Boolean;
             s.isSelect = s.choices !== undefined;
@@ -85,10 +86,14 @@ export class PTUSettings extends FormApplication {
     /** @override */
     async _updateObject(event, formData) {
         for ( let [k, v] of Object.entries(flattenObject(formData)) ) {
-            let s = game.settings.settings.get(k);
-            let current = game.settings.get(s.module, s.key);
+            let s = game.settings.settings.get("ptu"+k);
+            if(s === undefined)
+            {
+                s = game.settings.settings.get("PTUMoveMaster"+k);
+            }
+            let current = game.settings.get(s.namespace, s.key);
             if ( v !== current ) {
-                await game.settings.set(s.module, s.key, v);
+                await game.settings.set(s.namespace, s.key, v);
             }
         }
     }

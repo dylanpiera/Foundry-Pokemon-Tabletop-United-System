@@ -2,11 +2,38 @@
   "name": "ptu",
   "title": "Pokemon Tabletop United",
   "description": "A Pen and Paper Roleplaying Game Set in the World of Pokemon",
-  "version": "1.4.0",
-  "minimumCoreVersion": "0.8.6",
-  "compatibleCoreVersion": "0.8.6",
+  "minimumCoreVersion": "9",
+  "compatibleCoreVersion": "9",
+  "version": "2.1.1",
   "templateVersion": 2,
-  "author": "Dylan Piera, Tymo Wessel, Jeffrey Hollander, Efren A. Mariño & Cody Swendrowski",
+  "authors": [
+    {
+      "name": "Ashe Piera",
+      "email": "ptu@soaringnetwork.com",
+      "url": "https://github.com/dylanpiera/Foundry-Pokemon-Tabletop-United-System"
+    },
+    {
+      "name": "GSV A Nest of Kindled Embers"
+    },
+    {
+      "name": "Ellam Fox"
+    },
+    {
+      "name": "Muhsigbokz"
+    },
+    {
+      "name": "Tymo Wessel"
+    },
+    {
+      "name": "Jeffrey Hollander"
+    },
+    {
+      "name": "Efren A. Mariño"
+    },
+    {
+      "name": "Cody Swendrowski"
+    }
+  ],
   "esmodules": ["module/ptu.js"],
   "socket": true,
   "styles": [
@@ -80,6 +107,13 @@
       "entity": "Item",
       "name": "fan-game-content",
       "path": "packs/fan-game-content.db",
+      "system": "ptu"
+    },
+    {
+      "label": "uranium & sage dex",
+      "entity": "Item",
+      "name": "uranium-and-sage-dex",
+      "path": "packs/uranium-and-sage-dex.db",
       "system": "ptu"
     },
     {

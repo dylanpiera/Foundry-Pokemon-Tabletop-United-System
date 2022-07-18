@@ -1,4 +1,5 @@
 function getTypeEffectiveness(targetType) {
+    if(targetType == "null") targetType = "Untyped";
     return duplicate(game.ptu.TypeEffectiveness[targetType])
 }
 
@@ -21,9 +22,8 @@ export function GetMonEffectiveness(data) {
         delete typeCalc["Nuclear"];
     }
 
-    /** TODO: Add Abilities - See Issue #27 */
     let abilities = {
-        "Desert Weather": {active: false, execute: function(typeCalc) {return typeCalc;}}, //TODO: Add this ability once we have weather implemented
+        "Desert Weather": {active: false, execute: function(typeCalc) {if(game.settings.get("ptu", "currentWeather") == "Sunny") {typeCalc["Fire"] *= 0.5} return typeCalc;}},
         "Cave Crasher": {active: false, execute: function(typeCalc) {typeCalc["Ground"] *= 0.5; typeCalc["Rock"] *= 0.5; return typeCalc;}},
         "Dry Skin": {active: false, execute: function(typeCalc) {typeCalc["Water"] *= 0; return typeCalc;}},
         "Storm Drain": {active: false, execute: function(typeCalc) {typeCalc["Water"] *= 0; return typeCalc;}},
@@ -83,7 +83,34 @@ export function GetMonEffectiveness(data) {
         }
     }
 
+    // When both Solid Rock and Filter are active, Super Effective multiplications should only be changed
+    // once, not twice. If both Abilites are there, only calculate one and leave the conditional Damage
+    // reduction to the player
+    if(abilities["Solid Rock"].active && abilities["Filter"].active) abilities["Filter"].active = false
+
     for(const [key,value] of Object.entries(abilities).filter(x => x[1].active == true)) {
+        typeCalc = value.execute(typeCalc);
+    }
+
+    let capabilities = {
+        "Pokébot": {active: false, execute: function (typeCalc) {
+                typeCalc["Fire"] *= 2;
+                typeCalc["Electric"] *= 2;
+                typeCalc["Ground"] *= 2;
+                return typeCalc;
+            }}
+    }
+
+    for(let capability of data.items.filter(x => x.type == "capability")) {
+        for(let key of Object.keys(capabilities)) {
+            if(capability.name?.toLowerCase().replace("[playtest]","").trim() == key.toLowerCase()) {
+                capabilities[key].active = true;
+                break;
+            }
+        }
+    }
+
+    for(const [key,value] of Object.entries(capabilities).filter(x => x[1].active == true)) {
         typeCalc = value.execute(typeCalc);
     }
 

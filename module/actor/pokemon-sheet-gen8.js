@@ -1,5 +1,6 @@
 import { debug, error, log, PrepareMoveData, warn } from '../ptu.js'
 import { HardenedChanges } from '../data/training-data.js'
+import { sendItemMessage } from '../item/item-sheet.js';
 
 /**
  * Extend the basic ActorSheet with some very simple modifications
@@ -43,6 +44,7 @@ export class PTUGen8PokemonSheet extends ActorSheet {
 		data['owners'] = [];
 		let findActors = (key) => {
 			if(key == "default") return;
+			if(!game.users.get(key)) return;
 
 			let char = game.users.get(key).character
 			if(char) {
@@ -68,7 +70,7 @@ export class PTUGen8PokemonSheet extends ActorSheet {
 			data['canBeWild'] = true;
 		}
 
-		if(!data['owners'].includes(this.actor.data.data.owner)) {
+		if(!data['owners'].map(x => x.id).includes(this.actor.data.data.owner)) {
 			if(this.isEditable)
 				this.actor.update({"data.owner": data['canBeWild'] ? "0" : data['owners'][0]?.id})
 		}
@@ -173,6 +175,31 @@ export class PTUGen8PokemonSheet extends ActorSheet {
 		// Add Inventory Item
 		html.find('.item-create').click(this._onItemCreate.bind(this));
 
+		// Item to Chat
+		html.find('.item-to-chat').click((ev) => {
+			const li = $(ev.currentTarget).parents('.item');
+			const item = this.actor.items.get(li.data('itemId'));
+
+			switch(item.type) {
+				case "move":
+					return sendMoveMessage({
+						speaker: ChatMessage.getSpeaker({
+							actor: this.actor
+						}),
+						moveName: item.name,
+						move: item.data.data,
+						templateType: 'details'
+					});
+				default: 
+					return sendItemMessage({
+						speaker: ChatMessage.getSpeaker({
+							actor: this.actor
+						}),
+						item: item
+					});
+			}
+		});
+
 		// Update Inventory Item
 		html.find('.item-edit').click((ev) => {
 			const li = $(ev.currentTarget).parents('.item');
@@ -204,7 +231,7 @@ export class PTUGen8PokemonSheet extends ActorSheet {
 		// Delete Inventory Item
 		html.find('.item-delete').click((ev) => {
 			const li = $(ev.currentTarget).parents('.item');
-			this.actor.deleteOwnedItem(li.data('itemId'));
+			this.actor.deleteEmbeddedDocuments("Item", [li.data('itemId')]);
 			li.slideUp(200, () => this.render(false));
 		});
 
@@ -285,14 +312,14 @@ export class PTUGen8PokemonSheet extends ActorSheet {
 				return;
 			}
 
-			const effectData = new ActiveEffect({
+			const effectData = {
 				changes: [{"key":path,"mode":5,"value":true,"priority":50}].concat(game.ptu.getTrainingChanges(training, isOrder).changes),
 				label: `${training.capitalize()} ${training == 'critical' ? "Moment" : isOrder ? "Order" : "Training"}`,
 				icon: "",
 				transfer: false,
-				'flags.ptu.editLocked': true,
+				"flags.ptu.editLocked": true,
 				_id: randomID()
-			}).data
+			}
 			return await this.actor.createEmbeddedDocuments("ActiveEffect", [effectData]);
 		})
 	}
@@ -317,14 +344,14 @@ export class PTUGen8PokemonSheet extends ActorSheet {
 		}
 
 		if(!effect) {
-			const effectData = new ActiveEffect({
+			const effectData = {
 				changes: calcHardenedChanges(value),
 				label: 'Hardened Injuries',
 				icon: "",
 				transfer: false,
-				'flags.ptu.editLocked': true,
+				"flags.ptu.editLocked": true,
 				_id: randomID()
-			}).data
+			}
 			return await this.actor.createEmbeddedDocuments("ActiveEffect", [effectData]);
 		}
 		await effect.update({changes: calcHardenedChanges(value)});
@@ -363,7 +390,7 @@ export class PTUGen8PokemonSheet extends ActorSheet {
 
 		// Finally, create the item!
 		debug("Created new item",itemData);
-		return this.actor.createOwnedItem(itemData);
+		return this.actor.createEmbeddedDocuments("Item", [itemData]);
 	}
 
 	/**
@@ -371,15 +398,27 @@ export class PTUGen8PokemonSheet extends ActorSheet {
 	 * @param {Event} event   The originating click event
 	 * @private
 	 */
-	_onSkillRoll(event) {
+	async _onSkillRoll(event) {
 		event.preventDefault();
 		const element = event.currentTarget;
 		const dataset = element.dataset;
 
 		if (dataset.roll) {
-			let roll = new Roll(dataset.roll, this.actor.data.data);
+			let rolldata = dataset.roll;
 			let label = dataset.label ? `Rolling ${dataset.label}` : '';
-			roll.evaluate({async: false}).toMessage({
+
+			// Add +1 to the roll if shift is held on click
+			const alt = event.altKey;
+			if (alt && this.useOwnerAP()) { // Only if AP are available
+				rolldata += "+1";
+				label += "<br>using 1 AP</br>";
+			}
+			else if (alt) {
+				return;
+			}
+
+			let roll = new Roll(rolldata, this.actor.data.data);
+			(await roll.evaluate({ async: true })).toMessage({
 				speaker: ChatMessage.getSpeaker({
 					actor: this.actor
 				}),
@@ -433,7 +472,13 @@ export class PTUGen8PokemonSheet extends ActorSheet {
 		/** Option Callbacks */
 		let PerformFullAttack = (damageBonus = 0) => {
 			const moveData = duplicate(move.data);
-			if(damageBonus != 0) moveData.damageBonus += damageBonus;
+			if (damageBonus != 0) moveData.damageBonus += damageBonus;
+
+			const useAP = event.altKey && this.useOwnerAP();
+			if (event.altKey && !useAP) return;
+			const APBonus = useAP ? 1 : 0;
+
+			return this.actor.executeMove(move._id, {}, APBonus);
 
 			let acRoll = CalculateAcRoll(moveData, this.actor.data);
 			let diceResult = GetDiceResult(acRoll)
@@ -441,7 +486,7 @@ export class PTUGen8PokemonSheet extends ActorSheet {
 			let crit = diceResult === 1 ? CritOptions.CRIT_MISS : (diceResult >= 20 - this.actor.data.data.modifiers.critRange?.total) ? CritOptions.CRIT_HIT : CritOptions.NORMAL;
 
 			let damageRoll, critRoll;
-			if(crit != CritOptions.CRIT_MISS) {
+			if((crit != CritOptions.CRIT_MISS) || (moveData.ac == "--")) {
 				switch(game.settings.get("ptu", "combatRollPreference")) {
 					case "situational":
 						if(crit == CritOptions.CRIT_HIT) critRoll = CalculateDmgRoll(moveData, this.actor.data.data, crit);
@@ -473,71 +518,58 @@ export class PTUGen8PokemonSheet extends ActorSheet {
 			});
 		}
 
-		let RollDamage = () => {
-			let PerformDamage = (crit) => {
-				let damageRoll = CalculateDmgRoll(move.data, this.actor.data.data, crit).roll()
+		// let RollDamage = () => {
+		// 	let PerformDamage = (crit) => {
+		// 		let damageRoll = CalculateDmgRoll(move.data, this.actor.data.data, crit)
 
-				sendMoveRollMessage(damageRoll, {
-					speaker: ChatMessage.getSpeaker({
-						actor: this.actor
-					}),
-					name: move.name,
-					move: move.data,
-					templateType: MoveMessageTypes.DAMAGE,
-					crit: crit,
-					isCrit: crit == CritOptions.CRIT_HIT
-				});
-			}
+		// 		sendMoveRollMessage(damageRoll, {
+		// 			speaker: ChatMessage.getSpeaker({
+		// 				actor: this.actor
+		// 			}),
+		// 			name: move.name,
+		// 			move: move.data,
+		// 			templateType: MoveMessageTypes.DAMAGE,
+		// 			crit: crit,
+		// 			isCrit: crit == CritOptions.CRIT_HIT
+		// 		});
+		// 	}
 
-			let d = new Dialog({
-				title: `${this.actor.data.name}'s ${move.name} Damage`,
-				content: `<div class="pb-1"><p>Is it a Crit?</p></div>`,
-				buttons: {
-					crit: {
-						icon: '<i class="fas fa-bullseye"></i>',
-						label: "Critical Hit!",
-						callback: () => PerformDamage(CritOptions.CRIT_HIT)
-					},
-					normal: {
-						icon: '<i class="fas fa-crosshairs"></i>',
-						label: "Regular Hit",
-						callback: () => PerformDamage(CritOptions.NORMAL)
-					}
-				},
-				default: "normal"
-			});
-			d.position.width = 650;
-			d.position.height = 125;
-			d.render(true)
-		}
+		// 	let d = new Dialog({
+		// 		title: `${this.actor.data.name}'s ${move.name} Damage`,
+		// 		content: `<div class="pb-1"><p>Is it a Crit?</p></div>`,
+		// 		buttons: {
+		// 			crit: {
+		// 				icon: '<i class="fas fa-bullseye"></i>',
+		// 				label: "Critical Hit!",
+		// 				callback: () => PerformDamage(CritOptions.CRIT_HIT)
+		// 			},
+		// 			normal: {
+		// 				icon: '<i class="fas fa-crosshairs"></i>',
+		// 				label: "Regular Hit",
+		// 				callback: () => PerformDamage(CritOptions.NORMAL)
+		// 			}
+		// 		},
+		// 		default: "normal"
+		// 	});
+		// 	d.position.width = 650;
+		// 	d.position.height = 125;
+		// 	d.render(true)
+		// }
 
 		/** Check for Shortcut */
 		// Instant full roll
 		if(event.shiftKey) {
-			if(event.altKey) {
-				Dialog.confirm({
-					title: `Apply Damage Bonus`,
-					content: `<input type="number" name="damage-bonus" value="0"></input>`,
-					yes: (html) => PerformFullAttack(parseInt(html.find('input[name="damage-bonus"]').val()))
-				});
-				return;
-			}
-			PerformFullAttack();
-			return;
+			return PerformFullAttack();
 		}
 		if(event.ctrlKey) {
 			sendMoveMessage({
 				speaker: ChatMessage.getSpeaker({
 					actor: this.actor
 				}),
-				name: move.name,
+				moveName: move.name,
 				move: move.data,
 				templateType: MoveMessageTypes.DETAILS
 			})
-			return;
-		}
-		if(event.altKey) {
-			RollDamage();
 			return;
 		}
 
@@ -558,7 +590,7 @@ export class PTUGen8PokemonSheet extends ActorSheet {
 						speaker: ChatMessage.getSpeaker({
 							actor: this.actor
 						}),
-						name: move.name,
+						moveName: move.name,
 						move: move.data,
 						templateType: MoveMessageTypes.DETAILS
 					})
@@ -566,17 +598,28 @@ export class PTUGen8PokemonSheet extends ActorSheet {
 			},
 			default: "roll"
 		});
-		if(move.data.category != "Status") {
-			d.data.buttons.rollDamage = {
-				icon: '<i class="fas fa-dice"></i>',
-				label: "Roll Damage",
-				callback: () => RollDamage()
-			};
-		}
 		d.position.width = 650;
 		d.position.height = 125;
 		
 		d.render(true);
+	}
+
+	useOwnerAP(amount = 1) {
+		if (this.actor.data.data.owner == 0) {
+			ui.notifications.error(`${this.actor.data.name} does not have an owner.`);
+			return false;
+		}
+		const owner = game.actors.get(this.actor.data.data.owner);
+		if (!owner) return;
+		let remainingAP = owner.data.data.ap.value;
+		if (remainingAP >= amount) {
+			owner.update({
+				'data.ap.value': remainingAP - amount
+			});
+			return true;
+		}
+		ui.notifications.error(`${owner.data.name} does not have enough AP for this action.`);
+		return false;
 	}
 }
 
@@ -585,8 +628,7 @@ export class PTUGen8PokemonSheet extends ActorSheet {
 function CalculateAcRoll(moveData, actor) {
 	return new Roll('1d20-@ac+@acBonus', {
 		ac: (parseInt(moveData.ac) || 0),
-		acBonus: (actor.flags?.ptu?.is_blind ? actor.flags?.ptu?.is_totally_blind ? -10 : -6 : 0) + 
-		(parseInt(actor.data.modifiers.acBonus?.total) || 0)
+		acBonus: (parseInt(actor.data.modifiers.acBonus?.total) || 0)
 	})
 }
 
@@ -620,19 +662,6 @@ function GetDiceResult(roll) {
 		diceResult = roll.parts[0].results[0];
 	}
 	return diceResult;
-}
-
-function PerformAcRoll(roll, move, actor) {
-	sendMoveRollMessage(roll, {
-		speaker: ChatMessage.getSpeaker({
-			actor: actor
-		}),
-		name: move.name,
-		move: move.data,
-		templateType: MoveMessageTypes.TO_HIT
-	}).then(_ => log(`Rolling to hit for ${actor.name}'s ${move.name}`));
-
-	return GetDiceResult(roll);
 }
 
 async function sendMoveRollMessage(rollData, messageData = {}) {
@@ -677,7 +706,7 @@ export async function sendMoveMessage(messageData = {}) {
 
 	if(!Hooks.call("ptu.preSendMoveToChat", messageData)) return;
 	
-	messageData.content = await renderTemplate(`/systems/ptu/templates/chat/moves/move-${messageData.templateType}.hbs`, messageData)
+	messageData.content = await renderTemplate(`/systems/ptu/templates/chat/moves/full-attack.hbs`, messageData)
 
 	Hooks.call("ptu.SendMoveToChat", duplicate(messageData));
 

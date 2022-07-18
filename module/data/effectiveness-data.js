@@ -398,7 +398,7 @@ export const TypeEffectiveness = {
             Fairy: 2,
             Nuclear: 0.5
         },
-        null: {
+        Untyped: {
             Normal: 1,
             Fighting: 1,
             Flying: 1,

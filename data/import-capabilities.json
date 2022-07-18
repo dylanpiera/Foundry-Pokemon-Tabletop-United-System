@@ -192,6 +192,10 @@
     "effect": "Pokémon with the Planter Capability can act as a Portable Grower, holding one plant at a time. Pokémon with this Capability may be limited in what they can grow. In these cases, they will have parentheses on their Planter Capability denoting what they can grow. For example, Planter (Berries) would allow the Pokémon to grow Berry plants only."
   },
   {
+    "name": "Pokébot",
+    "effect": "Pokémon and Trainer with the this Capability resist Electric, Ground and Fire Type moves one step less."
+  },
+  {
     "name": "Premonition",
     "effect": "Pokémon with this Capability have a supernatural sense for natural disasters such as earthquakes, floods, and volcanic eruptions. The magnitude of the impending disaster and its proximity to the Pokémon both affect how often they get this sense before a disaster and how long in advance the warning is. Closer and bigger disasters tend to have a greater effect and may alert the Pokémon to the specific area where a disaster will occur days in advance, while lesser disasters may simply give the Pokémon an odd sense of unease several hours before they hit."
   },
