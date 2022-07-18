@@ -902,3 +902,5 @@ Hooks.on('getSceneControlButtons', function(hudButtons) {
       });
   }
 });
+
+Hooks.on("renderTokenConfig", (config,html,options) => html.find("[name='actorLink']").siblings()[0].outerHTML = "<label>Link Actor Data <span class='readable p10'>Unlinked actors are not supported by the system</span></label>")
