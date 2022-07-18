@@ -55,6 +55,7 @@ import { PTUSidebar } from "./sidebar/sidebar-form.js";
 import './utils/item-piles-compatibility-handler.js';
 import './utils/drag-ruler-compatibility-handler.js';
 import { ThrowPokeball } from './combat/effects/pokeball_effects.js';
+import { LANG } from './utils/language-helper.js';
 
 export let debug = (...args) => { if (game.settings.get("ptu", "showDebugInfo") ?? false) console.log("DEBUG: FVTT PTU | ", ...args) };
 export let log = (...args) => console.log("FVTT PTU | ", ...args);
@@ -500,6 +501,14 @@ Hooks.once("setup", function () {
  */
 Hooks.once("ready", async function () {
   console.groupCollapsed("PTU Ready")
+
+  if(game.settings.get("ptu","gameLanguage") != "en") {
+    const languageData = LANG[game.settings.get("ptu","gameLanguage")];
+    for(const mon of game.ptu.pokemonData) {
+      if(languageData[mon._id]) mon._id = languageData[mon._id];
+    }
+  }
+
   await InitCustomSpecies();
   await InitCustomTypings();
 

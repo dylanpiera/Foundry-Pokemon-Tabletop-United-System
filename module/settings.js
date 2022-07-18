@@ -43,6 +43,20 @@ export function LoadSystemSettings() {
         category: "rules"
     });
 
+    game.settings.register("ptu", "gameLanguage", {
+        name: "Localization",
+        hint: "Changes the name of Pokemon in the system. Would you like your language here? Get in contact on how to translate!",
+        scope: "world",
+        config: true,
+        type: String,
+        default: "en",
+        choices: {
+            "en": "English",
+            "de": "German",
+        },
+        category: "general"
+    });
+
     game.settings.register("ptu", "canPlayersDeleteTokens", {
         name: "Can Players Delete Tokens?",
         hint: "Are players allowed to delete tokens they own from a scene?",
