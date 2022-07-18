@@ -136,9 +136,13 @@
                         <h3 class="m-auto">{{localize "PTU.ActionPoints"}}</h3>
                       </div>
                       <div class="swsh-body">
-                        <div class="resource-content flexrow flex-group-right hp-info">
-                          <input type="text" name="data.ap.value" value="{{data.ap.value}}" data-dtype="Number"/>
-                          <span> / </span>
+                        <div class="w-100">
+                          <input type="range" class="w-75" name="data.ap.value" value="{{data.ap.value}}" data-dtype="Integer" min="0"
+                            max="{{data.ap.max}}" step="1" />
+                        </div>
+                        <div class="resource-content hp-info flexrow flex-group-right hp-info">
+                          <input type="text" name="data.ap.value input" value="{{data.ap.value}}" data-dtype="Number" />
+                          <span>/</span>
                           <input type="text" name="data.ap.max" value="{{data.ap.max}}" data-dtype="Number" disabled/>
                         </div>
                       </div>

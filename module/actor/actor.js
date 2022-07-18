@@ -532,7 +532,7 @@ export class PTUActor extends Actor {
    * @param {PTUActor} targetActor the target actor that needs to be damaged.
    * @returns 
    */
-  async executeMove(moveId, { trainerActor, targetActor } = {}) {
+  async executeMove(moveId, { trainerActor, targetActor } = {}, APBonus = false) {
     if (!moveId) return;
     const move = this.items.get(moveId)
     if (!move) return;
@@ -560,10 +560,10 @@ export class PTUActor extends Actor {
     //   return await this.rollMove(move, { targets , bonusDamage});
     // }
 
-    await this.rollMove(move, { targets })
+    await this.rollMove(move, { targets, APBonus })
   }
 
-  async rollMove(move, options = { moveId, bonusDamage, targets }) {
+  async rollMove(move, options = { moveId, bonusDamage, targets, APBonus }) {
     if (!move && options.moveId) move = this.items.get(moveId);
     if (!move) return;
 
@@ -644,7 +644,7 @@ export class PTUActor extends Actor {
     }, game.settings.get("ptu", "dramaticTiming") == true ? move_animation_delay_ms : 0);
   }
 
-  async _performFullAttack(moveData, token, { bonusDamage, targets, moveName }) {
+  async _performFullAttack(moveData, token, { bonusDamage, targets, moveName, APBonus }) {
     if (!moveData) return;
 
 
@@ -674,9 +674,9 @@ export class PTUActor extends Actor {
     const damageBonuses = await calculateTotalDamageBonus(moveData, bonusDamage, currentWeather, abilityBonuses, this)
 
     // Do AC Roll
-    const acRoll = await game.ptu.combat.CalculateAcRoll(moveData, this.data).evaluate({ async: true });
+    const acRoll = await game.ptu.combat.CalculateAcRoll(moveData, this.data, APBonus).evaluate({ async: true });
     if (moveData.doubleStrike.is === true) {
-      const acRoll2 = await game.ptu.combat.CalculateAcRoll(moveData, this.data).evaluate({ async: true });
+      const acRoll2 = await game.ptu.combat.CalculateAcRoll(moveData, this.data, APBonus).evaluate({ async: true });
       moveData.doubleStrike.hit1 = { roll: acRoll };
       moveData.doubleStrike.hit2 = { roll: acRoll2 };
     }

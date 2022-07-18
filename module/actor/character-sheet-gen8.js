@@ -1,5 +1,6 @@
 import { sendItemMessage } from '../item/item-sheet.js';
 import { debug, error, log, PrepareMoveData } from '../ptu.js'
+import { ui_sound_paths } from '../sidebar/components/menu-component.js';
 
 /**
  * Extend the basic ActorSheet with some very simple modifications
@@ -48,7 +49,7 @@ export class PTUGen8CharacterSheet extends ActorSheet {
 				label: "Notes",
 				class: "open-notes",
 				icon: "fas fa-edit",
-				onclick: () => new game.ptu.PTUCharacterNotesForm(this.actor, {"submitOnClose": true, "closeOnSubmit": false}).render(true)
+				onclick: () => new game.ptu.PTUCharacterNotesForm(this.actor, { "submitOnClose": true, "closeOnSubmit": false }).render(true)
 			});
 		}
 
@@ -64,7 +65,7 @@ export class PTUGen8CharacterSheet extends ActorSheet {
 	 */
 	_prepareCharacterItems(sheetData) {
 		sheetData['skills'] = this.actor.data.data.skills
-		
+
 		const actor = sheetData.actor;
 
 		// Initialize containers.
@@ -94,33 +95,33 @@ export class PTUGen8CharacterSheet extends ActorSheet {
 		for (let i of sheetData.items) {
 			let item = i.data;
 			i.img = i.img || DEFAULT_TOKEN;
-			if(i.type == 'item'){
-				let cat=i.data.category;
-				if(cat === undefined || cat == ""){
-					cat="Misc";
+			if (i.type == 'item') {
+				let cat = i.data.category;
+				if (cat === undefined || cat == "") {
+					cat = "Misc";
 				}
-				if(!(items_categorized[cat])){
+				if (!(items_categorized[cat])) {
 					//Category needs handling
-					items_categorized[cat]=[];
+					items_categorized[cat] = [];
 				}
 				items_categorized[cat].push(i);
 			}
-			switch(i.type) {
+			switch (i.type) {
 				case 'feat': feats.push(i); break;
 				case 'edge': edges.push(i); break;
 				case 'item': items.push(i); break;
 				case 'ability': abilities.push(i); break;
 				case 'move': moves.push(i); break;
 				case 'capability': capabilities.push(i); break;
-				case 'dexentry': 
-					if(i.data.owned) dex.owned.push(i);
-					else dex.seen.push(i); 
+				case 'dexentry':
+					if (i.data.owned) dex.owned.push(i);
+					else dex.seen.push(i);
 					break;
 			}
 		}
 
-		for(const category of Object.keys(items_categorized)) {
-			if(actor.data.data.item_categories[category] === undefined) actor.data.data.item_categories[category] = true;
+		for (const category of Object.keys(items_categorized)) {
+			if (actor.data.data.item_categories[category] === undefined) actor.data.data.item_categories[category] = true;
 		}
 
 		// Assign and return
@@ -150,7 +151,7 @@ export class PTUGen8CharacterSheet extends ActorSheet {
 		html.find('.item-to-chat').click((ev) => {
 			const li = $(ev.currentTarget).parents('.item');
 			const item = this.actor.items.get(li.data('itemId'));
-			switch(item.type) {
+			switch (item.type) {
 				case "move":
 					return sendMoveMessage({
 						speaker: ChatMessage.getSpeaker({
@@ -160,7 +161,7 @@ export class PTUGen8CharacterSheet extends ActorSheet {
 						move: item.data.data,
 						templateType: 'details'
 					});
-				default: 
+				default:
 					return sendItemMessage({
 						speaker: ChatMessage.getSpeaker({
 							actor: this.actor
@@ -215,8 +216,8 @@ export class PTUGen8CharacterSheet extends ActorSheet {
 		});
 
 		html.find("input[data-item-id]")
-		.on("change", (e) => this._updateItemField(e));
-		
+			.on("change", (e) => this._updateItemField(e));
+
 		// html.find("input[data-item-id][type=checkbox]")
 		// .on("change", (e) => this._updateDexItem(e))
 
@@ -231,8 +232,8 @@ export class PTUGen8CharacterSheet extends ActorSheet {
 			html.find('li.item').each((i, li) => {
 				if (li.classList.contains('inventory-header')) return;
 				li.setAttribute('draggable', true);
-					li.addEventListener('dragstart', handler, false);
-				});
+				li.addEventListener('dragstart', handler, false);
+			});
 		}
 
 		html.find('#heldItemInput').autocomplete({
@@ -242,17 +243,25 @@ export class PTUGen8CharacterSheet extends ActorSheet {
 		});
 
 		Hooks.on("preCreateOwnedItem", (actor, itemData, options, sender) => {
-			if(actor.id !== this.actor.id || actor.data.type !== "character" || itemData.type !== "dexentry") return;
-			
+			if (actor.id !== this.actor.id || actor.data.type !== "character" || itemData.type !== "dexentry") return;
+
 			const item = actor.items.getName(itemData.name)
-			if(item) {
+			if (item) {
 				//if(!item.data.owned) item.update({"data.owned": true});
 				return false;
 			}
-		})
+		});
+
+		document.getElementsByName('data.ap.value input')[0].addEventListener('change', (e) => {
+			const value = parseInt(e.currentTarget.value);
+			if (isNaN(value)) return;
+			this.actor.update({
+				"data.ap.value": value
+			});
+		});
 	}
 
-	async _onDrop(event){
+	async _onDrop(event) {
 		const dataTransfer = JSON.parse(event.dataTransfer.getData('text/plain'));
 
 		const itemData = dataTransfer.data;
@@ -261,16 +270,16 @@ export class PTUGen8CharacterSheet extends ActorSheet {
 		let handled = false;
 		let item = undefined;
 
-		if(!itemData) { 
+		if (!itemData) {
 			item = (await super._onDrop(event))[0];
-			if(!item) {
+			if (!item) {
 				error("Item Drop data is undefined.", event)
 				return;
 			}
 			handled = true;
 
 			const oldItem = actor.items.getName(item.data.name);
-			if(oldItem.id != item.id && oldItem.data.data.quantity) {
+			if (oldItem.id != item.id && oldItem.data.data.quantity) {
 				const data = duplicate(oldItem.data);
 				data.data.quantity++;
 				await this.actor.deleteEmbeddedDocuments("Item", [item.id]);
@@ -278,19 +287,19 @@ export class PTUGen8CharacterSheet extends ActorSheet {
 			}
 		}
 		else item = actor.items.get(itemData._id);
-		
-		if(item.data.type != 'item' || item.data.data.category == category)
+
+		if (item.data.type != 'item' || item.data.data.category == category)
 			return this._onSortItem(event, item.data);
 
-		item = await item.update({'data.category':category});
-		
+		item = await item.update({ 'data.category': category });
+
 		log(`Moved ${item.data.name} to ${category} category`);
-		
+
 		await this._onSortItem(event, item.data);
 		return handled ? actor.items.get(item.id) : await super._onDrop(event);
 	}
 
-	_onDragItemStart(event) {}
+	_onDragItemStart(event) { }
 
 	/**
 	 * Handle creating a new Owned Item for the actor using initial data defined in the HTML dataset
@@ -315,20 +324,20 @@ export class PTUGen8CharacterSheet extends ActorSheet {
 		// Remove the type from the dataset since it's in the itemData.type prop.
 		delete itemData.data['type'];
 
-		if(itemData.type === "ActiveEffect") {
+		if (itemData.type === "ActiveEffect") {
 			// Finally, create the effect!
-			debug("Created new effect",itemData);
+			debug("Created new effect", itemData);
 			return this.actor.createEmbeddedDocuments(itemData.type, [itemData]);
 		}
 
 		// Finally, create the item!
-		debug("Created new item",itemData);
+		debug("Created new item", itemData);
 		return this.actor.createEmbeddedDocuments("Item", [itemData]);
 	}
 
 	_updateItemField(e) {
 		e.preventDefault();
-	
+
 		const t = e.currentTarget;
 		let value;
 		if ($(t).prop("type") === "checkbox") {
@@ -336,11 +345,11 @@ export class PTUGen8CharacterSheet extends ActorSheet {
 		} else {
 			value = $(t).val();
 		}
-	
+
 		const id = $(t).data("item-id");
 		const binding = $(t).data("binding");
-	
-		
+
+
 		const item = this.actor.items.get(id);
 		const updateParams = {};
 		updateParams[binding] = value;
@@ -358,9 +367,29 @@ export class PTUGen8CharacterSheet extends ActorSheet {
 		const dataset = element.dataset;
 
 		if (dataset.roll) {
-			let roll = new Roll(dataset.roll, this.actor.data.data);
+			let rolldata = dataset.roll;
 			let label = dataset.label ? `Rolling ${dataset.label}` : '';
-			(await roll.evaluate({async: true})).toMessage({
+
+			// Add +1 to the roll if shift is held on click
+			const alt = event.altKey;
+			if (alt && this.useAP()) { // Only if AP are available
+				// Does the character have Instinctive Aptitude?
+				let instinctiveAptitude = false;
+				this.actor.edges.forEach((e) => {
+					if (e.name === "Instinctive Aptitude") {
+						instinctiveAptitude = true;
+					}
+				})
+
+				instinctiveAptitude ? rolldata += "+2" : rolldata += "+1";
+				label += "<br>using 1 AP</br>";
+			}
+			else if (alt) {
+				return;
+			}
+
+			let roll = new Roll(rolldata, this.actor.data.data);
+			(await roll.evaluate({ async: true })).toMessage({
 				speaker: ChatMessage.getSpeaker({
 					actor: this.actor
 				}),
@@ -374,14 +403,14 @@ export class PTUGen8CharacterSheet extends ActorSheet {
 	 * @param {Event} event   The originating click event
 	 * @private
 	 */
-	 async _onSaveRoll(event = new Event('void')) {
+	async _onSaveRoll(event = new Event('void')) {
 		event.preventDefault();
-		if(event.screenX == 0 && event.screenY == 0) return;
+		if (event.screenX == 0 && event.screenY == 0) return;
 
 		let mod = this.actor.data.data.modifiers.saveChecks?.total;
-		let roll = new Roll("1d20 + @mod", {mod: mod});
-		
-		await roll.evaluate({async: true});
+		let roll = new Roll("1d20 + @mod", { mod: mod });
+
+		await roll.evaluate({ async: true });
 
 		const messageData = {
 			title: `${this.actor.name}'s<br>Save Check`,
@@ -402,9 +431,9 @@ export class PTUGen8CharacterSheet extends ActorSheet {
 	 * @param {Event} event   The originating click event
 	 * @private
 	 */
-	 _onMoveRoll(event, {actor, item} = {}) {
+	_onMoveRoll(event, { actor, item } = {}) {
 		event.preventDefault();
- 
+
 		const element = event?.currentTarget;
 		const dataset = element?.dataset;
 		const move = item ? item : this.actor.items.get(dataset.id).data;
@@ -414,9 +443,14 @@ export class PTUGen8CharacterSheet extends ActorSheet {
 		/** Option Callbacks */
 		let PerformFullAttack = (damageBonus = 0) => {
 			const moveData = duplicate(move.data);
-			if(damageBonus != 0) moveData.damageBonus += damageBonus;
+			if (damageBonus != 0) moveData.damageBonus += damageBonus;
 
-			return this.actor.executeMove(move._id);
+			const useAP = event.altKey && this.useAP();
+			if (event.altKey && !useAP) return;
+			let APBonus = this.hasInstinctiveAptitude() ? 2 : 1;
+			APBonus = useAP ? APBonus : 0;
+
+			return this.actor.executeMove(move._id, {}, APBonus);
 
 			let acRoll = CalculateAcRoll(moveData, this.actor.data);
 			let diceResult = GetDiceResult(acRoll)
@@ -424,23 +458,23 @@ export class PTUGen8CharacterSheet extends ActorSheet {
 			let crit = diceResult === 1 ? CritOptions.CRIT_MISS : diceResult >= 20 - this.actor.data.data.modifiers.critRange?.total ? CritOptions.CRIT_HIT : CritOptions.NORMAL;
 
 			let damageRoll, critRoll;
-			if(crit != CritOptions.CRIT_MISS) {
-				switch(game.settings.get("ptu", "combatRollPreference")) {
+			if (crit != CritOptions.CRIT_MISS) {
+				switch (game.settings.get("ptu", "combatRollPreference")) {
 					case "situational":
-						if(crit == CritOptions.CRIT_HIT) critRoll = CalculateDmgRoll(moveData, this.actor.data.data, crit);
+						if (crit == CritOptions.CRIT_HIT) critRoll = CalculateDmgRoll(moveData, this.actor.data.data, crit);
 						else damageRoll = CalculateDmgRoll(moveData, this.actor.data.data, crit);
-					break;
+						break;
 					case "both":
 						damageRoll = CalculateDmgRoll(moveData, this.actor.data.data, CritOptions.NORMAL);
 					case "always-crit":
 						critRoll = CalculateDmgRoll(moveData, this.actor.data.data, CritOptions.CRIT_HIT);
-					break;
+						break;
 					case "always-normal":
 						damageRoll = CalculateDmgRoll(moveData, this.actor.data.data, CritOptions.NORMAL);
-					break;
+						break;
 				}
-				if(damageRoll) damageRoll.evaluate({async: false});
-				if(critRoll) critRoll.evaluate({async: false});
+				if (damageRoll) damageRoll.evaluate({ async: false });
+				if (critRoll) critRoll.evaluate({ async: false });
 			}
 			sendMoveRollMessage(acRoll, {
 				speaker: ChatMessage.getSpeaker({
@@ -496,10 +530,10 @@ export class PTUGen8CharacterSheet extends ActorSheet {
 
 		/** Check for Shortcut */
 		// Instant full roll
-		if(event.shiftKey) {
+		if (event.shiftKey) {
 			return PerformFullAttack();
 		}
-		if(event.ctrlKey) {
+		if (event.ctrlKey) {
 			sendMoveMessage({
 				speaker: ChatMessage.getSpeaker({
 					actor: this.actor
@@ -538,17 +572,34 @@ export class PTUGen8CharacterSheet extends ActorSheet {
 		});
 		d.position.width = 650;
 		d.position.height = 125;
-		
+
 		d.render(true);
+	}
+
+	useAP(value = 1) {
+		const currentAP = this.actor.data.data.ap.value;
+		if (currentAP >= value) {
+			this.actor.update({
+				'data.ap.value': currentAP - value
+			});
+			return true;
+		}
+		ui.notifications.error(`${this.actor.data.name} does not have enough AP for this action.`);
+		return false;
+	}
+
+	hasInstinctiveAptitude() {
+		return this.actor.edges.some((e) => e.name === "Instinctive Aptitude");
 	}
 }
 
 /** Pure Functions */
 
-export function CalculateAcRoll(moveData, actor) {
-	return new Roll('1d20-@ac+@acBonus', {
+export function CalculateAcRoll(moveData, actor, APBonus = 0) {
+	return new Roll('1d20-@ac+@acBonus@apBonus', {
 		ac: (parseInt(moveData.ac) || 0),
-		acBonus: (parseInt(actor.data.modifiers.acBonus?.total) || 0)
+		acBonus: (parseInt(actor.data.modifiers.acBonus?.total) || 0),
+		apBonus: (APBonus == 0 ? "" : "+" + APBonus.toString())
 	})
 }
 
@@ -572,7 +623,7 @@ function CalculateDmgRoll(moveData, actorData, isCrit) {
 }
 
 function GetDiceResult(roll) {
-	if (!roll._evaluated) roll.evaluate({async:false});
+	if (!roll._evaluated) roll.evaluate({ async: false });
 
 	let diceResult = -2;
 	try {
@@ -585,7 +636,7 @@ function GetDiceResult(roll) {
 }
 
 async function sendMoveRollMessage(rollData, messageData = {}) {
-	if (!rollData._evaluated) await rollData.evaluate({async: true});
+	if (!rollData._evaluated) await rollData.evaluate({ async: true });
 
 	messageData = mergeObject({
 		user: game.user.id,
@@ -598,11 +649,11 @@ async function sendMoveRollMessage(rollData, messageData = {}) {
 
 	messageData.roll = rollData;
 
-	if(!messageData.move) {
+	if (!messageData.move) {
 		error("Can't display move chat message without move data.")
 		return;
 	}
-	
+
 	messageData.content = await renderTemplate(`/systems/ptu/templates/chat/moves/move-${messageData.templateType}.hbs`, messageData)
 
 	return ChatMessage.create(messageData, {});
@@ -615,13 +666,13 @@ async function sendMoveMessage(messageData = {}) {
 		verboseChatInfo: game.settings.get("ptu", "verboseChatInfo") ?? false
 	}, messageData);
 
-	if(!messageData.move) {
+	if (!messageData.move) {
 		error("Can't display move chat message without move data.")
 		return;
 	}
 
-	if(!Hooks.call("ptu.preSendMoveToChat", messageData)) return;
-	
+	if (!Hooks.call("ptu.preSendMoveToChat", messageData)) return;
+
 	messageData.content = await renderTemplate(`/systems/ptu/templates/chat/moves/full-attack.hbs`, messageData)
 
 	Hooks.call("ptu.SendMoveToChat", duplicate(messageData));
