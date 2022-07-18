@@ -532,7 +532,7 @@ export class PTUActor extends Actor {
    * @param {PTUActor} targetActor the target actor that needs to be damaged.
    * @returns 
    */
-  async executeMove(moveId, { trainerActor, targetActor } = {}, APBonus = false) {
+  async executeMove(moveId, { trainerActor, targetActor } = {}, event = null) {
     if (!moveId) return;
     const move = this.items.get(moveId)
     if (!move) return;
@@ -546,6 +546,14 @@ export class PTUActor extends Actor {
         content: "But they did not obey!"
       }, {})
       return;
+    }
+
+    let APBonus = 0;
+    if (event != null) {
+      const useAP = event.altKey && this.useAP();
+      if (event.altKey && !useAP) return;
+      APBonus = this.hasInstinctiveAptitude() ? 2 : 1;
+      APBonus = useAP ? APBonus : 0;
     }
 
     const targets = [...game.user.targets];
@@ -1053,6 +1061,54 @@ export class PTUActor extends Actor {
 
     if (roll.total < LOYALTY_DC[this.data.data.loyalty]) return false;
     return true;
+  }
+
+  useAP(amount = 1) {
+    switch (this.data.type) {
+      case "character":
+        return this.useAPCharacter(amount);
+      case "pokemon":
+        return this.useAPPokemon(amount);
+    }
+  }
+
+  useAPCharacter(amount = 1) {
+    const currentAP = this.data.data.ap?.value;
+    if (currentAP >= amount) { // If we have enough AP, subtract them and return true.
+      this.update({
+        'data.ap.value': currentAP - amount
+      });
+      return true;
+    }
+    // Show error and return false if owner does not have enough AP left
+    ui.notifications.error(`${this.data.name} does not have enough AP for this action.`);
+    return false;
+  }
+
+  useAPPokemon(amount = 1) {
+    // Show error if Pokemon has no owner
+    if (this.data.data.owner == 0) {
+      ui.notifications.error(`${this.data.name} does not have an owner.`);
+      return false;
+    }
+    const owner = game.actors.get(this.data.data.owner);
+    if (!owner) return;
+    // Spend AP of owner
+    let remainingAP = owner.data.data.ap.value;
+    if (remainingAP >= amount) { // If we have enough AP, subtract them and return true.
+      owner.update({
+        'data.ap.value': remainingAP - amount
+      });
+      return true;
+    }
+    // Show error and return false if owner does not have enough AP left
+    ui.notifications.error(`${owner.data.name} does not have enough AP for this action.`);
+    return false;
+  }
+
+  hasInstinctiveAptitude() {
+    if (this.data.type == "pokemon") return false;
+    return this.edges?.some((e) => e.name === "Instinctive Aptitude");
   }
 }
 

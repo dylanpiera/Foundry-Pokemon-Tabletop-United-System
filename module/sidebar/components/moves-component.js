@@ -135,7 +135,7 @@ export default class MovesList extends Component {
         for (const move of this.state.moves ?? []) {
             $(`.movemaster-button[data-button="${move._id}"]`).on("mousedown", (event) => {
                 // Handle on move click here, for now just log that button is clicked
-                switch(event.which) {
+                switch (event.which) {
                     case 3: // Right click
                         sendMoveMessage({
                             speaker: ChatMessage.getSpeaker({
@@ -148,7 +148,7 @@ export default class MovesList extends Component {
                     case 1: // Left click
                     case 2: // Middle click
                     default: // anything else??
-                        this.state.actor.executeMove(move._id)
+                        this.state.actor.executeMove(move._id, {}, event)
                 }
             })
         }
