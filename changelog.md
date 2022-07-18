@@ -1,6 +1,31 @@
 # Welcome to the Beta!
 Hey there! You are on the Beta Branch. If you ever have any feedback please do share with us over on [Github](https://github.com/dylanpiera/Foundry-Pokemon-Tabletop-United-System/issues) or [Discord](https://discord.gg/fE3w59q)
 
+## Version 2.1
+Hey everyone! With the release of PTUVTT 2.1 we now have officially moved over to support Foundry V9!
+
+And there are Loooooads of features and bug fixes that have been added in this version, as many beta versions were created before this stable release.
+Because there are so many changes and basically everyone who is using the system has already been using the beta... Well, no real reason to consilidate them.
+But in case you're wondering you're free to read the individual updates down below.
+
+Up next we will start the 3.0 beta which will be for Foundry V10.
+**Please be aware that if you stay on the Beta branch you WILL need to update your foundry to V10 starting the first v3 beta. So we recommend upgrading to stable until Foundry V10 has fully launched as a stable update.**
+
+## 2.0-Beta-12 - All the PR Merges
+Since this version will never actually go live and is just a changelog for you guys in the discord server... A quick update!
+
+## New Features:
+- Tools of the Trade have been automated for Pokeball Captures
+- Added a custom type image setting for those that need it.
+- Alt clicking a skill roll will consume 1AP to add +1 to a skill check.
+
+## Bugfixes:
+- Added 'Sticky Hold' capability.
+- Fixed Quick Ball & Repeat Ball capture calculations.
+- Pokeball Throws now take trainer accuracy into account.
+- Dex entry settings have now been fully fixed and optimized.
+- Fixed Double Strike moves during untargeted combat.
+
 ## 2.0-Beta-11 - Hotfix & Quick Feature
 - Fixed an error in the move effectiveness calculation causing the sidebar to break.
 - Added a 'Pokedex' button to 'dexentry' items.
