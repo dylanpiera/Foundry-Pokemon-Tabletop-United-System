@@ -3,8 +3,8 @@
   "title": "Pokemon Tabletop United",
   "description": "A Pen and Paper Roleplaying Game Set in the World of Pokemon",
   "minimumCoreVersion": "9",
-  "compatibleCoreVersion": "9",
-  "version": "2.1.1",
+  "compatibleCoreVersion": "10",
+  "version": "3.0.0.1",
   "templateVersion": 2,
   "authors": [
     {

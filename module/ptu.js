@@ -62,7 +62,7 @@ export let log = (...args) => console.log("FVTT PTU | ", ...args);
 export let warn = (...args) => console.warn("FVTT PTU | ", ...args);
 export let error = (...args) => console.error("FVTT PTU | ", ...args)
 
-export const LATEST_VERSION = "2.1.1";
+export const LATEST_VERSION = "3.0.0.1";
 
 /* -------------------------------------------- */
 /*  Foundry VTT Initialization                  */
@@ -569,7 +569,7 @@ Hooks.once("ready", async function () {
   PTUCombat.Initialize();
 
   game.ptu.sidebar = new game.ptu.PTUSidebar();
-  game.ptu.sidebar.render(true);
+  //game.ptu.sidebar.render(true);
 
   console.groupEnd();
 });
