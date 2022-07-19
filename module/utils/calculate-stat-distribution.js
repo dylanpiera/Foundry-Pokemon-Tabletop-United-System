@@ -22,9 +22,9 @@ function CreateWeightedBag() {
 }
 
 export async function ApplyLevelUpPoints(actor, type, randomPercent = 0.1) {
-    let stats = duplicate(actor.data.data.stats);
-    let levelUpPoints = duplicate(actor.data.data.levelUpPoints);
-    let speciesStats = BaseStatsWithNature(game.ptu.GetSpeciesData(actor.data.data.species)["Base Stats"], actor.data.data.nature.value);
+    let stats = duplicate(actor.system.stats);
+    let levelUpPoints = duplicate(actor.system.levelUpPoints);
+    let speciesStats = BaseStatsWithNature(game.ptu.GetSpeciesData(actor.system.species)["Base Stats"], actor.system.nature.value);
 
     let randomPoints = Math.ceil(levelUpPoints * randomPercent);
     levelUpPoints -= randomPoints;
@@ -149,10 +149,10 @@ function old(actor) {
             return divideStats(game.ptu.GetSpeciesData(mon)["Base Stats"],10+level)
         }
     }
-    let levelupStats = game.ptu.calcMonStats(actor.data.data.species, actor.data.data.level.current);
+    let levelupStats = game.ptu.calcMonStats(actor.system.species, actor.system.level.current);
     let statArray = Object.values(levelupStats);
     
-    let stats = duplicate(actor.data.data.stats); 
+    let stats = duplicate(actor.system.stats); 
     let i = 0;
     for(let stat of Object.values(stats)) {
         stat.levelUp = statArray[i++]

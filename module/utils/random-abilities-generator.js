@@ -2,10 +2,10 @@ import { GetOrCacheAbilities } from './cache-helper.js';
 import { getRandomIntInclusive } from './generic-helpers.js';
 
 export async function GiveRandomAbilities(actor) {
-    let speciesData = game.ptu.GetSpeciesData(actor.data.data.species);
+    let speciesData = game.ptu.GetSpeciesData(actor.system.species);
     if(!speciesData) return;
     
-    let level = actor.data.data.level.current;
+    let level = actor.system.level.current;
     let abilities = speciesData.Abilities;
     let abilityNames = [];
     

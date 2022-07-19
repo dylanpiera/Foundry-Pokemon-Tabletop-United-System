@@ -55,7 +55,7 @@ Hooks.on("endOfCombat", async function (combat, participants) {
       }
     }
 
-    if (actor.data.data.modifiers.flinch_count.value > 0) {
+    if (actor.system.modifiers.flinch_count.value > 0) {
       log(`Reseting ${actor.name} (${actor.id})'s flinch count.`);
       await actor.update({ "data.modifiers.flinch_count": { value: 0, keys: [] } })
     }

@@ -60,7 +60,7 @@ export class PTUPokemonCharactermancer extends FormApplication {
     }
     
     this.allSpecies = game.ptu.pokemonData.map(x => {return {number: x.ptuNumber, name: x._id}}).concat(game.ptu.customSpeciesData.map(x => {return {number: x.ptuNumber, name: x._id}}));
-    this.speciesData = game.ptu.GetSpeciesData(this.object.data.data.species ? this.object.data.data.species : this.object.name);
+    this.speciesData = game.ptu.GetSpeciesData(this.object.system.species ? this.object.system.species : this.object.name);
     data.app = this;
     
     console.log(duplicate(this));
@@ -113,7 +113,7 @@ export class PTUPokemonCharactermancer extends FormApplication {
     }
     else {
       this.store = initStore({
-        level: this.object.data.data.level,
+        level: this.object.system.level,
         tabs: this._tabs[0],
         actor: this.object,
         species: this.speciesData

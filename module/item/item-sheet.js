@@ -108,7 +108,7 @@ export class PTUItemSheet extends ItemSheet {
 							if (!game.user.character) return ui.notifications.warn("Please make sure you have a trainer as your Selected Player Character");
 				
 							return game.ptu.renderDex(mon, 
-								game.user.character.itemTypes.dexentry.some(entry => entry.data.data.owned && entry.data.name === game.ptu.GetSpeciesData(mon)?.id?.toLowerCase())
+								game.user.character.itemTypes.dexentry.some(entry => entry.system.owned && entry.data.name === game.ptu.GetSpeciesData(mon)?.id?.toLowerCase())
 								? "full" : "desc");
 						}
 						case 5: { // GM Prompt
@@ -164,7 +164,7 @@ export class PTUItemSheet extends ItemSheet {
 						actor: this.actor
 					}),
 					name: this.object.name,
-					move: this.object.data.data,
+					move: this.object.system,
 					templateType: 'details'
 				});
 			default: 
@@ -189,7 +189,7 @@ export class PTUItemSheet extends ItemSheet {
 		const dataset = element.dataset;
 
 		if (dataset.roll || dataset.type == 'Status') {
-			let roll = new Roll('1d20+' + dataset.ac, this.actor.data.data);
+			let roll = new Roll('1d20+' + dataset.ac, this.actor.system);
 			let label = dataset.label ? `To-Hit for move: ${dataset.label} ` : '';
 			roll.evaluate({async: false}).toMessage({
 				speaker: ChatMessage.getSpeaker({ actor: this.actor }),

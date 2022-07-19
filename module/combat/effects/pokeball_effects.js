@@ -378,7 +378,7 @@ export async function ThrowPokeball(thrower, target, pokeball) {
             await timeout(1000);
             await AudioHelper.play({ src: pokeball_sound_paths["capture_jingle"], volume: 0.7, autoplay: true, loop: false }, true);
 
-            await applyCapture(thrower, target.actor, pokeball, game.ptu.GetSpeciesData(target.actor.data.data.species)); 
+            await applyCapture(thrower, target.actor, pokeball, game.ptu.GetSpeciesData(target.actor.system.species)); 
         }
         else // Escaped!
         {
@@ -448,20 +448,20 @@ export async function PlayReleaseOwnedPokemonAnimation(token) {
         }
 
         let current_token_species = actor.name;
-        if(actor.data.data.species)
+        if(actor.system.species)
         {
-            current_token_species = capitalizeFirstLetter((actor.data.data.species).toLowerCase());
+            current_token_species = capitalizeFirstLetter((actor.system.species).toLowerCase());
         }
         
         let current_token_nature = "";
-        if(actor.data.data.nature && display_token_nature)
+        if(actor.system.nature && display_token_nature)
         {
-            current_token_nature = capitalizeFirstLetter((actor.data.data.nature.value).toLowerCase())+" ";
+            current_token_nature = capitalizeFirstLetter((actor.system.nature.value).toLowerCase())+" ";
         }
 
-        if(actor.data.type == "pokemon" && (actor.data.data.owner != "0" && actor.data.data.owner != "")) // Owned Pokemon
+        if(actor.data.type == "pokemon" && (actor.system.owner != "0" && actor.system.owner != "")) // Owned Pokemon
         {
-            let trainer_actor = game.actors.get(actor.data.data.owner);
+            let trainer_actor = game.actors.get(actor.system.owner);
             let trainer_tokens = trainer_actor.getActiveTokens();
             let actor_token = trainer_tokens[0]; // The throwing trainer
             
@@ -502,7 +502,7 @@ export async function PlayReleaseOwnedPokemonAnimation(token) {
             }
 
             await timeout(2000);
-            await game.ptu.PlayPokemonCry(actor.data.data.species);
+            await game.ptu.PlayPokemonCry(actor.system.species);
 
             if(always_display_token_name)
             {
@@ -539,7 +539,7 @@ export async function PlayReleaseOwnedPokemonAnimation(token) {
         }
         else if (actor.data.type == "pokemon") // Wild Pokemon - no pokeball release effect.
         {
-            await game.ptu.PlayPokemonCry(actor.data.data.species);
+            await game.ptu.PlayPokemonCry(actor.system.species);
 
             if(always_display_token_name)
             {
@@ -584,7 +584,7 @@ export async function PlayPokeballReturnAnimation(pokemon_token)
     let pokemon_actor = await GetActorFromToken(pokemon_token);
     if(pokemon_actor?.type == "pokemon")
     {
-        let trainer_actor = game.actors.get(pokemon_token.actor.data.data.owner)
+        let trainer_actor = game.actors.get(pokemon_token.actor.system.owner)
         let trainer_tokens = await trainer_actor?.getActiveTokens();
         let on_field_trainer_token = trainer_tokens?.[0];
     

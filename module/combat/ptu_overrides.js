@@ -87,7 +87,7 @@ export class PTUCombatOverrides extends Combat {
     for (const d of documents) {
       const c = this.combatants.get(d?.id);
 
-      if (c.actor.data.data.boss?.is) this._handleBoss(c.actor, c);
+      if (c.actor.system.boss?.is) this._handleBoss(c.actor, c);
     }
 
     super._onUpdateEmbeddedDocuments(
@@ -101,7 +101,7 @@ export class PTUCombatOverrides extends Combat {
 
   _handleBoss(actor, combatant) {
     if (!game.ptu.api._isMainGM()) return;
-    const turns = actor.data.data.boss.turns;
+    const turns = actor.system.boss.turns;
     const combatants = this.turns.filter((c) => c.actor.id == actor.id);
 
     if (combatants.length < turns) {

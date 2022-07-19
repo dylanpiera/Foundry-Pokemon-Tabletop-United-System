@@ -720,8 +720,8 @@ export class PTUActor extends Actor {
     }
     if (moveData.category.toLowerCase() != "status" && critType != CritOptions.CRIT_MISS) {
       if (moveData.damageBase != "--" && moveData.damageBase) {
-        damageRolls.normal = await this._calculateDamageRoll(moveData, CritOptions.NORMAL, damageBonuses.total, abilityBonuses, this.data.data, targets[0]?.actor?.data.data).evaluate({ async: true });
-        damageRolls.crit = await this._calculateDamageRoll(moveData, CritOptions.CRIT_HIT, damageBonuses.total, abilityBonuses, this.data.data, targets[0]?.actor?.data.data).evaluate({ async: true });
+        damageRolls.normal = await this._calculateDamageRoll(moveData, CritOptions.NORMAL, damageBonuses.total, abilityBonuses, this.system, targets[0]?.actor?.system).evaluate({ async: true });
+        damageRolls.crit = await this._calculateDamageRoll(moveData, CritOptions.CRIT_HIT, damageBonuses.total, abilityBonuses, this.system, targets[0]?.actor?.system).evaluate({ async: true });
       }
     }
 

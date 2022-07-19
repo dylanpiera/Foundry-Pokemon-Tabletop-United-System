@@ -2,7 +2,7 @@
   "name": "ptu",
   "title": "Pokemon Tabletop United",
   "description": "A Pen and Paper Roleplaying Game Set in the World of Pokemon",
-  "minimumCoreVersion": "9",
+  "minimumCoreVersion": "10",
   "compatibleCoreVersion": "10",
   "version": "3.0.0.1",
   "templateVersion": 2,

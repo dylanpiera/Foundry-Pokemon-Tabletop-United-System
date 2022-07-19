@@ -33,8 +33,8 @@ export class PTUGen8CharacterSheet extends ActorSheet {
 		if (this.actor.data.type == 'character') {
 			this._prepareCharacterItems(data);
 		}
-		data['totalWealth'] = this.actor.itemTypes.item.reduce((total, item) => total + (!isNaN(item.data.data.cost) ? item.data.data.cost * (item.data.data.quantity ?? 0) : 0), this.actor.data.data.money);
-		data.data = this.actor.data.data;
+		data['totalWealth'] = this.actor.itemTypes.item.reduce((total, item) => total + (!isNaN(item.system.cost) ? item.system.cost * (item.system.quantity ?? 0) : 0), this.actor.system.money);
+		data.data = this.actor.system;
 		// data['origins'] = this.actor.origins;
 
 		return data;
@@ -64,7 +64,7 @@ export class PTUGen8CharacterSheet extends ActorSheet {
 	 * @return {undefined}
 	 */
 	_prepareCharacterItems(sheetData) {
-		sheetData['skills'] = this.actor.data.data.skills
+		sheetData['skills'] = this.actor.system.skills
 
 		const actor = sheetData.actor;
 
@@ -121,7 +121,7 @@ export class PTUGen8CharacterSheet extends ActorSheet {
 		}
 
 		for (const category of Object.keys(items_categorized)) {
-			if (actor.data.data.item_categories[category] === undefined) actor.data.data.item_categories[category] = true;
+			if (actor.system.item_categories[category] === undefined) actor.system.item_categories[category] = true;
 		}
 
 		// Assign and return
@@ -158,7 +158,7 @@ export class PTUGen8CharacterSheet extends ActorSheet {
 							actor: this.actor
 						}),
 						name: item.name,
-						move: item.data.data,
+						move: item.system,
 						templateType: 'details'
 					});
 				default:
@@ -279,7 +279,7 @@ export class PTUGen8CharacterSheet extends ActorSheet {
 			handled = true;
 
 			const oldItem = actor.items.getName(item.data.name);
-			if (oldItem.id != item.id && oldItem.data.data.quantity) {
+			if (oldItem.id != item.id && oldItem.system.quantity) {
 				const data = duplicate(oldItem.data);
 				data.data.quantity++;
 				await this.actor.deleteEmbeddedDocuments("Item", [item.id]);
@@ -288,7 +288,7 @@ export class PTUGen8CharacterSheet extends ActorSheet {
 		}
 		else item = actor.items.get(itemData._id);
 
-		if (item.data.type != 'item' || item.data.data.category == category)
+		if (item.data.type != 'item' || item.system.category == category)
 			return this._onSortItem(event, item.data);
 
 		item = await item.update({ 'data.category': category });
@@ -388,7 +388,7 @@ export class PTUGen8CharacterSheet extends ActorSheet {
 				return;
 			}
 
-			let roll = new Roll(rolldata, this.actor.data.data);
+			let roll = new Roll(rolldata, this.actor.system);
 			(await roll.evaluate({ async: true })).toMessage({
 				speaker: ChatMessage.getSpeaker({
 					actor: this.actor
@@ -407,7 +407,7 @@ export class PTUGen8CharacterSheet extends ActorSheet {
 		event.preventDefault();
 		if (event.screenX == 0 && event.screenY == 0) return;
 
-		let mod = this.actor.data.data.modifiers.saveChecks?.total;
+		let mod = this.actor.system.modifiers.saveChecks?.total;
 		let roll = new Roll("1d20 + @mod", { mod: mod });
 
 		await roll.evaluate({ async: true });
@@ -438,7 +438,7 @@ export class PTUGen8CharacterSheet extends ActorSheet {
 		const dataset = element?.dataset;
 		const move = item ? item : this.actor.items.get(dataset.id).data;
 
-		move.data = PrepareMoveData(actor ? actor.data.data : this.actor.data.data, move.data);
+		move.data = PrepareMoveData(actor ? actor.system : this.actor.system, move.data);
 
 		/** Option Callbacks */
 		let PerformFullAttack = (damageBonus = 0) => {
@@ -451,82 +451,7 @@ export class PTUGen8CharacterSheet extends ActorSheet {
 			APBonus = useAP ? APBonus : 0;
 
 			return this.actor.executeMove(move._id, {}, APBonus);
-
-			let acRoll = CalculateAcRoll(moveData, this.actor.data);
-			let diceResult = GetDiceResult(acRoll)
-
-			let crit = diceResult === 1 ? CritOptions.CRIT_MISS : diceResult >= 20 - this.actor.data.data.modifiers.critRange?.total ? CritOptions.CRIT_HIT : CritOptions.NORMAL;
-
-			let damageRoll, critRoll;
-			if (crit != CritOptions.CRIT_MISS) {
-				switch (game.settings.get("ptu", "combatRollPreference")) {
-					case "situational":
-						if (crit == CritOptions.CRIT_HIT) critRoll = CalculateDmgRoll(moveData, this.actor.data.data, crit);
-						else damageRoll = CalculateDmgRoll(moveData, this.actor.data.data, crit);
-						break;
-					case "both":
-						damageRoll = CalculateDmgRoll(moveData, this.actor.data.data, CritOptions.NORMAL);
-					case "always-crit":
-						critRoll = CalculateDmgRoll(moveData, this.actor.data.data, CritOptions.CRIT_HIT);
-						break;
-					case "always-normal":
-						damageRoll = CalculateDmgRoll(moveData, this.actor.data.data, CritOptions.NORMAL);
-						break;
-				}
-				if (damageRoll) damageRoll.evaluate({ async: false });
-				if (critRoll) critRoll.evaluate({ async: false });
-			}
-			sendMoveRollMessage(acRoll, {
-				speaker: ChatMessage.getSpeaker({
-					actor: this.actor
-				}),
-				name: move.name,
-				move: move.data,
-				damageRoll: damageRoll,
-				critRoll: critRoll,
-				templateType: MoveMessageTypes.FULL_ATTACK,
-				crit: crit,
-				isCrit: crit == CritOptions.CRIT_HIT
-			});
 		}
-
-		// let RollDamage = () => {
-		// 	let PerformDamage = (crit) => {
-		// 		let damageRoll = CalculateDmgRoll(move.data, this.actor.data.data, crit)
-
-		// 		sendMoveRollMessage(damageRoll, {
-		// 			speaker: ChatMessage.getSpeaker({
-		// 				actor: this.actor
-		// 			}),
-		// 			name: move.name,
-		// 			move: move.data,
-		// 			templateType: MoveMessageTypes.DAMAGE,
-		// 			crit: crit,
-		// 			isCrit: crit == CritOptions.CRIT_HIT
-		// 		});
-		// 	}
-
-		// 	let d = new Dialog({
-		// 		title: `${this.actor.data.name}'s ${move.name} Damage`,
-		// 		content: `<div class="pb-1"><p>Is it a Crit?</p></div>`,
-		// 		buttons: {
-		// 			crit: {
-		// 				icon: '<i class="fas fa-bullseye"></i>',
-		// 				label: "Critical Hit!",
-		// 				callback: () => PerformDamage(CritOptions.CRIT_HIT)
-		// 			},
-		// 			normal: {
-		// 				icon: '<i class="fas fa-crosshairs"></i>',
-		// 				label: "Regular Hit",
-		// 				callback: () => PerformDamage(CritOptions.NORMAL)
-		// 			}
-		// 		},
-		// 		default: "normal"
-		// 	});
-		// 	d.position.width = 650;
-		// 	d.position.height = 125;
-		// 	d.render(true)
-		// }
 
 		/** Check for Shortcut */
 		// Instant full roll
@@ -577,7 +502,7 @@ export class PTUGen8CharacterSheet extends ActorSheet {
 	}
 
 	useAP(value = 1) {
-		const currentAP = this.actor.data.data.ap.value;
+		const currentAP = this.actor.system.ap.value;
 		if (currentAP >= value) {
 			this.actor.update({
 				'data.ap.value': currentAP - value

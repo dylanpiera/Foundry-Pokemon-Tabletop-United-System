@@ -33,7 +33,7 @@ export default class BeltComponent extends Component {
         if(this.state.actor?.folder)
         {
             for (const actor of this.state.actor?.folder?.content) {
-                if (actor.data.data.owner == this.state.actor.id) {
+                if (actor.system.owner == this.state.actor.id) {
                     beltMons.push(actor);
                 }
             }
@@ -46,7 +46,7 @@ export default class BeltComponent extends Component {
                     name: mon.data.name,
                     img: mon.data.img,
                     id: mon.id,
-                    color: this._calculateColor(mon.data.data.health),
+                    color: this._calculateColor(mon.system.health),
                     isActive: false,
                     bgImg: undefined,
                 });

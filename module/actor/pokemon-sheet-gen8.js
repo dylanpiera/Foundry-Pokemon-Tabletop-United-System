@@ -34,7 +34,7 @@ export class PTUGen8PokemonSheet extends ActorSheet {
 			this._prepareCharacterItems(data);
 		}
 
-		data.data = this.actor.data.data;
+		data.data = this.actor.system;
 
 		data['origins'] = this.actor.origins;
 
@@ -70,7 +70,7 @@ export class PTUGen8PokemonSheet extends ActorSheet {
 			data['canBeWild'] = true;
 		}
 
-		if(!data['owners'].map(x => x.id).includes(this.actor.data.data.owner)) {
+		if(!data['owners'].map(x => x.id).includes(this.actor.system.owner)) {
 			if(this.isEditable)
 				this.actor.update({"data.owner": data['canBeWild'] ? "0" : data['owners'][0]?.id})
 		}
@@ -86,7 +86,7 @@ export class PTUGen8PokemonSheet extends ActorSheet {
 	 * @return {undefined}
 	 */
 	_prepareCharacterItems(sheetData) {
-		sheetData['skills'] = this.actor.data.data.skills
+		sheetData['skills'] = this.actor.system.skills
 
 		const actor = sheetData.actor;
 
@@ -125,7 +125,7 @@ export class PTUGen8PokemonSheet extends ActorSheet {
 		actor.edges = edges;
 
 		for(let move of actor.moves) {
-			move.data = PrepareMoveData(actor.data.data, move.data)
+			move.data = PrepareMoveData(actor.system, move.data)
 		}
 	}
 
@@ -151,12 +151,12 @@ export class PTUGen8PokemonSheet extends ActorSheet {
 			});
 		}
 
-		if(this.actor.data.data.owner) {
+		if(this.actor.system.owner) {
 			buttons.unshift({
 				label: "Open Owner",
 				class: "open-owner",
 				icon: "fas fa-user",
-				onclick: () => game.actors.get(this.actor.data.data.owner).sheet.render(true)
+				onclick: () => game.actors.get(this.actor.system.owner).sheet.render(true)
 			});
 		}
 
@@ -187,7 +187,7 @@ export class PTUGen8PokemonSheet extends ActorSheet {
 							actor: this.actor
 						}),
 						moveName: item.name,
-						move: item.data.data,
+						move: item.system,
 						templateType: 'details'
 					});
 				default: 
@@ -277,11 +277,11 @@ export class PTUGen8PokemonSheet extends ActorSheet {
 			const value = Number(event.currentTarget.value);
 			if(isNaN(value)) return;
 
-			await this._applyHardenedEffect(value, this.actor.data.data.modifiers.hardened);
+			await this._applyHardenedEffect(value, this.actor.system.modifiers.hardened);
 		})
 
 		html.find('input[data-name="data.modifiers.hardened"]').click(async (event) => {
-			const value = Number(this.actor.data.data.health.injuries);
+			const value = Number(this.actor.system.health.injuries);
 			const isHardened = event.currentTarget.checked;
 
 			await this._applyHardenedEffect(value, isHardened);
@@ -338,7 +338,7 @@ export class PTUGen8PokemonSheet extends ActorSheet {
 		if(value === 0 || !isHardened) {
 			if(effect) {
 				await effect.delete();
-				if(this.actor.data.data.modifiers.hardened) await this.actor.update({'data.modifiers.hardened': false});
+				if(this.actor.system.modifiers.hardened) await this.actor.update({'data.modifiers.hardened': false});
 			}
 			return;
 		}
@@ -417,7 +417,7 @@ export class PTUGen8PokemonSheet extends ActorSheet {
 				return;
 			}
 
-			let roll = new Roll(rolldata, this.actor.data.data);
+			let roll = new Roll(rolldata, this.actor.system);
 			(await roll.evaluate({ async: true })).toMessage({
 				speaker: ChatMessage.getSpeaker({
 					actor: this.actor
@@ -436,7 +436,7 @@ export class PTUGen8PokemonSheet extends ActorSheet {
 		event.preventDefault();
 		if(event.screenX == 0 && event.screenY == 0) return;
 
-		let mod = this.actor.data.data.modifiers.saveChecks?.total;
+		let mod = this.actor.system.modifiers.saveChecks?.total;
 		let roll = new Roll("1d20 + @mod", {mod: mod});
 		
 		await roll.evaluate({async: true});
@@ -467,7 +467,7 @@ export class PTUGen8PokemonSheet extends ActorSheet {
 		const dataset = element?.dataset;
 		const move = item ? item : this.actor.items.get(dataset.id).data;
 
-		move.data = PrepareMoveData(actor ? actor.data.data : this.actor.data.data, move.data);
+		move.data = PrepareMoveData(actor ? actor.system : this.actor.system, move.data);
 
 		/** Option Callbacks */
 		let PerformFullAttack = (damageBonus = 0) => {
@@ -479,82 +479,7 @@ export class PTUGen8PokemonSheet extends ActorSheet {
 			const APBonus = useAP ? 1 : 0;
 
 			return this.actor.executeMove(move._id, {}, APBonus);
-
-			let acRoll = CalculateAcRoll(moveData, this.actor.data);
-			let diceResult = GetDiceResult(acRoll)
-
-			let crit = diceResult === 1 ? CritOptions.CRIT_MISS : (diceResult >= 20 - this.actor.data.data.modifiers.critRange?.total) ? CritOptions.CRIT_HIT : CritOptions.NORMAL;
-
-			let damageRoll, critRoll;
-			if((crit != CritOptions.CRIT_MISS) || (moveData.ac == "--")) {
-				switch(game.settings.get("ptu", "combatRollPreference")) {
-					case "situational":
-						if(crit == CritOptions.CRIT_HIT) critRoll = CalculateDmgRoll(moveData, this.actor.data.data, crit);
-						else damageRoll = CalculateDmgRoll(moveData, this.actor.data.data, crit);
-					break;
-					case "both":
-						damageRoll = CalculateDmgRoll(moveData, this.actor.data.data, CritOptions.NORMAL);
-					case "always-crit":
-						critRoll = CalculateDmgRoll(moveData, this.actor.data.data, CritOptions.CRIT_HIT);
-					break;
-					case "always-normal":
-						damageRoll = CalculateDmgRoll(moveData, this.actor.data.data, CritOptions.NORMAL);
-					break;
-				}
-				if(damageRoll) damageRoll.evaluate({async: false});
-				if(critRoll) critRoll.evaluate({async: false});
-			}
-			sendMoveRollMessage(acRoll, {
-				speaker: ChatMessage.getSpeaker({
-					actor: this.actor
-				}),
-				name: move.name,
-				move: move.data,
-				damageRoll: damageRoll,
-				critRoll: critRoll,
-				templateType: MoveMessageTypes.FULL_ATTACK,
-				crit: crit,
-				isCrit: crit == CritOptions.CRIT_HIT
-			});
 		}
-
-		// let RollDamage = () => {
-		// 	let PerformDamage = (crit) => {
-		// 		let damageRoll = CalculateDmgRoll(move.data, this.actor.data.data, crit)
-
-		// 		sendMoveRollMessage(damageRoll, {
-		// 			speaker: ChatMessage.getSpeaker({
-		// 				actor: this.actor
-		// 			}),
-		// 			name: move.name,
-		// 			move: move.data,
-		// 			templateType: MoveMessageTypes.DAMAGE,
-		// 			crit: crit,
-		// 			isCrit: crit == CritOptions.CRIT_HIT
-		// 		});
-		// 	}
-
-		// 	let d = new Dialog({
-		// 		title: `${this.actor.data.name}'s ${move.name} Damage`,
-		// 		content: `<div class="pb-1"><p>Is it a Crit?</p></div>`,
-		// 		buttons: {
-		// 			crit: {
-		// 				icon: '<i class="fas fa-bullseye"></i>',
-		// 				label: "Critical Hit!",
-		// 				callback: () => PerformDamage(CritOptions.CRIT_HIT)
-		// 			},
-		// 			normal: {
-		// 				icon: '<i class="fas fa-crosshairs"></i>',
-		// 				label: "Regular Hit",
-		// 				callback: () => PerformDamage(CritOptions.NORMAL)
-		// 			}
-		// 		},
-		// 		default: "normal"
-		// 	});
-		// 	d.position.width = 650;
-		// 	d.position.height = 125;
-		// 	d.render(true)
-		// }
 
 		/** Check for Shortcut */
 		// Instant full roll
@@ -605,13 +530,13 @@ export class PTUGen8PokemonSheet extends ActorSheet {
 	}
 
 	useOwnerAP(amount = 1) {
-		if (this.actor.data.data.owner == 0) {
+		if (this.actor.system.owner == 0) {
 			ui.notifications.error(`${this.actor.data.name} does not have an owner.`);
 			return false;
 		}
-		const owner = game.actors.get(this.actor.data.data.owner);
+		const owner = game.actors.get(this.actor.system.owner);
 		if (!owner) return;
-		let remainingAP = owner.data.data.ap.value;
+		let remainingAP = owner.system.ap.value;
 		if (remainingAP >= amount) {
 			owner.update({
 				'data.ap.value': remainingAP - amount

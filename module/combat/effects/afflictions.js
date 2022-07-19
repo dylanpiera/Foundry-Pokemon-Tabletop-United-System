@@ -169,11 +169,11 @@ export const EffectFns = new Map([
         /** Actually apply Affliction */
         const actor = lastCombatant.actor;
 
-        if (actor.data.data.modifiers.immuneToEffectDamage) return;
+        if (actor.system.modifiers.immuneToEffectDamage) return;
 
         let applyPoison = async () => {
             const token = canvas.tokens.get(lastCombatant.token.id);
-            await ApplyFlatDamage([token], "Poison", actor.data.data.health.tick);
+            await ApplyFlatDamage([token], "Poison", actor.system.health.tick);
         }
 
         const actions_taken = actor.data.flags.ptu?.actions_taken;
@@ -199,7 +199,7 @@ export const EffectFns = new Map([
 
         /** Actually apply Affliction */
         const actor = lastCombatant.actor;
-        if (actor.data.data.modifiers.immuneToEffectDamage) return;
+        if (actor.system.modifiers.immuneToEffectDamage) return;
 
         let applyPoison = async () => {
             const token = canvas.tokens.get(lastCombatant.token.id);
@@ -232,11 +232,11 @@ export const EffectFns = new Map([
 
         /** Actually apply Affliction */
         const actor = lastCombatant.actor;
-        if (actor.data.data.modifiers.immuneToEffectDamage) return;
+        if (actor.system.modifiers.immuneToEffectDamage) return;
 
         let applyBurn = async () => {
             const token = canvas.tokens.get(lastCombatant.token.id);
-            await ApplyFlatDamage([token], "Burn", actor.data.data.health.tick);
+            await ApplyFlatDamage([token], "Burn", actor.system.health.tick);
         }
 
         const actions_taken = actor.data.flags.ptu?.actions_taken;
@@ -262,11 +262,11 @@ export const EffectFns = new Map([
 
         /** Actually apply Affliction */
         const actor = lastCombatant.actor;
-        if (actor.data.data.modifiers.immuneToEffectDamage) return;
+        if (actor.system.modifiers.immuneToEffectDamage) return;
 
         let applyCurse = async () => {
             const token = canvas.tokens.get(lastCombatant.token.id);
-            await ApplyFlatDamage([token], "Curse", actor.data.data.health.tick * 2);
+            await ApplyFlatDamage([token], "Curse", actor.system.health.tick * 2);
         }
 
         const actions_taken = actor.data.flags.ptu?.actions_taken;
@@ -312,21 +312,21 @@ export const EffectFns = new Map([
             coinFlipMessageData.content = await renderTemplate('/systems/ptu/templates/chat/save-check.hbs', coinFlipMessageData);
             await ChatMessage.create(coinFlipMessageData, {});
 
-            if (actor.data.data.modifiers.immuneToEffectDamage || coinFlipMessageData.success) return;
+            if (actor.system.modifiers.immuneToEffectDamage || coinFlipMessageData.success) return;
             const token = canvas.tokens.get(lastCombatant.token.id);
             switch (type) {
                 case 3: {
-                    const dmg = Math.floor(Number(actor.data.data.stats.atk.total) / 2);
+                    const dmg = Math.floor(Number(actor.system.stats.atk.total) / 2);
                     await ApplyFlatDamage([token], "Confusion Damage", dmg);
                     return;
                 }
                 case 2: {
-                    const dmg = Math.floor(Number(actor.data.data.stats.spatk.total) / 2);
+                    const dmg = Math.floor(Number(actor.system.stats.spatk.total) / 2);
                     await ApplyFlatDamage([token], "Confusion Damage", dmg);
                     return;
                 }
                 case 1: {
-                    const dmg = Number(actor.data.data.health.tick);
+                    const dmg = Number(actor.system.health.tick);
                     await ApplyFlatDamage([token], "Confusion Damage", dmg);
                     return;
                 }
@@ -493,7 +493,7 @@ export const EffectFns = new Map([
         roll._total = roll.total;
         let messageData = {};
 
-        const DC = actor.data.data.typing.includes("Fire") ? CONFIG.PTUCombat.DC.FROZEN + CONFIG.PTUCombat.DC.FROZEN_FIRE_MOD : CONFIG.PTUCombat.DC.FROZEN +
+        const DC = actor.system.typing.includes("Fire") ? CONFIG.PTUCombat.DC.FROZEN + CONFIG.PTUCombat.DC.FROZEN_FIRE_MOD : CONFIG.PTUCombat.DC.FROZEN +
             game.settings.get("ptu", "currentWeather") == "Sunny" ? -4 : game.settings.get("ptu", "currentWeather") == "Hail" ? 2 : 0;
 
         if (roll.total >= DC) {
@@ -681,10 +681,10 @@ export const EffectFns = new Map([
 
         /** Actually apply Affliction */
         const actor = lastCombatant.actor;
-        if (actor.data.data.modifiers.immuneToEffectDamage) return;
+        if (actor.system.modifiers.immuneToEffectDamage) return;
 
         const token = canvas.tokens.get(lastCombatant.token.id);
-        await ApplyFlatDamage([token], "Nightmare (Bad Sleep)", actor.data.data.health.tick * 2);
+        await ApplyFlatDamage([token], "Nightmare (Bad Sleep)", actor.system.health.tick * 2);
 
         /** If affliction can only be triggered once per turn, make sure it shows as applied. */
         if (options.round.direction == CONFIG.PTUCombat.DirectionOptions.FORWARD) return; // If new round already started don't register EoT effect.
@@ -695,10 +695,10 @@ export const EffectFns = new Map([
             if (!IsSameTokenAndNotAlreadyApplied(effect + "sot", tokenId, combat, lastCombatant)) return;
 
             const actor = lastCombatant.actor;
-            if (actor.data.data.modifiers.immuneToEffectDamage) return;
+            if (actor.system.modifiers.immuneToEffectDamage) return;
 
             const token = canvas.tokens.get(lastCombatant.token.id);
-            await ApplyFlatDamage([token], "Vortex", actor.data.data.health.tick);
+            await ApplyFlatDamage([token], "Vortex", actor.system.health.tick);
 
             /** If affliction can only be triggered once per turn, make sure it shows as applied. */
             if (options.round.direction == CONFIG.PTUCombat.DirectionOptions.FORWARD) return; // If new round already started don't register EoT effect.
@@ -752,11 +752,11 @@ export const EffectFns = new Map([
         /** Actually apply Affliction */
         const actor = lastCombatant.actor;
 
-        if (actor.data.data.modifiers.immuneToEffectDamage) return;
+        if (actor.system.modifiers.immuneToEffectDamage) return;
 
         const token = canvas.tokens.get(lastCombatant.token.id);
-        await ApplyFlatDamage([token], "Leech Seed", actor.data.data.health.tick);
-        Hooks.call("onLeechSeedDamage", { actor: actor, damage: actor.data.data.health.tick });
+        await ApplyFlatDamage([token], "Leech Seed", actor.system.health.tick);
+        Hooks.call("onLeechSeedDamage", { actor: actor, damage: actor.system.health.tick });
 
         /** If affliction can only be triggered once per turn, make sure it shows as applied. */
         if (options.round.direction == CONFIG.PTUCombat.DirectionOptions.FORWARD) return; // If new round already started don't register EoT effect.

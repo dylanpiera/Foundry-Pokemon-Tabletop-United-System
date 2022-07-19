@@ -233,7 +233,7 @@ function registerHandlebars() {
     if (!name) return "";
     if (name || 0 !== name.length) {
       let item = game.ptu.items.find(i => i.name.toLowerCase().includes(name.toLowerCase()));
-      if (item) return item.data.data.effect;
+      if (item) return item.system.effect;
     }
     return "";
   });
@@ -569,7 +569,7 @@ Hooks.once("ready", async function () {
   PTUCombat.Initialize();
 
   game.ptu.sidebar = new game.ptu.PTUSidebar();
-  //game.ptu.sidebar.render(true);
+  game.ptu.sidebar.render(true);
 
   console.groupEnd();
 });
@@ -590,12 +590,12 @@ Hooks.on('dropActorSheetData', function (actor, sheet, itemDropData,) {
 
   let updateActorBasedOnSpeciesItem = function (item) {
     if (item.data.name) {
-      log(`Updating Species based on Dex Drop (${actor.data.data.species} -> ${item.data.name})`)
+      log(`Updating Species based on Dex Drop (${actor.system.species} -> ${item.data.name})`)
       actor.update({ "data.species": item.data.name }).then(x => log("Finished Updating Species based on Dex Drop"));
     }
-    else if (item.data.data.id) {
-      log(`Updating Species based on Dex Drop (${actor.data.data.species} -> ${item.data.data.id})`)
-      actor.update({ "data.species": item.data.data.id }).then(x => log("Finished Updating Species based on Dex Drop"));
+    else if (item.system.id) {
+      log(`Updating Species based on Dex Drop (${actor.system.species} -> ${item.system.id})`)
+      actor.update({ "data.species": item.system.id }).then(x => log("Finished Updating Species based on Dex Drop"));
     }
   }
 
@@ -775,35 +775,35 @@ async function _onPokedexMacro() {
     
     // No checks needed; just show full dex.
     if (game.user.isGM) {
-      game.ptu.renderDex(token.actor.data.data.species, "full");
+      game.ptu.renderDex(token.actor.system.species, "full");
       continue;
     }
 
     if(addToDex && !game.user.isGM){
       if (!game.user.character) return ui.notifications.warn("Please make sure you have a trainer as your Selected Player Character");
-      await game.ptu.addToDex(token.actor.data.data.species);
+      await game.ptu.addToDex(token.actor.system.species);
     }
 
     switch (permSetting) {
       case 1: { // Pokedex Disabled
-        //game.ptu.renderDesc(token.actor.data.data.species);
+        //game.ptu.renderDesc(token.actor.system.species);
         return ui.notifications.info("DM has turned off the Pokedex.");
       }
       case 2: { //pokemon description only
-        game.ptu.renderDex(token.actor.data.data.species);
+        game.ptu.renderDex(token.actor.system.species);
         break;
       }
       case 3: { // Only owned tokens
-        game.ptu.renderDex(token.actor.data.data.species, token.owner ? "full" : "desc");
+        game.ptu.renderDex(token.actor.system.species, token.owner ? "full" : "desc");
         break;
       }
       case 4: { // Only owned mons
         if (!game.user.character) return ui.notifications.warn("Please make sure you have a trainer as your Selected Player Character");
 
-        const monData = game.ptu.GetSpeciesData(token.actor.data.data.species);
+        const monData = game.ptu.GetSpeciesData(token.actor.system.species);
 
-        game.ptu.renderDex(token.actor.data.data.species, 
-          game.user.character.itemTypes.dexentry.some(entry => entry.data.data.owned && entry.data.name.toLowerCase() === monData?._id?.toLowerCase())
+        game.ptu.renderDex(token.actor.system.species, 
+          game.user.character.itemTypes.dexentry.some(entry => entry.system.owned && entry.data.name.toLowerCase() === monData?._id?.toLowerCase())
           ? "full" : "desc");
         break;
       }
@@ -811,7 +811,7 @@ async function _onPokedexMacro() {
         return ui.notifications.warn("The GM prompt feature has yet to be implemented. Please ask your DM to change to a different Dex Permission Setting");
       }
       case 6: { // Always Full Details
-        game.ptu.renderDex(token.actor.data.data.species, "full");
+        game.ptu.renderDex(token.actor.system.species, "full");
         break;
       }
     }
@@ -849,7 +849,7 @@ Hooks.on("updateInitiative", function (actor) {
   const decimal = Number((combatant.initiative - Math.trunc(combatant.initiative).toFixed(2)));
   if (decimal == 0) return;
 
-  const init = actor.data.data.initiative.value;
+  const init = actor.system.initiative.value;
 
   if (init + decimal != combatant.initiative) {
     game.combats.active.setInitiative(combatant.id, init >= 0 ? init + decimal : (Math.abs(init) + decimal) * -1);
@@ -859,9 +859,9 @@ Hooks.on("updateInitiative", function (actor) {
 
 // Whenever a dexentry is added to a sheet, double check if it doesn't already exist
 Hooks.on("preCreateItem", (item, itemData, options, sender) => {
-  if (item.type != "dexentry" || !item.data.data.id) return;
+  if (item.type != "dexentry" || !item.system.id) return;
 
-  const entry = item.parent.itemTypes.dexentry.find(e => e.data.data.id == item.data.data.id);
+  const entry = item.parent.itemTypes.dexentry.find(e => e.system.id == item.system.id);
   if (entry) {
     log("Dex entry already exists, skipping. This may throw an error, which can be ignored.")
     return false;
@@ -872,7 +872,7 @@ Hooks.on("preCreateItem", (item, itemData, options, sender) => {
 Hooks.on("preCreateItem", async function (item, data, options, sender) {
   if (item.type != "move") return;
   let origin = "";
-  const speciesData = game.ptu.GetSpeciesData(item.parent.data.data.species);
+  const speciesData = game.ptu.GetSpeciesData(item.parent.system.species);
 
   // All of these have a slightly different format, change them to just be an array of the names with capital letters included.
   const levelUp = speciesData["Level Up Move List"].map(x => x.Move);

@@ -71,7 +71,7 @@ export async function UpdateCustomSpecies(data) {
         warn("Unable to update applications", err)
     }
 
-    await game.actors.filter(x => x.data.type === "pokemon" && (x.data.data.isCustomSpecies || x.data.data.typing === undefined)).forEach(async (x) => {
+    await game.actors.filter(x => x.data.type === "pokemon" && (x.system.isCustomSpecies || x.system.typing === undefined)).forEach(async (x) => {
         if(x.permission >= 3)
             await x.update({timestamp: Date.now()})
     })

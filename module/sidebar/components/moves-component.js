@@ -60,7 +60,7 @@ export default class MovesList extends Component {
             // 'changed move data' during every re-render, causing infinite re-render loops.
             const moveData = duplicate(move);
             
-            moveData.data = this.PrepareMoveData(moveData.data, this.state.actor.data.data, this.state.targetedActors);
+            moveData.data = this.PrepareMoveData(moveData.data, this.state.actor.system, this.state.targetedActors);
 
             // If fake move skip
             if((moveData.data.damageBase == "--" && moveData.data.category == "--") || (moveData.data.damageBase == "" && moveData.data.category == "") || (moveData.data.isStruggle)) continue;
@@ -89,7 +89,7 @@ export default class MovesList extends Component {
                             break;
                         }
                         
-                        if((!game.user.character.itemTypes.dexentry.some(entry => entry.data.name.toLowerCase() === monData?._id?.toLowerCase() && entry.data.data.owned)))
+                        if((!game.user.character.itemTypes.dexentry.some(entry => entry.data.name.toLowerCase() === monData?._id?.toLowerCase() && entry.system.owned)))
                             moveData.data.effectiveness = -1;
                         
 
@@ -192,7 +192,7 @@ export default class MovesList extends Component {
             return moveData;
         }
         if (targetIds.length == 1) {
-            moveData.effectiveness = this.store.getTarget(targetIds[0]).data.data.effectiveness?.All[moveData.type] ?? 1;
+            moveData.effectiveness = this.store.getTarget(targetIds[0]).system.effectiveness?.All[moveData.type] ?? 1;
         }
         if (targetIds.length > 1) { // TODO: Maybe add a way to display multiple effectiveness borders?
             moveData.effectiveness = -1;

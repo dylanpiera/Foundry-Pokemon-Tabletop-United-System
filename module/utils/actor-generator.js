@@ -11,14 +11,14 @@ export class ActorGenerator {
             if(!actor.preparedData) throw 'PreparedData required to generate actor. See ActorGenerator.PrepareData';
             delete actor.preparedData;
             this.actor = {data: actor};
-            this.actor.data.data.level.current = CalcLevel(this.actor.data.data.level.exp, 50, game.ptu.levelProgression)
+            this.actor.system.level.current = CalcLevel(this.actor.system.level.exp, 50, game.ptu.levelProgression)
         }
         else {
             if((!actor.data && !actor.preparedData) && exists) throw 'Actor not initialized.';
             this.actor = actor;    
         }
 
-        this.species = { name: this.actor.data.data.species, data: game.ptu.GetSpeciesData(this.actor.data.data.species)};
+        this.species = { name: this.actor.system.species, data: game.ptu.GetSpeciesData(this.actor.system.species)};
         if(!this.species) throw 'Species undefined';
 
         this.ApplyChanges = ApplyChanges;
@@ -53,7 +53,7 @@ export class ActorGenerator {
             imgSrc = game.settings.get("ptu", "defaultPokemonImageDirectory");
             if(!imgSrc) return this;
         }
-        let imgPath = await GetSpeciesArt(this.species.data, imgSrc, imgExt, this.actor.data.data.shiny);
+        let imgPath = await GetSpeciesArt(this.species.data, imgSrc, imgExt, this.actor.system.shiny);
         if(imgPath) this.data.img = imgPath;
         return this;
     }
@@ -151,7 +151,7 @@ function PrepareEvolution(prevent_evolution = undefined) {
 
     let current;
     for(let i = stages.length-1; i >= 0; i--) {
-        if(stages[i].level <= this.actor.data.data.level.current) {
+        if(stages[i].level <= this.actor.system.level.current) {
             let p = stages.filter(x => x.stage == stages[i].stage);
             if(p.length > 1) current = game.ptu.GetSpeciesData(p[getRandomIntInclusive(0,p.length-1)].name);
             else current = game.ptu.GetSpeciesData(stages[i].name);
@@ -170,8 +170,8 @@ function PrepareEvolution(prevent_evolution = undefined) {
 
 function PrepareStats(type, randomPercent = 0.1) {
     let stats = {atk: {},def: {},spatk: {},spdef: {},spd: {},hp: {}};//duplicate(this.actor.data.data.stats);
-    let levelUpPoints = this.actor.data.data.levelUpPoints ? duplicate(this.actor.data.data.levelUpPoints) : this.actor.data.data.level.current + 10;
-    let speciesStats = BaseStatsWithNature(this.species.data["Base Stats"], this.actor.data.data.nature.value);
+    let levelUpPoints = this.actor.system.levelUpPoints ? duplicate(this.actor.system.levelUpPoints) : this.actor.system.level.current + 10;
+    let speciesStats = BaseStatsWithNature(this.species.data["Base Stats"], this.actor.system.nature.value);
 
     let randomPoints = Math.ceil(levelUpPoints * randomPercent);
     levelUpPoints -= randomPoints;
@@ -214,7 +214,7 @@ function PrepareStats(type, randomPercent = 0.1) {
 }
 
 function PrepareMoves(allMoves) {
-    let level = this.actor.data.data.level.current;
+    let level = this.actor.system.level.current;
 
     let levelUpMoves = this.species.data["Level Up Move List"].filter(x => x.Level <= level);
     let evoMoves = this.species.data["Level Up Move List"].filter(x => x.Level == "Evo");
@@ -230,7 +230,7 @@ function PrepareMoves(allMoves) {
 }
 
 function PrepareAbilities(allAbilities) {
-    let level = this.actor.data.data.level.current;
+    let level = this.actor.system.level.current;
     let abilities = this.species.data.Abilities;
     let abilityNames = [];
     
@@ -285,6 +285,6 @@ function PrepareCapabilities(allCapabilities) {
 
 function PrepareShiny(shiny_chance_percentage = 0.0) {
     // Math.random() return form inclusive 0 to exclusive 1
-    this.actor.data.data.shiny = Math.random() * 100 < shiny_chance_percentage
+    this.actor.system.shiny = Math.random() * 100 < shiny_chance_percentage
     return this;
 }
