@@ -273,8 +273,8 @@ export class PTUGen8PokemonSheet extends ActorSheet {
 			minLength: 1
 		});
 
-		html.find('button[name="apply-training-exp"]').click((event) => {
-			this._onApplyTrainingExp(event)
+		html.find('button[name="apply-training-exp"]').click(async (event) => {
+			await this._onApplyTrainingExp(event)
 		});
 
 		html.find('input[name="data.health.injuries"]').change(async (event) => {
@@ -613,8 +613,8 @@ export class PTUGen8PokemonSheet extends ActorSheet {
 	async _onApplyTrainingExp(event) {
 		event.preventDefault();
 		if(event.screenX == 0 && event.screenY == 0) return;
-		const newExp = this.actor.data.data.level.exp + this.getTrainingExp();;
-		this.actor.update({
+		const newExp = this.actor.data.data.level.exp + this.getTrainingExp();
+		await this.actor.update({
 			"data.level.exp": newExp,
 		});
 	}
