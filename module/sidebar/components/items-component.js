@@ -25,8 +25,8 @@ export default class ItemsComponent extends Component {
 
             for (const item of items.sort(this._sort)) {
                 output += await renderTemplate("/systems/ptu/module/sidebar/components/items-component.hbs", {
-                    name: item.data.name,
-                    img: item.data.img,
+                    name: item.name,
+                    img: item.img,
                     id: item.id,
                     color: 'gray',
                     amount: item.system.quantity,

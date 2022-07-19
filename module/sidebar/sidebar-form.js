@@ -117,10 +117,10 @@ export class PTUSidebar extends FormApplication {
     if (canvas.tokens.controlled.length > 1) return;
 
     if (selected) { // Token selection became active
-      const actor = game.actors.get(token.data.actorId);
+      const actor = game.actors.get(token.actor.id);
       if (actor) 
       {
-        self.store.dispatch("setActor", token.data.actorId);
+        self.store.dispatch("setActor", token.actor.id);
         AudioHelper.play({ src: ui_sound_paths["flip"], volume: 0.3, autoplay: true, loop: false }, false);
       }
     }
@@ -139,16 +139,16 @@ export class PTUSidebar extends FormApplication {
   }
 
   async _onTokenTarget(user, token, selected) {
-    if (user.data._id != game.user.data._id) return;
+    if (user._id != game.user._id) return;
 
     const self = this;
 
     if (selected) { // Targeted Token selection became active
-      const actor = game.actors.get(token.data.actorId);
-      if (actor) self.store.dispatch("addTarget", token.data.actorId);
+      const actor = game.actors.get(token.actor.id);
+      if (actor) self.store.dispatch("addTarget", token.actor.id);
     }
     else { // If token got untargeted
-      self.store.dispatch("removeTarget", token.data.actorId);
+      self.store.dispatch("removeTarget", token.actor.id);
     }
   }
 

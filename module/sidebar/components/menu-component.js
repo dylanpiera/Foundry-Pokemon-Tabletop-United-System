@@ -185,7 +185,7 @@ export default class MenuComponent extends Component {
         // Control and pan to Token object
         if (token) {
             token.control({ releaseOthers: true });
-            return canvas.animatePan({ x: token.data.x, y: token.data.y });
+            return canvas.animatePan({ x: token.system.x, y: token.system.y });
         }
     }
 
@@ -265,7 +265,7 @@ export default class MenuComponent extends Component {
         await timeout(150);
         this.lock = false;
 
-        return strugglesToDisplay.map(m => m.data);
+        return strugglesToDisplay.map(m => m.system);
     }
 
     _prepareNewStruggle(actor, type, isTelekinetic, isPhysical = true) {
