@@ -1054,6 +1054,11 @@ export class PTUActor extends Actor {
     if (roll.total < LOYALTY_DC[this.data.data.loyalty]) return false;
     return true;
   }
+
+  hasEdge(name) {
+    if (this.data.type == "pokemon") return false;
+    return this.edges?.some((e) => e.name === name);
+  }
 }
 
 export function GetSpeciesData(species) {

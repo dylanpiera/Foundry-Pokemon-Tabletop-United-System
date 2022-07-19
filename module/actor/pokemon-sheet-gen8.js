@@ -75,6 +75,8 @@ export class PTUGen8PokemonSheet extends ActorSheet {
 				this.actor.update({"data.owner": data['canBeWild'] ? "0" : data['owners'][0]?.id})
 		}
 
+		this.getTrainingExp();
+
 		return data;
 	}
 
@@ -270,6 +272,17 @@ export class PTUGen8PokemonSheet extends ActorSheet {
 			autoFocus: true,
 			minLength: 1
 		});
+
+				// Add event listener to button with class .training.exp
+				let button = html.find('button[name="apply-training-exp"]');
+				button.click((event) => {
+					this._onApplyTrainingExp(event)
+				});
+		
+				// document.getElementsByName("apply-training-exp")[0].addEventListener("click", async (event) => {
+				// 	console.log("Exp Training");
+				// 	await this._onApplyTrainingExp(event)
+				// });
 
 		html.find('input[name="data.health.injuries"]').change(async (event) => {
 			await new Promise(r => setTimeout(r, 100));
@@ -602,6 +615,45 @@ export class PTUGen8PokemonSheet extends ActorSheet {
 		d.position.height = 125;
 		
 		d.render(true);
+	}
+
+	async _onApplyTrainingExp(event) {
+		event.preventDefault();
+		if(event.screenX == 0 && event.screenY == 0) return;
+		const newExp = this.actor.data.data.level.exp + this.getTrainingExp();;
+		this.actor.update({
+			"data.level.exp": newExp,
+		});
+	}
+
+	getTrainingExp() {
+		if (this.actor.data.data.owner == 0) return;
+
+		const owner = game.actors.get(this.actor.data.data.owner);
+		if (!owner) return;
+		
+		let rank = owner.data.data.skills.command.value.value;
+		if (owner.hasEdge("Groomer"))
+		{
+			rank = Math.max(rank, owner.data.data.skills.generalEd.value.value, owner.data.data.skills.pokemonEd.value.value)
+		}
+		if (owner.hasEdge("Beast Master"))
+		{
+			rank = Math.max(rank, owner.data.data.skills.intimidate.value.value)
+		}
+
+		const bonusList = [0, 0, 5, 5, 10, 10, 15, 15]
+		let bonus = bonusList[rank - 1];
+		if (owner.hasEdge("Trainer of Champions"))
+		{
+			bonus += 5;
+		}
+
+		const trainingExp = bonus + Math.floor(this.actor.data.data.level.current * 0.5);
+		this.actor.update({
+			"data.level.trainingExp": trainingExp
+		});
+		return trainingExp;
 	}
 
 	useOwnerAP(amount = 1) {

@@ -58,6 +58,10 @@
     "PTU.Experience": "Experience",
     "PTU.Level": "Level",
     "PTU.Nature": "Nature",
+    "PTU.TrainingExp": {
+        "Exp": "Training Exp",
+        "Apply": "Apply Training Exp"
+    },
 
     "PTU.DamageModPhysical": "Physical Damage Mod",
     "PTU.DamageModSpecial": "Special Damage Mod",
