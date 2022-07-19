@@ -31,7 +31,7 @@ export const battle_sound_paths = {
 Hooks.on("renderChatMessage", (message) => {
 	if(!message.isRoll && (game.settings.get("ptu", "playMoveSounds") == true))
 	{
-		message.data.sound = null; // Suppress dice sounds for Move Master roll templates
+		message.sound = null; // Suppress dice sounds for Move Master roll templates
 	}
 });
 

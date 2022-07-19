@@ -199,15 +199,15 @@ export class PTUCombatOverrides extends Combat {
     else {
       // Determine the turn order and the current turn
       const turns = this.combatants.contents.sort(this._sortCombatants);
-      if ( this.turn !== null) this.data.turn = Math.clamped(this.data.turn, 0, turns.length-1);
+      if ( this.turn !== null) this.turn = Math.clamped(this.turn, 0, turns.length-1);
 
             // Update state tracking
-      let c = turns[this.data.turn];
+      let c = turns[this.turn];
       this.current = {
-        round: this.data.round,
-        turn: this.data.turn,
+        round: this.round,
+        turn: this.turn,
         combatantId: c ? c.id : null,
-        tokenId: c ? c.data.tokenId : null
+        tokenId: c ? c.tokenId : null
       };
       return this.turns = turns;
      }

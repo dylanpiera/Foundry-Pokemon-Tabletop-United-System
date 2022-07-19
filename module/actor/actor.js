@@ -25,7 +25,7 @@ export class PTUActor extends Actor {
     this.origins = {};
     super.prepareData();
 
-    const actorData = this.data;
+    const actorData = this;
     const actorSystem = this.system;
 
     if (parseInt(game.version.split('.')[1]) <= 6) {
@@ -210,7 +210,7 @@ export class PTUActor extends Actor {
 
   /** @override */
   async prepareDerivedData() {
-    const actorData = this.data;
+    const actorData = this;
     const actorSystem = this.system;
 
     if (!isNaN(Number(actorSystem.stats.atk.mod))) {
@@ -375,7 +375,7 @@ export class PTUActor extends Actor {
    * Prepare Character type specific data
    */
   _prepareCharacterData() {
-    const actorData = this.data
+    const actorData = this
     const data = this.system;
 
     const dexExpEnabled = "true" == game.settings.get("ptu", "useDexExp") ?? false;
@@ -442,7 +442,7 @@ export class PTUActor extends Actor {
    * Prepare Pokemon type specific data
    */
   _preparePokemonData() {
-    const actorData = this.data
+    const actorData = this
     const data = this.system;
 
     const speciesData = game.ptu.GetSpeciesData(data.species);
@@ -498,7 +498,7 @@ export class PTUActor extends Actor {
     Hooks.call("updateInitiative", this);
 
     data.tp.max = (data.level.current > 0 ? Math.floor(data.level.current / 5) : 0) + 1;
-    data.tp.pep.value = actorData.items.filter(x => x.type == "pokeedge" && x.data.origin?.toLowerCase() != "pusher").length;
+    data.tp.pep.value = actorData.items.filter(x => x.type == "pokeedge" && x.system.origin?.toLowerCase() != "pusher").length;
     data.tp.pep.max = data.level.current > 0 ? Math.floor(data.level.current / 10) + 1 : 1;
 
     data.evasion = CalculateEvasions(data, actorData.flags?.ptu, actorData.items);
@@ -678,9 +678,9 @@ export class PTUActor extends Actor {
     const damageBonuses = await calculateTotalDamageBonus(moveData, bonusDamage, currentWeather, abilityBonuses, this)
 
     // Do AC Roll
-    const acRoll = await game.ptu.combat.CalculateAcRoll(moveData, this.data, APBonus).evaluate({ async: true });
+    const acRoll = await game.ptu.combat.CalculateAcRoll(moveData, this, APBonus).evaluate({ async: true });
     if (moveData.doubleStrike.is === true) {
-      const acRoll2 = await game.ptu.combat.CalculateAcRoll(moveData, this.data, APBonus).evaluate({ async: true });
+      const acRoll2 = await game.ptu.combat.CalculateAcRoll(moveData, this, APBonus).evaluate({ async: true });
       moveData.doubleStrike.hit1 = { roll: acRoll };
       moveData.doubleStrike.hit2 = { roll: acRoll2 };
     }

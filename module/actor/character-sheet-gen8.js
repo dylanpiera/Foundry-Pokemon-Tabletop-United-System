@@ -523,7 +523,7 @@ export class PTUGen8CharacterSheet extends ActorSheet {
 export function CalculateAcRoll(moveData, actor, APBonus = 0) {
 	return new Roll('1d20-@ac+@acBonus@apBonus', {
 		ac: (parseInt(moveData.ac) || 0),
-		acBonus: (parseInt(actor.data.modifiers.acBonus?.total) || 0),
+		acBonus: (parseInt(actor.system.modifiers.acBonus?.total) || 0),
 		apBonus: (APBonus == 0 ? "" : "+" + APBonus.toString())
 	})
 }
