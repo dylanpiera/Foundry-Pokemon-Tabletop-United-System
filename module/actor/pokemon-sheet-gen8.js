@@ -273,16 +273,9 @@ export class PTUGen8PokemonSheet extends ActorSheet {
 			minLength: 1
 		});
 
-				// Add event listener to button with class .training.exp
-				let button = html.find('button[name="apply-training-exp"]');
-				button.click((event) => {
-					this._onApplyTrainingExp(event)
-				});
-		
-				// document.getElementsByName("apply-training-exp")[0].addEventListener("click", async (event) => {
-				// 	console.log("Exp Training");
-				// 	await this._onApplyTrainingExp(event)
-				// });
+		html.find('button[name="apply-training-exp"]').click((event) => {
+			this._onApplyTrainingExp(event)
+		});
 
 		html.find('input[name="data.health.injuries"]').change(async (event) => {
 			await new Promise(r => setTimeout(r, 100));
