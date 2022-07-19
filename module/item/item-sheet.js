@@ -30,7 +30,7 @@ export class PTUItemSheet extends ItemSheet {
 
 		// Alternatively, you could use the following return statement to do a
 		// unique item sheet by type, like `weapon-sheet.html`.
-		return `${path}/item-${this.item.data.type}-sheet.html`;
+		return `${path}/item-${this.item.type}-sheet.html`;
 	}
 
 	/* -------------------------------------------- */
@@ -40,7 +40,7 @@ export class PTUItemSheet extends ItemSheet {
 		const data = super.getData();
 
 		if(this.object.type === 'move' && this.object.isOwned)
-			data.data = PrepareMoveData(this.object.actor?.data?.data, data.data);
+			data.data = PrepareMoveData(this.object.actor?.system, data.data);
 		return data;
 	}
 
@@ -108,7 +108,7 @@ export class PTUItemSheet extends ItemSheet {
 							if (!game.user.character) return ui.notifications.warn("Please make sure you have a trainer as your Selected Player Character");
 				
 							return game.ptu.renderDex(mon, 
-								game.user.character.itemTypes.dexentry.some(entry => entry.system.owned && entry.data.name === game.ptu.GetSpeciesData(mon)?.id?.toLowerCase())
+								game.user.character.itemTypes.dexentry.some(entry => entry.system.owned && entry.system.name === game.ptu.GetSpeciesData(mon)?.id?.toLowerCase())
 								? "full" : "desc");
 						}
 						case 5: { // GM Prompt
@@ -157,7 +157,7 @@ export class PTUItemSheet extends ItemSheet {
 	 * @private
 	 */
 	_toChat() {
-		switch(this.object.data.type) {
+		switch(this.object.type) {
 			case "move":
 				return sendMoveMessage({
 					speaker: ChatMessage.getSpeaker({

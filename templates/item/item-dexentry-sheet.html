@@ -7,7 +7,7 @@
                     class="readable p-2" 
                     style="word-break: break-word;
                         line-height: 13px;
-                        font-size: 15px;">{{{data.entry}}}</span>
+                        font-size: 15px;">{{{system.entry}}}</span>
                 </div>
             </div>
         </header>
@@ -37,22 +37,22 @@
                                 <input
                                     class="ml-2"
                                     data-item-id="{{_id}}" 
-                                    data-binding="data.owned" 
-                                    type="checkbox" {{checked data.owned}}
+                                    data-binding="system.owned" 
+                                    type="checkbox" {{checked system.owned}}
                                     disabled
                                 />
-                                <label for="data.owned"><span class="text-muted" style="word-break: break-word;">Please edit in trainer sheet.</span></label>
+                                <label for="system.owned"><span class="text-muted" style="word-break: break-word;">Please edit in trainer sheet.</span></label>
                             </div>
                         </div>
                     </div>
                     <div class="hgss-box align-items-center">
                         <div class="hgss-header mb-1 " style="padding: 6px 5px;">
-                            <label for="data.entry">Entry:</label>
+                            <label for="system.entry">Entry:</label>
                         </div>
                         <div class="hgss-body" style="word-break: break-word;">
                             <textarea
                                 class="ml-2"
-                                name="data.entry">{{data.entry}}</textarea>
+                                name="system.entry">{{system.entry}}</textarea>
                         </div>
                     </div>
                 </div>
