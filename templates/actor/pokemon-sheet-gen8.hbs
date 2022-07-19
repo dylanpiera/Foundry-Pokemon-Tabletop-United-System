@@ -265,15 +265,12 @@
                           <div class="progress-bar p{{data.level.percent}}" id="progressBar"></div>
                         </div>
                       </div>
-                      {{#if (not this.actor.data.data.owner 0)}}
-                        <div class="swsh-body">
+                      {{#if (and (getGameSetting "useTrainingExp") (not this.actor.data.data.owner 0))}}
+                        <div class="swsh-body" style="margin-bottom: 4pt;">
                           <div class="d-flex w-100 mt-auto mb-auto">
-                            <div class="col-sm-6">
-                              <button name="apply-training-exp" class="btn w-100" style="margin-bottom: 4pt; margin-top: 4pt; font-size: x-small;">{{localize "PTU.TrainingExp.Apply"}}</button>
-                            </div>                           
-                            <div class="col-sm-6 d-flex w-100 mt-auto mb-auto">
-                                <label for="training-exp">{{localize "PTU.TrainingExp.Exp"}}</label>
-                                <input class="ml-1" type="text" name="training-exp" value="{{data.level.trainingExp}}"
+                            <div class="w-100 mt-auto mb-auto" name="apply-training-exp" style="align-items: center;">
+                                <label class="center-text w-50 rollable" name="apply-training-exp" for="training-exp">{{localize "PTU.TrainingExp"}}</label>
+                                <input class="ml-1 w-25" type="text" name="apply-training-exp" value="{{data.level.trainingExp}}"
                                 data-dtype="Number" disabled />
                             </div>
                           </div>

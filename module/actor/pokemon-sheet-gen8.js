@@ -273,7 +273,7 @@ export class PTUGen8PokemonSheet extends ActorSheet {
 			minLength: 1
 		});
 
-		html.find('button[name="apply-training-exp"]').click(async (event) => {
+		html.find('label[name="apply-training-exp"]').click(async (event) => {
 			await this._onApplyTrainingExp(event)
 		});
 
