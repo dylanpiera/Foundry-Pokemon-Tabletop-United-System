@@ -528,62 +528,6 @@ export function CalculateAcRoll(moveData, actor, APBonus = 0) {
 	})
 }
 
-function CalculateDmgRoll(moveData, actorData, isCrit) {
-	if (moveData.category === "Status") return;
-
-	if (moveData.damageBase.toString().match(/^[0-9]+$/) != null) {
-		let dbRoll = game.ptu.DbData[moveData.stab ? parseInt(moveData.damageBase) + 2 : moveData.damageBase];
-		let bonus = Math.max((moveData.category === "Physical" ? (actorData.stats.atk.total + (actorData.modifiers.damageBonus?.physical?.total ?? 0)) : (actorData.stats.spatk.total + (actorData.modifiers.damageBonus?.special?.total ?? 0))) + (moveData.damageBonus ?? 0), 0);
-		if (!dbRoll) return;
-		return new Roll(isCrit == CritOptions.CRIT_HIT ? '@roll+@roll+@bonus' : '@roll+@bonus', {
-			roll: dbRoll,
-			bonus: bonus
-		})
-	}
-	let dbRoll = game.ptu.DbData[moveData.damageBase];
-	if (!dbRoll) return;
-	return new Roll('@roll', {
-		roll: dbRoll
-	})
-}
-
-function GetDiceResult(roll) {
-	if (!roll._evaluated) roll.evaluate({ async: false });
-
-	let diceResult = -2;
-	try {
-		diceResult = roll.terms[0].results[0].result;
-	} catch (err) {
-		log("Old system detected, using deprecated rolling...")
-		diceResult = roll.parts[0].results[0];
-	}
-	return diceResult;
-}
-
-async function sendMoveRollMessage(rollData, messageData = {}) {
-	if (!rollData._evaluated) await rollData.evaluate({ async: true });
-
-	messageData = mergeObject({
-		user: game.user.id,
-		sound: CONFIG.sounds.dice,
-		templateType: MoveMessageTypes.DAMAGE,
-		verboseChatInfo: game.settings.get("ptu", "verboseChatInfo") ?? false,
-		crp: game.settings.get("ptu", "combatRollPreference"),
-		cdp: game.settings.get("ptu", "combatDescPreference"),
-	}, messageData);
-
-	messageData.roll = rollData;
-
-	if (!messageData.move) {
-		error("Can't display move chat message without move data.")
-		return;
-	}
-
-	messageData.content = await renderTemplate(`/systems/ptu/templates/chat/moves/move-${messageData.templateType}.hbs`, messageData)
-
-	return ChatMessage.create(messageData, {});
-}
-
 async function sendMoveMessage(messageData = {}) {
 	messageData = mergeObject({
 		user: game.user.id,

@@ -587,7 +587,7 @@ export class PTUActor extends Actor {
 
     // Increase used count if applicable.
     if (moveData.frequency.toLowerCase().includes("daily") || moveData.frequency.toLowerCase().includes("scene")) {
-      await move.data.update({ "data.useCount": Number(duplicate(moveData.useCount ?? 0)) + 1 })
+      await move.update({ "system.useCount": Number(duplicate(moveData.useCount ?? 0)) + 1 })
     }
 
     // Set round properties if applicable
@@ -604,8 +604,8 @@ export class PTUActor extends Actor {
         label: `Type Strategist (${moveData.type})`,
         changes: [
           { key: "flags.ptu.has_type_strategist", value: true, mode: CONST.ACTIVE_EFFECT_MODES.OVERRIDE, priority: 50 },
-          { key: "data.modifiers.damageReduction.physical.value", value: dr, mode: CONST.ACTIVE_EFFECT_MODES.ADD, priority: 10 },
-          { key: "data.modifiers.damageReduction.special.value", value: dr, mode: CONST.ACTIVE_EFFECT_MODES.ADD, priority: 10 }
+          { key: "modifiers.damageReduction.physical.value", value: dr, mode: CONST.ACTIVE_EFFECT_MODES.ADD, priority: 10 },
+          { key: "modifiers.damageReduction.special.value", value: dr, mode: CONST.ACTIVE_EFFECT_MODES.ADD, priority: 10 }
         ],
 				"flags.ptu.editLocked": true,
       };
@@ -627,7 +627,7 @@ export class PTUActor extends Actor {
       move: moveData,
       moveName: move.name,
       targetAmount: Object.keys(attack.data).length,
-      actorImage: this.data.img,
+      actorImage: this.img,
     }, attack);
 
     messageData.content = await renderTemplate('/systems/ptu/templates/chat/moves/full-attack.hbs', messageData);

@@ -364,7 +364,7 @@ export const ActionSubTypes = {
 
 export async function TakeAction(actor, { actionType, actionSubType, label }) {
     const changesToApply = [];
-    const actions = actor.data.flags?.ptu?.actions_taken ?? {};
+    const actions = actor.flags?.ptu?.actions_taken ?? {};
     const supportAction = actions?.support ?? false;
 
     // This handles the homebrew option for extra standard actions that can't be used for directly damaging moves

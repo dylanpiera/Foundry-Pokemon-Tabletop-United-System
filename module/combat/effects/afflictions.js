@@ -11,7 +11,7 @@ export const Afflictions = [
     {
         id: "effect.persistent.burned", label: "Burned", icon: 'icons/svg/fire.svg', changes: [
             { key: "flags.ptu.is_burned", value: true, mode: CONST.ACTIVE_EFFECT_MODES.OVERRIDE, priority: 50 },
-            { key: "data.stats.def.stage.mod", value: -2, mode: CONST.ACTIVE_EFFECT_MODES.ADD, priority: 10 }
+            { key: "system.stats.def.stage.mod", value: -2, mode: CONST.ACTIVE_EFFECT_MODES.ADD, priority: 10 }
         ]
     },
     {
@@ -55,7 +55,7 @@ export const Afflictions = [
         id: "effect.volatile.flinch", label: "Flinch", icon: 'icons/svg/paralysis.svg', changes: [
             { key: "flags.ptu.is_vulnerable", value: true, mode: CONST.ACTIVE_EFFECT_MODES.OVERRIDE, priority: 50 },
             { key: "flags.ptu.is_flinched", value: true, mode: CONST.ACTIVE_EFFECT_MODES.OVERRIDE, priority: 50 },
-            { key: "data.modifiers.flinch_count", value: 1, mode: CONST.ACTIVE_EFFECT_MODES.CUSTOM, priority: 0 },
+            { key: "system.modifiers.flinch_count", value: 1, mode: CONST.ACTIVE_EFFECT_MODES.CUSTOM, priority: 0 },
         ]
     },
     {
@@ -88,7 +88,7 @@ export const Afflictions = [
         id: "effect.other.blindness", label: "Blindness", icon: 'icons/svg/eye.svg', changes: [
             { key: "flags.ptu.is_blind", value: true, mode: CONST.ACTIVE_EFFECT_MODES.OVERRIDE, priority: 50 },
             { key: "flags.ptu.is_vulnerable", value: true, mode: CONST.ACTIVE_EFFECT_MODES.OVERRIDE, priority: 50 },
-            { key: "data.modifiers.acBonus.mod", value: -6, mode: CONST.ACTIVE_EFFECT_MODES.ADD, priority: 30 }
+            { key: "system.modifiers.acBonus.mod", value: -6, mode: CONST.ACTIVE_EFFECT_MODES.ADD, priority: 30 }
         ]
     },
     {
@@ -96,7 +96,7 @@ export const Afflictions = [
             { key: "flags.ptu.is_blind", value: true, mode: CONST.ACTIVE_EFFECT_MODES.OVERRIDE, priority: 50 },
             { key: "flags.ptu.is_totally_blind", value: true, mode: CONST.ACTIVE_EFFECT_MODES.OVERRIDE, priority: 50 },
             { key: "flags.ptu.is_vulnerable", value: true, mode: CONST.ACTIVE_EFFECT_MODES.OVERRIDE, priority: 50 },
-            { key: "data.modifiers.acBonus.mod", value: -10, mode: CONST.ACTIVE_EFFECT_MODES.ADD, priority: 30 }
+            { key: "system.modifiers.acBonus.mod", value: -10, mode: CONST.ACTIVE_EFFECT_MODES.ADD, priority: 30 }
         ]
     },
     {
@@ -176,7 +176,7 @@ export const EffectFns = new Map([
             await ApplyFlatDamage([token], "Poison", actor.system.health.tick);
         }
 
-        const actions_taken = actor.data.flags.ptu?.actions_taken;
+        const actions_taken = actor.flags.ptu?.actions_taken;
         if (actions_taken?.standard) {
             await applyPoison();
         }
@@ -203,12 +203,12 @@ export const EffectFns = new Map([
 
         let applyPoison = async () => {
             const token = canvas.tokens.get(lastCombatant.token.id);
-            const badly_poisoned_effect = token.actor.effects.find(x => x.data.label == "Badly Poisoned");
+            const badly_poisoned_effect = token.actor.effects.find(x => x.label == "Badly Poisoned");
             const toxicDamage = (a,b=5) => a > 0 ? toxicDamage(a-1,b+b) : b;
-            await ApplyFlatDamage([token], "Toxic Damage", toxicDamage(badly_poisoned_effect.data.flags.ptu?.roundsElapsed ?? 0));
+            await ApplyFlatDamage([token], "Toxic Damage", toxicDamage(badly_poisoned_effect.flags.ptu?.roundsElapsed ?? 0));
         }
 
-        const actions_taken = actor.data.flags.ptu?.actions_taken;
+        const actions_taken = actor.flags.ptu?.actions_taken;
         if (actions_taken?.standard) {
             await applyPoison();
         }
@@ -239,7 +239,7 @@ export const EffectFns = new Map([
             await ApplyFlatDamage([token], "Burn", actor.system.health.tick);
         }
 
-        const actions_taken = actor.data.flags.ptu?.actions_taken;
+        const actions_taken = actor.flags.ptu?.actions_taken;
         if (actions_taken?.standard) {
             await applyBurn();
         }
@@ -269,7 +269,7 @@ export const EffectFns = new Map([
             await ApplyFlatDamage([token], "Curse", actor.system.health.tick * 2);
         }
 
-        const actions_taken = actor.data.flags.ptu?.actions_taken;
+        const actions_taken = actor.flags.ptu?.actions_taken;
         if (actions_taken?.standard) {
             await applyCurse();
         }
@@ -334,7 +334,7 @@ export const EffectFns = new Map([
         }
 
         if (isErrata) {
-            const actions_taken = actor.data.flags.ptu?.actions_taken;
+            const actions_taken = actor.flags.ptu?.actions_taken;
             if (actions_taken?.attacked?.physical || actions_taken?.attacked?.special || actions_taken?.attacked?.status) {
                 if (actions_taken?.attacked?.physical) await applyConfusion(CONFIG.PTUCombat.Attack.PHYSICAL);
                 if (actions_taken?.attacked?.special) await applyConfusion(CONFIG.PTUCombat.Attack.SPECIAL);
@@ -375,7 +375,7 @@ export const EffectFns = new Map([
         }
 
         const saveCheck = await actor.sheet._onSaveRoll();
-        const roll = JSON.parse(saveCheck.data.roll);
+        const roll = JSON.parse(saveCheck.roll);
         roll._total = roll.total;
         let messageData = {};
 
@@ -390,7 +390,7 @@ export const EffectFns = new Map([
                     success: true
                 }
 
-                await actor.effects.find(x => x.data.label == "Confused").delete();
+                await actor.effects.find(x => x.label == "Confused").delete();
             }
             else {
                 messageData = {
@@ -426,7 +426,7 @@ export const EffectFns = new Map([
                     success: true
                 }
 
-                await actor.effects.find(x => x.data.label == "Confused").delete();
+                await actor.effects.find(x => x.label == "Confused").delete();
             }
         }
         const content = await renderTemplate('/systems/ptu/templates/chat/save-check.hbs', messageData);
@@ -447,7 +447,7 @@ export const EffectFns = new Map([
         const actor = lastCombatant.actor;
 
         const saveCheck = await actor.sheet._onSaveRoll();
-        const roll = JSON.parse(saveCheck.data.roll);
+        const roll = JSON.parse(saveCheck.roll);
         roll._total = roll.total;
         let messageData = {};
 
@@ -489,7 +489,7 @@ export const EffectFns = new Map([
         const actor = lastCombatant.actor;
 
         const saveCheck = await actor.sheet._onSaveRoll();
-        const roll = JSON.parse(saveCheck.data.roll);
+        const roll = JSON.parse(saveCheck.roll);
         roll._total = roll.total;
         let messageData = {};
 
@@ -504,7 +504,7 @@ export const EffectFns = new Map([
                 success: true
             }
 
-            await actor.effects.find(x => x.data.label == Handlebars.helpers.capitalizeFirst(effect)).delete();
+            await actor.effects.find(x => x.label == Handlebars.helpers.capitalizeFirst(effect)).delete();
         }
         else {
             messageData = {
@@ -531,7 +531,7 @@ export const EffectFns = new Map([
         const isErrata = game.settings.get("ptu", "errata");
 
         const saveCheck = await actor.sheet._onSaveRoll();
-        const roll = JSON.parse(saveCheck.data.roll);
+        const roll = JSON.parse(saveCheck.roll);
         roll._total = roll.total;
         let messageData = {};
 
@@ -546,7 +546,7 @@ export const EffectFns = new Map([
                     success: true
                 }
 
-                await actor.effects.find(x => x.data.label == "Infatuation").delete();
+                await actor.effects.find(x => x.label == "Infatuation").delete();
             }
             else {
                 messageData = {
@@ -582,7 +582,7 @@ export const EffectFns = new Map([
                     success: true
                 }
 
-                await actor.effects.find(x => x.data.label == "Infatuation").delete();
+                await actor.effects.find(x => x.label == "Infatuation").delete();
             }
         }
         const content = await renderTemplate('/systems/ptu/templates/chat/save-check.hbs', messageData);
@@ -601,7 +601,7 @@ export const EffectFns = new Map([
         const actor = lastCombatant.actor;
 
         const saveCheck = await actor.sheet._onSaveRoll();
-        const roll = JSON.parse(saveCheck.data.roll);
+        const roll = JSON.parse(saveCheck.roll);
         roll._total = roll.total;
         let messageData = {};
 
@@ -615,7 +615,7 @@ export const EffectFns = new Map([
                 success: true
             }
 
-            await actor.effects.find(x => x.data.label == "Rage").delete();
+            await actor.effects.find(x => x.label == "Rage").delete();
         }
         else {
             messageData = {
@@ -641,7 +641,7 @@ export const EffectFns = new Map([
         const actor = lastCombatant.actor;
 
         const saveCheck = await actor.sheet._onSaveRoll();
-        const roll = JSON.parse(saveCheck.data.roll);
+        const roll = JSON.parse(saveCheck.roll);
         roll._total = roll.total;
         let messageData = {};
 
@@ -655,8 +655,8 @@ export const EffectFns = new Map([
                 success: true
             }
 
-            await actor.effects.find(x => x.data.label == "Sleep").delete();
-            const bad_sleep = actor.effects.find(x => x.data.label == "BadSleep");
+            await actor.effects.find(x => x.label == "Sleep").delete();
+            const bad_sleep = actor.effects.find(x => x.label == "BadSleep");
             if (bad_sleep) await bad_sleep.delete();
         }
         else {
@@ -710,13 +710,13 @@ export const EffectFns = new Map([
             const actor = lastCombatant.actor;
 
             const saveCheck = await actor.sheet._onSaveRoll();
-            const roll = JSON.parse(saveCheck.data.roll);
+            const roll = JSON.parse(saveCheck.roll);
             roll._total = roll.total;
             let messageData = {};
 
-            const vortex_effect = actor.effects.find(x => x.data.label == "Vortex");
+            const vortex_effect = actor.effects.find(x => x.label == "Vortex");
 
-            const DC = Math.max(0, 20 - ((vortex_effect.data.flags.ptu?.roundsElapsed ?? 0) * 6));
+            const DC = Math.max(0, 20 - ((vortex_effect.flags.ptu?.roundsElapsed ?? 0) * 6));
 
             if (roll.total >= DC || DC == 0) {
                 messageData = {
@@ -726,7 +726,7 @@ export const EffectFns = new Map([
                     success: true
                 }
 
-                await actor.effects.find(x => x.data.label == "Vortex").delete();
+                await actor.effects.find(x => x.label == "Vortex").delete();
             }
             else {
                 messageData = {
@@ -772,16 +772,16 @@ Hooks.on("applyActiveEffect", function (actorData, change) {
 
         if (actorData.isToken) {
             actor = canvas?.tokens?.get(actorData.token.id)?.actor;
-            if (!actor?.data) return;
+            if (!actor?.system) return;
         }
         else {
             actor = game.actors?.get(actorData.id)
-            if (!actor?.data) return;
+            if (!actor?.system) return;
         }
-        let count = duplicate(actor.data).data.modifiers.flinch_count;
+        let count = duplicate(actor.system).modifiers.flinch_count;
 
-        if (count.keys.includes(change.effect.data._id)) return;
-        count.keys.push(change.effect.data._id);
+        if (count.keys.includes(change.effect._id)) return;
+        count.keys.push(change.effect._id);
         count.value++;
 
 
@@ -791,7 +791,7 @@ Hooks.on("applyActiveEffect", function (actorData, change) {
 
 // Set combat details on active effects for duration based calculations like Badly Poisoned
 Hooks.on("preCreateActiveEffect", function (effect, effectData, options, sender) {
-    effect.data.update(applyPreCreateActiveEffectChanges(effectData));
+    effect.updateSource(applyPreCreateActiveEffectChanges(effectData));
 })
 
 function applyPreCreateActiveEffectChanges(effect, preCreate = true) {
