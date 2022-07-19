@@ -1,5 +1,4 @@
 {{#each actor.effects as |effect|}}
-    {{#with effect.data}}
     <div class="swsh-box mb-2 w-100 no-shadow">
         <div class="swsh-header pl-2 effect-header">
             <h3 style="flex: 1 0 50%">{{label}} {{#if (is disabled true)}}({{localize "PTU.EffectDisabled"}}){{/if}}</h3>
@@ -60,5 +59,4 @@
             </ol>
         </div>
     </div>
-    {{/with}}
 {{/each}}

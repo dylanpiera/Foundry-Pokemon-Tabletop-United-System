@@ -30,7 +30,7 @@ export class PTUGen8PokemonSheet extends ActorSheet {
 		data.dtypes = ['String', 'Number', 'Boolean'];
 
 		// Prepare items.
-		if (this.actor.data.type == 'pokemon') {
+		if (this.actor.type == 'pokemon') {
 			this._prepareCharacterItems(data);
 		}
 
@@ -52,21 +52,21 @@ export class PTUGen8PokemonSheet extends ActorSheet {
 				return;
 			}
 
-			let pcs = game.actors.filter(x => (x.data.permission[key] >= 3 || x.data.permission.default >= 3) && x.data.type == "character");
+			let pcs = game.actors.filter(x => (x.ownership[key] >= 3 || x.ownership.default >= 3) && x.type == "character");
 			if(pcs && !game.users.get(key).isGM) data["owners"] = data['owners'].concat(pcs);
 		}
 
 
-		if(this.actor.data.permission.default >= 3) {
+		if(this.actor.ownership.default >= 3) {
 			for(let key of game.users.map(x => x.id)) findActors(key);
 		}
 		else {
-			for(let [key, level] of Object.entries(this.actor.data.permission)) {
+			for(let [key, level] of Object.entries(this.actor.ownership)) {
 				if(level >= 3) findActors(key);
 			}
 		}
 		if(data['owners'].length == 0) {
-			data['owners'] = data['owners'].concat(game.actors.filter(x => !x.hasPlayerOwner && x.data.type == "character"));
+			data['owners'] = data['owners'].concat(game.actors.filter(x => !x.hasPlayerOwner && x.type == "character"));
 			data['canBeWild'] = true;
 		}
 
@@ -99,7 +99,6 @@ export class PTUGen8PokemonSheet extends ActorSheet {
 		// Iterate through items, allocating to containers
 		// let totalWeight = 0;
 		for (let i of sheetData.items) {
-			let item = i.data;
 			i.img = i.img || DEFAULT_TOKEN;
 
 			switch (i.type) {
@@ -125,7 +124,7 @@ export class PTUGen8PokemonSheet extends ActorSheet {
 		actor.edges = edges;
 
 		for(let move of actor.moves) {
-			move.data = PrepareMoveData(actor.system, move.data)
+			move.system = PrepareMoveData(actor.system, move.system)
 		}
 	}
 
@@ -260,13 +259,13 @@ export class PTUGen8PokemonSheet extends ActorSheet {
 		}
 
 		html.find('#heldItemInput').autocomplete({
-			source: game.ptu.items.map((i) => i.data.name),
+			source: game.ptu.items.map((i) => i.name),
 			autoFocus: true,
 			minLength: 1
 		});
 
 		html.find('input[name="data.pokeball"]').autocomplete({
-			source: game.ptu.items.filter(x => x.data.category == "PokeBalls" || x.name.toLowerCase().endsWith("ball")).map((i) => i.data.name),
+			source: game.ptu.items.filter(x => x.category == "PokeBalls" || x.name.toLowerCase().endsWith("ball")).map((i) => i.name),
 			autoFocus: true,
 			minLength: 1
 		});
@@ -295,8 +294,8 @@ export class PTUGen8PokemonSheet extends ActorSheet {
 			// If property is true
 			if(getProperty(this.actor.data, path)) {
 				const effects = [];
-				this.actor.data.effects.forEach(effect => {
-					if(effect.data.changes.some(change => change.key == path)) {
+				this.actor.effects.forEach(effect => {
+					if(effect.changes.some(change => change.key == path)) {
 						effects.push(effect.id);
 						return;
 					}
@@ -334,7 +333,7 @@ export class PTUGen8PokemonSheet extends ActorSheet {
 			return changes;
 		} 
 
-		const effect = this.actor.effects.find(x => x.data.label == "Hardened Injuries")
+		const effect = this.actor.effects.find(x => x.label == "Hardened Injuries")
 		if(value === 0 || !isHardened) {
 			if(effect) {
 				await effect.delete();
@@ -500,7 +499,7 @@ export class PTUGen8PokemonSheet extends ActorSheet {
 
 		/** Show Dialog */
 		let d = new Dialog({
-			title: `${this.actor.data.name}'s ${move.name}`,
+			title: `${this.actor.name}'s ${move.name}`,
 			content: `<div class="pb-1"><p>Would you like to use move ${move.name} or output the move details?</p></div><div><small class="text-muted">Did you know you can skip this dialog box by holding the Shift, Ctrl or Alt key?</small></div>`,
 			buttons: {
 				roll: {
@@ -531,7 +530,7 @@ export class PTUGen8PokemonSheet extends ActorSheet {
 
 	useOwnerAP(amount = 1) {
 		if (this.actor.system.owner == 0) {
-			ui.notifications.error(`${this.actor.data.name} does not have an owner.`);
+			ui.notifications.error(`${this.actor.name} does not have an owner.`);
 			return false;
 		}
 		const owner = game.actors.get(this.actor.system.owner);
@@ -539,11 +538,11 @@ export class PTUGen8PokemonSheet extends ActorSheet {
 		let remainingAP = owner.system.ap.value;
 		if (remainingAP >= amount) {
 			owner.update({
-				'data.ap.value': remainingAP - amount
+				'system.ap.value': remainingAP - amount
 			});
 			return true;
 		}
-		ui.notifications.error(`${owner.data.name} does not have enough AP for this action.`);
+		ui.notifications.error(`${owner.name} does not have enough AP for this action.`);
 		return false;
 	}
 }
