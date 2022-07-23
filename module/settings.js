@@ -43,16 +43,6 @@ export function LoadSystemSettings() {
         category: "rules"
     });
 
-    game.settings.register("ptu", "useTrainingExp", {
-        name: "Use Training Experience for Pokemon",
-        hint: "Whether the value and apply button for training experience should be shown in the Pokémon's details page.",
-        scope: "world",
-        config: true,
-        type: Boolean,
-        default: true,
-        category: "rules"
-    });
-
     game.settings.register("ptu", "gameLanguage", {
         name: "Localization",
         hint: "Changes the name of Pokemon in the system. Would you like your language here? Get in contact on how to translate!",
