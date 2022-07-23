@@ -75,6 +75,8 @@ export class PTUGen8PokemonSheet extends ActorSheet {
 				this.actor.update({"data.owner": data['canBeWild'] ? "0" : data['owners'][0]?.id})
 		}
 
+		this.getTrainingExp();
+
 		return data;
 	}
 
@@ -269,6 +271,10 @@ export class PTUGen8PokemonSheet extends ActorSheet {
 			source: game.ptu.items.filter(x => x.data.category == "PokeBalls" || x.name.toLowerCase().endsWith("ball")).map((i) => i.data.name),
 			autoFocus: true,
 			minLength: 1
+		});
+
+		html.find('label[name="apply-training-exp"]').click(async (event) => {
+			await this._onApplyTrainingExp(event)
 		});
 
 		html.find('input[name="data.health.injuries"]').change(async (event) => {
