@@ -474,11 +474,7 @@ export class PTUGen8PokemonSheet extends ActorSheet {
 			const moveData = duplicate(move.data);
 			if (damageBonus != 0) moveData.damageBonus += damageBonus;
 
-			const useAP = event.altKey && this.useOwnerAP();
-			if (event.altKey && !useAP) return;
-			const APBonus = useAP ? 1 : 0;
-
-			return this.actor.executeMove(move._id, {}, APBonus);
+			return this.actor.executeMove(move._id, {}, event);
 
 			let acRoll = CalculateAcRoll(moveData, this.actor.data);
 			let diceResult = GetDiceResult(acRoll)
@@ -602,24 +598,6 @@ export class PTUGen8PokemonSheet extends ActorSheet {
 		d.position.height = 125;
 		
 		d.render(true);
-	}
-
-	useOwnerAP(amount = 1) {
-		if (this.actor.data.data.owner == 0) {
-			ui.notifications.error(`${this.actor.data.name} does not have an owner.`);
-			return false;
-		}
-		const owner = game.actors.get(this.actor.data.data.owner);
-		if (!owner) return;
-		let remainingAP = owner.data.data.ap.value;
-		if (remainingAP >= amount) {
-			owner.update({
-				'data.ap.value': remainingAP - amount
-			});
-			return true;
-		}
-		ui.notifications.error(`${owner.data.name} does not have enough AP for this action.`);
-		return false;
 	}
 }
 
