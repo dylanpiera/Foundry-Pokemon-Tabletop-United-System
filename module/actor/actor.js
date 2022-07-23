@@ -1063,10 +1063,6 @@ export class PTUActor extends Actor {
     return true;
   }
 
-  hasEdge(name) {
-    if (this.data.type == "pokemon") return false;
-    return this.edges?.some((e) => e.name === name);
-
   useAP(amount = 1) {
     switch (this.data.type) {
       case "character":
