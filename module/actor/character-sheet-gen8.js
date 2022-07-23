@@ -445,12 +445,7 @@ export class PTUGen8CharacterSheet extends ActorSheet {
 			const moveData = duplicate(move.data);
 			if (damageBonus != 0) moveData.damageBonus += damageBonus;
 
-			const useAP = event.altKey && this.useAP();
-			if (event.altKey && !useAP) return;
-			let APBonus = this.hasInstinctiveAptitude() ? 2 : 1;
-			APBonus = useAP ? APBonus : 0;
-
-			return this.actor.executeMove(move._id, {}, APBonus);
+			return this.actor.executeMove(move._id, {}, event);
 
 			let acRoll = CalculateAcRoll(moveData, this.actor.data);
 			let diceResult = GetDiceResult(acRoll)
@@ -574,22 +569,6 @@ export class PTUGen8CharacterSheet extends ActorSheet {
 		d.position.height = 125;
 
 		d.render(true);
-	}
-
-	useAP(value = 1) {
-		const currentAP = this.actor.data.data.ap.value;
-		if (currentAP >= value) {
-			this.actor.update({
-				'data.ap.value': currentAP - value
-			});
-			return true;
-		}
-		ui.notifications.error(`${this.actor.data.name} does not have enough AP for this action.`);
-		return false;
-	}
-
-	hasInstinctiveAptitude() {
-		return this.actor.edges.some((e) => e.name === "Instinctive Aptitude");
 	}
 }
 

@@ -480,11 +480,7 @@ export class PTUGen8PokemonSheet extends ActorSheet {
 			const moveData = duplicate(move.data);
 			if (damageBonus != 0) moveData.damageBonus += damageBonus;
 
-			const useAP = event.altKey && this.useOwnerAP();
-			if (event.altKey && !useAP) return;
-			const APBonus = useAP ? 1 : 0;
-
-			return this.actor.executeMove(move._id, {}, APBonus);
+			return this.actor.executeMove(move._id, {}, event);
 
 			let acRoll = CalculateAcRoll(moveData, this.actor.data);
 			let diceResult = GetDiceResult(acRoll)
@@ -608,63 +604,6 @@ export class PTUGen8PokemonSheet extends ActorSheet {
 		d.position.height = 125;
 		
 		d.render(true);
-	}
-
-	async _onApplyTrainingExp(event) {
-		event.preventDefault();
-		if(event.screenX == 0 && event.screenY == 0) return;
-		const newExp = this.actor.data.data.level.exp + this.getTrainingExp();
-		await this.actor.update({
-			"data.level.exp": newExp,
-		});
-	}
-
-	getTrainingExp() {
-		if (this.actor.data.data.owner == 0) return;
-
-		const owner = game.actors.get(this.actor.data.data.owner);
-		if (!owner) return;
-		
-		let rank = owner.data.data.skills.command.value.value;
-		if (owner.hasEdge("Groomer"))
-		{
-			rank = Math.max(rank, owner.data.data.skills.generalEd.value.value, owner.data.data.skills.pokemonEd.value.value)
-		}
-		if (owner.hasEdge("Beast Master"))
-		{
-			rank = Math.max(rank, owner.data.data.skills.intimidate.value.value)
-		}
-
-		const bonusList = [0, 0, 5, 5, 10, 10, 15, 15]
-		let bonus = bonusList[rank - 1];
-		if (owner.hasEdge("Trainer of Champions"))
-		{
-			bonus += 5;
-		}
-
-		const trainingExp = bonus + Math.floor(this.actor.data.data.level.current * 0.5);
-		this.actor.update({
-			"data.level.trainingExp": trainingExp
-		});
-		return trainingExp;
-	}
-
-	useOwnerAP(amount = 1) {
-		if (this.actor.data.data.owner == 0) {
-			ui.notifications.error(`${this.actor.data.name} does not have an owner.`);
-			return false;
-		}
-		const owner = game.actors.get(this.actor.data.data.owner);
-		if (!owner) return;
-		let remainingAP = owner.data.data.ap.value;
-		if (remainingAP >= amount) {
-			owner.update({
-				'data.ap.value': remainingAP - amount
-			});
-			return true;
-		}
-		ui.notifications.error(`${owner.data.name} does not have enough AP for this action.`);
-		return false;
 	}
 }
 
