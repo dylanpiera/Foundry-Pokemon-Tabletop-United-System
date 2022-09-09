@@ -63,7 +63,7 @@ export let log = logging.log;
 export let warn = logging.warn;
 export let error = logging.error;
 
-export const LATEST_VERSION = "3.0.0.1";
+export const LATEST_VERSION = "2.2.0.1";
 
 export const ptu = {
   utils: {
@@ -488,17 +488,16 @@ Hooks.on('dropActorSheetData', function (actor, sheet, itemDropData,) {
 });
 
 Hooks.on("renderSettingsConfig", function (esc, html, data) {
-  const element = html.find('.tab[data-tab="system"] .settings-list');
-  let header = element.find(".module-header");
-  element.html(
-    `${header[0].outerHTML}
+  const element = html.find(`.tab[data-tab="system"]`);
+  // const element = html.find('.tab[data-tab="system"] .settings-list');
+  // let header = element.find(".module-header");
+  element.html(`
     <div>
       <h3>We have moved!</h3>
       <p class="notes pb-2">All system settings can now be found in the PTU Settings, right under the section with the Configure Settings button in the sidebar!</p>
       <button onclick="new game.ptu.settings().render(true);" class="mb-2">Open PTU Settings</button>
     </div>
     `);
-  html.height('auto');
 });
 
 /* -------------------------------------------- */
