@@ -243,7 +243,7 @@ export async function FinishDexDragPokemonCreation(formData, update)
 
     const protoToken = duplicate(new_actor.data.token);
     
-    let size = game.ptu.GetSpeciesData(new_actor.data.data.species)["Size Class"]
+    let size = game.ptu.GetSpeciesData(new_actor.system.species)["Size Class"]
     
     let size_categories = {
         "Small": {width: 1, height: 1},
@@ -260,7 +260,7 @@ export async function FinishDexDragPokemonCreation(formData, update)
     protoToken.displayName=  40; 
     protoToken.bar1.attribute = "health";
 
-    protoToken.img = await GetSpeciesArt(game.ptu.GetSpeciesData(new_actor.data.data.species), imgSrc, ".webp", new_actor.data.data.shiny, true);
+    protoToken.img = await GetSpeciesArt(game.ptu.GetSpeciesData(new_actor.system.species), imgSrc, ".webp", new_actor.system.shiny, true);
     
     new_actor = await new_actor.update({"token": protoToken});
 
@@ -269,7 +269,7 @@ export async function FinishDexDragPokemonCreation(formData, update)
 
     let placedTokenData = await game.scenes.viewed.createEmbeddedDocuments("Token", [await new_actor.getTokenData(protoToken)]);
 
-    let currentSpecies = game.ptu.GetSpeciesData(new_actor.data.data.species)._id;
+    let currentSpecies = game.ptu.GetSpeciesData(new_actor.system.species)._id;
     game.ptu.PlayPokemonCry(currentSpecies);
     
     return placedTokenData;

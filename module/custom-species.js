@@ -58,7 +58,7 @@ async function migrateOldData() {
 export async function UpdateCustomSpecies(data) {
     log("Triggering Custom Species Refresh")
     debug("Custom Species Refresh Arguments:", data)
-    game.ptu.customSpeciesData = await JSON.parse("["+Folders.instance.get(CustomSpeciesFolder._dirId).contents.map(x => $(`<p>${x.data.content}</p>`).text()).join(",")+"]");
+    game.ptu.customSpeciesData = await JSON.parse("["+game.folders.get(CustomSpeciesFolder._dirId).contents.map(x => $(`<p>${[...x.pages][0].text.content}</p>`).text()).join(",")+"]");
     
     try {
         if(data && data.outdatedApplications) {
@@ -71,7 +71,7 @@ export async function UpdateCustomSpecies(data) {
         warn("Unable to update applications", err)
     }
 
-    await game.actors.filter(x => x.data.type === "pokemon" && (x.data.data.isCustomSpecies || x.data.data.typing === undefined)).forEach(async (x) => {
+    await game.actors.filter(x => x.type === "pokemon" && (x.system.isCustomSpecies || x.system.typing === undefined)).forEach(async (x) => {
         if(x.permission >= 3)
             await x.update({timestamp: Date.now()})
     })

@@ -45,19 +45,19 @@ Hooks.on("endOfCombat", async function (combat, participants) {
     console.groupCollapsed(`${actor.name}'s endOfCombat Handle`);
     for (const effect of actor.effects.values()) {
       if (
-        effect.data.flags?.core?.statusId?.includes(".volatile.") ||
-        effect.data.label == "Flinch"
+        effect.flags?.core?.statusId?.includes(".volatile.") ||
+        effect.label == "Flinch"
       ) {
         debug(
-          `Adding ${effect.id} (${effect.data.label}) to list of effects to remove`
+          `Adding ${effect.id} (${effect.label}) to list of effects to remove`
         );
         effectIdsToDelete.push(effect.id);
       }
     }
 
-    if (actor.data.data.modifiers.flinch_count.value > 0) {
+    if (actor.system.modifiers.flinch_count.value > 0) {
       log(`Reseting ${actor.name} (${actor.id})'s flinch count.`);
-      await actor.update({ "data.modifiers.flinch_count": { value: 0, keys: [] } })
+      await actor.update({ "system.modifiers.flinch_count": { value: 0, keys: [] } })
     }
     if (game.settings.get("ptu", "removeVolatileConditionsAfterCombat") && effectIdsToDelete.length > 0) {
       log(`Deleting Volatile conditions for ${actor.name} (${actor.id}).`);
@@ -240,7 +240,7 @@ export default class PTUCombat {
     if (combat.id != this.combat.id) return;
 
     // if this combatant doesn't have special PTU Flags, it can be ignored.
-    if (!combatant?.actor?.data?.flags?.ptu) return;
+    if (!combatant?.actor?.flags?.ptu) return;
     // Only worry about effects if the combat has started
     if (!combat.started) return;
 
@@ -256,27 +256,27 @@ export default class PTUCombat {
     // TODO: Maybe merge this into its own function
     // Checks to see if an effect should be deleted based on its duration, as well as updating the effect's "roundsElapsed" flag, for stuff like toxic.
     for (let effect of combatant.actor.effects) {
-      if(effect.data.duration.round == undefined && effect.data.duration.turns == undefined) continue;
+      if(effect.duration.round == undefined && effect.duration.turns == undefined) continue;
       if (options.turn.direction == CONFIG.PTUCombat.DirectionOptions.FORWARD) {
         const curRound =
           options.round.direction == CONFIG.PTUCombat.DirectionOptions.FORWARD
             ? lastTurn.round
             : combat.round;
-        const startRound = effect.data.duration?.startRound;
+        const startRound = effect.duration?.startRound;
         if (
           startRound - curRound <=
-          (effect.data.duration?.rounds ?? NaN) * -1
+          (effect.duration?.rounds ?? NaN) * -1
         ) {
           // If turns is bigger than 0, the effect needs to be deleted at the end of the turn
           // if it is undefined, it should be deleted at the start of the turn (ergo not now)
-          if (effect.data.duration?.turns > 0) {
+          if (effect.duration?.turns > 0) {
             await effect.delete();
             continue;
           }
         }
       }
 
-      const val = (duplicate(effect.data.flags).ptu?.roundsElapsed ?? 0) + 1;
+      const val = (duplicate(effect.flags).ptu?.roundsElapsed ?? 0) + 1;
       await effect.update({ "flags.ptu.roundsElapsed": val });
     }
 
@@ -290,21 +290,21 @@ export default class PTUCombat {
 
     if (options.turn.direction == CONFIG.PTUCombat.DirectionOptions.FORWARD) {
       await AudioHelper.play({src: ("systems/ptu/sounds/ui_sounds/ui_button.wav"), volume: 0.5, autoplay: true, loop: false}, true);
-      await game.ptu.PlayPokemonCry(combatant?.actor?.data?.data?.species);
+      await game.ptu.PlayPokemonCry(combatant?.actor?.system?.species);
     }
 
-    if (!combatant.actor.data.flags.ptu) return;
+    if (!combatant.actor.flags.ptu) return;
 
     if (options.turn.direction == CONFIG.PTUCombat.DirectionOptions.FORWARD) {
       for (let effect of combatant.actor.effects) {
         const curRound = combat.round;
-        const startRound = effect.data.duration?.startRound;
-        debug(startRound - curRound, effect.data.duration?.rounds * -1);
+        const startRound = effect.duration?.startRound;
+        debug(startRound - curRound, effect.duration?.rounds * -1);
         if (
           startRound - curRound <=
-          (effect.data.duration?.rounds ?? NaN) * -1
+          (effect.duration?.rounds ?? NaN) * -1
         ) {
-          if (effect.data.duration?.turns > 0) continue; // Needs to be removed at end of turn
+          if (effect.duration?.turns > 0) continue; // Needs to be removed at end of turn
           await effect.delete();
         }
       }
@@ -503,8 +503,8 @@ export default class PTUCombat {
     sender,
     isStartOfTurn
   ) {
-    if (!combatant.actor.data.flags?.ptu) return;
-    const afflictions = Object.keys(combatant.actor.data.flags.ptu)
+    if (!combatant.actor.flags?.ptu) return;
+    const afflictions = Object.keys(combatant.actor.flags.ptu)
       .filter((x) => x.startsWith("is_"))
       .map((x) => x.slice(3));
     if (afflictions.length == 0) return;

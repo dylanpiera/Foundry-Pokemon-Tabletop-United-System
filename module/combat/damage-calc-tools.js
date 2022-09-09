@@ -74,43 +74,6 @@ async function executeApplyDamageToTargets(targets, data, damage, { isFlat, isRe
     if (isNaN(damageReduction)) damageReduction = 0;
 
     return await game.ptu.api.applyDamage(targets, damage, data.type, data.category, { isFlat, isResist, isWeak, damageReduction, msgId });
-    // let appliedDamage = {};
-    // for (let target of targets) {
-    //     // if (target.actor.data.permission[game.userId] < 3) continue;
-
-    //     let actualDamage;
-    //     if (isFlat) {
-    //         actualDamage = damage;
-    //     }
-    //     else {
-    //         const defense = data.category == "Special" ? target.actor.data.data.stats.spdef.total : target.actor.data.data.stats.def.total;
-    //         const dr = parseInt(data.category == "Special" ? (target.actor.data.data.modifiers?.damageReduction?.special?.total ?? 0) : (target.actor.data.data.modifiers?.damageReduction?.physical?.total ?? 0));
-
-    //         const effectiveness = target.actor.data.data.effectiveness?.All[data.type] ?? 1;
-
-    //         actualDamage = Math.max(
-    //             effectiveness === 0 ? 0 : 1,
-    //             Math.floor((damage - parseInt(defense) - dr - parseInt(damageReduction)) * (effectiveness + (isResist ? (effectiveness > 1 ? -0.5 : effectiveness * -0.5) : isWeak ? (effectiveness >= 1 ? effectiveness >= 2 ? 1 : 0.5 : effectiveness) : 0)))
-    //         )
-    //     }
-
-    //     log(`Dealing ${actualDamage} damage to ${target.name}`);
-    //     appliedDamage[target.data.actorLink ? target.actor.id : target.data._id] = {
-    //         name: target.actor.data.name,
-    //         damage: actualDamage,
-    //         type: target.data.actorLink ? "actor" : "token",
-    //         old: {
-    //             value: duplicate(target.actor.data.data.health.value),
-    //             temp: duplicate(target.actor.data.data.tempHp.value)
-    //         },
-    //         tokenId: target.id,
-    //         msgId,
-    //     };
-
-    //     await game.ptu.api.applyDamage(target, actualDamage * -1, )
-    //     // await target.actor.modifyTokenAttribute("health", actualDamage * -1, true, true);
-    // }
-    // return await displayAppliedDamageToTargets({ data: appliedDamage, move: data.moveName });
 }
 
 export async function displayAppliedDamageToTargets(appliedDamage) {
@@ -401,7 +364,7 @@ export const ActionSubTypes = {
 
 export async function TakeAction(actor, { actionType, actionSubType, label }) {
     const changesToApply = [];
-    const actions = actor.data.flags?.ptu?.actions_taken ?? {};
+    const actions = actor.flags?.ptu?.actions_taken ?? {};
     const supportAction = actions?.support ?? false;
 
     // This handles the homebrew option for extra standard actions that can't be used for directly damaging moves
@@ -467,13 +430,13 @@ export const FiveStrikeHitsDictionary = {
 
 export async function ApplyInjuries(target_actor, final_effective_damage, damage_type="Untyped")
 {
-    const currentInjuries = Number(target_actor.data.data.health.injuries);
+    const currentInjuries = Number(target_actor.system.health.injuries);
 
     // A mon can't have more then 10 injuries.
     if(currentInjuries >= 10) return 0;
 
-	const targetHealthCurrent = target_actor.data.data.health.value;
-	const targetHealthMax = target_actor.data.data.health.total;
+	const targetHealthCurrent = target_actor.system.health.value;
+	const targetHealthMax = target_actor.system.health.total;
 
 	const hitPoints50Pct = targetHealthMax*0.50;
 	const hitPoints0Pct = 0;

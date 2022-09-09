@@ -48,7 +48,7 @@ export async function AddMontoPokedex(species) {
             await game.user.character.createEmbeddedDocuments("Item", [{
                 name: Handlebars.helpers.capitalizeFirst(dexEntry.name.toLowerCase()),
                 type: "dexentry",
-                data: dexEntry.data.data
+                data: dexEntry.system
             }]);
         }
     }

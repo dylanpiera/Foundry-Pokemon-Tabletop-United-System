@@ -4,7 +4,7 @@
             <div class="itemBox">
                 <img class="content profile-img" src="{{img}}" data-edit="img" title="{{name}}"/>
                 <div class="content with-image">
-                    Description: <span class="readable p11 pokemon">{{{data.effect}}}</span>
+                    Description: <span class="readable p11 pokemon">{{{system.effect}}}</span>
                 </div>
             </div>
         </header>
@@ -28,53 +28,53 @@
                         </div>
 
                         <div class="hgss-header vertical">
-                            <label for="data.origin">Obtained at:</label>
+                            <label for="system.origin">Obtained at:</label>
                         </div>
                         <div class="hgss-body">
                             <input
                                 class="ml-2"
-                                name="data.origin"
+                                name="system.origin"
                                 type="text"
-                                value="{{data.origin}}"
+                                value="{{system.origin}}"
                                 placeholder="Pickup"
                             />
                         </div>
 
                         <div class="hgss-header vertical">
-                            <label for="data.quantity">Quantity:</label>
+                            <label for="system.quantity">Quantity:</label>
                         </div>
                         <div class="hgss-body">
                             <input
                                 class="ml-2"
-                                name="data.quantity"
+                                name="system.quantity"
                                 type="text"
-                                value="{{data.quantity}}"
+                                value="{{system.quantity}}"
                                 data-dtype="Number"
                             />
                         </div>
 
                         <div class="hgss-header vertical">
-                            <label for="data.cost">Cost:</label>
+                            <label for="system.cost">Cost:</label>
                         </div>
                         <div class="hgss-body">
                             <input
                                 class="ml-2"
-                                name="data.cost"
+                                name="system.cost"
                                 type="text"
-                                value="{{data.cost}}"
+                                value="{{system.cost}}"
                                 data-dtype="Number"
                             />
                         </div>
 
                         <div class="hgss-header vertical">
-                            <label for="data.category">Category:</label>
+                            <label for="system.category">Category:</label>
                         </div>
                         <div class="hgss-body">
                             <input
                                 class="ml-2"
-                                name="data.category"
+                                name="system.category"
                                 type="text"
-                                value="{{data.category}}"
+                                value="{{system.category}}"
                             />
                         </div>
 
@@ -82,12 +82,12 @@
                     </div>
                     <div class="hgss-box align-items-center">
                         <div class="hgss-header mb-1 " style="padding: 5px 5px;">
-                            <label for="data.effect">Description:</label>
+                            <label for="system.effect">Description:</label>
                         </div>
                         <div class="hgss-body" style="word-break: break-word;">
                             <textarea
                                 class="ml-2"
-                                name="data.effect">{{data.effect}}</textarea>
+                                name="system.effect">{{system.effect}}</textarea>
                         </div>
                     </div>
                 </div>

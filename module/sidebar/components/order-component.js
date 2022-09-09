@@ -35,7 +35,7 @@ export default class OrderComponent extends Component {
                     id: item.id,
                     color: 'gray',
                     color2: 'black',
-                    effect: item.data.data.effect,
+                    effect: item.system.effect,
                     owner: this.state.actor.id,
                     type: trainingType
                 });

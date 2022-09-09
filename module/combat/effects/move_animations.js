@@ -482,7 +482,7 @@ export async function injuryTokenSplash(actor)
 	let actor_tokens = actor.getActiveTokens();
 	let actor_token = actor_tokens[0];
 
-    if( (actor.data.data.health.injuries >= 5) && (blood_allowed) )
+    if( (actor.system.health.injuries >= 5) && (blood_allowed) )
     {
         // await actor_token.TMFXaddUpdateFilters(blood_splash_params);
         await game.ptu.api.addTokenMagicFilters(actor_token, game.canvas.scene, blood_splash_params);

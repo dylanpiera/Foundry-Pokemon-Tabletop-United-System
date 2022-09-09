@@ -43,7 +43,7 @@ export default class Api {
                 for (const uuid of data.content.uuids) {
                     const document = await ref._documentFromUuid(uuid);
                     if (!document) continue;
-                    if (document.data.locked || !document.actor.canUserModify(game.users.get(data.user), "delete")) continue;
+                    if (document.locked || !document.actor.canUserModify(game.users.get(data.user), "delete")) continue;
                     documents.push(document);
                 }
 
@@ -134,7 +134,7 @@ export default class Api {
                 const documents = [];
                 for (const uuid of uuids) {
                     const document = await ref._documentFromUuid(uuid);
-                    if (!document || document.data.locked) continue;
+                    if (!document || document.locked) continue;
                     documents.push(document);
                 }
 
@@ -146,24 +146,24 @@ export default class Api {
                         actualDamage = damage;
                     }
                     else {
-                        const defense = damageCategory == "Special" ? document.actor.data.data.stats.spdef.total : document.actor.data.data.stats.def.total;
-                        const dr = parseInt(damageCategory == "Special" ? (document.actor.data.data.modifiers?.damageReduction?.special?.total ?? 0) : (document.actor.data.data.modifiers?.damageReduction?.physical?.total ?? 0));
+                        const defense = damageCategory == "Special" ? document.actor.system.stats.spdef.total : document.actor.system.stats.def.total;
+                        const dr = parseInt(damageCategory == "Special" ? (document.actor.system.modifiers?.damageReduction?.special?.total ?? 0) : (document.actor.system.modifiers?.damageReduction?.physical?.total ?? 0));
 
-                        const effectiveness = document.actor.data.data.effectiveness?.All[damageType] ?? 1;
+                        const effectiveness = document.actor.system.effectiveness?.All[damageType] ?? 1;
 
                         actualDamage = Math.max(
                             (effectiveness === 0 ? 0 : 1),
                             Math.floor((damage - parseInt(defense) - dr - parseInt(damageReduction)) * (effectiveness + (isResist ? (effectiveness > 1 ? -0.5 : effectiveness * -0.5) : isWeak ? (effectiveness >= 1 ? effectiveness >= 2 ? 1 : 0.5 : effectiveness) : 0))))
                     }
                     log(`Dealing ${actualDamage} damage to ${document.name}`);
-                    retVal.appliedDamage[document.data.actorLink ? document.actor.id : document.data._id] = {
-                        name: document.actor.data.name,
+                    retVal.appliedDamage[document.actorLink ? document.actor.id : (document._id ?? document.id)] = {
+                        name: document.actor.name,
                         damage: actualDamage,
-                        type: document.data.actorLink ? "actor" : "token",
+                        type: document.actorLink ? "actor" : "token",
                         old: {
-                            value: duplicate(document.actor.data.data.health.value),
-                            temp: duplicate(document.actor.data.data.tempHp.value),
-                            injuries: duplicate(document.actor.data.data.health.injuries)
+                            value: duplicate(document.actor.system.health.value),
+                            temp: duplicate(document.actor.system.tempHp.value),
+                            injuries: duplicate(document.actor.system.health.injuries)
                         },
                         injuries: (await ApplyInjuries(document.actor, actualDamage)),
                         tokenId: document.id,
@@ -182,7 +182,7 @@ export default class Api {
                 const documents = [];
                 for (const uuid of uuids) {
                     const document = await ref._documentFromUuid(uuid);
-                    if (!document || document.data.locked) continue;
+                    if (!document || document.locked) continue;
                     documents.push(document);
                 }
 
@@ -197,7 +197,7 @@ export default class Api {
                 const documents = [];
                 for (const uuid of uuids) {
                     const document = await ref._documentFromUuid(uuid);
-                    if (!document || document.data.locked) continue;
+                    if (!document || document.locked) continue;
                     documents.push(document);
                 }
 
@@ -213,7 +213,7 @@ export default class Api {
                 const documents = [];
                 for (const uuid of uuids) {
                     const document = await ref._documentFromUuid(uuid);
-                    if (!document || document.data.locked) continue;
+                    if (!document || document.locked) continue;
                     documents.push(document);
                 }
 
@@ -230,7 +230,7 @@ export default class Api {
                 const documents = [];
                 for (const uuid of data.content.uuids) {
                     const document = await ref._documentFromUuid(uuid);
-                    if (!document || document.data.locked) continue;
+                    if (!document || document.locked) continue;
                     documents.push(document);
                 }
 

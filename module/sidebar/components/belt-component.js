@@ -32,8 +32,8 @@ export default class BeltComponent extends Component {
         // select all owned pokemon in the same folder as this actor.
         if(this.state.actor?.folder)
         {
-            for (const actor of this.state.actor?.folder?.content) {
-                if (actor.data.data.owner == this.state.actor.id) {
+            for (const actor of this.state.actor?.folder?.contents) {
+                if (actor.system.owner == this.state.actor.id) {
                     beltMons.push(actor);
                 }
             }
@@ -43,10 +43,10 @@ export default class BeltComponent extends Component {
             output += dividerIcon;
             for (const mon of beltMons) {
                 output += await renderTemplate("/systems/ptu/module/sidebar/components/belt-component.hbs", {
-                    name: mon.data.name,
-                    img: mon.data.img,
+                    name: mon.name,
+                    img: mon.img,
                     id: mon.id,
-                    color: this._calculateColor(mon.data.data.health),
+                    color: this._calculateColor(mon.system.health),
                     isActive: false,
                     bgImg: undefined,
                 });
@@ -115,7 +115,7 @@ export default class BeltComponent extends Component {
         // Control and pan to Token object
         if ( token ) {
           token.control({releaseOthers: true});
-          return canvas.animatePan({x: token.data.x, y: token.data.y});
+          return canvas.animatePan({x: token.system.x, y: token.system.y});
         }
     }
 

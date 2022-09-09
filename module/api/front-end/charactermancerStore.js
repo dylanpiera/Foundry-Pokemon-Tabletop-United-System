@@ -85,11 +85,11 @@ export default function({level, tabs, initialTab, species, actor}) {
             },
             async changeStats(context, {levelUpStats, speciesData}={levelUpStats: undefined, speciesData: undefined}) {
                 debug(levelUpStats, speciesData)
-                const statChanges = mergeObject(context.state.actor.data.data.stats, levelUpStats ?? {});
-                const baseStats = CalcBaseStats(statChanges, speciesData ?? context.state.species, context.state.actor.data.data.nature.value);
+                const statChanges = mergeObject(context.state.actor.system.stats, levelUpStats ?? {});
+                const baseStats = CalcBaseStats(statChanges, speciesData ?? context.state.species, context.state.actor.system.nature.value);
 
                 // Recalculate stats
-                const levelUpPoints = context.state.actor.data.data.modifiers.statPoints?.total + 10 + context.state.level;
+                const levelUpPoints = context.state.actor.system.modifiers.statPoints?.total + 10 + context.state.level;
 
                 const calculatedStats = CalculateStatTotal(levelUpPoints, baseStats, {ignoreStages: true});
                 const result = {
@@ -143,7 +143,7 @@ export default function({level, tabs, initialTab, species, actor}) {
             species,
             actor,
             imgPath: "",
-            nature: actor.data.data.nature.value,
+            nature: actor.system.nature.value,
             natureStat: {
                 up: '',
                 down: '',

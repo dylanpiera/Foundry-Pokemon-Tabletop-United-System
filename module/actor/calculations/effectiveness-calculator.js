@@ -5,7 +5,7 @@ function getTypeEffectiveness(targetType) {
 
 export function GetMonEffectiveness(data) {
     let effectivenesses = {Weakness: [], Normal: [], Resistant: [], Immune: [], All: []}
-    if(!data.data.typing) return effectivenesses;
+    if(!data.typing) return effectivenesses;
     let typing = data.data.typing
     let typeCalc;
     
