@@ -86,63 +86,69 @@ export async function GetSpeciesArt(mon, imgDirectoryPath, type = ".webp", shiny
 
     const shiny_path = shiny ? "s" : "";
 
-    let path = basePath+lpad(mon?.number, 4)+shiny_path+type;
+    const alolan_path = mon?._id.toLowerCase().includes("alolan") ? "_al" : "";
+    const galarian_path = mon?._id.toLowerCase().includes("galarian") ? "_ga" : "";
+
+    //combine both paths so i don't have to keep typing them
+    const reg_path = alolan_path+galarian_path;
+
+    let path = basePath+lpad(mon?.number, 4)+reg_path+shiny_path+type;
 
     if(animated)
     {
-        path = basePath+lpad(mon?.number, 4)+shiny_path+animated_type;
+        path = basePath+lpad(mon?.number, 4)+reg_path+shiny_path+animated_type;
     }
     let result = await fetch(path);
 
     if(animated && (result.status === 404 && mon?.number < 1000)) {
-        path = basePath+lpad(mon?.number, 3)+shiny_path+animated_type;
+        path = basePath+lpad(mon?.number, 3)+reg_path+shiny_path+animated_type;
         result = await fetch(path);
     }
     if(result.status === 404 && mon?.number < 1000) {
-        path = basePath+lpad(mon?.number, 3)+shiny_path+type;
+        path = basePath+lpad(mon?.number, 3)+reg_path+shiny_path+type;
         result = await fetch(path);
     }
     if(result.status === 404 && mon?.number < 1000) {
-        path = basePath+lpad(mon?.number, 3)+shiny_path+alt_type;
+        path = basePath+lpad(mon?.number, 3)+reg_path+shiny_path+alt_type;
         result = await fetch(path);
     }
 
     if(animated && (result.status === 404)) {
-        path = basePath+lpad(mon?.number, 4)+shiny_path+animated_type;
+        path = basePath+lpad(mon?.number, 4)+reg_path+shiny_path+animated_type;
         result = await fetch(path);
     }
     if(result.status === 404) {
-        path = basePath+lpad(mon?.number, 4)+shiny_path+type;
+        path = basePath+lpad(mon?.number, 4)+reg_path+shiny_path+type;
         result = await fetch(path);
     }
     if(result.status === 404) {
-        path = basePath+lpad(mon?.number, 4)+shiny_path+alt_type;
+        path = basePath+lpad(mon?.number, 4)+reg_path+shiny_path+alt_type;
         result = await fetch(path);
     }
 
     if(animated && (result.status === 404)) {
-        path = basePath+mon?._id+shiny_path+animated_type;
+        path = basePath+mon?._id+reg_path+shiny_path+animated_type;
         result = await fetch(path);
     }
     if(result.status === 404) {
-        path = basePath+mon?._id+shiny_path+type;
+        path = basePath+mon?._id+reg_path+shiny_path+type;
         result = await fetch(path);
     }
     if(result.status === 404) {
-        path = basePath+mon?._id+shiny_path+alt_type;
+        path = basePath+mon?._id+reg_path+shiny_path+alt_type;
         result = await fetch(path);
     }
 
     if(animated && (result.status === 404)) {
-        path = basePath+mon?._id?.toLowerCase()+shiny_path+animated_type;
+        path = basePath+mon?._id?.toLowerCase()+reg_path+shiny_path+animated_type;
         result = await fetch(path);
     }
     if(result.status === 404) {
-        path = basePath+mon?._id?.toLowerCase()+shiny_path+type;
+        path = basePath+mon?._id?.toLowerCase()+reg_path+shiny_path+type;
         result = await fetch(path);
     }
     if(result.status === 404) {
-        path = basePath+mon?._id?.toLowerCase()+shiny_path+alt_type;
+        path = basePath+mon?._id?.toLowerCase()+reg_path+shiny_path+alt_type;
         result = await fetch(path);
     }
 

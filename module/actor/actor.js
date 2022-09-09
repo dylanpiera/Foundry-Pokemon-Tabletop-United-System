@@ -26,7 +26,48 @@ export class PTUActor extends Actor {
     super.prepareData();
 
     const actorData = this;
-    const actorSystem = this.system;
+    const actorSystem = actorData.system;
+
+    //check if actor name contains "alolan" or "galarian" and edit the img path accordingly
+    if (actorData.name.toLowerCase().includes("-alolan")) {
+      //remove the file extension from image path
+      var shiny = false;
+      let imgPath = actorData.img.split(".");
+      //check is shiny by checking the last character of the file path
+      shiny = imgPath[imgPath.length - 2].charAt(imgPath[imgPath.length - 2].length - 1) == "s";
+      if(shiny)
+        //remove the last character from the file path
+        imgPath[imgPath.length - 2] = imgPath[imgPath.length - 2].slice(0, -1);
+      
+      //ad the alolan tag
+      imgPath[imgPath.length - 2] = imgPath[imgPath.length - 2] + "_al";
+
+      if(shiny) //re-add the shiny character to the file path
+        imgPath[imgPath.length - 2] = imgPath[imgPath.length - 2] + "s";
+
+      //re-add the file extension to the file path 
+      this.img = imgPath.join(".");      
+    }
+
+    if (actorData.name.toLowerCase().includes("-galarian")) {
+      //remove the file extension from image path
+      var shiny = false;
+      let imgPath = actorData.img.split(".");
+      //check is shiny by checking the last character of the file path
+      shiny = imgPath[imgPath.length - 2].charAt(imgPath[imgPath.length - 2].length - 1) == "s";
+      if(shiny)
+        //remove the last character from the file path
+        imgPath[imgPath.length - 2] = imgPath[imgPath.length - 2].slice(0, -1);
+      
+      //ad the alolan tag
+      imgPath[imgPath.length - 2] = imgPath[imgPath.length - 2] + "_ga";
+
+      if(shiny) //re-add the shiny character to the file path
+        imgPath[imgPath.length - 2] = imgPath[imgPath.length - 2] + "s";
+
+      //re-add the file extension to the file path 
+      this.img = imgPath.join(".");
+    }
 
     if (parseInt(game.version.split('.')[1]) <= 6) {
       warn("Using old prepare-data structure")
