@@ -5,8 +5,8 @@ function getTypeEffectiveness(targetType) {
 
 export function GetMonEffectiveness(data) {
     let effectivenesses = {Weakness: [], Normal: [], Resistant: [], Immune: [], All: []}
-    if(!data.typing) return effectivenesses;
-    let typing = data.data.typing
+    if(!data?.system?.typing) return effectivenesses;
+    let typing = data.system.typing
     let typeCalc;
     
     for(let type of typing) {
@@ -114,7 +114,7 @@ export function GetMonEffectiveness(data) {
         typeCalc = value.execute(typeCalc);
     }
 
-    const effectivenessModifier = data.data.modifiers?.resistanceSteps?.total ?? 0;
+    const effectivenessModifier = data.system.modifiers?.resistanceSteps?.total ?? 0;
     if(effectivenessModifier != 0) {
         const timesMod = Math.pow((effectivenessModifier > 0 ? 0.5 : 2), Math.abs(effectivenessModifier));
 

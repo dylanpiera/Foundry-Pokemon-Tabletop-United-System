@@ -10,11 +10,11 @@ export class ActorGenerator {
         if(!exists) {
             if(!actor.preparedData) throw 'PreparedData required to generate actor. See ActorGenerator.PrepareData';
             delete actor.preparedData;
-            this.actor = {data: actor};
+            this.actor = actor;
             this.actor.system.level.current = CalcLevel(this.actor.system.level.exp, 50, game.ptu.levelProgression)
         }
         else {
-            if((!actor.data && !actor.preparedData) && exists) throw 'Actor not initialized.';
+            if((!actor.system && !actor.preparedData) && exists) throw 'Actor not initialized.';
             this.actor = actor;    
         }
 
@@ -30,12 +30,13 @@ export class ActorGenerator {
         this.PrepareShiny = PrepareShiny;
     }
 
-    data = { data: {}}
+    data = { }
+    system = { }
     items = []
 
     /** @param {String} fid Must be an existing folder ID */
     SetFolder(fid) {
-        this.actor.data.folder = fid;
+        this.data.folder = fid;
         return this;
     }
 
@@ -44,7 +45,7 @@ export class ActorGenerator {
         if(gender === -1) gender = "Genderless";
         else gender = gender * 10 > getRandomIntInclusive(0, 1000) ? "Male" : "Female";
 
-        this.data.data.gender = gender;
+        this.system.gender = gender;
         return this;
     }
 
@@ -84,7 +85,7 @@ export class ActorGenerator {
         return {
             name: name ? name : species.toLowerCase().capitalize(),
             type: "pokemon",
-            data: {
+            system: {
                 species: species,
                 level: {
                     exp: exp
@@ -134,10 +135,11 @@ export class ActorGenerator {
 
 async function ApplyChanges() {
     if(this.actor.update === undefined) {
-        this.actor = await Actor.create(mergeObject(this.actor.data, this.data), {noCharactermancer: true})
+        const actorData = mergeObject(mergeObject(this.actor, this.data), {system: mergeObject(this.actor.system, this.system)});
+        this.actor = await Actor.create(actorData, {noCharactermancer: true})
     }
     else {
-        await this.actor.update(this.data);
+        await this.actor.update({data, system: system});
     }
     if(this.items.length > 0)
         await this.actor.createEmbeddedDocuments("Item", duplicate(this.items));
@@ -161,7 +163,7 @@ function PrepareEvolution(prevent_evolution = undefined) {
 
     if(current.number != this.species.data.number) {
         this.species = { name: current._id, data: current};
-        this.data.data.species = current._id;
+        this.system.species = current._id;
         this.data.name = current._id.toLowerCase().capitalize();
     }
 
@@ -208,7 +210,7 @@ function PrepareStats(type, randomPercent = 0.1) {
         }
     }
 
-    this.data.data.stats = stats;
+    this.system.stats = stats;
 
     return this;
 }

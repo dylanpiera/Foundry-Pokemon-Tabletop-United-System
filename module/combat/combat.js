@@ -583,13 +583,13 @@ Hooks.on("createToken", async (token, options, id) => {
   // If an owned Pokemon is dropped onto the field, play pokeball release sound, and create lightshow, (TODO)
   // And if there is an active combat and the token is a character or pokemon, add to combat and roll initiative
 
-	if((game.userId == id) && (token.data.flags["item-piles"] == undefined))
+	if((game.userId == id) && (token.flags["item-piles"] == undefined))
 	{
     await timeout(100);
     let target_token;
-    let actor = game.actors.get(token.data.actorId);
+    let actor = game.actors.get(token.actorId);
 	
-    if(token.data.actorLink == false)
+    if(token.actorLink == false)
     {
       target_token = canvas.tokens.get(token.id); // The thrown pokemon
     }

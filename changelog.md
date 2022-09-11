@@ -1,6 +1,18 @@
 # Welcome to the Beta!
 Hey there! You are on the Beta Branch. If you ever have any feedback please do share with us over on [Github](https://github.com/dylanpiera/Foundry-Pokemon-Tabletop-United-System/issues) or [Discord](https://discord.gg/fE3w59q)
 
+## Version 2.2.0.2
+Hi all! Welcome to the v10 beta.
+
+The v10 beta will see a slower update cycle as we are currently working on v3 of the system; featuring a massive resturcturing after which development will be a lot smoother for the team.
+
+The exception to this rule will be any breaking changes, like discovered between v2.2.0.1 and now 2.2.0.2!
+If you find any breaking problems, do let us know in #bug-reports
+
+### Bug Fixes:
+- Fixed type effectiveness not calculating
+- Fixed pokemon generation not working
+
 ## Version 2.1
 Hey everyone! With the release of PTUVTT 2.1 we now have officially moved over to support Foundry V9!
 
@@ -14,12 +26,12 @@ Up next we will start the 3.0 beta which will be for Foundry V10.
 ## 2.0-Beta-12 - All the PR Merges
 Since this version will never actually go live and is just a changelog for you guys in the discord server... A quick update!
 
-## New Features:
+### New Features:
 - Tools of the Trade have been automated for Pokeball Captures
 - Added a custom type image setting for those that need it.
 - Alt clicking a skill roll will consume 1AP to add +1 to a skill check.
 
-## Bugfixes:
+### Bugfixes:
 - Added 'Sticky Hold' capability.
 - Fixed Quick Ball & Repeat Ball capture calculations.
 - Pokeball Throws now take trainer accuracy into account.

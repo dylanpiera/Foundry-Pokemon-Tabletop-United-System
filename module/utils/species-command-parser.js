@@ -204,17 +204,9 @@ Hooks.on("ptu.finishedGeneratingMons", function(commandData, actors) {
     debug(commandData, actors);
 })
 
-Hooks.on("dropCanvasData", (canvas, update) => {
-    if(update.pack == "ptu.dex-entries")
-    {
-        update.item = game.packs.get("ptu.dex-entries").index.find(x => x._id === update.id)
-    }
-    else {
-        let item = game.items.get(update.id);
-        if(item) update.item = item;
-    }
-    if(update.item)
-        new game.ptu.PTUDexDragOptions(update, {"submitOnChange": false, "submitOnClose": false}).render(true);
+Hooks.on("dropCanvasData", async (canvas, update) => {
+    const item = await fromUuid(update.uuid);
+    new game.ptu.PTUDexDragOptions({item, x: update.x, y: update.y}, {"submitOnChange": false, "submitOnClose": false}).render(true);
 });
 
 export async function FinishDexDragPokemonCreation(formData, update)
@@ -241,7 +233,7 @@ export async function FinishDexDragPokemonCreation(formData, update)
         prevent_evolution: prevent_evolution
     })
 
-    const protoToken = duplicate(new_actor.data.token);
+    const protoToken = duplicate(new_actor.prototypeToken);
     
     let size = game.ptu.GetSpeciesData(new_actor.system.species)["Size Class"]
     
@@ -262,12 +254,13 @@ export async function FinishDexDragPokemonCreation(formData, update)
 
     protoToken.img = await GetSpeciesArt(game.ptu.GetSpeciesData(new_actor.system.species), imgSrc, ".webp", new_actor.system.shiny, true);
     
-    new_actor = await new_actor.update({"token": protoToken});
+    new_actor = await new_actor.update({"prototypeToken": protoToken});
 
-    protoToken.x = Math.floor(drop_coordinates_x / game.scenes.viewed.data.grid) * game.scenes.viewed.data.grid;
-    protoToken.y = Math.floor(drop_coordinates_y / game.scenes.viewed.data.grid) * game.scenes.viewed.data.grid;
+    protoToken.x = Math.floor(drop_coordinates_x / game.scenes.viewed.grid.size) * game.scenes.viewed.grid.size;
+    protoToken.y = Math.floor(drop_coordinates_y / game.scenes.viewed.grid.size) * game.scenes.viewed.grid.size;
 
-    let placedTokenData = await game.scenes.viewed.createEmbeddedDocuments("Token", [await new_actor.getTokenData(protoToken)]);
+    const tokenData = await new_actor.getTokenDocument(protoToken);
+    let placedTokenData = await game.scenes.viewed.createEmbeddedDocuments("Token", [tokenData]);
 
     let currentSpecies = game.ptu.GetSpeciesData(new_actor.system.species)._id;
     game.ptu.PlayPokemonCry(currentSpecies);
