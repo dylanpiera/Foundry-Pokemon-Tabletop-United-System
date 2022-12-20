@@ -49,7 +49,7 @@ export class PTUPokemonCharactermancer extends FormApplication {
     const data = super.getData();
     data.dtypes = ["String", "Number", "Boolean"];
     
-    data.natures = game.ptu.natureData;
+    data.natures = game.ptu.data.natureData;
     data.natureStatOptions = {
       "HP": "HP",
       "Attack": "ATK",
@@ -59,8 +59,8 @@ export class PTUPokemonCharactermancer extends FormApplication {
       "Speed": "SPD"
     }
     
-    this.allSpecies = game.ptu_new.data.pokemonData.map(x => {return {number: x.ptuNumber, name: x._id}}).concat(game.ptu_new.data.customSpeciesData.map(x => {return {number: x.ptuNumber, name: x._id}}));
-    this.speciesData = game.ptu.GetSpeciesData(this.object.system.species ? this.object.system.species : this.object.name);
+    this.allSpecies = game.ptu.data.pokemonData.map(x => {return {number: x.ptuNumber, name: x._id}}).concat(game.ptu.data.customSpeciesData.map(x => {return {number: x.ptuNumber, name: x._id}}));
+    this.speciesData = game.ptu.utils.species.get(this.object.system.species ? this.object.system.species : this.object.name);
     data.app = this;
     
     console.log(duplicate(this));

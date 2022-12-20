@@ -38,8 +38,8 @@ export class PTUGen8PokemonSheet extends ActorSheet {
 
 		data['origins'] = this.actor.origins;
 
-		data['compendiumItems'] = game.ptu.items;
-		data['natures'] = game.ptu.natureData;
+		data['compendiumItems'] = game.ptu.data.items;
+		data['natures'] = game.ptu.data.natureData;
 
 		data['owners'] = [];
 		let findActors = (key) => {
@@ -139,14 +139,14 @@ export class PTUGen8PokemonSheet extends ActorSheet {
 				label: "Charactermancer",
 				class: "open-charactermancer",
 				icon: "fas fa-edit",
-				onclick: () => new game.ptu.PTUPokemonCharactermancer(this.actor, {"submitOnChange": false, "submitOnClose": false}).render(true)
+				onclick: () => new game.ptu.config.ui.PokemonCharacterMancer.documentClass(this.actor, {"submitOnChange": false, "submitOnClose": false}).render(true)
 			});
 
 			buttons.unshift({
 				label: "Notes",
 				class: "open-notes",
 				icon: "fas fa-edit",
-				onclick: () => new game.ptu.PTUCharacterNotesForm(this.actor, {"submitOnClose": true, "closeOnSubmit": false}).render(true)
+				onclick: () => new game.ptu.config.ui.CharacterNotesForm.documentClass(this.actor, {"submitOnClose": true, "closeOnSubmit": false}).render(true)
 			});
 		}
 
@@ -257,13 +257,13 @@ export class PTUGen8PokemonSheet extends ActorSheet {
 		}
 
 		html.find('#heldItemInput').autocomplete({
-			source: game.ptu.items.map((i) => i.name),
+			source: game.ptu.data.items.map((i) => i.name),
 			autoFocus: true,
 			minLength: 1
 		});
 
 		html.find('input[name="data.pokeball"]').autocomplete({
-			source: game.ptu.items.filter(x => x.category == "PokeBalls" || x.name.toLowerCase().endsWith("ball")).map((i) => i.name),
+			source: game.ptu.data.items.filter(x => x.category == "PokeBalls" || x.name.toLowerCase().endsWith("ball")).map((i) => i.name),
 			autoFocus: true,
 			minLength: 1
 		});
@@ -310,7 +310,7 @@ export class PTUGen8PokemonSheet extends ActorSheet {
 			}
 
 			const effectData = {
-				changes: [{"key":path,"mode":5,"value":true,"priority":50}].concat(game.ptu.getTrainingChanges(training, isOrder).changes),
+				changes: [{"key":path,"mode":5,"value":true,"priority":50}].concat(game.ptu.utils.macros.trainingChanges(training, isOrder).changes),
 				label: `${training.capitalize()} ${training == 'critical' ? "Moment" : isOrder ? "Order" : "Training"}`,
 				icon: "",
 				transfer: false,

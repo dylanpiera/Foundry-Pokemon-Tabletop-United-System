@@ -32,7 +32,7 @@ export default function({speciesData, form}) {
                     }) 
                 ).concat(
                     context.state.speciesData["TM Move List"].map(move => {
-                        return {name: game.ptu.TMsData.get(`${move}`), tm: true, id: randomID()}; 
+                        return {name: game.ptu.data.TMsData.get(`${move}`), tm: true, id: randomID()}; 
                     }) 
                 ));
 
@@ -72,9 +72,9 @@ export default function({speciesData, form}) {
                 
             },
             async changeSpecies(context, species) {
-                const speciesData = species === "" ? duplicate(BlankPTUSpecies) : game.ptu.GetSpeciesData(species);
+                const speciesData = species === "" ? duplicate(BlankPTUSpecies) : game.ptu.utils.species.get(species);
                 if(!speciesData) return ui.notifications.notify("Unable to find species " + species, "warning");
-                speciesData.number = game.ptu_new.data.customSpeciesData.length > 0 ? parseInt(game.ptu_new.data.customSpeciesData.sort((a,b) => b.ptuNumber - a.ptuNumber)[0].number) + 1 : 2000;
+                speciesData.number = game.ptu.data.customSpeciesData.length > 0 ? parseInt(game.ptu.data.customSpeciesData.sort((a,b) => b.ptuNumber - a.ptuNumber)[0].number) + 1 : 2000;
 
                 await context.commit('updateSpecies', speciesData)
                 await context.dispatch('init');

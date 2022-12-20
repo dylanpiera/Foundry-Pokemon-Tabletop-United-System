@@ -70,14 +70,14 @@ Hooks.on("endOfCombat", async function (combat, participants) {
 Hooks.on("createCombat", initializeNewPTUCombat);
 
 function initializeNewPTUCombat(newCombat, options, sender) {
-  if (!game.ptu.api._isMainGM() || game.ptu.disableCombatAutomation) return;
+  if (!game.ptu.utils.api.gm._isMainGM() || game.ptu.config.Combat.disableAutomation) return;
 
   const combat = game.combats.get(newCombat.id);
   if (!combat) {
     warn("Combat doesn't exist");
   }
 
-  game.ptu.combats.set(combat.id, new PTUCombat(combat));
+  game.ptu.utils.combats.set(combat.id, new PTUCombat(combat));
 }
 
 export default class PTUCombat {
@@ -290,7 +290,7 @@ export default class PTUCombat {
 
     if (options.turn.direction == CONFIG.PTUCombat.DirectionOptions.FORWARD) {
       await AudioHelper.play({src: ("systems/ptu/sounds/ui_sounds/ui_button.wav"), volume: 0.5, autoplay: true, loop: false}, true);
-      await game.ptu.PlayPokemonCry(combatant?.actor?.system?.species);
+      await game.ptu.utils.species.playCry(combatant?.actor?.system?.species);
     }
 
     if (!combatant.actor.flags.ptu) return;
@@ -574,7 +574,7 @@ export default class PTUCombat {
 
     Hooks.call("endOfCombat", this.combat, this.data.participants);
 
-    game.ptu.combats.delete(this.id);
+    game.ptu.utils.combats.delete(this.id);
     log("Deleted combat with ID: ", this.id);
   }
 }

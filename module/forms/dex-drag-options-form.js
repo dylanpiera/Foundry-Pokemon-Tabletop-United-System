@@ -43,6 +43,6 @@ export class PTUDexDragOptions extends FormApplication {
 
         formData["data.level"] = getRandomIntInclusive(parseInt(formData["data.level_min"]), parseInt(formData["data.level_max"]));
 
-        game.ptu.FinishDexDragPokemonCreation(formData, this.object);
+        game.ptu.utils.generator.FinishDexDragPokemonCreation(formData, this.object);
     }
 }

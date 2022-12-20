@@ -40,7 +40,7 @@ export class PTUSettings extends FormApplication {
 
         const canConfigure = game.user.can("SETTINGS_MODIFY");
 
-        data.categories = game.ptu.settingCategories
+        data.categories = game.ptu.config.Ui.Settings.categories
 
         data.settings = {};
         for(const [key, setting] of game.settings.settings.entries()) {

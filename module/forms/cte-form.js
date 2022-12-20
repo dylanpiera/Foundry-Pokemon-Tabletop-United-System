@@ -31,7 +31,7 @@ export class PTUCustomTypingEditor extends FormApplication {
       const data = super.getData();
       data.dtypes = ["String", "Number", "Boolean"];
   
-      data.types = game.ptu.TypeEffectiveness;
+      data.types = game.ptu.data.TypeEffectiveness;
       this.object = isEmpty(this.object ?? {}) ? {type: "Normal", data: data.types.Normal} : this.object;
       data.object = this.object;
 
@@ -43,12 +43,12 @@ export class PTUCustomTypingEditor extends FormApplication {
       super.activateListeners(html);
 
       html.find('#typing-list .item').click((ev) => {
-        this.object = {type: ev.currentTarget.dataset.type, data: game.ptu.TypeEffectiveness[ev.currentTarget.dataset.type]};
+        this.object = {type: ev.currentTarget.dataset.type, data: game.ptu.data.TypeEffectiveness[ev.currentTarget.dataset.type]};
         this.render(true);
       });
 
       html.find('.item-create[data-type="type"]').click(async (ev) => {
-        const newTypes = duplicate(game.ptu.TypeEffectiveness);
+        const newTypes = duplicate(game.ptu.data.TypeEffectiveness);
         
         newTypes["New Type"] = newTypes["Untyped"];
         for(const key of Object.keys(newTypes)) newTypes[key]["New Type"] = 1;
@@ -60,7 +60,7 @@ export class PTUCustomTypingEditor extends FormApplication {
         await game.socket.emit("system.ptu", "RefreshCustomTypings")
 
         setTimeout(x => {
-          this.object = {type: "New Type", data: game.ptu.TypeEffectiveness["New Type"]};
+          this.object = {type: "New Type", data: game.ptu.data.TypeEffectiveness["New Type"]};
           this.render(true);
         }, 50);
       })
@@ -119,7 +119,7 @@ export class PTUCustomTypingEditor extends FormApplication {
 
         if(!confirm) return;
         
-        const newTypes = duplicate(game.ptu.TypeEffectiveness);
+        const newTypes = duplicate(game.ptu.data.TypeEffectiveness);
         log(`Deleting type: ${this.object.type}. Data backup:`, duplicate(this.object))
         
         delete newTypes[this.object.type];
@@ -142,7 +142,7 @@ export class PTUCustomTypingEditor extends FormApplication {
 
     /** @override */
     async _updateObject(event, formData) {
-      const newTypes = duplicate(game.ptu.TypeEffectiveness);
+      const newTypes = duplicate(game.ptu.data.TypeEffectiveness);
 
       newTypes[formData.type] = {};
 

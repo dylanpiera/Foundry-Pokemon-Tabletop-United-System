@@ -49,7 +49,7 @@ export class PTUGen8CharacterSheet extends ActorSheet {
 				label: "Notes",
 				class: "open-notes",
 				icon: "fas fa-edit",
-				onclick: () => new game.ptu.PTUCharacterNotesForm(this.actor, { "submitOnClose": true, "closeOnSubmit": false }).render(true)
+				onclick: () => new game.ptu.config.Ui.CharacterNotesForm.documentClass(this.actor, { "submitOnClose": true, "closeOnSubmit": false }).render(true)
 			});
 		}
 
@@ -237,7 +237,7 @@ export class PTUGen8CharacterSheet extends ActorSheet {
 		}
 
 		html.find('#heldItemInput').autocomplete({
-			source: game.ptu.items.map((i) => i.data.name),
+			source: game.ptu.data.items.map((i) => i.data.name),
 			autoFocus: true,
 			minLength: 1
 		});

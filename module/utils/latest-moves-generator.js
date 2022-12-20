@@ -4,7 +4,7 @@ export async function GiveLatestMoves(actor) {
     let species = actor.system.species;
     let level = actor.system.level.current;
 
-    let speciesData = game.ptu.GetSpeciesData(species);
+    let speciesData = game.ptu.utils.species.get(species);
     if(!speciesData) return;
 
     let moves = await GetOrCacheMoves();

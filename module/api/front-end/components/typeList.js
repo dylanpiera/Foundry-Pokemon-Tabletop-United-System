@@ -42,7 +42,7 @@ export default class TypeList extends Component {
     }
     
     _selectOptions(selectedType) {        
-        return `<option value="Untyped"></option>` + Object.keys(game.ptu.TypeEffectiveness).filter(type => type != "Untyped").reduce((html, type) => 
+        return `<option value="Untyped"></option>` + Object.keys(game.ptu.data.TypeEffectiveness).filter(type => type != "Untyped").reduce((html, type) => 
             html += `<option ${type == selectedType ? "selected" : ""} style="color: #191813;" value="${type}">${type}</option>`
         , "")
     } 

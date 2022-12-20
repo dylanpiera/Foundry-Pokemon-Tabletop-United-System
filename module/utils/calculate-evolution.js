@@ -1,7 +1,7 @@
 import { getRandomIntInclusive } from './generic-helpers.js'
 
 export async function ApplyEvolution(actor) {
-    let speciesData = game.ptu.GetSpeciesData(actor.system.species);
+    let speciesData = game.ptu.utils.species.get(actor.system.species);
 
     let stages = speciesData.Evolution.map(x => {return {stage: x[0], name: x[1], level: x[2] == "Null" ? 0 : x[2]}});
 
@@ -9,8 +9,8 @@ export async function ApplyEvolution(actor) {
     for(let i = stages.length-1; i >= 0; i--) {
         if(stages[i].level <= actor.system.level.current) {
             let p = stages.filter(x => x.stage == stages[i].stage);
-            if(p.length > 1) current = game.ptu.GetSpeciesData(p[getRandomIntInclusive(0,p.length-1)].name);
-            else current = game.ptu.GetSpeciesData(stages[i].name);
+            if(p.length > 1) current = game.ptu.utils.species.get(p[getRandomIntInclusive(0,p.length-1)].name);
+            else current = game.ptu.utils.species.get(stages[i].name);
             break;
         }
     }
@@ -29,8 +29,8 @@ export function CheckStage(level, speciesData) {
     for(let i = stages.length-1; i >= 0; i--) {
         if(stages[i].level <= level) {
             let p = stages.filter(x => x.stage == stages[i].stage);
-            if(p.length > 1) current = game.ptu.GetSpeciesData(p[getRandomIntInclusive(0,p.length-1)].name);
-            else current = game.ptu.GetSpeciesData(stages[i].name);
+            if(p.length > 1) current = game.ptu.utils.species.get(p[getRandomIntInclusive(0,p.length-1)].name);
+            else current = game.ptu.utils.species.get(stages[i].name);
             break;
         }
     }

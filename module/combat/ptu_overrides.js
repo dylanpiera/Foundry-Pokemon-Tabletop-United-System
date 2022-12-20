@@ -17,8 +17,8 @@ export class PTUCombatOverrides extends Combat {
   }
 
   async nextTurn() {
-    if(!game.ptu.api._isMainGM()) {
-      return await game.ptu.api.nextTurn(this.id);
+    if(!game.ptu.utils.api.gm._isMainGM()) {
+      return await game.ptu.utils.api.gm.nextTurn(this.id);
     }
 
     let turn = this.turn ?? -1;
@@ -106,7 +106,7 @@ export class PTUCombatOverrides extends Combat {
   }
 
   _handleBoss(actor, combatant) {
-    if (!game.ptu.api._isMainGM()) return;
+    if (!game.ptu.utils.api.gm._isMainGM()) return;
     const turns = actor.system.boss.turns;
     const combatants = this.turns.filter((c) => c.actor.id == actor.id);
 

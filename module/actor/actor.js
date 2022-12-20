@@ -99,8 +99,8 @@ export class PTUActor extends Actor {
     })
     console.groupEnd();
 
-    if (this.id === game.ptu.sidebar?.store?.state?.actorId) game.ptu.sidebar.stateHasChanged();
-    if (game.ptu.sidebar?.store?.state?.targetedActors.includes(this.id)) game.ptu.sidebar.stateHasChanged(true);
+    if (this.id === game.ptu.forms.sidebar?.store?.state?.actorId) game.ptu.forms.sidebar.stateHasChanged();
+    if (game.ptu.forms.sidebar?.store?.state?.targetedActors.includes(this.id)) game.ptu.forms.sidebar.stateHasChanged(true);
   }
 
   /**
@@ -352,7 +352,7 @@ export class PTUActor extends Actor {
     debug("Creating new actor with data:", actor);
     if (options?.noCharactermancer || actor.data.type != "pokemon") return actor;
 
-    let form = new game.ptu.PTUPokemonCharactermancer(actor, { "submitOnChange": false, "submitOnClose": true });
+    let form = new game.ptu.config.Ui.PokemonCharacterMancer.documentClass(actor, { "submitOnChange": false, "submitOnClose": true });
     form.render(true)
 
     return actor;
@@ -445,7 +445,7 @@ export class PTUActor extends Actor {
     const actorData = this
     const data = this.system;
 
-    const speciesData = game.ptu.GetSpeciesData(data.species);
+    const speciesData = game.ptu.utils.species.get(data.species);
 
     data.isCustomSpecies = speciesData?.isCustomSpecies ?? false;
 
@@ -464,12 +464,12 @@ export class PTUActor extends Actor {
     // Use Data
 
     // Calculate Level
-    data.level.current = CalcLevel(data.level.exp, 50, game.ptu.levelProgression);
+    data.level.current = CalcLevel(data.level.exp, 50, game.ptu.data.levelProgression);
 
     data.levelUpPoints = data.level.current + data.modifiers.statPoints.total + 10;
 
-    data.level.expTillNextLevel = (data.level.current < 100) ? game.ptu.levelProgression[data.level.current + 1] : game.ptu.levelProgression[100];
-    data.level.percent = Math.round(((data.level.exp - game.ptu.levelProgression[data.level.current]) / (data.level.expTillNextLevel - game.ptu.levelProgression[data.level.current])) * 100);
+    data.level.expTillNextLevel = (data.level.current < 100) ? game.ptu.data.levelProgression[data.level.current + 1] : game.ptu.data.levelProgression[100];
+    data.level.percent = Math.round(((data.level.exp - game.ptu.data.levelProgression[data.level.current]) / (data.level.expTillNextLevel - game.ptu.data.levelProgression[data.level.current])) * 100);
 
     // Stats
     data.stats = CalculatePoisonedCondition(duplicate(data.stats), actorData.flags?.ptu);
@@ -678,9 +678,9 @@ export class PTUActor extends Actor {
     const damageBonuses = await calculateTotalDamageBonus(moveData, bonusDamage, currentWeather, abilityBonuses, this)
 
     // Do AC Roll
-    const acRoll = await game.ptu.combat.CalculateAcRoll(moveData, this, APBonus).evaluate({ async: true });
+    const acRoll = await game.ptu.utils.combat.calculateAcRoll(moveData, this, APBonus).evaluate({ async: true });
     if (moveData.doubleStrike.is === true) {
-      const acRoll2 = await game.ptu.combat.CalculateAcRoll(moveData, this, APBonus).evaluate({ async: true });
+      const acRoll2 = await game.ptu.utils.combat.calculateAcRoll(moveData, this, APBonus).evaluate({ async: true });
       moveData.doubleStrike.hit1 = { roll: acRoll };
       moveData.doubleStrike.hit2 = { roll: acRoll2 };
     }
@@ -730,7 +730,7 @@ export class PTUActor extends Actor {
     await PlayMoveAnimations(moveData, token, attacksData);
     await PlayMoveSounds(moveData, attacksData);
 
-    await game.ptu.combat.TakeAction(this, {
+    await game.ptu.utils.combat.takeAction(this, {
       actionType: match(moveData.range?.toLowerCase(), [
         { test: (v) => v.includes("swift"), result: (v) => ActionTypes.SWIFT },
         { test: (v) => v.includes("shift"), result: (v) => ActionTypes.SHIFT },
@@ -993,8 +993,8 @@ export class PTUActor extends Actor {
     const rollString = critType == CritOptions.DOUBLE_CRIT_HIT ? `@roll+@baseRoll+@baseRoll+@bonus` : critType == CritOptions.CRIT_HIT ? moveData.fiveStrike.is === true ? "@roll+@roll+@bonus" : "@roll+@baseRoll+@bonus" : "@roll+@bonus"
 
     return new Roll(rollString, {
-      roll: game.ptu.DbData[(db * hitCount) + dbBonus],
-      baseRoll: game.ptu.DbData[db + dbBonus],
+      roll: game.ptu.data.DbData[(db * hitCount) + dbBonus],
+      baseRoll: game.ptu.data.DbData[db + dbBonus],
       bonus: damageBonus,
       db: (db * hitCount + dbBonus),
       isStab,
@@ -1066,9 +1066,9 @@ export function GetSpeciesData(species) {
     let preJson;
     let extra = { isCustomSpecies: false };
     if (parseInt(species)) {
-      preJson = game.ptu.pokemonData.find(x => x.number == species);
+      preJson = game.ptu.data.pokemonData.find(x => x.number == species);
       if (!preJson) {
-        preJson = game.ptu_new.data.customSpeciesData.find(x => x.number == species);
+        preJson = game.ptu.data.customSpeciesData.find(x => x.number == species);
         if (!preJson) return null;
         extra.isCustomSpecies = true;
       };
@@ -1087,9 +1087,9 @@ export function GetSpeciesData(species) {
         }
         preJson["Type"][0] = getOricorioType();
       }
-      else preJson = game.ptu.pokemonData.find(x => x._id.toLowerCase() === species.toLowerCase());
+      else preJson = game.ptu.data.pokemonData.find(x => x._id.toLowerCase() === species.toLowerCase());
       if (!preJson) {
-        preJson = game.ptu_new.data.customSpeciesData.find(x => x._id.toLowerCase() === species.toLowerCase());
+        preJson = game.ptu.data.customSpeciesData.find(x => x._id.toLowerCase() === species.toLowerCase());
         if (!preJson) return null;
         extra.isCustomSpecies = true;
       };

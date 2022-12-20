@@ -46,7 +46,7 @@ export function registerHandlebars() {
     Handlebars.registerHelper("itemDescription", function (name) {
       if (!name) return "";
       if (name || 0 !== name.length) {
-        let item = game.ptu.items.find(i => i.name.toLowerCase().includes(name.toLowerCase()));
+        let item = game.ptu.data.items.find(i => i.name.toLowerCase().includes(name.toLowerCase()));
         if (item) return item.system.effect;
       }
       return "";
@@ -113,8 +113,8 @@ export function registerHandlebars() {
     }
   
     Handlebars.registerHelper("natureCheck", function (nature, stat) {
-      let statUp = game.ptu.natureData[nature][0] == keyToNatureStat(stat);
-      let statDown = game.ptu.natureData[nature][1] == keyToNatureStat(stat)
+      let statUp = game.ptu.data.natureData[nature][0] == keyToNatureStat(stat);
+      let statDown = game.ptu.data.natureData[nature][1] == keyToNatureStat(stat)
   
       return statUp && !statDown ? "nature-up" : statDown && !statUp ? "nature-down" : "";
     });
@@ -129,8 +129,8 @@ export function registerHandlebars() {
   
     Handlebars.registerHelper("loadTypeImages", function (types, includeSlash = true) {
       // TypeEffectiveness here is imported from source and only contains the default types
-      // in contract, game.ptu.TypeEffectiveness contains custom types as well
-      const isTypeDefaultType = (typeName) => Object.keys(game.ptu_new.data.TypeEffectiveness).includes(typeName)
+      // in contract, game.ptu.data.TypeEffectiveness contains custom types as well
+      const isTypeDefaultType = (typeName) => Object.keys(game.ptu.data.TypeEffectiveness).includes(typeName)
       let customDir = game.settings.get("ptu", "typeEffectivenessCustomImageDirectory");
       if (customDir.slice(-1) !== "/") customDir += "/"
       if (customDir.charAt(0) !== "/") customDir = "/" + customDir
@@ -144,8 +144,8 @@ export function registerHandlebars() {
   
     Handlebars.registerHelper("loadTypeImage", function (type) {
       // TypeEffectiveness here is imported from source and only contains the default types
-      // in contract, game.ptu.TypeEffectiveness contains custom types as well
-      const isTypeDefaultType = (typeName) => Object.keys(game.ptu_new.data.TypeEffectiveness).includes(typeName)
+      // in contract, game.ptu.data.TypeEffectiveness contains custom types as well
+      const isTypeDefaultType = (typeName) => Object.keys(game.ptu.data.TypeEffectiveness).includes(typeName)
       let customDir = game.settings.get("ptu", "typeEffectivenessCustomImageDirectory");
       if (customDir.slice(-1) !== "/") customDir += "/"
       if (customDir.charAt(0) !== "/") customDir = "/" + customDir
@@ -205,7 +205,7 @@ export function registerHandlebars() {
   
     Handlebars.registerHelper("inc", function (num) { return Number(num) + 1 })
   
-    Handlebars.registerHelper("tmName", function (tmNum) { return game.ptu.TMsData.get(tmNum) });
+    Handlebars.registerHelper("tmName", function (tmNum) { return game.ptu.data.TMsData.get(tmNum) });
   
     /** If furnace ain't installed... */
     if (!Object.keys(Handlebars.helpers).includes("divide")) {
@@ -220,11 +220,11 @@ export function registerHandlebars() {
       if (move.category === "Status") return;
       let bonus = (move.owner ? move.category === "Physical" ? (move.owner.stats.atk.total + (move.owner.damageBonus?.physical?.total ?? 0)) : (move.owner.stats.spatk.total + (move.owner.damageBonus?.special?.total ?? 0)) : 0) + (move.damageBonus ?? 0);
       if (move.damageBase.toString().match(/^[0-9]+$/) != null) {
-        let db = game.ptu.DbData[move.stab ? parseInt(move.damageBase) + 2 : move.damageBase];
+        let db = game.ptu.data.DbData[move.stab ? parseInt(move.damageBase) + 2 : move.damageBase];
         if (db) return db + (bool ? " + " : "#") + bonus;
         return -1;
       }
-      let db = game.ptu.DbData[move.damageBase];
+      let db = game.ptu.data.DbData[move.damageBase];
       if (db) return db;
       return -1;
     }

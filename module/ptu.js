@@ -75,7 +75,21 @@ export const ptu = {
       }
     },
     cache: {
-
+      GetOrCreateCachedItem,
+    },
+    combat: {
+      instances: new Map(),
+      applyDamageToTargets,
+      undoDamageToTargets,
+      calculateAcRoll: CalculateAcRoll,
+      newApplyDamageToTargets,
+      handleApplicatorItem,
+      takeAction: TakeAction,
+    },
+    combats: new Map(),
+    dex: {
+      render: RenderDex,
+      addMon: AddMontoPokedex,
     },
     dice: {
       dbRoll: RollWithDb
@@ -95,14 +109,21 @@ export const ptu = {
         BaseStatsWithNature,
         ApplyLevelUpPoints
       },
-      GetSpeciesArt
+      GetSpeciesArt,
+      FinishDexDragPokemonCreation,
     },
     logging,
+    macros: {
+      item: rollItemMacro,
+      move: _onMoveMacro,
+      pokedex: _onPokedexMacro,
+      trainingChanges: getTrainingChanges,
+    },
     species: {
       get: GetSpeciesData,
       playCry: PlayPokemonCry,
-
     },
+    throwPokeball: ThrowPokeball,
   },
   config: {
     ActiveEffect: {
@@ -127,14 +148,31 @@ export const ptu = {
         feat: PTUFeatSheet
       }
     },
-    Settings: {
-      documentClass: PTUSettings,
-      categories: PTUSettingCategories
-    },
-
-    ui: {
+    Ui: {
       Combat: {
         documentClass: PTUCombatTrackerOverrides
+      },
+      Sidebar: {
+        documentClass: PTUSidebar
+      },
+      Settings: {
+        documentClass: PTUSettings,
+        categories: PTUSettingCategories
+      },
+      ChangeLog: {
+        documentClass: ChangeLog
+      },
+      CustomSpeciesEditor: {
+        documentClass: PTUCustomSpeciesEditor
+      },
+      PokemonCharacterMancer: {
+        documentClass: PTUPokemonCharactermancer,
+      },
+      CharacterNotesForm: {
+        documentClass: PTUCharacterNotesForm
+      },
+      DexDragOptions: {
+        documentClass: PTUDexDragOptions
       }
     }
   },
@@ -146,6 +184,10 @@ export const ptu = {
     DbData,
     TMsData,
     TypeEffectiveness,
+    items: [],
+  },
+  forms: {
+    sidebar: undefined
   }
 }
 
@@ -157,75 +199,9 @@ Hooks.once('init', function () {
   console.groupCollapsed("PTU Init");
   console.time("PTU Init")
 
-  game.ptu_new = ptu;
-
-  // Create a namespace within the game global
-  game.ptu = {
-    rollItemMacro,
-    moveMacro: _onMoveMacro,
-    pokedexMacro: _onPokedexMacro,
-    renderDex: RenderDex,
-    addToDex: AddMontoPokedex,
-    PTUActor,
-    PTUItem,
-    PTUPokemonCharactermancer,
-    PTUDexDragOptions,
-    PTUCustomSpeciesEditor,
-    PTUCustomTypingEditor,
-    PTUCharacterNotesForm,
-    PTUSidebar,
-    levelProgression,
-    pokemonData,
-    customSpeciesData: [],
-    natureData,
-    DbData,
-    TMsData,
-    TypeEffectiveness,
-    GetSpeciesData,
-    RollWithDb,
-    PlayPokemonCry,
-    FinishDexDragPokemonCreation,
-    ThrowPokeball,
-    monGenerator: {
-      ActorGenerator,
-      CreateMonParser,
-      GetRandomNature,
-      GiveRandomAbilities,
-      GiveLatestMoves,
-      ApplyEvolution,
-      GiveCapabilities,
-      StatDistributions: {
-        DistributeStatsWeighted,
-        DistributeStatsRandomly,
-        DistributeByBaseStats,
-        BaseStatsWithNature,
-        ApplyLevelUpPoints
-      },
-      GetSpeciesArt
-    },
-    combat: {
-      applyDamageToTargets,
-      undoDamageToTargets,
-      CalculateAcRoll,
-      newApplyDamageToTargets,
-      handleApplicatorItem,
-      TakeAction,
-    },
-    combats: new Map(),
-    cache: {
-      GetOrCreateCachedItem,
-    },
-    api: new Api(),
-    getTrainingChanges,
-    settings: PTUSettings,
-    settingCategories: PTUSettingCategories,
-    frontEnd: {
-      Store,
-      Component
-    }
-  };
-
-  ptu.utils.api.gm = game.ptu.api;
+  // Register custom system settings
+  ptu.utils.api.gm = new Api(); // Initialize the GM API
+  game.ptu = ptu;
 
   /**
    * Set an initiative formula for the system
@@ -239,7 +215,7 @@ Hooks.once('init', function () {
   CONFIG.Combat.documentClass = ptu.config.Combat.documentClass;
 
   // Define custom combat tracker
-  CONFIG.ui.combat = ptu.config.ui.Combat.documentClass;
+  CONFIG.ui.combat = ptu.config.Ui.Combat.documentClass;
 
   // Define custom Entity classes
   CONFIG.Actor.documentClass = ptu.config.Actor.documentClass;
@@ -261,13 +237,13 @@ Hooks.once('init', function () {
   loadSystemSettings();
 
   if (game.settings.get("ptu", "insurgenceData")) {
-    Array.prototype.push.apply(game.ptu["pokemonData"], insurgenceData);
+    Array.prototype.push.apply(game.ptu.data.pokemonData, insurgenceData);
   }
   if (game.settings.get("ptu", "sageData")) {
-    Array.prototype.push.apply(game.ptu["pokemonData"], sageData);
+    Array.prototype.push.apply(game.ptu.data.pokemonData, sageData);
   }
   if (game.settings.get("ptu", "uraniumData")) {
-    Array.prototype.push.apply(game.ptu["pokemonData"], uraniumData);
+    Array.prototype.push.apply(game.ptu.data.pokemonData, uraniumData);
   }
 
   initCustomTypings();
@@ -374,7 +350,7 @@ Hooks.once("setup", function () {
           return uuids;
         }, [])
         if (uuids.length) {
-          if (Hooks.call("prePlayerDeleteToken", uuids)) return game.ptu.api.tokensDelete(uuids);
+          if (Hooks.call("prePlayerDeleteToken", uuids)) return game.ptu.utils.api.gm.tokensDelete(uuids);
         }
       }
     }
@@ -389,7 +365,7 @@ Hooks.once("ready", async function () {
 
   if (game.settings.get("ptu", "gameLanguage") != "en") {
     const languageData = LANG[game.settings.get("ptu", "gameLanguage")];
-    for (const mon of game.ptu.pokemonData) {
+    for (const mon of game.ptu.data.pokemonData) {
       if (languageData[mon._id]) mon._id = languageData[mon._id];
     }
   }
@@ -400,7 +376,7 @@ Hooks.once("ready", async function () {
   SetAccessabilityFont(game.settings.get("ptu", "accessability"));
 
   // Globally enable items from item compendium
-  game.ptu["items"] = Array.from(new Set(game.items.filter(x => x.type == "item").concat(await game.packs.get("ptu.items").getDocuments())));
+  game.ptu.data.items = Array.from(new Set(game.items.filter(x => x.type == "item").concat(await game.packs.get("ptu.items").getDocuments())));
 
   // Wait to register hotbar drop hook on ready so that modules could register earlier if they want to
   Hooks.on("hotbarDrop", (bar, data, slot) => createPTUMacro(data, slot));
@@ -443,8 +419,8 @@ Hooks.once("ready", async function () {
 
   PTUCombat.Initialize();
 
-  game.ptu.sidebar = new game.ptu.PTUSidebar();
-  game.ptu.sidebar.render(true);
+  game.ptu.forms.sidebar = new game.ptu.config.Ui.Sidebar.documentClass();
+  game.ptu.forms.sidebar.render(true);
 
   console.groupEnd();
 });
@@ -498,7 +474,7 @@ Hooks.on("renderSettingsConfig", function (esc, html, data) {
     <div>
       <h3>We have moved!</h3>
       <p class="notes pb-2">All system settings can now be found in the PTU Settings, right under the section with the Configure Settings button in the sidebar!</p>
-      <button onclick="new game.ptu.settings().render(true);" class="mb-2">Open PTU Settings</button>
+      <button onclick="new game.ptu.config.Ui.Settings.documentClass().render(true);" class="mb-2">Open PTU Settings</button>
     </div>
     `);
 });
@@ -509,8 +485,7 @@ Hooks.on("renderSettingsConfig", function (esc, html, data) {
 
 Hooks.on("renderSettings", (app, html) => {
   html.find('#settings-game').after($(`<h2>PTU System Settings</h2><div id="ptu-options"></div>`));
-
-  game.ptu.settings.Initialize(html);
+  game.ptu.config.Ui.Settings.documentClass.Initialize(html);
 
   if (game.user.isGM) {
     $('#ptu-options').append($(
@@ -518,13 +493,13 @@ Hooks.on("renderSettings", (app, html) => {
           <i class="fas fa-book-open"></i>
           Edit Custom Species
       </button>`));
-    html.find('button[data-action="ptu-custom-species-editor"').on("click", _ => new game.ptu.PTUCustomSpeciesEditor().render(true));
+    html.find('button[data-action="ptu-custom-species-editor"').on("click", _ => new game.ptu.config.Ui.CustomSpeciesEditor.documentClass().render(true));
     $('#ptu-options').append($(
       `<button data-action="ptu-custom-typing-editor">
           <i class="fas fa-book-open"></i>
           Edit Custom Typings
       </button>`));
-    html.find('button[data-action="ptu-custom-typing-editor"').on("click", _ => new game.ptu.PTUCustomTypingEditor().render(true));
+    html.find('button[data-action="ptu-custom-typing-editor"').on("click", _ => new game.ptu.config.Ui.CustomSpeciesEditor.documentClass().render(true));
   }
 })
 
@@ -587,7 +562,7 @@ async function createPTUMacro(data, slot) {
   const actor = game.actors.get(data.actorId);
 
   // Create the macro command
-  const command = `game.ptu.rollItemMacro("${data.actorId}","${item._id}","${data.sceneId}", "${data.tokenId}");`;
+  const command = `game.ptu.utils.macros.item("${data.actorId}","${item._id}","${data.sceneId}", "${data.tokenId}");`;
   let macro = game.macros.contents.find(m => (m.name === `${actor.name}'s ${item.name}`) && (m.command === command));
   if (!macro) {
     macro = await Macro.create({
@@ -626,11 +601,11 @@ function rollItemMacro(actorId, itemId, sceneId, tokenId) {
 
   switch (item.type) {
     case 'move': {
-      return game.ptu.moveMacro(actor, isTokenActor ? item : item.data);
+      return game.ptu.utils.macros.move(actor, isTokenActor ? item : item.data);
     }
     case 'item': {
       if (item.data.name == "Pokédex") {
-        return game.ptu.pokedexMacro();
+        return game.ptu.utils.macros.pokedex();
       }
 
       return;
@@ -652,34 +627,33 @@ async function _onPokedexMacro() {
 
     // No checks needed; just show full dex.
     if (game.user.isGM) {
-      game.ptu.renderDex(token.actor.system.species, "full");
+      game.ptu.utils.dex.render(token.actor.system.species, "full");
       continue;
     }
 
     if (addToDex && !game.user.isGM) {
       if (!game.user.character) return ui.notifications.warn("Please make sure you have a trainer as your Selected Player Character");
-      await game.ptu.addToDex(token.actor.system.species);
+      await game.ptu.utils.dex.addMon(token.actor.system.species);
     }
 
     switch (permSetting) {
       case 1: { // Pokedex Disabled
-        //game.ptu.renderDesc(token.actor.system.species);
         return ui.notifications.info("DM has turned off the Pokedex.");
       }
       case 2: { //pokemon description only
-        game.ptu.renderDex(token.actor.system.species);
+        game.ptu.utils.dex.render(token.actor.system.species);
         break;
       }
       case 3: { // Only owned tokens
-        game.ptu.renderDex(token.actor.system.species, token.owner ? "full" : "desc");
+        game.ptu.utils.dex.render(token.actor.system.species, token.owner ? "full" : "desc");
         break;
       }
       case 4: { // Only owned mons
         if (!game.user.character) return ui.notifications.warn("Please make sure you have a trainer as your Selected Player Character");
 
-        const monData = game.ptu.GetSpeciesData(token.actor.system.species);
+        const monData = game.ptu.utils.species.get(token.actor.system.species);
 
-        game.ptu.renderDex(token.actor.system.species,
+        game.ptu.utils.dex.render(token.actor.system.species,
           game.user.character.itemTypes.dexentry.some(entry => entry.system.owned && entry.data.name.toLowerCase() === monData?._id?.toLowerCase())
             ? "full" : "desc");
         break;
@@ -688,7 +662,7 @@ async function _onPokedexMacro() {
         return ui.notifications.warn("The GM prompt feature has yet to be implemented. Please ask your DM to change to a different Dex Permission Setting");
       }
       case 6: { // Always Full Details
-        game.ptu.renderDex(token.actor.system.species, "full");
+        game.ptu.utils.dex.render(token.actor.system.species, "full");
         break;
       }
     }
@@ -749,7 +723,7 @@ Hooks.on("preCreateItem", (item, itemData, options, sender) => {
 Hooks.on("preCreateItem", async function (item, data, options, sender) {
   if (item.type != "move") return;
   let origin = "";
-  const speciesData = game.ptu.GetSpeciesData(item.parent.system.species);
+  const speciesData = game.ptu.utils.species.get(item.parent.system.species);
 
   // All of these have a slightly different format, change them to just be an array of the names with capital letters included.
   const levelUp = speciesData["Level Up Move List"].map(x => x.Move);
@@ -775,7 +749,7 @@ Hooks.on('getSceneControlButtons', function (hudButtons) {
       title: "PTU.DexButtonHint",
       icon: "fas fa-tablet-alt",
       button: true,
-      onClick: () => game.ptu.pokedexMacro()
+      onClick: () => game.ptu.utils.macros.pokedex()
     });
   }
 });

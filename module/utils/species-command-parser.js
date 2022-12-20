@@ -24,7 +24,7 @@ export async function CreateMonParser(input, andCreate = false) {
     }
     
     if(commands["pokemon"]) {
-        let mon = game.ptu.GetSpeciesData(isNaN(commands["pokemon"]) ? commands["pokemon"] : parseInt(commands["pokemon"]));
+        let mon = game.ptu.utils.species.get(isNaN(commands["pokemon"]) ? commands["pokemon"] : parseInt(commands["pokemon"]));
         if(!mon) {ui.notifications.notify("Couldn't find a pokemon with name/id " + commands["pokemon"], "error");return;}
         commands["pokemon"] = [];
         for(let i = 0; i < commands["generate"]; i++) {
@@ -36,7 +36,7 @@ export async function CreateMonParser(input, andCreate = false) {
         if(!table) {ui.notifications.notify("Couldn't find a table with name " + commands["random"], "error");return;}
         
         let mons = table.data.results.map(x => {return {mon: x.data.text, weight: x.data.weight};}).flatMap(x => {
-            let mon = game.ptu.GetSpeciesData(x.mon);
+            let mon = game.ptu.utils.species.get(x.mon);
             if(!mon) return;
             let results = [];
             for(let i = 0; i < x.weight; i++) results.push(mon);
@@ -186,14 +186,14 @@ async function createMons(commandData) {
         options.push({
             exists: false,
             species: commandData["pokemon"][i]._id,
-            exp: game.ptu.levelProgression[commandData["level"][i]],
+            exp: game.ptu.data.levelProgression[commandData["level"][i]],
             imgpath: commandData["imgpath"]
         });
         if(commandData["folder"]) options[i]["folder"] = commandData["folder"].name;
     }
 
     let actors = [];
-    for(let option of options) actors.push(await game.ptu.monGenerator.ActorGenerator.Create(option));
+    for(let option of options) actors.push(await game.ptu.utils.generator.ActorGenerator.Create(option));
     
     Hooks.call("ptu.finishedGeneratingMons", commandData, actors)
     return actors;
@@ -206,7 +206,7 @@ Hooks.on("ptu.finishedGeneratingMons", function(commandData, actors) {
 
 Hooks.on("dropCanvasData", async (canvas, update) => {
     const item = await fromUuid(update.uuid);
-    new game.ptu.PTUDexDragOptions({item, x: update.x, y: update.y}, {"submitOnChange": false, "submitOnClose": false}).render(true);
+    new game.ptu.config.Ui.DexDragOptions.documentClass({item, x: update.x, y: update.y}, {"submitOnChange": false, "submitOnClose": false}).render(true);
 });
 
 export async function FinishDexDragPokemonCreation(formData, update)
@@ -223,10 +223,10 @@ export async function FinishDexDragPokemonCreation(formData, update)
     let stat_randomness = parseInt(formData["data.stat_randomness"]);
     let prevent_evolution = Number(formData["data.prevent_evolution"]);
 
-    let new_actor = await game.ptu.monGenerator.ActorGenerator.Create({
+    let new_actor = await game.ptu.utils.generator.ActorGenerator.Create({
         exists: false,
         species: species_name,
-        exp: game.ptu.levelProgression[level],
+        exp: game.ptu.data.levelProgression[level],
         folder: game.scenes.current.name,
         shiny_chance: shiny_chance,
         stat_randomness: stat_randomness,
@@ -235,7 +235,7 @@ export async function FinishDexDragPokemonCreation(formData, update)
 
     const protoToken = duplicate(new_actor.prototypeToken);
     
-    let size = game.ptu.GetSpeciesData(new_actor.system.species)["Size Class"]
+    let size = game.ptu.utils.species.get(new_actor.system.species)["Size Class"]
     
     let size_categories = {
         "Small": {width: 1, height: 1},
@@ -252,7 +252,7 @@ export async function FinishDexDragPokemonCreation(formData, update)
     protoToken.displayName=  40; 
     protoToken.bar1.attribute = "health";
 
-    protoToken.img = await GetSpeciesArt(game.ptu.GetSpeciesData(new_actor.system.species), imgSrc, ".webp", new_actor.system.shiny, true);
+    protoToken.img = await GetSpeciesArt(game.ptu.utils.species.get(new_actor.system.species), imgSrc, ".webp", new_actor.system.shiny, true);
     
     new_actor = await new_actor.update({"prototypeToken": protoToken});
 
@@ -262,8 +262,8 @@ export async function FinishDexDragPokemonCreation(formData, update)
     const tokenData = await new_actor.getTokenDocument(protoToken);
     let placedTokenData = await game.scenes.viewed.createEmbeddedDocuments("Token", [tokenData]);
 
-    let currentSpecies = game.ptu.GetSpeciesData(new_actor.system.species)._id;
-    game.ptu.PlayPokemonCry(currentSpecies);
+    let currentSpecies = game.ptu.utils.species.get(new_actor.system.species)._id;
+    game.ptu.utils.species.playCry(currentSpecies);
     
     return placedTokenData;
 }

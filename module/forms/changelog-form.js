@@ -38,7 +38,7 @@ export class ChangeLog extends FormApplication {
     html.find('button[data-action=dismiss-till-update]').click((event) => {
       event.preventDefault();
 
-      game.ptu.api.setChangelogRead();
+      game.ptu.utils.api.gm.setChangelogRead();
 
       this.close();
     });

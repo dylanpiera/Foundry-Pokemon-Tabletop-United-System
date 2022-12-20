@@ -20,7 +20,7 @@ export async function PrepareCustomSpecies() {
 }
 
 export async function MigrateOldData() {
-    if(game.ptu.api._isMainGM()) {
+    if(game.ptu.utils.api.gm._isMainGM()) {
         // Initialize old system
         await CustomSpeciesFolder.initializeJournals();
 
@@ -71,8 +71,7 @@ export async function MigrateOldData() {
 
 export async function UpdateCustomSpeciesData(data) {
     log("Triggering Custom Species Refresh")
-    game.ptu_new.data.customSpeciesData = game.settings.get("ptu", "customSpeciesData").data;
-    game.ptu.customSpeciesData = game.ptu_new.data.customSpeciesData
+    game.ptu.data.customSpeciesData = game.settings.get("ptu", "customSpeciesData").data;
     
     try {
         if(data && data.outdatedApplications) {

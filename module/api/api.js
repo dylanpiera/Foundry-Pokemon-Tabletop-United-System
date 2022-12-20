@@ -377,7 +377,7 @@ export default class Api {
         const tokens = [];
 
         for (const o of objects) {
-            if (o instanceof game.ptu.PTUActor)
+            if (o instanceof game.ptu.config.Actor.documentClass)
                 tokens.push(...(await o.getActiveTokens()));
 
             if (o instanceof TokenDocument || o instanceof Token)
@@ -426,7 +426,7 @@ export default class Api {
      */
     async transferOwnership(object, options) {
         let actor;
-        if (object instanceof game.ptu.PTUActor)
+        if (object instanceof game.ptu.config.Actor.documentClass)
             actor = object;
         else if (object instanceof TokenDocument || object instanceof Token)
             actor = object.actor;
@@ -500,7 +500,7 @@ export default class Api {
         const objects = (object instanceof Array) ? object : [object];
         const tokens = [];
         for (const o of objects) {
-            if (o instanceof game.ptu.PTUActor)
+            if (o instanceof game.ptu.config.Actor.documentClass)
                 tokens.push(...(await o.getActiveTokens()));
 
             if (o instanceof TokenDocument || o instanceof Token)
@@ -535,7 +535,7 @@ export default class Api {
 
         const tokens = [];
         for (const o of (object instanceof Array) ? object : [object]) {
-            if (o instanceof game.ptu.PTUActor)
+            if (o instanceof game.ptu.config.Actor.documentClass)
                 tokens.push(...(await o.getActiveTokens()));
 
             if (o instanceof TokenDocument || o instanceof Token)
@@ -571,7 +571,7 @@ export default class Api {
 
         const tokens = [];
         for (const o of (object instanceof Array) ? object : [object]) {
-            if (o instanceof game.ptu.PTUActor)
+            if (o instanceof game.ptu.config.Actor.documentClass)
                 tokens.push(...(await o.getActiveTokens()));
 
             if (o instanceof TokenDocument || o instanceof Token)
@@ -600,7 +600,7 @@ export default class Api {
         const tokens = [];
 
         for (const o of objects) {
-            if (o instanceof game.ptu.PTUActor)
+            if (o instanceof game.ptu.config.Actor.documentClass)
                 tokens.push(...(await o.getActiveTokens()));
 
             if (o instanceof TokenDocument || o instanceof Token)

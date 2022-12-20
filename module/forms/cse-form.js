@@ -31,7 +31,7 @@ export class PTUCustomSpeciesEditor extends FormApplication {
       const data = super.getData();
       data.dtypes = ["String", "Number", "Boolean"];
   
-      data.species = game.ptu_new.data.customSpeciesData.sort((a,b) => a.ptuNumber - b.ptuNumber);
+      data.species = game.ptu.data.customSpeciesData.sort((a,b) => a.ptuNumber - b.ptuNumber);
       this.object = isEmpty(this.object ?? {}) ? data.species[0] : this.object.state == "new" ? {} : this.object;
       data.object = this.object;
 
@@ -56,7 +56,7 @@ export class PTUCustomSpeciesEditor extends FormApplication {
       this._initializeState();
 
       html.find('#species-list .item').click((ev) => {
-        this.object = game.ptu_new.data.customSpeciesData.find(x => x.number == ev.currentTarget.dataset.itemNumber);
+        this.object = game.ptu.data.customSpeciesData.find(x => x.number == ev.currentTarget.dataset.itemNumber);
         this._initializeState();
         this.render(true);
       });
@@ -277,7 +277,7 @@ export class PTUCustomSpeciesEditor extends FormApplication {
         "Egg Move List": this.store.state.moves.filter(move => move.egg).map(move => move.name),
         "Tutor Move List": this.store.state.moves.filter(move => move.tutor).map(move => move.name),
         "TM Move List": this.store.state.moves.filter(move => move.tm).map(move => {
-          for(const [tm, name] of game.ptu.TMsData.entries()) {
+          for(const [tm, name] of game.ptu.data.TMsData.entries()) {
             if(name == move.name) return tm;
           }
         }).filter(move => move),
@@ -291,12 +291,12 @@ export class PTUCustomSpeciesEditor extends FormApplication {
     checkMonId(number) {
       if(number) {
         if(number >= 2000) {
-          if(game.ptu_new.data.customSpeciesData.find(s => s.ptuNumber == number)) {
+          if(game.ptu.data.customSpeciesData.find(s => s.ptuNumber == number)) {
             return number;
           }
         }
       }
-      return game.ptu_new.data.customSpeciesData.length > 0 ? parseInt(game.ptu_new.data.customSpeciesData.sort((a,b) => b.ptuNumber - a.ptuNumber)[0].number) + 1 : 2000;
+      return game.ptu.data.customSpeciesData.length > 0 ? parseInt(game.ptu.data.customSpeciesData.sort((a,b) => b.ptuNumber - a.ptuNumber)[0].number) + 1 : 2000;
     }
 
 }
