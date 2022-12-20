@@ -5,7 +5,7 @@ export default logger = {
     debug: function(...args) {
         const r = randomID();
         console.debug(`PTU | Debug (${r}): `, ...args)
-        console.trace(`PTU | Debug (${r}): `)
+        // console.trace(`PTU | Debug (${r}): `)
     },
     warn: function(...args) {
         const r = randomID();

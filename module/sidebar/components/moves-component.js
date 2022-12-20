@@ -142,7 +142,7 @@ export default class MovesList extends Component {
                                 actor: this.state.actor
                             }),
                             moveName: move.name,
-                            move: move.data,
+                            move: move.system,
                         })
                         break;
                     case 1: // Left click

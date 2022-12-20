@@ -221,9 +221,7 @@ export class PTUGen8PokemonSheet extends ActorSheet {
 			const button = ev.currentTarget;
 			const effectId = button.dataset.id;
 			const effect = this.actor.effects.get(effectId);
-			const effectData = duplicate(effect.data);
-			effectData.disabled = !effectData.disabled;
-			await effect.update(effectData);
+			await effect.update({disabled: !duplicate(effect.disabled)});
 			this.render(false);
 		});
 
@@ -292,7 +290,7 @@ export class PTUGen8PokemonSheet extends ActorSheet {
 			const isOrder = path.split('.')[3] == "ordered";
 
 			// If property is true
-			if(getProperty(this.actor.data, path)) {
+			if(getProperty(this.actor.system, path)) {
 				const effects = [];
 				this.actor.effects.forEach(effect => {
 					if(effect.changes.some(change => change.key == path)) {
@@ -376,10 +374,10 @@ export class PTUGen8PokemonSheet extends ActorSheet {
 		const itemData = {
 			name: name,
 			type: type,
-			data: data
+			system: data
 		};
 		// Remove the type from the dataset since it's in the itemData.type prop.
-		delete itemData.data['type'];
+		delete itemData.system['type'];
 
 		if(itemData.type === "ActiveEffect") {
 			// Finally, create the effect!
@@ -464,13 +462,13 @@ export class PTUGen8PokemonSheet extends ActorSheet {
  
 		const element = event?.currentTarget;
 		const dataset = element?.dataset;
-		const move = item ? item : this.actor.items.get(dataset.id).data;
+		const move = item ? item : this.actor.items.get(dataset.id);
 
-		move.data = PrepareMoveData(actor ? actor.system : this.actor.system, move.data);
+		move.system = PrepareMoveData(actor ? actor.system : this.actor.system, move.system);
 
 		/** Option Callbacks */
 		let PerformFullAttack = (damageBonus = 0) => {
-			const moveData = duplicate(move.data);
+			const moveData = duplicate(move.system);
 			if (damageBonus != 0) moveData.damageBonus += damageBonus;
 
 			const useAP = event.altKey && this.useOwnerAP();
@@ -491,7 +489,7 @@ export class PTUGen8PokemonSheet extends ActorSheet {
 					actor: this.actor
 				}),
 				moveName: move.name,
-				move: move.data,
+				move: move.system,
 				templateType: MoveMessageTypes.DETAILS
 			})
 			return;
@@ -515,7 +513,7 @@ export class PTUGen8PokemonSheet extends ActorSheet {
 							actor: this.actor
 						}),
 						moveName: move.name,
-						move: move.data,
+						move: move.system,
 						templateType: MoveMessageTypes.DETAILS
 					})
 				}

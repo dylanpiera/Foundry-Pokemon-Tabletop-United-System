@@ -105,9 +105,8 @@ export async function undoDamageToTargets(event) {
     const actor = data.type == "actor" ? game.actors.get(data.target) : canvas.tokens.get(data.target).actor;
     if (!actor) return;
 
-
-    log(`FVTT PTU | Undoing ${data.injuries} injuries and ${data.damage} damage to ${actor.data.name} - Old Injuries: ${data.oldInjuries} - Old HP: ${data.oldHp} - Old Temp: ${data.oldTempHp}`);
-    await actor.update({ "data.health.injuries":data.oldInjuries, "data.health.value": data.oldHp, "data.tempHp.value": data.oldTempHp, "data.tempHp.max": data.oldTempHp })
+    log(`FVTT PTU | Undoing ${data.injuries} injuries and ${data.damage} damage to ${actor.name} - Old Injuries: ${data.oldInjuries} - Old HP: ${data.oldHp} - Old Temp: ${data.oldTempHp}`);
+    await actor.update({ "system.health.injuries":data.oldInjuries, "system.health.value": data.oldHp, "system.tempHp.value": data.oldTempHp, "system.tempHp.max": data.oldTempHp })
 
     if (data.tokenId && data.msgId) {
         await updateApplicatorHtml($(`[data-message-id="${data.msgId}"]`), [data.tokenId], undefined, true, true)

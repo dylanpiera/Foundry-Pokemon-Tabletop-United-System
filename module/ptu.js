@@ -56,7 +56,7 @@ import './utils/drag-ruler-compatibility-handler.js';
 import { ThrowPokeball } from './combat/effects/pokeball_effects.js';
 import { LANG } from './utils/language-helper.js';
 import logging from "./helpers/logging.js";
-import {registerHandlebars, preloadHandlebarsTemplates} from "./helpers/handlebars.js";
+import { registerHandlebars, preloadHandlebarsTemplates } from "./helpers/handlebars.js";
 
 export let debug = logging.debug;
 export let log = logging.log;
@@ -67,7 +67,7 @@ export const LATEST_VERSION = "2.2.0.2";
 
 export const ptu = {
   utils: {
-    api: { 
+    api: {
       gm: undefined,
       ui: {
         Store,
@@ -75,7 +75,7 @@ export const ptu = {
       }
     },
     cache: {
-      
+
     },
     dice: {
       dbRoll: RollWithDb
@@ -131,7 +131,7 @@ export const ptu = {
       documentClass: PTUSettings,
       categories: PTUSettingCategories
     },
-    
+
     ui: {
       Combat: {
         documentClass: PTUCombatTrackerOverrides
@@ -154,7 +154,7 @@ export const ptu = {
 /* -------------------------------------------- */
 
 Hooks.once('init', function () {
-  console.groupCollapsed("PTU Init"); 
+  console.groupCollapsed("PTU Init");
   console.time("PTU Init")
 
   game.ptu_new = ptu;
@@ -240,7 +240,7 @@ Hooks.once('init', function () {
 
   // Define custom combat tracker
   CONFIG.ui.combat = ptu.config.ui.Combat.documentClass;
-  
+
   // Define custom Entity classes
   CONFIG.Actor.documentClass = ptu.config.Actor.documentClass;
   CONFIG.Item.documentClass = ptu.config.Item.documentClass;
@@ -387,10 +387,10 @@ Hooks.once("setup", function () {
 Hooks.once("ready", async function () {
   console.groupCollapsed("PTU Ready")
 
-  if(game.settings.get("ptu","gameLanguage") != "en") {
-    const languageData = LANG[game.settings.get("ptu","gameLanguage")];
-    for(const mon of game.ptu.pokemonData) {
-      if(languageData[mon._id]) mon._id = languageData[mon._id];
+  if (game.settings.get("ptu", "gameLanguage") != "en") {
+    const languageData = LANG[game.settings.get("ptu", "gameLanguage")];
+    for (const mon of game.ptu.pokemonData) {
+      if (languageData[mon._id]) mon._id = languageData[mon._id];
     }
   }
 
@@ -461,12 +461,12 @@ Hooks.on("updatedCustomTypings", UpdateCustomTypings);
 
 /** DexEntry on Pokemon Sheet updates Species Data */
 Hooks.on('dropActorSheetData', function (actor, sheet, itemDropData,) {
-  if (actor.data.type != "pokemon") return true;
+  if (actor.type != "pokemon") return true;
 
-  let updateActorBasedOnSpeciesItem = function (item) {
-    if (item.data.name) {
-      log(`Updating Species based on Dex Drop (${actor.system.species} -> ${item.data.name})`)
-      actor.update({ "data.species": item.data.name }).then(x => log("Finished Updating Species based on Dex Drop"));
+  const updateActorBasedOnSpeciesItem = function (item) {
+    if (item.name) {
+      log(`Updating Species based on Dex Drop (${actor.system.species} -> ${item.name})`)
+      actor.update({ "data.species": item.name }).then(x => log("Finished Updating Species based on Dex Drop"));
     }
     else if (item.system.id) {
       log(`Updating Species based on Dex Drop (${actor.system.species} -> ${item.system.id})`)
@@ -474,17 +474,20 @@ Hooks.on('dropActorSheetData', function (actor, sheet, itemDropData,) {
     }
   }
 
-  if (itemDropData.pack) {
-    if (itemDropData.pack != "ptu.dex-entries") { return true; }
+  if (itemDropData.uuid.includes("dex-entries") || itemDropData.uuid.includes("uranium-and-sage-dex")) {
     Item.fromDropData(itemDropData).then(updateActorBasedOnSpeciesItem);
+    return false;
   }
-  else {
-    let item = game.items.get(itemDropData.id);
-    if (item.data.type != "dexentry") return true;
-    updateActorBasedOnSpeciesItem(item);
+  if (itemDropData.uuid.startsWith("Item.")) {
+    const uuid = itemDropData.uuid.split(".")[1];
+    const item = game.items.get(uuid);
+    if (item) {
+      updateActorBasedOnSpeciesItem(item);
+      return false;
+    }
   }
 
-  return false;
+  return true;
 });
 
 Hooks.on("renderSettingsConfig", function (esc, html, data) {
@@ -646,14 +649,14 @@ async function _onPokedexMacro() {
   const addToDex = game.settings.get("ptu", "auto-add-to-dex");
   for (let token of game.user.targets.size > 0 ? game.user.targets.values() : canvas.tokens.controlled) {
     if (token.actor.data.type != "pokemon") continue;
-    
+
     // No checks needed; just show full dex.
     if (game.user.isGM) {
       game.ptu.renderDex(token.actor.system.species, "full");
       continue;
     }
 
-    if(addToDex && !game.user.isGM){
+    if (addToDex && !game.user.isGM) {
       if (!game.user.character) return ui.notifications.warn("Please make sure you have a trainer as your Selected Player Character");
       await game.ptu.addToDex(token.actor.system.species);
     }
@@ -676,9 +679,9 @@ async function _onPokedexMacro() {
 
         const monData = game.ptu.GetSpeciesData(token.actor.system.species);
 
-        game.ptu.renderDex(token.actor.system.species, 
+        game.ptu.renderDex(token.actor.system.species,
           game.user.character.itemTypes.dexentry.some(entry => entry.system.owned && entry.data.name.toLowerCase() === monData?._id?.toLowerCase())
-          ? "full" : "desc");
+            ? "full" : "desc");
         break;
       }
       case 5: { // GM Prompt
@@ -693,7 +696,7 @@ async function _onPokedexMacro() {
 }
 
 export async function PlayPokemonCry(species) {
-  if(!species) return;
+  if (!species) return;
   if (game.settings.get("ptu", "playPokemonCriesOnDrop")) {
     let CryDirectory = game.settings.get("ptu", "pokemonCryDirectory");
     let SpeciesCryFilename = species.toString().toLowerCase();
@@ -764,17 +767,17 @@ Hooks.on("preCreateItem", async function (item, data, options, sender) {
   await item.updateSource({ "system.origin": origin });
 });
 
-Hooks.on('getSceneControlButtons', function(hudButtons) {
+Hooks.on('getSceneControlButtons', function (hudButtons) {
   const hud = hudButtons.find(val => val.name == "token")
   if (hud) {
-      hud.tools.push({
-          name: "PTU.DexButtonName",
-          title: "PTU.DexButtonHint",
-          icon: "fas fa-tablet-alt",
-          button: true,
-          onClick: () => game.ptu.pokedexMacro()
-      });
+    hud.tools.push({
+      name: "PTU.DexButtonName",
+      title: "PTU.DexButtonHint",
+      icon: "fas fa-tablet-alt",
+      button: true,
+      onClick: () => game.ptu.pokedexMacro()
+    });
   }
 });
 
-Hooks.on("renderTokenConfig", (config,html,options) => html.find("[name='actorLink']").siblings()[0].outerHTML = "<label>Link Actor Data <span class='readable p10'>Unlinked actors are not supported by the system</span></label>")
+Hooks.on("renderTokenConfig", (config, html, options) => html.find("[name='actorLink']").siblings()[0].outerHTML = "<label>Link Actor Data <span class='readable p10'>Unlinked actors are not supported by the system</span></label>")
