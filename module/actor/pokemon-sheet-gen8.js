@@ -38,8 +38,8 @@ export class PTUGen8PokemonSheet extends ActorSheet {
 
 		data['origins'] = this.actor.origins;
 
-		data['compendiumItems'] = game.ptu.items;
-		data['natures'] = game.ptu.natureData;
+		data['compendiumItems'] = game.ptu.data.items;
+		data['natures'] = game.ptu.data.natureData;
 
 		data['owners'] = [];
 		let findActors = (key) => {
@@ -139,14 +139,14 @@ export class PTUGen8PokemonSheet extends ActorSheet {
 				label: "Charactermancer",
 				class: "open-charactermancer",
 				icon: "fas fa-edit",
-				onclick: () => new game.ptu.PTUPokemonCharactermancer(this.actor, {"submitOnChange": false, "submitOnClose": false}).render(true)
+				onclick: () => new game.ptu.config.ui.PokemonCharacterMancer.documentClass(this.actor, {"submitOnChange": false, "submitOnClose": false}).render(true)
 			});
 
 			buttons.unshift({
 				label: "Notes",
 				class: "open-notes",
 				icon: "fas fa-edit",
-				onclick: () => new game.ptu.PTUCharacterNotesForm(this.actor, {"submitOnClose": true, "closeOnSubmit": false}).render(true)
+				onclick: () => new game.ptu.config.ui.CharacterNotesForm.documentClass(this.actor, {"submitOnClose": true, "closeOnSubmit": false}).render(true)
 			});
 		}
 
@@ -221,9 +221,7 @@ export class PTUGen8PokemonSheet extends ActorSheet {
 			const button = ev.currentTarget;
 			const effectId = button.dataset.id;
 			const effect = this.actor.effects.get(effectId);
-			const effectData = duplicate(effect.data);
-			effectData.disabled = !effectData.disabled;
-			await effect.update(effectData);
+			await effect.update({disabled: !duplicate(effect.disabled)});
 			this.render(false);
 		});
 
@@ -259,13 +257,13 @@ export class PTUGen8PokemonSheet extends ActorSheet {
 		}
 
 		html.find('#heldItemInput').autocomplete({
-			source: game.ptu.items.map((i) => i.name),
+			source: game.ptu.data.items.map((i) => i.name),
 			autoFocus: true,
 			minLength: 1
 		});
 
 		html.find('input[name="data.pokeball"]').autocomplete({
-			source: game.ptu.items.filter(x => x.category == "PokeBalls" || x.name.toLowerCase().endsWith("ball")).map((i) => i.name),
+			source: game.ptu.data.items.filter(x => x.category == "PokeBalls" || x.name.toLowerCase().endsWith("ball")).map((i) => i.name),
 			autoFocus: true,
 			minLength: 1
 		});
@@ -292,7 +290,7 @@ export class PTUGen8PokemonSheet extends ActorSheet {
 			const isOrder = path.split('.')[3] == "ordered";
 
 			// If property is true
-			if(getProperty(this.actor.data, path)) {
+			if(getProperty(this.actor.system, path)) {
 				const effects = [];
 				this.actor.effects.forEach(effect => {
 					if(effect.changes.some(change => change.key == path)) {
@@ -312,7 +310,7 @@ export class PTUGen8PokemonSheet extends ActorSheet {
 			}
 
 			const effectData = {
-				changes: [{"key":path,"mode":5,"value":true,"priority":50}].concat(game.ptu.getTrainingChanges(training, isOrder).changes),
+				changes: [{"key":path,"mode":5,"value":true,"priority":50}].concat(game.ptu.utils.macros.trainingChanges(training, isOrder).changes),
 				label: `${training.capitalize()} ${training == 'critical' ? "Moment" : isOrder ? "Order" : "Training"}`,
 				icon: "",
 				transfer: false,
@@ -376,10 +374,10 @@ export class PTUGen8PokemonSheet extends ActorSheet {
 		const itemData = {
 			name: name,
 			type: type,
-			data: data
+			system: data
 		};
 		// Remove the type from the dataset since it's in the itemData.type prop.
-		delete itemData.data['type'];
+		delete itemData.system['type'];
 
 		if(itemData.type === "ActiveEffect") {
 			// Finally, create the effect!
@@ -464,13 +462,13 @@ export class PTUGen8PokemonSheet extends ActorSheet {
  
 		const element = event?.currentTarget;
 		const dataset = element?.dataset;
-		const move = item ? item : this.actor.items.get(dataset.id).data;
+		const move = item ? item : this.actor.items.get(dataset.id);
 
-		move.data = PrepareMoveData(actor ? actor.system : this.actor.system, move.data);
+		move.system = PrepareMoveData(actor ? actor.system : this.actor.system, move.system);
 
 		/** Option Callbacks */
 		let PerformFullAttack = (damageBonus = 0) => {
-			const moveData = duplicate(move.data);
+			const moveData = duplicate(move.system);
 			if (damageBonus != 0) moveData.damageBonus += damageBonus;
 
 			const useAP = event.altKey && this.useOwnerAP();
@@ -491,7 +489,7 @@ export class PTUGen8PokemonSheet extends ActorSheet {
 					actor: this.actor
 				}),
 				moveName: move.name,
-				move: move.data,
+				move: move.system,
 				templateType: MoveMessageTypes.DETAILS
 			})
 			return;
@@ -515,7 +513,7 @@ export class PTUGen8PokemonSheet extends ActorSheet {
 							actor: this.actor
 						}),
 						moveName: move.name,
-						move: move.data,
+						move: move.system,
 						templateType: MoveMessageTypes.DETAILS
 					})
 				}

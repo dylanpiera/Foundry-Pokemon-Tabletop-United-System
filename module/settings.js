@@ -1,5 +1,3 @@
-import CustomSpeciesFolder from './entities/custom-species-folder.js'
-
 /* -------------------------------------------- */
 /*  System Setting Initialization               */
 /* -------------------------------------------- */
@@ -320,6 +318,26 @@ export function LoadSystemSettings() {
         type: String,
         default: ""
     });
+    game.settings.register("ptu", "customSpeciesData", {
+        name: "Custom Species Data",
+        scope: "world",
+        config: false,
+        type: Object,
+        default: {
+            data: [], 
+            flags: {
+                init: false,
+                migrated: false
+            }
+        }
+    });
+    game.settings.register("ptu", "customSpeciesBackup", {
+        name: "Custom Species data backup",
+        scope: "world",
+        config: false,
+        type: Object,
+        default: []
+    });
 
     game.settings.register("ptu", "dismissedVersion", {
         name: "Current Dismissed Version",
@@ -355,7 +373,6 @@ export function LoadSystemSettings() {
         config: true,
         type: Boolean,
         default: false,
-        onChange: (value) => CustomSpeciesFolder.updateFolderDisplay(value),
         category: "other"
     });
 
@@ -397,7 +414,6 @@ export function LoadSystemSettings() {
         type: String,
         default: "pokemon_cries/",
         filePicker: true,
-        onChange: (value) => CustomSpeciesFolder.updateFolderDisplay(value),
         category: "other"
     });
 
@@ -419,7 +435,6 @@ export function LoadSystemSettings() {
         type: String,
         default: "pokemon_sounds/",
         filePicker: true,
-        onChange: (value) => CustomSpeciesFolder.updateFolderDisplay(value),
         category: "other"
     });
 
@@ -668,7 +683,6 @@ export function LoadSystemSettings() {
             type: String,
             default: "item_icons/",
             filePicker: true,
-            // onChange: (value) => CustomSpeciesFolder.updateFolderDisplay(value),
             category: "other"
         });
 

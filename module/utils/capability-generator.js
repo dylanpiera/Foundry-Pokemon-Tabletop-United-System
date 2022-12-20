@@ -2,7 +2,7 @@ import { GetOrCacheCapabilities } from "./cache-helper.js";
 
 
 export async function GiveCapabilities(actor) {
-    let speciesData = game.ptu.GetSpeciesData(actor.system.species);
+    let speciesData = game.ptu.utils.species.get(actor.system.species);
     if(!speciesData) return;
     
     let otherCapabilities = speciesData.Capabilities.Other;

@@ -126,7 +126,7 @@ export async function RollCaptureChance(trainer, target, pokeball, to_hit_roll, 
 	}
 
 	function isStoneEvo(species) {
-		const speciesData = game.ptu.GetSpeciesData(species);
+		const speciesData = game.ptu.utils.species.get(species);
 		const STONE_EVO_MONS = [
 			"Eevee", "Vaporeon", "Jolteon", "Flareon", "Espeon", "Umbreon", "Leafeon", "Glaceon", "Sylveon", "Nucleon", "Vulpix", "Ninetales", "Growlithe",
 			"Arcanine", "Pansear", "Simisear", "Poliwhirl", "Poliwrath", "Poliwag", "Shellder", "Cloyster", "Staryu", "Starmie", "Lombre", "Lotad",
@@ -297,7 +297,7 @@ export async function RollCaptureChance(trainer, target, pokeball, to_hit_roll, 
 		captureData.rate -= 30;
 	}
 
-	const speciesData = game.ptu.GetSpeciesData(targetData.species);
+	const speciesData = game.ptu.utils.species.get(targetData.species);
 
 	// TODO: Pretty this up
 	let myEvolution = 0;
@@ -341,7 +341,7 @@ export async function applyCapture(trainer, target, pokeball, speciesData)
 		return await failedCapture(trainer, target, pokeball, speciesData);
 	}
 
-	const result = await game.ptu.api.transferOwnership(target, {reason:"capture", pokeball: pokeball.name, timeout: 30000, /*permission: { [newOwnerId]: CONST.ENTITY_PERMISSIONS.OWNER },*/ newOwnerId});
+	const result = await game.ptu.utils.api.gm.transferOwnership(target, {reason:"capture", pokeball: pokeball.name, timeout: 30000, /*permission: { [newOwnerId]: CONST.ENTITY_PERMISSIONS.OWNER },*/ newOwnerId});
 
 	if((result?._id ?? result?.id) == target.id) {
 		const dexentry = trainer.itemTypes.dexentry.find(item => item.name.toLowerCase() == speciesData._id.toLowerCase())
@@ -402,7 +402,7 @@ Hooks.on("renderChatMessage", (message, html, data) => {
 
 			const trainer = game.actors.get(trainerId);
 			const target = game.actors.get(targetId);
-			const speciesData = game.ptu.GetSpeciesData(target.system.species);
+			const speciesData = game.ptu.utils.species.get(target.system.species);
 			const result = await applyCapture(trainer,target,pokeball,speciesData);
 
 			if(result) {

@@ -1,6 +1,21 @@
 # Welcome to the Beta!
 Hey there! You are on the Beta Branch. If you ever have any feedback please do share with us over on [Github](https://github.com/dylanpiera/Foundry-Pokemon-Tabletop-United-System/issues) or [Discord](https://discord.gg/fE3w59q)
 
+## Version 3.0.0.1
+Hi all! Welcome to the v10 beta! ...again :)
+
+As of today PTU Development will be back to normal, so I hope the upcomming few betas will provide a more stable v10 experience.
+As per always please report your bugs on our discord server and let me know of any features you'd like see added.
+
+This update has completely changed the `game.ptu` namespace to a new system which should allow for a cleaner maintenance.
+**PLEASE NOTE MACRO DEVELOPERS**: *this means that macros may break* if they make use of the `game.ptu` namespace.
+Please check out the changes using developer tools for clarity.
+
+The new namespace isn't quite 100% done yet as some internal name changes may still happen, but this shouldn't affect macro developers.
+
+Besides this the Custom Species data storage has been overhauled as well, which should provide with a smoother and a more stable experience.
+*please note*: The system will automatically migrate the data over and save a backup of the old data so you're save to delete the journal entry, but you may always keep a copy just in case for your own sake.
+
 ## Version 2.2.0.2
 Hi all! Welcome to the v10 beta.
 

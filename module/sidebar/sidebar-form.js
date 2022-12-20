@@ -88,7 +88,7 @@ export class PTUSidebar extends FormApplication {
   }
 
   /**
-   * Used for external use through game.ptu.sidebar.stateHasChanged() - Forcing all components to evaluate a re-render.
+   * Used for external use through game.ptu.forms.sidebar.stateHasChanged() - Forcing all components to evaluate a re-render.
    */
   stateHasChanged(targetHasChanged = false) {
     if (targetHasChanged) this.store.dispatch("targetsHasChanged");

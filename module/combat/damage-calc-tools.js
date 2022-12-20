@@ -3,13 +3,13 @@ import { injuryTokenSplash } from "../../module/combat/effects/move_animations.j
 
 Hooks.on("renderChatMessage", (message, html, data) => {
     setTimeout(() => {
-        $(html).find(".apply-damage-button").on("click", game.ptu.combat.applyDamageToTargets);
-        $(html).find(".undo-damage-button").on("click", game.ptu.combat.undoDamageToTargets);
-        $(html).find(".half-damage-button").on("click", (ev) => game.ptu.combat.applyDamageToTargets(ev, ATTACK_MOD_OPTIONS.HALF));
-        $(html).find(".resist-damage-button").on("click", (ev) => game.ptu.combat.applyDamageToTargets(ev, ATTACK_MOD_OPTIONS.RESIST));
-        $(html).find(".flat-damage-button").on("click", (ev) => game.ptu.combat.applyDamageToTargets(ev, ATTACK_MOD_OPTIONS.FLAT));
-        $(html).find(".automated-damage-button").click(game.ptu.combat.newApplyDamageToTargets)
-        $(html).find(".mon-item").click(game.ptu.combat.handleApplicatorItem)
+        $(html).find(".apply-damage-button").on("click", game.ptu.utils.combat.applyDamageToTargets);
+        $(html).find(".undo-damage-button").on("click", game.ptu.utils.combat.undoDamageToTargets);
+        $(html).find(".half-damage-button").on("click", (ev) => game.ptu.utils.combat.applyDamageToTargets(ev, ATTACK_MOD_OPTIONS.HALF));
+        $(html).find(".resist-damage-button").on("click", (ev) => game.ptu.utils.combat.applyDamageToTargets(ev, ATTACK_MOD_OPTIONS.RESIST));
+        $(html).find(".flat-damage-button").on("click", (ev) => game.ptu.utils.combat.applyDamageToTargets(ev, ATTACK_MOD_OPTIONS.FLAT));
+        $(html).find(".automated-damage-button").click(game.ptu.utils.combat.newApplyDamageToTargets)
+        $(html).find(".mon-item").click(game.ptu.utils.combat.handleApplicatorItem)
     }, 500);
 });
 
@@ -73,7 +73,7 @@ export async function ApplyFlatDamage(targets, sourceName, damage) {
 async function executeApplyDamageToTargets(targets, data, damage, { isFlat, isResist, isWeak, damageReduction, msgId } = { isFlat: false, isResist: false, isWeak: false }) {
     if (isNaN(damageReduction)) damageReduction = 0;
 
-    return await game.ptu.api.applyDamage(targets, damage, data.type, data.category, { isFlat, isResist, isWeak, damageReduction, msgId });
+    return await game.ptu.utils.api.gm.applyDamage(targets, damage, data.type, data.category, { isFlat, isResist, isWeak, damageReduction, msgId });
 }
 
 export async function displayAppliedDamageToTargets(appliedDamage) {
@@ -105,9 +105,8 @@ export async function undoDamageToTargets(event) {
     const actor = data.type == "actor" ? game.actors.get(data.target) : canvas.tokens.get(data.target).actor;
     if (!actor) return;
 
-
-    log(`FVTT PTU | Undoing ${data.injuries} injuries and ${data.damage} damage to ${actor.data.name} - Old Injuries: ${data.oldInjuries} - Old HP: ${data.oldHp} - Old Temp: ${data.oldTempHp}`);
-    await actor.update({ "data.health.injuries":data.oldInjuries, "data.health.value": data.oldHp, "data.tempHp.value": data.oldTempHp, "data.tempHp.max": data.oldTempHp })
+    log(`FVTT PTU | Undoing ${data.injuries} injuries and ${data.damage} damage to ${actor.name} - Old Injuries: ${data.oldInjuries} - Old HP: ${data.oldHp} - Old Temp: ${data.oldTempHp}`);
+    await actor.update({ "system.health.injuries":data.oldInjuries, "system.health.value": data.oldHp, "system.tempHp.value": data.oldTempHp, "system.tempHp.max": data.oldTempHp })
 
     if (data.tokenId && data.msgId) {
         await updateApplicatorHtml($(`[data-message-id="${data.msgId}"]`), [data.tokenId], undefined, true, true)
@@ -283,7 +282,7 @@ export async function handleApplicatorItem(event) {
     const message = game.messages.get(messageId);
     const newContent = messageHtml.children(".message-content").html().trim();
 
-    await game.ptu.api.chatMessageUpdate(message, { content: newContent })
+    await game.ptu.utils.api.gm.chatMessageUpdate(message, { content: newContent })
 }
 
 async function updateApplicatorHtml(root, targetIds, mode, updateChatMessage = false, undo = false) {
@@ -343,7 +342,7 @@ async function updateApplicatorHtml(root, targetIds, mode, updateChatMessage = f
         const message = game.messages.get(messageId);
         const newContent = $(root).children(".message-content").html().trim();
 
-        await game.ptu.api.chatMessageUpdate(message, { content: newContent })
+        await game.ptu.utils.api.gm.chatMessageUpdate(message, { content: newContent })
     }
 }
 

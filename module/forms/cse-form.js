@@ -31,8 +31,8 @@ export class PTUCustomSpeciesEditor extends FormApplication {
       const data = super.getData();
       data.dtypes = ["String", "Number", "Boolean"];
   
-      data.species = game.ptu.customSpeciesData.sort((a,b) => a.ptuNumber - b.ptuNumber);
-      this.object = isObjectEmpty(this.object ?? {}) ? data.species[0] : this.object.state == "new" ? {} : this.object;
+      data.species = game.ptu.data.customSpeciesData.sort((a,b) => a.ptuNumber - b.ptuNumber);
+      this.object = isEmpty(this.object ?? {}) ? data.species[0] : this.object.state == "new" ? {} : this.object;
       data.object = this.object;
 
       return data;
@@ -56,7 +56,8 @@ export class PTUCustomSpeciesEditor extends FormApplication {
       this._initializeState();
 
       html.find('#species-list .item').click((ev) => {
-        this.object = game.ptu.customSpeciesData.find(x => x.number == ev.currentTarget.dataset.itemNumber);
+        this.object = game.ptu.data.customSpeciesData.find(x => x.number == ev.currentTarget.dataset.itemNumber);
+        this._initializeState();
         this.render(true);
       });
 
@@ -177,15 +178,17 @@ export class PTUCustomSpeciesEditor extends FormApplication {
       }
 
       mergeObject(this.object, this.formatFormData(formData));
+
+      // Load custom species data from settings
+      const customSpeciesData = game.settings.get("ptu", "customSpeciesData");
       
-      let journalEntry = CustomSpeciesFolder.findEntry(this.object);
-      if(journalEntry === undefined) journalEntry = CustomSpeciesFolder.findEntry(this.object.ptuNumber);
-      if(journalEntry === undefined) {
-        log("No entry found for " + this.object.id + " creating new entry");
-        await JournalEntry.create({name: this.object.ptuNumber, content: JSON.stringify(this.object), folder: CustomSpeciesFolder._dirId})
-      } else {
-        await journalEntry.update({content: JSON.stringify(this.object)});
-      }
+      // Check if species already exists, and if so update data
+      const index = customSpeciesData.data.findIndex(x => x.number == this.object.number)
+      if(index) customSpeciesData.data[index] = this.object;
+      // If species doesn't exist, add it to the list
+      else customSpeciesData.data.push(this.object);
+      // Save custom species data to settings
+      await game.settings.set("ptu", "customSpeciesData", customSpeciesData);
 
       log("Updating Custom Species")
       await Hooks.callAll("updatedCustomSpecies", {outdatedApplications: [this.options.baseApplication]});
@@ -274,7 +277,7 @@ export class PTUCustomSpeciesEditor extends FormApplication {
         "Egg Move List": this.store.state.moves.filter(move => move.egg).map(move => move.name),
         "Tutor Move List": this.store.state.moves.filter(move => move.tutor).map(move => move.name),
         "TM Move List": this.store.state.moves.filter(move => move.tm).map(move => {
-          for(const [tm, name] of game.ptu.TMsData.entries()) {
+          for(const [tm, name] of game.ptu.data.TMsData.entries()) {
             if(name == move.name) return tm;
           }
         }).filter(move => move),
@@ -288,12 +291,12 @@ export class PTUCustomSpeciesEditor extends FormApplication {
     checkMonId(number) {
       if(number) {
         if(number >= 2000) {
-          if(CustomSpeciesFolder.findEntry(number)) {
+          if(game.ptu.data.customSpeciesData.find(s => s.ptuNumber == number)) {
             return number;
           }
         }
       }
-      return CustomSpeciesFolder.getAvailableId();
+      return game.ptu.data.customSpeciesData.length > 0 ? parseInt(game.ptu.data.customSpeciesData.sort((a,b) => b.ptuNumber - a.ptuNumber)[0].number) + 1 : 2000;
     }
 
 }

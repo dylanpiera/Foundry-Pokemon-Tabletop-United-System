@@ -66,7 +66,7 @@ export default class MovesList extends Component {
             if((moveData.system.damageBase == "--" && moveData.system.category == "--") || (moveData.system.damageBase == "" && moveData.system.category == "") || (moveData.system.isStruggle)) continue;
             
             const tokens = game.user.targets.size > 0 ? [...game.user.targets] : canvas.tokens.controlled
-            const monData = game.ptu.GetSpeciesData(tokens[0]?.actor?.system?.species);
+            const monData = game.ptu.utils.species.get(tokens[0]?.actor?.system?.species);
 
             // If DB is not a number, 
                 if(isNaN(Number(moveData.system.damageBase))) moveData.system.damageBase = "--";
@@ -142,7 +142,7 @@ export default class MovesList extends Component {
                                 actor: this.state.actor
                             }),
                             moveName: move.name,
-                            move: move.data,
+                            move: move.system,
                         })
                         break;
                     case 1: // Left click

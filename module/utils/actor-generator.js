@@ -11,14 +11,14 @@ export class ActorGenerator {
             if(!actor.preparedData) throw 'PreparedData required to generate actor. See ActorGenerator.PrepareData';
             delete actor.preparedData;
             this.actor = actor;
-            this.actor.system.level.current = CalcLevel(this.actor.system.level.exp, 50, game.ptu.levelProgression)
+            this.actor.system.level.current = CalcLevel(this.actor.system.level.exp, 50, game.ptu.data.levelProgression)
         }
         else {
             if((!actor.system && !actor.preparedData) && exists) throw 'Actor not initialized.';
             this.actor = actor;    
         }
 
-        this.species = { name: this.actor.system.species, data: game.ptu.GetSpeciesData(this.actor.system.species)};
+        this.species = { name: this.actor.system.species, data: game.ptu.utils.species.get(this.actor.system.species)};
         if(!this.species) throw 'Species undefined';
 
         this.ApplyChanges = ApplyChanges;
@@ -61,15 +61,15 @@ export class ActorGenerator {
 
     Generate(statMethod = "weighted", allMoves = undefined, allAbilities = undefined, allCapabilities = undefined, stat_randomness = undefined, shiny_chance = undefined, prevent_evolution = undefined) {
         if(allMoves === undefined) {
-            if(game.ptu.cache.moves) allMoves = game.ptu.cache.moves;
+            if(game.ptu.utils.cache.moves) allMoves = game.ptu.utils.cache.moves;
             else throw 'Moves not cached, please provide moves.';
         }
         if(allAbilities === undefined) {
-            if(game.ptu.cache.abilities) allAbilities = game.ptu.cache.abilities;
+            if(game.ptu.utils.cache.abilities) allAbilities = game.ptu.utils.cache.abilities;
             else throw 'Abilities not cached, please provide moves.';
         }
         if(allCapabilities === undefined) {
-            if(game.ptu.cache.capabilities) allCapabilities = game.ptu.cache.capabilities;
+            if(game.ptu.utils.cache.capabilities) allCapabilities = game.ptu.utils.cache.capabilities;
             else throw 'Capabilities not cached, please provide moves.';
         }
 
@@ -91,7 +91,7 @@ export class ActorGenerator {
                     exp: exp
                 },
                 nature: {
-                    value: nature ? nature : game.ptu.monGenerator.GetRandomNature()
+                    value: nature ? nature : game.ptu.utils.generator.GetRandomNature()
                 }
             },
             preparedData: true
@@ -155,8 +155,8 @@ function PrepareEvolution(prevent_evolution = undefined) {
     for(let i = stages.length-1; i >= 0; i--) {
         if(stages[i].level <= this.actor.system.level.current) {
             let p = stages.filter(x => x.stage == stages[i].stage);
-            if(p.length > 1) current = game.ptu.GetSpeciesData(p[getRandomIntInclusive(0,p.length-1)].name);
-            else current = game.ptu.GetSpeciesData(stages[i].name);
+            if(p.length > 1) current = game.ptu.utils.species.get(p[getRandomIntInclusive(0,p.length-1)].name);
+            else current = game.ptu.utils.species.get(stages[i].name);
             break;
         }
     }

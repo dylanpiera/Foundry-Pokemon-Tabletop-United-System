@@ -15,7 +15,7 @@ export default class NewMonComponent extends Component {
      * @returns {void}
      */
     async render() {
-        if(!isObjectEmpty(this.state.speciesData ?? {})) return;
+        if(!isEmpty(this.state.speciesData ?? {})) return;
 
         const html = `
         <div class="h-100 d-flex">

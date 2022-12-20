@@ -93,7 +93,7 @@ export class PTUItemSheet extends ItemSheet {
 
 					// No checks needed; just show full dex.
 					if (game.user.isGM) {
-						return game.ptu.renderDex(mon, "full");
+						return game.ptu.utils.dex.render(mon, "full");
 					}
 				
 					switch (permSetting) {
@@ -102,20 +102,20 @@ export class PTUItemSheet extends ItemSheet {
 						}
 						case 2:
 						case 3: { //pokemon description only
-							return game.ptu.renderDex(mon);
+							return game.ptu.utils.dex.render(mon);
 						}
 						case 4: { // Only owned mons
 							if (!game.user.character) return ui.notifications.warn("Please make sure you have a trainer as your Selected Player Character");
 				
-							return game.ptu.renderDex(mon, 
-								game.user.character.itemTypes.dexentry.some(entry => entry.system.owned && entry.system.name === game.ptu.GetSpeciesData(mon)?.id?.toLowerCase())
+							return game.ptu.utils.dex.render(mon, 
+								game.user.character.itemTypes.dexentry.some(entry => entry.system.owned && entry.system.name === game.ptu.utils.species.get(mon)?.id?.toLowerCase())
 								? "full" : "desc");
 						}
 						case 5: { // GM Prompt
 							return ui.notifications.warn("The GM prompt feature has yet to be implemented. Please ask your DM to change to a different Dex Permission Setting");
 						}
 						case 6: { // Always Full Details
-							return game.ptu.renderDex(mon, "full");
+							return game.ptu.utils.dex.render(mon, "full");
 						}
 					}
 				}

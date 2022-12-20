@@ -107,7 +107,7 @@ export default class MenuComponent extends Component {
             const { entityId, ballName, ownerId } = event.target.dataset;
 
             const owner = game.actors.get(ownerId);
-            game.ptu.ThrowPokeball(owner, game.user?.targets?.first(), owner?.items.get(entityId));
+            game.ptu.utils.throwPokeball(owner, game.user?.targets?.first(), owner?.items.get(entityId));
         })
 
         this.element.children("#menu-content").children(".struggle-row").children(".movemaster-button[data-struggle-id]").on("mousedown", (event) => {

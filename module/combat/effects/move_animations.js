@@ -270,7 +270,7 @@ export async function PlayHitShakeAnimation(moveTargetToken)
         return false; // Either TMFX module is not installed, or config settings have disabled move animations, so stop here.
     }
 
-    await game.ptu.api.addTokenMagicFilters(moveTargetToken, game.canvas.scene.id, hit_TMFX_params);
+    await game.ptu.utils.api.gm.addTokenMagicFilters(moveTargetToken, game.canvas.scene.id, hit_TMFX_params);
 }
 
 
@@ -281,7 +281,7 @@ export async function PlayMissDodgeAnimation(moveTargetToken)
         return false; // Either TMFX module is not installed, or config settings have disabled move animations, so stop here.
     }
 
-    await game.ptu.api.addTokenMagicFilters(moveTargetToken, game.canvas.scene.id, dodge_TMFX_params);
+    await game.ptu.utils.api.gm.addTokenMagicFilters(moveTargetToken, game.canvas.scene.id, dodge_TMFX_params);
 }
 
 
@@ -485,12 +485,12 @@ export async function injuryTokenSplash(actor)
     if( (actor.system.health.injuries >= 5) && (blood_allowed) )
     {
         // await actor_token.TMFXaddUpdateFilters(blood_splash_params);
-        await game.ptu.api.addTokenMagicFilters(actor_token, game.canvas.scene, blood_splash_params);
+        await game.ptu.utils.api.gm.addTokenMagicFilters(actor_token, game.canvas.scene, blood_splash_params);
     }
     else
     {
         // await actor_token.TMFXaddUpdateFilters(soot_splash_params);
-        await game.ptu.api.addTokenMagicFilters(actor_token, game.canvas.scene, blood_splash_params);
+        await game.ptu.utils.api.gm.addTokenMagicFilters(actor_token, game.canvas.scene, blood_splash_params);
     }
 }
 
@@ -502,6 +502,6 @@ export async function cleanInjuryTokenSplash(actor)
 
 	// await actor_token.TMFXdeleteFilters("sootSplash");
 	// await actor_token.TMFXdeleteFilters("bloodSplash");
-    await game.ptu.api.removeTokenMagicFilters(target, game.canvas.scene.id, "sootSplash");
-    await game.ptu.api.removeTokenMagicFilters(target, game.canvas.scene.id, "bloodSplash");
+    await game.ptu.utils.api.gm.removeTokenMagicFilters(target, game.canvas.scene.id, "sootSplash");
+    await game.ptu.utils.api.gm.removeTokenMagicFilters(target, game.canvas.scene.id, "bloodSplash");
 }
