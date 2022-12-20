@@ -1,9 +1,12 @@
 {
-  "name": "ptu",
+  "id": "ptu",
   "title": "Pokemon Tabletop United",
   "description": "A Pen and Paper Roleplaying Game Set in the World of Pokemon",
-  "minimumCoreVersion": "10",
-  "compatibleCoreVersion": "10.284",
+  "compatibility": {
+    "minimum": 10,
+    "verified": "10.285",
+    "maximum": 10
+  },
   "version": "2.2.0.2",
   "templateVersion": 2,
   "authors": [
@@ -31,7 +34,8 @@
       "name": "Efren A. Mariño"
     },
     {
-      "name": "Cody Swendrowski"
+      "name": "Cody Swendrowski",
+      "url": "https://swendrowski.us"
     }
   ],
   "esmodules": ["module/ptu.js"],

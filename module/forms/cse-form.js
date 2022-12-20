@@ -31,7 +31,7 @@ export class PTUCustomSpeciesEditor extends FormApplication {
       const data = super.getData();
       data.dtypes = ["String", "Number", "Boolean"];
   
-      data.species = game.ptu.customSpeciesData.sort((a,b) => a.ptuNumber - b.ptuNumber);
+      data.species = game.ptu_new.data.customSpeciesData.sort((a,b) => a.ptuNumber - b.ptuNumber);
       this.object = isObjectEmpty(this.object ?? {}) ? data.species[0] : this.object.state == "new" ? {} : this.object;
       data.object = this.object;
 
@@ -56,7 +56,7 @@ export class PTUCustomSpeciesEditor extends FormApplication {
       this._initializeState();
 
       html.find('#species-list .item').click((ev) => {
-        this.object = game.ptu.customSpeciesData.find(x => x.number == ev.currentTarget.dataset.itemNumber);
+        this.object = game.ptu_new.data.customSpeciesData.find(x => x.number == ev.currentTarget.dataset.itemNumber);
         this.render(true);
       });
 

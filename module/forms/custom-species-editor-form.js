@@ -26,7 +26,7 @@ export class PTUCustomSpeciesEditor extends Application {
       const data = super.getData();
       data.dtypes = ["String", "Number", "Boolean"];
   
-      data.species = game.ptu.customSpeciesData.sort((a,b) => a.ptuNumber - b.ptuNumber);
+      data.species = game.ptu_new.data.customSpeciesData.sort((a,b) => a.ptuNumber - b.ptuNumber);
       this.toggle = false;
 
       return data;
@@ -43,7 +43,7 @@ export class PTUCustomSpeciesEditor extends Application {
       // Update Inventory Item
       html.find('#species-list .item').click((ev) => {
         if(!this.toggle) {
-          let mon = game.ptu.customSpeciesData.find(x => x.number == ev.currentTarget.dataset.itemNumber);
+          let mon = game.ptu_new.data.customSpeciesData.find(x => x.number == ev.currentTarget.dataset.itemNumber);
           new game.ptu.PTUCustomMonEditor(mon, {"submitOnChange": false, "submitOnClose": false, baseApplication: this}).render(true);
         }
       });

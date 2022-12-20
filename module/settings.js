@@ -320,6 +320,26 @@ export function LoadSystemSettings() {
         type: String,
         default: ""
     });
+    game.settings.register("ptu", "customSpeciesData", {
+        name: "Custom Species Data",
+        scope: "world",
+        config: false,
+        type: Object,
+        default: {
+            data: [], 
+            flags: {
+                init: false,
+                migrated: false
+            }
+        }
+    });
+    game.settings.register("ptu", "customSpeciesBackup", {
+        name: "Custom Species data backup",
+        scope: "world",
+        config: false,
+        type: Object,
+        default: []
+    });
 
     game.settings.register("ptu", "dismissedVersion", {
         name: "Current Dismissed Version",

@@ -59,7 +59,7 @@ export class PTUPokemonCharactermancer extends FormApplication {
       "Speed": "SPD"
     }
     
-    this.allSpecies = game.ptu.pokemonData.map(x => {return {number: x.ptuNumber, name: x._id}}).concat(game.ptu.customSpeciesData.map(x => {return {number: x.ptuNumber, name: x._id}}));
+    this.allSpecies = game.ptu_new.data.pokemonData.map(x => {return {number: x.ptuNumber, name: x._id}}).concat(game.ptu_new.data.customSpeciesData.map(x => {return {number: x.ptuNumber, name: x._id}}));
     this.speciesData = game.ptu.GetSpeciesData(this.object.system.species ? this.object.system.species : this.object.name);
     data.app = this;
     

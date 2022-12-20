@@ -22,7 +22,7 @@ import { PTUCustomTypingEditor } from './forms/cte-form.js'
 import { PTUCustomMonEditor } from './forms/custom-mon-editor-form.js'
 import { PTUCharacterNotesForm } from './forms/character-notes-form.js'
 import { RollWithDb } from './utils/roll-calculator.js'
-import { InitCustomSpecies, UpdateCustomSpecies } from './custom-species.js'
+import { PrepareCustomSpecies, UpdateCustomSpeciesData } from './custom-species.js'
 import { InitCustomTypings as initCustomTypings, UpdateCustomTypings } from './custom-typings.js'
 import { ChangeLog } from './forms/changelog-form.js'
 import { applyDamageToTargets, undoDamageToTargets, newApplyDamageToTargets, handleApplicatorItem, TakeAction } from './combat/damage-calc-tools.js'
@@ -394,7 +394,7 @@ Hooks.once("ready", async function () {
     }
   }
 
-  await InitCustomSpecies();
+  await PrepareCustomSpecies();
   await initCustomTypings();
 
   SetAccessabilityFont(game.settings.get("ptu", "accessability"));
@@ -452,7 +452,7 @@ Hooks.once("ready", async function () {
 /* -------------------------------------------- */
 /*  Custom Species (Editor) Hooks               */
 /* -------------------------------------------- */
-Hooks.on("updatedCustomSpecies", UpdateCustomSpecies);
+Hooks.on("updatedCustomSpecies", UpdateCustomSpeciesData);
 Hooks.on("updatedCustomTypings", UpdateCustomTypings);
 
 Hooks.on('renderJournalDirectory', function () {

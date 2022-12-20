@@ -130,7 +130,7 @@ export function registerHandlebars() {
     Handlebars.registerHelper("loadTypeImages", function (types, includeSlash = true) {
       // TypeEffectiveness here is imported from source and only contains the default types
       // in contract, game.ptu.TypeEffectiveness contains custom types as well
-      const isTypeDefaultType = (typeName) => Object.keys(TypeEffectiveness).includes(typeName)
+      const isTypeDefaultType = (typeName) => Object.keys(game.ptu_new.data.TypeEffectiveness).includes(typeName)
       let customDir = game.settings.get("ptu", "typeEffectivenessCustomImageDirectory");
       if (customDir.slice(-1) !== "/") customDir += "/"
       if (customDir.charAt(0) !== "/") customDir = "/" + customDir
@@ -145,7 +145,7 @@ export function registerHandlebars() {
     Handlebars.registerHelper("loadTypeImage", function (type) {
       // TypeEffectiveness here is imported from source and only contains the default types
       // in contract, game.ptu.TypeEffectiveness contains custom types as well
-      const isTypeDefaultType = (typeName) => Object.keys(TypeEffectiveness).includes(typeName)
+      const isTypeDefaultType = (typeName) => Object.keys(game.ptu_new.data.TypeEffectiveness).includes(typeName)
       let customDir = game.settings.get("ptu", "typeEffectivenessCustomImageDirectory");
       if (customDir.slice(-1) !== "/") customDir += "/"
       if (customDir.charAt(0) !== "/") customDir = "/" + customDir

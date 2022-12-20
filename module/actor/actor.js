@@ -1068,7 +1068,7 @@ export function GetSpeciesData(species) {
     if (parseInt(species)) {
       preJson = game.ptu.pokemonData.find(x => x.number == species);
       if (!preJson) {
-        preJson = game.ptu.customSpeciesData.find(x => x.number == species);
+        preJson = game.ptu_new.data.customSpeciesData.find(x => x.number == species);
         if (!preJson) return null;
         extra.isCustomSpecies = true;
       };
@@ -1089,7 +1089,7 @@ export function GetSpeciesData(species) {
       }
       else preJson = game.ptu.pokemonData.find(x => x._id.toLowerCase() === species.toLowerCase());
       if (!preJson) {
-        preJson = game.ptu.customSpeciesData.find(x => x._id.toLowerCase() === species.toLowerCase());
+        preJson = game.ptu_new.data.customSpeciesData.find(x => x._id.toLowerCase() === species.toLowerCase());
         if (!preJson) return null;
         extra.isCustomSpecies = true;
       };
