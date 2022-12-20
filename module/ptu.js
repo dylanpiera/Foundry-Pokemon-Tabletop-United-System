@@ -455,9 +455,9 @@ Hooks.once("ready", async function () {
 Hooks.on("updatedCustomSpecies", UpdateCustomSpeciesData);
 Hooks.on("updatedCustomTypings", UpdateCustomTypings);
 
-Hooks.on('renderJournalDirectory', function () {
-  CustomSpeciesFolder.updateFolderDisplay(game.settings.get("ptu", "showDebugInfo"));
-})
+// Hooks.on('renderJournalDirectory', function () {
+//   CustomSpeciesFolder.updateFolderDisplay(game.settings.get("ptu", "showDebugInfo"));
+// })
 
 /** DexEntry on Pokemon Sheet updates Species Data */
 Hooks.on('dropActorSheetData', function (actor, sheet, itemDropData,) {

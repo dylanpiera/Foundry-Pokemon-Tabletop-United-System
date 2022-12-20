@@ -1,5 +1,3 @@
-import CustomSpeciesFolder from './entities/custom-species-folder.js'
-
 /* -------------------------------------------- */
 /*  System Setting Initialization               */
 /* -------------------------------------------- */
@@ -375,7 +373,6 @@ export function LoadSystemSettings() {
         config: true,
         type: Boolean,
         default: false,
-        onChange: (value) => CustomSpeciesFolder.updateFolderDisplay(value),
         category: "other"
     });
 
@@ -417,7 +414,6 @@ export function LoadSystemSettings() {
         type: String,
         default: "pokemon_cries/",
         filePicker: true,
-        onChange: (value) => CustomSpeciesFolder.updateFolderDisplay(value),
         category: "other"
     });
 
@@ -439,7 +435,6 @@ export function LoadSystemSettings() {
         type: String,
         default: "pokemon_sounds/",
         filePicker: true,
-        onChange: (value) => CustomSpeciesFolder.updateFolderDisplay(value),
         category: "other"
     });
 
@@ -688,7 +683,6 @@ export function LoadSystemSettings() {
             type: String,
             default: "item_icons/",
             filePicker: true,
-            // onChange: (value) => CustomSpeciesFolder.updateFolderDisplay(value),
             category: "other"
         });
 

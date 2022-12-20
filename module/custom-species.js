@@ -77,7 +77,7 @@ export async function UpdateCustomSpeciesData(data) {
     try {
         if(data && data.outdatedApplications) {
             for(let app of data.outdatedApplications) {
-                await app._render();
+                await app?._render();
             }
         }
     }

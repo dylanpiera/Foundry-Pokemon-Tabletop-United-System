@@ -32,7 +32,7 @@ export class PTUCustomTypingEditor extends FormApplication {
       data.dtypes = ["String", "Number", "Boolean"];
   
       data.types = game.ptu.TypeEffectiveness;
-      this.object = isObjectEmpty(this.object ?? {}) ? {type: "Normal", data: data.types.Normal} : this.object;
+      this.object = isEmpty(this.object ?? {}) ? {type: "Normal", data: data.types.Normal} : this.object;
       data.object = this.object;
 
       return data;
