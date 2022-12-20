@@ -19,14 +19,12 @@ import { PTUDexDragOptions } from './forms/dex-drag-options-form.js'
 // import { PTUCustomSpeciesEditor } from './forms/custom-species-editor-form.js'
 import { PTUCustomSpeciesEditor } from './forms/cse-form.js'
 import { PTUCustomTypingEditor } from './forms/cte-form.js'
-import { PTUCustomMonEditor } from './forms/custom-mon-editor-form.js'
 import { PTUCharacterNotesForm } from './forms/character-notes-form.js'
 import { RollWithDb } from './utils/roll-calculator.js'
 import { PrepareCustomSpecies, UpdateCustomSpeciesData } from './custom-species.js'
 import { InitCustomTypings as initCustomTypings, UpdateCustomTypings } from './custom-typings.js'
 import { ChangeLog } from './forms/changelog-form.js'
 import { applyDamageToTargets, undoDamageToTargets, newApplyDamageToTargets, handleApplicatorItem, TakeAction } from './combat/damage-calc-tools.js'
-import CustomSpeciesFolder from './entities/custom-species-folder.js'
 import { CreateMonParser, GetSpeciesArt } from './utils/species-command-parser.js'
 import { FinishDexDragPokemonCreation } from './utils/species-command-parser.js'
 import { GetRandomNature } from './utils/random-nature-generator.js'
@@ -37,7 +35,6 @@ import { GiveCapabilities } from './utils/capability-generator.js'
 import { DistributeStatsWeighted, DistributeStatsRandomly, DistributeByBaseStats, BaseStatsWithNature, ApplyLevelUpPoints } from './utils/calculate-stat-distribution.js'
 import { GetOrCreateCachedItem } from './utils/cache-helper.js'
 import { ActorGenerator } from './utils/actor-generator.js'
-import { GetOrCacheAbilities, GetOrCacheCapabilities, GetOrCacheMoves } from './utils/cache-helper.js'
 import { Afflictions } from './combat/effects/afflictions.js'
 import PTUCombat from './combat/combat.js'
 import { PTUCombatOverrides, PTUCombatTrackerOverrides } from './combat/ptu_overrides.js'
@@ -164,6 +161,9 @@ export const ptu = {
       },
       CustomSpeciesEditor: {
         documentClass: PTUCustomSpeciesEditor
+      },
+      CustomTypingEditor: {
+        documentClass: PTUCustomTypingEditor
       },
       PokemonCharacterMancer: {
         documentClass: PTUPokemonCharactermancer,
@@ -499,7 +499,7 @@ Hooks.on("renderSettings", (app, html) => {
           <i class="fas fa-book-open"></i>
           Edit Custom Typings
       </button>`));
-    html.find('button[data-action="ptu-custom-typing-editor"').on("click", _ => new game.ptu.config.Ui.CustomSpeciesEditor.documentClass().render(true));
+    html.find('button[data-action="ptu-custom-typing-editor"').on("click", _ => new game.ptu.config.Ui.CustomTypingEditor.documentClass().render(true));
   }
 })
 
