@@ -86,7 +86,7 @@ export async function UpdateCustomSpeciesData(data) {
 
     await game.actors.filter(x => x.type === "pokemon" && (x.system.isCustomSpecies || x.system.typing === undefined)).forEach(async (x) => {
         if(x.permission >= 3)
-            await x.update({timestamp: Date.now()})
+            await x.update({"system.timestamp": Date.now()})
     })
 }
 
