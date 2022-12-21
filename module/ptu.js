@@ -724,6 +724,7 @@ Hooks.on("preCreateItem", async function (item, data, options, sender) {
   if (item.type != "move") return;
   let origin = "";
   const speciesData = game.ptu.utils.species.get(item.parent?.system.species);
+  if(!speciesData) return;
 
   // All of these have a slightly different format, change them to just be an array of the names with capital letters included.
   const levelUp = speciesData["Level Up Move List"].map(x => x.Move);
