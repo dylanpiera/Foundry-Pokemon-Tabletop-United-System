@@ -284,13 +284,13 @@ export class PTUGen8PokemonSheet extends ActorSheet {
 			await this._applyHardenedEffect(value, isHardened);
 		})
 
-		html.find('input[data-name^="data.training"]').click(async (event) => {
+		html.find('input[data-name^="system.training"]').click(async (event) => {
 			const path = event.currentTarget.dataset.name;
 			const training = path.split('.')[2];
 			const isOrder = path.split('.')[3] == "ordered";
 
 			// If property is true
-			if(getProperty(this.actor.system, path)) {
+			if(getProperty(this.actor, path)) {
 				const effects = [];
 				this.actor.effects.forEach(effect => {
 					if(effect.changes.some(change => change.key == path)) {

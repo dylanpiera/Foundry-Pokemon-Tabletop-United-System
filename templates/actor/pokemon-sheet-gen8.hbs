@@ -655,11 +655,11 @@
                             <p>{{localize (concat "PTU.Training" (capitalizeFirst key))}}</p>
                           </div>
                           <div class="col-sm-3">
-                            <input data-name="data.training.{{key}}.trained" type="checkbox" {{checked
+                            <input data-name="system.training.{{key}}.trained" type="checkbox" {{checked
                               training.trained}} />
                           </div>
                           <div class="col-sm-3">
-                            <input data-name="data.training.{{key}}.ordered" type="checkbox" {{checked
+                            <input data-name="system.training.{{key}}.ordered" type="checkbox" {{checked
                               training.ordered}} />
                           </div>
                         </div>
@@ -670,7 +670,7 @@
                             <p>{{localize "PTU.TrainingCriticalMoment"}}?</p>
                           </div>
                           <div class="col-sm-6">
-                            <input data-name="data.training.critical" type="checkbox" {{checked
+                            <input data-name="system.training.critical" type="checkbox" {{checked
                               data.training.critical}} />
                           </div>
                         </div>

@@ -344,7 +344,7 @@ Hooks.once("setup", function () {
         if (!objects.length) return;
 
         const uuids = objects.reduce((uuids, o) => {
-          if (o.data.locked || o.document.canUserModify(game.user, "delete")) return uuids;
+          if (o.locked || o.document.canUserModify(game.user, "delete")) return uuids;
           if (!o.document.actor.canUserModify(game.user, "delete")) return uuids;
           uuids.push(o.document?.uuid ?? o.uuid);
           return uuids;
@@ -457,7 +457,7 @@ Hooks.on('dropActorSheetData', function (actor, sheet, itemDropData,) {
   if (itemDropData.uuid.startsWith("Item.")) {
     const uuid = itemDropData.uuid.split(".")[1];
     const item = game.items.get(uuid);
-    if (item) {
+    if (item && item.type == "dex-entry") {
       updateActorBasedOnSpeciesItem(item);
       return false;
     }
@@ -723,7 +723,8 @@ Hooks.on("preCreateItem", (item, itemData, options, sender) => {
 Hooks.on("preCreateItem", async function (item, data, options, sender) {
   if (item.type != "move") return;
   let origin = "";
-  const speciesData = game.ptu.utils.species.get(item.parent.system.species);
+  const speciesData = game.ptu.utils.species.get(item.parent?.system.species);
+  if(!speciesData) return;
 
   // All of these have a slightly different format, change them to just be an array of the names with capital letters included.
   const levelUp = speciesData["Level Up Move List"].map(x => x.Move);

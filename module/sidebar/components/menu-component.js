@@ -265,7 +265,7 @@ export default class MenuComponent extends Component {
         await timeout(150);
         this.lock = false;
 
-        return strugglesToDisplay.map(m => m.system);
+        return strugglesToDisplay.map(m => m);
     }
 
     _prepareNewStruggle(actor, type, isTelekinetic, isPhysical = true) {

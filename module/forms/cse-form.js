@@ -105,18 +105,17 @@ export class PTUCustomSpeciesEditor extends FormApplication {
 
         if(!confirm) return;
         
-        let entry = CustomSpeciesFolder.findEntry(this.object.number);
-        if(!entry) {
-          setTimeout(x => {
-            this.object = undefined;
-            this.render(true);
-          }, 50);
-          // ui.notifications.notify("Unable to delete mon: " + this.object.number, "error");
-          return;
-        }
+        // Load custom species data from settings
+        const customSpeciesData = game.settings.get("ptu", "customSpeciesData");
         
-        log(`Deleting mon with ID: ${this.object.number}. Data backup:`, JSON.parse(entry.data.content))
-        await entry.delete();
+        // Check if species exists in custom species data
+        const index = customSpeciesData.data.findIndex(x => x.number == this.object.number)
+        
+        // Delete mon from custom species data
+        log(`Deleting mon with ID: ${this.object.number}. Data backup:`, duplicate(customSpeciesData.data[index]));
+        const newCustomSpeciesData = {data: customSpeciesData.data.filter(x => x.number != this.object.number), flags: customSpeciesData.flags};
+        // Save custom species data to settings
+        await game.settings.set("ptu", "customSpeciesData", newCustomSpeciesData);
         
         log("Updating Custom Species")
         await Hooks.callAll("updatedCustomSpecies", {outdatedApplications: [this]});
@@ -184,7 +183,7 @@ export class PTUCustomSpeciesEditor extends FormApplication {
       
       // Check if species already exists, and if so update data
       const index = customSpeciesData.data.findIndex(x => x.number == this.object.number)
-      if(index) customSpeciesData.data[index] = this.object;
+      if(index >= 0) customSpeciesData.data[index] = this.object;
       // If species doesn't exist, add it to the list
       else customSpeciesData.data.push(this.object);
       // Save custom species data to settings

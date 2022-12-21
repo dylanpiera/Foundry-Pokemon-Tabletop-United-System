@@ -206,7 +206,8 @@ Hooks.on("ptu.finishedGeneratingMons", function(commandData, actors) {
 
 Hooks.on("dropCanvasData", async (canvas, update) => {
     const item = await fromUuid(update.uuid);
-    new game.ptu.config.Ui.DexDragOptions.documentClass({item, x: update.x, y: update.y}, {"submitOnChange": false, "submitOnClose": false}).render(true);
+    if(item.type == "dexentry")
+        new game.ptu.config.Ui.DexDragOptions.documentClass({item, x: update.x, y: update.y}, {"submitOnChange": false, "submitOnClose": false}).render(true);
 });
 
 export async function FinishDexDragPokemonCreation(formData, update)

@@ -1,6 +1,23 @@
 # Welcome to the Beta!
 Hey there! You are on the Beta Branch. If you ever have any feedback please do share with us over on [Github](https://github.com/dylanpiera/Foundry-Pokemon-Tabletop-United-System/issues) or [Discord](https://discord.gg/fE3w59q)
 
+## Version 3.0.0.2
+Hi All, here to clean up some bugs, as well as add the Hisuian Dex
+
+Thanks to `Joooooosh🐉#2354` for the Hisuian Dex!
+Thanks to `OmletDuFromaj#4242` & `Layon [Commander]#1460` for the bug reports
+### New Features:
+- Added Hisuian Dex
+
+### Bug Fixes:
+- Fixed various bugs with the CSE
+- You can now delete & create custom species again
+- Editing custom species should properly load on refresh again
+- Dragging any item onto the field should no longer prompt the 'Dex Drag-In' popup
+- Dragging items into Pokemon Sheets should now work properly again
+- Using Trainings/Orders should now apply/remove the effect properly again
+- Struggle menu should now be functional again
+
 ## Version 3.0.0.1
 Hi all! Welcome to the v10 beta! ...again :)
 
