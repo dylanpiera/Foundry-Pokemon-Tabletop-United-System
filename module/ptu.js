@@ -278,7 +278,8 @@ export function PrepareMoveData(actorData, move) {
   };
   move.prepared = true;
 
-  move.stab = move.owner?.type && (move.owner.type[0] == move.type || move.owner.type[1] == move.type);
+
+  move.stab = move.owner?.type && move.owner.type.filter(t => t == move.type).length > 0;
   move.acBonus = move.owner.acBonus ? move.owner.acBonus : 0;
   return move;
 }

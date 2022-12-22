@@ -1,8 +1,22 @@
 # Welcome to the Beta!
 Hey there! You are on the Beta Branch. If you ever have any feedback please do share with us over on [Github](https://github.com/dylanpiera/Foundry-Pokemon-Tabletop-United-System/issues) or [Discord](https://discord.gg/fE3w59q)
 
+## Version 3.0.0.3
+Hi all! Lots of fixes and small new quality of life features today!
+
+### New Features:
+- Added Backup mechanism to the CSE
+- (Please note, currently there is no way to 'import from file' but it is plausible, if you somehow fuck up your data we can help you setup a macro in the discord server to fix your data)
+- Allow for Dice Formulas in Ad-Hoc damage changes (Damage Bonus & Damage Reduction) (Hold shift while doing a move / applying damage)
+- Add 'Skip to Combatant' right click context option to Combat Tracker
+
+### Bug Fixes:
+- Fixed dragging in Pokemon from the Trainer Belt in the Sidebar
+- Fixed Rotom's Tutor Moveset (Thanks `Ellam#6478`)
+- Fix Stab on Pokemon with more than 2 typings
+
 ## Version 3.0.0.2
-Hi All, here to clean up some bugs, as well as add the Hisuian Dex
+Hi all! Here to clean up some bugs, as well as add the Hisuian Dex
 
 Thanks to `Joooooosh🐉#2354` for the Hisuian Dex!
 Thanks to `OmletDuFromaj#4242` & `Layon [Commander]#1460` for the bug reports

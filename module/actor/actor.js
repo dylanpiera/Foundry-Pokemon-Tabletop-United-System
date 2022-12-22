@@ -857,9 +857,11 @@ export class PTUActor extends Actor {
       if (game.keyboard.downKeys.has("ShiftLeft")) {
         await Dialog.confirm({
           title: `Apply Damage Bonus`,
-          content: `<input type="number" name="damage-bonus" value="0"></input>`,
-          yes: (html) => {
-            const bonus = (parseInt(html.find('input[name="damage-bonus"]').val()))
+          content: `<input type="text" name="damage-bonus" value="0"></input>`,
+          yes: async (html) => {
+            const bonusTxt = html.find('input[name="damage-bonus"]').val();
+            
+            const bonus = !isNaN(Number(bonusTxt)) ? Number(bonusTxt) : parseInt((await (new Roll(bonusTxt)).roll({async:true})).total);
             if (!isNaN(bonus)) {
               total += bonus;
               modifierTexts.push(`Including ${bonus >= 0 ? "+" : ""}${bonus} damage from [Manual Modifier]`)
