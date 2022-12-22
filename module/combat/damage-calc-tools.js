@@ -44,8 +44,16 @@ export async function applyDamageToTargets(event, options = ATTACK_MOD_OPTIONS.N
         dr = await new Promise((resolve, reject) => {
             Dialog.confirm({
                 title: `Apply Damage Reduction`,
-                content: `<input type="number" name="damage-reduction" value="0"></input>`,
-                yes: (html) => resolve(parseInt(html.find('input[name="damage-reduction"]').val()))
+                content: `<input type="text" name="damage-reduction" value="0"></input>`,
+                yes: async (html) => {
+                    const bonusTxt = html.find('input[name="damage-reduction"]').val()
+            
+                    const bonus = !isNaN(Number(bonusTxt)) ? Number(bonusTxt) : parseInt((await (new Roll(bonusTxt)).roll({async:true})).total);
+                    if (!isNaN(bonus)) {
+                        return resolve(bonus);
+                    }
+                    return reject();
+                }
             });
         });
     }
@@ -156,8 +164,16 @@ export async function newApplyDamageToTargets(event) {
             dr = await new Promise((resolve, reject) => {
                 Dialog.confirm({
                     title: `Apply Damage Reduction`,
-                    content: `<input type="number" name="damage-reduction" value="0"></input>`,
-                    yes: (html) => resolve(parseInt(html.find('input[name="damage-reduction"]').val()))
+                    content: `<input type="text" name="damage-reduction" value="0"></input>`,
+                    yes: async (html) => {
+                        const bonusTxt = html.find('input[name="damage-reduction"]').val()
+                
+                        const bonus = !isNaN(Number(bonusTxt)) ? Number(bonusTxt) : parseInt((await (new Roll(bonusTxt)).roll({async:true})).total);
+                        if (!isNaN(bonus)) {
+                            return resolve(bonus);
+                        }
+                        return reject();
+                    }
                 });
             });
         }
@@ -190,8 +206,16 @@ export async function newApplyDamageToTargets(event) {
         dr = await new Promise((resolve, reject) => {
             Dialog.confirm({
                 title: `Apply Damage Reduction`,
-                content: `<input type="number" name="damage-reduction" value="0"></input>`,
-                yes: (html) => resolve(parseInt(html.find('input[name="damage-reduction"]').val()))
+                content: `<input type="text" name="damage-reduction" value="0"></input>`,
+                yes: async (html) => {
+                    const bonusTxt = html.find('input[name="damage-reduction"]').val()
+            
+                    const bonus = !isNaN(Number(bonusTxt)) ? Number(bonusTxt) : parseInt((await (new Roll(bonusTxt)).roll({async:true})).total);
+                    if (!isNaN(bonus)) {
+                        return resolve(bonus);
+                    }
+                    return reject();
+                }
             });
         });
     }
