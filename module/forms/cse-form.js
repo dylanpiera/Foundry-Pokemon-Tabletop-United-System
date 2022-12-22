@@ -61,6 +61,70 @@ export class PTUCustomSpeciesEditor extends FormApplication {
         this.render(true);
       });
 
+      html.find('.item-create[data-type="backup"]').click((ev) => {
+          new Dialog({
+            title: "Backup Menu",
+            content: "Would you like to view, take or restore a backup?",
+            buttons: {
+                take: {
+                    label: "Take",
+                    callback: () => {
+                        Dialog.confirm({
+                            title: "Take new Custom Species Backup",
+                            content: "This action is irreversible and will overwrite the current backup if any exists. Are you sure you wish to proceed?",
+                            yes: async () => {
+                                await game.settings.set("ptu", "customSpeciesBackup", game.ptu.data.customSpeciesData);
+                            },
+                            defaultYes: false
+                        });
+                    }
+                },
+                view: {
+                    label: "View",
+                    callback: () => {
+                        const backup = game.settings.get("ptu", "customSpeciesBackup");
+                        if(!backup) {
+                            ui.notifications.notify("No backup found", "warning");
+                            return;
+                        }
+        
+                        function downloadTextFile(text, name) {
+                          const a = document.createElement('a');
+                          const type = name.split(".").pop();
+                          a.href = URL.createObjectURL( new Blob([text], { type:`text/${type === "txt" ? "plain" : type}` }) );
+                          a.download = name;
+                          a.click();
+                        }
+        
+                        downloadTextFile(JSON.stringify(backup, undefined, 2), "CustomSpeciesDataBackup.json")
+                        ui.notifications.notify("Backup downloaded to browser", "success")
+                    }
+                },
+                restore: {
+                    label: "Restore",
+                    callback: () => {
+                        Dialog.confirm({
+                            title: "Restore Custom Species Backup",
+                            content: "This action is irreversible and will overwrite the current custom species data if any exists. Are you sure you wish to proceed?",
+                            yes: async () => {
+                                const backup = game.settings.get("ptu", "customSpeciesBackup");
+                                
+                                await game.settings.set("ptu", "customSpeciesData", {data: backup, flags: {
+                                    init: true,
+                                    migrated: true
+                                }});
+        
+                                await Hooks.callAll("updatedCustomSpecies", {outdatedApplications: [this]});
+                                await game.socket.emit("system.ptu", "RefreshCustomSpecies")
+                            },
+                            defaultYes: false
+                        });
+                    }
+                },
+            }
+        }).render(true);
+      });
+
       html.find('.item-create[data-type="species"]').click((ev) => {
         this._tabs[0].activate('stats');
         this.object = {state: "new"};
