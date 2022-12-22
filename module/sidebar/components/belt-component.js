@@ -46,6 +46,7 @@ export default class BeltComponent extends Component {
                     name: mon.name,
                     img: mon.img,
                     id: mon.id,
+                    uuid: mon.uuid,
                     color: this._calculateColor(mon.system.health),
                     isActive: false,
                     bgImg: undefined,
@@ -76,7 +77,7 @@ export default class BeltComponent extends Component {
     _onDragStart(event) {
         const dragData = {
             type: 'Actor',
-            id: event.target?.dataset?.entityId
+            uuid: event.target?.dataset?.entityUuid
         }
         event.originalEvent.dataTransfer.setData("text/plain", JSON.stringify(dragData));
     }
