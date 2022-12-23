@@ -16,7 +16,7 @@ export class PTUCombatOverrides extends Combat {
     return result;
   }
 
-  async nextTurn() {
+  async nextTurn(next) {
     if(!game.ptu.utils.api.gm._isMainGM()) {
       return await game.ptu.utils.api.gm.nextTurn(this.id);
     }
@@ -26,14 +26,15 @@ export class PTUCombatOverrides extends Combat {
     let round = this.round;
 
     // Determine the next turn number
-    let next = null;
-    for (let [i, t] of this.turns.entries()) {
-      if (t.getFlag("ptu", "last_turn_acted") >= round && t.getFlag("ptu", "has_acted")) continue;
-      if (t.isDefeated) continue;
-      if (i == turn) continue;
-      if (t.getFlag("ptu", "has_acted")) continue;
-      next = i;
-      break;
+    if(next === undefined || next === null || next < 0) {
+      for (let [i, t] of this.turns.entries()) {
+        if (t.getFlag("ptu", "last_turn_acted") >= round && t.getFlag("ptu", "has_acted")) continue;
+        if (t.isDefeated) continue;
+        if (i == turn) continue;
+        if (t.getFlag("ptu", "has_acted")) continue;
+        next = i;
+        break;
+      }
     }
 
     // Maybe advance to the next round
@@ -262,5 +263,58 @@ export class PTUCombatTrackerOverrides extends CombatTracker {
       .find(".combatant-control[data-control='toggleActed']")
       .click(this._toggleTurnStatus.bind(this));
     html.find(".toggleTurnStatus").click(this._toggleTurnStatus.bind(this));
+  }
+
+  /**
+   * Get the Combatant entry context options
+   * @returns {object[]}   The Combatant entry context options
+   * @private
+   */
+   _getEntryContextOptions() {
+    return [
+      {
+        name: "Skip to Combatant",
+        icon: '<i class="fas fa-edit"></i>',
+        callback: (li) => {
+          console.log(this);
+          const combatant = this.viewed.combatants.get(li.data("combatant-id"))
+          const index = combatant.combat.turns.findIndex(t => t.id === combatant.id);
+          combatant.combat.nextTurn(index);
+        }
+      },
+      {
+        name: "COMBAT.CombatantUpdate",
+        icon: '<i class="fas fa-edit"></i>',
+        callback: this._onConfigureCombatant.bind(this)
+      },
+      {
+        name: "COMBAT.CombatantClear",
+        icon: '<i class="fas fa-undo"></i>',
+        condition: li => {
+          const combatant = this.viewed.combatants.get(li.data("combatant-id"));
+          return Number.isNumeric(combatant?.initiative);
+        },
+        callback: li => {
+          const combatant = this.viewed.combatants.get(li.data("combatant-id"));
+          if ( combatant ) return combatant.update({initiative: null});
+        }
+      },
+      {
+        name: "COMBAT.CombatantReroll",
+        icon: '<i class="fas fa-dice-d20"></i>',
+        callback: li => {
+          const combatant = this.viewed.combatants.get(li.data("combatant-id"));
+          if ( combatant ) return this.viewed.rollInitiative([combatant.id]);
+        }
+      },
+      {
+        name: "COMBAT.CombatantRemove",
+        icon: '<i class="fas fa-trash"></i>',
+        callback: li => {
+          const combatant = this.viewed.combatants.get(li.data("combatant-id"));
+          if ( combatant ) return combatant.delete();
+        }
+      }
+    ];
   }
 }
