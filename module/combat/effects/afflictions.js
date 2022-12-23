@@ -204,7 +204,7 @@ export const EffectFns = new Map([
         let applyPoison = async () => {
             const token = canvas.tokens.get(lastCombatant.token.id);
             const badly_poisoned_effect = token.actor.effects.find(x => x.label == "Badly Poisoned");
-            const toxicDamage = (a,b=5) => a > 0 ? toxicDamage(a-1,b+b) : b;
+            const toxicDamage = (a,b=5) => b*2^(a-1); //When Badly Poisoned, the afflicted instead loses 5 Hit Points; this amount is doubled each consecutive round (10, 20, 40, etc)
             await ApplyFlatDamage([token], "Toxic Damage", toxicDamage(badly_poisoned_effect.flags.ptu?.roundsElapsed ?? 0));
         }
 
