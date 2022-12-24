@@ -1,6 +1,9 @@
 # Welcome to the Beta!
 Hey there! You are on the Beta Branch. If you ever have any feedback please do share with us over on [Github](https://github.com/dylanpiera/Foundry-Pokemon-Tabletop-United-System/issues) or [Discord](https://discord.gg/fE3w59q)
 
+## Version 3.0.0.5 - Sword/Shield DLC
+Hi all, one more small update for today, thanks to `Joooooosh🐉#2354` for the Galarian DLC dexes!
+
 ## Version 3.0.0.4
 Hi all! Some more minor bug fixes and quality of life features.
 
