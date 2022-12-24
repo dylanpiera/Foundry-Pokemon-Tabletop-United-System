@@ -221,6 +221,8 @@ export class PTUGen8CharacterSheet extends ActorSheet {
 		// html.find("input[data-item-id][type=checkbox]")
 		// .on("change", (e) => this._updateDexItem(e))
 
+		html.find('.sort-dex').click(this._onDexSort.bind(this));
+
 		// Rollable abilities.
 		html.find('.rollable.skill').click(this._onRoll.bind(this));
 		html.find('.rollable.gen8move').click(this._onMoveRoll.bind(this));
@@ -237,13 +239,13 @@ export class PTUGen8CharacterSheet extends ActorSheet {
 		}
 
 		html.find('#heldItemInput').autocomplete({
-			source: game.ptu.data.items.map((i) => i.data.name),
+			source: game.ptu.data.items.map((i) => i.name),
 			autoFocus: true,
 			minLength: 1
 		});
 
 		Hooks.on("preCreateOwnedItem", (actor, itemData, options, sender) => {
-			if (actor.id !== this.actor.id || actor.data.type !== "character" || itemData.type !== "dexentry") return;
+			if (actor.id !== this.actor.id || actor.type !== "character" || itemData.type !== "dexentry") return;
 
 			const item = actor.items.getName(itemData.name)
 			if (item) {
@@ -354,6 +356,28 @@ export class PTUGen8CharacterSheet extends ActorSheet {
 		const updateParams = {};
 		updateParams[binding] = value;
 		if (item) { item.update(updateParams, {}); }
+	}
+
+	/**
+	 * Handle sorting dex entries based on option selected
+	 * @param {Event} event  The originating click event
+	 * @private
+	 */
+	async _onDexSort(event) {
+		event.preventDefault();
+		const dataset = event.currentTarget.dataset;
+
+		const sortName = (a,b) => a.name.localeCompare(b.name);
+		const sortId = (a,b) => parseInt(game.ptu.utils.species.get(a.name).ptuNumber) - parseInt(game.ptu.utils.species.get(b.name).ptuNumber);
+
+		const entries = this.actor.itemTypes.dexentry.sort(dataset.sort === "name" ? sortName : sortId)
+		const itemsToUpdate = [];
+		for(const [index, entry] of entries.entries()) {
+			const item = duplicate(entry);
+			item.sort = 10000*(index+1);
+			itemsToUpdate.push(item)
+		}
+		await this.actor.updateEmbeddedDocuments("Item", itemsToUpdate)
 	}
 
 	/**

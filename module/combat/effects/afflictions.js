@@ -181,12 +181,15 @@ export const EffectFns = new Map([
             await applyPoison();
         }
         else {
+            let response = true;
             await Dialog.confirm({
                 title: `${lastCombatant.name}'s Poison`,
                 content: `<p>Has ${lastCombatant.name} taken a Standard Action this turn?</p><p><small class="muted-text">Aka, should they take Poison damage?</small></p>`,
                 yes: async () => await applyPoison(),
+                no: () => response = false,
                 defaultYes: false
             })
+            if(!response) return;
         }
 
         /** If affliction can only be triggered once per turn, make sure it shows as applied. */
@@ -213,14 +216,16 @@ export const EffectFns = new Map([
             await applyPoison();
         }
         else {
+            let response = true;
             await Dialog.confirm({
                 title: `${lastCombatant.name}'s Toxic`,
                 content: `<p>Has ${lastCombatant.name} taken a Standard Action this turn?</p><p><small class="muted-text">Aka, should they take Toxic damage?</small></p>`,
                 yes: async () => await applyPoison(),
+                no: () => response = false,
                 defaultYes: false
             })
+            if(!response) return;
         }
-
 
         /** If affliction can only be triggered once per turn, make sure it shows as applied. */
         if (options.round.direction == CONFIG.PTUCombat.DirectionOptions.FORWARD) return; // If new round already started don't register EoT effect.
@@ -244,12 +249,15 @@ export const EffectFns = new Map([
             await applyBurn();
         }
         else {
+            let response = true;
             await Dialog.confirm({
                 title: `${lastCombatant.name}'s Burn`,
                 content: `<p>Has ${lastCombatant.name} taken a Standard Action this turn?</p><p><small class="muted-text">Aka, should they take Burn damage?</small></p>`,
                 yes: async () => await applyBurn(),
+                no: () => response = false,
                 defaultYes: false
             })
+            if(!response) return;
         }
 
         /** If affliction can only be triggered once per turn, make sure it shows as applied. */
@@ -274,12 +282,15 @@ export const EffectFns = new Map([
             await applyCurse();
         }
         else {
+            let response = true;
             await Dialog.confirm({
                 title: `${lastCombatant.name}'s Curse`,
                 content: `<p>Has ${lastCombatant.name} taken a Standard Action this turn?</p><p><small class="muted-text">Aka, should they take Curse damage?</small></p>`,
                 yes: async () => await applyCurse(),
+                no: () => response = false,
                 defaultYes: false
             })
+            if(!response) return;
         }
 
         /** If affliction can only be triggered once per turn, make sure it shows as applied. */
@@ -333,6 +344,7 @@ export const EffectFns = new Map([
             }
         }
 
+        let result;
         if (isErrata) {
             const actions_taken = actor.flags.ptu?.actions_taken;
             if (actions_taken?.attacked?.physical || actions_taken?.attacked?.special || actions_taken?.attacked?.status) {
@@ -341,7 +353,7 @@ export const EffectFns = new Map([
                 if (actions_taken?.attacked?.status) await applyConfusion(CONFIG.PTUCombat.Attack.STATUS);
             }
             else {
-                await new Promise((resolve, reject) => {
+                const result = await new Promise((resolve, reject) => {
                     const dialog = new Dialog({
                         title: `${actor.name}'s Confusion`,
                         content: `<p>Did ${actor.name} use any move? If so which type?</p>`,
@@ -371,6 +383,17 @@ export const EffectFns = new Map([
                         });
                     dialog.render(true);
                 })
+                if (result == CONFIG.PTUCombat.Attack.NONE) {
+                    let response = true;
+                    await Dialog.confirm({
+                        title: `${lastCombatant.name}'s Confusion`,
+                        content: `<p>Should confusion save be performed?</p>`,
+                        yes: () => response = true,
+                        no: () => response = false,
+                        defaultYes: false
+                    })
+                    if(!response) return;
+                }
             }
         }
 

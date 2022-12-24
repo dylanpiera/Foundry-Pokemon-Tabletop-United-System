@@ -1,6 +1,20 @@
 # Welcome to the Beta!
 Hey there! You are on the Beta Branch. If you ever have any feedback please do share with us over on [Github](https://github.com/dylanpiera/Foundry-Pokemon-Tabletop-United-System/issues) or [Discord](https://discord.gg/fE3w59q)
 
+## Version 3.0.0.4
+Hi all! Some more minor bug fixes and quality of life features.
+
+### New Features:
+- Added >2 types compatibility with the CharacterMancer
+- Added sort buttons for Dex Entry sorting in Player Sheets
+
+### Bug Fixes:
+- Fixed Sequencer errors with certain move types
+- Fixed Charactermancer not opening due to an invalid reference
+- Fixed Charactermancer not showing types
+- Made it so that if you skip someone's turn, effects with a dialog will be able to be triggered again later in the same round
+- Removed some more outdated v9 code in favor of v10 references
+
 ## Version 3.0.0.3
 Hi all! Lots of fixes and small new quality of life features today!
 

@@ -46,11 +46,11 @@ export const move_animation_library = { // This is basically a list of Sequencer
 
 export const move_type_color_filters = {
     "normal":"#ffffff",
-    // "fire":"#e0772d",
-    // "water":"#6186e0",
-    // "electric":"#e7c22d",
-    // "grass":"#70bb4b",
-    // "ice":"#8ecaca",
+    "fire":"#e0772d",
+    "water":"#6186e0",
+    "electric":"#e7c22d",
+    "grass":"#70bb4b",
+    "ice":"#8ecaca",
     "fighting":"#b32d25",
     "poison":"#953c95",
     "ground":"#d3b562",
@@ -62,7 +62,7 @@ export const move_type_color_filters = {
     "dragon":"#6934e7",
     "dark":"#695243",
     "steel":"#acacc2",
-    // "fairy":"#cf9acf",
+    "fairy":"#cf9acf",
     "nuclear":"#03fe01"
 };
 

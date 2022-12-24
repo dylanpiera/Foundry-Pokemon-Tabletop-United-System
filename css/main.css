@@ -897,6 +897,13 @@ span.readable {
 .gen8move.rollable[data-ac="NaN"][data-roll=""] {
   visibility: hidden;
 }
+.sort-dex div {
+  flex: 0 0 30%;
+  text-align: center;
+}
+.sort-dex button {
+  padding: unset;
+}
 .gen8.charactermancer select.nature-up {
   background-color: #cc9999;
   color: black;
