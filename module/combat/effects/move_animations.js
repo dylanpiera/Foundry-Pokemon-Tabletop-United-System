@@ -11,6 +11,14 @@ export const move_animation_library = { // This is basically a list of Sequencer
         "hit":  { path:"modules/jb2a_patreon/Library/Generic/Creature/Bite_01_Regular_Green_400x400.webm", scale: 0.5, repeats:[4, 100], melee: true}
     },
 
+    "bite":{
+        "hit":  { path:"modules/jb2a_patreon/Library/Generic/Creature/Bite_01_Regular_Grey_400x400.webm", scale: 1.5, repeats:[1, 0], melee: true}
+    },
+
+    "crunch":{
+        "hit":  { path:"modules/jb2a_patreon/Library/Generic/Creature/Bite_01_Regular_Purple_400x400.webm", scale: 1.5, repeats:[1, 0], melee: true}
+    },
+
     "bug buzz":{
         "hit":  { path:"modules/jb2a_patreon/Library/5th_Level/Cone_Of_Cold/ConeOfCold_01_Regular_Green_600x600.webm", scale: 1.75, repeats:[1, 0]}
     },
@@ -19,19 +27,43 @@ export const move_animation_library = { // This is basically a list of Sequencer
         "hit": { path:"modules/jb2a_patreon/Library/6th_Level/Chain_Lightning/ChainLightning_01_Regular_Green_30ft_Primary_1600x400.webm", scale: 1.2, repeats:[1, 0], anchor_x: 0.5, anchor_y: 0.5 }
     },
 
+    "thunder wave":{
+        "hit": { path:"modules/jb2a_patreon/Library/3rd_Level/Lightning_Bolt/LightningBolt_01_Regular_Green_4000x400.webm", scale: 1.0, repeats:[1, 0], anchor_x: 0.5, anchor_y: 0.5 }
+    },
 
+    "electro ball":{
+        "hit": { path:"modules/jb2a_patreon/Library/Generic/Lightning/LightningBall_01_Regular_Green_400x400.webm", scale: 1.0, repeats:[1, 0], anchor_x: 0.5, anchor_y: 0.5 }
+    },
+
+
+    "spark":{
+        "hit":  { path:"modules/jb2a_patreon/Library/6th_Level/Chain_Lightning/ChainLightning_01_Regular_Green_05ft_Secondary_600x400.webm", scale: 1.0, repeats:[1, 0], melee: true}
+    },
 
 
     "hone claws":{
         "self": {path:"modules/jb2a_patreon/Library/Generic/Creature/Claws_01_Bright_Blue_400x400.webm", scale:0.7, repeats:[6, 250], anchor_y: 0.25,}
     },
 
+    "splash":{
+        "self": {path:"modules/jb2a_patreon/Library/Generic/Liquid/LiquidSplash01_Regular_Blue_400x400.webm", scale:1.5, repeats:[3, 750]}
+    },
+
     
     "hyper beam":{
         "self":  { path:"modules/jb2a_patreon/Library/TMFX/InPulse/Circle/InPulse_01_Circle_Normal_500.webm", scale: 1, anchor_x: 0.15, anchor_y: 0.5, speed:0.1, ease:false, melee:false, repeats:[1, 100, 500] },
         "hit":  { path:"modules/jb2a_patreon/Library/Cantrip/Eldritch_Blast/EldritchBlast_01_Regular_Yellow_30ft_1600x400.webm", scale: 1.2, anchor_x: 0.15, anchor_y: 0.5, speed:0.1, ease:false, melee:false, repeats:[1, 0] },
-        // "miss": {}
     },
+
+    "hydro pump":{
+        "hit":  { path:"modules/jb2a_patreon/Library/Cantrip/Eldritch_Blast/EldritchBlast_01_Regular_LightBlue_30ft_1600x400.webm", scale: 1.2, anchor_x: 0.15, anchor_y: 0.5, speed:0.1, ease:false, melee:false, repeats:[1, 0] },
+    },
+
+    "confuse ray":{
+        "hit":  { path:"modules/jb2a_patreon/Library/Cantrip/Ray_Of_Frost/RayOfFrost_01_Regular_PurpleTeal_30ft_1600x400.webm", scale: 1.2, anchor_x: 0.15, anchor_y: 0.5, speed:0.1, ease:false, melee:false, repeats:[5, 250] },
+    },
+
+
     "light screen":{
         "self":  { path:"modules/jb2a_patreon/Library/Generic/Zoning/ZoningCircle01Out_01_Regular_BlueGreen_600x600.webm", scale: 10, repeats:[1, 0]}
     },
@@ -41,16 +73,74 @@ export const move_animation_library = { // This is basically a list of Sequencer
     "safeguard":{
         "self":  { path:"modules/jb2a_patreon/Library/Generic/Zoning/ZoningCircle03Out_01_Regular_BlueGreen_600x600.webm", scale: 10, repeats:[1, 0]}
     },
+    "mist":{
+        "self":  { path:"modules/jb2a_patreon/Library/2nd_Level/Misty_Step/MistyStep_01_Regular_Blue_400x400.webm", scale: 10, repeats:[1, 0]}
+    },
+    "lucky chant":{
+        "self":  { path:"modules/jb2a_patreon/Library/Generic/Impact/ImpactMusicNote01_01_Regular_GreenYellow_400x400.webm", scale: 10, repeats:[3, 300]}
+    },
+
+    "protect":{
+        "self":  { path:"modules/jb2a_patreon/Library/1st_Level/Shield/Shield_02_Regular_Blue_Intro_400x400.webm", scale: 2, repeats:[3, 300]}
+    },
+
+    "hurricane":{
+        "self":  { path:"modules/jb2a_patreon/Library/Generic/Marker/EnergyStrandsOverlay_01_Regular_Blue_600x600.webm", scale: 2.5, repeats:[1, 0]}
+    },
+
+
+    "blast burn":{
+        "hit":  { path:"modules/jb2a_patreon/Library/Generic/Explosion/Explosion_01_Orange_400x400.webm", scale: 1.2, anchor_x: 0.15, anchor_y: 0.5, speed:0.1, ease:false, melee:false, repeats:[5, 250] },
+    },
+
+    "blaze kick":{
+        "hit":  { path:"modules/jb2a_patreon/Library/Generic/Unarmed_Attacks/Unarmed_Strike/UnarmedStrike_01_Regular_Orange_Physical02_800x600.webm", scale: 1.5, repeats:[1, 0], melee: true}
+    },
+
+    "blue flare":{
+        "hit":  { path:"modules/jb2a_patreon/Library/2nd_Level/Scorching_Ray/ScorchingRay_01_Regular_Blue_60ft_2800x400.webm", scale: 1.1, anchor_x: 0.7, anchor_y: 0.7, ease:false, melee:false, repeats:[5, 250] },
+    },
+
+    "ember":{
+        "hit":  { path:"modules/jb2a_patreon/Library/Cantrip/Fire_Bolt/FireBolt_01_Regular_Orange_15ft_1000x400.webm", scale: 1.2, ease:false, melee:false, repeats:[4, 150] },
+    },
+
+    "eruption":{
+        "self":  { path:"modules/jb2a_patreon/Library/Generic/Explosion/Explosion_05_Regular_Orange_400x400.webm", scale: 4, repeats:[2, 750]}
+    },
+
+    "fiery dance":{
+        "hit":  { path:"modules/jb2a_patreon/Library/Generic/Energy/EnergyStrand_Multiple01_Dark_Red_15ft_1000x400.webm", scale: 1.2, ease:false, melee:false, repeats:[5, 250] },
+        "self":  { path:"modules/jb2a_patreon/Library/Generic/Marker/EnergyStrandsOverlay_01_Dark_Red_600x600.webm", scale: 2.5, repeats:[1, 0]}
+    },
+
+    "fire blast":{
+        "hit":  { path:"modules/jb2a_patreon/Library/Generic/Fire/FireJet_01_Orange_15ft_600x200.webm", scale: 1.2, ease:false, melee:false, repeats:[3, 250] },
+        "self":  { path:"modules/jb2a_patreon/Library/Generic/Marker/EnergyStrandsOverlay_01_Regular_BlueOrange_600x600.webm", scale: 1.5, repeats:[1, 0]}
+    },
+
+    "fire fang":{
+        "hit":  { path:"modules/jb2a_patreon/Library/Generic/Creature/Bite_01_Regular_Orange_400x400.webm", scale: 1.5, repeats:[1, 0], melee: true}
+    },
+
+    "fire pledge":{
+        "hit":  { path:"modules/jb2a_patreon/Library/Cantrip/Fire_Bolt/FireBolt_01_Regular_Orange_30ft_1600x400.webm", scale: 1.0, ease:false, melee:false, repeats:[3, 500] },
+    },
+
+    "fire punch":{
+        "hit":  { path:"modules/jb2a_patreon/Library/Generic/Unarmed_Attacks/Unarmed_Strike/UnarmedStrike_01_Regular_Orange_Physical02_800x600.webm", scale: 1.5, repeats:[1, 0], melee: true}
+    },
+    
 };
 
 
-export const move_type_color_filters = {
+export const move_type_color_filters = { // Some of these look better without a tint, because the assets already have sensible colors, but it breaks if nothing is provided, so use #ffffff for those we don't want to tint.
     "normal":"#ffffff",
-    "fire":"#e0772d",
-    "water":"#6186e0",
-    "electric":"#e7c22d",
-    "grass":"#70bb4b",
-    "ice":"#8ecaca",
+    "fire":"#ffffff",//"#e0772d",
+    "water":"#ffffff",//"#6186e0",
+    "electric":"#ffffff",//"#e7c22d",
+    "grass":"#ffffff",//"#70bb4b",
+    "ice":"#ffffff",//"#8ecaca",
     "fighting":"#b32d25",
     "poison":"#953c95",
     "ground":"#d3b562",
