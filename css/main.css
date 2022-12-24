@@ -1233,6 +1233,7 @@ a.hover-button.resist-damage-button {
 .charactermancer .typing {
   min-height: 45px;
   margin-top: -2px;
+  flex-wrap: wrap;
 }
 .charactermancer #levelContainer,
 .charactermancer #levelExpContainer {
