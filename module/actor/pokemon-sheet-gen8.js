@@ -139,14 +139,14 @@ export class PTUGen8PokemonSheet extends ActorSheet {
 				label: "Charactermancer",
 				class: "open-charactermancer",
 				icon: "fas fa-edit",
-				onclick: () => new game.ptu.config.ui.PokemonCharacterMancer.documentClass(this.actor, {"submitOnChange": false, "submitOnClose": false}).render(true)
+				onclick: () => new game.ptu.config.Ui.PokemonCharacterMancer.documentClass(this.actor, {"submitOnChange": false, "submitOnClose": false}).render(true)
 			});
 
 			buttons.unshift({
 				label: "Notes",
 				class: "open-notes",
 				icon: "fas fa-edit",
-				onclick: () => new game.ptu.config.ui.CharacterNotesForm.documentClass(this.actor, {"submitOnClose": true, "closeOnSubmit": false}).render(true)
+				onclick: () => new game.ptu.config.Ui.CharacterNotesForm.documentClass(this.actor, {"submitOnClose": true, "closeOnSubmit": false}).render(true)
 			});
 		}
 
