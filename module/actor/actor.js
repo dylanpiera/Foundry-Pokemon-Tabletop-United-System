@@ -932,7 +932,7 @@ export class PTUActor extends Actor {
 
     const db = Number(moveData.damageBase);
     if (isNaN(db)) {
-      const flatDamage = parseInt(moveData.damageBase);
+      const flatDamage = ""+parseInt(moveData.damageBase);
       if (isNaN(flatDamage)) return new Roll("0");
 
       return new Roll(flatDamage);
