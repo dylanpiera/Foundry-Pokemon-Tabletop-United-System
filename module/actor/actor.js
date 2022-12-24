@@ -771,7 +771,7 @@ export class PTUActor extends Actor {
           function isInRange() {
             switch (true) {
               case moveRange.includes("pass"): return 4;
-              case moveRange.includes("melee"): return Math.max(token.data.width, token.data.height);
+              case moveRange.includes("melee"): return Math.max(token.width, token.height);
               case moveRange.includes("self"): return Number.MAX_SAFE_INTEGER;
               case moveRange.includes("burst"): return moveRange.slice(moveRange.indexOf("burst") + "burst".length).split(',')[0].trim();
               case moveRange.includes("cone"): return moveRange.slice(moveRange.indexOf("cone") + "cone".length).split(',')[0].trim();
@@ -796,7 +796,7 @@ export class PTUActor extends Actor {
                 value: Math.max(target.actor.system.evasion.physical, target.actor.system.evasion.speed),
                 type: "Physical/Speed",
               },
-              image: target.actor.data.img,
+              image: target.actor.img,
             }
             break;
           case "special":
@@ -806,7 +806,7 @@ export class PTUActor extends Actor {
                 value: Math.max(target.actor.system.evasion.special, target.actor.system.evasion.speed),
                 type: "Special/Speed",
               },
-              image: target.actor.data.img,
+              image: target.actor.img,
             }
             break;
           case "status":
@@ -816,7 +816,7 @@ export class PTUActor extends Actor {
                 value: target.actor.system.evasion.speed,
                 type: "Speed",
               },
-              image: target.actor.data.img,
+              image: target.actor.img,
             }
             break;
         }
