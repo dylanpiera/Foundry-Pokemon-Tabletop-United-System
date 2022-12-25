@@ -27,7 +27,7 @@ export class PTUActor extends Actor {
 
     const actorData = this;
     const actorSystem = this.system;
-    
+
     if (parseInt(game.version.split('.')[1]) <= 6) {
       warn("Using old prepare-data structure")
       // Make separate methods for each Actor type (character, npc, etc.) to keep
