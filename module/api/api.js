@@ -147,7 +147,12 @@ export default class Api {
                     }
                     else {
                         const defense = damageCategory == "Special" ? document.actor.system.stats.spdef.total : document.actor.system.stats.def.total;
-                        const dr = parseInt(damageCategory == "Special" ? (document.actor.system.modifiers?.damageReduction?.special?.total ?? 0) : (document.actor.system.modifiers?.damageReduction?.physical?.total ?? 0));
+                        let dr = parseInt(damageCategory == "Special" ? (document.actor.system.modifiers?.damageReduction?.special?.total ?? 0) : (document.actor.system.modifiers?.damageReduction?.physical?.total ?? 0));
+                        if(document.actor.system.heldItem?.toLowerCase()?.includes("brace")) {
+                            if(document.actor.system.heldItem.toLowerCase().includes(damageType.toLowerCase())) {
+                                dr += 15;
+                            }
+                        }
 
                         const effectiveness = document.actor.system.effectiveness?.All[damageType] ?? 1;
 

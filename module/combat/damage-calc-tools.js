@@ -220,6 +220,8 @@ export async function newApplyDamageToTargets(event) {
         });
     }
 
+
+
     return await applyResult(moveData.target, moveData.damage, dataset.messageId);
 
     function applyResult(targets, damage, messageId) {
