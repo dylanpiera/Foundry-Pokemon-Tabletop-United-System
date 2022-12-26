@@ -582,7 +582,7 @@
                         <label for="data.health.injuries">{{localize "PTU.Injuries"}}</label>
                       </div>
                       <div class="col-sm-3">
-                        <label for="data.modifiers.hardened">{{localize "PTU.Hardened"}}</label>
+                        <label for="modifiers.hardened">{{localize "PTU.Hardened"}}</label>
                       </div>
                       <div class="col-sm-5">
                         <label for="data.health.total">{{localize "PTU.TotalHealth"}}<br><small>{{localize
@@ -609,20 +609,20 @@
                     <div class="d-flex w-100 mt-1 mb-1">
                       <ul style="position: relative; left: 15px; width: 96%; line-height: 15px; text-align: start;">
                         {{#if data.modifiers.hardened}}<li>{{localize "PTU.HardenedEffect0"}}</li>{{/if}}
-                        {{#if (and (is "true" data.modifiers.hardened) (biggerOrEqual data.health.injuries 1))}}<li>
+                        {{#if (and (is 1 data.modifiers.hardened) (biggerOrEqual data.health.injuries 1))}}<li>
                           {{localize "PTU.HardenedEffect1"}}</li>{{/if}}
-                        {{#if (and (is "true" data.modifiers.hardened) (biggerOrEqual data.health.injuries 3))}}<li>
+                        {{#if (and (is 1 data.modifiers.hardened) (biggerOrEqual data.health.injuries 3))}}<li>
                           {{localize "PTU.HardenedEffect2"}}</li>{{/if}}
                         {{#if (biggerOrEqual data.health.injuries 5)}}<li>{{localize "PTU.InjuryEffect1"}}</li>{{/if}}
-                        {{#if (and (is "true" data.modifiers.hardened) (biggerOrEqual data.health.injuries 5))}}<li>
+                        {{#if (and (is 1 data.modifiers.hardened) (biggerOrEqual data.health.injuries 5))}}<li>
                           {{localize "PTU.HardenedEffect3"}}</li>{{/if}}
-                        {{#if (and (not "true" data.modifiers.hardened) (biggerOrEqual data.health.injuries 5))}}<li>
+                        {{#if (and (not 1 data.modifiers.hardened) (biggerOrEqual data.health.injuries 5))}}<li>
                           {{localize "PTU.InjuryEffect2" (ld "injuries" data.health.injuries)}}</li>{{/if}}
-                        {{#if (and (is "true" data.modifiers.hardened) (biggerOrEqual data.health.injuries 7))}}<li>
+                        {{#if (and (is 1 data.modifiers.hardened) (biggerOrEqual data.health.injuries 7))}}<li>
                           {{localize "PTU.HardenedEffect4"}}</li>{{/if}}
-                        {{#if (and (is "true" data.modifiers.hardened) (biggerOrEqual data.health.injuries 9))}}<li>
+                        {{#if (and (is 1 data.modifiers.hardened) (biggerOrEqual data.health.injuries 9))}}<li>
                           {{localize "PTU.HardenedEffect5"}}</li>{{/if}}
-                        {{#if (and (not "true" data.modifiers.hardened) (biggerOrEqual data.health.injuries 10))}}<li>
+                        {{#if (and (not 1 data.modifiers.hardened) (biggerOrEqual data.health.injuries 10))}}<li>
                           <b>{{localize "PTU.InjuryEffect3"}}</b></li>{{/if}}
                       </ul>
                     </div>
