@@ -2,6 +2,7 @@ import Component from '../../api/front-end/lib/component.js';
 import { sendMoveMessage } from '../../actor/pokemon-sheet-gen8.js'
 import { pokeball_sound_paths } from '../../combat/effects/pokeball_effects.js';
 import { timeout } from '../../utils/generic-helpers.js';
+import { move_animation_delay_ms } from "../../combat/effects/move_animations.js";
 
 export const ui_sound_paths = {
     "button": "systems/ptu/sounds/ui_sounds/ui_button.wav",
@@ -49,13 +50,16 @@ export default class MenuComponent extends Component {
                 })
                 break;
             case "maneuver":
-
+                output += await renderTemplate("/systems/ptu/module/sidebar/components/menu-component.hbs", {
+                    menu: "maneuver",
+                    maneuvers: await this._prepareManeuvers(this.state.actor)
+                })
                 break;
             default:
                 output += await renderTemplate("/systems/ptu/module/sidebar/components/menu-component.hbs", {
                     menu: "none"
                 })
-                break;
+                    break;
         }
 
         this.element.html(output);
@@ -129,6 +133,13 @@ export default class MenuComponent extends Component {
                 default: // anything else??
                     this.state.actor.executeMove(move.id)
             }
+        })
+
+        this.element.children("#menu-content").children(".maneuvers-row").children(".movemaster-button[data-maneuver-name]").on("click", (event) => {
+            console.log("maneuver button clicked")
+            const { maneuverName } = event.currentTarget.dataset;
+            
+            this._sendManeuverToChat(maneuverName);            
         })
 
         this.element.children(".divider-image").on("click", () => {
@@ -297,5 +308,109 @@ export default class MenuComponent extends Component {
                 amount: item.system.quantity
             }
         });
+    }
+
+    _prepareManeuvers(actor) {
+        this.lock = true
+        const maneuvers = new Array(
+            {
+                name: "Attack of Opportunity",
+                action: "Free",
+                effect: "You may make a Struggle Attack against the triggering foe as an Interrupt. You may use Attack of Opportunity only once per round. Attacks of Opportunity cannot be made by Sleeping, Flinched, or Paralyzed targets"
+                
+            },
+            {
+                name: "Disengage",
+                action: "Shift",
+                effect: "You may shift 1 Meter. Shifting this way does not provoke Attacks of Opportunity"
+
+            },
+            {
+                name: "Disarm",
+                ac: 6,
+                class: "Status",
+                range: "Melee, 1 Target",
+                effect: "You and the target each make opposed Combat or Stealth checks. If you win, the target's Held Item (Main hand or Off-hand for humans) falls to the ground"
+            },
+            {
+                name: "Dirty Trick",
+                ac: 2,
+                class: "Status",
+                range: "Melee, 1 Target",
+                effect: "You may perform any of the Dirty Tricks Listed Below. You May use each trick only once each Scene per target. <br>&nbsp;<br>&nbsp; Hinder - You and the target make opposed athletics Checks. If you win, the target is slowed and takes a -2 penalty to all Skill Checks for one full round.<br>&nbsp;Blind - You and the target make Opposed Stealth Checks. If you win, the target is Blinded for one full round.<br>&nbsp;Low Blow - You and the target make Opposed Acrobatics Checks. If you win the target is Vulnerable and has their Initiative set to 0 until the end of your next turn."
+            },
+            {
+                name: "Manipulate",
+                ac: 2,
+                class: "Status",
+                range: "6, 1 Target",
+                effect: "You may perform any of the manipulations listed below. You may use each manipulation only once each scene per target. Manipulate can only be performed by Trainers.<br>&nbsp;<br>&nbsp;Bon Mot - Make a Guile Check, opposed by the target's Guile or Focus. If you win, the target is Enraged and cannot spend AP for one full round. The target does not gain a Save Check against this effect.<br>&nbsp;Flirt - Make a Charm Check, opposed by the target's Charm or Focus. If you win. the target is Infatuated with you for one full round. The target automatically fails their Save Check.<br>&nbsp;Terrorize - Make an Intimidation Check, opposed by the target's Intimidate or Focus. If you win, the target loses all Temporary Hit Points and can only use At-Will Frequence Moves for one full round."
+            },
+            {
+                name: "push",
+                ac: 4,
+                class: "Status",
+                range: "Melee, 1 Target",
+                effect: " You and the target each make opposed Combat or Athletics Checks. If you win, the target is Pushed back 1 Meter directly away from you. If you have Movement remaining this round, you may then Move into the newly occupied Space, and Push the target again. This continues until you choose to stop, or have no Movement remaining for the round. Push may only be used against a target whose weight is no heavier than your Heavy Lifting rating."
+            },
+            {
+                name: "Sprint",
+                action: "Standard",
+                range: "Self",
+                effect: "Increase your Movement Speeds by 50% for the rest of your turn."
+            },
+            {
+                name: "Trip",
+                ac: 6,
+                class: "Status",
+                range: "Melee, 1 Target",
+                effect: "You and the target each make opposed Combat or Acrobatics Checks. If you win, the target is knocked over and Tripped."
+            },
+            {
+                name: "Incercept Melee",
+                action: "Full Action, Interupt",
+                trigger: "An ally within Movement range is hit by an adjacent foe",
+                effect: "you must make an Acrobatics or Athletics check, with a DC equal to three times the number of meters they have to move to reach the triggering Ally;<br>&nbsp;If you succed, you push the triggeringAlly 1 Meter away from you, and Shigt to occupy their space, and are hit by the triggering attack.<br>&nbsp;On Failure to make the Check, the user still Shifts a number of meters equal to a third of their check result. <br>&nbsp; <br>&nbsp; ***Special: Pokemon must have Loyalty of 3 or greater to make Intercept Melee Maneuvers and may only Intercept attacks against their Trainer. At Loyalty 6, Pokemon may Intercept for an Ally"
+            },
+            {
+                name: "Intercept Ranged",
+                action: "Full Action, Interrupt",
+                trigger: "A Ranged X-Target attack passes within your Movement range",
+                effect: "Select a Square within your Movement Range that lies directly between the source of the attack and the target of the attack. Make an Acrobatics or Athletics check; you may Shift a number of Meters equal to half the result towards the chosen square.<br>&nbsp;if you reach the chosen square, you take the attack instead of it's intended target.<br>&nbsp; <br>&nbsp; ***Special: Pokemon must have Loyalty of 3 or greater to make Intercept Ranged Maneuvers and may only Intercept attacks against their Trainer. At Loyalty 6, Pokemon may Intercept for an Ally"
+            },
+            {
+                name: "Grapple",
+                ac: 4,
+                class: "Status",
+                range: "Melee, 1 Target",
+                effect: "You and the target each make opposed Combat or Athletics Checks. If you win, you and the target each become Grapples, and you gain Dominance in the Grapple.<br>&nbsp;<br>&nbsp;Pokemon and Trainers that are Grappled<br>&nbsp;» Are Vulnerable.<br>&nbsp;»Cannot take Shift Actions, or any actions that would cause them to Shift.<br>&nbsp;»Gain a -6 penalty to Accuracy rolls if targeting any-one outside the Grapple.<br>&nbsp;»Additionally, Grapply has other effects on whether the target has or doesn't have dominance.<br>&nbsp;<br>&nbsp;If a target begins their turn as part of a Grapple but with no Dominance, they may choose to contest the Grapple as a Full Action. If they do, all participants make opposed Combat or Athletics Checks. Whoever wins then may choose to either continue the Grapple and gain Dominance, or to end the Grapple<br>&nbsp;<br>&nbsp;If a target has the Phasing or Teleport Capability, they may use those to escape from a Grapple on their turn with no check required.<br>&nbsp;<br>&nbsp;If a Target Begins their turn as part of a Grapple and has Dominance, they may take one of the following actions as a Full action.<br>&nbsp;»End the Grapple<br>&nbsp;»Secure:They gain a +3 Bonus to the next opposed check they make in the Grapple.<br>&nbsp;»Attack: They may automatically hit with an Unarmed Struggle attack.<br>&nbsp;»Move: They Shift, dragging the other person in the grapple with them. The user's Movement Capability is lowered by the other grappler's Weight Class"
+            }
+
+        );
+
+        return maneuvers.map(m => m);   
+    }
+
+    async _sendManeuverToChat(maneuverName) {
+        let maneuver;
+        this._prepareManeuvers(this.state.actor).forEach(m => {
+            if (m.name == maneuverName) maneuver = m;
+        })
+
+        const messageData = mergeObject({
+            title: maneuver.name,
+            user: game.user._id,
+            action: maneuver.action,
+            trigger: maneuver.trigger,
+            ac: maneuver.ac,
+            class: maneuver.class,
+            range: maneuver.range,
+            effect: maneuver.effect,
+            sound: CONFIG.sounds.dice,
+            templateType: 'maneuver',
+        })
+        messageData.content = await renderTemplate("/systems/ptu/templates/chat/maneuver.hbs", messageData)
+        console.log(messageData);
+        await ChatMessage.create(messageData, {});
     }
 }

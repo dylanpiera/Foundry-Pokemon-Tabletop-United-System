@@ -1,0 +1,64 @@
+
+{{log this}}
+    <div class="content flexrow pt-1" style="font-variant: normal;">
+        <div class="swsh-box">
+            <div class="swsh-header" style="border-bottom:1px solid #00000020;text-align:center">
+                <div class="d-flex w-100 mt-1 mb-1 justify-content-center">
+                    <span style="padding:5px;word-break: break-word;">{{title}}</span>
+                </div>
+            </div>
+            <div class="d-flex w-100 fs-10 justify-content-center" style="flex-wrap: wrap;word-break: break-word;">
+                    <div class="justify-content-center swsh-header col-sm-5 pt-1 pb-1" style="align-maneuvers:center;">
+                        Action
+                    </div>
+                    <div class="justify-content-center swsh-body col-sm-7" style="text-align: center;">
+                        {{capitalizeFirst action}}
+                    </div>
+                {{#if trigger}}
+                    <div class="justify-content-center swsh-header col-sm-5 pt-1 pb-1" style="align-maneuvers:center;">
+                        Trigger
+                    </div>
+                    <div class="justify-content-center swsh-body col-sm-7" style="text-align: center;">
+                        {{trigger}}
+                    </div>
+                {{/if}}
+                {{#if ac}}
+                    <div class="justify-content-center swsh-header col-sm-5 pt-1 pb-1" style="align-maneuvers:center;">
+                        AC
+                    </div>
+                    <div class="justify-content-center swsh-body col-sm-7" style="text-align: center;">
+                        {{ac}}
+                    </div>
+                {{/if}}
+                {{#if class}}
+                    <div class="justify-content-center swsh-header col-sm-5 pt-1 pb-1" style="align-maneuvers:center;">
+                        Class
+                    </div>
+                    <div class="justify-content-center swsh-body col-sm-7" style="text-align: center;">
+                        {{capitalizeFirst class}}
+                    </div>
+                {{/if}}
+                {{#if range}}
+                    <div class="justify-content-center swsh-header col-sm-5 pt-1 pb-1" style="align-maneuvers:center;">
+                        Range
+                    </div>
+                    <div class="justify-content-center swsh-body col-sm-7" style="text-align: center;">
+                        {{range}}
+                    </div>
+                {{/if}}
+                {{#if effect}}
+                    <div class="swsh-header col-sm-12">
+                        <div class="d-flex w-100 mt-1 mb-1 fs-11" style="align-maneuvers: center;text-align: center;">
+                            <div class="col">Effect</div>
+                        </div>
+                    </div>
+                    <div class="swsh-body col-sm-12">
+                        <div class="d-flex w-100 mt-1 mb-1 fs-11" style="align-maneuvers: center;text-align: center;">
+                            <div class="p-1 readable pokemon p8 tight"
+                                style="word-break: break-word;text-align: start;line-height: 16px;">{{{effect}}}</div>
+                        </div>
+                    </div>
+                {{/if}}
+            </div>
+        </div>
+    </div>
