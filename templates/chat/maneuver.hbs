@@ -8,12 +8,14 @@
                 </div>
             </div>
             <div class="d-flex w-100 fs-10 justify-content-center" style="flex-wrap: wrap;word-break: break-word;">
+                {{#if action}}
                     <div class="justify-content-center swsh-header col-sm-5 pt-1 pb-1" style="align-maneuvers:center;">
                         Action
                     </div>
                     <div class="justify-content-center swsh-body col-sm-7" style="text-align: center;">
-                        {{capitalizeFirst action}}
+                        {{action}}
                     </div>
+                {{/if}}
                 {{#if trigger}}
                     <div class="justify-content-center swsh-header col-sm-5 pt-1 pb-1" style="align-maneuvers:center;">
                         Trigger
