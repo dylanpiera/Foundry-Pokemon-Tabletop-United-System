@@ -1,6 +1,19 @@
 # Welcome to the Beta!
 Hey there! You are on the Beta Branch. If you ever have any feedback please do share with us over on [Github](https://github.com/dylanpiera/Foundry-Pokemon-Tabletop-United-System/issues) or [Discord](https://discord.gg/fE3w59q)
 
+## Version 3.0.0.6
+Hi all, more bugfixes & quality of live features!
+
+### Bug Fixes:
+- Fixed static damage moves not working
+- Generating regional forms will now set the proper token art (suffix with _al or _ga)
+- Hardened text has been fixed in Pokemon Sheet
+
+### New Features:
+- Added lots of new move animations (for use with Sequencer and the JB2A Patreon module)
+- Type Boosters & Type Braces now apply their Damage Bonus / Reduction automatically
+
+
 ## Version 3.0.0.5 - Sword/Shield DLC
 Hi all, one more small update for today, thanks to `Joooooosh🐉#2354` for the Galarian DLC dexes!
 
