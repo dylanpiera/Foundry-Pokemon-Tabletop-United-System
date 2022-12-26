@@ -831,7 +831,8 @@ export class PTUActor extends Actor {
         hasTechnician: false,
         hasAdaptability: false,
         lastChanceApplies: false,
-        typeStratagistApplies: false
+        typeStratagistApplies: false,
+        typeBoosterApplies: false,
       };
       // Currently only checks Abilities, change the loop to include other types of items if desired.
       for (const item of actor.items.filter(x => x.type == "ability")) {
@@ -842,6 +843,12 @@ export class PTUActor extends Actor {
           case `type strategist (${moveData.type.toLowerCase()})`: output.typeStratagistApplies = true; break;
         }
       }
+      if(actor.system.heldItem?.toLowerCase()?.includes("booster")) {
+        if(actor.system.heldItem.toLowerCase().includes(moveData.type.toLowerCase())) {
+          output.typeBoosterApplies = true;
+        }
+      }
+
       return output;
     }
 
@@ -871,6 +878,11 @@ export class PTUActor extends Actor {
         ;
       }
 
+      // Type Booster
+      if (abilityBonuses.typeBoosterApplies) {
+        total += 5;
+        modifierTexts.push(`Including +5 damage from ${moveData.type} Booster!`);
+      }
       // Last Chance
       if (abilityBonuses.lastChanceApplies) {
         if (actor.system.health.value < (actor.system.health.total / 3)) {
