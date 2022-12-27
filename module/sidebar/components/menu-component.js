@@ -316,7 +316,8 @@ export default class MenuComponent extends Component {
             {
                 name: "Attack of Opportunity",
                 action: "Free",
-                effect: "You may make a Struggle Attack against the triggering foe as an Interrupt. You may use Attack of Opportunity only once per round. Attacks of Opportunity cannot be made by Sleeping, Flinched, or Paralyzed targets"
+                trigger: "See Below",
+                effect: "You may make a Struggle Attack against the triggering foe as an Interrupt. You may use Attack of Opportunity only once per round. Attacks of Opportunity cannot be made by Sleeping, Flinched, or Paralyzed targets.<br>&nbsp;<br>&nbsp;Attacks of Opportunity can be triggered in multiple ways:<br>&nbsp;»An adjacent foe uses a Push, Grapple, Disarm, Trip, or Dirty Trick Maneuver that does not target you.<br>&nbsp;»An adjacent foe stands up.<br>&nbsp;»An adjacent foe uses a Ranged attack that does not target someone adjacent to it.<br>&nbsp;»An adjacent foe uses a Standard Action to pick up or retrieve an item.<br>&nbsp;»An adjacent foe An adjacent foe Shifts out of a Square adjacent to you."
                 
             },
             {
@@ -349,7 +350,7 @@ export default class MenuComponent extends Component {
                 effect: "You may perform any of the manipulations listed below. You may use each manipulation only once each scene per target. Manipulate can only be performed by Trainers.<br>&nbsp;<br>&nbsp;Bon Mot - Make a Guile Check, opposed by the target's Guile or Focus. If you win, the target is Enraged and cannot spend AP for one full round. The target does not gain a Save Check against this effect.<br>&nbsp;Flirt - Make a Charm Check, opposed by the target's Charm or Focus. If you win. the target is Infatuated with you for one full round. The target automatically fails their Save Check.<br>&nbsp;Terrorize - Make an Intimidation Check, opposed by the target's Intimidate or Focus. If you win, the target loses all Temporary Hit Points and can only use At-Will Frequence Moves for one full round."
             },
             {
-                name: "push",
+                name: "Push",
                 ac: 4,
                 action: "Standard",
                 class: "Status",
