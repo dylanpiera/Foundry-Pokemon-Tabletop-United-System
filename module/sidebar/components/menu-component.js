@@ -335,19 +335,49 @@ export default class MenuComponent extends Component {
                 effect: "You and the target each make opposed Combat or Stealth checks. If you win, the target's Held Item (Main hand or Off-hand for humans) falls to the ground"
             },
             {
-                name: "Dirty Trick",
+                name: "Dirty Trick - Hinder",
                 ac: 2,
-                class: "Status",
+                class: "Scene - Status",
                 range: "Melee, 1 Target",
-                effect: "You may perform any of the Dirty Tricks Listed Below. You May use each trick only once each Scene per target. <br>&nbsp;<br>&nbsp; Hinder - You and the target make opposed athletics Checks. If you win, the target is slowed and takes a -2 penalty to all Skill Checks for one full round.<br>&nbsp;Blind - You and the target make Opposed Stealth Checks. If you win, the target is Blinded for one full round.<br>&nbsp;Low Blow - You and the target make Opposed Acrobatics Checks. If you win the target is Vulnerable and has their Initiative set to 0 until the end of your next turn."
+                effect: "You and the target make opposed athletics Checks. If you win, the target is slowed and takes a -2 penalty to all Skill Checks for one full round."
             },
             {
-                name: "Manipulate",
+                name: "Dirty Trick - Blind",
                 ac: 2,
-                action: "Standard",
+                class: "Scene - Status",
+                range: "Melee, 1 Target",
+                effect: "You and the target make Opposed Stealth Checks. If you win, the target is Blinded for one full round."
+            },
+            {
+                name: "Dirty Trick - Low Blow",
+                ac: 2,
+                class: "Scene - Status",
+                range: "Melee, 1 Target",
+                effect: "Low Blow - You and the target make Opposed Acrobatics Checks. If you win the target is Vulnerable and has their Initiative set to 0 until the end of your next turn."
+            },
+            {
+                name: "Manipulate -Bon Mot",
+                ac: 2,
+                action: "Scene - Standard",
                 class: "Status",
                 range: "6, 1 Target",
-                effect: "You may perform any of the manipulations listed below. You may use each manipulation only once each scene per target. Manipulate can only be performed by Trainers.<br>&nbsp;<br>&nbsp;Bon Mot - Make a Guile Check, opposed by the target's Guile or Focus. If you win, the target is Enraged and cannot spend AP for one full round. The target does not gain a Save Check against this effect.<br>&nbsp;Flirt - Make a Charm Check, opposed by the target's Charm or Focus. If you win. the target is Infatuated with you for one full round. The target automatically fails their Save Check.<br>&nbsp;Terrorize - Make an Intimidation Check, opposed by the target's Intimidate or Focus. If you win, the target loses all Temporary Hit Points and can only use At-Will Frequence Moves for one full round."
+                effect: "Manipulate can only be performed by Trainers.<br>&nbsp;<br>&nbsp;Make a Guile Check, opposed by the target's Guile or Focus. If you win, the target is Enraged and cannot spend AP for one full round. The target does not gain a Save Check against this effect."
+            },
+            {
+                name: "Manipulate - Flirt",
+                ac: 2,
+                action: "Scene - Standard",
+                class: "Status",
+                range: "6, 1 Target",
+                effect: "Manipulate can only be performed by Trainers.<br>&nbsp;<br>&nbsp;Make a Charm Check, opposed by the target's Charm or Focus. If you win. the target is Infatuated with you for one full round. The target automatically fails their Save Check."
+            },
+            {
+                name: "Manipulate - Terrorize",
+                ac: 2,
+                action: "Scene - Standard",
+                class: "Status",
+                range: "6, 1 Target",
+                effect: "Manipulate can only be performed by Trainers.<br>&nbsp;<br>&nbsp;Make an Intimidation Check, opposed by the target's Intimidate or Focus. If you win, the target loses all Temporary Hit Points and can only use At-Will Frequence Moves for one full round."
             },
             {
                 name: "Push",
