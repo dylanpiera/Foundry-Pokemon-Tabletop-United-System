@@ -2,7 +2,6 @@ import Component from '../../api/front-end/lib/component.js';
 import { sendMoveMessage } from '../../actor/pokemon-sheet-gen8.js'
 import { pokeball_sound_paths } from '../../combat/effects/pokeball_effects.js';
 import { timeout } from '../../utils/generic-helpers.js';
-import { move_animation_delay_ms } from "../../combat/effects/move_animations.js";
 
 export const ui_sound_paths = {
     "button": "systems/ptu/sounds/ui_sounds/ui_button.wav",
