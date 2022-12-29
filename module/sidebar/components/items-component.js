@@ -16,30 +16,54 @@ export default class ItemsComponent extends Component {
      */
     async render() {
         if (!this.state.actor) return;
-
-        const items = this.state.actor.itemTypes.item;
         const dividerIcon = "<img class='divider-image' src='systems/ptu/images/icons/DividerIcon_Items.png' style='border:none; width:200px;'>"
         let output = "";
-        if (items.length > 0) {
-            output += dividerIcon
+        if (this.state.actor.type == 'character') {
+            const items = this.state.actor.itemTypes.item;
 
-            for (const item of items.sort(this._sort)) {
+
+            if (items.length > 0) {
+                output += dividerIcon
+
+                for (const item of items.sort(this._sort)) {
+                    output += await renderTemplate("/systems/ptu/module/sidebar/components/items-component.hbs", {
+                        name: item.name,
+                        img: item.img,
+                        id: item.id,
+                        color: 'gray',
+                        amount: item.system.quantity,
+                        effect: item.system.effect,
+                        owner: this.state.actor.id
+                    });
+                }
+            }
+        } else if (this.state.actor.type == 'pokemon') {
+            const itemName = this.state.actor.system.heldItem;
+            let item = game.ptu.data.items.find(i => i.name.toLowerCase().includes(itemName.toLowerCase()));
+            if (item) {
+                output += dividerIcon             
                 output += await renderTemplate("/systems/ptu/module/sidebar/components/items-component.hbs", {
                     name: item.name,
                     img: item.img,
                     id: item.id,
                     color: 'gray',
-                    amount: item.system.quantity,
+                    amount: 1,
                     effect: item.system.effect,
                     owner: this.state.actor.id
                 });
             }
         }
-        this.element.html(output);
+        if(output != "") { this.element.html(output); }
 
         this.element.children(".item").on("click", function(event) {
-            const {itemId, itemOwner} = event.currentTarget.dataset;
-            game.actors.get(itemOwner).items.get(itemId).sheet._toChat(); 
+            let {itemId, itemOwner} = event.currentTarget.dataset;
+
+            if(game.actors.get(itemOwner).type == 'character') {
+                game.actors.get(itemOwner).items.get(itemId).sheet._toChat();
+            } else if (game.actors.get(itemOwner).type == 'pokemon') {
+                game.ptu.data.items.find(i => i.id == itemId).sheet._toChat();
+            }
+ 
         });
 
         this.element.children(".divider-image").on("click", () => {
