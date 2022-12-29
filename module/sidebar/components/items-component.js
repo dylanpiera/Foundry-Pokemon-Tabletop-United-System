@@ -16,10 +16,11 @@ export default class ItemsComponent extends Component {
      */
     async render() {
         if (!this.state.actor) return;
-        const dividerIcon = "<img class='divider-image' src='systems/ptu/images/icons/DividerIcon_Items.png' style='border:none; width:200px;'>"
+        let dividerIcon = "";
         let output = "";
         if (this.state.actor.type == 'character') {
             const items = this.state.actor.itemTypes.item;
+            dividerIcon = "<img class='divider-image' src='systems/ptu/images/icons/DividerIcon_Items.png' style='border:none; width:200px;'>"
 
 
             if (items.length > 0) {
@@ -38,6 +39,7 @@ export default class ItemsComponent extends Component {
                 }
             }
         } else if (this.state.actor.type == 'pokemon') {
+            dividerIcon = "<img class='divider-image' src='systems/ptu/images/icons/DividerIcon_HeldItem.png' style='border:none; width:200px;'>"
             const itemName = this.state.actor.system.heldItem;
             let item = game.ptu.data.items.find(i => i.name.toLowerCase().includes(itemName.toLowerCase()));
             if (item) {
