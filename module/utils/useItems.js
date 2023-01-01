@@ -15,11 +15,12 @@ export async function useItem(event){
     
     //disable the button
     event.currentTarget.disabled = true;
+    
     //log the event to the console for dev purposes
-    console.log(event);
-    console.log(itemId);
-    console.log(itemName);
-    console.log(parentId);
+    // console.log(event);
+    // console.log(itemId);
+    // console.log(itemName);
+    // console.log(parentId);
 
     //find the actor with id parentId
     let actor = game.actors.get(parentId);
