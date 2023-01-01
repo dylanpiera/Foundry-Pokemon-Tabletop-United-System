@@ -105,7 +105,7 @@
                     </div>
                 {{/if}}
                 <div class="w-100 p-2" style="border-top:1px solid #00000080;/* padding:10px 5px */">
-                    <button class="reduce-item-count" data-item-id="{{item.system.id}}" data-item-name="{{item.name}}" onclick="useItem(event)">
+                    <button class="reduce-item-count" data-item="{{item.id}}" data-item-name="{{item.name}}" data-item-parentId="{{item.parent._id}}" onclick="useItem(event)">
                         Consume Item
                     </button>
                 </div>
