@@ -104,7 +104,14 @@
                         </div>
                     </div>
                 {{/if}}
+                <div class="w-100 p-2" style="border-top:1px solid #00000080;/* padding:10px 5px */">
+                    <button class="reduce-item-count" data-item-id="{{item.system.id}}" data-item-name="{{item.name}}" onclick="useItem(event)">
+                        Consume Item
+                    </button>
+                </div>
             </div>
         </div>
     </div>
+
+    <script src="../../utils/use-item.js"></script>
 {{/if}}
