@@ -61,7 +61,7 @@ export default class ItemsComponent extends Component {
             const {itemId, itemOwner} = event.currentTarget.dataset;
 
             if(game.actors.get(itemOwner).type == 'character') {
-                game.actors.get(itemOwner).items.get(itemId).sheet._toChat();
+                game.actors.get(itemOwner).items.get(itemId).sheet._toChat(itemOwner);
             } else if (game.actors.get(itemOwner).type == 'pokemon') {
                 game.ptu.data.items.find(i => i.id == itemId).sheet._toChat(itemOwner);
             }

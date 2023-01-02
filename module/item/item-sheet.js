@@ -156,7 +156,7 @@ export class PTUItemSheet extends ItemSheet {
 	 * Handle To Chat call.
 	 * @private
 	 */
-	_toChat() {
+	_toChat(ownerId) {
 		switch(this.object.type) {
 			case "move":
 				return sendMoveMessage({
@@ -165,14 +165,16 @@ export class PTUItemSheet extends ItemSheet {
 					}),
 					name: this.object.name,
 					move: this.object.system,
-					templateType: 'details'
+					templateType: 'details',
+					owner: ownerId
 				});
 			default: 
 				return sendItemMessage({
 					speaker: ChatMessage.getSpeaker({
 						actor: this.actor
 					}),
-					item: this.object
+					item: this.object,
+					owner: ownerId
 				});
 		}
 	}
