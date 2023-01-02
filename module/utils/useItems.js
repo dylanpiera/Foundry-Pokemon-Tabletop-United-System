@@ -38,7 +38,8 @@ export async function useItem(event){
         }
         console.log(`Consuming item with ID ${itemId} and name ${itemName}`);
         //reduce the number of this item that the character has by 1
-        actor.items.get(itemId).update({"system.quantity": actor.items.get(itemId).system.quantity - 1});
+        const item = actor.items.get(itemId);
+        await item.update({"system.quantity": Number(duplicate(item.system.quantity)) - 1});
     }
 
     //item effect will go here
