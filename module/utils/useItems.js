@@ -32,13 +32,18 @@ export async function useItem(event){
         actor.update({"data.heldItem": "None"});        
     }
     if (actor.type == "character"){
+        if(actor.items.get(itemId).system.quantity < 1){
+            ui.notifications.error("You don't have any of this item left.");
+            return;
+        }
         console.log(`Consuming item with ID ${itemId} and name ${itemName}`);
         //reduce the number of this item that the character has by 1
-        actor.update({"items": actor.items.map(item => {
-            if (item._id == itemId){
-                item.data.quantity -= 1;
-            }     
-            return item;       
-        })});
+        actor.items.get(itemId).update({"system.quantity": actor.items.get(itemId).system.quantity - 1});
     }
+
+    //item effect will go here
+    //applyItemEffect(itemName, actor, targetActor?)
 }
+
+// applyItemEffect(itemName, actor, targetActor?){
+//}
