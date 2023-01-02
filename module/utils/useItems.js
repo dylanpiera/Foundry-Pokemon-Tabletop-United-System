@@ -9,9 +9,9 @@ export async function useItem(event){
     event.preventDefault();
 
     // Get the item ID and name from the button element's data-item-id and data-item-name attributes
-    let itemId = event.currentTarget.dataset.item;
-    let itemName = event.currentTarget.dataset.itemName;
-    let parentId = `${event.currentTarget.dataset.itemParentid}`; //convert parentId to string
+    const itemId = event.currentTarget.dataset.item;
+    const itemName = event.currentTarget.dataset.itemName;
+    const parentId = ""+event.currentTarget.dataset.itemParentid; //convert parentId to string
     
     //disable the button
     event.currentTarget.disabled = true;
