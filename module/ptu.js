@@ -25,7 +25,6 @@ import { PrepareCustomSpecies, UpdateCustomSpeciesData } from './custom-species.
 import { InitCustomTypings as initCustomTypings, UpdateCustomTypings } from './custom-typings.js'
 import { ChangeLog } from './forms/changelog-form.js'
 import { applyDamageToTargets, undoDamageToTargets, newApplyDamageToTargets, handleApplicatorItem, TakeAction } from './combat/damage-calc-tools.js'
-import { useItem } from "./utils/useItems.js";
 import { CreateMonParser, GetSpeciesArt } from './utils/species-command-parser.js'
 import { FinishDexDragPokemonCreation } from './utils/species-command-parser.js'
 import { GetRandomNature } from './utils/random-nature-generator.js'
