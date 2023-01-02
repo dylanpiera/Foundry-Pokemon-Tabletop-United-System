@@ -58,7 +58,7 @@ export default class ItemsComponent extends Component {
         if(output != "") { this.element.html(output); }
 
         this.element.children(".item").on("click", function(event) {
-            let {itemId, itemOwner} = event.currentTarget.dataset;
+            const {itemId, itemOwner} = event.currentTarget.dataset;
 
             if(game.actors.get(itemOwner).type == 'character') {
                 game.actors.get(itemOwner).items.get(itemId).sheet._toChat();
