@@ -63,7 +63,7 @@ export default class ItemsComponent extends Component {
             if(game.actors.get(itemOwner).type == 'character') {
                 game.actors.get(itemOwner).items.get(itemId).sheet._toChat();
             } else if (game.actors.get(itemOwner).type == 'pokemon') {
-                game.ptu.data.items.find(i => i.id == itemId).sheet._toChat();
+                game.ptu.data.items.find(i => i.id == itemId).sheet._toChat(itemOwner);
             }
  
         });
