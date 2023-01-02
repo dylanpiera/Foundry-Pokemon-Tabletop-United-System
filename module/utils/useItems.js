@@ -23,7 +23,7 @@ export async function useItem(event){
     // console.log(parentId);
 
     //find the actor with id parentId
-    let actor = game.actors.get(parentId);
+    const actor = game.actors.get(parentId);
     console.log(actor);
     // if the user of the item is of type pokemon
     if (actor.type == "pokemon"){
