@@ -363,15 +363,13 @@
         {{/if}}
     </div>
 
-    {{#if dexEntry}}
-        {{#if dexEntry.data.entry}}
-            <div class='row readable pt-2'>
-                <div class='col' style='text-align: left;'>
-                    <h3><strong>Dex Entry</strong></h3>
-                
-                    {{{dexEntry.data.entry}}}
-                </div>
+    {{#if dexEntry.system.entry}}
+        <div class='row readable pt-2'>
+            <div class='col' style='text-align: left;'>
+                <h3><strong>Dex Entry</strong></h3>
+            
+                {{{dexEntry.system.entry}}}
             </div>
-        {{/if}}
+        </div>
     {{/if}}
 </div>
