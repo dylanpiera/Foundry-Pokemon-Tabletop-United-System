@@ -29,7 +29,7 @@ export async function useItem(event){
     if (actor.type == "pokemon"){
         console.log(`Consuming item with ID ${itemId} and name ${itemName}`);
         //change the held item to none
-        actor.update({"data.heldItem": "None"});        
+        await actor.update({"data.heldItem": "None"});        
     }
     if (actor.type == "character"){
         if(actor.items.get(itemId).system.quantity < 1){
