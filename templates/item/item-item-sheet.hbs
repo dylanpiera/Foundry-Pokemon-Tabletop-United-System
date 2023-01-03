@@ -77,6 +77,19 @@
                             />
                         </div>
 
+                        {{!-- Consumable --}}
+                        <div class="hgss-header vertical">
+                            <label for="system.consumable">Consumable:</label>
+                        </div>
+                        <div class="hgss-body">
+                            <input
+                                class="ml-2"
+                                name="system.consumable"
+                                type="checkbox"
+                                {{#if system.consumable}}checked{{/if}}
+                            />
+                        </div>
+
                         {{!-- Category --}}
                         <div class="hgss-header vertical">
                             <label for="system.category">Category:</label>

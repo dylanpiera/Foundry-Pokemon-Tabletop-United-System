@@ -519,7 +519,8 @@
       "templates": ["base"],
       "quantity": 1,
       "category": "",
-      "cost": 0
+      "cost": 0,
+      "consumable": false
     }
   }
 }
