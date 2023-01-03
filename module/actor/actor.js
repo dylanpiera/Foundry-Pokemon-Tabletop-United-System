@@ -646,6 +646,117 @@ export class PTUActor extends Actor {
       // If auto combat is turned on automatically apply damage based on result
       // TODO: Apply Attack (+ effects) 
     }, game.settings.get("ptu", "dramaticTiming") == true ? move_animation_delay_ms : 0);
+    
+    // If move used was transform and it was used by a ditto:
+    if (moveData.name.toLowerCase() =="transform" && move?.parent?.system.species == "ditto") {
+      this.transformDitto();
+    }
+  }
+
+  async transformDitto() {
+    let selected = canvas.tokens.controlled;
+    if (selected.length == 0 || selected.length > 1) {
+        ui.notifications.warn("Please select a single token.");
+        return;
+    }
+
+    let selectedActor = selected[0].actor;
+    let tok = selectedActor.getActiveTokens()[0];
+
+    if(selectedActor.system.species.toLowerCase() != "ditto"){
+        ui.notifications.warn("Please select a Ditto.");
+        return;
+    }
+
+    let dittoImage = selectedActor.system.shiny ? 'systems/ptu/images/pokemon_sprites/132s.webp' : 'systems/ptu/images/pokemon_sprites/132.webp';
+    let sizeDitto = 1;
+
+    let dittoCapabilities = {
+        "Overland": 4,
+        "Sky": 0,
+        "Swim": 4,
+        "Levitate": 0,
+        "Burrow": 0,
+        "High Jump": 1,
+        "Long Jump": 1,
+        "Power": 1,
+        "Weight Class": "1",
+        "Naturewalk": [],
+        "Other": [
+            "Amorphous",
+            "Shapeshifter",
+            "Underdog",
+            "Wallclimber"
+        ]
+    }
+
+    if (tok.document.texture.src == dittoImage){
+                //change from ditto to target
+        let targets = Array.from(game.user.targets);
+        if (targets.length == 0 || targets.length > 1) {
+            ui.notifications.warn("Unable to transform - Please target a single target.");
+            return;
+        }
+
+        const transformMove = selectedActor.items.find(item => item.name.toLowerCase() == "transform");
+
+        const dittoItems = {
+            ['flags.ptu.dittoItems']: selectedActor.items.filter(item => item.type === "move" || item.type === "ability" || item.type === "capability" )
+        };
+
+        selectedActor.update(dittoItems);
+
+        let targetActor = targets[0].actor;
+
+        let targetImage = targetActor.img;
+
+        let targetSize = targetActor.prototypeToken.height; 
+
+        let targetItems = targetActor.items.filter(item => item.type === "move" || item.type === "ability" || item.type === "capability" ).map(item => item.data);
+        //add transformMove to targetItems so that ditto can turn back
+        targetItems.push(transformMove.data);
+
+        //update token
+        const updates = {_id: tok.id, height: targetSize, width: targetSize, img: targetImage};
+        tok.document.update(updates);
+        //update capabilities of selectedActor
+        //selectedActor.capabilities = targetCapabilites;
+        //delete all current moves and abiltites
+        selectedActor.items.filter(item => item.type === "move" || item.type === "ability" || item.type === "capability").forEach(item => item.delete());
+        //add new moves and abilities
+        selectedActor.createEmbeddedDocuments("Item", duplicate(targetItems))
+        //add effects to change capabilities
+        const TransformEffect = {
+            "changes": [
+                { key: "system.capabilities.Burrow", mode: 5, value: targetActor.system.capabilities["Burrow"], priority: 69 },
+                { key: "system.capabilities.High Jump", mode: 5, value: targetActor.system.capabilities["High Jump"], priority: 69 },
+                { key: "system.capabilities.Levitate", mode: 5, value: targetActor.system.capabilities["Levitate"], priority: 69 },
+                { key: "system.capabilities.Long Jump", mode: 5, value: targetActor.system.capabilities["Long Jump"], priority: 69 },
+                { key: "system.capabilities.Naturewalk", mode: 5, value: targetActor.system.capabilities["Naturewalk"], priority: 69 },
+                { key: "system.capabilities.Overland", mode: 5, value: targetActor.system.capabilities["Overland"], priority: 69 },
+                { key: "system.capabilities.Power", mode: 5, value: targetActor.system.capabilities["Power"], priority: 69 },
+                { key: "system.capabilities.Sky", mode: 5, value: targetActor.system.capabilities["Sky"], priority: 69 },
+                { key: "system.capabilities.Swim", mode: 5, value: targetActor.system.capabilities["Swim"], priority: 69 },        
+            ],
+            "label": "Transform"
+        }
+        await selectedActor.createEmbeddedDocuments("ActiveEffect", [TransformEffect]);
+
+    } else {
+        //change back to ditto
+        const dittoItems = selectedActor.getFlag('ptu', 'dittoItems');
+        tok.document.unsetFlag('ptu', 'dittoItems');
+        //update token
+        const updates = {_id: tok.id, height: sizeDitto, width: sizeDitto, img: dittoImage};
+        tok.document.update(updates);
+        //delete all current moves and abiltites
+        selectedActor.items.filter(item => item.type === "move" || item.type === "ability" || item.type === "capability").forEach(item => item.delete());
+        //add new moves and abilities
+        selectedActor.createEmbeddedDocuments("Item", duplicate(dittoItems))
+        //remove effects to change capabilities
+        let effectsToDelete = selectedActor.effects.filter(e => e.label === "Transform").map(e => { return e.id });
+        await token.actor.deleteEmbeddedDocuments("ActiveEffect", effectsToDelete);
+    }
   }
 
   async _performFullAttack(moveData, token, { bonusDamage, targets, moveName, APBonus }) {
