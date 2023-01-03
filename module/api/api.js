@@ -81,7 +81,7 @@ export default class Api {
 
                 let allowed = true
 
-                if (game.settings.get("ptu", "pokeball-prompts") == 1 || game.settings.get("ptu", "pokeball-prompts") == 3)
+                if (game.settings.get("ptu", "pokeball-prompts") == 1 || game.settings.get("ptu", "pokeball-prompts") == 2)
                 {
                     allowed = await new Promise((resolve, reject) => {
                         const dialog = new Dialog({

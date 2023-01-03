@@ -110,7 +110,7 @@ export default class MenuComponent extends Component {
 
             let allowed = true
 
-            if (game.settings.get("ptu", "pokeball-prompts") == 1 || game.settings.get("ptu", "pokeball-prompts") == 2)
+            if (game.settings.get("ptu", "pokeball-prompts") == 1 || game.settings.get("ptu", "pokeball-prompts") == 3)
             {
                 //ask GM to confirm they want to allow player to throw a pokeball?
                 //Maybe skip check with a setting?
