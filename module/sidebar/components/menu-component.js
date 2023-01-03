@@ -103,10 +103,45 @@ export default class MenuComponent extends Component {
             }
         })
 
-        this.element.children('#menu-content').children('.pokeball-item').on("click", (event) => {
+        this.element.children('#menu-content').children('.pokeball-item').on("click", async(event) => {
             const { entityId, ballName, ownerId } = event.target.dataset;
 
             const owner = game.actors.get(ownerId);
+
+            //ask GM to confirm they want to allow player to throw a pokeball?
+            //Maybe skip check with a setting?
+            const allowed = await new Promise((resolve, reject) => {
+                const dialog = new Dialog({
+                    title: "Ownership Transfer",
+                    content: `<p>It seems that ${owner.name} wishes to throw a pokeball at ${game.user?.targets?.first().name}.<br>Will you let them?</p>`,
+                    buttons: {
+                        yes: {
+                            icon: '<i class="fas fa-check"></i>',
+                            label: game.i18n.localize("Yes"),
+                            callback: _ => resolve("true")
+                        },
+                        no: {
+                            icon: '<i class="fas fa-times"></i>',
+                            label: game.i18n.localize("No"),
+                            callback: _ => resolve("false")
+                        }
+                    },
+                    default: "no",
+                    close: () => resolve("timeout"),
+                });
+                dialog.render(true);
+                setTimeout(_ => {
+                    dialog.close();
+                    resolve("timeout");
+                }, 1000)
+            });
+
+            if(!allowed){
+                ui.notifications.error("GM prevented you from throwing a pokeball at this pokemon.");
+                return;
+            }
+
+        
             game.ptu.utils.throwPokeball(owner, game.user?.targets?.first(), owner?.items.get(entityId));
             
         })
