@@ -282,7 +282,7 @@ let pokeballPolymorphFunc = async function (pokeball_image_path, target_token) {
 
 export async function ThrowPokeball(thrower, target, pokeball) {
     if (!target) {
-        console.log("No target to throw pokeball at.");
+        ui.notifications.error ("No target to throw pokeball at.");
         return false;
     }
     if (!thrower) return;
@@ -293,6 +293,14 @@ export async function ThrowPokeball(thrower, target, pokeball) {
     if (!targetToken) return;
     if(targetToken.actor.type != "pokemon") return;
 
+    if(pokeball.system.quantity < 1){
+        ui.notifications.error("You don't have any of those left!");
+        return;
+    }
+
+    console.log(`Consuming item with ID ${pokeball._id} and name ${pokeball.name}`);
+    //reduce the number of balls that the character has by 1
+    pokeball.update({"system.quantity": Number(duplicate(pokeball.system.quantity)) - 1});
 
     const POKEBALL_IMAGE_PATH = pokeball?.img ?? "systems/ptu/images/item_icons/basic ball.webp";
 
