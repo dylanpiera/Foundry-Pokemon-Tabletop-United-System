@@ -107,7 +107,15 @@ export default class MenuComponent extends Component {
             const { entityId, ballName, ownerId } = event.target.dataset;
 
             const owner = game.actors.get(ownerId);
-            game.ptu.utils.throwPokeball(owner, game.user?.targets?.first(), owner?.items.get(entityId));
+            const item = owner?.items.get(entityId);
+            if(item.system.quantity < 1){
+                ui.notifications.error("You don't have any of those left!");
+                return;
+            }
+            game.ptu.utils.throwPokeball(owner, game.user?.targets?.first(), item);
+            console.log(`Consuming item with ID ${item._id} and name ${item.name}`);
+            //reduce the number of balls that the character has by 1
+            item.update({"system.quantity": Number(duplicate(item.system.quantity)) - 1});
         })
 
         this.element.children("#menu-content").children(".struggle-row").children(".movemaster-button[data-struggle-id]").on("mousedown", (event) => {
