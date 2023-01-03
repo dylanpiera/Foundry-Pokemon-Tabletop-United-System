@@ -41,21 +41,25 @@ export default class ItemsComponent extends Component {
         } else if (this.state.actor.type == 'pokemon') {
             dividerIcon = "<img class='divider-image' src='systems/ptu/images/icons/DividerIcon_HeldItem.png' style='border:none; width:200px;'>"
             const itemName = this.state.actor.system.heldItem;
-            let item = game.ptu.data.items.find(i => i.name.toLowerCase().includes(itemName.toLowerCase()));
-            if (item) {
-                output += dividerIcon             
-                output += await renderTemplate("/systems/ptu/module/sidebar/components/items-component.hbs", {
-                    name: item.name,
-                    img: item.img,
-                    id: item.id,
-                    color: 'gray',
-                    amount: 1,
-                    effect: item.system.effect,
-                    owner: this.state.actor.id
-                });
+            if (itemName != "None")
+            {
+                let item = game.ptu.data.items.find(i => i.name.toLowerCase().includes(itemName.toLowerCase()));
+                if (item) {
+                    output += dividerIcon             
+                    output += await renderTemplate("/systems/ptu/module/sidebar/components/items-component.hbs", {
+                        name: item.name,
+                        img: item.img,
+                        id: item.id,
+                        color: 'gray',
+                        amount: 1,
+                        effect: item.system.effect,
+                        owner: this.state.actor.id
+                    });
+                }
             }
+            
         }
-        if(output != "") { this.element.html(output); }
+        this.element.html(output);
 
         this.element.children(".item").on("click", function(event) {
             const {itemId, itemOwner} = event.currentTarget.dataset;
