@@ -300,6 +300,7 @@ export async function ThrowPokeball(thrower, target, pokeball) {
 
     console.log(`Consuming item with ID ${pokeball._id} and name ${pokeball.name}`);
     //reduce the number of balls that the character has by 1
+    ui.notifications.info("Removed 1 quantity from Pokeball in inventory.")
     pokeball.update({"system.quantity": Number(duplicate(pokeball.system.quantity)) - 1});
 
     const POKEBALL_IMAGE_PATH = pokeball?.img ?? "systems/ptu/images/item_icons/basic ball.webp";
