@@ -76,7 +76,7 @@
             </div>
         </div>
 
-        {{#unless (or (is move.category "Status") (is (isdefined damageRolls.normal.data.db) false))}}
+        {{#unless (or (is move.category "Status") (and (is (isdefined damageRolls.normal.data.db) false) (is damageRolls.normal.isDeterministic false)))}}
             <div class="swsh-header" style="padding: 0px ! important;  background-color:#272727 ! important;">
                 <div class="d-flex w-100 mt-0 mb-0" style="padding: 0px ! important; background-color:#272727 ! important;">
                     <div class="col" style="padding: 0px ! important; background-color:#272727 ! important;">

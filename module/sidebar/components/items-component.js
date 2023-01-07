@@ -25,12 +25,12 @@ export default class ItemsComponent extends Component {
 
             for (const item of items.sort(this._sort)) {
                 output += await renderTemplate("/systems/ptu/module/sidebar/components/items-component.hbs", {
-                    name: item.data.name,
-                    img: item.data.img,
+                    name: item.name,
+                    img: item.img,
                     id: item.id,
                     color: 'gray',
-                    amount: item.data.data.quantity,
-                    effect: item.data.data.effect,
+                    amount: item.system.quantity,
+                    effect: item.system.effect,
                     owner: this.state.actor.id
                 });
             }
@@ -55,8 +55,8 @@ export default class ItemsComponent extends Component {
     }
 
     _sort(a, b) {
-        const an = Number(a.data.data.quantity);
-        const bn = Number(b.data.data.quantity);
+        const an = Number(a.system.quantity);
+        const bn = Number(b.system.quantity);
 
         if (an > bn) return -1;
         if (bn > an) return 1;

@@ -25,14 +25,15 @@ export class PTUActor extends Actor {
     this.origins = {};
     super.prepareData();
 
-    const actorData = this.data;
+    const actorData = this;
+    const actorSystem = this.system;
 
-    if (parseInt(game.data.version.split('.')[1]) <= 6) {
+    if (parseInt(game.version.split('.')[1]) <= 6) {
       warn("Using old prepare-data structure")
       // Make separate methods for each Actor type (character, npc, etc.) to keep
       // things organized.
-      if (actorData.type === 'character') this._prepareCharacterData(actorData);
-      if (actorData.type === 'pokemon') this._preparePokemonData(actorData);
+      if (actorData.type === 'character') this._prepareCharacterData(actorSystem);
+      if (actorData.type === 'pokemon') this._preparePokemonData(actorSystem);
     }
 
     this.applyActiveEffects(false);
@@ -43,39 +44,39 @@ export class PTUActor extends Actor {
       data: {
         levelUpPoints: [
           { label: "Base Value", change: { type: CONST.ACTIVE_EFFECT_MODES.ADD, value: actorData.type === 'character' ? 9 : 10 } },
-          { label: "Level", change: { type: CONST.ACTIVE_EFFECT_MODES.ADD, value: actorData.data.level.current } },
-          { label: "HP Stat", change: { type: CONST.ACTIVE_EFFECT_MODES.ADD, value: -actorData.data.stats.hp.levelUp } },
-          { label: "ATK Stat", change: { type: CONST.ACTIVE_EFFECT_MODES.ADD, value: -actorData.data.stats.atk.levelUp } },
-          { label: "DEF Stat", change: { type: CONST.ACTIVE_EFFECT_MODES.ADD, value: -actorData.data.stats.def.levelUp } },
-          { label: "SP.ATK Stat", change: { type: CONST.ACTIVE_EFFECT_MODES.ADD, value: -actorData.data.stats.spatk.levelUp } },
-          { label: "SP.DEF Stat", change: { type: CONST.ACTIVE_EFFECT_MODES.ADD, value: -actorData.data.stats.spdef.levelUp } },
-          { label: "SPD Stat", change: { type: CONST.ACTIVE_EFFECT_MODES.ADD, value: -actorData.data.stats.spd.levelUp } },
-          { label: "Stat Point Modifier", change: { type: CONST.ACTIVE_EFFECT_MODES.ADD, value: actorData.data.modifiers.statPoints.total } },
+          { label: "Level", change: { type: CONST.ACTIVE_EFFECT_MODES.ADD, value: actorSystem.level.current } },
+          { label: "HP Stat", change: { type: CONST.ACTIVE_EFFECT_MODES.ADD, value: -actorSystem.stats.hp.levelUp } },
+          { label: "ATK Stat", change: { type: CONST.ACTIVE_EFFECT_MODES.ADD, value: -actorSystem.stats.atk.levelUp } },
+          { label: "DEF Stat", change: { type: CONST.ACTIVE_EFFECT_MODES.ADD, value: -actorSystem.stats.def.levelUp } },
+          { label: "SP.ATK Stat", change: { type: CONST.ACTIVE_EFFECT_MODES.ADD, value: -actorSystem.stats.spatk.levelUp } },
+          { label: "SP.DEF Stat", change: { type: CONST.ACTIVE_EFFECT_MODES.ADD, value: -actorSystem.stats.spdef.levelUp } },
+          { label: "SPD Stat", change: { type: CONST.ACTIVE_EFFECT_MODES.ADD, value: -actorSystem.stats.spd.levelUp } },
+          { label: "Stat Point Modifier", change: { type: CONST.ACTIVE_EFFECT_MODES.ADD, value: actorSystem.modifiers.statPoints.total } },
         ],
         evasion: {
           physical: [
-            { label: "DEF Stat / 5 (max 6)", change: { type: CONST.ACTIVE_EFFECT_MODES.ADD, value: Math.min(Math.floor(actorData.data.stats.def.total / 5), 6) } },
-            { label: "Physical Evasion Mod", change: { type: CONST.ACTIVE_EFFECT_MODES.ADD, value: actorData.data.modifiers.evasion.physical.total } },
+            { label: "DEF Stat / 5 (max 6)", change: { type: CONST.ACTIVE_EFFECT_MODES.ADD, value: Math.min(Math.floor(actorSystem.stats.def.total / 5), 6) } },
+            { label: "Physical Evasion Mod", change: { type: CONST.ACTIVE_EFFECT_MODES.ADD, value: actorSystem.modifiers.evasion.physical.total } },
           ],
           special: [
-            { label: "SP.DEF Stat / 5 (max 6)", change: { type: CONST.ACTIVE_EFFECT_MODES.ADD, value: Math.min(Math.floor(actorData.data.stats.spdef.total / 5), 6) } },
-            { label: "Special Evasion Mod", change: { type: CONST.ACTIVE_EFFECT_MODES.ADD, value: actorData.data.modifiers.evasion.special.total } },
+            { label: "SP.DEF Stat / 5 (max 6)", change: { type: CONST.ACTIVE_EFFECT_MODES.ADD, value: Math.min(Math.floor(actorSystem.stats.spdef.total / 5), 6) } },
+            { label: "Special Evasion Mod", change: { type: CONST.ACTIVE_EFFECT_MODES.ADD, value: actorSystem.modifiers.evasion.special.total } },
           ],
           speed: [
-            { label: "SPD Stat / 5 (max 6)", change: { type: CONST.ACTIVE_EFFECT_MODES.ADD, value: Math.min(Math.floor(actorData.data.stats.spd.total / 5), 6) } },
-            { label: "Speed Evasion Mod", change: { type: CONST.ACTIVE_EFFECT_MODES.ADD, value: actorData.data.modifiers.evasion.speed.total } },
+            { label: "SPD Stat / 5 (max 6)", change: { type: CONST.ACTIVE_EFFECT_MODES.ADD, value: Math.min(Math.floor(actorSystem.stats.spd.total / 5), 6) } },
+            { label: "Speed Evasion Mod", change: { type: CONST.ACTIVE_EFFECT_MODES.ADD, value: actorSystem.modifiers.evasion.speed.total } },
           ]
         },
         stats: {
           spdef: {
             stage: {
               mod: [
-                this.data.flags.ptu?.is_poisoned ? { label: "Poisoned", change: { type: CONST.ACTIVE_EFFECT_MODES.ADD, value: -2 } } : undefined,
+                this.flags.ptu?.is_poisoned ? { label: "Poisoned", change: { type: CONST.ACTIVE_EFFECT_MODES.ADD, value: -2 } } : undefined,
               ].filter(x => x !== undefined)
             }
           }
         },
-        skills: actorData.data.modifiers.skillBonus.total > 0 ? Object.keys(actorData.data.skills).map(skill => {
+        skills: actorSystem.modifiers.skillBonus.total > 0 ? Object.keys(actorSystem.skills).map(skill => {
           return {
             [skill]: {
               modifier: {
@@ -83,7 +84,7 @@ export class PTUActor extends Actor {
                   label: "Skill Bonus",
                   change: {
                     type: CONST.ACTIVE_EFFECT_MODES.ADD,
-                    value: actorData.data.modifiers.skillBonus.total
+                    value: actorSystem.modifiers.skillBonus.total
                   }
                 }]
               }
@@ -98,8 +99,8 @@ export class PTUActor extends Actor {
     })
     console.groupEnd();
 
-    if (this.id === game.ptu.sidebar?.store?.state?.actorId) game.ptu.sidebar.stateHasChanged();
-    if (game.ptu.sidebar?.store?.state?.targetedActors.includes(this.id)) game.ptu.sidebar.stateHasChanged(true);
+    if (this.id === game.ptu.forms.sidebar?.store?.state?.actorId) game.ptu.forms.sidebar.stateHasChanged();
+    if (game.ptu.forms.sidebar?.store?.state?.targetedActors.includes(this.id)) game.ptu.forms.sidebar.stateHasChanged(true);
   }
 
   /**
@@ -111,27 +112,27 @@ export class PTUActor extends Actor {
     const origins = {};
     // Organize non-disabled effects by their application priority
     const effects = Array.from(this.effects).concat(this.items.filter(item => item?.effects?.size > 0).flatMap(item => Array.from(item.effects)));
-
     const changes = effects.reduce((changes, e) => {
-      if (e.data.disabled) return changes;
+      if (e.disabled) return changes;
       return changes.concat(
-        e.data.changes.map((c) => {
+        e.changes.map((c) => {
           c = duplicate(c);
           if (doBaseData && c.priority >= 51) return undefined;
           if (!doBaseData && c.priority <= 50) return undefined;
 
           c.effect = e;
 
-          if (e.parent.data.type != this.data.type) {
+          if (e.parent.type != this.type) {
             if (!c.key.startsWith("actor.") && !c.key.startsWith("../")) return undefined;
             c.key = c.key.replace("actor.", "").replace("../", "");
           }
+          if(c.key.startsWith("data.")) c.key = c.key.replace("data.", "system.");
           c.priority = c.priority ?? c.mode * 10;
 
           let n = parseFloat(c.value)
           if(isNaN(n) && c.value?.startsWith("[")) {
-            n = parseFloat(dataFromPath(this.data, c.value.replace("[","").replace("]","")))
-            console.log(c.value, n);
+            n = parseFloat(dataFromPath(this.system, c.value.replace("[","").replace("]","")))
+
             if(!isNaN(n)) c.value = n;
           } 
           if (String(n) === c.value) {
@@ -149,7 +150,7 @@ export class PTUActor extends Actor {
       if (result !== null) {
         overrides[change.key] = result;
         if (!origins[change.key]) origins[change.key] = [];
-        origins[change.key].push({ label: change.effect.data.label, change: { type: change.mode, value: change.value } });
+        origins[change.key].push({ label: change.effect.label, change: { type: change.mode, value: change.value } });
       }
     }
     // Expand the set of final overrides
@@ -161,10 +162,10 @@ export class PTUActor extends Actor {
   async modifyTokenAttribute(attribute, value, isDelta = false, isBar = true) {
     debug("Modifying Token Attribute", attribute, value, isDelta, isBar);
 
-    const current = duplicate(getProperty(this.data.data, attribute));
+    const current = duplicate(getProperty(this.system, attribute));
     if (isBar) {
       if (attribute == "health") {
-        const temp = duplicate(getProperty(this.data.data, "tempHp"));
+        const temp = duplicate(getProperty(this.system, "tempHp"));
         if (isDelta) {
           if (value < 0 && Number(temp.value) > 0) {
             temp.value = Number(temp.value) + value;
@@ -209,10 +210,11 @@ export class PTUActor extends Actor {
 
   /** @override */
   async prepareDerivedData() {
-    const actorData = this.data;
+    const actorData = this;
+    const actorSystem = this.system;
 
-    if (!isNaN(Number(actorData.data.stats.atk.mod))) {
-      const stats = duplicate(actorData.data.stats)
+    if (!isNaN(Number(actorSystem.stats.atk.mod))) {
+      const stats = duplicate(actorSystem.stats)
       if (typeof stats.atk.mod === "object") return;
       await this.update({
         "data.stats": {
@@ -280,8 +282,8 @@ export class PTUActor extends Actor {
     // Update data structures.
     {
       const data = {}
-      if (!isNaN(actorData.data.skills.acrobatics.value)) {
-        const skills = duplicate(actorData.data.skills)
+      if (!isNaN(actorSystem.skills.acrobatics.value)) {
+        const skills = duplicate(actorSystem.skills)
         for (let [key, skill] of Object.entries(skills)) {
           skill["value"] = {
             "value": !isNaN(Number(skill.value)) ? skill.value : 2,
@@ -292,12 +294,12 @@ export class PTUActor extends Actor {
             "mod": 0,
           };
         }
-        actorData.data.skills = skills;
+        actorSystem.skills = skills;
         data.skills = skills;
         data.requiresUpdate = true;
       }
-      if (isNaN(actorData.data.modifiers.initiative.value)) {
-        const modifiers = duplicate(actorData.data.modifiers);
+      if (isNaN(actorSystem.modifiers.initiative.value)) {
+        const modifiers = duplicate(actorSystem.modifiers);
         for (let [key, value] of Object.entries(modifiers)) {
           if (key == "hardened" || key == "flinch_count" || key == 'immuneToEffectDamage' || key == 'skillBonus') continue;
           if (key == "evasion") {
@@ -315,7 +317,7 @@ export class PTUActor extends Actor {
             }
           }
         }
-        actorData.data.modifiers = modifiers;
+        actorSystem.modifiers = modifiers;
         data.modifiers = modifiers;
         data.requiresUpdate = true;
       }
@@ -329,12 +331,12 @@ export class PTUActor extends Actor {
 
     // Make separate methods for each Actor type (character, npc, etc.) to keep
     // things organized.
-    if (actorData.type === 'character') this._prepareCharacterData(actorData);
-    if (actorData.type === 'pokemon') this._preparePokemonData(actorData);
+    if (actorData.type === 'character') this._prepareCharacterData(actorSystem);
+    if (actorData.type === 'pokemon') this._preparePokemonData(actorSystem);
 
     /** Depricated Data Handler */
-    if (actorData.type === 'character' && actorData.data.skills.intimidation) {
-      let skills = duplicate(actorData.data.skills);
+    if (actorData.type === 'character' && actorSystem.skills.intimidation) {
+      let skills = duplicate(actorSystem.skills);
       skills.intimidate.value = skills.intimidation.value;
       skills.intimidate.modifier = skills.intimidation.modifier;
       delete skills.intimidation;
@@ -350,7 +352,7 @@ export class PTUActor extends Actor {
     debug("Creating new actor with data:", actor);
     if (options?.noCharactermancer || actor.data.type != "pokemon") return actor;
 
-    let form = new game.ptu.PTUPokemonCharactermancer(actor, { "submitOnChange": false, "submitOnClose": true });
+    let form = new game.ptu.config.Ui.PokemonCharacterMancer.documentClass(actor, { "submitOnChange": false, "submitOnClose": true });
     form.render(true)
 
     return actor;
@@ -372,8 +374,9 @@ export class PTUActor extends Actor {
   /**
    * Prepare Character type specific data
    */
-  _prepareCharacterData(actorData) {
-    const data = actorData.data;
+  _prepareCharacterData() {
+    const actorData = this
+    const data = this.system;
 
     const dexExpEnabled = "true" == game.settings.get("ptu", "useDexExp") ?? false;
 
@@ -401,7 +404,7 @@ export class PTUActor extends Actor {
     // Use Data
 
     if (dexExpEnabled) {
-      data.level.dexexp = actorData.items.filter(x => x.type == "dexentry" && x.data.data.owned).length;
+      data.level.dexexp = actorData.items.filter(x => x.type == "dexentry" && x.system.owned).length;
       data.level.current = data.level.milestones + Math.trunc((data.level.dexexp + data.level.miscexp) / 10) + 1 > 50 ? 50 : data.level.milestones + Math.trunc((data.level.dexexp + data.level.miscexp) / 10) + 1;
     }
     else {
@@ -438,10 +441,11 @@ export class PTUActor extends Actor {
   /**
    * Prepare Pokemon type specific data
    */
-  _preparePokemonData(actorData) {
-    const data = actorData.data;
+  _preparePokemonData() {
+    const actorData = this
+    const data = this.system;
 
-    const speciesData = game.ptu.GetSpeciesData(data.species);
+    const speciesData = game.ptu.utils.species.get(data.species);
 
     data.isCustomSpecies = speciesData?.isCustomSpecies ?? false;
 
@@ -460,12 +464,12 @@ export class PTUActor extends Actor {
     // Use Data
 
     // Calculate Level
-    data.level.current = CalcLevel(data.level.exp, 50, game.ptu.levelProgression);
+    data.level.current = CalcLevel(data.level.exp, 50, game.ptu.data.levelProgression);
 
     data.levelUpPoints = data.level.current + data.modifiers.statPoints.total + 10;
 
-    data.level.expTillNextLevel = (data.level.current < 100) ? game.ptu.levelProgression[data.level.current + 1] : game.ptu.levelProgression[100];
-    data.level.percent = Math.round(((data.level.exp - game.ptu.levelProgression[data.level.current]) / (data.level.expTillNextLevel - game.ptu.levelProgression[data.level.current])) * 100);
+    data.level.expTillNextLevel = (data.level.current < 100) ? game.ptu.data.levelProgression[data.level.current + 1] : game.ptu.data.levelProgression[100];
+    data.level.percent = Math.round(((data.level.exp - game.ptu.data.levelProgression[data.level.current]) / (data.level.expTillNextLevel - game.ptu.data.levelProgression[data.level.current])) * 100);
 
     // Stats
     data.stats = CalculatePoisonedCondition(duplicate(data.stats), actorData.flags?.ptu);
@@ -494,7 +498,7 @@ export class PTUActor extends Actor {
     Hooks.call("updateInitiative", this);
 
     data.tp.max = (data.level.current > 0 ? Math.floor(data.level.current / 5) : 0) + 1;
-    data.tp.pep.value = actorData.items.filter(x => x.type == "pokeedge" && x.data.origin?.toLowerCase() != "pusher").length;
+    data.tp.pep.value = actorData.items.filter(x => x.type == "pokeedge" && x.system.origin?.toLowerCase() != "pusher").length;
     data.tp.pep.max = data.level.current > 0 ? Math.floor(data.level.current / 10) + 1 : 1;
 
     data.evasion = CalculateEvasions(data, actorData.flags?.ptu, actorData.items);
@@ -528,7 +532,7 @@ export class PTUActor extends Actor {
   /**
    * Execute a move based on the Move's Item ID.
    * @param {PTUItem} moveId the ID of the move that needs to be executed.
-   * @param {PTUActor} trainerActor the trainer of the Pokémon, defaults to move.data.data.owner
+   * @param {PTUActor} trainerActor the trainer of the Pokémon, defaults to move.system.owner
    * @param {PTUActor} targetActor the target actor that needs to be damaged.
    * @returns 
    */
@@ -537,7 +541,7 @@ export class PTUActor extends Actor {
     const move = this.items.get(moveId)
     if (!move) return;
 
-    if (!trainerActor) trainerActor = game.actors.get(this.data.data.owner);
+    if (!trainerActor) trainerActor = game.actors.get(this.system.owner);
 
     if (!await this._commandCheck(trainerActor)) {
       await ChatMessage.create({
@@ -568,7 +572,7 @@ export class PTUActor extends Actor {
     if (!move) return;
 
     const token = canvas.tokens.controlled[0] ?? this.getActiveTokens()[0]
-    const moveData = move.data.data;
+    const moveData = move.system;
     options.moveName = move.name;
     const attack = await this._performFullAttack(moveData, token, options)
     debug(attack);
@@ -576,14 +580,14 @@ export class PTUActor extends Actor {
     // Backwards Compatability
     if (moveData.useCount == undefined) {
       for (const item of this.items) {
-        if (item.type == "dexentry" || item.data.data.useCount != undefined) continue;
+        if (item.type == "dexentry" || item.system.useCount != undefined) continue;
         await item.data.update({ "data.useCount": 0 })
       }
     }
 
     // Increase used count if applicable.
     if (moveData.frequency.toLowerCase().includes("daily") || moveData.frequency.toLowerCase().includes("scene")) {
-      await move.data.update({ "data.useCount": Number(duplicate(moveData.useCount ?? 0)) + 1 })
+      await move.update({ "system.useCount": Number(duplicate(moveData.useCount ?? 0)) + 1 })
     }
 
     // Set round properties if applicable
@@ -593,15 +597,15 @@ export class PTUActor extends Actor {
 
     // Apply Type Strategist
     if (attack.abilityBonuses.typeStratagistApplies) {
-      const dr = (this.data.data.health.value < (this.data.data.health.total / 3)) ? 10 : 5;
+      const dr = (this.system.health.value < (this.system.health.total / 3)) ? 10 : 5;
       const aeAffliction = {
         duration: { rounds: 1, turns: 1 },
         id: "effect.other.typestrategist",
         label: `Type Strategist (${moveData.type})`,
         changes: [
           { key: "flags.ptu.has_type_strategist", value: true, mode: CONST.ACTIVE_EFFECT_MODES.OVERRIDE, priority: 50 },
-          { key: "data.modifiers.damageReduction.physical.value", value: dr, mode: CONST.ACTIVE_EFFECT_MODES.ADD, priority: 10 },
-          { key: "data.modifiers.damageReduction.special.value", value: dr, mode: CONST.ACTIVE_EFFECT_MODES.ADD, priority: 10 }
+          { key: "modifiers.damageReduction.physical.value", value: dr, mode: CONST.ACTIVE_EFFECT_MODES.ADD, priority: 10 },
+          { key: "modifiers.damageReduction.special.value", value: dr, mode: CONST.ACTIVE_EFFECT_MODES.ADD, priority: 10 }
         ],
 				"flags.ptu.editLocked": true,
       };
@@ -623,7 +627,7 @@ export class PTUActor extends Actor {
       move: moveData,
       moveName: move.name,
       targetAmount: Object.keys(attack.data).length,
-      actorImage: this.data.img,
+      actorImage: this.img,
     }, attack);
 
     messageData.content = await renderTemplate('/systems/ptu/templates/chat/moves/full-attack.hbs', messageData);
@@ -665,7 +669,7 @@ export class PTUActor extends Actor {
     bonusDamage = Number(bonusDamage);
     if (isNaN(bonusDamage)) bonusDamage = 0;
 
-    bonusDamage += (moveData.category.toLowerCase() == "physical") ? (this.data.data.modifiers?.damageBonus?.physical?.total + this.data.data.stats.atk.total) : (moveData.category.toLowerCase() == "special") ? (this.data.data.modifiers?.damageBonus?.special?.total + this.data.data.stats.spatk.total) : 0;
+    bonusDamage += (moveData.category.toLowerCase() == "physical") ? (this.system.modifiers?.damageBonus?.physical?.total + this.system.stats.atk.total) : (moveData.category.toLowerCase() == "special") ? (this.system.modifiers?.damageBonus?.special?.total + this.system.stats.spatk.total) : 0;
 
     // Set other parameters
     const currentWeather = game.settings.get("ptu", "currentWeather");
@@ -674,9 +678,9 @@ export class PTUActor extends Actor {
     const damageBonuses = await calculateTotalDamageBonus(moveData, bonusDamage, currentWeather, abilityBonuses, this)
 
     // Do AC Roll
-    const acRoll = await game.ptu.combat.CalculateAcRoll(moveData, this.data, APBonus).evaluate({ async: true });
+    const acRoll = await game.ptu.utils.combat.calculateAcRoll(moveData, this, APBonus).evaluate({ async: true });
     if (moveData.doubleStrike.is === true) {
-      const acRoll2 = await game.ptu.combat.CalculateAcRoll(moveData, this.data, APBonus).evaluate({ async: true });
+      const acRoll2 = await game.ptu.utils.combat.calculateAcRoll(moveData, this, APBonus).evaluate({ async: true });
       moveData.doubleStrike.hit1 = { roll: acRoll };
       moveData.doubleStrike.hit2 = { roll: acRoll2 };
     }
@@ -716,8 +720,8 @@ export class PTUActor extends Actor {
     }
     if (moveData.category.toLowerCase() != "status" && critType != CritOptions.CRIT_MISS) {
       if (moveData.damageBase != "--" && moveData.damageBase) {
-        damageRolls.normal = await this._calculateDamageRoll(moveData, CritOptions.NORMAL, damageBonuses.total, abilityBonuses, this.data.data, targets[0]?.actor?.data.data).evaluate({ async: true });
-        damageRolls.crit = await this._calculateDamageRoll(moveData, CritOptions.CRIT_HIT, damageBonuses.total, abilityBonuses, this.data.data, targets[0]?.actor?.data.data).evaluate({ async: true });
+        damageRolls.normal = await this._calculateDamageRoll(moveData, CritOptions.NORMAL, damageBonuses.total, abilityBonuses, this.system, targets[0]?.actor?.system).evaluate({ async: true });
+        damageRolls.crit = await this._calculateDamageRoll(moveData, CritOptions.CRIT_HIT, damageBonuses.total, abilityBonuses, this.system, targets[0]?.actor?.system).evaluate({ async: true });
       }
     }
 
@@ -726,7 +730,7 @@ export class PTUActor extends Actor {
     await PlayMoveAnimations(moveData, token, attacksData);
     await PlayMoveSounds(moveData, attacksData);
 
-    await game.ptu.combat.TakeAction(this, {
+    await game.ptu.utils.combat.takeAction(this, {
       actionType: match(moveData.range?.toLowerCase(), [
         { test: (v) => v.includes("swift"), result: (v) => ActionTypes.SWIFT },
         { test: (v) => v.includes("shift"), result: (v) => ActionTypes.SHIFT },
@@ -767,7 +771,7 @@ export class PTUActor extends Actor {
           function isInRange() {
             switch (true) {
               case moveRange.includes("pass"): return 4;
-              case moveRange.includes("melee"): return Math.max(token.data.width, token.data.height);
+              case moveRange.includes("melee"): return Math.max(token.width, token.height);
               case moveRange.includes("self"): return Number.MAX_SAFE_INTEGER;
               case moveRange.includes("burst"): return moveRange.slice(moveRange.indexOf("burst") + "burst".length).split(',')[0].trim();
               case moveRange.includes("cone"): return moveRange.slice(moveRange.indexOf("cone") + "cone".length).split(',')[0].trim();
@@ -789,30 +793,30 @@ export class PTUActor extends Actor {
             attackData.target = {
               name: target.name,
               evasion: {
-                value: Math.max(target.actor.data.data.evasion.physical, target.actor.data.data.evasion.speed),
+                value: Math.max(target.actor.system.evasion.physical, target.actor.system.evasion.speed),
                 type: "Physical/Speed",
               },
-              image: target.actor.data.img,
+              image: target.actor.img,
             }
             break;
           case "special":
             attackData.target = {
               name: target.name,
               evasion: {
-                value: Math.max(target.actor.data.data.evasion.special, target.actor.data.data.evasion.speed),
+                value: Math.max(target.actor.system.evasion.special, target.actor.system.evasion.speed),
                 type: "Special/Speed",
               },
-              image: target.actor.data.img,
+              image: target.actor.img,
             }
             break;
           case "status":
             attackData.target = {
               name: target.name,
               evasion: {
-                value: target.actor.data.data.evasion.speed,
+                value: target.actor.system.evasion.speed,
                 type: "Speed",
               },
-              image: target.actor.data.img,
+              image: target.actor.img,
             }
             break;
         }
@@ -827,7 +831,8 @@ export class PTUActor extends Actor {
         hasTechnician: false,
         hasAdaptability: false,
         lastChanceApplies: false,
-        typeStratagistApplies: false
+        typeStratagistApplies: false,
+        typeBoosterApplies: false,
       };
       // Currently only checks Abilities, change the loop to include other types of items if desired.
       for (const item of actor.items.filter(x => x.type == "ability")) {
@@ -838,6 +843,12 @@ export class PTUActor extends Actor {
           case `type strategist (${moveData.type.toLowerCase()})`: output.typeStratagistApplies = true; break;
         }
       }
+      if(actor.system.heldItem?.toLowerCase()?.includes("booster")) {
+        if(actor.system.heldItem.toLowerCase().includes(moveData.type.toLowerCase())) {
+          output.typeBoosterApplies = true;
+        }
+      }
+
       return output;
     }
 
@@ -853,9 +864,11 @@ export class PTUActor extends Actor {
       if (game.keyboard.downKeys.has("ShiftLeft")) {
         await Dialog.confirm({
           title: `Apply Damage Bonus`,
-          content: `<input type="number" name="damage-bonus" value="0"></input>`,
-          yes: (html) => {
-            const bonus = (parseInt(html.find('input[name="damage-bonus"]').val()))
+          content: `<input type="text" name="damage-bonus" value="0"></input>`,
+          yes: async (html) => {
+            const bonusTxt = html.find('input[name="damage-bonus"]').val();
+            
+            const bonus = !isNaN(Number(bonusTxt)) ? Number(bonusTxt) : parseInt((await (new Roll(bonusTxt)).roll({async:true})).total);
             if (!isNaN(bonus)) {
               total += bonus;
               modifierTexts.push(`Including ${bonus >= 0 ? "+" : ""}${bonus} damage from [Manual Modifier]`)
@@ -865,9 +878,14 @@ export class PTUActor extends Actor {
         ;
       }
 
+      // Type Booster
+      if (abilityBonuses.typeBoosterApplies) {
+        total += 5;
+        modifierTexts.push(`Including +5 damage from ${moveData.type} Booster!`);
+      }
       // Last Chance
       if (abilityBonuses.lastChanceApplies) {
-        if (actor.data.data.health.value < (actor.data.data.health.total / 3)) {
+        if (actor.system.health.value < (actor.system.health.total / 3)) {
           total += 10;
           modifierTexts.push(`Including +10 damage from Last Chance (${moveData.type}) while below 1/3rd HP!`);
         }
@@ -913,7 +931,7 @@ export class PTUActor extends Actor {
     // TODO: Implement Custom Moves thingy that Move Master has
     function calculateCrit(acRoll, actor) {
       const diceResult = acRoll.dice[0].total;
-      return diceResult === 1 ? CritOptions.CRIT_MISS : diceResult >= 20 - actor.data.data.modifiers.critRange?.total ? CritOptions.CRIT_HIT : CritOptions.NORMAL;
+      return diceResult === 1 ? CritOptions.CRIT_MISS : diceResult >= 20 - actor.system.modifiers.critRange?.total ? CritOptions.CRIT_HIT : CritOptions.NORMAL;
     }
 
     function calculateFiveStrike() {
@@ -926,7 +944,7 @@ export class PTUActor extends Actor {
 
     const db = Number(moveData.damageBase);
     if (isNaN(db)) {
-      const flatDamage = parseInt(moveData.damageBase);
+      const flatDamage = ""+parseInt(moveData.damageBase);
       if (isNaN(flatDamage)) return new Roll("0");
 
       return new Roll(flatDamage);
@@ -956,7 +974,7 @@ export class PTUActor extends Actor {
     }
 
     // Calculate Stab Bonus
-    if (this.data.data.typing && (moveData.type == this.data.data.typing[0] || moveData.type == this.data.data.typing[1])) {
+    if (this.system.typing && (moveData.type == this.system.typing[0] || moveData.type == this.system.typing[1])) {
       if (abilityBonuses.hasAdaptability) dbBonus += 3;
       else dbBonus += 2;
       isStab = true;
@@ -989,8 +1007,8 @@ export class PTUActor extends Actor {
     const rollString = critType == CritOptions.DOUBLE_CRIT_HIT ? `@roll+@baseRoll+@baseRoll+@bonus` : critType == CritOptions.CRIT_HIT ? moveData.fiveStrike.is === true ? "@roll+@roll+@bonus" : "@roll+@baseRoll+@bonus" : "@roll+@bonus"
 
     return new Roll(rollString, {
-      roll: game.ptu.DbData[(db * hitCount) + dbBonus],
-      baseRoll: game.ptu.DbData[db + dbBonus],
+      roll: game.ptu.data.DbData[(db * hitCount) + dbBonus],
+      baseRoll: game.ptu.data.DbData[db + dbBonus],
       bonus: damageBonus,
       db: (db * hitCount + dbBonus),
       isStab,
@@ -1007,14 +1025,14 @@ export class PTUActor extends Actor {
   async _commandCheck(trainerActor) {
     // If either data is missing, skip command check.
     if (!trainerActor) return true;
-    if (!this.data.data.loyalty) return true;
+    if (!this.system.loyalty) return true;
 
     const LOYALTY_DC = {
       0: 20,
       1: 8
     }
 
-    if (!LOYALTY_DC[this.data.data.loyalty]) return true;
+    if (!LOYALTY_DC[this.system.loyalty]) return true;
 
     const ALTERNATE_COMMAND_SKILL_FEATURES =
       game.settings.get("ptu", "pokepsychologistCanReplaceCommand") ? {
@@ -1028,15 +1046,15 @@ export class PTUActor extends Actor {
 
     const commandSkill = {
       name: "command",
-      rank: () => trainerActor.data.data.skills[commandSkill.name].value.total,
-      mod: () => trainerActor.data.data.skills[commandSkill.name].modifier.total
+      rank: () => trainerActor.system.skills[commandSkill.name].value.total,
+      mod: () => trainerActor.system.skills[commandSkill.name].modifier.total
     }
 
     for (const item of trainerActor.items) {
       if (item.type != "edge" && item.type != "feat") continue;
       if (!ALTERNATE_COMMAND_SKILL_FEATURES[item.name]) continue;
 
-      if ((trainerActor.data.data.skills[ALTERNATE_COMMAND_SKILL_FEATURES[item.name]].value.total + (trainerActor.data.data.skills[ALTERNATE_COMMAND_SKILL_FEATURES[item.name]].modifier.total * .1)) >
+      if ((trainerActor.system.skills[ALTERNATE_COMMAND_SKILL_FEATURES[item.name]].value.total + (trainerActor.system.skills[ALTERNATE_COMMAND_SKILL_FEATURES[item.name]].modifier.total * .1)) >
         (commandSkill.rank() + (commandSkill.mod() * .1)))
         commandSkill.name = ALTERNATE_COMMAND_SKILL_FEATURES[item.name];
     }
@@ -1051,7 +1069,7 @@ export class PTUActor extends Actor {
       speaker: ChatMessage.getSpeaker({ token: trainerActor })
     })
 
-    if (roll.total < LOYALTY_DC[this.data.data.loyalty]) return false;
+    if (roll.total < LOYALTY_DC[this.system.loyalty]) return false;
     return true;
   }
 }
@@ -1062,9 +1080,9 @@ export function GetSpeciesData(species) {
     let preJson;
     let extra = { isCustomSpecies: false };
     if (parseInt(species)) {
-      preJson = game.ptu.pokemonData.find(x => x.number == species);
+      preJson = game.ptu.data.pokemonData.find(x => x.number == species);
       if (!preJson) {
-        preJson = game.ptu.customSpeciesData.find(x => x.number == species);
+        preJson = game.ptu.data.customSpeciesData.find(x => x.number == species);
         if (!preJson) return null;
         extra.isCustomSpecies = true;
       };
@@ -1083,9 +1101,9 @@ export function GetSpeciesData(species) {
         }
         preJson["Type"][0] = getOricorioType();
       }
-      else preJson = game.ptu.pokemonData.find(x => x._id.toLowerCase() === species.toLowerCase());
+      else preJson = game.ptu.data.pokemonData.find(x => x._id.toLowerCase() === species.toLowerCase());
       if (!preJson) {
-        preJson = game.ptu.customSpeciesData.find(x => x._id.toLowerCase() === species.toLowerCase());
+        preJson = game.ptu.data.customSpeciesData.find(x => x._id.toLowerCase() === species.toLowerCase());
         if (!preJson) return null;
         extra.isCustomSpecies = true;
       };

@@ -42,14 +42,7 @@ a.item {
   font-weight: bold;
 }
 
-#combat #combat-round .encounters h4 {
-  font-size: 20px;
-}
 
-#combat li.combatant .token-name h4 {
-  line-height: 18px;
-  font-size: 13px;
-}
 
 #chat-controls .control-buttons a {
   width: unset;
@@ -64,12 +57,7 @@ a.item {
   font-size: 11px;
 }
 
-#combat {
-  & h3,
-  & h4 {
-    padding: 0;
-  }
-}
+
 
 .hgss-box {
   border: black solid 1px;
@@ -1128,6 +1116,16 @@ span.readable {
   visibility: hidden;
 }
 
+.sort-dex {
+  & div {
+    flex: 0 0 30%;
+    text-align: center;
+  }
+  & button {
+    padding:unset;
+  }
+}
+
 .gen8 {
   &.charactermancer select {
     &.nature-up {
@@ -1839,16 +1837,6 @@ li.system {
     align-self: center;
 }
 
-#combat {
-    li.combatant.acted {
-        color: #999;
-
-        img {
-            transform: scale(0.75);
-            opacity: 0.75;
-        }
-    }
-}
 
 .fxmaster .config label{
   color:#000;
@@ -1857,4 +1845,217 @@ li.system {
 
 .fxmaster .config span{
   color:#000;
+}
+
+/* ----------------------------------------- */
+/*  Foundry V10 compatability fixes
+/* ----------------------------------------- */
+
+.sidebar-tab .action-buttons button {
+  color: var(--color-text-light-heading);
+}
+
+li.folder > .folder-header h3 {
+  font-size: 13px;
+}
+
+h3 {
+  border-bottom: unset !important;
+}
+
+/* ----------------------------------------- */
+/*  Combat Tracker
+/* ----------------------------------------- */
+#combat #combat-round {
+  flex: 0 0 calc(var(--sidebar-header-height) * 2px);
+  line-height: var(--sidebar-header-height);
+  font-size: var(--font-size-20);
+  text-align: center;
+  border-bottom: 2px groove var(--color-border-dark-4);
+}
+#combat #combat-round .encounters {
+  --control-width: 28px;
+  height: 32px;
+}
+#combat #combat-round .encounters a {
+  font-size: var(--font-size-14);
+  flex: 0 0 28px;
+  width: 28px;
+  color: var(--color-text-light-6);
+  height: 32px;
+}
+#combat #combat-round .encounters a.combat-cycle {
+  font-size: var(--font-size-24);
+}
+#combat #combat-round .encounters a[disabled] {
+  visibility: hidden;
+}
+#combat #combat-round .encounters h4 {
+  flex: 1;
+  margin: 0;
+  font-size: var(--font-size-16);
+  color: var(--color-text-light-5);
+  text-align: center;
+}
+#combat #combat-round .encounters h3 {
+  flex: 1;
+  margin: 0;
+  font-size: 14px;
+  text-align: center;
+}
+#combat #combat-round .encounters h3.encounter-title {
+  margin-left: var(--control-width);
+}
+#combat #combat-round .encounters:not(.combat) a[disabled] {
+  display: none;
+}
+#combat #combat-tracker {
+  height: calc(100% - (var(--sidebar-header-height) * 3px - 2px));
+  padding: 1px 0;
+}
+#combat #combat-controls {
+  margin: 0;
+  border-top: 2px groove var(--color-border-dark-4);
+  padding-top: 4px;
+}
+#combat #combat-controls a {
+  flex: 1;
+  font-size: var(--font-size-20);
+  text-align: center;
+  line-height: var(--sidebar-header-height);
+}
+#combat #combat-controls a.center {
+  flex: 3;
+}
+#combat li.combatant .token-image {
+  margin: 0;
+}
+#combat li.combatant .token-name {
+  flex: 1;
+  overflow: hidden;
+  margin: 0 5px;
+  text-shadow: 1px 1px 4px var(--color-shadow-dark);
+}
+#combat li.combatant .token-name h4 {
+  flex: 0 0 24px;
+  line-height: 28px;
+  margin: 0 0 2px;
+}
+#combat li.combatant .token-name .combatant-controls {
+  flex: 0 0 20px;
+  font-size: var(--font-size-14);
+  line-height: 20px;
+}
+#combat li.combatant .token-name .combatant-control {
+  flex: 0 0 20px;
+  height: 20px;
+  float: left;
+  color: var(--color-text-dark-5);
+}
+#combat li.combatant .token-name .combatant-control.active {
+  color: var(--color-text-light-1);
+}
+#combat li.combatant .token-name .token-effects {
+  height: 20px;
+  overflow: hidden;
+}
+#combat li.combatant .token-name img.token-effect {
+  width: 16px;
+  height: 16px;
+  margin: 1px 0;
+  border: none;
+  border-radius: 0;
+}
+#combat li.combatant .token-resource {
+  flex: 0 0 32px;
+  color: var(--color-text-light-4);
+  text-align: center;
+  border-right: 1px solid var(--color-border-dark-2);
+}
+#combat li.combatant .token-initiative {
+  flex: 0 0 48px;
+  text-align: center;
+}
+#combat li.combatant .token-initiative .initiative {
+  font-size: var(--font-size-14);
+  text-shadow: 1px 1px 4px var(--color-shadow-dark);
+}
+#combat li.combatant .roll {
+  display: block;
+  width: 40px;
+  height: var(--sidebar-item-height);
+  background: url(/icons/svg/d20.svg) no-repeat 50% 50%;
+  background-size: 32px;
+  margin: 0 0.5em;
+}
+#combat li.combatant .roll:hover {
+  background-image: url(/icons/svg/d20-highlight.svg);
+}
+#combat li.combatant.hover,
+#combat li.combatant:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+#combat li.combatant.active {
+  background: rgba(255, 255, 255, 0.1);
+}
+#combat li.combatant.active .initiative {
+  font-weight: bold;
+}
+#combat li.combatant.hidden {
+  color: var(--color-text-light-7);
+}
+#combat li.combatant.hidden img {
+  opacity: 0.3;
+}
+#combat li.combatant.defeated {
+  color: #b32019;
+}
+#combat li.combatant.defeated img {
+  opacity: 0.3;
+  transform: scale(0.75);
+}
+
+#combat #combat-round .encounters h4 {
+  font-size: 16px;
+}
+
+#combat li.combatant .token-name h4 {
+  line-height: 18px;
+  font-size: 13px;
+}
+
+#combat h3, #combat h4{
+    padding: 0;
+}
+
+#combat {
+  li.combatant.acted {
+      color: #999;
+
+      img {
+          transform: scale(0.75);
+          opacity: 0.75;
+      }
+  }
+}
+
+/* -------------------------------------------- */
+/*  CSE Chat Notification                       */
+/* -------------------------------------------- */
+
+.cse-notification {
+  font-family: 'Modesto Condensed';
+  font-weight: 400;
+  line-height: 24px;
+  word-break: break-word;
+}
+
+.cse-notification h2 {
+  font-size: 40px;    
+}
+
+.cse-notification p {
+  font-size: 20px;
+  font-family: monospace;
+  word-spacing: -4px;
 }

@@ -107,7 +107,7 @@ export default class MenuComponent extends Component {
             const { entityId, ballName, ownerId } = event.target.dataset;
 
             const owner = game.actors.get(ownerId);
-            game.ptu.ThrowPokeball(owner, game.user?.targets?.first(), owner?.items.get(entityId));
+            game.ptu.utils.throwPokeball(owner, game.user?.targets?.first(), owner?.items.get(entityId));
         })
 
         this.element.children("#menu-content").children(".struggle-row").children(".movemaster-button[data-struggle-id]").on("mousedown", (event) => {
@@ -120,7 +120,7 @@ export default class MenuComponent extends Component {
                             actor: this.state.actor
                         }),
                         moveName: move.name,
-                        move: move.data.data,
+                        move: move.system,
                         templateType: 'details'
                     })
                     break;
@@ -185,7 +185,7 @@ export default class MenuComponent extends Component {
         // Control and pan to Token object
         if (token) {
             token.control({ releaseOthers: true });
-            return canvas.animatePan({ x: token.data.x, y: token.data.y });
+            return canvas.animatePan({ x: token.system.x, y: token.system.y });
         }
     }
 
@@ -216,7 +216,7 @@ export default class MenuComponent extends Component {
 
         const currentStruggles = [];
         actor.itemTypes.move.forEach(m => {
-            if (m.data.data.isStruggle || (m.name.includes("Struggle") && m.data.data.type != "" && m.data.data.type != "--")) currentStruggles.push(m);
+            if (m.system.isStruggle || (m.name.includes("Struggle") && m.system.type != "" && m.system.type != "--")) currentStruggles.push(m);
         })
 
         const foundStruggles = ["default"];
@@ -249,13 +249,13 @@ export default class MenuComponent extends Component {
             const { type } = struggleCapabilities[struggle];
 
             if (struggle != "telekinetic") {
-                const move = currentStruggles.find(m => m.data.data.type == type && m.data.data.category == "Physical");
+                const move = currentStruggles.find(m => m.system.type == type && m.system.category == "Physical");
                 if (!move) strugglesToCreate.push(this._prepareNewStruggle(actor, type, isTelekinetic));
                 else strugglesToDisplay.push(move);
             }
             if (struggle == "default") continue;
 
-            const move = currentStruggles.find(m => m.data.data.type == type && m.data.data.category == "Special");
+            const move = currentStruggles.find(m => m.system.type == type && m.system.category == "Special");
             if (!move) strugglesToCreate.push(this._prepareNewStruggle(actor, type, isTelekinetic, false));
             else strugglesToDisplay.push(move);
         }
@@ -265,11 +265,11 @@ export default class MenuComponent extends Component {
         await timeout(150);
         this.lock = false;
 
-        return strugglesToDisplay.map(m => m.data);
+        return strugglesToDisplay.map(m => m);
     }
 
     _prepareNewStruggle(actor, type, isTelekinetic, isPhysical = true) {
-        const isStrugglePlus = actor.data.data.skills.combat.value >= 5;
+        const isStrugglePlus = actor.system.skills.combat.value >= 5;
 
         return {
             name: `Struggle (${type})`,
@@ -280,74 +280,21 @@ export default class MenuComponent extends Component {
                 category: isPhysical ? "Physical" : "Special",
                 damageBase: isStrugglePlus ? "5" : "4",
                 type: type,
-                range: (isTelekinetic ? actor.data.data.skills.focus.value.total : "Melee") + ", 1 Target",
+                range: (isTelekinetic ? actor.system.skills.focus.value.total : "Melee") + ", 1 Target",
                 frequency: "At-Will",
                 effect: "--",
             }
         }
     }
 
-
-
-    // async _getStruggles(actor) {
-    //     if (!actor) return;
-
-    //     const struggleAc = actor.data.data.skills.combat.value >= 5 ? 3 : 4;
-    //     const struggleDb = actor.data.data.skills.combat.value >= 5 ? 5 : 4;
-
-    //     const struggleCapabilities = {
-    //         "firestarter": { "type": "Fire" },
-    //         "fountain": { "type": "Water" },
-    //         "freezer": { "type": "Ice" },
-    //         "guster": { "type": "Flying" },
-    //         "materializer": { "type": "Rock" },
-    //         "telekinetic": { "type": "Normal" },
-    //         "zapper": { "type": "Electric" }
-    //     };
-    //     const isTelekinetic = actor.data.itemTypes.capability.includes("Telekinetic");
-
-    //     const struggles = [{
-    //         name: "Struggle",
-    //         type: "Normal",
-    //         category: "Physical",
-    //         ac: struggleAc,
-    //         db: struggleDb,
-    //         range: isTelekinetic ? actor.data.data.skills.focus.value.total : "Melee" + ", 1 Target"
-    //     }];
-
-    //     for (const item of actor.data.itemTypes.capability) {
-    //         const capability = struggleCapabilities[item.name.toLowerCase()];
-    //         if (!capability) continue;
-
-    //         struggles.push({
-    //             name: item.name,
-    //             type: capability.type,
-    //             ac: struggleAc,
-    //             db: struggleDb,
-    //             category: "Physical",
-    //             range: isTelekinetic ? actor.data.data.skills.focus.value.total : "Melee" + ", 1 Target"
-    //         });
-    //         struggles.push({
-    //             name: item.name,
-    //             type: capability.type,
-    //             ac: struggleAc,
-    //             db: struggleDb,
-    //             category: "Special",
-    //             range: isTelekinetic ? actor.data.data.skills.focus.value.total : "Melee" + ", 1 Target"
-    //         })
-    //     }
-
-    //     return struggles;
-    // }
-
     async _getTrainerPokeballArray(actor) {
-        return actor.items.filter(item => item.type == "item" && item.data.data.category.toLowerCase() == "pokeballs").map(item => {
+        return actor.items.filter(item => item.type == "item" && item.system.category.toLowerCase() == "pokeballs").map(item => {
             return {
                 name: item.name,
                 id: item.id,
                 owner: actor.id,
                 img: item.img,
-                amount: item.data.data.quantity
+                amount: item.system.quantity
             }
         });
     }

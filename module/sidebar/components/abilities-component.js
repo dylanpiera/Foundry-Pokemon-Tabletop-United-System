@@ -39,7 +39,7 @@ export default class AbilitiesList extends Component {
                 }
                 if (!this.state.actor) return;
                 // But the abilities are different than the ones displayed
-                if (!isObjectEmpty(diffObject(this.state.abilities, duplicate(this.state.actor.itemTypes.ability))) || !isObjectEmpty(diffObject(duplicate(this.state.actor.itemTypes.ability), this.state.abilities))) {
+                if (!isEmpty(diffObject(this.state.abilities, duplicate(this.state.actor.itemTypes.ability))) || !isEmpty(diffObject(duplicate(this.state.actor.itemTypes.ability), this.state.abilities))) {
                     this.updated += 1;
                     await this.store.dispatch("updateAbilities", this.state.actor.itemTypes.ability);
                     return;
@@ -56,12 +56,12 @@ export default class AbilitiesList extends Component {
             // Ability data is prepared on a duplicate entry, otherwise the preperation data will be flagged as 
             // 'changed ability data' during every re-render, causing infinite re-render loops.
             const abilityData = duplicate(ability);
-            const frequencyIconPath = this._getFrequencyIcons(abilityData.data.frequency);
+            const frequencyIconPath = this._getFrequencyIcons(abilityData.system.frequency);
             const abilityHtml = await renderTemplate('/systems/ptu/module/sidebar/components/abilities-component.hbs', {
                 name: abilityData.name,
                 img: frequencyIconPath,
                 id: abilityData._id,
-                effect: abilityData.data.effect,
+                effect: abilityData.system.effect,
                 owner: this.state.actor.id
             });
             output += abilityHtml;
@@ -89,13 +89,13 @@ export default class AbilitiesList extends Component {
     }
 
     _sort(a, b) {
-        const ai = this._getFrequencyIcons(a.data.frequency);
-        const bi = this._getFrequencyIcons(b.data.frequency);
+        const ai = this._getFrequencyIcons(a.system.frequency);
+        const bi = this._getFrequencyIcons(b.system.frequency);
         if (ai > bi) return 1;
         if (bi > ai) return -1;
 
-        if (a.data.frequency > b.data.frequency) return 1;
-        if (b.data.frequency > a.data.frequency) return -1;
+        if (a.system.frequency > b.system.frequency) return 1;
+        if (b.system.frequency > a.system.frequency) return -1;
 
         if (a.name > b.name) return 1;
         if (b.name > a.name) return -1;

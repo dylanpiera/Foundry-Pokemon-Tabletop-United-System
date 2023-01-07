@@ -1,3 +1,9 @@
+[![foundry-shield]][foundry-url]
+[![Forks][forks-shield]][forks-url]
+[![Stargazers][stars-shield]][stars-url]
+[![Issues][issues-shield]][issues-url]
+[![All Release Downloads](https://img.shields.io/github/downloads/dylanpiera/Foundry-Pokemon-Tabletop-United-System/total.svg)]()
+
 # PTU System
 A Pokemon Tabletop United System for use in FoundryVTT.
 
@@ -53,3 +59,12 @@ Drag & Drop Support Example
 * [cswendrowski](https://github.com/cswendrowski) for starting this project!
 * https://www.theworldofpokemon.com/ for their amazing pokedex entries 
 * The Amazing People and their amazing feedback, over at the [FVTTPTU Dev Server](https://discord.gg/fE3w59q)
+
+[foundry-shield]: https://img.shields.io/badge/Foundry-v10.291-informational
+[foundry-url]: https://foundryvtt.com/
+[forks-shield]: https://img.shields.io/github/forks/dylanpiera/Foundry-Pokemon-Tabletop-United-System.svg?style=flat-square
+[forks-url]: https://github.com/dylanpiera/Foundry-Pokemon-Tabletop-United-System/network/members
+[stars-shield]: https://img.shields.io/github/stars/dylanpiera/Foundry-Pokemon-Tabletop-United-System.svg?style=flat-square
+[stars-url]: https://github.com/dylanpiera/Foundry-Pokemon-Tabletop-United-System/stargazers
+[issues-shield]: https://img.shields.io/github/issues/dylanpiera/Foundry-Pokemon-Tabletop-United-System.svg?style=flat-square
+[issues-url]: https://github.com/dylanpiera/Foundry-Pokemon-Tabletop-United-System/issues

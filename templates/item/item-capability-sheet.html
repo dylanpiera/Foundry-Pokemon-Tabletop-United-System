@@ -3,7 +3,7 @@
         <header class="sheet-header mb-2">
             <div class="itemBox">
                 <div class="content">
-                    Effect: <span class="readable p11 pokemon">{{{data.effect}}}</span>
+                    Effect: <span class="readable p11 pokemon">{{{system.effect}}}</span>
                 </div>
             </div>
         </header>
@@ -27,34 +27,34 @@
                         </div>
 
                         <div class="hgss-header vertical">
-                            <label for="data.origin">Origin:</label>
+                            <label for="system.origin">Origin:</label>
                         </div>
                         <div class="hgss-body">
                             <input
                                 class="ml-2"
-                                name="data.origin"
+                                name="system.origin"
                                 type="text"
-                                value="{{data.origin}}"
+                                value="{{system.origin}}"
                                 placeholder="Level-Up"
                             />
                         </div>
                     </div>
                     <div class="hgss-box align-items-center">
                         <div class="hgss-header mb-1 " style="padding: 6px 5px;">
-                            <label for="data.effect">Effect:</label>
+                            <label for="system.effect">Effect:</label>
                         </div>
                         <div class="hgss-body" style="word-break: break-word;">
                             <textarea
                                 class="ml-2"
-                                name="data.effect">{{data.effect}}</textarea>
+                                name="system.effect">{{system.effect}}</textarea>
                         </div>
                         <div class="hgss-header mt-1 mb-1 " style="padding: 5px 5px;">
-                            <label for="data.snippet">Snippet:</label>
+                            <label for="system.snippet">Snippet:</label>
                         </div>
                         <div class="hgss-body" style="word-break: break-word;">
                             <textarea
                                 class="ml-2"
-                                name="data.snippet">{{data.snippet}}</textarea>
+                                name="system.snippet">{{system.snippet}}</textarea>
                         </div>
                     </div>
                 </div>

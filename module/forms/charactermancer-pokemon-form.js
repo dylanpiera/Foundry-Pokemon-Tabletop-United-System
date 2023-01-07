@@ -6,7 +6,7 @@ import NextButton from "../api/front-end/components/nextButton.js";
 import SpeciesField from "../api/front-end/components/speciesField.js";
 import SpeciesIdField from "../api/front-end/components/speciesIdField.js";
 import SpeciesImage from "../api/front-end/components/speciesImg.js";
-import TypeList from "../api/front-end/components/typeList.js";
+import TypeBar from "../api/front-end/components/typeBar.js";
 import NatureSelect from "../api/front-end/components/natureSelect.js";
 import NatureStatSelect from "../api/front-end/components/natureStatSelect.js";
 import { CalcBaseStats, CalculateStatTotal } from "../actor/calculations/stats-calculator.js";
@@ -49,7 +49,7 @@ export class PTUPokemonCharactermancer extends FormApplication {
     const data = super.getData();
     data.dtypes = ["String", "Number", "Boolean"];
     
-    data.natures = game.ptu.natureData;
+    data.natures = game.ptu.data.natureData;
     data.natureStatOptions = {
       "HP": "HP",
       "Attack": "ATK",
@@ -59,8 +59,8 @@ export class PTUPokemonCharactermancer extends FormApplication {
       "Speed": "SPD"
     }
     
-    this.allSpecies = game.ptu.pokemonData.map(x => {return {number: x.ptuNumber, name: x._id}}).concat(game.ptu.customSpeciesData.map(x => {return {number: x.ptuNumber, name: x._id}}));
-    this.speciesData = game.ptu.GetSpeciesData(this.object.data.data.species ? this.object.data.data.species : this.object.name);
+    this.allSpecies = game.ptu.data.pokemonData.map(x => {return {number: x.ptuNumber, name: x._id}}).concat(game.ptu.data.customSpeciesData.map(x => {return {number: x.ptuNumber, name: x._id}}));
+    this.speciesData = game.ptu.utils.species.get(this.object.system.species ? this.object.system.species : this.object.name);
     data.app = this;
     
     console.log(duplicate(this));
@@ -113,7 +113,7 @@ export class PTUPokemonCharactermancer extends FormApplication {
     }
     else {
       this.store = initStore({
-        level: this.object.data.data.level,
+        level: this.object.system.level,
         tabs: this._tabs[0],
         actor: this.object,
         species: this.speciesData
@@ -124,7 +124,7 @@ export class PTUPokemonCharactermancer extends FormApplication {
       speciesField: new SpeciesField(this.store),
       speciesIdField: new SpeciesIdField(this.store),
       previewImage: new SpeciesImage(this.store),
-      typeBar: new TypeList(this.store),
+      typeBar: new TypeBar(this.store),
       levelField: new LevelField(this.store),
       levelExpField: new LevelExpField(this.store),
       evolutionBlock: new EvolutionBlock(this.store),

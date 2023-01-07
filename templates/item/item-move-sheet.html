@@ -3,13 +3,13 @@
         <header class="sheet-header mb-2">
             <div class="itemBox">
                 <div class="content move-grid">
-                    Frequency: <span class="readable pokemon p11">{{data.frequency}}</span>
-                    DB: <span class="readable pokemon p11 rollable" data-critrange="{{calcCritRangeMove data}}" data-roll="{{calcDbCalc data false}}" data-label="{{name}}" data-ac="{{calcAc data}}" data-type="{{data.category}}"> <i class="fas fa-dice-d20" style="position:unset;margin-left:-33px;"></i> {{calcDb data}}: {{calcDbCalc data true}} </span>
-                    Category: <span class="readable pokemon p11">{{data.category}}</span> 
-                    Type: <span class="readable pokemon p11">{{data.type}}</span> 
-                    AC: <span class="readable pokemon p11">{{data.ac}}</span>
-                    Range: <span class="readable pokemon p11">{{data.range}}</span>
-                    <span>Effect: <span class="readable p11 pokemon">{{{data.effect}}}</span></span>
+                    Frequency: <span class="readable pokemon p11">{{system.frequency}}</span>
+                    DB: <span class="readable pokemon p11 rollable" data-critrange="{{calcCritRangeMove system}}" data-roll="{{calcDbCalc system false}}" data-label="{{name}}" data-ac="{{calcAc system}}" data-type="{{system.category}}"> <i class="fas fa-dice-d20" style="position:unset;margin-left:-33px;"></i> {{calcDb system}}: {{calcDbCalc system true}} </span>
+                    Category: <span class="readable pokemon p11">{{system.category}}</span> 
+                    Type: <span class="readable pokemon p11">{{system.type}}</span> 
+                    AC: <span class="readable pokemon p11">{{system.ac}}</span>
+                    Range: <span class="readable pokemon p11">{{system.range}}</span>
+                    <span>Effect: <span class="readable p11 pokemon">{{{system.effect}}}</span></span>
                 </div>
             </div>
         </header>
@@ -33,122 +33,122 @@
                         </div>
 
                         <div class="hgss-header vertical">
-                            <label for="data.origin">Origin:</label>
+                            <label for="system.origin">Origin:</label>
                         </div>
                         <div class="hgss-body">
                             <input
                                 class="ml-2"
-                                name="data.origin"
+                                name="system.origin"
                                 type="text"
-                                value="{{data.origin}}"
+                                value="{{system.origin}}"
                                 placeholder="Level-Up"
                             />
                         </div>
 
                         <div class="hgss-header vertical">
-                            <label for="data.type">Type:</label>
+                            <label for="system.type">Type:</label>
                         </div>
                         <div class="hgss-body">
                             <input
                                 class="ml-2"
-                                name="data.type"
+                                name="system.type"
                                 type="text"
-                                value="{{data.type}}"
+                                value="{{system.type}}"
                                 placeholder=""
                             />
                         </div>
 
                         <div class="hgss-header vertical">
-                            <label for="data.category">Category:</label>
+                            <label for="system.category">Category:</label>
                         </div>
                         <div class="hgss-body">
                             <input
                                 class="ml-2"
-                                name="data.category"
+                                name="system.category"
                                 type="text"
-                                value="{{data.category}}"
+                                value="{{system.category}}"
                                 placeholder=""
                             />
                         </div>
 
                         <div class="hgss-header vertical">
-                            <label for="data.ac">AC:</label>
+                            <label for="system.ac">AC:</label>
                         </div>
                         <div class="hgss-body">
                             <input
                                 class="ml-2"
-                                name="data.ac"
+                                name="system.ac"
                                 type="text"
-                                value="{{data.ac}}"
+                                value="{{system.ac}}"
                                 placeholder=""
                             />
                         </div>
 
                         <div class="hgss-header vertical">
-                            <label for="data.range">Range:</label>
+                            <label for="system.range">Range:</label>
                         </div>
                         <div class="hgss-body">
                             <input
                                 class="ml-2"
-                                name="data.range"
+                                name="system.range"
                                 type="text"
-                                value="{{data.range}}"
+                                value="{{system.range}}"
                                 placeholder=""
                             />
                         </div>
                     </div>
                     <div class="hgss-box align-items-center">
                         <div class="hgss-header mb-1" style="padding: 6px 5px;">
-                            <label for="data.frequency">Frequency:</label>
+                            <label for="system.frequency">Frequency:</label>
                         </div>
                         <div class="hgss-body">
                             <input
                                 class="ml-2"
-                                name="data.frequency"
+                                name="system.frequency"
                                 type="text"
-                                value="{{data.frequency}}"
+                                value="{{system.frequency}}"
                                 placeholder=""
                             />
                         </div>
                         <div class="hgss-header mt-1 mb-1" style="padding: 7px 5px;">
-                            <label for="data.damageBase">Damage Base:</label>
+                            <label for="system.damageBase">Damage Base:</label>
                         </div>
                         <div class="hgss-body">
                             <input
                                 class="ml-2"
-                                name="data.damageBase"
+                                name="system.damageBase"
                                 type="text"
-                                value="{{data.damageBase}}"
+                                value="{{system.damageBase}}"
                                 placeholder=""
                             />
                         </div>
                         <div class="hgss-header mt-1 mb-1" style="padding: 7px 5px;">
-                            <label for="data.damageBase">Damage Bonus:</label>
+                            <label for="system.damageBase">Damage Bonus:</label>
                         </div>
                         <div class="hgss-body">
                             <input
                                 class="ml-2"
-                                name="data.damageBonus"
+                                name="system.damageBonus"
                                 type="number"
-                                value="{{data.damageBonus}}"
+                                value="{{system.damageBonus}}"
                                 placeholder=""
                             />
                         </div>
                         <div class="hgss-header mt-1 mb-1 " style="padding: 5px 5px;">
-                            <label for="data.effect">Effect:</label>
+                            <label for="system.effect">Effect:</label>
                         </div>
                         <div class="hgss-body" style="word-break: break-word;">
                             <textarea
                                 class="ml-2"
-                                name="data.effect">{{data.effect}}</textarea>
+                                name="system.effect">{{system.effect}}</textarea>
                         </div>
                         <div class="hgss-header mt-1 mb-1 " style="padding: 5px 5px;">
-                            <label for="data.snippet">Snippet:</label>
+                            <label for="system.snippet">Snippet:</label>
                         </div>
                         <div class="hgss-body" style="word-break: break-word;">
                             <textarea
                                 class="ml-2"
-                                name="data.snippet">{{data.snippet}}</textarea>
+                                name="system.snippet">{{system.snippet}}</textarea>
                         </div>
                     </div>
                 </div>

@@ -36,8 +36,8 @@
             {{/if}}
 
             {{#if combatCount}}
-            {{#if combat.data.round}}
-            <h3 class="encounter-title">{{localize 'COMBAT.Round'}} {{combat.data.round}}</h3>
+            {{#if combat.round}}
+            <h3 class="encounter-title">{{localize 'COMBAT.Round'}} {{combat.round}}</h3>
             {{else}}
             <h3 class="encounter-title">{{localize 'COMBAT.NotStarted'}}</h3>
             {{/if}}
@@ -63,12 +63,8 @@
 
     <ol id="combat-tracker" class="directory-list">
         {{#each turns as |turn i|}}
-        {{!-- {{#with (lookup ../combat/turns @index)}}
-        <a class="toggleTurnStatus" data-combatant-id="{{this.id}}">{{#if this.data.flags.ptu.has_acted}}Acted{{else}}Up
-            Soon{{/if}}</a>
-        {{/with}} --}}
 
-        <li class="combatant actor directory-item flexrow {{this.css}} {{#with (lookup ../combat/turns @index)}}{{#if this.data.flags.ptu.has_acted}}acted{{/if}}{{/with}}" data-combatant-id="{{this.id}}">
+        <li class="combatant actor directory-item flexrow {{this.css}} {{#with (lookup ../combat/turns @index)}}{{#if this.flags.ptu.has_acted}}acted{{/if}}{{/with}}" data-combatant-id="{{this.id}}">
             <img class="token-image" data-src="{{this.img}}" title="{{this.name}}" />
             <div class="token-name flexcol">
                 <h4>{{this.name}}</h4>
@@ -81,9 +77,9 @@
                         title="{{localize 'COMBAT.ToggleDead'}}" data-control="toggleDefeated">
                         <i class="fas fa-skull"></i></a>
                     {{#with (lookup ../combat/turns @index)}}
-                        <a class="combatant-control {{#if this.data.flags.ptu.has_acted}}active{{/if}}" title="Toggle Acted"
+                        <a class="combatant-control {{#if this.flags.ptu.has_acted}}active{{/if}}" title="Toggle Acted"
                             data-control="toggleActed">
-                            {{#if this.data.flags.ptu.has_acted}}
+                            {{#if this.flags.ptu.has_acted}}
                                 <i class="fas fa-times"></i>
                             {{else}}
                                 <i class="fas fa-check"></i>

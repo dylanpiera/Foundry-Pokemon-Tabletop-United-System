@@ -10,6 +10,7 @@
         <!-- Struggle Menu -->
         {{#if struggles}}
             {{#each struggles as | struggle |}}
+            {{log struggle}}
                 <div class="struggle-row">
                     <button type="button" class="movemaster-button" data-struggle-id="{{struggle._id}}">
                         <div class="btn-body efc none" >
@@ -19,21 +20,21 @@
                                     Struggle
                                 </div>
                                 <!-- Frequency -->
-                                <img src="{{calcFrequencyIconPath struggle.data.frequency '0'}}" title="{{struggle.data.frequency}} ({{'0'}} Remaining)"
+                                <img src="{{calcFrequencyIconPath struggle.system.frequency '0'}}" title="{{struggle.system.frequency}} ({{'0'}} Remaining)"
                                     style="border-width: 0;">
                                 <!-- Typings -->
                                 <div class="type-bar">
-                                    <img src="systems/ptu/images/icons/{{struggle.data.category}}.png" />
-                                    <img src="systems/ptu/images/icons/{{struggle.data.type}}IC.png" />
+                                    <img src="systems/ptu/images/icons/{{struggle.system.category}}.png" />
+                                    <img src="systems/ptu/images/icons/{{struggle.system.type}}IC.png" />
                                 </div>
                             </h3>
                             <!-- Damage Base Bar -->
-                            {{!-- {{#if (and (not data.damageBase "--") (not (contains "damage" (data.damageBase)) true)) }} --}}
-                            {{#unless (is struggle.data.damageBase "--")}}
+                            {{!-- {{#if (and (not system.damageBase "--") (not (contains "damage" (system.damageBase)) true)) }} --}}
+                            {{#unless (is struggle.system.damageBase "--")}}
                             <div class="col p-0">
                                 <span class="type-img">
-                                    <img title="Damage Base {{calcDb struggle.data}}"
-                                        src="/systems/ptu/images/icons/DividerIcon_DB{{calcDb struggle.data}}.png" />
+                                    <img title="Damage Base {{calcDb struggle.system}}"
+                                        src="/systems/ptu/images/icons/DividerIcon_DB{{calcDb struggle.system}}.png" />
                                 </span>
                             </div>
                             {{/unless}}

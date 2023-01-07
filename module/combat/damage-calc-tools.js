@@ -3,13 +3,13 @@ import { injuryTokenSplash } from "../../module/combat/effects/move_animations.j
 
 Hooks.on("renderChatMessage", (message, html, data) => {
     setTimeout(() => {
-        $(html).find(".apply-damage-button").on("click", game.ptu.combat.applyDamageToTargets);
-        $(html).find(".undo-damage-button").on("click", game.ptu.combat.undoDamageToTargets);
-        $(html).find(".half-damage-button").on("click", (ev) => game.ptu.combat.applyDamageToTargets(ev, ATTACK_MOD_OPTIONS.HALF));
-        $(html).find(".resist-damage-button").on("click", (ev) => game.ptu.combat.applyDamageToTargets(ev, ATTACK_MOD_OPTIONS.RESIST));
-        $(html).find(".flat-damage-button").on("click", (ev) => game.ptu.combat.applyDamageToTargets(ev, ATTACK_MOD_OPTIONS.FLAT));
-        $(html).find(".automated-damage-button").click(game.ptu.combat.newApplyDamageToTargets)
-        $(html).find(".mon-item").click(game.ptu.combat.handleApplicatorItem)
+        $(html).find(".apply-damage-button").on("click", game.ptu.utils.combat.applyDamageToTargets);
+        $(html).find(".undo-damage-button").on("click", game.ptu.utils.combat.undoDamageToTargets);
+        $(html).find(".half-damage-button").on("click", (ev) => game.ptu.utils.combat.applyDamageToTargets(ev, ATTACK_MOD_OPTIONS.HALF));
+        $(html).find(".resist-damage-button").on("click", (ev) => game.ptu.utils.combat.applyDamageToTargets(ev, ATTACK_MOD_OPTIONS.RESIST));
+        $(html).find(".flat-damage-button").on("click", (ev) => game.ptu.utils.combat.applyDamageToTargets(ev, ATTACK_MOD_OPTIONS.FLAT));
+        $(html).find(".automated-damage-button").click(game.ptu.utils.combat.newApplyDamageToTargets)
+        $(html).find(".mon-item").click(game.ptu.utils.combat.handleApplicatorItem)
     }, 500);
 });
 
@@ -44,8 +44,16 @@ export async function applyDamageToTargets(event, options = ATTACK_MOD_OPTIONS.N
         dr = await new Promise((resolve, reject) => {
             Dialog.confirm({
                 title: `Apply Damage Reduction`,
-                content: `<input type="number" name="damage-reduction" value="0"></input>`,
-                yes: (html) => resolve(parseInt(html.find('input[name="damage-reduction"]').val()))
+                content: `<input type="text" name="damage-reduction" value="0"></input>`,
+                yes: async (html) => {
+                    const bonusTxt = html.find('input[name="damage-reduction"]').val()
+            
+                    const bonus = !isNaN(Number(bonusTxt)) ? Number(bonusTxt) : parseInt((await (new Roll(bonusTxt)).roll({async:true})).total);
+                    if (!isNaN(bonus)) {
+                        return resolve(bonus);
+                    }
+                    return reject();
+                }
             });
         });
     }
@@ -73,44 +81,7 @@ export async function ApplyFlatDamage(targets, sourceName, damage) {
 async function executeApplyDamageToTargets(targets, data, damage, { isFlat, isResist, isWeak, damageReduction, msgId } = { isFlat: false, isResist: false, isWeak: false }) {
     if (isNaN(damageReduction)) damageReduction = 0;
 
-    return await game.ptu.api.applyDamage(targets, damage, data.type, data.category, { isFlat, isResist, isWeak, damageReduction, msgId });
-    // let appliedDamage = {};
-    // for (let target of targets) {
-    //     // if (target.actor.data.permission[game.userId] < 3) continue;
-
-    //     let actualDamage;
-    //     if (isFlat) {
-    //         actualDamage = damage;
-    //     }
-    //     else {
-    //         const defense = data.category == "Special" ? target.actor.data.data.stats.spdef.total : target.actor.data.data.stats.def.total;
-    //         const dr = parseInt(data.category == "Special" ? (target.actor.data.data.modifiers?.damageReduction?.special?.total ?? 0) : (target.actor.data.data.modifiers?.damageReduction?.physical?.total ?? 0));
-
-    //         const effectiveness = target.actor.data.data.effectiveness?.All[data.type] ?? 1;
-
-    //         actualDamage = Math.max(
-    //             effectiveness === 0 ? 0 : 1,
-    //             Math.floor((damage - parseInt(defense) - dr - parseInt(damageReduction)) * (effectiveness + (isResist ? (effectiveness > 1 ? -0.5 : effectiveness * -0.5) : isWeak ? (effectiveness >= 1 ? effectiveness >= 2 ? 1 : 0.5 : effectiveness) : 0)))
-    //         )
-    //     }
-
-    //     log(`Dealing ${actualDamage} damage to ${target.name}`);
-    //     appliedDamage[target.data.actorLink ? target.actor.id : target.data._id] = {
-    //         name: target.actor.data.name,
-    //         damage: actualDamage,
-    //         type: target.data.actorLink ? "actor" : "token",
-    //         old: {
-    //             value: duplicate(target.actor.data.data.health.value),
-    //             temp: duplicate(target.actor.data.data.tempHp.value)
-    //         },
-    //         tokenId: target.id,
-    //         msgId,
-    //     };
-
-    //     await game.ptu.api.applyDamage(target, actualDamage * -1, )
-    //     // await target.actor.modifyTokenAttribute("health", actualDamage * -1, true, true);
-    // }
-    // return await displayAppliedDamageToTargets({ data: appliedDamage, move: data.moveName });
+    return await game.ptu.utils.api.gm.applyDamage(targets, damage, data.type, data.category, { isFlat, isResist, isWeak, damageReduction, msgId });
 }
 
 export async function displayAppliedDamageToTargets(appliedDamage) {
@@ -142,9 +113,8 @@ export async function undoDamageToTargets(event) {
     const actor = data.type == "actor" ? game.actors.get(data.target) : canvas.tokens.get(data.target).actor;
     if (!actor) return;
 
-
-    log(`FVTT PTU | Undoing ${data.injuries} injuries and ${data.damage} damage to ${actor.data.name} - Old Injuries: ${data.oldInjuries} - Old HP: ${data.oldHp} - Old Temp: ${data.oldTempHp}`);
-    await actor.update({ "data.health.injuries":data.oldInjuries, "data.health.value": data.oldHp, "data.tempHp.value": data.oldTempHp, "data.tempHp.max": data.oldTempHp })
+    log(`FVTT PTU | Undoing ${data.injuries} injuries and ${data.damage} damage to ${actor.name} - Old Injuries: ${data.oldInjuries} - Old HP: ${data.oldHp} - Old Temp: ${data.oldTempHp}`);
+    await actor.update({ "system.health.injuries":data.oldInjuries, "system.health.value": data.oldHp, "system.tempHp.value": data.oldTempHp, "system.tempHp.max": data.oldTempHp })
 
     if (data.tokenId && data.msgId) {
         await updateApplicatorHtml($(`[data-message-id="${data.msgId}"]`), [data.tokenId], undefined, true, true)
@@ -194,8 +164,16 @@ export async function newApplyDamageToTargets(event) {
             dr = await new Promise((resolve, reject) => {
                 Dialog.confirm({
                     title: `Apply Damage Reduction`,
-                    content: `<input type="number" name="damage-reduction" value="0"></input>`,
-                    yes: (html) => resolve(parseInt(html.find('input[name="damage-reduction"]').val()))
+                    content: `<input type="text" name="damage-reduction" value="0"></input>`,
+                    yes: async (html) => {
+                        const bonusTxt = html.find('input[name="damage-reduction"]').val()
+                
+                        const bonus = !isNaN(Number(bonusTxt)) ? Number(bonusTxt) : parseInt((await (new Roll(bonusTxt)).roll({async:true})).total);
+                        if (!isNaN(bonus)) {
+                            return resolve(bonus);
+                        }
+                        return reject();
+                    }
                 });
             });
         }
@@ -228,11 +206,21 @@ export async function newApplyDamageToTargets(event) {
         dr = await new Promise((resolve, reject) => {
             Dialog.confirm({
                 title: `Apply Damage Reduction`,
-                content: `<input type="number" name="damage-reduction" value="0"></input>`,
-                yes: (html) => resolve(parseInt(html.find('input[name="damage-reduction"]').val()))
+                content: `<input type="text" name="damage-reduction" value="0"></input>`,
+                yes: async (html) => {
+                    const bonusTxt = html.find('input[name="damage-reduction"]').val()
+            
+                    const bonus = !isNaN(Number(bonusTxt)) ? Number(bonusTxt) : parseInt((await (new Roll(bonusTxt)).roll({async:true})).total);
+                    if (!isNaN(bonus)) {
+                        return resolve(bonus);
+                    }
+                    return reject();
+                }
             });
         });
     }
+
+
 
     return await applyResult(moveData.target, moveData.damage, dataset.messageId);
 
@@ -320,7 +308,7 @@ export async function handleApplicatorItem(event) {
     const message = game.messages.get(messageId);
     const newContent = messageHtml.children(".message-content").html().trim();
 
-    await game.ptu.api.chatMessageUpdate(message, { content: newContent })
+    await game.ptu.utils.api.gm.chatMessageUpdate(message, { content: newContent })
 }
 
 async function updateApplicatorHtml(root, targetIds, mode, updateChatMessage = false, undo = false) {
@@ -380,7 +368,7 @@ async function updateApplicatorHtml(root, targetIds, mode, updateChatMessage = f
         const message = game.messages.get(messageId);
         const newContent = $(root).children(".message-content").html().trim();
 
-        await game.ptu.api.chatMessageUpdate(message, { content: newContent })
+        await game.ptu.utils.api.gm.chatMessageUpdate(message, { content: newContent })
     }
 }
 
@@ -401,7 +389,7 @@ export const ActionSubTypes = {
 
 export async function TakeAction(actor, { actionType, actionSubType, label }) {
     const changesToApply = [];
-    const actions = actor.data.flags?.ptu?.actions_taken ?? {};
+    const actions = actor.flags?.ptu?.actions_taken ?? {};
     const supportAction = actions?.support ?? false;
 
     // This handles the homebrew option for extra standard actions that can't be used for directly damaging moves
@@ -467,13 +455,13 @@ export const FiveStrikeHitsDictionary = {
 
 export async function ApplyInjuries(target_actor, final_effective_damage, damage_type="Untyped")
 {
-    const currentInjuries = Number(target_actor.data.data.health.injuries);
+    const currentInjuries = Number(target_actor.system.health.injuries);
 
     // A mon can't have more then 10 injuries.
     if(currentInjuries >= 10) return 0;
 
-	const targetHealthCurrent = target_actor.data.data.health.value;
-	const targetHealthMax = target_actor.data.data.health.total;
+	const targetHealthCurrent = target_actor.system.health.value;
+	const targetHealthMax = target_actor.system.health.total;
 
 	const hitPoints50Pct = targetHealthMax*0.50;
 	const hitPoints0Pct = 0;

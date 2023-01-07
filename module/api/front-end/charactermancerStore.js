@@ -16,7 +16,7 @@ export default function({level, tabs, initialTab, species, actor}) {
                 }
 
                 if(context.state.nature) {
-                    const natureInfo = game.ptu.natureData[context.state.nature];
+                    const natureInfo = game.ptu.data.natureData[context.state.nature];
                     if(!natureInfo) return;
 
                     await context.commit('updateNature', [context.state.nature, natureInfo]);
@@ -25,7 +25,7 @@ export default function({level, tabs, initialTab, species, actor}) {
                 await context.dispatch('changeStats');
             },
             async changeSpecies(context, species) {
-                const speciesData = game.ptu.GetSpeciesData(species);
+                const speciesData = game.ptu.utils.species.get(species);
                 if(!speciesData) return;
 
                 const imgSrc = game.settings.get("ptu", "defaultPokemonImageDirectory");
@@ -42,7 +42,7 @@ export default function({level, tabs, initialTab, species, actor}) {
 
                 if(exp === undefined || isNaN(exp) || exp == context.state.exp) return;
                 
-                const level = CalcLevel(exp, 50, game.ptu.levelProgression);
+                const level = CalcLevel(exp, 50, game.ptu.data.levelProgression);
                 const oldLevel = duplicate(context.state.level)
 
                 await context.commit('updateExp', exp);
@@ -53,7 +53,7 @@ export default function({level, tabs, initialTab, species, actor}) {
                 const level = payload;
                 if(level === undefined || isNaN(level) || level == context.state.level) return;
                 
-                const exp = game.ptu.levelProgression[level];
+                const exp = game.ptu.data.levelProgression[level];
 
                 await context.commit('updateLevel', level);
                 await context.commit('updateExp', exp);
@@ -70,7 +70,7 @@ export default function({level, tabs, initialTab, species, actor}) {
                 if(!value) return;
 
                 const otherStat = isUp ? context.state.natureStat.down : context.state.natureStat.up;
-                const natureInfo = Object.entries(game.ptu.natureData).find(x => x[1][0] == (isUp ? value : otherStat) && x[1][1] == (isUp ? otherStat : value))
+                const natureInfo = Object.entries(game.ptu.data.natureData).find(x => x[1][0] == (isUp ? value : otherStat) && x[1][1] == (isUp ? otherStat : value))
                 if(!natureInfo) return;
 
                 await context.commit('updateNature', natureInfo);
@@ -78,18 +78,18 @@ export default function({level, tabs, initialTab, species, actor}) {
             async changeNature(context, nature) {
                 if(!nature) return;
 
-                const natureInfo = game.ptu.natureData[nature];
+                const natureInfo = game.ptu.data.natureData[nature];
                 if(!natureInfo) return;
 
                 await context.commit('updateNature', [nature, natureInfo])
             },
             async changeStats(context, {levelUpStats, speciesData}={levelUpStats: undefined, speciesData: undefined}) {
                 debug(levelUpStats, speciesData)
-                const statChanges = mergeObject(context.state.actor.data.data.stats, levelUpStats ?? {});
-                const baseStats = CalcBaseStats(statChanges, speciesData ?? context.state.species, context.state.actor.data.data.nature.value);
+                const statChanges = mergeObject(context.state.actor.system.stats, levelUpStats ?? {});
+                const baseStats = CalcBaseStats(statChanges, speciesData ?? context.state.species, context.state.actor.system.nature.value);
 
                 // Recalculate stats
-                const levelUpPoints = context.state.actor.data.data.modifiers.statPoints?.total + 10 + context.state.level;
+                const levelUpPoints = context.state.actor.system.modifiers.statPoints?.total + 10 + context.state.level;
 
                 const calculatedStats = CalculateStatTotal(levelUpPoints, baseStats, {ignoreStages: true});
                 const result = {
@@ -143,7 +143,7 @@ export default function({level, tabs, initialTab, species, actor}) {
             species,
             actor,
             imgPath: "",
-            nature: actor.data.data.nature.value,
+            nature: actor.system.nature.value,
             natureStat: {
                 up: '',
                 down: '',

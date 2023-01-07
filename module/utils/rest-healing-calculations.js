@@ -51,7 +51,7 @@ export async function healActorRest(actor, hours=8, bandage_used=false, pokecent
 {
 	let health_fractions_healed = hours;
 	let health_fraction_size = (bandage_used ? 4 : 8);
-	let injuries = actor.data.data.health.injuries;
+	let injuries = actor.system.health.injuries;
 	let pokecenter_text = "";
 	let injury_gtr_5_text = "";
     let healing_sound = "rest";
@@ -106,14 +106,14 @@ export async function healActorRest(actor, hours=8, bandage_used=false, pokecent
 
 	await AudioHelper.play({src: battle_sound_paths["heal"][healing_sound], volume: 0.8, autoplay: true, loop: false}, true);
 
-	await actor.update({'data.health.injuries': Math.max(Number(actor.data.data.health.injuries - injuries_healed), 0) });
+	await actor.update({'data.health.injuries': Math.max(Number(actor.system.health.injuries - injuries_healed), 0) });
 
 	await cleanInjuryTokenSplash(actor);
 
 
 	await timeout(1000);
-	let finalhealing = Math.min(Math.floor(actor.data.data.health.total * healing_percent), (actor.data.data.health.total-actor.data.data.health.value));
-	if(actor.data.data.health.injuries >= 5) // A Trainer or Pokémon is unable to restore Hit Points through rest if the individual has 5 or more injuries. Once the individual has 4 or fewer injuries (usually by seeking medical attention), he or she may once again restore Hit Points by resting.
+	let finalhealing = Math.min(Math.floor(actor.system.health.total * healing_percent), (actor.system.health.total-actor.system.health.value));
+	if(actor.system.health.injuries >= 5) // A Trainer or Pokémon is unable to restore Hit Points through rest if the individual has 5 or more injuries. Once the individual has 4 or fewer injuries (usually by seeking medical attention), he or she may once again restore Hit Points by resting.
 	{
 		finalhealing = 0;
 		injury_gtr_5_text = " Due to still having 5 or more injuries, they are unable to recover any hit points. Seek proper medical attention immediately!"

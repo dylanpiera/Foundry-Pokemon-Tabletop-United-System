@@ -2,16 +2,16 @@ import { debug, log} from '../ptu.js'
 
 export default async function RenderDex(species, type = "desc") {
     if (!species) return;
-    const speciesData = game.ptu.GetSpeciesData(species);  
+    const speciesData = game.ptu.utils.species.get(species);  
     if (!speciesData) return;
     const imageBasePath = game.settings.get("ptu", "defaultPokemonImageDirectory");
 
-    const dexEntries = await game.ptu.cache.GetOrCreateCachedItem("dexentries", _cacheDexEntries)
+    const dexEntries = await game.ptu.utils.cache.GetOrCreateCachedItem("dexentries", _cacheDexEntries)
     const dexEntry = dexEntries.find( x => (x.name?.toLowerCase() === speciesData._id.toLowerCase()));
 
     const pokedexDialog = new Dialog({
         title: "Pokédex information for " + speciesData._id.toLowerCase(),
-        content: await renderTemplate('/systems/ptu/templates/pokedex.hbs', {img: await game.ptu.monGenerator.GetSpeciesArt(speciesData, imageBasePath),speciesData, dexEntry, type}),
+        content: await renderTemplate('/systems/ptu/templates/pokedex.hbs', {img: await game.ptu.utils.generator.GetSpeciesArt(speciesData, imageBasePath),speciesData, dexEntry, type}),
         buttons: {}
     });
     pokedexDialog.position.width = 800;
@@ -23,7 +23,7 @@ export default async function RenderDex(species, type = "desc") {
 export async function AddMontoPokedex(species) {
     if(!species || !game.user.character) return;
 
-    const speciesData = game.ptu.GetSpeciesData(species);
+    const speciesData = game.ptu.utils.species.get(species);
     if (!speciesData) return;
 
     var alreadySeen = false;
@@ -40,7 +40,7 @@ export async function AddMontoPokedex(species) {
     if (!alreadySeen)
     {
         //get description from db
-        const dexEntries = await game.ptu.cache.GetOrCreateCachedItem("dexentries", _cacheDexEntries)
+        const dexEntries = await game.ptu.utils.cache.GetOrCreateCachedItem("dexentries", _cacheDexEntries)
         const dexEntry = dexEntries.find( x => (x.name?.toLowerCase() === speciesData._id.toLowerCase()));
 
         if(dexEntry != null)
@@ -48,7 +48,7 @@ export async function AddMontoPokedex(species) {
             await game.user.character.createEmbeddedDocuments("Item", [{
                 name: Handlebars.helpers.capitalizeFirst(dexEntry.name.toLowerCase()),
                 type: "dexentry",
-                data: dexEntry.data.data
+                data: dexEntry.system
             }]);
         }
     }

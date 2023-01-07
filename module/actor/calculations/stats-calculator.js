@@ -22,10 +22,10 @@ function _fetchSpecieStat(specie, stat) {
 
 function _calculateStatWithNature(nature, statKey, stat) {
     if (nature == "") return stat;
-    if (game.ptu.natureData[nature] == null) return statKey;
+    if (game.ptu.data.natureData[nature] == null) return statKey;
 
-    if (game.ptu.natureData[nature][0] == statKey) stat += statKey == "HP" ? 1 : 2;
-    if (game.ptu.natureData[nature][1] == statKey) stat -= statKey == "HP" ? 1 : 2;
+    if (game.ptu.data.natureData[nature][0] == statKey) stat += statKey == "HP" ? 1 : 2;
+    if (game.ptu.data.natureData[nature][1] == statKey) stat -= statKey == "HP" ? 1 : 2;
     return Math.max(stat, 1);
 }
 

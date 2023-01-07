@@ -376,7 +376,7 @@
               </li>
               <ol class="item-list">
                 {{#each actor.moves as | move |}}
-                  {{#unless move.data.isStruggle}}
+                  {{#unless move.system.isStruggle}}
                   <li class="item flexrow" data-item-id="{{move._id}}">
                     <div class="gen8move rollable" data-id="{{move._id}}">
                       <i class="fas fa-dice-d20" style="position:unset; flex: 0 0 3%;"></i>
@@ -387,33 +387,33 @@
                       </h4>
                     </div>
                     <div class="item-name flexcol align-items-center align-self-center" style="flex: 0 0 8%;">
-                      <span class="readable pokemon p8 tight">{{move.data.type}}</span>
+                      <span class="readable pokemon p8 tight">{{move.system.type}}</span>
                     </div>
                     <div class="item-name flexcol align-items-center align-self-center" style="flex: 0 0 7%;">
-                      <span class="readable pokemon p8 tight">{{move.data.category}}</span>
+                      <span class="readable pokemon p8 tight">{{move.system.category}}</span>
                     </div>
                     <div class="item-name flexcol align-items-center align-self-center" style="flex: 0 0 5%;">
-                      <span class="readable pokemon p8 tight">{{calcDb move.data}}</span>
+                      <span class="readable pokemon p8 tight">{{calcDb move.system}}</span>
                     </div>
                     <div class="item-name flexcol align-items-center align-self-center" style="flex: 0 0 13%;">
-                      <span class="readable pokemon p8 tight">{{calcMoveDb ../data move.data true}}</span>
+                      <span class="readable pokemon p8 tight">{{calcMoveDb ../system move.system true}}</span>
                     </div>
                     <div class="item-name flexcol align-items-center align-self-center" style="flex: 0 0 10%;">
-                      <span class="readable pokemon p8 tight">{{move.data.frequency}}</span>
+                      <span class="readable pokemon p8 tight">{{move.system.frequency}}</span>
                     </div>
                     <div class="item-name flexcol align-items-center align-self-center" style="flex: 0 0 4%;">
-                      <span class="readable pokemon p8 tight">{{move.data.ac}}</span>
+                      <span class="readable pokemon p8 tight">{{move.system.ac}}</span>
                     </div>
                     <div class="item-name flexcol align-items-center align-self-center" style="flex: 0 0 13%;">
-                      <span class="readable pokemon p8 tight">{{move.data.range}}</span>
+                      <span class="readable pokemon p8 tight">{{move.system.range}}</span>
                     </div>
                     <div class="item-name flexcol move-col" style="flex: 0 0 20%;">
                       <span class="move-effect">
-                        {{#if move.data.snippet}}
-                        <span class="show-until-hover readable pokemon p8 tight">{{move.data.snippet}}</span>
-                        <span class="hide-until-hover readable pokemon p8 tight">{{move.data.effect}}</span>
+                        {{#if move.system.snippet}}
+                        <span class="show-until-hover readable pokemon p8 tight">{{move.system.snippet}}</span>
+                        <span class="hide-until-hover readable pokemon p8 tight">{{move.system.effect}}</span>
                         {{else}}
-                        <span class="readable pokemon p8 tight">{{move.data.effect}}</span>
+                        <span class="readable pokemon p8 tight">{{move.system.effect}}</span>
                         {{/if}}
                       </span>
                     </div>
@@ -582,7 +582,7 @@
                         <label for="data.health.injuries">{{localize "PTU.Injuries"}}</label>
                       </div>
                       <div class="col-sm-3">
-                        <label for="data.modifiers.hardened">{{localize "PTU.Hardened"}}</label>
+                        <label for="modifiers.hardened">{{localize "PTU.Hardened"}}</label>
                       </div>
                       <div class="col-sm-5">
                         <label for="data.health.total">{{localize "PTU.TotalHealth"}}<br><small>{{localize
@@ -609,20 +609,20 @@
                     <div class="d-flex w-100 mt-1 mb-1">
                       <ul style="position: relative; left: 15px; width: 96%; line-height: 15px; text-align: start;">
                         {{#if data.modifiers.hardened}}<li>{{localize "PTU.HardenedEffect0"}}</li>{{/if}}
-                        {{#if (and (is "true" data.modifiers.hardened) (biggerOrEqual data.health.injuries 1))}}<li>
+                        {{#if (and (is 1 data.modifiers.hardened) (biggerOrEqual data.health.injuries 1))}}<li>
                           {{localize "PTU.HardenedEffect1"}}</li>{{/if}}
-                        {{#if (and (is "true" data.modifiers.hardened) (biggerOrEqual data.health.injuries 3))}}<li>
+                        {{#if (and (is 1 data.modifiers.hardened) (biggerOrEqual data.health.injuries 3))}}<li>
                           {{localize "PTU.HardenedEffect2"}}</li>{{/if}}
                         {{#if (biggerOrEqual data.health.injuries 5)}}<li>{{localize "PTU.InjuryEffect1"}}</li>{{/if}}
-                        {{#if (and (is "true" data.modifiers.hardened) (biggerOrEqual data.health.injuries 5))}}<li>
+                        {{#if (and (is 1 data.modifiers.hardened) (biggerOrEqual data.health.injuries 5))}}<li>
                           {{localize "PTU.HardenedEffect3"}}</li>{{/if}}
-                        {{#if (and (not "true" data.modifiers.hardened) (biggerOrEqual data.health.injuries 5))}}<li>
+                        {{#if (and (not 1 data.modifiers.hardened) (biggerOrEqual data.health.injuries 5))}}<li>
                           {{localize "PTU.InjuryEffect2" (ld "injuries" data.health.injuries)}}</li>{{/if}}
-                        {{#if (and (is "true" data.modifiers.hardened) (biggerOrEqual data.health.injuries 7))}}<li>
+                        {{#if (and (is 1 data.modifiers.hardened) (biggerOrEqual data.health.injuries 7))}}<li>
                           {{localize "PTU.HardenedEffect4"}}</li>{{/if}}
-                        {{#if (and (is "true" data.modifiers.hardened) (biggerOrEqual data.health.injuries 9))}}<li>
+                        {{#if (and (is 1 data.modifiers.hardened) (biggerOrEqual data.health.injuries 9))}}<li>
                           {{localize "PTU.HardenedEffect5"}}</li>{{/if}}
-                        {{#if (and (not "true" data.modifiers.hardened) (biggerOrEqual data.health.injuries 10))}}<li>
+                        {{#if (and (not 1 data.modifiers.hardened) (biggerOrEqual data.health.injuries 10))}}<li>
                           <b>{{localize "PTU.InjuryEffect3"}}</b></li>{{/if}}
                       </ul>
                     </div>
@@ -655,11 +655,11 @@
                             <p>{{localize (concat "PTU.Training" (capitalizeFirst key))}}</p>
                           </div>
                           <div class="col-sm-3">
-                            <input data-name="data.training.{{key}}.trained" type="checkbox" {{checked
+                            <input data-name="system.training.{{key}}.trained" type="checkbox" {{checked
                               training.trained}} />
                           </div>
                           <div class="col-sm-3">
-                            <input data-name="data.training.{{key}}.ordered" type="checkbox" {{checked
+                            <input data-name="system.training.{{key}}.ordered" type="checkbox" {{checked
                               training.ordered}} />
                           </div>
                         </div>
@@ -670,7 +670,7 @@
                             <p>{{localize "PTU.TrainingCriticalMoment"}}?</p>
                           </div>
                           <div class="col-sm-6">
-                            <input data-name="data.training.critical" type="checkbox" {{checked
+                            <input data-name="system.training.critical" type="checkbox" {{checked
                               data.training.critical}} />
                           </div>
                         </div>

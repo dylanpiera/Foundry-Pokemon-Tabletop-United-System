@@ -8,13 +8,13 @@ Hooks.once("dragRuler.ready", (SpeedProvider) => {
         }
 
         getRanges(token) {
-            const overland_speed = token.actor.data.data.capabilities.Overland || 0;
-            const sky_speed = token.actor.data.data.capabilities.Sky || 0;
-            const levitate_speed = token.actor.data.data.capabilities.Levitate || 0;
-            const burrow_speed = token.actor.data.data.capabilities.Burrow || 0;
-            const teleporter_speed = token.actor.data.data.capabilities.Teleporter || 0;
+            const overland_speed = token.actor.system.capabilities.Overland || 0;
+            const sky_speed = token.actor.system.capabilities.Sky || 0;
+            const levitate_speed = token.actor.system.capabilities.Levitate || 0;
+            const burrow_speed = token.actor.system.capabilities.Burrow || 0;
+            const teleporter_speed = token.actor.system.capabilities.Teleporter || 0;
 
-            // const swim_speed = token.actor.data.data.capabilities.Swim || 0;
+            // const swim_speed = token.actor.system.capabilities.Swim || 0;
 
 			const highest_speed = Math.max(overland_speed, sky_speed, levitate_speed, burrow_speed, teleporter_speed);
 

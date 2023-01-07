@@ -7,7 +7,7 @@ export function GetRandomNature() {
 }
 
 export function GetNatureByProp(up, down) {
-    return Object.entries(game.ptu.natureData).find(x => x[1][0] == up && x[1][1] == down)[0] 
+    return Object.entries(game.ptu.data.natureData).find(x => x[1][0] == up && x[1][1] == down)[0] 
 }
 
 /* -- Helper Functions -- */

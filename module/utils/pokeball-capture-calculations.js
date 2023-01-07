@@ -94,24 +94,24 @@ export async function RollCaptureChance(trainer, target, pokeball, to_hit_roll, 
 
 	const captureData = {
 		rate: 100,
-		mod: -trainer.data.data.level.current
+		mod: -trainer.system.level.current
 	}
 
 	// let CaptureRollModifier = 0;
 	// let CaptureRate = 100;
 	const targetData = {
 		health: {
-			current: targetActor.data.data.health.value,
-			percent: targetActor.data.data.health.percent
+			current: targetActor.system.health.value,
+			percent: targetActor.system.health.percent
 		},
-		weight: targetActor.data.data.capabilities["Weight Class"],
-		species: targetActor.data.data.species,
-		typing: targetActor.data.data.typing,
-		isWaterOrBug: isWaterOrBug(targetActor.data.data.typing),
-		capabilities: targetActor.data.data.capabilities,
-		movementAtLeastSeven: hasMovementMoreThanSeven(targetActor.data.data.capabilities),
-		level: targetActor.data.data.level.current,
-		isStoneEvo: isStoneEvo(targetActor.data.data.species),
+		weight: targetActor.system.capabilities["Weight Class"],
+		species: targetActor.system.species,
+		typing: targetActor.system.typing,
+		isWaterOrBug: isWaterOrBug(targetActor.system.typing),
+		capabilities: targetActor.system.capabilities,
+		movementAtLeastSeven: hasMovementMoreThanSeven(targetActor.system.capabilities),
+		level: targetActor.system.level.current,
+		isStoneEvo: isStoneEvo(targetActor.system.species),
 		conditions: {
 			persistentCount: 0,
 			volatileCount: 0
@@ -126,7 +126,7 @@ export async function RollCaptureChance(trainer, target, pokeball, to_hit_roll, 
 	}
 
 	function isStoneEvo(species) {
-		const speciesData = game.ptu.GetSpeciesData(species);
+		const speciesData = game.ptu.utils.species.get(species);
 		const STONE_EVO_MONS = [
 			"Eevee", "Vaporeon", "Jolteon", "Flareon", "Espeon", "Umbreon", "Leafeon", "Glaceon", "Sylveon", "Nucleon", "Vulpix", "Ninetales", "Growlithe",
 			"Arcanine", "Pansear", "Simisear", "Poliwhirl", "Poliwrath", "Poliwag", "Shellder", "Cloyster", "Staryu", "Starmie", "Lombre", "Lotad",
@@ -289,15 +289,15 @@ export async function RollCaptureChance(trainer, target, pokeball, to_hit_roll, 
 		captureData.rate -= 30;
 	}
 
-	if (targetActor.data.data.shiny) {
+	if (targetActor.system.shiny) {
 		captureData.rate -= 10;
 	}
 
-	if (targetActor.data.data.legendary) {
+	if (targetActor.system.legendary) {
 		captureData.rate -= 30;
 	}
 
-	const speciesData = game.ptu.GetSpeciesData(targetData.species);
+	const speciesData = game.ptu.utils.species.get(targetData.species);
 
 	// TODO: Pretty this up
 	let myEvolution = 0;
@@ -320,7 +320,7 @@ export async function RollCaptureChance(trainer, target, pokeball, to_hit_roll, 
 		captureData.rate -= 10;
 	}
 
-	captureData.rate += (targetActor.data.data.health.injuries * 5)
+	captureData.rate += (targetActor.system.health.injuries * 5)
 
 	captureData.roll = await new Roll(`1d100+@mod`, { mod: captureData.mod }).roll({ async: true });
 
@@ -331,7 +331,7 @@ export async function RollCaptureChance(trainer, target, pokeball, to_hit_roll, 
 export async function applyCapture(trainer, target, pokeball, speciesData) 
 {
 	const newOwnerId = game.user.character?.id == trainer.id ? game.user.id : getTokenOwner(trainer);
-	if(trainer.id == target.data.data.owner) {
+	if(trainer.id == target.system.owner) {
 		ui.notifications.warn("Trainer already owns this mon.")
 		return true;
 	}
@@ -341,11 +341,11 @@ export async function applyCapture(trainer, target, pokeball, speciesData)
 		return await failedCapture(trainer, target, pokeball, speciesData);
 	}
 
-	const result = await game.ptu.api.transferOwnership(target, {reason:"capture", pokeball: pokeball.name, timeout: 30000, /*permission: { [newOwnerId]: CONST.ENTITY_PERMISSIONS.OWNER },*/ newOwnerId});
+	const result = await game.ptu.utils.api.gm.transferOwnership(target, {reason:"capture", pokeball: pokeball.name, timeout: 30000, /*permission: { [newOwnerId]: CONST.ENTITY_PERMISSIONS.OWNER },*/ newOwnerId});
 
 	if((result?._id ?? result?.id) == target.id) {
 		const dexentry = trainer.itemTypes.dexentry.find(item => item.name.toLowerCase() == speciesData._id.toLowerCase())
-		if (dexentry && !dexentry.data.data.owned) {
+		if (dexentry && !dexentry.system.owned) {
 			await dexentry.update({
 				data: {
 					owned: true
@@ -402,7 +402,7 @@ Hooks.on("renderChatMessage", (message, html, data) => {
 
 			const trainer = game.actors.get(trainerId);
 			const target = game.actors.get(targetId);
-			const speciesData = game.ptu.GetSpeciesData(target.data.data.species);
+			const speciesData = game.ptu.utils.species.get(target.system.species);
 			const result = await applyCapture(trainer,target,pokeball,speciesData);
 
 			if(result) {

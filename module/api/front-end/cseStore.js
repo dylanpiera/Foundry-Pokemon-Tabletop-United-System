@@ -5,13 +5,12 @@ import { CheckStage } from '../../utils/calculate-evolution.js';
 import { GetSpeciesArt } from '../../utils/species-command-parser.js';
 import { CalcBaseStats, CalculateStatTotal } from '../../actor/calculations/stats-calculator.js';
 import { BlankPTUSpecies } from '../../data/species-template.js';
-import CustomSpeciesFolder from "../../entities/custom-species-folder.js"
 
 export default function({speciesData, form}) {
     const store = new Store({
         actions: {
             async init(context) {
-                if(isObjectEmpty(context.state.speciesData ?? {})) return await context.dispatch("initNewMon");
+                if(isEmpty(context.state.speciesData ?? {})) return await context.dispatch("initNewMon");
 
                 for(const type of context.state.speciesData.Type) {
                     await context.dispatch('addTyping', `${type}`)
@@ -33,7 +32,7 @@ export default function({speciesData, form}) {
                     }) 
                 ).concat(
                     context.state.speciesData["TM Move List"].map(move => {
-                        return {name: game.ptu.TMsData.get(`${move}`), tm: true, id: randomID()}; 
+                        return {name: game.ptu.data.TMsData.get(`${move}`), tm: true, id: randomID()}; 
                     }) 
                 ));
 
@@ -73,9 +72,9 @@ export default function({speciesData, form}) {
                 
             },
             async changeSpecies(context, species) {
-                const speciesData = species === "" ? duplicate(BlankPTUSpecies) : game.ptu.GetSpeciesData(species);
+                const speciesData = species === "" ? duplicate(BlankPTUSpecies) : game.ptu.utils.species.get(species);
                 if(!speciesData) return ui.notifications.notify("Unable to find species " + species, "warning");
-                speciesData.number = CustomSpeciesFolder.getAvailableId();
+                speciesData.number = game.ptu.data.customSpeciesData.length > 0 ? parseInt(game.ptu.data.customSpeciesData.sort((a,b) => b.ptuNumber - a.ptuNumber)[0].number) + 1 : 2000;
 
                 await context.commit('updateSpecies', speciesData)
                 await context.dispatch('init');
