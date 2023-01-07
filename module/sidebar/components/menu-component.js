@@ -420,7 +420,7 @@ export default class MenuComponent extends Component {
 
         );
 
-        return maneuvers.map(m => m);   
+        return maneuvers;
     }
 
     async _sendManeuverToChat(maneuverName) {
