@@ -13,7 +13,6 @@ Hi all, more bugfixes & quality of live features!
 - Added lots of new move animations (for use with Sequencer and the JB2A Patreon module)
 - Type Boosters & Type Braces now apply their Damage Bonus / Reduction automatically
 
-
 ## Version 3.0.0.5 - Sword/Shield DLC
 Hi all, one more small update for today, thanks to `Joooooosh🐉#2354` for the Galarian DLC dexes!
 

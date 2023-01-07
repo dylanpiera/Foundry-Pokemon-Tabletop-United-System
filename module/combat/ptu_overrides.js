@@ -38,7 +38,7 @@ export class PTUCombatOverrides extends Combat {
     }
 
     // Maybe advance to the next round
-    if (this.round === 0 || next === null || next >= this.turns.length) {
+    if (this.round === 0 || next === undefined || next === null || next >= this.turns.length) {
       return this.nextRound();
     }
 
