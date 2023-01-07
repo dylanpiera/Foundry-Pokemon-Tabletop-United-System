@@ -79,36 +79,33 @@ export default class Api {
                     default: reason = ""; break;
                 }
 
-                let allowed = true
 
-                if (game.settings.get("ptu", "pokeball-prompts") == 1 || game.settings.get("ptu", "pokeball-prompts") == 2)
-                {
-                    allowed = await new Promise((resolve, reject) => {
-                        const dialog = new Dialog({
-                            title: "Ownership Transfer",
-                            content: `<p>It seems that ${pc.name} wishes to take control of ${document.name}.<br>${reason}<br>Will you let them?</p>`,
-                            buttons: {
-                                yes: {
-                                    icon: '<i class="fas fa-check"></i>',
-                                    label: game.i18n.localize("Yes"),
-                                    callback: _ => resolve("true")
-                                },
-                                no: {
-                                    icon: '<i class="fas fa-times"></i>',
-                                    label: game.i18n.localize("No"),
-                                    callback: _ => resolve("false")
-                                }
+                
+                const allowed = (game.settings.get("ptu", "pokeball-prompts") == 1 || game.settings.get("ptu", "pokeball-prompts") == 2) ? await new Promise((resolve, reject) => {
+                    const dialog = new Dialog({
+                        title: "Ownership Transfer",
+                        content: `<p>It seems that ${pc.name} wishes to take control of ${document.name}.<br>${reason}<br>Will you let them?</p>`,
+                        buttons: {
+                            yes: {
+                                icon: '<i class="fas fa-check"></i>',
+                                label: game.i18n.localize("Yes"),
+                                callback: _ => resolve("true")
                             },
-                            default: "no",
-                            close: () => resolve("timeout"),
-                        });
-                        dialog.render(true);
-                        setTimeout(_ => {
-                            dialog.close();
-                            resolve("timeout");
-                        }, (data.content.options?.timeout ?? 15000) - 1000)
+                            no: {
+                                icon: '<i class="fas fa-times"></i>',
+                                label: game.i18n.localize("No"),
+                                callback: _ => resolve("false")
+                            }
+                        },
+                        default: "no",
+                        close: () => resolve("timeout"),
                     });
-                }
+                    dialog.render(true);
+                    setTimeout(_ => {
+                        dialog.close();
+                        resolve("timeout");
+                    }, (data.content.options?.timeout ?? 15000) - 1000)
+                }) : "true";
 
                 if (allowed == "false") return ref._returnBridge({ result: new ApiError({ message: "DM Denied owner transfer", type: 403 }) }, data);
                 if (allowed == "timeout") {
