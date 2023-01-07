@@ -1,6 +1,35 @@
 # Welcome to the Beta!
 Hey there! You are on the Beta Branch. If you ever have any feedback please do share with us over on [Github](https://github.com/dylanpiera/Foundry-Pokemon-Tabletop-United-System/issues) or [Discord](https://discord.gg/fE3w59q)
 
+## Version 3.1.0.1
+Hi all! As per usual this is just the beta version of the next full release. No new features actually are applied to this branch vs branch 3.1.0.0
+
+## Version 3.1.0.0 - V10 Support!
+Hey Everyone! It's been a long time coming but we finally have an official v10 build available for you all to play around with.
+
+Below follows a short overview of all updates, for more clear details check the detailed changelog in the discord / on our development branch:
+
+### Breaking Changes: **MUST READ**
+- This update may require you to clear your cache for it to work properly. Make sure every player runs ctrl+f5 on their browser before trying to run a game!
+- The `game.ptu` namespace has been completely adepted. Any existing macros will most likely break. For help fixing your macros you can reach us in #sharing-macros on the discord.
+- Custom Species storage has been updated and will be imported whenever a GM first loads the world (properly, see point 1 of this bullet list). In case of any doubts please reach us. In case of any import errors, old data will be kept in `game.settings.get("ptu", "customSpeciesBackup")`. Import is successfull once you see a chat message stating the same.
+
+## New Features:
+- Added Hisuian Dex & SwSh DLC Dexes
+- Custom Species Backup system
+- Allow for Dice Formulas in Ad-Hoc damage changes (Damage Bonus & Damage Reduction) (Hold shift while doing a move / applying damage)
+- Add 'Skip to Combatant' right click context option to Combat Tracker
+- Added >2 types compatibility with the CharacterMancer
+- Added sort buttons for Dex Entry sorting in Player Sheets
+- Added lots of new move animations (for use with Sequencer and the JB2A Patreon module)
+- Type Boosters & Type Braces now apply their Damage Bonus / Reduction automatically
+
+### Bug Fixes:
+- Fixed Rotom's Tutor Moveset (Thanks `Ellam#6478`)
+- Fix Stab on Pokemon with more than 2 typings
+- Made it so that if you skip someone's turn, effects with a dialog will be able to be triggered again later in the same round
+- Moves that always hit now show their dice roll for crit/effect purposes
+
 ## Version 3.0.0.6
 Hi all, more bugfixes & quality of live features!
 
@@ -12,7 +41,6 @@ Hi all, more bugfixes & quality of live features!
 ### New Features:
 - Added lots of new move animations (for use with Sequencer and the JB2A Patreon module)
 - Type Boosters & Type Braces now apply their Damage Bonus / Reduction automatically
-
 
 ## Version 3.0.0.5 - Sword/Shield DLC
 Hi all, one more small update for today, thanks to `Joooooosh🐉#2354` for the Galarian DLC dexes!
