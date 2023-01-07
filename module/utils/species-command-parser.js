@@ -88,9 +88,11 @@ export async function GetSpeciesArt(mon, imgDirectoryPath, type = ".webp", shiny
 
     const alolan_path = mon?._id.toLowerCase().includes("alolan") ? "_al" : "";
     const galarian_path = mon?._id.toLowerCase().includes("galarian") ? "_ga" : "";
+    const hisuian_path = mon?._id.toLowerCase().includes("hisuian") ? "_hi" : "";
+    const paldean_path = mon?._id.toLowerCase().includes("paldean") ? "_pa" : "";
 
     //combine both paths so i don't have to keep typing them
-    const reg_path = alolan_path+galarian_path;
+    const reg_path = alolan_path+galarian_path+hisuian_path+paldean_path;
 
     let path = basePath+lpad(mon?.number, 4)+reg_path+shiny_path+type;
 
