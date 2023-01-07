@@ -429,7 +429,7 @@ export default class MenuComponent extends Component {
             if (m.name == maneuverName) maneuver = m;
         })
 
-        const messageData = mergeObject({
+        const messageData = {
             title: maneuver.name,
             user: game.user._id,
             action: maneuver.action,
@@ -440,7 +440,7 @@ export default class MenuComponent extends Component {
             effect: maneuver.effect,
             sound: CONFIG.sounds.dice,
             templateType: 'maneuver',
-        })
+        }
         messageData.content = await renderTemplate("/systems/ptu/templates/chat/maneuver.hbs", messageData)
         console.log(messageData);
         await ChatMessage.create(messageData, {});
