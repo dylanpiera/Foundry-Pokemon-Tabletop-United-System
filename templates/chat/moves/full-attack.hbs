@@ -39,7 +39,6 @@
         </div>
         {{/if}}
         
-        {{#if hasAC}}
         <div class="swsh-header" style="padding: 0px ! important;background-color: #b3b3b3;">
             <div class="d-flex w-100 mt-0 mb-0" style="padding: 0px ! important;">
                 <div class="col" style="padding: 0px ! important; background-color:#272727 ! important;">
@@ -49,12 +48,11 @@
                 </div>
             </div>
         </div>
-        {{/if}}
 
-        <div class="swsh-body" style="background-color: #b3b3b3; ">
-            {{#if hasAC}}
-                <div class="dice-roll w-100" style="padding: 0px 0px; font-size: 10px ! important;">
-                    <div class="dice-result" style="padding: 0px 0px; font-size: 10px ! important;">
+        <div class="swsh-body" style="background-color: #b3b3b3; ">  
+            <div class="dice-roll w-100" style="padding: 0px 0px; font-size: 10px ! important;">
+                <div class="dice-result" style="padding: 0px 0px; font-size: 10px ! important;">
+                    {{#if hasAC}}
                         <div class="dice-formula" style="padding: 0px 0px; margin: 0px; font-size: 10px ! important;">  
                             {{#each acRoll.terms as | term |}}
                                 {{#if term.faces}}
@@ -176,9 +174,17 @@
                                 </span>
                             {{/if}}
                         {{/if}}
-                    </div>
+                    {{else}}
+                        <div class="dice-formula" style="padding: 0px 0px; margin: 0px; font-size: 10px ! important;">
+                            <span
+                                class="roll die d{{acRoll.terms.0.faces}} {{minMaxDiceCheck acRoll.terms.0.results.0.result acRoll.terms.0.faces}}"
+                                style="padding: 0px; margin: 0px; font-size: 8px ! important;">
+                                    {{acRoll.terms.0.results.0.result}}
+                            </span>
+                        </div>
+                    {{/if}}
                 </div>
-            {{/if}}
+            </div>           
 
             {{#unless noRoll}}
                 {{#if crit}}
