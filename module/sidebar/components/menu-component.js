@@ -135,10 +135,7 @@ export default class MenuComponent extends Component {
         })
 
         this.element.children("#menu-content").children(".maneuvers-row").children(".movemaster-button[data-maneuver-name]").on("click", (event) => {
-            console.log("maneuver button clicked")
-            const { maneuverName } = event.currentTarget.dataset;
-            
-            this._sendManeuverToChat(maneuverName);            
+            this._sendManeuverToChat(event.currentTarget.dataset.maneuverName);            
         })
 
         this.element.children(".divider-image").on("click", () => {
