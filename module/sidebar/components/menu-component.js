@@ -442,7 +442,6 @@ export default class MenuComponent extends Component {
             templateType: 'maneuver',
         }
         messageData.content = await renderTemplate("/systems/ptu/templates/chat/maneuver.hbs", messageData)
-        console.log(messageData);
         await ChatMessage.create(messageData, {});
     }
 }
