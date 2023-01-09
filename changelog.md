@@ -1,6 +1,9 @@
 # Welcome to the Beta!
 Hey there! You are on the Beta Branch. If you ever have any feedback please do share with us over on [Github](https://github.com/dylanpiera/Foundry-Pokemon-Tabletop-United-System/issues) or [Discord](https://discord.gg/fE3w59q)
 
+## Version 3.1.0.2 - Auto-Transform
+Hi all, one small update thanks to `Ellam#6478`. The move 'Transform' will now actually transform your mon (and back) into whatever it's targeting!
+
 ## Version 3.1.0.1
 Hi all! As per usual this is just the beta version of the next full release. No new features actually are applied to this branch vs branch 3.1.0.0
 
