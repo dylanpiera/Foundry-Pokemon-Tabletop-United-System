@@ -10,6 +10,7 @@ import { PlayMoveAnimations, move_animation_delay_ms } from "../combat/effects/m
 import { PlayMoveSounds } from "../combat/effects/move_sounds.js";
 import { ActionTypes, FiveStrikeHitsDictionary } from "../combat/damage-calc-tools.js";
 import { timeout } from "../utils/generic-helpers.js";
+import transform from "../utils/transform-helper.js";
 
 /**
  * Extend the base Actor entity by defining a custom roll data structure which is ideal for the Simple system.
@@ -646,6 +647,11 @@ export class PTUActor extends Actor {
       // If auto combat is turned on automatically apply damage based on result
       // TODO: Apply Attack (+ effects) 
     }, game.settings.get("ptu", "dramaticTiming") == true ? move_animation_delay_ms : 0);
+    
+    // If move used was transform
+    if (moveData.name.toLowerCase() =="transform" && game.settings.get("ptu", "autoTransform")) {
+      transform();
+    }
   }
 
   async _performFullAttack(moveData, token, { bonusDamage, targets, moveName, APBonus }) {

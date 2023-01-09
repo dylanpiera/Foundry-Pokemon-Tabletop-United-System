@@ -741,6 +741,16 @@ export function LoadSystemSettings() {
             default: false,
             category: "combat"
         });
+
+        game.settings.register("ptu", "autoTransform", {
+            name: "GM Setting: Automatically transform pokemon upon using the move 'Transform'.",
+            hint: "This will automatically change the actor's image, move set and capabilities to match the targets",
+            scope: "world",
+            config: true,
+            type: Boolean,
+            default: true,
+            category: "combat"
+        })
     }
 }
 
