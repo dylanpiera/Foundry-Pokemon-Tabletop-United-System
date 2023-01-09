@@ -125,6 +125,48 @@ export default class Api {
 
                 return ref._returnBridge({ result: await document.update(newData) }, data);
             },
+            async throwPokeballRequest(data) {
+                if (!ref._isMainGM()) return;
+
+                const {trainerName, pokemonName} = data.content;
+                
+                if (!trainerName) return ref._returnBridge({ result: new ApiError({ message: "Trainer name not found.", type: 400 }) }, data);
+                if (!pokemonName) return ref._returnBridge({ result: new ApiError({ message: "Target pokemon name not found.", type: 400 }) }, data);
+                
+                const allowed = (game.settings.get("ptu", "pokeball-prompts") == 1 || game.settings.get("ptu", "pokeball-prompts") == 3) ? await new Promise((resolve, reject) => {
+                    const dialog = new Dialog({
+                        title: "Throw Pokéball?",
+                        content: `<p>It seems that ${trainerName} wishes to throw a ball at ${pokemonName}.<br>Will you let them?</p>`,
+                        buttons: {
+                            yes: {
+                                icon: '<i class="fas fa-check"></i>',
+                                label: game.i18n.localize("Yes"),
+                                callback: _ => resolve("true")
+                            },
+                            no: {
+                                icon: '<i class="fas fa-times"></i>',
+                                label: game.i18n.localize("No"),
+                                callback: _ => resolve("false")
+                            }
+                        },
+                        default: "no",
+                        close: () => resolve("timeout"),
+                    });
+                    dialog.render(true);
+                    setTimeout(_ => {
+                        dialog.close();
+                        resolve("timeout");
+                    }, (data.content.options?.timeout ?? 15000) - 1000)
+                }) : "true";
+
+                if (allowed == "false") return ref._returnBridge({ result: new ApiError({ message: "DM Denied pokeball throw", type: 403 }) }, data);
+                if (allowed == "timeout") {
+                    //TODO: Allow GM to retroactively apply request.
+                    return ref._returnBridge({ result: new ApiError({ message: "Request to DM for pokeball throw timed out.", type: 403 }) }, data);
+                }
+
+                return ref._returnBridge({ result: allowed }, data);
+            },
             async applyDamage(data) {
                 if (!ref._isMainGM()) return;
 
@@ -446,6 +488,48 @@ export default class Api {
 
         const content = { uuid: actor.uuid, options };
         return this._handlerBridge(content, "transferOwnership", options?.timeout ?? 15000);
+    }
+
+    /**
+     * @param {*} trainerObject - Instance of a PTUActor, Token, TokenDocument or UUID string.
+     * @param {*} pokemonObject - Instance of a PTUActor, Token, TokenDocument or UUID string. 
+     * @param {Object} options - See subproperties:
+     * @param {Number} options.timeout - DM Query Timeout duration, default 15 sec
+     * @param {Object} options.permission - Possible Permission overwrite
+     * 
+     * @returns {ApiError | ActorData} - Will return data on success, otherwise will return ApiError.
+     * @ApiError {403} - DM Denied request or Timed Out
+     * @ApiError {400} - Badrequest, see message for details. 
+     */
+    async throwPokeballRequest(trainerObject, pokemonObject, options) {
+        let trainerActor;
+        if (trainerObject instanceof game.ptu.config.Actor.documentClass)
+            trainerActor = trainerObject;
+        else if (trainerObject instanceof TokenDocument || trainerObject instanceof Token)
+            trainerActor = trainerObject.actor;
+        else if (typeof trainerObject === "string")
+            trainerActor = await this._documentFromUuid(o);
+
+        if (!trainerActor) {
+            ui.notifications.notify(`Unable to find an actor associated with: ${trainerObject?.uuid ?? trainerObject}`, 'error');
+            return false;
+        }
+
+        let pokemonActor;
+        if (pokemonObject instanceof game.ptu.config.Actor.documentClass)
+            pokemonActor = pokemonObject;
+        else if (pokemonObject instanceof TokenDocument || pokemonObject instanceof Token)
+            pokemonActor = pokemonObject.actor;
+        else if (typeof pokemonObject === "string")
+            pokemonActor = await this._documentFromUuid(o);
+
+        if (!pokemonActor) {
+            ui.notifications.notify(`Unable to find an actor associated with: ${pokemonObject?.uuid ?? pokemonObject}`, 'error');
+            return false;
+        }
+
+        const content = { trainerName: trainerActor.name, pokemonName: pokemonActor.name, options };
+        return this._handlerBridge(content, "throwPokeballRequest", options?.timeout ?? 15000);
     }
 
     /**

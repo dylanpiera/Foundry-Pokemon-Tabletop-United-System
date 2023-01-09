@@ -107,42 +107,20 @@ export default class MenuComponent extends Component {
             const { entityId, ballName, ownerId } = event.target.dataset;
 
             const owner = game.actors.get(ownerId);
+            const target = game.user?.targets?.first();
 
-            let allowed = true
-
-            if (game.settings.get("ptu", "pokeball-prompts") == 1 || game.settings.get("ptu", "pokeball-prompts") == 3)
-            {
+            let allowed = "true";
+            
+            if (game.settings.get("ptu", "pokeball-prompts") == 1 || game.settings.get("ptu", "pokeball-prompts") == 3) {
+                if (game.ptu.utils.api.gm._isMainGM())
+                    allowed = "true"
                 //ask GM to confirm they want to allow player to throw a pokeball?
-                //Maybe skip check with a setting?
-                allowed = await new Promise((resolve, reject) => {
-                    const dialog = new Dialog({
-                        title: "Throw Pokeball?",
-                        content: `<p>It seems that ${owner.name} wishes to throw a pokeball at ${game.user?.targets?.first().name}.<br>Will you let them?</p>`,
-                        buttons: {
-                            yes: {
-                                icon: '<i class="fas fa-check"></i>',
-                                label: game.i18n.localize("Yes"),
-                                callback: _ => resolve(true)
-                            },
-                            no: {
-                                icon: '<i class="fas fa-times"></i>',
-                                label: game.i18n.localize("No"),
-                                callback: _ => resolve(false)
-                            }
-                        },
-                        default: "no",
-                        close: () => resolve(false),
-                    });
-                    dialog.render(true);
-                    setTimeout(_ => {
-                        dialog.close();
-                        resolve(false);
-                    }, 10000)
-                });
+                else
+                    allowed = await game.ptu.utils.api.gm.throwPokeballRequest(owner, target, {timeout: 30000});
             }
 
-            if(allowed){
-                game.ptu.utils.throwPokeball(owner, game.user?.targets?.first(), owner?.items.get(entityId));
+            if(allowed == "true"){
+                game.ptu.utils.throwPokeball(owner, target, owner?.items.get(entityId));
             } else {
                 ui.notifications.error("GM prevented you from throwing a pokeball at this pokemon.");
                 return;
