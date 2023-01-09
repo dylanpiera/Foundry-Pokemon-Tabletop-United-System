@@ -7,7 +7,7 @@
     "verified": "10.291",
     "maximum": 10
   },
-  "version": "3.0.0.4",
+  "version": "3.1.0.2",
   "templateVersion": 2,
   "authors": [
     {
@@ -125,6 +125,13 @@
       "entity": "RollTable",
       "name": "habitats",
       "path": "packs/habitats.db",
+      "system": "ptu"
+    },
+    {
+      "label": "maneuvers",
+      "entity": "Item",
+      "name": "maneuvers",
+      "path": "packs/maneuvers.db",
       "system": "ptu"
     }
   ],
