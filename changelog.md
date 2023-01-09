@@ -1,6 +1,15 @@
 # Welcome to the Beta!
 Hey there! You are on the Beta Branch. If you ever have any feedback please do share with us over on [Github](https://github.com/dylanpiera/Foundry-Pokemon-Tabletop-United-System/issues) or [Discord](https://discord.gg/fE3w59q)
 
+## Version 3.1.0.3 - Item Rework & Maneuvers
+Hi all! another update thanks to `Ellam#6478` this time adding some more features:
+
+### New Features
+- Pokemon show their held item in the side bar
+- (held) items marked as consumable will now show a 'Consume' button in chat which will lower their quantity by one (/delete if held item)
+- Add a pop-up that allows GMs to block pokeballs from being thrown (can be configured in settings)
+- Add maneuvers as a reference in the side bar (purely referential, no automation)
+
 ## Version 3.1.0.2 - Auto-Transform
 Hi all, one small update thanks to `Ellam#6478`. The move 'Transform' will now actually transform your mon (and back) into whatever it's targeting!
 
