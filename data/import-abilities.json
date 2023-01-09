@@ -2442,7 +2442,7 @@
     {
       "name": "Sturdy [Playtest]",
       "frequency": "Static",
-      "effect": "Keywords - 2-16 Playtest\nThe user is immune to Moves with the Execute Keyword. If a single source of Damage or Hit Point Loss would cause the user to lose more than X Hit Points, the damage or Hit Point loss is instead reduced to X. X is equal to 50% of their Max Hit Points. Defensive."
+      "effect": "Keywords - 2-16 Playtest\nThe user is immune to Moves with the Execute Keyword. If a single source of Damage or Hit Point Loss would cause the user to lose more than X Hit Points, the damage or Hit Point loss is instead reduced to X. X is equal to 50% of their Max Hit Points, rounded up. Defensive."
     },
     {
       "name": "Suction Cups [Playtest]",
@@ -2517,7 +2517,7 @@
     {
       "name": "Whirlwind Kicks [Playtest]",
       "frequency": "Static",
-      "effect": "Keywords - 2-16 Playtest\nConnection – Triple Kick. When the user uses the Moves “Rapid Spin” or “Triple Kick”, they have a range of “Burst 1”."
+      "effect": "Keywords - 2-16 Playtest\nConnection – Triple Kick. When the user uses the Move “Rapid Spin,” it has a range of “Burst 1”. When the user uses the Move “Triple Kick”, one of the attacks made may be “Burst 1” instead of “Melee.” A given target may still only be hit once by a single use of Triple Kick, however."
     },
     {
       "name": "Windveiled [Playtest]",
@@ -3042,11 +3042,51 @@
     {
       "name": "Wandering Spirit",
       "frequency": "Scene – Free Action, Reaction",
-      "effect": "Trigger - The user is hit by a Melee attack\nThe user exchanges Wandering Spirit with a random Ability of the opposing Pokémon, as per the Move Skill Swap."
+      "effect": "Trigger - The user is hit by a Melee attack\nThe user exchanges Wandering Spirit w ith a random Ability of the opposing Pokémon, as per the Move Skill Swap."
     },
     {
       "name": "Zen Snowed",
       "frequency": "Scene – Swift Action",
       "effect": "The user changes into Zen Mode forme for the rest of the Scene, and may use the Moves “Ice Punch” and “Fire Punch” as if they were on its Move List."
-    }
+    },
+    {
+      "name": "Chilling Neigh",
+      "frequency": "At-Will - Free Action",
+      "effect": "Trigger: The user causes a foe to Faint with a damaging attack\nThe user’s Attack is raised by 1 Combat Stage. In addition, all foes within 3m of the user take a -2 penalty to evasion for one full round."
+    },
+    {
+      "name": "Curious Medicine",
+      "frequency": "Scene - Swift Action",
+      "effect": "All allies within 2m of the user have their CS reset to their default values.\nSpecial: The user may instead trigger this as a Free Action Reaction when entering the field."
+    },
+    {
+      "name": "Dragon's Maw",
+      "frequency": "Scene x2 - Free Action",
+      "effect": "Trigger: The user hits with a damaging Dragon-Type Move\nOne target hit by the attack becomes one stage more vulnerable to the attack (applied after all other modifiers). Immune targets are treated as initially double-resistant for the purposes of this Ability, and may be damaged normally."
+    },    
+    {
+      "name": "Grim Neigh",
+      "frequency": "At-Will - Free Action",
+      "effect": "Trigger: The user causes a foe to Faint with a damaging attack\nThe user’s Special Attack is raised by 1 Combat Stage. In addition, all foes within 3m of the user take a -2 penalty to Accuracy for one full round."
+    },
+    {
+      "name": "Quick Draw",
+      "frequency": "Scene - Free Action, Interrupt",
+      "effect": "Trigger: A foe uses a Move, and the user has not acted this round\nThe user immediately uses a Move on the triggering foe as a Standard Action Interrupt (this Move must still obey Frequency and Range). If this Move hits, the foe also gains a -2 penalty to their attack roll for the triggering attack, unless the foe cannot Flinch.\nBonus: The user cannot be Flinched. Defensive."
+    }, 
+    {
+      "name": "Splendorous Rider",
+      "frequency": "Scene x2 - Swift Action",
+      "effect": "The user may pick a Move from their Mount’s known Moves that they do not already know. For the rest of the user’s Turn, they may use that Move as though it was one of their own Moves. Note that this does not remove any frequency limitations – a Daily Move that the Mount knows may not be used more than once. Innate."
+    },      
+    {
+      "name": "Transistor",
+      "frequency": "Scene x2 - Swift Action",
+      "effect": "Trigger: The user hits with a damaging Electric-Type Move\nOne target hit by the attack becomes one stage more vulnerable to the attack (applied after all other modifiers). Immune targets are treated as initially double-resistant for the purposes of this Ability, and may be damaged normally."
+    },    
+    {
+      "name": "Unseen Fist",
+      "frequency": "Static",
+      "effect": "Reactions, Interrupts, and Blessings may not be activated in response to the user’s Melee Attacks."
+    }            
   ]
