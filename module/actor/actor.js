@@ -649,7 +649,7 @@ export class PTUActor extends Actor {
     }, game.settings.get("ptu", "dramaticTiming") == true ? move_animation_delay_ms : 0);
     
     // If move used was transform
-    if (moveData.name.toLowerCase() =="transform") {
+    if (moveData.name.toLowerCase() =="transform" && game.settings.get("ptu", "autoTransform")) {
       transform();
     }
   }
