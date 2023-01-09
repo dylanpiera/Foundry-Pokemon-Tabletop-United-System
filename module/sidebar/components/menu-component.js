@@ -49,13 +49,16 @@ export default class MenuComponent extends Component {
                 })
                 break;
             case "maneuver":
-
+                output += await renderTemplate("/systems/ptu/module/sidebar/components/menu-component.hbs", {
+                    menu: "maneuver",
+                    maneuvers: await game.packs.get("ptu.maneuvers").getDocuments()
+                })
                 break;
             default:
                 output += await renderTemplate("/systems/ptu/module/sidebar/components/menu-component.hbs", {
                     menu: "none"
                 })
-                break;
+                    break;
         }
 
         this.element.html(output);
@@ -147,6 +150,10 @@ export default class MenuComponent extends Component {
                 default: // anything else??
                     this.state.actor.executeMove(move.id)
             }
+        })
+
+        this.element.children("#menu-content").children(".maneuvers-row").children(".movemaster-button[data-maneuver-name]").on("click", (event) => {
+            this._sendManeuverToChat(event.currentTarget.dataset.maneuverName);            
         })
 
         this.element.children(".divider-image").on("click", () => {
@@ -315,5 +322,24 @@ export default class MenuComponent extends Component {
                 amount: item.system.quantity
             }
         });
+    }
+
+    async _sendManeuverToChat(maneuverName) {
+        const maneuver = await game.packs.get("ptu.maneuvers").find(m => m.name.toLowerCase() == maneuverName.toLowerCase());
+
+        const messageData = {
+            title: maneuver.name,
+            user: game.user._id,
+            action: maneuver.system.action,
+            trigger: maneuver.system.trigger,
+            ac: maneuver.system.ac,
+            class: maneuver.system.class,
+            range: maneuver.system.range,
+            effect: maneuver.system.effect,
+            sound: CONFIG.sounds.dice,
+            templateType: 'maneuver',
+        }
+        messageData.content = await renderTemplate("/systems/ptu/templates/chat/maneuver.hbs", messageData)
+        await ChatMessage.create(messageData, {});
     }
 }

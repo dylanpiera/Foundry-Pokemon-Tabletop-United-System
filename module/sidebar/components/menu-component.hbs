@@ -1,6 +1,6 @@
 <div class="d-flex pb-1" id="menu-buttons">
-    <button title="Coming Soon" class="menu-item p-1" id="struggle-button" data-type="struggle">Struggles</button>
-    <button title="Coming Soon" disabled class="menu-item p-1" id="maneuver-button" data-type="maneuver">Maneuvers</button>
+    <button title="Struggles Menu" class="menu-item p-1" id="struggle-button" data-type="struggle">Struggles</button>
+    <button title="Manouvers Menu" class="menu-item p-1" id="maneuver-button" data-type="maneuver">Maneuvers</button>
     <button title="Pokeball Menu" class="menu-item p-1" id="pokeball-button" data-type="pokeball">Pokeballs</button>
     <button title="Coming Soon" disabled class="menu-item p-1" id="rest-button" data-type="rest">Resting</button>
 </div>
@@ -45,7 +45,19 @@
         {{/if}}
     {{else}}
     {{#if (is menu "maneuver")}}
-        <!-- Does not trigger as of now-->
+        <!-- Maneuver Menu -->
+        {{#each maneuvers as | maneuver |}}
+            <div class="maneuvers-row">
+                <button type="button" class="movemaster-button" data-maneuver-name="{{name}}" title="{{effect}}">
+                    <div class="item" >
+                        <p>
+                            <!-- Manouver Name -->
+                            {{name}}                            
+                        </p>
+                    </div>
+                </button>
+            </div>
+        {{/each}}
     {{else}}
     {{#if (is menu "pokeball")}}
         <!-- Pokeball Menu -->

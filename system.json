@@ -126,6 +126,13 @@
       "name": "habitats",
       "path": "packs/habitats.db",
       "system": "ptu"
+    },
+    {
+      "label": "maneuvers",
+      "entity": "Item",
+      "name": "maneuvers",
+      "path": "packs/maneuvers.db",
+      "system": "ptu"
     }
   ],
   "languages": [

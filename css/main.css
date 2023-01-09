@@ -2451,6 +2451,26 @@ body.messages-dark-theme .chat-controls .roll-type-select {
 #ptu-sidebar .ptu-sidebar #menu-component #menu-content .struggle-row .btn-body {
   min-height: 60px !important;
 }
+#ptu-sidebar .ptu-sidebar #menu-component #menu-content .maneuvers-row .item {
+  background-size: 25px;
+  background-repeat: no-repeat;
+  background-position: left center;
+  background-color: #333333;
+  color: #cccccc;
+  width: 180px;
+  margin: 0.2rem 0;
+  height: 25px;
+  font-size: 22px;
+  font-family: "Modesto Condensed";
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+#ptu-sidebar .ptu-sidebar #menu-component #menu-content .maneuvers-row .item p {
+  white-space: nowrap;
+  overflow: hidden;
+}
 #ptu-sidebar .ptu-sidebar #menu-component #menu-content .pokeball-item {
   padding-left: 2px;
   margin-top: 2px;
