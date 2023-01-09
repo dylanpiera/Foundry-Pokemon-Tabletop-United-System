@@ -83,6 +83,7 @@ export const ptu = {
       handleApplicatorItem,
       takeAction: TakeAction,
     },
+    
     combats: new Map(),
     dex: {
       render: RenderDex,

@@ -30,7 +30,7 @@ export class PTUItemSheet extends ItemSheet {
 
 		// Alternatively, you could use the following return statement to do a
 		// unique item sheet by type, like `weapon-sheet.html`.
-		return `${path}/item-${this.item.type}-sheet.html`;
+		return `${path}/item-${this.item.type}-sheet.hbs`;
 	}
 
 	/* -------------------------------------------- */
@@ -156,7 +156,7 @@ export class PTUItemSheet extends ItemSheet {
 	 * Handle To Chat call.
 	 * @private
 	 */
-	_toChat() {
+	_toChat(ownerId) {
 		switch(this.object.type) {
 			case "move":
 				return sendMoveMessage({
@@ -165,14 +165,16 @@ export class PTUItemSheet extends ItemSheet {
 					}),
 					name: this.object.name,
 					move: this.object.system,
-					templateType: 'details'
+					templateType: 'details',
+					owner: ownerId
 				});
 			default: 
 				return sendItemMessage({
 					speaker: ChatMessage.getSpeaker({
 						actor: this.actor
 					}),
-					item: this.object
+					item: this.object,
+					owner: ownerId
 				});
 		}
 	}
@@ -259,3 +261,55 @@ Hooks.on("ptu.SendItemToChat", function(messageData) {
 	debug(messageData);
 	return true;
 })
+
+
+// Using Consumable Items
+Hooks.on("renderChatMessage", (message, html, data) => {
+    setTimeout(() => {
+        $(html).find(".reduce-item-count").on("click", (event) => useItem(event));
+    }, 500);
+});
+
+export async function useItem(event){
+    //prevent the default action of the button
+    event.preventDefault();
+
+    // Get the item ID and name from the button element's data-item-id and data-item-name attributes
+    const itemId = event.currentTarget.dataset.item;
+    const itemName = event.currentTarget.dataset.itemName;
+    const parentId = event.currentTarget.dataset.itemParentid;
+    
+    //disable the button
+    event.currentTarget.disabled = true;
+
+    //find the actor with id parentId
+    const actor = game.actors.get(parentId);
+    console.log(actor);
+    // if the user of the item is of type pokemon
+    if (actor.type == "pokemon"){
+        // if(!applyItemEffect(itemName, actor, targetedActor)){
+        //     ui.notifications.error("There was an error applying the item effect.");
+        //     return;
+        // } 
+        console.log(`Consuming item with ID ${itemId} and name ${itemName}`);
+        //change the held item to none
+        await actor.update({"data.heldItem": "None"});        
+    }
+    if (actor.type == "character"){
+        if(actor.items.get(itemId).system.quantity < 1){
+            ui.notifications.error("You don't have any of this item left.");
+            return;
+        }
+        // if(!applyItemEffect(itemName, actor, targetedActor)){
+        //     ui.notifications.error("There was an error applying the item effect.");
+        //     return;
+        // }    
+        console.log(`Consuming item with ID ${itemId} and name ${itemName}`);
+        //reduce the number of this item that the character has by 1
+        const item = actor.items.get(itemId);
+        await item.update({"system.quantity": Number(duplicate(item.system.quantity)) - 1});
+    }
+}
+
+//applyItemEffect(itemName, actor, targetedActor){
+//}

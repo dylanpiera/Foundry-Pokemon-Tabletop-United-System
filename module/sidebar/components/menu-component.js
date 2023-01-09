@@ -103,11 +103,29 @@ export default class MenuComponent extends Component {
             }
         })
 
-        this.element.children('#menu-content').children('.pokeball-item').on("click", (event) => {
+        this.element.children('#menu-content').children('.pokeball-item').on("click", async(event) => {
             const { entityId, ballName, ownerId } = event.target.dataset;
 
             const owner = game.actors.get(ownerId);
-            game.ptu.utils.throwPokeball(owner, game.user?.targets?.first(), owner?.items.get(entityId));
+            const target = game.user?.targets?.first();
+
+            let allowed = "true";
+            
+            if (game.settings.get("ptu", "pokeball-prompts") == 1 || game.settings.get("ptu", "pokeball-prompts") == 3) {
+                if (game.ptu.utils.api.gm._isMainGM())
+                    allowed = "true"
+                //ask GM to confirm they want to allow player to throw a pokeball?
+                else
+                    allowed = await game.ptu.utils.api.gm.throwPokeballRequest(owner, target, {timeout: 30000});
+            }
+
+            if(allowed == "true"){
+                game.ptu.utils.throwPokeball(owner, target, owner?.items.get(entityId));
+            } else {
+                ui.notifications.error("GM prevented you from throwing a pokeball at this pokemon.");
+                return;
+            }       
+            
         })
 
         this.element.children("#menu-content").children(".struggle-row").children(".movemaster-button[data-struggle-id]").on("mousedown", (event) => {

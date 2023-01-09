@@ -93,6 +93,22 @@ export function LoadSystemSettings() {
         category: "general"
     })
 
+    game.settings.register("ptu", "pokeball-prompts", {
+        name: "GM Setting: Request permission from GM when using Pokeballs",
+        hint: "This will prompt the GM to allow or deny the use of a Pokeball or capturing a pokemon.",
+        scope: "world",
+        config: true,
+        type: Number,
+        choices: {
+            1: "Always ask",
+            2: "Only ask for capture",
+            3: "Only ask for Pokéball throw",
+            4: "Never Ask"
+        },
+        default: 1,
+        category: "combat"
+    })
+
     game.settings.register("ptu", "auto-add-to-dex", {
         name: "Automatically add pokemon to Seen",
         hint: "Automatically add pokemon to player's seen list when scanned with pokedex",

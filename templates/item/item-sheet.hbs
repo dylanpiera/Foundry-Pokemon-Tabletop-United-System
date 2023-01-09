@@ -1,5 +1,10 @@
 {{#with data}}
-    <form class="{{cssClass}} framed" autocomplete="off">
+        {{!-- Form Element --}}
+    {{#if cssClass}}
+        <form class="{{cssClass}}" autocomplete="off">
+    {{else}}
+        <form autocomplete="off">
+    {{/if}}
         <header class="sheet-header">
             <img class="profile-img" src="{{img}}" data-edit="img" title="{{name}}"/>
             <div class="header-fields">

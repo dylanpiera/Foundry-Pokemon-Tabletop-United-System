@@ -1,21 +1,30 @@
 {{#with data}}
-    <form class="{{cssClass}}" autocomplete="off">
+    {{!-- Form Element --}}
+    {{#if cssClass}}
+        <form class="{{cssClass}}" autocomplete="off">
+    {{else}}
+        <form autocomplete="off">
+    {{/if}}
+
+        {{!-- Sheet Header --}}
         <header class="sheet-header mb-2" style="height: auto;">
-            <div class="hgss-box">
+            <div class "hgss-box">
                 <div class="hgss-body">
-                    <span 
-                    class="readable p-2" 
+                    <span
+                    class="readable p-2"
                     style="word-break: break-word;
                         line-height: 13px;
                         font-size: 15px;">{{{system.entry}}}</span>
                 </div>
             </div>
         </header>
+
         {{!-- Sheet Body --}}
         <div class="sheet-body">
             <div class="details readable h-100">
                 <div style="display: grid; grid-template-columns: 45% 50%; justify-content: space-between; padding: 0 5px;">
                     <div class="hgss-box align-items-center" style="display: grid; grid-template-columns: 40% 60%;">
+                        {{!-- Name --}}
                         <div class="hgss-header vertical">
                             <label for="name">Name:</label>
                         </div>
@@ -29,6 +38,7 @@
                             />
                         </div>
 
+                        {{!-- Owned --}}
                         <div class="hgss-header vertical">
                             <label for="name">Owned:</label>
                         </div>
@@ -46,6 +56,7 @@
                         </div>
                     </div>
                     <div class="hgss-box align-items-center">
+                        {{!-- Entry --}}
                         <div class="hgss-header mb-1 " style="padding: 6px 5px;">
                             <label for="system.entry">Entry:</label>
                         </div>
