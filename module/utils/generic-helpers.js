@@ -1,5 +1,9 @@
 /* -- Helper Functions -- */
 
+// import { pokemonData } from "../data/species-data";
+// import { levelProgression } from "../data/level-progression";
+// import { CalcLevel } from "../actor/calculations/level-up-calculator";
+
 export function getRandomIntInclusive(min, max) {
     min = Math.ceil(min);
     max = Math.floor(max);
@@ -46,3 +50,30 @@ export function timeout(ms) {
 export function capitalizeFirstLetter(string) {
     return string[0].toUpperCase() + string.slice(1);
 }
+
+Hooks.on("preUpdateActor", async (oldActor, changes, options, sender) => {
+    if(changes.system?.level?.exp === undefined) return;
+
+    const oldLvl = CalcLevel(oldActor.system.level.exp, 50, levelProgression);
+    const newLvl = CalcLevel(changes.system.level.exp, 50, levelProgression);
+    
+    
+    if(newLvl > oldLvl) {
+        //mons dex entry
+        const dexEntry = pokemonData.find(e => e._id.toLowerCase() === oldActor.system.species.toLowerCase() )
+        let lvl = oldLvl + 1;
+        let newMoves = [];
+        while(lvl <= newLvl)
+        { 
+            //check if the mon learns new moves
+            const move = dexEntry.get("Level Up Move List").find(m => m.level === lvl)
+            if(move) newMoves.push(move);
+            //increment lvl
+            lvl++;
+        }
+
+        if(newMoves.length > 0) {
+            //send new moves to chat/popup
+        }
+    }
+});
