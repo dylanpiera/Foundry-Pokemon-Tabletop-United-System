@@ -91,7 +91,7 @@ Hooks.on("preUpdateActor", async (oldActor, changes, options, sender) => {
                         d.render(true);//don't close the dialog
                         //check if old actor already has the move
                         if(oldActor.moves.find(m => m.name.toLowerCase() === move.name.toLowerCase())) {
-                            ui.notifications.info(`${oldActor.name} already knows ${move.name}!}`);
+                            ui.notifications.info(`${oldActor.name} already knows ${move.name}!`);
                         } else {
                             //add the move to the actors list of moves
                             await oldActor.createEmbeddedDocuments("Item", [move]);
