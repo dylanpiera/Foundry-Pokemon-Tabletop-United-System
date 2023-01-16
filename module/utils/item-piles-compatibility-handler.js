@@ -45,7 +45,7 @@ async function GetItemArt(item_name, type = ".webp") {
 }
 
 
-Hooks.on("item-piles-preDropItemDetermined", function(a, b, c, dropped_item) {
+Hooks.on("item-piles-preDropItemDetermined", function(a, b, dropped_item, d) {
     if(dropped_item.item.type != "item")
     {
         return false; // Cancel Item Piles dialogue if the dragged item is not a 'real' item.
