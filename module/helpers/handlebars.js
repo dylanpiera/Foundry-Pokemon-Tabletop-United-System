@@ -215,6 +215,38 @@ export function registerHandlebars() {
       Handlebars.registerHelper("floor", (value) => Math.floor(Number(value)));
       Handlebars.registerHelper("capitalizeFirst", (e) => { return "string" != typeof e ? e : e.charAt(0).toUpperCase() + e.slice(1) });
     }
+
+    Handlebars.registerHelper("capitalize", function (input) {
+      var i, j, str, lowers, uppers;
+      str = input.replace(/([^\W_]+[^\s-]*) */g, function(txt) {
+        return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+      });
+    
+      // Certain minor words should be left lowercase unless 
+      // they are the first or last words in the string
+      lowers = ['A', 'An', 'The', 'And', 'But', 'Or', 'For', 'Nor', 'As', 'At', 
+      'By', 'For', 'From', 'In', 'Into', 'Near', 'Of', 'On', 'Onto', 'To', 'With'];
+      for (i = 0, j = lowers.length; i < j; i++)
+        str = str.replace(new RegExp('\\s' + lowers[i] + '\\s', 'g'), 
+          function(txt) {
+            return txt.toLowerCase();
+          });
+    
+      // Certain words such as initialisms or acronyms should be left uppercase
+      uppers = ['Id', 'Tv'];
+      for (i = 0, j = uppers.length; i < j; i++)
+        str = str.replace(new RegExp('\\b' + uppers[i] + '\\b', 'g'), 
+          uppers[i].toUpperCase());
+    
+      return str;
+    });
+    Handlebars.registerHelper("newline", function (a) { return a.replace("\\n", "\n") });
+
+    Handlebars.registerHelper("lpad", function (str, len, char) {
+      str = str.toString();
+      while (str.length < len) str = char + str;
+      return str;
+    });
   
     function _calcMoveDb(move, bool = false) {
       if (move.category === "Status") return;

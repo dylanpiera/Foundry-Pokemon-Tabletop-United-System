@@ -54,6 +54,7 @@ import { ThrowPokeball } from './combat/effects/pokeball_effects.js';
 import { LANG } from './utils/language-helper.js';
 import logging from "./helpers/logging.js";
 import { registerHandlebars, preloadHandlebarsTemplates } from "./helpers/handlebars.js";
+import { PTRSearch } from "./ptr-search/ptr-search.js";
 
 export let debug = logging.debug;
 export let log = logging.log;
@@ -149,6 +150,9 @@ export const ptu = {
     Ui: {
       Combat: {
         documentClass: PTUCombatTrackerOverrides
+      },
+      Search: {
+        documentClass: PTRSearch
       },
       Sidebar: {
         documentClass: PTUSidebar
@@ -753,6 +757,14 @@ Hooks.on('getSceneControlButtons', function (hudButtons) {
       icon: "fas fa-tablet-alt",
       button: true,
       onClick: () => game.ptu.utils.macros.pokedex()
+    });
+
+    hud.tools.push({
+      name: "PTU.SearchButtonName",
+      title: "PTU.SearchButtonHint",
+      icon: "fas fa-search",
+      button: true,
+      onClick: () => new game.ptu.config.Ui.Search.documentClass().render(true)
     });
   }
 });
