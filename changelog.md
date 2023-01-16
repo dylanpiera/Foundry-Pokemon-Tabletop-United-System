@@ -1,6 +1,19 @@
 # Welcome to the Beta!
 Hey there! You are on the Beta Branch. If you ever have any feedback please do share with us over on [Github](https://github.com/dylanpiera/Foundry-Pokemon-Tabletop-United-System/issues) or [Discord](https://discord.gg/fE3w59q)
 
+## Version 3.1.0.4 - Bug Fixes & Search
+Hi all! We have some more awesome bug fixes and new features thanks to `Ellam#6478` and Void!
+
+### New Features
+- Added a pop-up when a Pokemon levels up to ask whether it should learn new moves when applicable.
+- Added a 'Search' button to the Menu Bar (on the left).
+- Search is part of PTR and will display PTR data. In the future we'll implement to-chat functionality.
+
+### Bugfixes
+- Fixed an issue with ItemPiles compatability
+- Fixed a style issue with certain items
+- Fixed hovering over maneuvers not showing the details
+
 ## Version 3.1.0.3 - Item Rework & Maneuvers
 Hi all! another update thanks to `Ellam#6478` this time adding some more features:
 

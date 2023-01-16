@@ -193,6 +193,8 @@
 
     "PTU.DexButtonName": "Pokédex",
     "PTU.DexButtonHint": "Scan the pokemon with your pokédex",
+    "PTU.SearchButtonName": "PTR Search",
+    "PTU.SearchButtonHint": "Search the PTR Data Source for information",
 
     "SETTINGS.ptu": ""
 }
