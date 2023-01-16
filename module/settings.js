@@ -767,6 +767,16 @@ export function LoadSystemSettings() {
             default: true,
             category: "combat"
         })
+
+        game.settings.register("ptu", "pokemonLearnMovesMessage", {
+            name: "GM Setting: Show message when a pokemon learns a new move from leveling up.",
+            hint: "This will show a pop up for players when there pokemon learns new moves from gaining experience. They can then add those moves to their move list.",
+            scope: "world",
+            config: true,
+            type: Boolean,
+            default: true,
+            category: "other"
+        })
     }
 }
 
