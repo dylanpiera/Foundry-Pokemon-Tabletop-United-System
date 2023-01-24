@@ -79,7 +79,7 @@ export async function CreateMonParser(input, andCreate = false) {
     return commands;
 }
 
-export async function GetSpeciesArt(mon, imgDirectoryPath, type = ".webp", shiny = false, animated = false, animated_type = ".webm") {
+export async function GetSpeciesArt(mon, imgDirectoryPath, type = ".webp", shiny = false, animated = false, female = false, animated_type = ".webm") {
 
     const alt_type = ".png";
     const basePath = imgDirectoryPath+(imgDirectoryPath.endsWith('/') ? '' : '/')
@@ -90,9 +90,10 @@ export async function GetSpeciesArt(mon, imgDirectoryPath, type = ".webp", shiny
     const galarian_path = mon?._id.toLowerCase().includes("galarian") ? "_ga" : "";
     const hisuian_path = mon?._id.toLowerCase().includes("hisuian") ? "_hi" : "";
     const paldean_path = mon?._id.toLowerCase().includes("paldean") ? "_pa" : "";
+    const female_path = female ? "f" : "";
 
     //combine both paths so i don't have to keep typing them
-    const reg_path = alolan_path+galarian_path+hisuian_path+paldean_path;
+    const reg_path = alolan_path+galarian_path+hisuian_path+paldean_path+female_path;
 
     let path = basePath+lpad(mon?.number, 4)+reg_path+shiny_path+type;
 
@@ -155,6 +156,7 @@ export async function GetSpeciesArt(mon, imgDirectoryPath, type = ".webp", shiny
     }
 
     if(result.status === 404) {
+        if(female) return GetSpeciesArt(mon, imgDirectoryPath, type, shiny, animated, false, animated_type);
         return undefined;
     }
     return path;
@@ -261,7 +263,7 @@ export async function FinishDexDragPokemonCreation(formData, update)
     protoToken.displayName=  40; 
     protoToken.bar1.attribute = "health";
 
-    protoToken.img = await GetSpeciesArt(game.ptu.utils.species.get(new_actor.system.species), imgSrc, ".webp", new_actor.system.shiny, true);
+    protoToken.img = await GetSpeciesArt(game.ptu.utils.species.get(new_actor.system.species), imgSrc, ".webp", new_actor.system.shiny, true, new_actor.system.gender.toLowerCase().includes("female"));
     
     new_actor = await new_actor.update({"prototypeToken": protoToken});
 
