@@ -105,6 +105,21 @@
                                 placeholder=""
                             />
                         </div>
+                        {{!-- Free --}}
+                        <div class="hgss-header mt-1 mb-1">
+                            <label for="name">Free Feat:</label>
+                        </div>
+                        <div class="hgss-body">
+                            <div class="d-flex align-items-center">
+                                <input
+                                    class="ml-2 mr-2"
+                                    data-item-id="{{_id}}" 
+                                    data-binding="system.free" 
+                                    type="checkbox" {{checked system.free}}
+                                />
+                                <label for="system.free"><span class="text-muted" style="word-break: break-word;">Whether this feat should count for max-feats</span></label>
+                            </div>
+                        </div>
                         {{!-- Effect --}}
                         <div class="hgss-header mt-1 mb-1 " style="padding: 5px 5px;">
                             <label for="system.effect">Effect:</label>
