@@ -752,6 +752,10 @@ Hooks.on("preCreateItem", async function (item, data, options, sender) {
   await item.updateSource({ "system.origin": origin });
 });
 
+Hooks.on('preCreateActor', function(document,b,c,d) {
+  document.data.update({"prototypeToken.actorLink":true});
+});
+
 Hooks.on('getSceneControlButtons', function (hudButtons) {
   const hud = hudButtons.find(val => val.name == "token")
   if (hud) {

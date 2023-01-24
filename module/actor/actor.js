@@ -351,7 +351,7 @@ export class PTUActor extends Actor {
     let actor = await super.create(data, options);
 
     debug("Creating new actor with data:", actor);
-    if (options?.noCharactermancer || actor.data.type != "pokemon") return actor;
+    if (options?.noCharactermancer || actor.type != "pokemon") return actor;
 
     let form = new game.ptu.config.Ui.PokemonCharacterMancer.documentClass(actor, { "submitOnChange": false, "submitOnClose": true });
     form.render(true)
