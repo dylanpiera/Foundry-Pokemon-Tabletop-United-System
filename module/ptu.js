@@ -61,7 +61,7 @@ export let log = logging.log;
 export let warn = logging.warn;
 export let error = logging.error;
 
-export const LATEST_VERSION = "3.1.0.4";
+export const LATEST_VERSION = "3.1.0.5";
 
 export const ptu = {
   utils: {
@@ -203,6 +203,10 @@ export const ptu = {
 Hooks.once('init', function () {
   console.groupCollapsed("PTU Init");
   console.time("PTU Init")
+
+  window.actor = function() {
+    return canvas.tokens.controlled[0].actor;
+  }
 
   // Register custom system settings
   ptu.utils.api.gm = new Api(); // Initialize the GM API
@@ -746,6 +750,10 @@ Hooks.on("preCreateItem", async function (item, data, options, sender) {
 
   // In preCreate[document] hook, you can update a document's data class using `document.updateSource` before it is committed to the database and actually created.
   await item.updateSource({ "system.origin": origin });
+});
+
+Hooks.on('preCreateActor', function(document,b,c,d) {
+  document.data.update({"prototypeToken.actorLink":true});
 });
 
 Hooks.on('getSceneControlButtons', function (hudButtons) {

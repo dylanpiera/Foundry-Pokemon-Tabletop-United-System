@@ -1,6 +1,14 @@
 # Welcome to the Beta!
 Hey there! You are on the Beta Branch. If you ever have any feedback please do share with us over on [Github](https://github.com/dylanpiera/Foundry-Pokemon-Tabletop-United-System/issues) or [Discord](https://discord.gg/fE3w59q)
 
+## Version 3.1.0.5 - Bug Fixes
+Hi all! Another small bug update patch with a few major bugs splatted.
+
+### Fixes: 
+- Actors have their token data linked by default now.
+- Active Effects & Source pop-ups work and display as intended again.
+- Fixed crit button being ignored by the single-target applicator.
+
 ## Version 3.1.0.4 - Bug Fixes & Search
 Hi all! We have some more awesome bug fixes and new features thanks to `Ellam#6478` and Void!
 
