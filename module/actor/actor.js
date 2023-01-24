@@ -41,8 +41,8 @@ export class PTUActor extends Actor {
 
     // Add extra origin info
 
-    this.origins = mergeObject(this.origins, {
-      data: {
+    this.origins = mergeObject({
+      system: {
         levelUpPoints: [
           { label: "Base Value", change: { type: CONST.ACTIVE_EFFECT_MODES.ADD, value: actorData.type === 'character' ? 9 : 10 } },
           { label: "Level", change: { type: CONST.ACTIVE_EFFECT_MODES.ADD, value: actorSystem.level.current } },
@@ -97,7 +97,7 @@ export class PTUActor extends Actor {
           return map;
         }) : undefined
       }
-    })
+    }, this.origins)
     console.groupEnd();
 
     if (this.id === game.ptu.forms.sidebar?.store?.state?.actorId) game.ptu.forms.sidebar.stateHasChanged();
@@ -109,7 +109,7 @@ export class PTUActor extends Actor {
    */
   /** @override */
   applyActiveEffects(doBaseData = true) {
-    const overrides = {};
+    let overrides = {};
     const origins = {};
     // Organize non-disabled effects by their application priority
     const effects = Array.from(this.effects).concat(this.items.filter(item => item?.effects?.size > 0).flatMap(item => Array.from(item.effects)));
@@ -149,7 +149,7 @@ export class PTUActor extends Actor {
     for (let change of changes) {
       const result = change.effect.apply(this, change);
       if (result !== null) {
-        overrides[change.key] = result;
+        overrides = mergeObject(overrides, result);
         if (!origins[change.key]) origins[change.key] = [];
         origins[change.key].push({ label: change.effect.label, change: { type: change.mode, value: change.value } });
       }

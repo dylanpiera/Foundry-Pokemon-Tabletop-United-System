@@ -50,36 +50,36 @@
                         {{#each data.skills as |skill key|}}
                         <div class="row no-gutters {{key}} align-items-center">
                           <div class="skill {{key}} col-sm-3 bgcolor key type--{{skill.type}} align-self-center">
-                            <label for="data.skills.{{key}}.label" class="resource-label" {{#if (is key "techEd")}}style="font-size:10px;"{{/if}}>{{skill.label}}</label>
+                            <label for="system.skills.{{key}}.label" class="resource-label" {{#if (is key "techEd")}}style="font-size:10px;"{{/if}}>{{skill.label}}</label>
                           </div>
                           <div class="skill {{key}} col pl-1 pr-1 fs-9 center-text">
                             {{> "systems/ptu/templates/partials/mod-field.hbs" 
-                              path=(concat "data.skills." key ".value.value") 
+                              path=(concat "system.skills." key ".value.value") 
                               value=skill.value.value
                               dtype="Number" 
                               mod=skill.value.mod
                               total=skill.value.total
-                              modOrigins=(getProperty ../actor.origins (concat "data.skills." key ".value.mod"))
+                              modOrigins=(getProperty ../actor.origins (concat "system.skills." key ".value.mod"))
                               flipped=(gt 8 @index)}}
                           </div>
                           <div class="skill {{key}} col-sm-3 align-self-center bgcolor skill--{{skill.rank}} center-text">
-                            <label for="data.skills.{{key}}.rank" class="resource-label">{{localize (concat "PTU.Skill" skill.rank)}}</label>
+                            <label for="system.skills.{{key}}.rank" class="resource-label">{{localize (concat "PTU.Skill" skill.rank)}}</label>
                           </div>
                           <div class="skill {{key}} col pl-1 fs-9 center-text">
                             {{> "systems/ptu/templates/partials/mod-field.hbs" 
-                              path=(concat "data.skills." key ".modifier.value") 
+                              path=(concat "system.skills." key ".modifier.value") 
                               value=skill.modifier.value
                               dtype="Number" 
                               mod=skill.modifier.mod
                               total=skill.modifier.total
-                              modOrigins=(getProperty ../actor.origins (concat "data.skills." key ".modifier.mod") )
+                              modOrigins=(getProperty ../actor.origins (concat "system.skills." key ".modifier.mod") )
                               flipped=(gt 8 @index)}}
                           </div>
                           <div class="skill {{key}} col-sm-2 align-self-center bgcolor fs-9 center-text rollable"
                             data-roll="{{#if (is true (getGameSetting "ignoreVirtuosoLimit"))}}{{skill.value.total}}{{else}}{{#if (bigger skill.value.total 6)}}6{{else}}{{skill.value.total}}{{/if}}{{/if}}d6{{#if skill.modifier.total}}+{{skill.modifier.total}}{{/if}}"
                             data-label="{{skill.label}}">
                             <i class="fas fa-dice-d20"></i>
-                            <label for="data.skills.{{key}}.value"
+                            <label for="system.skills.{{key}}.value"
                               class="resource-label">{{#if (is true (getGameSetting "ignoreVirtuosoLimit"))}}{{skill.value.total}}{{else}}{{#if (bigger skill.value.total 6)}}6{{else}}{{skill.value.total}}{{/if}}{{/if}}d6{{#if skill.modifier.total}}+{{skill.modifier.total}}{{/if}}</label>
                           </div>
                         </div>
@@ -285,7 +285,7 @@
                       value=data.modifiers.damageBonus.physical.value 
                       total=data.modifiers.damageBonus.physical.total
                       dtype="Number"
-                      modOrigins=(getProperty origins "data.modifiers.damageBonus.physical.mod")
+                      modOrigins=(getProperty origins "system.modifiers.damageBonus.physical.mod")
                       flipped=true}}
                   </div>
                   <div class="col-sm-6 small-input">
@@ -295,7 +295,7 @@
                       value=data.modifiers.damageBonus.special.value 
                       total=data.modifiers.damageBonus.special.total
                       dtype="Number" 
-                      modOrigins=(getProperty origins "data.modifiers.damageBonus.special.mod")
+                      modOrigins=(getProperty origins "system.modifiers.damageBonus.special.mod")
                       flipped=true}}
                   </div>
                 </div>
@@ -492,7 +492,7 @@
                           dtype="Number" 
                           mod=""
                           total=data.levelUpPoints
-                          modOrigins=(getProperty origins "data.levelUpPoints")
+                          modOrigins=(getProperty origins "system.levelUpPoints")
                           disabled=true}}
                       </div>
                     </div>
@@ -535,7 +535,7 @@
                             dtype="Number" 
                             mod=""
                             total=data.evasion.physical
-                            modOrigins=(getProperty origins "data.evasion.physical")
+                            modOrigins=(getProperty origins "system.evasion.physical")
                             disabled=true
                             flipped=true}}
                         </div>
@@ -546,7 +546,7 @@
                             dtype="Number" 
                             mod=""
                             total=data.evasion.special
-                            modOrigins=(getProperty origins "data.evasion.special")
+                            modOrigins=(getProperty origins "system.evasion.special")
                             disabled=true
                             flipped=true}}
                         </div>
@@ -557,7 +557,7 @@
                             dtype="Number" 
                             mod=""
                             total=data.evasion.speed
-                            modOrigins=(getProperty origins "data.evasion.speed")
+                            modOrigins=(getProperty origins "system.evasion.speed")
                             disabled=true
                             flipped=true}}
                         </div>
@@ -734,7 +734,7 @@
                           value=data.modifiers.initiative.value 
                           total=data.modifiers.initiative.total
                           dtype="Number"
-                          modOrigins=(getProperty origins "data.modifiers.initiative.mod")
+                          modOrigins=(getProperty origins "system.modifiers.initiative.mod")
                           flipped=true}}
                       </div>
                       <div class="col-sm-6">
@@ -744,7 +744,7 @@
                           value=data.modifiers.statPoints.value 
                           total=data.modifiers.statPoints.total
                           dtype="Number" 
-                          modOrigins=(getProperty origins "data.modifiers.statPoints.mod")
+                          modOrigins=(getProperty origins "system.modifiers.statPoints.mod")
                           flipped=true}}
                       </div>
                     </div>
@@ -771,7 +771,7 @@
                           value=data.modifiers.acBonus.value 
                           total=data.modifiers.acBonus.total
                           dtype="Number" 
-                          modOrigins=(getProperty origins "data.modifiers.acBonus.mod")
+                          modOrigins=(getProperty origins "system.modifiers.acBonus.mod")
                           flipped=true}}
                       </div>
                       <div class="col-sm-4">
@@ -781,7 +781,7 @@
                           value=data.modifiers.critRange.value 
                           total=data.modifiers.critRange.total
                           dtype="Number" 
-                          modOrigins=(getProperty origins "data.modifiers.critRange.mod")
+                          modOrigins=(getProperty origins "system.modifiers.critRange.mod")
                           flipped=true}}
                       </div>
                       <div class="col-sm-4">
@@ -791,7 +791,7 @@
                           value=data.modifiers.effectRange.value 
                           total=data.modifiers.effectRange.total
                           dtype="Number" 
-                          modOrigins=(getProperty origins "data.modifiers.effectRange.mod")
+                          modOrigins=(getProperty origins "system.modifiers.effectRange.mod")
                           flipped=true}}
                       </div>
                     </div>
@@ -822,7 +822,7 @@
                           value=data.modifiers.damageReduction.physical.value 
                           total=data.modifiers.damageReduction.physical.total
                           dtype="Number" 
-                          modOrigins=(getProperty origins "data.modifiers.damageReduction.physical.mod")}}
+                          modOrigins=(getProperty origins "system.modifiers.damageReduction.physical.mod")}}
                       </div>
                       <div class="col-sm-6">
                         {{> "systems/ptu/templates/partials/mod-field.hbs" 
@@ -831,7 +831,7 @@
                           value=data.modifiers.damageReduction.special.value 
                           total=data.modifiers.damageReduction.special.total
                           dtype="Number" 
-                          modOrigins=(getProperty origins "data.modifiers.damageReduction.special.mod")}}
+                          modOrigins=(getProperty origins "system.modifiers.damageReduction.special.mod")}}
                       </div>
                     </div>
                   </div>
@@ -857,7 +857,7 @@
                           value=data.modifiers.evasion.physical.value 
                           total=data.modifiers.evasion.physical.total
                           dtype="Number" 
-                          modOrigins=(getProperty origins "data.modifiers.evasion.physical.mod")}}
+                          modOrigins=(getProperty origins "system.modifiers.evasion.physical.mod")}}
                       </div>
                       <div class="col-sm-4">
                         {{> "systems/ptu/templates/partials/mod-field.hbs" 
@@ -866,7 +866,7 @@
                           value=data.modifiers.evasion.special.value 
                           total=data.modifiers.evasion.special.total 
                           dtype="Number" 
-                          modOrigins=(getProperty origins "data.modifiers.evasion.special.mod")}}
+                          modOrigins=(getProperty origins "system.modifiers.evasion.special.mod")}}
                       </div>
                       <div class="col-sm-4">
                         {{> "systems/ptu/templates/partials/mod-field.hbs" 
@@ -875,7 +875,7 @@
                           value=data.modifiers.evasion.speed.value 
                           total=data.modifiers.evasion.speed.total
                           dtype="Number" 
-                          modOrigins=(getProperty origins "data.modifiers.evasion.speed.mod")}}
+                          modOrigins=(getProperty origins "system.modifiers.evasion.speed.mod")}}
                       </div>
                     </div>
                   </div>
