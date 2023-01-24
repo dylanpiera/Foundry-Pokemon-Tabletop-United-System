@@ -1,6 +1,17 @@
 # Welcome to the Beta!
 Hey there! You are on the Beta Branch. If you ever have any feedback please do share with us over on [Github](https://github.com/dylanpiera/Foundry-Pokemon-Tabletop-United-System/issues) or [Discord](https://discord.gg/fE3w59q)
 
+## Version 3.1.0.6 - Bug Fixes & QoL Featurs
+Hi all! Another small patch with some QoL Features and a hotfix from the latest bugfixes~
+
+### New Features:
+- Trainer Sheets now show how many Feats/Edges you should have based on your level up (including the bonus edges at lvl 2, 6 & 12).
+- Added ad-hoc modifier for Skill Checks just like you can do with moves/damage calc (hold shift when clicking).
+- Added support for female images with the `f` prefix so f.e. `001f.png`
+
+### Fixes: 
+- Fixed the AE & Source bugs on Trainer Sheets as well. Oops.
+
 ## Version 3.1.0.5 - Bug Fixes
 Hi all! Another small bug update patch with a few major bugs splatted.
 
