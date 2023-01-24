@@ -230,9 +230,6 @@ Hooks.once('init', function () {
   CONFIG.Actor.documentClass = ptu.config.Actor.documentClass;
   CONFIG.Item.documentClass = ptu.config.Item.documentClass;
 
-  // Define custom Active Effect class
-  CONFIG.ActiveEffect.sheetClass = ptu.config.ActiveEffect.sheetClass;
-
   // Custom Combat Settings
   CONFIG.Combat.defeatedStatusId = ptu.config.Combat.defeatedStatusId;
 
@@ -274,6 +271,8 @@ function registerSheets() {
   Items.registerSheet("ptu", ptu.config.Item.sheetClasses.item, { types: ["item", "ability", "move", "capability", "pokeedge", "dexentry"], makeDefault: true });
   Items.registerSheet("ptu", ptu.config.Item.sheetClasses.edge, { types: ["edge"], makeDefault: true });
   Items.registerSheet("ptu", ptu.config.Item.sheetClasses.feat, { types: ["feat"], makeDefault: true });
+
+  DocumentSheetConfig.registerSheet(ActiveEffect, "core", PTUActiveEffectConfig, { makeDefault: true })
 }
 
 export function PrepareMoveData(actorData, move) {

@@ -45,7 +45,6 @@ import { debug } from "../ptu.js";
           c.value = c.value.replace("[", "").replace("]", "").split(",")
         }
       }
-      debug(this.object)
       if(this.object.data.flags?.ptu?.itemEffect) {
         const obj = mergeObject(duplicate(this.object.data), formData);
         return this.object.parent.update({effects: [obj]})
