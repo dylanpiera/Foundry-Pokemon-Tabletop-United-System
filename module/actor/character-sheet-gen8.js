@@ -393,9 +393,8 @@ export class PTUGen8CharacterSheet extends ActorSheet {
 			let rolldata = dataset.roll;
 			let label = dataset.label ? `Rolling ${dataset.label}` : '';
 
-			// Add +1 to the roll if shift is held on click
-			const alt = event.altKey;
-			if (alt && this.useAP()) { // Only if AP are available
+			// Add +1 to the roll if alt is held on click
+			if (event.altKey && this.useAP()) { // Only if AP are available
 				// Does the character have Instinctive Aptitude?
 				let instinctiveAptitude = false;
 				this.actor.edges.forEach((e) => {
@@ -407,8 +406,27 @@ export class PTUGen8CharacterSheet extends ActorSheet {
 				instinctiveAptitude ? rolldata += "+2" : rolldata += "+1";
 				label += "<br>using 1 AP</br>";
 			}
-			else if (alt) {
+			else if (event.altKey) {
 				return;
+			}
+			if (event.shiftKey) {
+				const extra = await new Promise((resolve, reject) => {
+					Dialog.confirm({
+						title: `Skill Roll Modifier`,
+						content: `<input type="text" name="skill-roll-modifier" value="0"></input>`,
+						yes: async (html) => {
+							const bonusTxt = html.find('input[name="skill-roll-modifier"]').val()
+					
+							const bonus = !isNaN(Number(bonusTxt)) ? Number(bonusTxt) : parseInt((await (new Roll(bonusTxt)).roll({async:true})).total);
+							if (!isNaN(bonus)) {
+								return resolve(bonus);
+							}
+							return reject();
+						}
+					});
+				});
+				rolldata += `+${extra}`;
+				label += `with ${extra} skill roll modifier</br>`;
 			}
 
 			let roll = new Roll(rolldata, this.actor.system);
