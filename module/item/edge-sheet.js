@@ -107,6 +107,14 @@ export class PTUEdgeSheet extends ItemSheet {
     // Everything below here is only needed if the sheet is editable
     if (!this.options.editable) return;
 
+    html.find("input[type=checkbox]").on("change", (e) => {
+      e.preventDefault();
+
+      const value = e.currentTarget.checked;
+
+      this.object.update({"system.free": value});
+    });
+
     // Roll handlers, click handlers, etc. would go here.
   }
 }

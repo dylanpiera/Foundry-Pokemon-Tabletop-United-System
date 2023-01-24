@@ -720,6 +720,7 @@ span.readable {
   cursor: default;
   flex-wrap: nowrap;
   overflow: hidden;
+  align-items: center;
 }
 .actor .inventory-list .item .item-name h4 .info-icon {
   margin-left: 6px;

@@ -77,6 +77,22 @@
                         </div>
                     </div>
                     <div class="hgss-box align-items-center">
+                        {{!-- Free --}}
+                        <div class="hgss-header mb-1">
+                            <label for="name">Free Edge:</label>
+                        </div>
+                        <div class="hgss-body">
+                            <div class="d-flex align-items-center">
+                                <input
+                                    class="ml-2 mr-2"
+                                    data-item-id="{{_id}}" 
+                                    data-binding="system.free" 
+                                    type="checkbox" {{checked system.free}}
+                                />
+                                <label for="system.free"><span class="text-muted" style="word-break: break-word;">Whether this edge should count for max-edges</span></label>
+                            </div>
+                        </div>
+
                         {{!-- Effect --}}
                         <div class="hgss-header mb-1 " style="padding: 6px 5px;">
                             <label for="system.effect">Effect:</label>

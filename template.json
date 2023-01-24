@@ -482,12 +482,14 @@
       "prerequisites": "",
       "frequency": "At Will - Standard Action",
       "tags": [],
-      "notes": ""
+      "notes": "",
+      "free": false
     },
     "edge": {
       "templates": ["base"],
       "prerequisites": "",
-      "notes": ""
+      "notes": "",
+      "free": false
     },
     "ability": {
       "templates": ["base"],

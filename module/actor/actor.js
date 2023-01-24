@@ -427,6 +427,16 @@ export class PTUActor extends Actor {
     data.evasion = CalculateEvasions(data, actorData.flags?.ptu, actorData.items);
     data.capabilities = CalculateTrainerCapabilities(data.skills, actorData.items, (data.stats.spd.stage.value + data.stats.spd.stage.mod), actorData.flags?.ptu);
 
+    data.feats = {
+      total: actorData.items.filter(x => x.type == "feat" && !x.system.free).length,
+      max: 4 + Math.ceil(data.level.current / 2)
+    }
+
+    data.edges = {
+      total: actorData.items.filter(x => x.type == "edge" && !x.system.free).length,
+      max: 4 + Math.floor(data.level.current / 2) + (data.level.current >= 2 ? 1 : 0) + (data.level.current >= 6 ? 1 : 0) + (data.level.current >= 12 ? 1 : 0)
+    }
+
     data.ap.max = 5 + Math.floor(data.level.current / 5);
 
     data.initiative = { value: data.stats.spd.total + data.modifiers.initiative.total };

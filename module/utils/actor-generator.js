@@ -54,7 +54,7 @@ export class ActorGenerator {
             imgSrc = game.settings.get("ptu", "defaultPokemonImageDirectory");
             if(!imgSrc) return this;
         }
-        let imgPath = await GetSpeciesArt(this.species.data, imgSrc, imgExt, this.actor.system.shiny);
+        let imgPath = await GetSpeciesArt(this.species.data, imgSrc, imgExt, this.actor.system.shiny, false, (this.actor.system.gender ?? this.system.gender ?? "").toLowerCase().includes("female"));
         if(imgPath) this.data.img = imgPath;
         return this;
     }
