@@ -30,7 +30,7 @@ export class PTUGen8CharacterSheet extends ActorSheet {
 		data.dtypes = ['String', 'Number', 'Boolean'];
 
 		// Prepare items.
-		if (this.actor.data.type == 'character') {
+		if (this.actor.type == 'character') {
 			this._prepareCharacterItems(data);
 		}
 		data['totalWealth'] = this.actor.itemTypes.item.reduce((total, item) => total + (!isNaN(item.system.cost) ? item.system.cost * (item.system.quantity ?? 0) : 0), this.actor.system.money);
@@ -93,10 +93,9 @@ export class PTUGen8CharacterSheet extends ActorSheet {
 		// Iterate through items, allocating to containers
 		// let totalWeight = 0;
 		for (let i of sheetData.items) {
-			let item = i.data;
 			i.img = i.img || DEFAULT_TOKEN;
 			if (i.type == 'item') {
-				let cat = i.data.category;
+				let cat = i.system.category;
 				if (cat === undefined || cat == "") {
 					cat = "Misc";
 				}
@@ -114,7 +113,7 @@ export class PTUGen8CharacterSheet extends ActorSheet {
 				case 'move': moves.push(i); break;
 				case 'capability': capabilities.push(i); break;
 				case 'dexentry':
-					if (i.data.owned) dex.owned.push(i);
+					if (i.system.owned) dex.owned.push(i);
 					else dex.seen.push(i);
 					break;
 			}
@@ -280,24 +279,24 @@ export class PTUGen8CharacterSheet extends ActorSheet {
 			}
 			handled = true;
 
-			const oldItem = actor.items.getName(item.data.name);
+			const oldItem = actor.items.getName(item.name);
 			if (oldItem.id != item.id && oldItem.system.quantity) {
-				const data = duplicate(oldItem.data);
-				data.data.quantity++;
+				const data = duplicate(oldItem.system);
+				data.quantity++;
 				await this.actor.deleteEmbeddedDocuments("Item", [item.id]);
 				return await this.actor.updateEmbeddedDocuments("Item", [data]);
 			}
 		}
 		else item = actor.items.get(itemData._id);
 
-		if (item.data.type != 'item' || item.system.category == category)
-			return this._onSortItem(event, item.data);
+		if (item.type != 'item' || item.system.category == category)
+			return this._onSortItem(event, item);
 
 		item = await item.update({ 'data.category': category });
 
-		log(`Moved ${item.data.name} to ${category} category`);
+		log(`Moved ${item.name} to ${category} category`);
 
-		await this._onSortItem(event, item.data);
+		await this._onSortItem(event, item);
 		return handled ? actor.items.get(item.id) : await super._onDrop(event);
 	}
 
@@ -496,7 +495,7 @@ export class PTUGen8CharacterSheet extends ActorSheet {
 
 		/** Show Dialog */
 		let d = new Dialog({
-			title: `${this.actor.data.name}'s ${move.name}`,
+			title: `${this.actor.name}'s ${move.name}`,
 			content: `<div class="pb-1"><p>Would you like to use move ${move.name} or output the move details?</p></div><div><small class="text-muted">Did you know you can skip this dialog box by holding the Shift, Ctrl or Alt key?</small></div>`,
 			buttons: {
 				roll: {
@@ -533,7 +532,7 @@ export class PTUGen8CharacterSheet extends ActorSheet {
 			});
 			return true;
 		}
-		ui.notifications.error(`${this.actor.data.name} does not have enough AP for this action.`);
+		ui.notifications.error(`${this.actor.name} does not have enough AP for this action.`);
 		return false;
 	}
 

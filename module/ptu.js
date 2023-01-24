@@ -204,6 +204,10 @@ Hooks.once('init', function () {
   console.groupCollapsed("PTU Init");
   console.time("PTU Init")
 
+  window.actor = function() {
+    return canvas.tokens.controlled[0].actor;
+  }
+
   // Register custom system settings
   ptu.utils.api.gm = new Api(); // Initialize the GM API
   game.ptu = ptu;
