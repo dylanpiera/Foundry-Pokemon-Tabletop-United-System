@@ -229,7 +229,7 @@ export class PTUGen8CharacterSheet extends ActorSheet {
 
 		// Drag events for macros.
 		if (this.actor.isOwner) {
-			let handler = (ev) => this._onDragItemStart(ev);
+			let handler = (ev) => undefined;
 			html.find('li.item').each((i, li) => {
 				if (li.classList.contains('inventory-header')) return;
 				li.setAttribute('draggable', true);
@@ -253,54 +253,79 @@ export class PTUGen8CharacterSheet extends ActorSheet {
 			}
 		});
 
-		document.getElementsByName('data.ap.value input')[0].addEventListener('change', (e) => {
+		document.getElementsByName('system.ap.value input')[0].addEventListener('change', (e) => {
 			const value = parseInt(e.currentTarget.value);
 			if (isNaN(value)) return;
 			this.actor.update({
-				"data.ap.value": value
+				"system.ap.value": value
 			});
 		});
 	}
 
-	async _onDrop(event) {
-		const dataTransfer = JSON.parse(event.dataTransfer.getData('text/plain'));
+	// async _onDrop(event) {
+	// 	const dataTransfer = JSON.parse(event.dataTransfer.getData('text/plain'));
 
-		const itemData = dataTransfer.data;
+	// 	const category = event.target.dataset.category;
+	// 	const actor = this.actor;
+	// 	const uuid = dataTransfer.uuid;
+	// 	let handled = false;
+	// 	let item = undefined;
+
+		
+	// 	item = duplicate(await fromUuid(uuid));
+	// 	if (!item) return ui.notifications.notify("Item not found", "error");
+
+	// 	const oldItem = actor.items.getName(item.name);
+	// 	if (oldItem && oldItem.id != item.id && oldItem.system.quantity) {
+	// 		const quantity = duplicate(oldItem.system.quantity);
+	// 		oldItem.system.quantity = quantity + 1;
+	// 		//await this.actor.deleteEmbeddedDocuments("Item", [item.id]);
+	// 		return await this.actor.updateEmbeddedDocuments("Item", [oldItem]);
+	// 	}
+
+	// 	if (item.type != 'item' || item.system.category == category)
+	// 		return this._onSortItem(event, item);
+
+	// 	item = await item.update({ 'system.category': category });
+
+	// 	log(`Moved ${item.name} to ${category} category`);
+
+	// 	await this._onSortItem(event, item);
+	// 	return handled ? actor.items.get(item.id) : await super._onDrop(event);
+	// }
+
+	async _onDropItem(event, data) {
+		if ( !this.actor.isOwner ) return false;
+		const item = await Item.implementation.fromDropData(data);
+		const itemData = item.toObject();
+
 		const category = event.target.dataset.category;
-		const actor = this.actor;
-		let handled = false;
-		let item = undefined;
 
-		if (!itemData) {
-			item = (await super._onDrop(event))[0];
-			if (!item) {
-				error("Item Drop data is undefined.", event)
-				return;
+		// Handle item sorting within the same Actor
+		if ( this.actor.uuid === item.parent?.uuid ) {
+			if(category) {
+				if(item.type == 'item' && item.system.category != category) 
+				await item.update({"system.category": category});
 			}
-			handled = true;
-
-			const oldItem = actor.items.getName(item.name);
-			if (oldItem.id != item.id && oldItem.system.quantity) {
-				const data = duplicate(oldItem.system);
-				data.quantity++;
-				await this.actor.deleteEmbeddedDocuments("Item", [item.id]);
-				return await this.actor.updateEmbeddedDocuments("Item", [data]);
-			}
+			return this._onSortItem(event, itemData);
 		}
-		else item = actor.items.get(itemData._id);
 
-		if (item.type != 'item' || item.system.category == category)
-			return this._onSortItem(event, item);
+		const oldItem = this.actor.items.getName(itemData.name);
+		if (oldItem && oldItem.id != itemData.id && oldItem.system.quantity) {
+			const quantity = duplicate(oldItem.system.quantity);
+			await oldItem.update({"system.quantity": quantity + 1});
+			return false;
+		}
 
-		item = await item.update({ 'data.category': category });
+		if(category) {
+			if(itemData.type == 'item' && itemData.system.category != category) itemData.system.category = category;
+		}
 
-		log(`Moved ${item.name} to ${category} category`);
-
-		await this._onSortItem(event, item);
-		return handled ? actor.items.get(item.id) : await super._onDrop(event);
+		// Create the owned item
+		return this._onDropItemCreate(itemData);
 	}
 
-	_onDragItemStart(event) { }
+	
 
 	/**
 	 * Handle creating a new Owned Item for the actor using initial data defined in the HTML dataset
@@ -546,7 +571,7 @@ export class PTUGen8CharacterSheet extends ActorSheet {
 		const currentAP = this.actor.system.ap.value;
 		if (currentAP >= value) {
 			this.actor.update({
-				'data.ap.value': currentAP - value
+				'system.ap.value': currentAP - value
 			});
 			return true;
 		}

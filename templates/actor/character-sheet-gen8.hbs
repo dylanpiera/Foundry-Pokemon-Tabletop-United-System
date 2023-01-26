@@ -108,19 +108,19 @@
                       <div class="options w-100 d-flex">
                         <label for="progressBar" class="hp"></label>
                         <div class="d-flex pt-1 pb-1" style="text-align: center;">
-                          <input class="ml-1 mr-1" type="text" name="data.health.value" value="{{data.health.value}}"
+                          <input class="ml-1 mr-1" type="text" name="system.health.value" value="{{data.health.value}}"
                             data-dtype="Number" />
                           <span style="font-size: 20px;"> / </span>
-                          <input class="ml-1" type="text" name="data.health.max" value="{{data.health.max}}" data-dtype="Number"
+                          <input class="ml-1" type="text" name="system.health.max" value="{{data.health.max}}" data-dtype="Number"
                             disabled />
                         </div>
                       </div>
                       <div class="options w-100 d-flex">
                         <div class="temp-hp"><label for="temp-hp">{{localize "PTU.HPTemp"}}</label></div>
                         <div class="d-flex pt-1 pb-1" style="text-align: center;">
-                          <input class="ml-1 mr-1" type="text" name="data.tempHp.value" value="{{data.tempHp.value}}" data-dtype="Number">
+                          <input class="ml-1 mr-1" type="text" name="system.tempHp.value" value="{{data.tempHp.value}}" data-dtype="Number">
                           <span style="font-size: 20px;"> / </span>
-                          <input class="ml-1" type="text" name="data.tempHp.max" value="{{data.tempHp.max}}" data-dtype="Number">
+                          <input class="ml-1" type="text" name="system.tempHp.max" value="{{data.tempHp.max}}" data-dtype="Number">
                         </div>
                       </div>
                       <div class="options w-100 pb-1 pt-1">
@@ -137,13 +137,13 @@
                       </div>
                       <div class="swsh-body">
                         <div class="w-100">
-                          <input type="range" class="w-75" name="data.ap.value" value="{{data.ap.value}}" data-dtype="Integer" min="0"
+                          <input type="range" class="w-75" name="system.ap.value" value="{{data.ap.value}}" data-dtype="Integer" min="0"
                             max="{{data.ap.max}}" step="1" />
                         </div>
                         <div class="resource-content hp-info flexrow flex-group-right hp-info">
-                          <input type="text" name="data.ap.value input" value="{{data.ap.value}}" data-dtype="Number" />
+                          <input type="text" name="system.ap.value input" value="{{data.ap.value}}" data-dtype="Number" />
                           <span>/</span>
-                          <input type="text" name="data.ap.max" value="{{data.ap.max}}" data-dtype="Number" disabled/>
+                          <input type="text" name="system.ap.max" value="{{data.ap.max}}" data-dtype="Number" disabled/>
                         </div>
                       </div>
                     </div>
@@ -155,10 +155,10 @@
                       <div class="swsh-header">
                         <div class="d-flex w-100 align-items-center justify-content-center">
                           <div class="col-sm-2">
-                            <label for="data.level.current">{{localize "PTU.Level"}}:</label>
+                            <label for="system.level.current">{{localize "PTU.Level"}}:</label>
                           </div>
                           <div class="col-sm-3">
-                            <input class="ml-2" type="text" name="data.level.current" value="{{data.level.current}}" data-dtype="Number"
+                            <input class="ml-2" type="text" name="system.level.current" value="{{data.level.current}}" data-dtype="Number"
                               disabled />
                           </div>
                         </div>
@@ -167,20 +167,20 @@
                         <div class="d-flex w-100 mt-1 mb-1 align-items-center justify-content-between">
                           {{#if (is "true" (getGameSetting "useDexExp"))}}
                           <div class="col-sm-4">
-                            <label for="data.level.milestones">{{localize "PTU.LevelMilestones"}}</label>
+                            <label for="system.level.milestones">{{localize "PTU.LevelMilestones"}}</label>
                           </div>
                           <div class="col-sm-4">
-                            <label for="data.level.dexexp">{{localize "PTU.LevelDexExp"}}</label>
+                            <label for="system.level.dexexp">{{localize "PTU.LevelDexExp"}}</label>
                           </div>
                           <div class="col-sm-4">
-                            <label for="data.level.miscexp">{{localize "PTU.LevelMiscExp"}}</label>
+                            <label for="system.level.miscexp">{{localize "PTU.LevelMiscExp"}}</label>
                           </div>
                           {{else}}
                             <div class="col-sm-6">
-                              <label for="data.level.milestones">{{localize "PTU.LevelMilestones"}}</label>
+                              <label for="system.level.milestones">{{localize "PTU.LevelMilestones"}}</label>
                             </div>
                             <div class="col-sm-6">
-                              <label for="data.level.miscexp">{{localize "PTU.LevelMiscExp"}}</label>
+                              <label for="system.level.miscexp">{{localize "PTU.LevelMiscExp"}}</label>
                             </div>
                           {{/if}}
                         </div>
@@ -190,20 +190,20 @@
                           <div class="d-flex w-100 pt-1 pb-1" style="text-align: center;">
                             {{#if (is "true" (getGameSetting "useDexExp"))}}
                             <div class="col-sm-4">
-                              <input type="text" name="data.level.milestones" value="{{data.level.milestones}}" data-dtype="Number" />
+                              <input type="text" name="system.level.milestones" value="{{data.level.milestones}}" data-dtype="Number" />
                             </div>
                             <div class="col-sm-4">
-                              <input type="text" name="data.level.dexexp" value="{{data.level.dexexp}}" data-dtype="Number" disabled/>
+                              <input type="text" name="system.level.dexexp" value="{{data.level.dexexp}}" data-dtype="Number" disabled/>
                             </div>
                             <div class="col-sm-4">
-                              <input type="text" name="data.level.miscexp" value="{{data.level.miscexp}}" data-dtype="Number" />
+                              <input type="text" name="system.level.miscexp" value="{{data.level.miscexp}}" data-dtype="Number" />
                             </div>
                             {{else}}
                               <div class="col-sm-6">
-                                <input type="text" name="data.level.milestones" value="{{data.level.milestones}}" data-dtype="Number" />
+                                <input type="text" name="system.level.milestones" value="{{data.level.milestones}}" data-dtype="Number" />
                               </div>
                               <div class="col-sm-6">
-                                <input type="text" name="data.level.miscexp" value="{{data.level.miscexp}}" data-dtype="Number" />
+                                <input type="text" name="system.level.miscexp" value="{{data.level.miscexp}}" data-dtype="Number" />
                               </div>
                             {{/if}}
                             </div>
@@ -230,10 +230,10 @@
               <div class="col">
                 <div class="swsh-box mt-2 mb-2">
                   <div class="swsh-header justify-content-center">
-                    <h3 for="data.money" class="mr-1">{{localize "PTU.Money"}}</h3>
+                    <h3 for="system.money" class="mr-1">{{localize "PTU.Money"}}</h3>
                   </div>
                   <div class="swsh-body ml-3 mr-3">
-                    <input type="text" name="data.money" value="{{data.money}}" data-dtype="Number">
+                    <input type="text" name="system.money" value="{{data.money}}" data-dtype="Number">
                   </div>
                 </div>
                 <div class="swsh-box mt-2 mb-2">
@@ -246,14 +246,14 @@
                 </div>
                 <div class="swsh-box mb-2">
                   <div class="swsh-header justify-content-center">
-                    <h3 for="data.item_categories" class="mr-1">{{localize "PTU.ItemCategories"}}</h3>
+                    <h3 for="system.item_categories" class="mr-1">{{localize "PTU.ItemCategories"}}</h3>
                   </div>
                   <div class="swsh-body ml-3 mr-3">
                     <div class="d-flex flexrow" style="flex-wrap: wrap; width: 100%;">
                       {{#each data.item_categories as |value category|}}
                         <div class="d-flex flexrow m-1" style="flex: 0 1 31%; align-items: center;">
-                          <label for="data.item_categories.{{category}}">{{category}}</label>
-                          <input name="data.item_categories.{{category}}" type="checkbox" {{checked value}}>
+                          <label for="system.item_categories.{{category}}">{{category}}</label>
+                          <input name="system.item_categories.{{category}}" type="checkbox" {{checked value}}>
                         </div>
                       {{/each}}
                     </div>
@@ -269,10 +269,10 @@
               <div class="swsh-header" style="padding: 0;">
                 <div class="d-flex w-100 mt-1 mb-1">
                   <div class="col-sm-6">
-                    <label for="data.modifiers.damageBonus.physical.value">{{localize "PTU.DamageModPhysical"}}</label>
+                    <label for="system.modifiers.damageBonus.physical.value">{{localize "PTU.DamageModPhysical"}}</label>
                   </div>
                   <div class="col-sm-6">
-                    <label for="data.modifiers.damageBonus.special.value">{{localize "PTU.DamageModSpecial"}}</label>
+                    <label for="system.modifiers.damageBonus.special.value">{{localize "PTU.DamageModSpecial"}}</label>
                   </div>
                 </div>
               </div>
@@ -483,7 +483,7 @@
                     {{#if data.levelUpPoints}}
                     <div class="row no-gutters levelUpPoints">
                       <div class="col-sm-8">
-                        <label for="data.levelUpPoints" class="resource-label">{{localize "PTU.StatsRemainingLevelupPoints"}}:</label>
+                        <label for="system.levelUpPoints" class="resource-label">{{localize "PTU.StatsRemainingLevelupPoints"}}:</label>
                       </div>
                       <div class="col">
                         {{> "systems/ptu/templates/partials/mod-field.hbs" 
@@ -516,13 +516,13 @@
                     <div class="swsh-header">
                       <div class="d-flex w-100 mt-1 mb-1 align-items-center">
                         <div class="col-sm-4">
-                          <label for="data.evasion.physical">{{{localize "PTU.EvasionPhysical"}}}</label>
+                          <label for="system.evasion.physical">{{{localize "PTU.EvasionPhysical"}}}</label>
                         </div>
                         <div class="col-sm-4">
-                          <label for="data.evasion.special">{{{localize "PTU.EvasionSpecial"}}}</label>
+                          <label for="system.evasion.special">{{{localize "PTU.EvasionSpecial"}}}</label>
                         </div>
                         <div class="col-sm-4">
-                          <label for="data.evasion.speed">{{{localize "PTU.EvasionSpeed"}}}</label>
+                          <label for="system.evasion.speed">{{{localize "PTU.EvasionSpeed"}}}</label>
                         </div>
                       </div>
                     </div>
@@ -565,30 +565,89 @@
                     </div>
                   </div>
 
+                  <!-- Tick/HP Guidelines -->
+                  <div class="swsh-box w-100 mb-2" style="text-align: center;">
+                    <div class="swsh-header">
+                      <div class="d-flex w-100 mt-1" style="font-size: 13px; justify-content: center;">
+                        <h3>HP Guidelines</h3>
+                      </div>
+                    </div>
+                    <div class="swsh-header">
+                      <div class="d-flex w-100 mb-1 hp-guidelines" style="align-items: flex-end;">
+                        <div class="col-sm-2">
+                          <label for="1/16th">1/16th</label>
+                        </div>
+                        <div class="col-sm-2">
+                          <label for="1/10th">Tick<br>1/10th</label>
+                        </div>
+                        <div class="col-sm-2">
+                          <label for="1/8th">1/8th</label>
+                        </div>
+                        <div class="col-sm-2">
+                          <label for="3/10th">3/10th</label>
+                        </div>
+                        <div class="col-sm-2">
+                          <label for="1/4th">1/4th</label>
+                        </div>
+                        <div class="col-sm-2">
+                          <label for="1/2nd">1/2nd</label>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="swsh-body">
+                      <div class="d-flex w-100 mt-1 mb-1 hp-guidelines">
+                        <div class="col-sm-2">
+                          <input disabled name="1/16th" type="text" value="{{floor (divide data.health.total 16)}}"
+                            data-dtype="Number">
+                        </div>
+                        <div class="col-sm-2">
+                          <input disabled name="1/10th" type="text" value="{{floor (divide data.health.total 10)}}"
+                            data-dtype="Number">
+                        </div>
+                        <div class="col-sm-2">
+                          <input disabled name="1/8th" type="text" value="{{floor (divide data.health.total 8)}}"
+                            data-dtype="Number">
+                        </div>
+                        <div class="col-sm-2">
+                          <input disabled name="3/10th" type="text"
+                            value="{{floor (multiply data.health.total (divide 3 10))}}" data-dtype="Number">
+                        </div>
+                        <div class="col-sm-2">
+                          <input disabled name="1/4th" type="text" value="{{floor (divide data.health.total 4)}}"
+                            data-dtype="Number">
+                        </div>
+                        <div class="col-sm-2">
+                          <input disabled name="1/2nd" type="text" value="{{floor (divide data.health.total 2)}}"
+                            data-dtype="Number">
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
                   <!-- Injuries -->
                   <div class="swsh-box mb-2 w-100" style="text-align: center; word-break: keep-all;">
                     <div class="swsh-header">
                       <div class="d-flex w-100 mt-1 mb-1 align-items-center">
                         <div class="col-sm-6">
-                          <label for="data.health.injuries">{{localize "PTU.Injuries"}}</label>
+                          <label for="system.health.injuries">{{localize "PTU.Injuries"}}</label>
                         </div>
                         <div class="col-sm-6">
-                          <label for="data.health.total">{{localize "PTU.TotalHealth"}}<br><small>{{localize "PTU.IgnoringInjuries"}}</small></label>
+                          <label for="system.health.total">{{localize "PTU.TotalHealth"}}<br><small>{{localize "PTU.IgnoringInjuries"}}</small></label>
                         </div>
                       </div>
                     </div>
                     <div class="swsh-body" style="display: block;">
                       <div class="d-flex w-100 mt-1 mb-1">
                         <div class="col-sm-6">
-                          <input name="data.health.injuries" type="text" value="{{data.health.injuries}}"
+                          <input name="system.health.injuries" type="text" value="{{data.health.injuries}}"
                             data-dtype="Number" />
                         </div>
                         <div class="col-sm-6">
-                          <input type="text" name="data.health.total" value="{{data.health.total}}" data-dtype="Number"
+                          <input type="text" name="system.health.total" value="{{data.health.total}}" data-dtype="Number"
                             disabled />
                         </div>
                       </div>
-                      {{#if (or (bigger data.health.injuries 0) (is true data.modifiers.hardened))}}
+                      {{#if (or (bigger data.health.injuries 4) (is true data.modifiers.hardened))}}
                       <div class="d-flex w-100 mt-1 mb-1">
                         <ul style="position: relative; left: 15px; width: 96%; line-height: 15px; text-align: start;">
                           {{#if data.modifiers.hardened}}<li>{{localize "PTU.HardenedEffect0"}}</li>{{/if}}
@@ -615,10 +674,10 @@
                       {{#each data.capabilities as |capability key|}}
                       {{#if (not key "Other")}}
                       <div class="col-sm-4 p11 mb-1">
-                        <label for="data.capabilities.{{key}}">{{key}}</label>
+                        <label for="system.capabilities.{{key}}">{{key}}</label>
                       </div>
                       <div class="col-sm-2 mb-1" style="text-align: center;">
-                        <input type="text" name="data.capabilities.{{key}}" value="{{capability}}" data-dtype="Number"
+                        <input type="text" name="system.capabilities.{{key}}" value="{{capability}}" data-dtype="Number"
                           disabled />
                       </div>
                       {{/if}}
@@ -642,14 +701,14 @@
                       <div class="swsh-header">
                         <div class="d-flex w-100 mt-1 mb-1">
                           <div class="col">
-                            <label for="data.heldItem">{{localize "PTU.HeldItem"}}</label>
+                            <label for="system.heldItem">{{localize "PTU.HeldItem"}}</label>
                           </div>
                         </div>
                       </div>
                       <div class="swsh-body">
                         <div class="d-flex w-100 mt-1 mb-1">
                           <div class="col">
-                            <input id="heldItemInput" type="text" name="data.heldItem" value="{{data.heldItem}}" />
+                            <input id="heldItemInput" type="text" name="system.heldItem" value="{{data.heldItem}}" />
                           </div>
                         </div>
                       </div>
@@ -664,14 +723,14 @@
                       <div class="swsh-header">
                         <div class="d-flex w-100 mt-1 mb-1">
                           <div class="col">
-                            <label for="data.digestionBuff">{{localize "PTU.DigestionBuff"}}</label>
+                            <label for="system.digestionBuff">{{localize "PTU.DigestionBuff"}}</label>
                           </div>
                         </div>
                       </div>
                       <div class="swsh-body">
                         <div class="d-flex w-100 mt-1 mb-1">
                           <div class="col">
-                            <input id="digestionBuffInput" type="text" name="data.digestionBuff" value="{{data.digestionBuff}}" />
+                            <input id="digestionBuffInput" type="text" name="system.digestionBuff" value="{{data.digestionBuff}}" />
                           </div>
                         </div>
                       </div>
@@ -681,14 +740,14 @@
                       <div class="swsh-header" >
                         <div class="d-flex w-100 mt-1 mb-1 align-items-center">
                           <div class="col-sm-12">
-                            <label for="data.modifiers.saveChecks.value">{{localize "PTU.SaveCheckLabel"}}</label>
+                            <label for="system.modifiers.saveChecks.value">{{localize "PTU.SaveCheckLabel"}}</label>
                           </div>
                         </div>
                       </div>
                       <div class="swsh-body d-flex flex-column h-100" style="display: block;">
                         <div class="d-flex w-100 mt-1 mb-1">
                           <div class="col-sm-12">
-                            <input name="data.modifiers.saveChecks.value" type="text" value="{{data.modifiers.saveChecks.value}}" data-dtype="Number" />
+                            <input name="system.modifiers.saveChecks.value" type="text" value="{{data.modifiers.saveChecks.value}}" data-dtype="Number" />
                           </div>
                         </div>
                         <div class="d-flex w-100 mt-1 mb-1">
@@ -718,10 +777,10 @@
                   <div class="swsh-header">
                     <div class="d-flex w-100 mt-1 mb-1">
                       <div class="col-sm-6">
-                        <label for="data.modifiers.initiative.value">{{localize "PTU.Initiative"}} {{localize "PTU.Bonus"}}</label>
+                        <label for="system.modifiers.initiative.value">{{localize "PTU.Initiative"}} {{localize "PTU.Bonus"}}</label>
                       </div>
                       <div class="col-sm-6">
-                        <label for="data.modifiers.statPoints.value">{{localize "PTU.StatPoint"}} {{localize "PTU.Bonus"}}</label>
+                        <label for="system.modifiers.statPoints.value">{{localize "PTU.StatPoint"}} {{localize "PTU.Bonus"}}</label>
                       </div>
                     </div>
                   </div>
@@ -752,13 +811,13 @@
                   <div class="swsh-header pt-1">
                     <div class="d-flex w-100 mt-1 mb-1">
                       <div class="col-sm-4">
-                        <label for="data.modifiers.acBonus.value">{{localize "PTU.Accuracy"}} {{localize "PTU.Bonus"}}</label>
+                        <label for="system.modifiers.acBonus.value">{{localize "PTU.Accuracy"}} {{localize "PTU.Bonus"}}</label>
                       </div>
                       <div class="col-sm-4 fs-10">
-                        <label for="data.modifiers.critRange.value">{{localize "PTU.CritRange"}} {{localize "PTU.Bonus"}}</label>
+                        <label for="system.modifiers.critRange.value">{{localize "PTU.CritRange"}} {{localize "PTU.Bonus"}}</label>
                       </div>
                       <div class="col-sm-4 fs-10">
-                        <label for="data.modifiers.effectRange.value">{{localize "PTU.EffectRange"}} {{localize "PTU.Bonus"}}</label>
+                        <label for="system.modifiers.effectRange.value">{{localize "PTU.EffectRange"}} {{localize "PTU.Bonus"}}</label>
                       </div>
                     </div>
                   </div>
@@ -799,17 +858,17 @@
                   <div class="swsh-header pt-1">
                     <div class="d-flex w-100 mt-1 mb-1">
                       <div class="col">
-                        <label for="data.modifiers.damageReduction">{{localize "PTU.DamageReduction"}}</label>
+                        <label for="system.modifiers.damageReduction">{{localize "PTU.DamageReduction"}}</label>
                       </div>
                     </div>
                   </div>
                   <div class="swsh-header pt-1">
                     <div class="d-flex w-100 mt-1 mb-1">
                       <div class="col-sm-6">
-                        <label for="data.modifiers.damageReduction.physical.value">{{localize "PTU.Physical"}}</label>
+                        <label for="system.modifiers.damageReduction.physical.value">{{localize "PTU.Physical"}}</label>
                       </div>
                       <div class="col-sm-6">
-                        <label for="data.modifiers.damageReduction.special.value">{{localize "PTU.Special"}}</label>
+                        <label for="system.modifiers.damageReduction.special.value">{{localize "PTU.Special"}}</label>
                       </div>
                     </div>
                   </div>
@@ -838,13 +897,13 @@
                   <div class="swsh-header pt-1">
                     <div class="d-flex w-100 mt-1 mb-1">
                       <div class="col-sm-4">
-                        <label for="data.modifiers.evasion.physical.value">{{localize "PTU.EvasionPhysicalShort"}} {{localize "PTU.EvasionShort"}} {{localize "PTU.Bonus"}}</label>
+                        <label for="system.modifiers.evasion.physical.value">{{localize "PTU.EvasionPhysicalShort"}} {{localize "PTU.EvasionShort"}} {{localize "PTU.Bonus"}}</label>
                       </div>
                       <div class="col-sm-4">
-                        <label for="data.modifiers.evasion.special.value">{{localize "PTU.EvasionSpecialShort"}} {{localize "PTU.EvasionShort"}} {{localize "PTU.Bonus"}}</label>
+                        <label for="system.modifiers.evasion.special.value">{{localize "PTU.EvasionSpecialShort"}} {{localize "PTU.EvasionShort"}} {{localize "PTU.Bonus"}}</label>
                       </div>
                       <div class="col-sm-4">
-                        <label for="data.modifiers.evasion.speed.value">{{localize "PTU.EvasionSpeedShort"}} {{localize "PTU.EvasionShort"}} {{localize "PTU.Bonus"}}</label>
+                        <label for="system.modifiers.evasion.speed.value">{{localize "PTU.EvasionSpeedShort"}} {{localize "PTU.EvasionShort"}} {{localize "PTU.Bonus"}}</label>
                       </div>
                     </div>
                   </div>

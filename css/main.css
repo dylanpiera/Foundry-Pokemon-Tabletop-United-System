@@ -1361,6 +1361,14 @@ header.effect-change.effects-header.flexrow > div {
 .mod-input .mod-tooltip ol ul {
   white-space: normal;
 }
+.hp-guidelines > .col-sm-2 {
+  padding-left: 5px;
+  padding-right: 5px;
+  white-space: nowrap;
+}
+h4.message-sender {
+  white-space: pre-wrap !important;
+}
 .settings .settings-body {
   padding-top: 15px;
 }

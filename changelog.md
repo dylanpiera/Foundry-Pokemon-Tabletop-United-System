@@ -1,6 +1,18 @@
 # Welcome to the Beta!
 Hey there! You are on the Beta Branch. If you ever have any feedback please do share with us over on [Github](https://github.com/dylanpiera/Foundry-Pokemon-Tabletop-United-System/issues) or [Discord](https://discord.gg/fE3w59q)
 
+## Version 3.1.0.7 - Breaking Fixes
+Hi all! It was brought to my attention that 3.1.0.6 had some breaking trainer-sheet changes, so here are your fixes!
+
+### Fixes:
+- All fields in trainer sheet are now properly editable.
+- Item Sorting has been updated to v10 and should now no longer be wonky!
+- Renamed 'Digestion Buff' to 'Food Buff'
+- Fixed long names not wrapping in chat
+
+### New Features:
+- Added HP Guidelines section to trainer sheets
+
 ## Version 3.1.0.6 - Bug Fixes & QoL Featurs
 Hi all! Another small patch with some QoL Features and a hotfix from the latest bugfixes~
 
