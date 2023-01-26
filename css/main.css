@@ -1366,6 +1366,9 @@ header.effect-change.effects-header.flexrow > div {
   padding-right: 5px;
   white-space: nowrap;
 }
+h4.message-sender {
+  white-space: pre-wrap !important;
+}
 .settings .settings-body {
   padding-top: 15px;
 }
