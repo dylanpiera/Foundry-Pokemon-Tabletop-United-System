@@ -565,6 +565,65 @@
                     </div>
                   </div>
 
+                  <!-- Tick/HP Guidelines -->
+                  <div class="swsh-box w-100 mb-2" style="text-align: center;">
+                    <div class="swsh-header">
+                      <div class="d-flex w-100 mt-1" style="font-size: 13px; justify-content: center;">
+                        <h3>HP Guidelines</h3>
+                      </div>
+                    </div>
+                    <div class="swsh-header">
+                      <div class="d-flex w-100 mb-1 hp-guidelines" style="align-items: flex-end;">
+                        <div class="col-sm-2">
+                          <label for="1/16th">1/16th</label>
+                        </div>
+                        <div class="col-sm-2">
+                          <label for="1/10th">Tick<br>1/10th</label>
+                        </div>
+                        <div class="col-sm-2">
+                          <label for="1/8th">1/8th</label>
+                        </div>
+                        <div class="col-sm-2">
+                          <label for="3/10th">3/10th</label>
+                        </div>
+                        <div class="col-sm-2">
+                          <label for="1/4th">1/4th</label>
+                        </div>
+                        <div class="col-sm-2">
+                          <label for="1/2nd">1/2nd</label>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="swsh-body">
+                      <div class="d-flex w-100 mt-1 mb-1 hp-guidelines">
+                        <div class="col-sm-2">
+                          <input disabled name="1/16th" type="text" value="{{floor (divide data.health.total 16)}}"
+                            data-dtype="Number">
+                        </div>
+                        <div class="col-sm-2">
+                          <input disabled name="1/10th" type="text" value="{{floor (divide data.health.total 10)}}"
+                            data-dtype="Number">
+                        </div>
+                        <div class="col-sm-2">
+                          <input disabled name="1/8th" type="text" value="{{floor (divide data.health.total 8)}}"
+                            data-dtype="Number">
+                        </div>
+                        <div class="col-sm-2">
+                          <input disabled name="3/10th" type="text"
+                            value="{{floor (multiply data.health.total (divide 3 10))}}" data-dtype="Number">
+                        </div>
+                        <div class="col-sm-2">
+                          <input disabled name="1/4th" type="text" value="{{floor (divide data.health.total 4)}}"
+                            data-dtype="Number">
+                        </div>
+                        <div class="col-sm-2">
+                          <input disabled name="1/2nd" type="text" value="{{floor (divide data.health.total 2)}}"
+                            data-dtype="Number">
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
                   <!-- Injuries -->
                   <div class="swsh-box mb-2 w-100" style="text-align: center; word-break: keep-all;">
                     <div class="swsh-header">
@@ -588,7 +647,7 @@
                             disabled />
                         </div>
                       </div>
-                      {{#if (or (bigger data.health.injuries 0) (is true data.modifiers.hardened))}}
+                      {{#if (or (bigger data.health.injuries 4) (is true data.modifiers.hardened))}}
                       <div class="d-flex w-100 mt-1 mb-1">
                         <ul style="position: relative; left: 15px; width: 96%; line-height: 15px; text-align: start;">
                           {{#if data.modifiers.hardened}}<li>{{localize "PTU.HardenedEffect0"}}</li>{{/if}}
