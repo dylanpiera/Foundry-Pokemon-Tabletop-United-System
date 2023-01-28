@@ -63,9 +63,9 @@
                             </div>
                             <div class="move-category">
                                 <select class="type-select" style="background: url('{{loadTypeImageUrl item.system.category}}');" {{#if editLocked}}disabled{{/if}}>
-                                    <option style="color: #191813;" value="Status">Status</option>
-                                    <option style="color: #191813;" value="Physical">Physical</option>
-                                    <option style="color: #191813;" value="Special">Special</option>
+                                    <option {{#if (is item.system.category 'Status')}}selected{{/if}} style="color: #191813;" value="Status">Status</option>
+                                    <option {{#if (is item.system.category 'Physical')}}selected{{/if}} style="color: #191813;" value="Physical">Physical</option>
+                                    <option {{#if (is item.system.category 'Special')}}selected{{/if}} style="color: #191813;" value="Special">Special</option>
                                 </select>
                             </div>
                         </div>
