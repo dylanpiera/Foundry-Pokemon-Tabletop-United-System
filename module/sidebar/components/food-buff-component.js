@@ -16,20 +16,25 @@ export default class FoodBuffComponent extends Component {
      */
     async render() {
         if (!this.state.actor) return;
-        let output = "";
-        const foodBuffName = this.state.actor.system.digestionBuff;
-        const dividerIcon = "<img class='divider-image' src='systems/ptu/images/icons/DividerIcon_FoodBuff.png' style='border:none; width:200px;'>";
-        let foodBuff = game.ptu.data.items.find(i => i.name.toLowerCase().includes(foodBuffName.toLowerCase()));
-        if (foodBuff) {
-            output += dividerIcon;
-            output += await renderTemplate("/systems/ptu/module/sidebar/components/food-buff-component.hbs", {
-                name: foodBuff.name,
-                img: foodBuff.img,
-                id: foodBuff.id,
-                color: 'gray',
-                effect: foodBuff.system.effect,
-                owner: this.state.actor.id
-            });
+        let output = "<img class='divider-image' src='systems/ptu/images/icons/DividerIcon_FoodBuff.png' style='border:none; width:200px;'>";
+        const foodBuffs = this.state.actor.system.digestionBuff.split(", ");
+        if (foodBuffs.length > 0) {
+            for (const foodBuff of foodBuffs) {
+                if (foodBuff != "None" && foodBuff != "")
+                {
+                    const foodBuffItem = game.ptu.data.items.find(i => i.name.toLowerCase().includes(foodBuff.toLowerCase()));
+                    if (foodBuffItem) {
+                        output += await renderTemplate("/systems/ptu/module/sidebar/components/food-buff-component.hbs", {
+                            name: foodBuffItem.name,
+                            img: foodBuffItem.img,
+                            id: foodBuffItem.id,
+                            color: 'gray',
+                            effect: foodBuffItem.system.effect,
+                            owner: this.state.actor.id
+                        });
+                    }
+                }
+            }
         }
         this.element.html(output);
 
@@ -37,7 +42,7 @@ export default class FoodBuffComponent extends Component {
         this.element.children('.item').click("click", function (event) {
             const {itemId, itemOwner} = event.currentTarget.dataset;
 
-            game.ptu.data.items.find(i => i.id == itemId).sheet._toChat(itemOwner);
+            game.ptu.data.items.find(i => i.id == itemId).sheet._toChat(itemOwner, true);
         });
 
         this.element.children(".divider-image").on("click", () => {

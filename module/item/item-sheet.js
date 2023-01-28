@@ -156,7 +156,7 @@ export class PTUItemSheet extends ItemSheet {
 	 * Handle To Chat call.
 	 * @private
 	 */
-	_toChat(ownerId) {
+	_toChat(ownerId, foodBuff = false) {
 		switch(this.object.type) {
 			case "move":
 				return sendMoveMessage({
@@ -174,7 +174,8 @@ export class PTUItemSheet extends ItemSheet {
 						actor: this.actor
 					}),
 					item: this.object,
-					owner: ownerId
+					owner: ownerId,
+					foodBuff: foodBuff
 				});
 		}
 	}
@@ -270,6 +271,45 @@ Hooks.on("renderChatMessage", (message, html, data) => {
     }, 500);
 });
 
+// trading in food buff Items
+Hooks.on("renderChatMessage", (message, html, data) => {
+    setTimeout(() => {
+        $(html).find(".use-food-buff").on("click", (event) => consumeBuff(event));
+    }, 500);
+});
+
+export async function consumeBuff(event){
+	//prevent the default action of the button
+	event.preventDefault();
+
+	// Get the item ID and name from the button element's data-item-id and data-item-name attributes
+	const itemId = event.currentTarget.dataset.item;
+	const itemName = event.currentTarget.dataset.itemName;
+	const parentId = event.currentTarget.dataset.itemParentid;
+
+	//disable the button
+	event.currentTarget.disabled = true;
+
+	//find the actor with id parentId
+	const actor = game.actors.get(parentId);
+	console.log(actor);
+
+	console.log(`${actor.name} consumed the food buff - ${itemName}!`);
+
+	const buffArray = actor.system.digestionBuff.split(", ");
+
+	//remove the buff from the array
+	const index = buffArray.indexOf(itemName);
+	if (index > -1) {
+		buffArray.splice(index, 1);
+	}
+
+	//join the Array back to a string
+	const newBuffString = buffArray.join(", ");
+
+	//remove the foodbuff from the actor
+	await actor.update({"data.digestionBuff": newBuffString});
+}
 export async function useItem(event){
     //prevent the default action of the button
     event.preventDefault();
@@ -284,7 +324,7 @@ export async function useItem(event){
 
     //find the actor with id parentId
     const actor = game.actors.get(parentId);
-    console.log(actor);
+    //console.log(actor);
     // if the user of the item is of type pokemon
     if (actor.type == "pokemon"){
         // if(!applyItemEffect(itemName, actor, targetedActor)){

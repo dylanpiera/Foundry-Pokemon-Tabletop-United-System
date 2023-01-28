@@ -1,5 +1,4 @@
 {{#if item}}
-{{log item}}
     <div class="content flexrow pt-1" style="font-variant: normal;">
         <div class="swsh-box">
             <div class="swsh-header" style="border-bottom:1px solid #00000020;text-align:center">
@@ -104,12 +103,20 @@
                         </div>
                     </div>
                 {{/if}}
-                {{#if item.system.consumable}}
-                <div class="w-100 p-2" style="border-top:1px solid #00000080;/* padding:10px 5px */">
-                    <button class="reduce-item-count" data-item="{{item.id}}" data-item-name="{{item.name}}" data-item-parentId="{{owner}}" onclick="useItem(event)">
-                        Consume Item
-                    </button>
-                </div>
+                {{#if foodBuff}}
+                    <div class="w-100 p-2" style="border-top:1px solid #00000080;/* padding:10px 5px */">
+                        <button class="use-food-buff" data-item="{{item.id}}" data-item-name="{{item.name}}" data-item-parentId="{{owner}}" onclick="consumeBuff(event)">
+                            Consume Food Buff
+                        </button>
+                    </div>
+                {{else}}
+                    {{#if item.system.consumable}}
+                    <div class="w-100 p-2" style="border-top:1px solid #00000080;/* padding:10px 5px */">
+                        <button class="reduce-item-count" data-item="{{item.id}}" data-item-name="{{item.name}}" data-item-parentId="{{owner}}" onclick="useItem(event)">
+                            Consume Item
+                        </button>
+                    </div>
+                    {{/if}}
                 {{/if}}
             </div>
         </div>
