@@ -1707,7 +1707,7 @@ h3 {
 /* -------------------------------------------- */
 /*  New Move Sheet                              */
 /* -------------------------------------------- */
-.sheet.item.move section {
+.sheet.item section {
   background-color: #D1FED4 !important;
   border: 5px solid #AED3A2;
   padding: 1px;

@@ -10,7 +10,7 @@ export class PTUMoveSheet extends ItemSheet {
 	static get defaultOptions() {
 		return mergeObject(super.defaultOptions, {
 			classes: ['ptu', 'sheet', 'item', 'move'],
-			template: 'systems/ptu/templates/item/item-move-new-sheet.hbs',
+			template: 'systems/ptu/templates/item/item-move-sheet.hbs',
 			width: 600,
 			height: 500,
 			tabs: [
