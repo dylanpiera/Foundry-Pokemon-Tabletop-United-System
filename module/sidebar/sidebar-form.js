@@ -5,6 +5,7 @@ import AbilitiesList from './components/abilities-component.js';
 import FeaturesList from './components/features-component.js';
 import BeltComponent from './components/belt-component.js';
 import ItemsComponent from './components/items-component.js';
+import FoodBuffComponent from "./components/food-buff-component.js";
 import OrdersComponent from './components/order-component.js';
 import MenuComponent from './components/menu-component.js';
 import { ui_sound_paths } from "./components/menu-component.js";
@@ -166,6 +167,7 @@ export class PTUSidebar extends FormApplication {
       featuresComponent: new FeaturesList(this.store),
       beltComponent: new BeltComponent(this.store),
       itemsComponent: new ItemsComponent(this.store),
+      foodBuffComponent: new FoodBuffComponent(this.store),
       // ordersComponent: new OrdersComponent(this.store),
       menuComponent: new MenuComponent(this.store),
     }

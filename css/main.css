@@ -2510,10 +2510,12 @@ body.messages-dark-theme .chat-controls .roll-type-select {
 #ptu-sidebar .ptu-sidebar #abilities-list .item,
 #ptu-sidebar .ptu-sidebar #features-list .item,
 #ptu-sidebar .ptu-sidebar #orders-list .item,
+#ptu-sidebar .ptu-sidebar #food-buff .item,
 #ptu-sidebar .ptu-sidebar #items-list .auto,
 #ptu-sidebar .ptu-sidebar #abilities-list .auto,
 #ptu-sidebar .ptu-sidebar #features-list .auto,
-#ptu-sidebar .ptu-sidebar #orders-list .auto {
+#ptu-sidebar .ptu-sidebar #orders-list .auto,
+#ptu-sidebar .ptu-sidebar #food-buff .auto {
   background-size: 25px;
   background-repeat: no-repeat;
   background-position: left center;
@@ -2533,10 +2535,12 @@ body.messages-dark-theme .chat-controls .roll-type-select {
 #ptu-sidebar .ptu-sidebar #abilities-list .item p,
 #ptu-sidebar .ptu-sidebar #features-list .item p,
 #ptu-sidebar .ptu-sidebar #orders-list .item p,
+#ptu-sidebar .ptu-sidebar #food-buff .item p,
 #ptu-sidebar .ptu-sidebar #items-list .auto p,
 #ptu-sidebar .ptu-sidebar #abilities-list .auto p,
 #ptu-sidebar .ptu-sidebar #features-list .auto p,
-#ptu-sidebar .ptu-sidebar #orders-list .auto p {
+#ptu-sidebar .ptu-sidebar #orders-list .auto p,
+#ptu-sidebar .ptu-sidebar #food-buff .auto p {
   padding-left: 40px;
   white-space: nowrap;
   overflow: hidden;
