@@ -1,6 +1,9 @@
 # Welcome to the Beta!
 Hey there! You are on the Beta Branch. If you ever have any feedback please do share with us over on [Github](https://github.com/dylanpiera/Foundry-Pokemon-Tabletop-United-System/issues) or [Discord](https://discord.gg/fE3w59q)
 
+## Version 3.1.0.8 - New Item Sheets
+Hi all! Thanks to `Layon [Commander]#1460` we have a new design for our Item Sheets, as well as new icons for all of them. Enjoy!
+
 ## Version 3.1.0.7 - Breaking Fixes
 Hi all! It was brought to my attention that 3.1.0.6 had some breaking trainer-sheet changes, so here are your fixes!
 
