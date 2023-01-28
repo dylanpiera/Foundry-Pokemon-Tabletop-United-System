@@ -10,8 +10,8 @@ export class PTUItemSheet extends ItemSheet {
 	static get defaultOptions() {
 		return mergeObject(super.defaultOptions, {
 			classes: ['ptu', 'sheet', 'item'],
-			width: 790,
-			height: 193,
+			width: 750,
+			height: 550,
 			tabs: [
 				{
 					navSelector: '.sheet-tabs',
@@ -39,20 +39,9 @@ export class PTUItemSheet extends ItemSheet {
 	getData() {
 		const data = super.getData();
 
-		if(this.object.type === 'move' && this.object.isOwned)
-			data.data = PrepareMoveData(this.object.actor?.system, data.data);
+		data.editLocked = data.editable == false ? true : this.object.getFlag('ptu', 'editLocked') ?? false;
+
 		return data;
-	}
-
-	/* -------------------------------------------- */
-
-	/** @override */
-	setPosition(options = {}) {
-		const position = super.setPosition(options);
-		const sheetBody = this.element.find('.sheet-body');
-		const bodyHeight = position.height - 192;
-		sheetBody.css('height', bodyHeight);
-		return position;
 	}
 
 	/* -------------------------------------------- */
@@ -68,6 +57,10 @@ export class PTUItemSheet extends ItemSheet {
 		html.find('.rollable').click(this._onRoll.bind(this));
 
 		html.find('.to-chat').click(this._toChat.bind(this));
+
+		html.find('.lock-img').on("click", event => {
+			this.object.setFlag('ptu', 'editLocked', !this.object.getFlag('ptu', 'editLocked'));
+		});
 	}
 
 	/** @override */
