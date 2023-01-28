@@ -33,6 +33,11 @@ export class PTUEdgeSheet extends ItemSheet {
   getData() {
     const data = super.getData();
     data.editLocked = data.editable == false ? true : this.object.getFlag('ptu', 'editLocked') ?? false;
+    
+    if(this.object.img == "icons/svg/item-bag.svg" || this.object.img == "icons/svg/mystery-man.svg") {
+        this.object.update({"img": `/systems/ptu/css/images/icons/edge_icon.png`});
+    }
+
     return data;
   }
 

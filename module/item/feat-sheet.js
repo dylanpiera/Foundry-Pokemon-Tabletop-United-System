@@ -33,6 +33,14 @@ export class PTUFeatSheet extends ItemSheet {
   getData() {
     const data = super.getData();
     data.editLocked = data.editable == false ? true : this.object.getFlag('ptu', 'editLocked') ?? false;
+
+    if(this.object.img == "icons/svg/item-bag.svg" || this.object.img == "icons/svg/mystery-man.svg") {
+      if(this.object.system.tags.toLowerCase().includes("class"))
+				this.object.update({"img": `/systems/ptu/css/images/icons/class_feat_icon.png`});
+      else
+        this.object.update({"img": `/systems/ptu/css/images/icons/feat_icon.png`});
+    }
+
     return data;
   }
 

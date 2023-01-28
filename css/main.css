@@ -1782,6 +1782,7 @@ h3 {
   height: 100%;
   border-radius: 10px;
   object-fit: contain;
+  border: unset;
 }
 .move-sheet .sheet-body .avatar img[src$=".svg"] {
   filter: invert(1);

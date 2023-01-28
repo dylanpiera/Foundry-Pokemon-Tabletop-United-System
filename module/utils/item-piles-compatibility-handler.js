@@ -1,7 +1,7 @@
 import { debug, log } from "../ptu.js";
 
 
-async function GetItemArt(item_name, type = ".webp") { 
+export async function GetItemArt(item_name, type = ".webp") { 
 
     const imgDirectoryPath = "systems/ptu/images/item_icons/";
     const customImgDirectoryPath = game.settings.get("ptu", "customItemIconDirectory");
@@ -82,30 +82,30 @@ Hooks.on("item-piles-createItemPile", async function(created_token, options) {
 });
 
 
-Hooks.on("renderPTUItemSheet", async function(item, init, css) {
+// Hooks.on("renderPTUItemSheet", async function(item, init, css) {
     
-    if(item?.object?.type != "item") {return true;}
+//     if(item?.object?.type != "item") {return true;}
 
-    let item_name = item?.object?.data?.name ?? "Generic Item";
-    item_name = item_name.replace("Thrown ","").replace("Broken ","");
-    let item_current_img = item?.object?.data?.img;
+//     let item_name = item?.object?.name ?? "Generic Item";
+//     item_name = item_name.replace("Thrown ","").replace("Broken ","");
+//     let item_current_img = item?.object?.img;
 
-    if((item_current_img == "icons/svg/mystery-man.svg") || (item_current_img == "icons/svg/item-bag.svg") || (item_current_img == "systems/ptu/images/item_icons/generic item.webp"))
-    {
-        let new_image = await GetItemArt(item_name);
+//     if((item_current_img == "icons/svg/mystery-man.svg") || (item_current_img == "icons/svg/item-bag.svg") || (item_current_img == "systems/ptu/images/item_icons/generic item.webp"))
+//     {
+//         let new_image = await GetItemArt(item_name);
         
-        // Default to item-bag icon instead of 'Old Gateau'
-        if(new_image === "systems/ptu/images/item_icons/generic item.webp")
-            new_image = "icons/svg/item-bag.svg";
+//         // Default to item-bag icon instead of 'Old Gateau'
+//         if(new_image === "systems/ptu/images/item_icons/generic item.webp")
+//             new_image = "icons/svg/item-bag.svg";
 
-        log("renderPTUItemSheet: Default image detected, replacing with:", new_image);
+//         log("renderPTUItemSheet: Default image detected, replacing with:", new_image);
 
-        if(new_image != undefined)
-        {
-            await item.object.update({"img": new_image});
-        }
-    }
-});
+//         if(new_image != undefined)
+//         {
+//             await item.object.update({"img": new_image});
+//         }
+//     }
+// });
 
 
 // Hooks.on("preCreateItem", async function(ptu_item, item, options, id) {

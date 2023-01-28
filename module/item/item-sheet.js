@@ -1,5 +1,6 @@
 import { PrepareMoveData, warn, debug } from '../ptu.js';
 import { sendMoveMessage } from '../actor/pokemon-sheet-gen8.js'
+import { GetItemArt } from '../utils/item-piles-compatibility-handler.js';
 
 /**
  * Extend the basic ItemSheet with some very simple modifications
@@ -40,6 +41,22 @@ export class PTUItemSheet extends ItemSheet {
 		const data = super.getData();
 
 		data.editLocked = data.editable == false ? true : this.object.getFlag('ptu', 'editLocked') ?? false;
+
+		if(this.object.img == "icons/svg/item-bag.svg" || this.object.img == "icons/svg/mystery-man.svg") {
+			if(this.object.type == "dexentry")
+				this.object.update({"img": `/systems/ptu/css/images/icons/dex_icon.png`});
+			else if(this.object.type == "pokeedge")
+				this.object.update({"img": `/systems/ptu/css/images/icons/poke_edge_icon.png`});
+			else if (this.object.type == "item")
+				GetItemArt(this.object.name).then((img) => {
+					if(img === "systems/ptu/images/item_icons/generic item.webp")
+						this.object.update({"img": `/systems/ptu/css/images/icons/item_icon.png`});
+					else
+						this.object.update({"img": img});
+				});
+			else
+				this.object.update({"img": `/systems/ptu/css/images/icons/${this.object.type.toLowerCase()}_icon.png`});
+		}
 
 		return data;
 	}
