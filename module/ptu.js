@@ -7,6 +7,7 @@ import { PTUItem } from "./item/item.js";
 import { PTUItemSheet } from "./item/item-sheet.js";
 import { PTUEdgeSheet } from "./item/edge-sheet.js";
 import { PTUFeatSheet } from "./item/feat-sheet.js";
+import { PTUMoveSheet } from "./item/move-sheet.js";
 import { measureDistances } from "./canvas.js";
 import { levelProgression } from "./data/level-progression.js";
 import { pokemonData } from "./data/species-data.js";
@@ -144,7 +145,8 @@ export const ptu = {
       sheetClasses: {
         item: PTUItemSheet,
         edge: PTUEdgeSheet,
-        feat: PTUFeatSheet
+        feat: PTUFeatSheet,
+        move: PTUMoveSheet,
       }
     },
     Ui: {
@@ -268,7 +270,8 @@ function registerSheets() {
   Actors.registerSheet("ptu", ptu.config.Actor.sheetClasses.character, { types: ["character"], makeDefault: true });
   Actors.registerSheet("ptu", ptu.config.Actor.sheetClasses.pokemon, { types: ["pokemon"], makeDefault: true });
   Items.unregisterSheet("core", ItemSheet);
-  Items.registerSheet("ptu", ptu.config.Item.sheetClasses.item, { types: ["item", "ability", "move", "capability", "pokeedge", "dexentry"], makeDefault: true });
+  Items.registerSheet("ptu", ptu.config.Item.sheetClasses.item, { types: ["item", "ability", "capability", "pokeedge", "dexentry"], makeDefault: true });
+  Items.registerSheet("ptu", ptu.config.Item.sheetClasses.move, { types: ["move"], makeDefault: true });
   Items.registerSheet("ptu", ptu.config.Item.sheetClasses.edge, { types: ["edge"], makeDefault: true });
   Items.registerSheet("ptu", ptu.config.Item.sheetClasses.feat, { types: ["feat"], makeDefault: true });
 

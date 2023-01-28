@@ -1,0 +1,148 @@
+{{!-- Form Element --}}
+<form class="move-sheet {{cssClass}}" autocomplete="off">
+    {{!-- Sheet Header --}}
+    <header class="header w-100 p-2">
+        <h3 class="pl-1">MOVE</h3>
+        <span class="lock-img pr-1">
+            {{#if editLocked}}
+                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 43 51">
+                    <image id="padlock" xlink:href="data:img/png;base64,iVBORw0KGgoAAAANSUhEUgAAACsAAAAzCAYAAAAO2PE2AAACe0lEQVRoge2ZwYtNURzHP3iGYhYaTUJio5SNNFjMQpSlhIWysUCasrFgp/wH2FgQm1mywMIsWFmRWCCxUpREPZ5RmOHpTL83zpzuufee3/vdmZvup27v3Xd+v3O+73fuOed3zl3U7XZJZD8wnuoU8ArYmerUUjQ0DQwq/HzWaJxSxI4BB4FhTUMBQ8B94C1wvKxTymNwBThlINTnC7CqrHGZyB4B9mmesZJcF7NzwKc8lzKRvQycrkjoHC1FBnmRPQGsA0Yi5V+Bi4mCtslsksUloA3cAp5nWrjIRq52N5/fOb6x63BBnY6xmH9eZN8AOzJ+/wi8kM9UJoEHwApgV8S3HatTM89OAMcUfj3fCZm6Pqc6L1Y0uEzhEzKkcdKI1fiEaHrUpOF5oxFbFY3YqvhvxG6O/L7RoN3lOWXRlDFvvjsriUzIS7XEf7wDLkTKHsacNHuwBSMrsm6bsb4G2m5KwjRLVmTfR7p/vjkA3Pbb7EV2ABiVbL1TE7EjklK64L3Gi6wT+3PB5WVzTXYtM5EdNNpeV4nTOOUi25HuX1lTob+k18dbBqcrf4DvBTZLCxaCPAbkWq1KggPcANhaYHNUDkn6YdJCrDv7+lZgk7zfysIikSlTh8l4aFLEqmjEVkUjtiosxE6VsPlg8QcsFgW3XO+V748kreuxBVjrlfeFS2Qs9zXbgafevcv2DxnVfcP6mZ0O7juWlVuLDbOvH5aVW4sNx4Bp/RYDzOdesD1SvUmMYS12k3F9c2hWsIrY0JIzJ/eq50xNxT+WsfDMP5Gp66HXVeAk3gBzkT0PLJEI97vjteCurIYusjNknXXdAXbXQOwe4MnsHfAXPrP/28rXrgUAAAAASUVORK5CYII="/>
+                </svg>
+            {{else}}
+                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 60 52">
+                    <image id="padlock_copiar" data-name="padlock copiar" xlink:href="data:img/png;base64,iVBORw0KGgoAAAANSUhEUgAAADwAAAA0CAYAAADWr1sfAAACqklEQVRoge2av2sUQRTHP2cSPEwulYJCFKJgIVooWFiIgv4RqSz8H0TUysbCwk6wtrK2VlRs/VFoY2EEjUGwCMmJnMq58uJbWYbdvd2dt3uTdT8w3N7t3Xvz3Tc3P95ML4oiMrgK3Mi6WZAhcAQYedoxYzbH0Bww8HQ0CEksGYIvaVk2sD8GnmikV4DvBja9SBN8CLhgZH8GOK/XUxeLI1iiejhRQUt+Arf09T6w2rzUvyQ7rTfA8QZ8ngDeNuAnFYnwNWA3MJ/xnQ8alTIsa4tJ44rafKqlWaLJvJRWULIcK2D3XgW73mVWe9C04WdVI/GqQgSkxTzWTuusvrp8aTy6E8bhu8CdinZfAxf1ehNYrGjHnF05BhcMnPWlY5yStlTyBOfdK8qccX29sRC1o+gEt51OcNv5LwVnLfL37wD7pZGZ1nWdCrpYTOxHNdsvTV5Oq5XkzaV9OAPsCeCBbbiLn7oi/BXYW4fhkrwATid/YtlL97SDkrJVp4oSjBJ12l7EWEd4TZeC84EMeWNNHkoAljASPKP/10UVHCoieMtCsGQ5H+r1QmjrX0VEfpPsjkUv3TfYoaibf/2LheBfRpW9DHzMuX8KuO3pY2jRpGWX4pGvEW0pP3LuHwXeefoYhrR4mLSXddDCSbc8bDud4LbTCW47IQnemHB/08JJSIKXdPrn7jTGh2sOWDgJSfAz4LNuryZZ0c8fWDipK8VThfgEQt/57cBycRJip+UuRkzPeYUo+L3z/pOl8ZCadMxNPWoRc9LSeIiCs07/mNBNPCoQQsK9KCYpnrUCR5SmjaRrn1uleJKEvFG1nU21/A/LhGFdD7r9NrTrw1jrsx5PaCwj3Euc7ZKxdF/T6lKQA3Ln9GPJS0eWw5I8OXmagoyj7hRxGkg94joB8Ae8UD6yjrVlIAAAAABJRU5ErkJggg=="/>
+                </svg>
+            {{/if}}
+        </span>
+    </header>
+
+    <div class="sheet-body pt-2 pb-2 h-100 w-100">
+        <div class="move-row p-2">
+            <div class="move-column">
+                <div class="avatar ml-3 mr-4 mt-2 mb-2">
+                    <img class="p-2 content {{#unless editLocked}}profile-img{{/unless}}" src="{{data.img}}" {{#unless editLocked}}data-edit="img"{{/unless}} title="{{name}}"/>
+                </div>
+                <div class="origin-box">
+                    <input
+                        name="system.origin"
+                        type="text"
+                        value="{{item.system.origin}}"
+                        placeholder="Origin"
+                        {{#if editLocked}}disabled{{/if}}
+                    />
+                </div>
+            </div>
+
+            <div class="move-info ml-3">
+                <div class="move-name p-2">
+                    <input
+                        name="name"
+                        type="text"
+                        value="{{item.name}}"
+                        placeholder="Name"
+                        {{#if editLocked}}disabled{{/if}}
+                    />
+                </div>
+
+                <div class="move-info-row">
+                    {{!-- <div class="move-origin">
+                        <input
+                            name="system.origin"
+                            type="text"
+                            value="{{item.system.origin}}"
+                            placeholder="Origin"
+                            {{#if editLocked}}disabled{{/if}}
+                        />
+                    </div> --}}
+                    <div class="move-info-col">
+                        <div class="move-type-row pl-1">
+                            <div class="move-type">
+                                <select class="type-select" style="background: url('{{loadTypeImageUrl item.system.type}}');" {{#if editLocked}}disabled{{/if}}>
+                                    {{{typeSelect item.system.type}}}
+                                </select>
+                            </div>
+                            <div class="move-category">
+                                <select class="type-select" style="background: url('{{loadTypeImageUrl item.system.category}}');" {{#if editLocked}}disabled{{/if}}>
+                                    <option style="color: #191813;" value="Status">Status</option>
+                                    <option style="color: #191813;" value="Physical">Physical</option>
+                                    <option style="color: #191813;" value="Special">Special</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="move-other-info mt-2">
+                            <span>
+                                AC 
+                                <input
+                                    class="ml-2"
+                                    name="system.ac"
+                                    type="text"
+                                    value="{{item.system.ac}}"
+                                    placeholder=""
+                                    {{#if editLocked}}disabled{{/if}}
+                                />
+                            </span>
+                            <span>
+                                FREQ 
+                                <input
+                                    class="ml-2"
+                                    name="system.frequency"
+                                    type="text"
+                                    value="{{item.system.frequency}}"
+                                    placeholder=""
+                                    {{#if editLocked}}disabled{{/if}}
+                                />
+                            </span>
+                            <span style="flex: 0 0 100%;">
+                                RANGE 
+                                <input
+                                    class="ml-2"
+                                    name="system.range"
+                                    type="text"
+                                    value="{{item.system.range}}"
+                                    placeholder=""
+                                    {{#if editLocked}}disabled{{/if}}
+                                />
+                            </span>
+                            <span>
+                                DB 
+                                <input
+                                    class="ml-2"
+                                    name="system.damageBase"
+                                    type="text"
+                                    value="{{item.system.damageBase}}"
+                                    placeholder=""
+                                    {{#if editLocked}}disabled{{/if}}
+                                />
+                            </span>
+                            <span>
+                                {{#if (bigger item.system.damageBase 0)}}
+                                <span>
+                                    {{getDb (calcDb item.system)}}
+                                </span>
+                                +
+                                <input
+                                    name="system.damageBonus"
+                                    type="number"
+                                    value="{{item.system.damageBonus}}"
+                                    placeholder=""
+                                    {{#if editLocked}}disabled{{/if}}
+                                />
+                                {{else}}
+                                    
+                                {{/if}}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="move-row p-2 mt-1 mb-2" style="flex-grow: 1">
+            <div class="move-effect">
+                <textarea
+                    name="system.effect"
+                    {{#if editLocked}}disabled{{/if}}
+                    >{{item.system.effect}}</textarea>
+            </div>
+        </div>
+    </div>
+</form>
