@@ -2070,3 +2070,271 @@ h3 {
   font-family: monospace;
   word-spacing: -4px;
 }
+
+/* -------------------------------------------- */
+/*  New Move Sheet                              */
+/* -------------------------------------------- */
+
+.sheet.item {
+  section {
+    background-color: #D1FED4 !important;
+    border: 5px solid #AED3A2;
+    padding: 1px;
+    overflow:hidden;
+  }
+}
+
+.move-sheet {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: 2px;
+  
+  .header {
+    background-color: #848572;
+    color: #fff;
+    display: flex;
+    justify-content: space-between;
+    align-items:center;
+    height: 40px;
+
+    .lock-img {
+      width: 30px;
+      height: 30px;
+
+      svg {
+        width: 100%;
+        height: 100%;
+      }
+    }
+  }
+  .sheet-body {
+    display: flex;
+    flex-direction: column;
+
+    .move-row {
+      display: flex;
+      justify-content: space-between;
+      flex-direction: row;
+      width: 100%;
+    }
+
+    .move-column {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .origin-box {
+      background-color: #9FCB94;
+      width: 100%;
+      height: 40px;
+      padding: 0.5rem;
+      position: relative;
+      left: -0.75rem;
+      border-radius: 0 13px 13px 0;
+      margin-top: 1rem;
+
+      input {
+        width: 100%;
+        height: 100%;
+        border: none;
+        text-align: center;
+        font-size: 11px;
+        background-color: transparent;
+      }
+    }
+
+    .avatar {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 150px;
+      width: 150px;
+      background-color: #fff;
+      box-shadow: 
+        0 0 0 5px #a0cb95, 
+        0 0 0 10px #fffed7, 
+        0 0 0 15px #c8b05f;
+      border-radius: 10px;
+
+      img {
+        width: 100%;
+        height: 100%;
+        border-radius: 10px;
+        object-fit: contain;
+        border: unset;
+        &[src$=".svg"] {
+          filter: invert(1);
+        }
+      }
+    }
+
+    .move-info {
+      flex: 1 0 65%;
+
+      .move-name {
+        font-weight: bold;
+        text-align: center;
+        border-radius: 13px 0 0 13px;
+        background-color: #FFFFC4;
+        position: relative;
+        right: -1rem;
+        margin-left: -1rem;
+
+        input {
+          padding: 0.5rem;
+          width: 100%;
+          height: 100%;
+          border: none;
+          text-align: center;
+          font-size: 20px;
+          font-weight: bold;
+          background-color: transparent;
+        }
+      }
+
+      .move-info-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-direction: row;
+        margin: 0.5rem 0;
+
+        .move-origin {
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          text-align:center;
+          width: 60px;
+          height: 60px;
+          flex: 0 0 60px;
+          background-color: #fff;
+          padding: 0.25rem;
+          border-radius: 50%;
+          box-shadow: 
+            0 0 0 3px #8CC3F0, 
+            0 0 0 10px #B6EFF8, 
+            0 0 0 13px #8CC3F0;
+
+          .move-origin-select {
+            height: 28px;
+            width: 85px;
+            background-size: contain !important;
+            background-repeat: no-repeat !important;
+            outline: unset;
+            border: unset;
+            padding: 0.25rem;
+            cursor: pointer;
+            color: rgba(0,0,0,0%);
+
+            &:focus {
+              box-shadow: unset;
+            }
+            &.selected {
+              color: rgba(0,0,0,1);
+            }
+          }
+          .move-origin-select:after {
+            content: "►";
+            position: absolute;
+            top: 2px;
+            left: 70px;
+            font-size: 22px;
+            color: white;
+            text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
+          }
+        }
+        
+        .move-info-col {
+          display: flex;
+          justify-content: space-between;
+          flex-direction: column;
+          width: 100%;
+          height: 100%;
+          flex-grow: 1;
+          margin: 0 0.5rem;
+
+          .move-type-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-direction: row;
+          }
+
+          .move-type, .move-category {
+            position: relative;
+            width: fit-content;
+            .type-select {
+              height: 34px;
+              width: 165px;
+              background-size: contain !important;
+              background-repeat: no-repeat !important;
+              padding: 0.25rem;
+              color: rgba(0,0,0,0%);
+            }
+            .type-select:focus {
+              box-shadow: unset;
+            }
+            .type-select.selected {
+              color: rgba(0,0,0,1);
+            }
+          }
+          .move-type:after, .move-category:after {
+            content: ">";
+            font: 17px "Pokemon GB", monospace;
+            color: #191813;
+            font-weight: bold;
+            -webkit-transform: rotate(90deg);
+            -moz-transform: rotate(90deg);
+            -ms-transform: rotate(90deg);
+            transform: rotate(90deg);
+            right: 4px;
+            top: 7px;
+            position: absolute;
+            pointer-events: none;
+          }
+
+          .move-other-info {
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            font-weight: bold;
+          }
+          .move-other-info > span {
+            display: flex;
+            align-items: center;
+            flex: 0 0 165px;
+            padding: 0.25rem;
+            input {
+              border: unset;
+              text-overflow: ellipsis;
+            }
+          }
+        }
+      }
+    }
+    .move-effect {
+      margin: 0.5rem 0.5rem;
+      background-color: white;
+      box-shadow: 
+        0 0 0 5px #5899D1, 
+        0 0 0 10px #73AEFA, 
+        0 0 0 15px #5899D1;
+      width: 100%;
+      height: 100%;
+      flex-grow: 1;
+
+        textarea {
+          width: 100%;
+          height: 100%;
+          border: none;
+          background-color: transparent;
+          font-size: 14px;
+          &:focus {
+            box-shadow: unset;
+          }
+        }
+    }
+  }
+}

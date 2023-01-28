@@ -498,7 +498,7 @@
     },
     "move": {
       "templates": ["base", "interactions"],
-      "type": "",
+      "type": "Untyped",
       "category": "",
       "damageBase": "",
       "frequency": "",
