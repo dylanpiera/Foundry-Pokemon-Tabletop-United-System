@@ -175,7 +175,8 @@ export class PTUItemSheet extends ItemSheet {
 					}),
 					item: this.object,
 					owner: ownerId,
-					foodBuff: foodBuff
+					foodBuff: foodBuff,
+					target: game.user.targets.values().next().value == undefined ? "" : game.user.targets.values().next().value.actor.uuid
 				});
 		}
 	}
@@ -237,6 +238,7 @@ export class PTUItemSheet extends ItemSheet {
 export async function sendItemMessage(messageData = {}) {
 	messageData = mergeObject({
 		user: game.user.id,
+		target: game.user.targets.ids[0]
 	}, messageData);
 
 	if(!messageData.item) {
@@ -318,6 +320,10 @@ export async function useItem(event){
     const itemId = event.currentTarget.dataset.item;
     const itemName = event.currentTarget.dataset.itemName;
     const parentId = event.currentTarget.dataset.itemParentid;
+	const targetUuid = event.currentTarget.dataset.target;
+
+	//find the targeted actor
+	const targetedActor = targetUuid == "" ? "" : await fromUuid(targetUuid);
     
     //disable the button
     event.currentTarget.disabled = true;
@@ -349,6 +355,23 @@ export async function useItem(event){
         const item = actor.items.get(itemId);
         await item.update({"system.quantity": Number(duplicate(item.system.quantity)) - 1});
     }
+
+	// if the item is a food buff
+	if (itemName.toLowerCase().includes("berry") || game.ptu.data.items.find(i => i.name.toLowerCase().includes(itemName.toLowerCase())).system.effect.toLowerCase().includes("digestion buff")){
+		//if there is a target actor add the food buff to the target actor, else add foodbuff to the user
+		
+		const effectedActor = targetedActor ? targetedActor : actor;
+		//if the target actor already has a food buff, add the new food buff to the list
+		if (effectedActor.system.digestionBuff.trim() != "" && effectedActor.system.digestionBuff.trim().toLowerCase() != "none"){
+			const buffArray = effectedActor.system.digestionBuff.split(", ");
+			buffArray.push(itemName);
+			const newBuffString = buffArray.join(", ");
+			await effectedActor.update({"data.digestionBuff": newBuffString});
+		}
+		else{
+			await effectedActor.update({"data.digestionBuff": itemName});
+		}		
+	}
 }
 
 //applyItemEffect(itemName, actor, targetedActor){
