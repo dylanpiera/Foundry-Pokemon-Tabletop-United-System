@@ -1,5 +1,6 @@
 import { PrepareMoveData, warn, debug } from '../ptu.js';
 import { sendMoveMessage } from '../actor/pokemon-sheet-gen8.js'
+import { GetItemArt } from '../utils/item-piles-compatibility-handler.js';
 
 /**
  * Extend the basic ItemSheet with some very simple modifications
@@ -10,8 +11,8 @@ export class PTUItemSheet extends ItemSheet {
 	static get defaultOptions() {
 		return mergeObject(super.defaultOptions, {
 			classes: ['ptu', 'sheet', 'item'],
-			width: 790,
-			height: 193,
+			width: 750,
+			height: 550,
 			tabs: [
 				{
 					navSelector: '.sheet-tabs',
@@ -39,20 +40,25 @@ export class PTUItemSheet extends ItemSheet {
 	getData() {
 		const data = super.getData();
 
-		if(this.object.type === 'move' && this.object.isOwned)
-			data.data = PrepareMoveData(this.object.actor?.system, data.data);
+		data.editLocked = data.editable == false ? true : this.object.getFlag('ptu', 'editLocked') ?? false;
+
+		if(this.object.img == "icons/svg/item-bag.svg" || this.object.img == "icons/svg/mystery-man.svg") {
+			if(this.object.type == "dexentry")
+				this.object.update({"img": `/systems/ptu/css/images/icons/dex_icon.png`});
+			else if(this.object.type == "pokeedge")
+				this.object.update({"img": `/systems/ptu/css/images/icons/poke_edge_icon.png`});
+			else if (this.object.type == "item")
+				GetItemArt(this.object.name).then((img) => {
+					if(img === "systems/ptu/images/item_icons/generic item.webp")
+						this.object.update({"img": `/systems/ptu/css/images/icons/item_icon.png`});
+					else
+						this.object.update({"img": img});
+				});
+			else
+				this.object.update({"img": `/systems/ptu/css/images/icons/${this.object.type.toLowerCase()}_icon.png`});
+		}
+
 		return data;
-	}
-
-	/* -------------------------------------------- */
-
-	/** @override */
-	setPosition(options = {}) {
-		const position = super.setPosition(options);
-		const sheetBody = this.element.find('.sheet-body');
-		const bodyHeight = position.height - 192;
-		sheetBody.css('height', bodyHeight);
-		return position;
 	}
 
 	/* -------------------------------------------- */
@@ -68,6 +74,10 @@ export class PTUItemSheet extends ItemSheet {
 		html.find('.rollable').click(this._onRoll.bind(this));
 
 		html.find('.to-chat').click(this._toChat.bind(this));
+
+		html.find('.lock-img').on("click", event => {
+			this.object.setFlag('ptu', 'editLocked', !this.object.getFlag('ptu', 'editLocked'));
+		});
 	}
 
 	/** @override */
