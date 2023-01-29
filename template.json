@@ -522,7 +522,7 @@
       "quantity": 1,
       "category": "",
       "cost": 0,
-      "consumable": false
+      "consumable": 0
     }
   }
 }

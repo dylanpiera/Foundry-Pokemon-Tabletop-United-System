@@ -367,7 +367,7 @@ export async function useItem(event){
     }
 
 	// if the item is a food buff
-	if (itemName.toLowerCase().includes("berry") || game.ptu.data.items.find(i => i.name.toLowerCase().includes(itemName.toLowerCase())).system.effect.toLowerCase().includes("digestion buff")){
+	if (game.ptu.data.items.find(i => i.name.toLowerCase().includes(itemName.toLowerCase())).system.consumable == 2){
 		//if there is a target actor add the food buff to the target actor, else add foodbuff to the user
 		
 		const effectedActor = targetedActor ? targetedActor : actor;
