@@ -60,6 +60,10 @@ Drag & Drop Support Example
 * https://www.theworldofpokemon.com/ for their amazing pokedex entries 
 * The Amazing People and their amazing feedback, over at the [FVTTPTU Dev Server](https://discord.gg/fE3w59q)
 
+## Copyright
+Pokémon © 2002-2023 Pokémon. © 1995-2023 Nintendo/Creatures Inc./GAME FREAK inc. TM, ® and Pokémon character names are trademarks of Nintendo.
+No copyright or trademark infringement is intended in using Pokémon content for the PTU for FoundryVTT System.
+
 [foundry-shield]: https://img.shields.io/badge/Foundry-v10.291-informational
 [foundry-url]: https://foundryvtt.com/
 [forks-shield]: https://img.shields.io/github/forks/dylanpiera/Foundry-Pokemon-Tabletop-United-System.svg?style=flat-square
