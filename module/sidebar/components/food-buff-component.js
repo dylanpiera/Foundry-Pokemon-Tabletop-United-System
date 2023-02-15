@@ -16,9 +16,10 @@ export default class FoodBuffComponent extends Component {
      */
     async render() {
         if (!this.state.actor) return;
-        let output = "<img class='divider-image' src='systems/ptu/images/icons/DividerIcon_FoodBuff.png' style='border:none; width:200px;'>";
-        const foodBuffs = this.state.actor.system.digestionBuff.split(", ");
+        let output = "";
+        const foodBuffs = this.state.actor.system.foodBuff.split(", ").filter(s => s.trim().length > 0);
         if (foodBuffs.length > 0) {
+            output = "<img class='divider-image' src='systems/ptu/images/icons/DividerIcon_FoodBuff.png' style='border:none; width:200px;'>";
             for (const foodBuff of foodBuffs) {
                 if (foodBuff != "None" && foodBuff != "")
                 {

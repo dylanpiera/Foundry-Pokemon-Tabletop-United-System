@@ -330,7 +330,7 @@
         }
       },
       "shared": {
-        "digestionBuff": "",
+        "foodBuff": "",
         "notes": "",
         "tempHp": {
           "value": null,
