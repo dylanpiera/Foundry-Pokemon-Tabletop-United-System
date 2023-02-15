@@ -372,15 +372,10 @@ export async function useItem(event){
 		
 		const effectedActor = targetedActor ? targetedActor : actor;
 		//if the target actor already has a food buff, add the new food buff to the list
-		if (effectedActor.system.digestionBuff.trim() != "" && effectedActor.system.digestionBuff.trim().toLowerCase() != "none"){
-			const buffArray = effectedActor.system.digestionBuff.split(", ");
-			buffArray.push(itemName);
-			const newBuffString = buffArray.join(", ");
-			await effectedActor.update({"data.digestionBuff": newBuffString});
-		}
-		else{
-			await effectedActor.update({"data.digestionBuff": itemName});
-		}		
+	const buffArray = effectedActor.system.digestionBuff.split(", ").filter(b => b.trim() != "");
+	buffArray.push(itemName);
+	const newBuffString = buffArray.join(', ');
+	await effectedActor.update({"data.digestionBuff": newBuffString});
 	}
 }
 
