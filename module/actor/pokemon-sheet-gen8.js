@@ -319,6 +319,10 @@ export class PTUGen8PokemonSheet extends ActorSheet {
 			}
 			return await this.actor.createEmbeddedDocuments("ActiveEffect", [effectData]);
 		})
+
+		html.find('label[name="apply-training-exp"]').click(async (event) => {
+			await this._applyTrainingExp(event)
+		});
 	}
 
 	async _applyHardenedEffect(value, isHardened) {
@@ -560,6 +564,15 @@ export class PTUGen8PokemonSheet extends ActorSheet {
 		}
 		ui.notifications.error(`${owner.name} does not have enough AP for this action.`);
 		return false;
+	}
+
+	async _applyTrainingExp(event) {
+		event.preventDefault();
+		if (event.screenX == 0 && event.screenY == 0) return;
+		const newExp = this.actor.system.level.exp + this.actor.getTrainingExp();;
+		this.actor.update({
+			"system.level.exp": newExp,
+		});
 	}
 }
 

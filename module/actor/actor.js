@@ -482,6 +482,8 @@ export class PTUActor extends Actor {
     data.level.expTillNextLevel = (data.level.current < 100) ? game.ptu.data.levelProgression[data.level.current + 1] : game.ptu.data.levelProgression[100];
     data.level.percent = Math.round(((data.level.exp - game.ptu.data.levelProgression[data.level.current]) / (data.level.expTillNextLevel - game.ptu.data.levelProgression[data.level.current])) * 100);
 
+    data.level.trainingExp = actorData.getTrainingExp();
+
     // Stats
     data.stats = CalculatePoisonedCondition(duplicate(data.stats), actorData.flags?.ptu);
 
@@ -1087,6 +1089,38 @@ export class PTUActor extends Actor {
 
     if (roll.total < LOYALTY_DC[this.system.loyalty]) return false;
     return true;
+  }
+
+  hasEdge(name) {
+    if (this.system.type == "pokemon") return false;
+    return this.edges?.some((e) => e.name === name);
+  }
+
+  getTrainingExp() {
+    if (this.system.type == "pokemon") return;
+    if (this.system.owner == 0) return;
+    const owner = game.actors.get(this.system.owner);
+    if (!owner) return;
+
+    let rank = owner.system.skills.command.value.value;
+    if (owner.hasEdge("Groomer")) {
+      rank = Math.max(rank, owner.system.skills.generalEd.value.value, owner.system.skills.pokemonEd.value.value)
+    }
+    if (owner.hasEdge("Beast Master")) {
+      rank = Math.max(rank, owner.system.skills.intimidate.value.value)
+    }
+
+    const bonusList = [0, 0, 5, 5, 10, 10, 15, 15]
+    let bonus = bonusList[rank - 1];
+    if (owner.hasEdge("Trainer of Champions")) {
+      bonus += 5;
+    }
+
+    const trainingExp = bonus + Math.floor(this.system.level.current * 0.5);
+    this.update({
+      "system.level.trainingExp": trainingExp
+    });
+    return trainingExp;
   }
 }
 
