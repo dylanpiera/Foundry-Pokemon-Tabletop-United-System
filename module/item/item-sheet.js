@@ -340,7 +340,6 @@ export async function useItem(event){
 
     //find the actor with id parentId
     const actor = game.actors.get(parentId);
-    //console.log(actor);
     // if the user of the item is of type pokemon
     if (actor.type == "pokemon"){
         // if(!applyItemEffect(itemName, actor, targetedActor)){
