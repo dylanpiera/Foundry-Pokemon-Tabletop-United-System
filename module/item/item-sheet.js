@@ -310,14 +310,11 @@ export async function consumeBuff(event){
 
 	const buffArray = actor.system.digestionBuff.split(", ");
 
-	//remove the buff from the array
-	const index = buffArray.indexOf(itemName);
-	if (index > -1) {
-		buffArray.splice(index, 1);
-	}
+        // Filter buff out of Array
+        const newBuffArray = buggArray.filter(b => b.trim().toLowerCase() != itemName.trim().toLowerCase())
 
-	//join the Array back to a string
-	const newBuffString = buffArray.join(", ");
+	// Join the Array back to a string
+	const newBuffString = newBuffArray .join(", ");
 
 	//remove the foodbuff from the actor
 	await actor.update({"data.digestionBuff": newBuffString});
