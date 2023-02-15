@@ -1,6 +1,14 @@
 # Welcome to the Beta!
 Hey there! You are on the Beta Branch. If you ever have any feedback please do share with us over on [Github](https://github.com/dylanpiera/Foundry-Pokemon-Tabletop-United-System/issues) or [Discord](https://discord.gg/fE3w59q)
 
+## Version 3.1.0.9 - Bugfixes
+Hi all! Thanks to Alexander Block we have a fix for the trainer sheet issues.
+
+### Fixes 
+- Fixed Trainer Sheet Extra Tab issues
+- Removed Item Notes as they were unnecessary
+- Added 'Stealth' capability to the Compendium (Cheers `Joooooosh🐉#2354`)
+
 ## Version 3.1.0.8 - New Item Sheets
 Hi all! Thanks to `Layon [Commander]#1460` we have a new design for our Item Sheets, as well as new icons for all of them. Enjoy!
 
