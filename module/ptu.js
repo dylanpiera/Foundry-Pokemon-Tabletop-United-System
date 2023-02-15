@@ -755,7 +755,8 @@ Hooks.on("preCreateItem", async function (item, data, options, sender) {
 });
 
 Hooks.on('preCreateActor', function(document,b,c,d) {
-  document.data.update({"prototypeToken.actorLink":true});
+  console.log(document)
+  document.updateSource({"prototypeToken.actorLink":true});
 });
 
 Hooks.on('getSceneControlButtons', function (hudButtons) {
