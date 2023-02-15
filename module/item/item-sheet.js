@@ -304,9 +304,6 @@ export async function consumeBuff(event){
 
 	//find the actor with id parentId
 	const actor = game.actors.get(parentId);
-	console.log(actor);
-
-	console.log(`${actor.name} consumed the food buff - ${itemName}!`);
 
 	const buffArray = actor.system.digestionBuff.split(", ");
 
