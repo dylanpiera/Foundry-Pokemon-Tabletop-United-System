@@ -8,7 +8,7 @@ Hooks.on("renderChatMessage", (message, html, data) => {
         $(html).find(".half-damage-button").on("click", (ev) => game.ptu.utils.combat.applyDamageToTargets(ev, ATTACK_MOD_OPTIONS.HALF));
         $(html).find(".resist-damage-button").on("click", (ev) => game.ptu.utils.combat.applyDamageToTargets(ev, ATTACK_MOD_OPTIONS.RESIST));
         $(html).find(".flat-damage-button").on("click", (ev) => game.ptu.utils.combat.applyDamageToTargets(ev, ATTACK_MOD_OPTIONS.FLAT));
-        $(html).find(".automated-damage-button").click(game.ptu.utils.combat.newApplyDamageToTargets)
+        $(html).find(".automated-damage-button").click(applyDamageAndEffectsToTargets)
         $(html).find(".mon-item").click(game.ptu.utils.combat.handleApplicatorItem)
     }, 500);
 });
@@ -122,6 +122,438 @@ export async function undoDamageToTargets(event) {
 
 }
 
+export async function applyDamageAndEffectsToTargets(event) {
+    // Get data
+    let dataset;
+    if (event.hasDataset) dataset = event;
+    else {
+        event.preventDefault();
+        if (event.target != event.currentTarget) return;
+        
+        dataset = event.currentTarget.dataset.moveUuid ? event.currentTarget.dataset : event.currentTarget.parentElement.parentElement.dataset;
+    }
+
+    const move = await fromUuid(dataset.moveUuid ?? "");
+    if (!move) return;
+
+    const {target, damage, critDamage, mode, crit} = dataset;
+    const targets = [];
+    const critTargets = [];
+    const messageHtml = $(event.currentTarget).closest(".chat-message.message");
+
+    // Find targets
+    if (target === "many") {    
+        // Get all tokens that are not disabled (i.e. not already applied)
+        messageHtml.find(".mon-list").filter((k, i) => !i.className.includes("disabled")).each((k, i) => {
+            const token = canvas.tokens.get(i?.dataset?.target);
+            if (token && (i.dataset.hit == 'true')) {
+                if (i.dataset.crit == "hit" || i.dataset.crit == "crit" || i.dataset.crit == "double-hit")
+                    critTargets.push(token);
+                else
+                    targets.push(token);
+            }
+        })
+    }
+    else {
+        // If target is a tokenId, add its token to the list
+        if(target) {
+            if(canvas.tokens.get(target)) {
+                if(crit) critTargets.push(canvas.tokens.get(target));
+                else targets.push(canvas.tokens.get(target));
+            }
+        }
+        // Otherwise, add all controlled tokens
+        else {
+            if(crit) critTargets.push(...canvas.tokens.controlled);
+            else targets.push(...canvas.tokens.controlled);
+        }
+    }
+    // If no targets, return
+    if(targets.length == 0 && critTargets.length == 0) return;
+
+    // Optional Damage Reduction
+    let dr = 0;
+    if (event.shiftKey) {
+        dr = await new Promise((resolve, reject) => {
+            Dialog.confirm({
+                title: `Apply Damage Reduction`,
+                content: `<input type="text" name="damage-reduction" value="0"></input>`,
+                yes: async (html) => {
+                    const bonusTxt = html.find('input[name="damage-reduction"]').val()
+            
+                    const bonus = !isNaN(Number(bonusTxt)) ? Number(bonusTxt) : parseInt((await (new Roll(bonusTxt)).roll({async:true})).total);
+                    if (!isNaN(bonus)) {
+                        return resolve(bonus);
+                    }
+                    return reject();
+                }
+            });
+        });
+    }
+
+    // Save all results to an array
+    const results = [];
+
+    // Apply normal damage
+    if (targets.length != 0) {
+        results.push(await applyResult(targets, damage, messageHtml[0]?.dataset?.messageId ?? dataset.messageId));
+    }
+
+    // Apply crit damage
+    if (critTargets.length != 0) {
+        results.push(await applyResult(critTargets, critDamage, messageHtml[0]?.dataset?.messageId ?? dataset.messageId));
+    }
+
+    if(messageHtml)
+        await updateApplicatorHtml(messageHtml, targets.concat(critTargets).map(t => t.id), mode, true);
+
+    // Return results
+    return results;
+
+    async function applyResult(targets, damage, messageId) {
+
+        // switch (mode) {
+        //     case "full":
+        //         // return executeApplyDamageToTargets(targets, moveData, damage, { damageReduction: dr, msgId: messageId });
+        //     case "weak":
+        //         // return executeApplyDamageToTargets(targets, moveData, damage, { isWeak: true, damageReduction: dr, msgId: messageId });
+        //     case "resist":
+        //         // return executeApplyDamageToTargets(targets, moveData, damage, { isResist: true, damageReduction: dr, msgId: messageId });
+        //     case "half":
+        //         // return executeApplyDamageToTargets(targets, moveData, Math.max(1, (damage / 2)), { damageReduction: dr, msgId: messageId });
+        //     case "flat":
+        //         // return executeApplyDamageToTargets(targets, moveData, damage, { isFlat: true, damageReduction: dr, msgId: messageId })
+        // }
+
+        const attacks = [];
+        for(const target of targets) {
+            const attackData = {
+                uuid: target.document.uuid,
+                damage: damage,
+                damageReduction: dr,
+            }
+            switch(mode) {
+                case "weak":
+                    attackData.isWeak = true;
+                    break;
+                case "resist":
+                    attackData.isResist = true;
+                    break;
+                case "half":
+                    attackData.damage = Math.max(1, (damage / 2));
+                    break;
+                case "flat":
+                    attackData.isFlat = true;
+                    break;
+            }
+            attacks.push(attackData);
+        }
+
+        const modifiedAttacks = await beforeDamage(attacks, targets, move, {roll: 18, msgId: messageId});
+
+        // TODO: Implement that the HTML has UUID instead of ID
+        // TODO: Implement applying the damage like it was before.
+    }
+
+    // Step 1: from chat take the base Damage & Crit Damage and get move info
+
+    // Step 2: perform beforeDamage effects
+    async function beforeDamage(attacks, targets, move, options) {
+        const modifiers = [];
+
+        // Step 1.1: Perform Defensive automation
+        // for each target token; apply defensive effects.
+        // for(const target of targets) {
+        //     const attack = {
+        //         uuid: target.uuid,
+        //         modifier: undefined
+        //     }
+            
+        //     //TODO: Add 'defensive' beforeDamage static effects here
+        // }
+
+        // Step 1.2: Perform Offensive Move automation
+        if(move.system.automation?.length > 0) {
+            
+            for(const automation of move.system.automation.filter(a => a.timing == CONFIG.PTUAutomation.Timing.BEFORE_DAMAGE)) {
+                modifiers.push(...await ApplyAutomation(move, automation, {targets, roll: options.roll}));
+            }
+        }
+
+        // Step 1.3: Apply modifiers
+        if(modifiers.length > 0) {
+            for(const modifier of modifiers) {
+                const attack = attacks.find(a => a.uuid == modifier.uuid);
+                if(attack) {
+                    if(modifier.modifier.type == "damage")
+                        attack.damage += modifier.modifier.value;
+                    // TODO: add other types of modifiers
+                }
+            }
+        }
+        return attacks;
+    }
+    
+    // Step 3: calculate damage for each target
+    // Step 4: apply damage for each target
+    // Step 5: for each target; perform afterDamage effects
+}
+
+CONFIG.PTUAutomation = {
+    Timing: {
+        BEFORE_ROLL: "beforeRoll",
+        AFTER_ROLL: "afterRoll",
+        BEFORE_DAMAGE: "beforeDamage",
+        AFTER_DAMAGE: "afterDamage",
+    },
+    Target: {
+        TARGET: "target",
+        MOVE: "move",
+    },
+    Condition: {
+        ATTACK_ROLL: "attackRoll",
+        EFFECTIVENESS: "effectiveness",
+    },
+    RangeIncreases: {
+        NONE: "none",
+        EFFECT_RANGE: "effectRange",
+    },
+    Effect: {
+        ADD_DAMAGE: "addDamage",
+        ADD_EFFECT: "applyEffect",
+        REMOVE_EFFECT: "removeEffect",
+    }
+}
+
+/**
+ * 
+ * @param {*} source 
+ * @param {*} automation 
+ * @param {*} options.targets The target token
+ * @param {*} options.roll The number the d20 rolled without modifiers
+ * @returns 
+ */
+async function ApplyAutomation(source, automation, options) {
+
+    const targets = await findTargets(automation, {targets: options.targets})
+    if(targets.length == 0) return [];
+
+    const filteredTargets = filterTargetsByCondition(targets, automation, {roll: options.roll, source});
+    if(filteredTargets.length == 0) return [];
+
+    return await applyEffects(filteredTargets, automation);
+
+    async function findTargets(automation, options) {
+        const targets = [];
+        for(const target of automation.targets) {
+            // TODO: Implement all types of targets
+            switch(target) {
+                case CONFIG.PTUAutomation.Target.TARGET: {
+                    const objects = (options.targets instanceof Array) ? options.targets : [options.targets];
+                    for(const object of objects) {
+                        if(object instanceof Token) {
+                            targets.push(object.document);
+                            continue;
+                        }
+                        if(object instanceof TokenDocument || object instanceof Actor) {
+                            targets.push(object);
+                            continue;
+                        }
+                        if(typeof object === "string") {
+                            const objectFromUuid = await fromUuid(object)
+                            if(objectFromUuid) {
+                                if(objectFromUuid instanceof Token) targets.push(objectFromUuid.document);
+                                if(objectFromUuid instanceof TokenDocument || objectFromUuid instanceof Actor) targets.push(objectFromUuid);
+                                continue;
+                            }
+                            const tokenFromId = canvas.tokens.get(object);
+                            if(tokenFromId) {
+                                targets.push(tokenFromId.document);
+                                continue;
+                            }
+                            const actorFromId = game.actors.get(object);
+                            if(actorFromId) {
+                                targets.push(actorFromId);
+                                continue;
+                            }
+                            if(game.user.targets.ids[0]) {
+                                const tokenFromTarget = canvas.tokens.get(game.user.targets.ids[0]);
+                                if(tokenFromTarget) {
+                                    targets.push(tokenFromTarget.document);
+                                    continue;
+                                }
+                            }
+                            if(canvas.tokens.controlled[0]) {
+                                targets.push(canvas.tokens.controlled[0].document);
+                                continue;
+                            }
+                        }
+                    }
+                    break;
+                }
+            }
+        }
+        return targets;
+    }
+
+    function filterTargetsByCondition(targets, automation, options) {
+        const filteredTargets = [];
+        for(const target of targets) {
+            const conditionCount = automation.conditions.length;
+            let passedConditions = 0;
+            for(const condition of automation.conditions) {
+                // TODO: Implement all types of conditions
+                switch(condition.type) {
+                    case CONFIG.PTUAutomation.Condition.ATTACK_ROLL: {
+                        if(!options.roll) continue;
+                        const roll = options.roll;
+                        const operator = condition.operator;
+                        const value = condition.value;
+                        let range = "";
+                        switch(condition.rangeIncrease) {
+                            case CONFIG.PTUAutomation.RangeIncreases.NONE: break;
+                            case CONFIG.PTUAutomation.RangeIncreases.EFFECT_RANGE: {
+                                if(!options.source) break;
+                                let source = options.source;
+                                if(source instanceof Token || source instanceof TokenDocument) source = source.actor;
+                                if(source instanceof Item) source = source.parent;
+
+                                const r = source?.system?.modifiers?.effectRange?.total
+                                if(!r) break;
+                                range += `+(-1*${r})`;
+                                break;
+                            }
+                        }
+
+                        if(isNaN(Number(value))) continue; // TODO: Implement Roll values as strings
+                        console.log(`${roll} ${operator} (${value} ${range})`); // TODO: Delete line
+                        if(eval(`${roll} ${operator} (${value} ${range})`)) passedConditions++;
+                        break;
+                    }
+                    case CONFIG.PTUAutomation.Condition.EFFECTIVENESS: {
+                        // Gets the type of the move against the source or options.moveType
+                        let type = options?.source?.system?.type;
+                        if(!type) type = options?.moveType;
+                        if(!type) continue;
+
+                        // Gets the actor of the target
+                        const actor = (target?.actor ?? target)
+                        if(!actor || !(actor instanceof Actor)) continue;
+
+                        // Gets the effectiveness of the actor against the type
+                        const effectiveness = actor.system.effectiveness.All[Handlebars.helpers.capitalizeFirst(type)];
+                        if(!effectiveness) continue;
+
+                        // Checks if the effectiveness passes the condition
+                        if(eval(`${effectiveness} ${condition.operator} ${condition.value}`)) passedConditions++;
+                        break;
+                    }
+                }
+            }
+            if(passedConditions == conditionCount) filteredTargets.push(target);
+        }
+        return filteredTargets
+    }
+
+    async function applyEffects(targets, automation) {
+        const modifiers = [];
+        for(const target of targets) {
+            const updates = {
+                effects: {
+                    toggle: [], // Array of effect data to call toggle on
+                    add: [], // Array of effect data to call add on
+                    remove: [], // Array of effect ids to call remove on
+                }
+            };
+            for(const effect of automation.effects) {
+                // TODO: Implement all types of effects
+                switch(effect.type) {
+                    case CONFIG.PTUAutomation.Effect.ADD_EFFECT: {
+                        // If the effect is a string, it is a pre-made effect
+                        if(typeof effect.value === "string") {
+                            const effectData = CONFIG.statusEffects.find(e => e.id === effect.value);
+                            if(!effectData) continue;
+                            if(target instanceof Token || target instanceof TokenDocument) {
+                                const ae = target.actor.effects.find(e => e.label == effectData.label);
+                                if(!ae) updates.effects.toggle.push(effectData);
+                            }
+                            if(target instanceof Actor) {
+                                const ae = target.effects.find(e => e.label == effectData.label);
+                                if(!ae) updates.effects.add.push(effectData);
+                            }
+                        }
+                        // If the effect is an object, it is a custom effect
+                        if(typeof effect.value === "object") {
+                            updates.effects.add.push(effect.value);
+                        }
+                        break;
+                    }
+                    case CONFIG.PTUAutomation.Effect.REMOVE_EFFECT: {
+                        // If the effect is a string, it is a pre-made effect
+                        if(typeof effect.value === "string") {
+                            const effectData = CONFIG.statusEffects.find(e => e.id === effect.value);
+                            if(!effectData) continue;
+                            if(target instanceof Token || target instanceof TokenDocument) {
+                                const ae = target.actor.effects.find(e => e.label == effectData.label);
+                                if(ae) updates.effects.toggle.push(effectData);
+                            }
+                            if(target instanceof Actor) {
+                                const ae = target.effects.find(e => e.label == effectData.label);
+                                if(ae) updates.effects.remove.push(ae.id);
+                            }
+                        }
+                        // If the effect is an object, it is a custom effect
+                        if(typeof effect.value === "object") {
+                            if(target instanceof Token || target instanceof TokenDocument) {
+                                const ae = target.actor.effects.find(e => e.label == effect.value.label);
+                                if(ae) updates.effects.remove.push(ae.id);
+                            }
+                            if(target instanceof Actor) {
+                                const ae = target.effects.find(e => e.label == effect.value.label);
+                                if(ae) updates.effects.remove.push(ae.id);
+                            }
+                        }
+                        break;
+                    }
+                    case CONFIG.PTUAutomation.Effect.ADD_DAMAGE: {
+                        const modifier = {
+                            uuid: "",
+                            modifier: {
+                                type: "damage",
+                                value: effect.value
+                            }
+                        }
+                        if(target instanceof Token ) {
+                            modifier.uuid = target.actor.uuid;
+                        }
+                        if(target instanceof TokenDocument || target instanceof Actor) {
+                            modifier.uuid = target.uuid;
+                        }
+                        if(!modifier.uuid || !modifier.modifier) continue;
+
+                        modifiers.push(modifier);
+                        break;
+                    }
+                }
+            }
+
+            for(const effect of updates.effects.toggle) {
+                if(target instanceof Token) await target.toggleEffect(effect);
+                if(target instanceof TokenDocument) await target.toggleActiveEffect(effect);
+            }
+            if(updates.effects.add.length > 0) {
+                if(target instanceof Token || target instanceof TokenDocument) await target.actor.createEmbeddedDocuments("ActiveEffect", updates.effects.add);
+                if(target instanceof Actor) await target.createEmbeddedDocuments("ActiveEffect", updates.effects.add);
+            }
+            if(updates.effects.remove.length > 0) {
+                if(target instanceof Token || target instanceof TokenDocument) await target.actor.deleteEmbeddedDocuments("ActiveEffect", updates.effects.remove);
+                if(target instanceof Actor) await target.deleteEmbeddedDocuments("ActiveEffect", updates.effects.remove);
+            }
+        }
+        return modifiers;
+    }
+}
+
 export async function newApplyDamageToTargets(event) {
     let dataset;
     if (event.hasDataset) dataset = event;
@@ -150,7 +582,6 @@ export async function newApplyDamageToTargets(event) {
         const critTargets = [];
         messageHtml.find(".mon-list").filter((k, i) => !i.className.includes("disabled")).each((k, i) => {
             const token = canvas.tokens.get(i?.dataset?.target);
-            console.log(token.name, i.dataset, i.dataset.hit, i.dataset.hit == 'true')
             if (token && (i.dataset.hit == 'true')) {
                 if (i.dataset.crit == "hit" || i.dataset.crit == "crit" || i.dataset.crit == "double-hit")
                     critTargets.push(token);
