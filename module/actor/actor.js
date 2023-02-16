@@ -637,9 +637,11 @@ export class PTUActor extends Actor {
       hasAC: !(moveData.ac == "" || moveData.ac == "--"),
       move: moveData,
       moveName: move.name,
+      moveUuid: move.uuid,
       targetAmount: Object.keys(attack.data).length,
       actorImage: this.img,
     }, attack);
+    console.log(messageData)
 
     messageData.content = await renderTemplate('/systems/ptu/templates/chat/moves/full-attack.hbs', messageData);
 
@@ -649,6 +651,7 @@ export class PTUActor extends Actor {
       if (messageData.targetAmount >= 1 && attack.crit != CritOptions.CRIT_MISS) {
         const applicatorMessageData = duplicate(messageData);
         applicatorMessageData.damageRolls = messageData.damageRolls;
+        applicatorMessageData.attackId = randomID();
         applicatorMessageData.content = await renderTemplate('/systems/ptu/templates/chat/moves/damage-application.hbs', applicatorMessageData);
         timeout(100);
         const applicatorMsg = await ChatMessage.create(applicatorMessageData, {});
@@ -838,6 +841,7 @@ export class PTUActor extends Actor {
         }
 
         output[target.id] = attackData;
+        output[target.id].uuid = target.actor.uuid;
       }
       return output;
     }
