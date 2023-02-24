@@ -780,7 +780,7 @@ export function LoadSystemSettings() {
 
         game.settings.register("ptu", "playtestStats", {
             name: "PLAYTEST: Use playtest calculations for stats.",
-            hint: "This will use the playtest calculations for stats instead of the official ones. For further information see the discord.",
+            hint: "This will use the playtest calculations for stats instead of the official ones. For further information see the playtest.md file.",
             scope: "world",
             config: true,
             type: Boolean,
