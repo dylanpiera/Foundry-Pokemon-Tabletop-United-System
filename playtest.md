@@ -60,8 +60,8 @@ This effect also scales with level, so will have a higher impact in later levels
 If we go back to the list of objectives that this change had:
 
 **Full Tank was Bad.**
--after doing some turns to kill calculations, using the same point distribution as in the above workbook we found that using this system Tanks take on average twice as long to be killed by the agressive glass cannons. They can actually tank now!
--in addition to this the wet noodle fight of 200+ turns now does not occur, as the attack stats of the tank naturally increase it means that on average fights between full tanks will take around 10 turns if no super effective moves are used. This is obviously not as fast as if two glass cannons were to fight but still much better.
+- after doing some turns to kill calculations, using the same point distribution as in the above workbook we found that using this system Tanks take on average twice as long to be killed by the agressive glass cannons. They can actually tank now!
+- in addition to this the wet noodle fight of 200+ turns now does not occur, as the attack stats of the tank naturally increase it means that on average fights between full tanks will take around 10 turns if no super effective moves are used. This is obviously not as fast as if two glass cannons were to fight but still much better.
 
 **Glass cannons too stronk**
 - Glass cannons have been nerfed as part of this system. with average turns to kill being increased by a range of 1.5-2 times!
@@ -69,11 +69,14 @@ If we go back to the list of objectives that this change had:
 - In a fight between two glass cannons, it is still possible for one of them to one-shot the other, but it is no longer a consistant thing, it will rely on super effective moves, crits and high damage rolls. So when it does happen it should hopefully be more of a "WOW!" moment.
 
 **Even builds get left behind**
+
 As demonstrated above we've added the Sigma modifier to make it so that Even builds can be more of the Jack of all Trades. They get an increase to their stats so that a generalised pokemons stat total will actually be higher than the stat total of a glass cannon or a tank. This makes this playstyle much more viable.
 
 **The Essence of Base Stat Relations**
--Because this system scales with Base Stats a naturally fast pokemon, will always be pretty fast, even with zero investment into the stat. This means that we can allow players to point level up points wherever they want without worrying about the essence of the pokemon being effected.
--For example, Pikachu's highest base stat is speed, and it's lowest is defense. If you put all your level up points into defense because you want a chonky season 1 pikachu, not the skinny rubbish they brought out in later seasons, defense doesn't actually become the highest stat until level 20!
+
+Because this system scales with Base Stats a naturally fast pokemon, will always be pretty fast, even with zero investment into the stat. This means that we can allow players to point level up points wherever they want without worrying about the essence of the pokemon being effected.
+
+For example, Pikachu's highest base stat is speed, and it's lowest is defense. If you put all your level up points into defense because you want a chonky season 1 pikachu, not the skinny rubbish they brought out in later seasons, defense doesn't actually become the highest stat until level 20!
 
 
 ### How can I take part?
