@@ -428,8 +428,8 @@
                     <div class="row no-gutters header">
                       <div class="col-sm-2 pt-2 pb-2 key stat-header">{{localize "PTU.StatsLabel"}}</div>
                       <div class="col-sm-2 mt-2 mb-2">{{localize "PTU.StatsBase"}}</div>
-                      <div class="col-sm-2 mt-2 mb-2">{{localize "PTU.StatsMod"}}</div>
                       <div class="col-sm-2 mt-2 mb-2" style="font-size: 9px;">{{localize "PTU.StatsLevelup"}}</div>
+                      <div class="col-sm-2 mt-2 mb-2">{{localize "PTU.StatsMod"}}</div>
                       <div class="col-sm-2 mt-2 mb-2">{{localize "PTU.StatsStage"}}</div>
                       <div class="col-sm-2 mt-2 mb-2">{{localize "PTU.StatsTotal"}}</div>
                     </div>
@@ -441,6 +441,16 @@
                       <div class="stats {{key}} base col-sm-2">
                         <input type="text" name="system.stats.{{key}}.value" value="{{stat.value}}" data-dtype="Number"
                           disabled />
+                      </div>                      
+                      <div class="stats {{key}} levelUp col-sm-2">
+                        {{> "systems/ptu/templates/partials/mod-field.hbs" 
+                          path=(concat "system.stats." key ".levelUp") 
+                          value=stat.levelUp
+                          dtype="Number" 
+                          mod=""
+                          total="ignored"
+                          modOrigins=(getProperty ../actor.origins (concat "system.stats." key ".levelUp"))
+                          flipped=(gt 3 @index)}}
                       </div>
                       <div class="stats {{key}} mod col-sm-2">
                         {{> "systems/ptu/templates/partials/mod-field.hbs" 
@@ -450,16 +460,6 @@
                           total="ignored"
                           dtype="Number" 
                           modOrigins=(getProperty ../actor.origins (concat "system.stats." key ".mod.mod"))
-                          flipped=(gt 3 @index)}}
-                      </div>
-                      <div class="stats {{key}} levelUp col-sm-2">
-                        {{> "systems/ptu/templates/partials/mod-field.hbs" 
-                          path=(concat "system.stats." key ".levelUp") 
-                          value=stat.levelUp
-                          dtype="Number" 
-                          mod=""
-                          total="ignored"
-                          modOrigins=(getProperty ../actor.origins (concat "system.stats." key ".levelUp"))
                           flipped=(gt 3 @index)}}
                       </div>
                       <div class="stats stage stage col-sm-2">
