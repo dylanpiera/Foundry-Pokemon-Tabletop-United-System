@@ -407,7 +407,7 @@ export async function ThrowPokeball(thrower, target, pokeball) {
             if (game.settings.get("ptu", "trackBrokenPokeballs"))
             {
                 //check if thrower already has a broken ball of that type
-                let brokenBall = thrower.items.find(i => i.name == "Broken " + pokeball.name);
+                const brokenBall = thrower.items.find(i => i.name == "Broken " + pokeball.name);
 
                 if (brokenBall) //if they do, increment the quantity
                     await brokenBall.update({"system.quantity": duplicate(brokenBall.system.quantity)+1})
