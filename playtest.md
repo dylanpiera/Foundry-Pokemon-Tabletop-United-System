@@ -1,20 +1,20 @@
-# Welcome to the Playtest!
+# Welcome to the Stats Playtest!
 
 
-### What is this playtest?
-This playtest is being used to gather feedback for a potential new system of calculating a pokemons statistics, it takes inspiration from the Gen III games.
+## What is this playtest?
+This playtest is being used to gather feedback for a potential new system of calculating a pokemons statistics, it takes inspiration from the video game's in-game stat calculation used in the Gen III and later games.
 
-### Why?
-The current system of **Base Stat Relations** is flawed. Many people completely ignore it and it has many issues with balancing, especially when comparing full tanks, vs 'glass cannons'. You can find full details of these issues written in this google docs sheet: https://docs.google.com/document/d/1rOlOdksd0QNTiAO2vLU6uYes0aAxGzFe1n5wuDdGmVg/edit
+## Why?
+The current system of ***Base Stat Relations*** is flawed. Many people completely ignore it and it has many issues with balancing, especially when comparing full tanks, vs 'glass cannons'. You can find full details of these issues written in this google docs sheet: [Turns to Kill or “Wow, Tanks Really Suck”](https://docs.google.com/document/d/1rOlOdksd0QNTiAO2vLU6uYes0aAxGzFe1n5wuDdGmVg/edit)
 
-#### But the main points made in this sheet that we are trying to resolve with this playtest is:
+### But the main points made in this sheet that we are trying to resolve with this playtest is:
 
-- Full Tank is Bad. They invest all their level up points into health and defense stats, and it still only takes a glass cannon one maybe two turns to kill them, whilst they themselves deal no damage, because they have no points in attack/special attack. Meaning if you have two full tanks against eachother it is a wet noodle fight that can take **over 200 turns to resolve.**
+- Full Tank is Bad. They invest all their level up points into health and defense stats, and it still only takes a glass cannon one maybe two turns to kill them, whilst they themselves deal no damage, because they have no points in attack/special attack. Meaning if you have two full tanks against eachother it is a wet noodle fight that can take ***over 200 turns to resolve.***
 - Extreme agression stays consitant across all levels, with  most battles being over in two or less moves even with average rolls. In the case of two glass cannons going against eachother it can often just be down to whoever moves first wins. This is boring, and the opposite problem that we have with the tanks.
 - in the middle All Even builds progressively lose time as they level up as we've already established and they would be better off just focusing aggression
 - The idea of Base Stat Relations is that your pokemons stats should all increase gradually, as they level up. Even if you have a beefy snorlax their speed will still increase over time, regardless of if you're putting all your points in HP. This should be encouraged! and more well rounded pokemon should be rewarded and not felt like they are being left behind by the more specialised.
 
-### How does it work?
+## How does it work?
 To work out the new stat line of a pokemon we took some inspiration from the Generation III Calculation for the Pokémon games.
 
 ![image](https://user-images.githubusercontent.com/43385250/221129214-de5d5ff7-da5f-4da9-966a-c41a766ab102.png)
@@ -28,7 +28,7 @@ This can obviously look confusing, but the main changes from the current system 
 - When you assign level up points these will effectively be your pokemons EVs, and though they will not have an immediate impact early game, the impact of the EVs will scale with level. They are more of an investment than an immediate reward.
 - Nature is now applied to the final stat, rather than the Base stat as if the nature increases the stat it will increase the stat by 10%, and if the nature decreases the stat is will decrease the stat by 10%. Again this will not make much difference in the early levels, but will have a bigger impact at higher levels.
 
-#### What is that weird Squigly?
+### What is that weird Squigly?
 ![image](https://user-images.githubusercontent.com/43385250/221130475-8a0a894e-5c0f-4ee7-91f8-9683e8b7ac07.png)
 
 This section is what I refer to as the Sigma Modifier.
@@ -55,7 +55,7 @@ This effect also scales with level, so will have a higher impact in later levels
   Neither of these pokemon put any points into HP, but the generalised mon has a much higher HP stat at level 100.
  </details>
 
-#### Does this change acheives our objectives?
+### Does this change acheives our objectives?
 
 If we go back to the list of objectives that this change had:
 
@@ -79,11 +79,15 @@ Because this system scales with Base Stats a naturally fast pokemon, will always
 For example, Pikachu's highest base stat is speed, and it's lowest is defense. If you put all your level up points into defense because you want a chonky season 1 pikachu, not the skinny rubbish they brought out in later seasons, defense doesn't actually become the highest stat until level 20!
 
 
-### How can I take part?
+## How can I take part?
 If you want to play with these playtest stats the GM should go to the PTU Settings and click this checkbox.
 
 ![image](https://user-images.githubusercontent.com/43385250/221135503-476c39ec-6581-4db4-a362-6afd95e8b03d.png)
 
-I'd reccomend you let player re-allocate level up points if you do this, espcially if you are currently following the Base Stat Relations Rule.
+We recommend you to let player re-allocate level up points if you do this, espcially if you are currently following the Base Stat Relations Rule, as this one is now obsolete.
 
-Any feedback you have for how this new system plays out can be given to us in this [discord channel](https://discord.gg/Y8Wu2jZGzq)
+## Providing Feedback
+Feedback for any Playtest can be done in our [Discord Server's](https://discord.gg/Y8Wu2jZGzq) [#ptr-playtest](https://ptb.discord.com/channels/748601513835888682/1078480391448559718) discussions threads. All playtests will have their own 'Feedback' thread opened and marked as such.
+
+## FAQ
+None yet~
