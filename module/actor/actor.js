@@ -415,7 +415,7 @@ export class PTUActor extends Actor {
     data.levelUpPoints = data.level.current + data.modifiers.statPoints.total + 9;
     data.stats = CalculatePoisonedCondition(duplicate(data.stats), actorData.flags?.ptu);
     var result = game.settings.get("ptu", "playtestStats") ?
-      CalculatePTStatTotal(data.levelUpPoints, data.level.current, data.stats, { twistedPower: actorData.items.find(x => x.name.toLowerCase().replace("[playtest]") == "twisted power") != null }, data.nature.value) :
+      CalculatePTStatTotal(data.levelUpPoints, data.level.current, data.stats, { twistedPower: actorData.items.find(x => x.name.toLowerCase().replace("[playtest]") == "twisted power") != null }, data.nature?.value) :
       CalculateStatTotal(data.levelUpPoints, data.stats, { twistedPower: actorData.items.find(x => x.name.toLowerCase().replace("[playtest]") == "twisted power") != null });
     data.stats = result.stats;
     data.levelUpPoints = result.levelUpPoints;
