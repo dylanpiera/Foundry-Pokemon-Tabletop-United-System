@@ -1,6 +1,9 @@
 # Welcome to the Beta!
 Hey there! You are on the Beta Branch. If you ever have any feedback please do share with us over on [Github](https://github.com/dylanpiera/Foundry-Pokemon-Tabletop-United-System/issues) or [Discord](https://discord.gg/fE3w59q)
 
+## Version 3.2.0.1 - New Main Version!
+Hi all! Version 3.2 dropped and this is just the new Beta Branch ready to go for future updates. For full changelogs check the 3.2.0.0 update! 
+
 ## Version 3.1.0.9 - Bugfixes
 Hi all! Thanks to Alexander Block we have a fix for the trainer sheet issues.
 
