@@ -10,7 +10,8 @@ export function LoadSystemSettings() {
         config: true,
         type: Boolean,
         default: true,
-        category: "rules"
+        category: "rules",
+        onChange: debouncedReload
     });
 
     game.settings.register("ptu", "useTutorPoints", {
@@ -52,7 +53,8 @@ export function LoadSystemSettings() {
             "en": "English",
             "de": "German",
         },
-        category: "general"
+        category: "general",
+        onChange: debouncedReload
     });
 
     game.settings.register("ptu", "canPlayersDeleteTokens", {
@@ -332,7 +334,8 @@ export function LoadSystemSettings() {
         scope: "world",
         config: false,
         type: String,
-        default: ""
+        default: "",
+        onChange: debouncedReload
     });
     game.settings.register("ptu", "customSpeciesData", {
         name: "Custom Species Data",
@@ -389,7 +392,8 @@ export function LoadSystemSettings() {
         config: true,
         type: Boolean,
         default: false,
-        category: "other"
+        category: "other",
+        onChange: debouncedReload
     });
 
     game.settings.register("ptu", "enableMoveAnimations", {
@@ -780,13 +784,14 @@ export function LoadSystemSettings() {
         })
 
         game.settings.register("ptu", "playtestStats", {
-            name: "PLAYTEST: Use playtest calculations for stats.",
-            hint: "This will use the playtest calculations for stats instead of the official ones. For further information see the playtest.md file.",
+            name: "Use playtest calculations for stats.",
+            hint: "This will use the playtest calculations for stats instead of the official ones. See: <a href='https://ptufvtt.com/en/Guides/Playtests/Stats-Rework'>https://ptufvtt.com/en/Guides/Playtests/Stats-Rework</a>",
             scope: "world",
             config: true,
             type: Boolean,
             default: false,
-            category: "general"
+            category: "playtest",
+            onChange: debouncedReload
         })
     }
 }
@@ -799,3 +804,4 @@ export function SetAccessabilityFont(enabled) {
     }
 }
 
+const debouncedReload = foundry.utils.debounce(() => window.location.reload(), 100);

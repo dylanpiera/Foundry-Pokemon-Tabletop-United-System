@@ -4,6 +4,23 @@ Hey there! You are on the Beta Branch. If you ever have any feedback please do s
 ## Version 3.2.0.1 - New Main Version!
 Hi all! Version 3.2 dropped and this is just the new Beta Branch ready to go for future updates. For full changelogs check the 3.2.0.0 update! 
 
+## Version 3.2.0.0 - PTR Playtest 1
+Hi all! Welcome to stable version 3.2, with it brings some new features as well as the first PTR Playtest!
+
+### New Features
+- Consumable (food buff) items will now show in the sidebar and can be clicked to mark the item as 'Consumed' applying a food buff to the pokemon/target.
+- Food buffs themselves can also be consumed (NOTE: this is purely for tracking purposes as no automation has been implemented yet)
+- When a pokemon breaks out of a capture, a broken ball will automatically be added to the player character's inventory.
+
+### Fixes
+- Wishiwashi's art now generates properly depending on whether it's in solo or schooling form
+- species-data.js has been updated with the latest changes from PTR-Data (99% finished)
+
+### Playtests
+Introducing PTR Playtests! For full details check the #playtests channel on the discord.
+
+This version adds the "Stats & no-more BSR" Playtest, to enable check the new settings category in PTU Settings!
+
 ## Version 3.1.0.9 - Bugfixes
 Hi all! Thanks to Alexander Block we have a fix for the trainer sheet issues.
 

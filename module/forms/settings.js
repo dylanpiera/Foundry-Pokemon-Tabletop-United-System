@@ -2,6 +2,7 @@ import { debug } from "../ptu.js";
 
 export const PTUSettingCategories = [
     {id: "general", label: "General", icon: "fas fa-cogs"},
+    {id: "playtest", label: "Playtests", icon: "fas fa-book", subtext: "PTR Playtests, see #playtests on Discord"},
     {id: "combat", label: "Combat", icon: "fas fa-fist-raised", subtext: "Combat Rules & Preferences"},
     {id: "rules", label: "Rules", icon: "fas fa-book", subtext: "System rules, like which erratas to use."},
     {id: "generation", label: "Generation", icon: "fas fa-cogs", subtext: "Settings in regards to Pokémon Generation (through Dex-Dragin)"},
