@@ -2,7 +2,7 @@ import { CalcLevel } from "./calculations/level-up-calculator.js";
 import { CalculateEvasions } from "./calculations/evasion-calculator.js";
 import { CalculatePokemonCapabilities, CalculateTrainerCapabilities } from "./calculations/capability-calculator.js";
 import { CalculateSkills } from "./calculations/skills-calculator.js";
-import { CalcBaseStats, CalculateStatTotal, CalculatePoisonedCondition } from "./calculations/stats-calculator.js";
+import { CalcBaseStats, CalculateStatTotal, CalculatePTStatTotal, CalculatePoisonedCondition } from "./calculations/stats-calculator.js";
 import { GetMonEffectiveness } from "./calculations/effectiveness-calculator.js";
 import { CritOptions } from "./character-sheet-gen8.js";
 import { warn, debug, log } from '../ptu.js'
@@ -414,7 +414,9 @@ export class PTUActor extends Actor {
 
     data.levelUpPoints = data.level.current + data.modifiers.statPoints.total + 9;
     data.stats = CalculatePoisonedCondition(duplicate(data.stats), actorData.flags?.ptu);
-    var result = CalculateStatTotal(data.levelUpPoints, data.stats, { twistedPower: actorData.items.find(x => x.name.toLowerCase().replace("[playtest]") == "twisted power") != null });
+    var result = game.settings.get("ptu", "playtestStats") ?
+      CalculatePTStatTotal(data.levelUpPoints, data.level.current, data.stats, { twistedPower: actorData.items.find(x => x.name.toLowerCase().replace("[playtest]") == "twisted power") != null }, data.nature?.value) :
+      CalculateStatTotal(data.levelUpPoints, data.stats, { twistedPower: actorData.items.find(x => x.name.toLowerCase().replace("[playtest]") == "twisted power") != null });
     data.stats = result.stats;
     data.levelUpPoints = result.levelUpPoints;
 
@@ -487,7 +489,9 @@ export class PTUActor extends Actor {
 
     data.stats = CalcBaseStats(data.stats, speciesData, data.nature.value);
 
-    var result = CalculateStatTotal(data.levelUpPoints, data.stats, { twistedPower: actorData.items.find(x => x.name.toLowerCase().replace("[playtest]") == "twisted power") != null });
+    var result = game.settings.get("ptu", "playtestStats") ?
+    CalculatePTStatTotal(data.levelUpPoints, data.level.current, data.stats, { twistedPower: actorData.items.find(x => x.name.toLowerCase().replace("[playtest]") == "twisted power") != null }, data.nature.value) :
+      CalculateStatTotal(data.levelUpPoints, data.stats, { twistedPower: actorData.items.find(x => x.name.toLowerCase().replace("[playtest]") == "twisted power") != null });
     data.stats = result.stats;
     data.levelUpPoints = result.levelUpPoints;
 

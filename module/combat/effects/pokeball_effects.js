@@ -403,6 +403,26 @@ export async function ThrowPokeball(thrower, target, pokeball) {
                 // await target.TMFXdeleteFilters("pokeball_transform");
                 await game.ptu.utils.api.gm.removeTokenMagicFilters(target, game.canvas.scene.id, "pokeball_transform");
             }
+
+            if (game.settings.get("ptu", "trackBrokenPokeballs"))
+            {
+                //check if thrower already has a broken ball of that type
+                const brokenBall = thrower.items.find(i => i.name == "Broken " + pokeball.name);
+
+                if (brokenBall) //if they do, increment the quantity
+                    await brokenBall.update({"system.quantity": duplicate(brokenBall.system.quantity)+1})
+                else //if they don't, create a new item
+                {
+                    await thrower.createEmbeddedDocuments('Item',[{
+                        name: `Broken ${pokeball.name}`,
+                        type: "item",
+                        system: {
+                            quantity: 1
+                        },
+                        img: pokeball.img
+                    }])
+                }
+            }
         }
 
         return isCaptured;

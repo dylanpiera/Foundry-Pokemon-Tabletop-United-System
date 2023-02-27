@@ -330,7 +330,7 @@
         }
       },
       "shared": {
-        "digestionBuff": "",
+        "foodBuff": "",
         "notes": "",
         "tempHp": {
           "value": null,
@@ -522,7 +522,7 @@
       "quantity": 1,
       "category": "",
       "cost": 0,
-      "consumable": false
+      "consumable": 0
     }
   }
 }
