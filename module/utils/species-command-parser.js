@@ -91,67 +91,68 @@ export async function GetSpeciesArt(mon, imgDirectoryPath, type = ".webp", shiny
     const hisuian_path = mon?._id.toLowerCase().includes("hisuian") ? "_hi" : "";
     const paldean_path = mon?._id.toLowerCase().includes("paldean") ? "_pa" : "";
     const female_path = female ? "f" : "";
+    const wishiwashi_path = mon?._id.toLowerCase().includes("wishiwashi") ? (mon?._id.toLowerCase().includes("solo") ? "_1" : "_2")  : ""; //if it's not solo then it's schooling
 
-    //combine both paths so i don't have to keep typing them
-    const reg_path = alolan_path+galarian_path+hisuian_path+paldean_path+female_path;
+    //combine variation paths so i don't have to keep typing them
+    const variation_path = wishiwashi_path+alolan_path+galarian_path+hisuian_path+paldean_path+female_path;
 
-    let path = basePath+lpad(mon?.number, 4)+reg_path+shiny_path+type;
+    let path = basePath+lpad(mon?.number, 4)+variation_path+shiny_path+type;
 
     if(animated)
     {
-        path = basePath+lpad(mon?.number, 4)+reg_path+shiny_path+animated_type;
+        path = basePath+lpad(mon?.number, 4)+variation_path+shiny_path+animated_type;
     }
     let result = await fetch(path);
 
     if(animated && (result.status === 404 && mon?.number < 1000)) {
-        path = basePath+lpad(mon?.number, 3)+reg_path+shiny_path+animated_type;
+        path = basePath+lpad(mon?.number, 3)+variation_path+shiny_path+animated_type;
         result = await fetch(path);
     }
     if(result.status === 404 && mon?.number < 1000) {
-        path = basePath+lpad(mon?.number, 3)+reg_path+shiny_path+type;
+        path = basePath+lpad(mon?.number, 3)+variation_path+shiny_path+type;
         result = await fetch(path);
     }
     if(result.status === 404 && mon?.number < 1000) {
-        path = basePath+lpad(mon?.number, 3)+reg_path+shiny_path+alt_type;
+        path = basePath+lpad(mon?.number, 3)+variation_path+shiny_path+alt_type;
         result = await fetch(path);
     }
 
     if(animated && (result.status === 404)) {
-        path = basePath+lpad(mon?.number, 4)+reg_path+shiny_path+animated_type;
+        path = basePath+lpad(mon?.number, 4)+variation_path+shiny_path+animated_type;
         result = await fetch(path);
     }
     if(result.status === 404) {
-        path = basePath+lpad(mon?.number, 4)+reg_path+shiny_path+type;
+        path = basePath+lpad(mon?.number, 4)+variation_path+shiny_path+type;
         result = await fetch(path);
     }
     if(result.status === 404) {
-        path = basePath+lpad(mon?.number, 4)+reg_path+shiny_path+alt_type;
+        path = basePath+lpad(mon?.number, 4)+variation_path+shiny_path+alt_type;
         result = await fetch(path);
     }
 
     if(animated && (result.status === 404)) {
-        path = basePath+mon?._id+reg_path+shiny_path+animated_type;
+        path = basePath+mon?._id+variation_path+shiny_path+animated_type;
         result = await fetch(path);
     }
     if(result.status === 404) {
-        path = basePath+mon?._id+reg_path+shiny_path+type;
+        path = basePath+mon?._id+variation_path+shiny_path+type;
         result = await fetch(path);
     }
     if(result.status === 404) {
-        path = basePath+mon?._id+reg_path+shiny_path+alt_type;
+        path = basePath+mon?._id+variation_path+shiny_path+alt_type;
         result = await fetch(path);
     }
 
     if(animated && (result.status === 404)) {
-        path = basePath+mon?._id?.toLowerCase()+reg_path+shiny_path+animated_type;
+        path = basePath+mon?._id?.toLowerCase()+variation_path+shiny_path+animated_type;
         result = await fetch(path);
     }
     if(result.status === 404) {
-        path = basePath+mon?._id?.toLowerCase()+reg_path+shiny_path+type;
+        path = basePath+mon?._id?.toLowerCase()+variation_path+shiny_path+type;
         result = await fetch(path);
     }
     if(result.status === 404) {
-        path = basePath+mon?._id?.toLowerCase()+reg_path+shiny_path+alt_type;
+        path = basePath+mon?._id?.toLowerCase()+variation_path+shiny_path+alt_type;
         result = await fetch(path);
     }
 
