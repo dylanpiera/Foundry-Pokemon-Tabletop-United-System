@@ -79,17 +79,21 @@
                                     placeholder=""
                                     {{#if editLocked}}disabled{{/if}}
                                 />
-                            </span>
-                            <span style="flex: 0 0 45%">
-                                CONSUMABLE
-                                <input
-                                    class="ml-2"
-                                    name="system.consumable"
-                                    type="checkbox"
-                                    {{#if item.system.consumable}}checked{{/if}}
-                                    {{#if editLocked}}disabled{{/if}}
-                                />
-                            </span>
+                            </span>                         
+<span style="flex: 0 0 45%">
+    CONSUMABLE
+    <select
+        class="ml-2"
+        name="system.consumable"
+        {{#if editLocked}}disabled{{/if}}
+    >
+        {{#select item.system.consumable}}
+        <option value="0">No</option>
+        <option value="1">Yes</option>
+        <option value="2">Yes (Snack)</option>
+        {{/select}}
+    </select>
+</span>
                         </div>
                     </div>
                 </div>
