@@ -21,7 +21,7 @@ To work out the new stat line of a pokemon we took some inspiration from the Gen
 
 
 we have tweaked this calculation so that it works better for our game and helps acheive our objectives and now it looks like this
-![image](https://user-images.githubusercontent.com/43385250/221129633-cc843d34-7fdc-4331-97ea-b7476dc37859.png)
+![image](https://cdn.discordapp.com/attachments/1064977756720476282/1079822026396684318/image.png)
 
 This can obviously look confusing, but the main changes from the current system are
 - All stats now scale with level as well as how many points you put into them.
@@ -54,6 +54,14 @@ This effect also scales with level, so will have a higher impact in later levels
   
   Neither of these pokemon put any points into HP, but the generalised mon has a much higher HP stat at level 100.
  </details>
+ 
+### What is that weird B?
+![image](https://cdn.discordapp.com/attachments/1064977756720476282/1079826571587764234/image.png)
+
+This is refered to as the Beta multiplier. During initial draft of this playtest we had put this value at 0.2
+However we quickly realised that this value may be too restrictive. So during the playtest we have instead decided to make it a variable *you!* can change.
+
+In PTU Settings you'll be able to find yourself a EV strength factor (β) slider under the Playtest section. We have changed the default to 0.35 but feel free to play around and let us know what kind of values your party enjoys!
 
 ### Does this change acheives our objectives?
 
@@ -82,12 +90,12 @@ For example, Pikachu's highest base stat is speed, and it's lowest is defense. I
 ## How can I take part?
 If you want to play with these playtest stats the GM should go to the PTU Settings and click this checkbox.
 
-![image](https://user-images.githubusercontent.com/43385250/221135503-476c39ec-6581-4db4-a362-6afd95e8b03d.png)
+![image](https://cdn.discordapp.com/attachments/1064977756720476282/1079827558809485343/image.png)
 
 We recommend you to let player re-allocate level up points if you do this, espcially if you are currently following the Base Stat Relations Rule, as this one is now obsolete.
 
 ## Providing Feedback
-Feedback for any Playtest can be done in our [Discord Server's](https://discord.gg/Y8Wu2jZGzq) [#ptr-playtest](https://ptb.discord.com/channels/748601513835888682/1078480391448559718) discussions threads. All playtests will have their own 'Feedback' thread opened and marked as such.
+Feedback for any Playtest can be done in our [Discord Server's](https://discord.gg/Y8Wu2jZGzq) [#ptr-playtest](https://ptb.discord.com/channels/748601513835888682/1078480391448559718) discussions threads. All playtests will have their own 'Feedback' thread opened and marked as such. You can also find more information in the #playtests channel
 
 ## FAQ
 None yet~

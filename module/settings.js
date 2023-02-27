@@ -793,6 +793,22 @@ export function LoadSystemSettings() {
             category: "playtest",
             onChange: debouncedReload
         })
+
+        game.settings.register("ptu", "playtestStatsFactor", {
+            name: "EV strength factor β.",
+            hint: "Base value is 0.35. The higher the number, the stronger Level-Up Points will affect stat totals. See: <a href='https://ptufvtt.com/en/Guides/Playtests/Stats-Rework'>https://ptufvtt.com/en/Guides/Playtests/Stats-Rework</a>",
+            scope: "world",
+            config: true,
+            type: Number,
+            default: 0.35,
+            range: {
+                min: 0.1,
+                max: 1.0,
+                step: 0.05
+            },
+            category: "playtest",
+            onChange: debouncedReload
+        })
     }
 }
 

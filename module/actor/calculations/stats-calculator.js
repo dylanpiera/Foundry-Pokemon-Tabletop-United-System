@@ -83,9 +83,11 @@ function Dev(stats) {
 
 export function CalculatePTStatTotal(levelUpPoints, level, stats, {twistedPower, ignoreStages}, nature) {
 
+    const factor = game.settings.get("ptu", "playtestStatsFactor") ?? 0.3
+
     //find the gross stats = (Base Stat + (level * LevelUpPoints) * Level to the power of 1/2.2)/50 + Base Stat + LevelUpPOints/5
     for (const [key, value] of Object.entries(stats)) {
-        value["total"] = (value["value"] + (level + value["levelUp"]) * Math.pow(level, 1/2.2))/50 + value["value"] + value["levelUp"]/5;
+        value["total"] = (value["value"] + (level + value["levelUp"]) * Math.pow(level, 1/2.2))/50 + value["value"] + (value["levelUp"]*factor);
         levelUpPoints -= value["levelUp"];       
     }
 
