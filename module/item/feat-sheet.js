@@ -9,9 +9,9 @@ export class PTUFeatSheet extends ItemSheet {
   /** @override */
   static get defaultOptions() {
     return mergeObject(super.defaultOptions, {
-      classes: ["ptu", "sheet", "feat"],
-      width: 790,
-      height: 193,
+      classes: ["ptu", "sheet", "item", "feat"],
+      width: 750,
+      height: 550,
       tabs: [{ navSelector: ".sheet-tabs", contentSelector: ".sheet-body", initial: "description" }]
     });
   }
@@ -20,7 +20,7 @@ export class PTUFeatSheet extends ItemSheet {
   get template() {
     const path = "systems/ptu/templates/item";
     // Return a single sheet for all item types.
-    return `${path}/item-feat-sheet.html`;
+    return `${path}/item-feat-sheet.hbs`;
 
     // Alternatively, you could use the following return statement to do a
     // unique item sheet by type, like `weapon-sheet.html`.
@@ -32,18 +32,16 @@ export class PTUFeatSheet extends ItemSheet {
   /** @override */
   getData() {
     const data = super.getData();
+    data.editLocked = data.editable == false ? true : this.object.getFlag('ptu', 'editLocked') ?? false;
+
+    if(this.object.img == "icons/svg/item-bag.svg" || this.object.img == "icons/svg/mystery-man.svg") {
+      if(this.object.system.tags.toLowerCase().includes("class"))
+				this.object.update({"img": `/systems/ptu/css/images/icons/class_feat_icon.png`});
+      else
+        this.object.update({"img": `/systems/ptu/css/images/icons/feat_icon.png`});
+    }
+
     return data;
-  }
-
-  /* -------------------------------------------- */
-
-  /** @override */
-  setPosition(options = {}) {
-    const position = super.setPosition(options);
-    const sheetBody = this.element.find(".sheet-body");
-    const bodyHeight = position.height - 192;
-    sheetBody.css("height", bodyHeight);
-    return position;
   }
 
   /* -------------------------------------------- */
@@ -106,6 +104,18 @@ export class PTUFeatSheet extends ItemSheet {
 
     // Everything below here is only needed if the sheet is editable
     if (!this.options.editable) return;
+
+    html.find("input[type=checkbox]").on("change", (e) => {
+      e.preventDefault();
+
+      const value = e.currentTarget.checked;
+
+      this.object.update({"system.free": value});
+    });
+
+    html.find('.lock-img').on("click", event => {
+			this.object.setFlag('ptu', 'editLocked', !this.object.getFlag('ptu', 'editLocked'));
+		});
 
     // Roll handlers, click handlers, etc. would go here.
   }

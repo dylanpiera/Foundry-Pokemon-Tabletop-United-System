@@ -58,19 +58,19 @@
             },
             "special": {
               "value": 0,
-              "mod:": 0,
+              "mod": 0,
               "keys": []
             }
           },
           "damageReduction": {
             "physical": {
               "value": 0,
-              "mod:": 0,
+              "mod": 0,
               "keys": []
             },
             "special": {
               "value": 0,
-              "mod:": 0,
+              "mod": 0,
               "keys": []
             }
           }
@@ -330,7 +330,7 @@
         }
       },
       "shared": {
-        "digestionBuff": "",
+        "foodBuff": "",
         "notes": "",
         "tempHp": {
           "value": null,
@@ -482,12 +482,14 @@
       "prerequisites": "",
       "frequency": "At Will - Standard Action",
       "tags": [],
-      "notes": ""
+      "notes": "",
+      "free": false
     },
     "edge": {
       "templates": ["base"],
       "prerequisites": "",
-      "notes": ""
+      "notes": "",
+      "free": false
     },
     "ability": {
       "templates": ["base"],
@@ -496,7 +498,7 @@
     },
     "move": {
       "templates": ["base", "interactions"],
-      "type": "",
+      "type": "Untyped",
       "category": "",
       "damageBase": "",
       "frequency": "",
@@ -520,7 +522,7 @@
       "quantity": 1,
       "category": "",
       "cost": 0,
-      "consumable": false
+      "consumable": 0
     }
   }
 }

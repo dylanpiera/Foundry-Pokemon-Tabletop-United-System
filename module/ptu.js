@@ -7,6 +7,7 @@ import { PTUItem } from "./item/item.js";
 import { PTUItemSheet } from "./item/item-sheet.js";
 import { PTUEdgeSheet } from "./item/edge-sheet.js";
 import { PTUFeatSheet } from "./item/feat-sheet.js";
+import { PTUMoveSheet } from "./item/move-sheet.js";
 import { measureDistances } from "./canvas.js";
 import { levelProgression } from "./data/level-progression.js";
 import { pokemonData } from "./data/species-data.js";
@@ -54,13 +55,14 @@ import { ThrowPokeball } from './combat/effects/pokeball_effects.js';
 import { LANG } from './utils/language-helper.js';
 import logging from "./helpers/logging.js";
 import { registerHandlebars, preloadHandlebarsTemplates } from "./helpers/handlebars.js";
+import { PTRSearch } from "./ptr-search/ptr-search.js";
 
 export let debug = logging.debug;
 export let log = logging.log;
 export let warn = logging.warn;
 export let error = logging.error;
 
-export const LATEST_VERSION = "3.0.0.7";
+export const LATEST_VERSION = "3.2.0.0";
 
 export const ptu = {
   utils: {
@@ -83,6 +85,7 @@ export const ptu = {
       handleApplicatorItem,
       takeAction: TakeAction,
     },
+    
     combats: new Map(),
     dex: {
       render: RenderDex,
@@ -142,12 +145,16 @@ export const ptu = {
       sheetClasses: {
         item: PTUItemSheet,
         edge: PTUEdgeSheet,
-        feat: PTUFeatSheet
+        feat: PTUFeatSheet,
+        move: PTUMoveSheet,
       }
     },
     Ui: {
       Combat: {
         documentClass: PTUCombatTrackerOverrides
+      },
+      Search: {
+        documentClass: PTRSearch
       },
       Sidebar: {
         documentClass: PTUSidebar
@@ -199,6 +206,10 @@ Hooks.once('init', function () {
   console.groupCollapsed("PTU Init");
   console.time("PTU Init")
 
+  window.actor = function() {
+    return canvas.tokens.controlled[0].actor;
+  }
+
   // Register custom system settings
   ptu.utils.api.gm = new Api(); // Initialize the GM API
   game.ptu = ptu;
@@ -220,9 +231,6 @@ Hooks.once('init', function () {
   // Define custom Entity classes
   CONFIG.Actor.documentClass = ptu.config.Actor.documentClass;
   CONFIG.Item.documentClass = ptu.config.Item.documentClass;
-
-  // Define custom Active Effect class
-  CONFIG.ActiveEffect.sheetClass = ptu.config.ActiveEffect.sheetClass;
 
   // Custom Combat Settings
   CONFIG.Combat.defeatedStatusId = ptu.config.Combat.defeatedStatusId;
@@ -262,9 +270,12 @@ function registerSheets() {
   Actors.registerSheet("ptu", ptu.config.Actor.sheetClasses.character, { types: ["character"], makeDefault: true });
   Actors.registerSheet("ptu", ptu.config.Actor.sheetClasses.pokemon, { types: ["pokemon"], makeDefault: true });
   Items.unregisterSheet("core", ItemSheet);
-  Items.registerSheet("ptu", ptu.config.Item.sheetClasses.item, { types: ["item", "ability", "move", "capability", "pokeedge", "dexentry"], makeDefault: true });
+  Items.registerSheet("ptu", ptu.config.Item.sheetClasses.item, { types: ["item", "ability", "capability", "pokeedge", "dexentry"], makeDefault: true });
+  Items.registerSheet("ptu", ptu.config.Item.sheetClasses.move, { types: ["move"], makeDefault: true });
   Items.registerSheet("ptu", ptu.config.Item.sheetClasses.edge, { types: ["edge"], makeDefault: true });
   Items.registerSheet("ptu", ptu.config.Item.sheetClasses.feat, { types: ["feat"], makeDefault: true });
+
+  DocumentSheetConfig.registerSheet(ActiveEffect, "core", PTUActiveEffectConfig, { makeDefault: true })
 }
 
 export function PrepareMoveData(actorData, move) {
@@ -743,6 +754,11 @@ Hooks.on("preCreateItem", async function (item, data, options, sender) {
   await item.updateSource({ "system.origin": origin });
 });
 
+Hooks.on('preCreateActor', function(document,b,c,d) {
+  console.log(document)
+  document.updateSource({"prototypeToken.actorLink":true});
+});
+
 Hooks.on('getSceneControlButtons', function (hudButtons) {
   const hud = hudButtons.find(val => val.name == "token")
   if (hud) {
@@ -752,6 +768,14 @@ Hooks.on('getSceneControlButtons', function (hudButtons) {
       icon: "fas fa-tablet-alt",
       button: true,
       onClick: () => game.ptu.utils.macros.pokedex()
+    });
+
+    hud.tools.push({
+      name: "PTU.SearchButtonName",
+      title: "PTU.SearchButtonHint",
+      icon: "fas fa-search",
+      button: true,
+      onClick: () => new game.ptu.config.Ui.Search.documentClass().render(true)
     });
   }
 });

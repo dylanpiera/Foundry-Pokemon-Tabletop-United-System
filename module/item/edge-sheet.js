@@ -9,9 +9,9 @@ export class PTUEdgeSheet extends ItemSheet {
   /** @override */
   static get defaultOptions() {
     return mergeObject(super.defaultOptions, {
-      classes: ["ptu", "sheet", "edge"],
-      width: 790,
-      height: 193,
+      classes: ["ptu", "sheet", "item", "edge"],
+      width: 750,
+      height: 550,
       tabs: [{ navSelector: ".sheet-tabs", contentSelector: ".sheet-body", initial: "description" }]
     });
   }
@@ -20,7 +20,7 @@ export class PTUEdgeSheet extends ItemSheet {
   get template() {
     const path = "systems/ptu/templates/item";
     // Return a single sheet for all item types.
-    return `${path}/item-edge-sheet.html`;
+    return `${path}/item-edge-sheet.hbs`;
 
     // Alternatively, you could use the following return statement to do a
     // unique item sheet by type, like `weapon-sheet.html`.
@@ -32,18 +32,13 @@ export class PTUEdgeSheet extends ItemSheet {
   /** @override */
   getData() {
     const data = super.getData();
+    data.editLocked = data.editable == false ? true : this.object.getFlag('ptu', 'editLocked') ?? false;
+    
+    if(this.object.img == "icons/svg/item-bag.svg" || this.object.img == "icons/svg/mystery-man.svg") {
+        this.object.update({"img": `/systems/ptu/css/images/icons/edge_icon.png`});
+    }
+
     return data;
-  }
-
-  /* -------------------------------------------- */
-
-  /** @override */
-  setPosition(options = {}) {
-    const position = super.setPosition(options);
-    const sheetBody = this.element.find(".sheet-body");
-    const bodyHeight = position.height - 192;
-    sheetBody.css("height", bodyHeight);
-    return position;
   }
 
   /* -------------------------------------------- */
@@ -106,6 +101,18 @@ export class PTUEdgeSheet extends ItemSheet {
 
     // Everything below here is only needed if the sheet is editable
     if (!this.options.editable) return;
+
+    html.find("input[type=checkbox]").on("change", (e) => {
+      e.preventDefault();
+
+      const value = e.currentTarget.checked;
+
+      this.object.update({"system.free": value});
+    });
+
+    html.find('.lock-img').on("click", event => {
+			this.object.setFlag('ptu', 'editLocked', !this.object.getFlag('ptu', 'editLocked'));
+		});
 
     // Roll handlers, click handlers, etc. would go here.
   }

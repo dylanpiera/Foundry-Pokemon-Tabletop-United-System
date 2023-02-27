@@ -364,7 +364,7 @@ export async function applyCapture(trainer, target, pokeball, speciesData)
 			}])
 		}
 
-		ChatMessage.create({content: `<h4>${result.name} Captured!</h4><p class="pt-2">Don't forget to write off your pokeball ;)</p>`})
+		ChatMessage.create({content: `<h4>${result.name} Captured!</h4>`})
 		return true;
 	} else {
 		if(result === undefined) return true;

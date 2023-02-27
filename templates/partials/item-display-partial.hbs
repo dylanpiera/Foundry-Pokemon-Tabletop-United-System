@@ -4,6 +4,15 @@
         {{#if boxed}}<div class="swsh-header w-100" style="display: block;">{{/if}}
             <li class="inventory-header item flexrow" data-category="{{category}}" data-toggle="collapse" data-target=".{{type}}-{{category}}-collapse" aria-expanded="true" aria-controls="{{type}}-{{category}}-collapse">
                 <h3 class="item-categorized item-name flexrow" data-category="{{category}}" >{{title}}</h3>
+                {{#if featsOrEdges}}
+                    <!-- Display the amount / max of feats or edges -->
+                    <div class="item-detail item-amount" style="display: flex; align-items: center; flex: 0 0 38%;">
+                        <h4 class="mr-1">Slots used:</h4>
+                        <input type="text" value="{{featsOrEdges.total}}" data-dtype="Number" disabled style="text-align: center; width: 40px;"/>
+                        <span class="mr-1 ml-1"> / </span>
+                        <input type="text" value="{{featsOrEdges.max}}" data-dtype="Number" disabled style="text-align: center; width: 40px;"/>
+                    </div>
+                {{/if}}
                 <div class="item-controls">
                     <a class="item-control item-create" title="Add {{type}}" data-type="{{type}}" data-category="{{category}}"><i
                         class="fas fa-plus-circle" style="margin-right: 3px;"></i><span

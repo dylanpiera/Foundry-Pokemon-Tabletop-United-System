@@ -52,6 +52,9 @@ export function registerHandlebars() {
       return "";
     });
     Handlebars.registerHelper("getGameSetting", function (key) { return game.settings.get("ptu", key) });
+    Handlebars.registerHelper("getDb", function (db) {
+      return game.ptu.data.DbData[db];
+    });
     Handlebars.registerHelper("calcDb", function (move) {
       return (move.damageBase.toString().match(/^[0-9]+$/) != null) ? move.stab ? parseInt(move.damageBase) + 2 : move.damageBase : move.damageBase;
     });
@@ -152,6 +155,23 @@ export function registerHandlebars() {
       if (isTypeDefaultType(type)) return `<img src="/systems/ptu/css/images/types/${type}IC.webp">`;
       else return `<img src="${customDir}${type}IC.webp">`
     });
+
+    Handlebars.registerHelper("loadTypeImageUrl", function (type) {
+      // TypeEffectiveness here is imported from source and only contains the default types
+      // in contract, game.ptu.data.TypeEffectiveness contains custom types as well
+      const isTypeDefaultType = (typeName) => Object.keys(game.ptu.data.TypeEffectiveness).includes(typeName)
+      let customDir = game.settings.get("ptu", "typeEffectivenessCustomImageDirectory");
+      if (customDir.slice(-1) !== "/") customDir += "/"
+      if (customDir.charAt(0) !== "/") customDir = "/" + customDir
+      if (isTypeDefaultType(type) || type == "Special" || type == "Physical" || type == "Status") return `/systems/ptu/css/images/types2/${type}IC.png`;
+      else return `${customDir}${type}IC.webp`
+    });
+
+    Handlebars.registerHelper("typeSelect", function (selectedType) {        
+        return `<option value="Untyped"></option>` + Object.keys(game.ptu.data.TypeEffectiveness).filter(type => type != "Untyped").reduce((html, type) => 
+            html += `<option ${type == selectedType ? "selected" : ""} style="color: #191813;" value="${type}">${type}</option>`
+        , "");
+    });
   
     Handlebars.registerHelper("isGm", function () {
       return game.user.isGM;
@@ -215,6 +235,38 @@ export function registerHandlebars() {
       Handlebars.registerHelper("floor", (value) => Math.floor(Number(value)));
       Handlebars.registerHelper("capitalizeFirst", (e) => { return "string" != typeof e ? e : e.charAt(0).toUpperCase() + e.slice(1) });
     }
+
+    Handlebars.registerHelper("capitalize", function (input) {
+      var i, j, str, lowers, uppers;
+      str = input.replace(/([^\W_]+[^\s-]*) */g, function(txt) {
+        return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+      });
+    
+      // Certain minor words should be left lowercase unless 
+      // they are the first or last words in the string
+      lowers = ['A', 'An', 'The', 'And', 'But', 'Or', 'For', 'Nor', 'As', 'At', 
+      'By', 'For', 'From', 'In', 'Into', 'Near', 'Of', 'On', 'Onto', 'To', 'With'];
+      for (i = 0, j = lowers.length; i < j; i++)
+        str = str.replace(new RegExp('\\s' + lowers[i] + '\\s', 'g'), 
+          function(txt) {
+            return txt.toLowerCase();
+          });
+    
+      // Certain words such as initialisms or acronyms should be left uppercase
+      uppers = ['Id', 'Tv'];
+      for (i = 0, j = uppers.length; i < j; i++)
+        str = str.replace(new RegExp('\\b' + uppers[i] + '\\b', 'g'), 
+          uppers[i].toUpperCase());
+    
+      return str;
+    });
+    Handlebars.registerHelper("newline", function (a) { return a.replace("\\n", "\n") });
+
+    Handlebars.registerHelper("lpad", function (str, len, char) {
+      str = str.toString();
+      while (str.length < len) str = char + str;
+      return str;
+    });
   
     function _calcMoveDb(move, bool = false) {
       if (move.category === "Status") return;

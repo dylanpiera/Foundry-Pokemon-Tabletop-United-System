@@ -298,7 +298,7 @@ export async function handleApplicatorItem(event) {
             category: baseDataset.category,
             damage: baseDataset.damage,
             mode: target.dataset.mode,
-            crit: parent.dataset.crit == "hit" || parent.dataset.crit == "double-hit",
+            crit: parent.dataset.crit == "crit" || parent.dataset.crit == "double-hit",
             hasDataset: true,
             messageId
         }

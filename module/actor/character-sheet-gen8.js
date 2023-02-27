@@ -30,7 +30,7 @@ export class PTUGen8CharacterSheet extends ActorSheet {
 		data.dtypes = ['String', 'Number', 'Boolean'];
 
 		// Prepare items.
-		if (this.actor.data.type == 'character') {
+		if (this.actor.type == 'character') {
 			this._prepareCharacterItems(data);
 		}
 		data['totalWealth'] = this.actor.itemTypes.item.reduce((total, item) => total + (!isNaN(item.system.cost) ? item.system.cost * (item.system.quantity ?? 0) : 0), this.actor.system.money);
@@ -93,10 +93,9 @@ export class PTUGen8CharacterSheet extends ActorSheet {
 		// Iterate through items, allocating to containers
 		// let totalWeight = 0;
 		for (let i of sheetData.items) {
-			let item = i.data;
 			i.img = i.img || DEFAULT_TOKEN;
 			if (i.type == 'item') {
-				let cat = i.data.category;
+				let cat = i.system.category;
 				if (cat === undefined || cat == "") {
 					cat = "Misc";
 				}
@@ -114,7 +113,7 @@ export class PTUGen8CharacterSheet extends ActorSheet {
 				case 'move': moves.push(i); break;
 				case 'capability': capabilities.push(i); break;
 				case 'dexentry':
-					if (i.data.owned) dex.owned.push(i);
+					if (i.system.owned) dex.owned.push(i);
 					else dex.seen.push(i);
 					break;
 			}
@@ -230,7 +229,7 @@ export class PTUGen8CharacterSheet extends ActorSheet {
 
 		// Drag events for macros.
 		if (this.actor.isOwner) {
-			let handler = (ev) => this._onDragItemStart(ev);
+			let handler = (ev) => undefined;
 			html.find('li.item').each((i, li) => {
 				if (li.classList.contains('inventory-header')) return;
 				li.setAttribute('draggable', true);
@@ -254,54 +253,79 @@ export class PTUGen8CharacterSheet extends ActorSheet {
 			}
 		});
 
-		document.getElementsByName('data.ap.value input')[0].addEventListener('change', (e) => {
+		document.getElementsByName('system.ap.value input')[0].addEventListener('change', (e) => {
 			const value = parseInt(e.currentTarget.value);
 			if (isNaN(value)) return;
 			this.actor.update({
-				"data.ap.value": value
+				"system.ap.value": value
 			});
 		});
 	}
 
-	async _onDrop(event) {
-		const dataTransfer = JSON.parse(event.dataTransfer.getData('text/plain'));
+	// async _onDrop(event) {
+	// 	const dataTransfer = JSON.parse(event.dataTransfer.getData('text/plain'));
 
-		const itemData = dataTransfer.data;
+	// 	const category = event.target.dataset.category;
+	// 	const actor = this.actor;
+	// 	const uuid = dataTransfer.uuid;
+	// 	let handled = false;
+	// 	let item = undefined;
+
+		
+	// 	item = duplicate(await fromUuid(uuid));
+	// 	if (!item) return ui.notifications.notify("Item not found", "error");
+
+	// 	const oldItem = actor.items.getName(item.name);
+	// 	if (oldItem && oldItem.id != item.id && oldItem.system.quantity) {
+	// 		const quantity = duplicate(oldItem.system.quantity);
+	// 		oldItem.system.quantity = quantity + 1;
+	// 		//await this.actor.deleteEmbeddedDocuments("Item", [item.id]);
+	// 		return await this.actor.updateEmbeddedDocuments("Item", [oldItem]);
+	// 	}
+
+	// 	if (item.type != 'item' || item.system.category == category)
+	// 		return this._onSortItem(event, item);
+
+	// 	item = await item.update({ 'system.category': category });
+
+	// 	log(`Moved ${item.name} to ${category} category`);
+
+	// 	await this._onSortItem(event, item);
+	// 	return handled ? actor.items.get(item.id) : await super._onDrop(event);
+	// }
+
+	async _onDropItem(event, data) {
+		if ( !this.actor.isOwner ) return false;
+		const item = await Item.implementation.fromDropData(data);
+		const itemData = item.toObject();
+
 		const category = event.target.dataset.category;
-		const actor = this.actor;
-		let handled = false;
-		let item = undefined;
 
-		if (!itemData) {
-			item = (await super._onDrop(event))[0];
-			if (!item) {
-				error("Item Drop data is undefined.", event)
-				return;
+		// Handle item sorting within the same Actor
+		if ( this.actor.uuid === item.parent?.uuid ) {
+			if(category) {
+				if(item.type == 'item' && item.system.category != category) 
+				await item.update({"system.category": category});
 			}
-			handled = true;
-
-			const oldItem = actor.items.getName(item.data.name);
-			if (oldItem.id != item.id && oldItem.system.quantity) {
-				const data = duplicate(oldItem.data);
-				data.data.quantity++;
-				await this.actor.deleteEmbeddedDocuments("Item", [item.id]);
-				return await this.actor.updateEmbeddedDocuments("Item", [data]);
-			}
+			return this._onSortItem(event, itemData);
 		}
-		else item = actor.items.get(itemData._id);
 
-		if (item.data.type != 'item' || item.system.category == category)
-			return this._onSortItem(event, item.data);
+		const oldItem = this.actor.items.getName(itemData.name);
+		if (oldItem && oldItem.id != itemData.id && oldItem.system.quantity) {
+			const quantity = duplicate(oldItem.system.quantity);
+			await oldItem.update({"system.quantity": quantity + 1});
+			return false;
+		}
 
-		item = await item.update({ 'data.category': category });
+		if(category) {
+			if(itemData.type == 'item' && itemData.system.category != category) itemData.system.category = category;
+		}
 
-		log(`Moved ${item.data.name} to ${category} category`);
-
-		await this._onSortItem(event, item.data);
-		return handled ? actor.items.get(item.id) : await super._onDrop(event);
+		// Create the owned item
+		return this._onDropItemCreate(itemData);
 	}
 
-	_onDragItemStart(event) { }
+	
 
 	/**
 	 * Handle creating a new Owned Item for the actor using initial data defined in the HTML dataset
@@ -394,9 +418,8 @@ export class PTUGen8CharacterSheet extends ActorSheet {
 			let rolldata = dataset.roll;
 			let label = dataset.label ? `Rolling ${dataset.label}` : '';
 
-			// Add +1 to the roll if shift is held on click
-			const alt = event.altKey;
-			if (alt && this.useAP()) { // Only if AP are available
+			// Add +1 to the roll if alt is held on click
+			if (event.altKey && this.useAP()) { // Only if AP are available
 				// Does the character have Instinctive Aptitude?
 				let instinctiveAptitude = false;
 				this.actor.edges.forEach((e) => {
@@ -408,8 +431,27 @@ export class PTUGen8CharacterSheet extends ActorSheet {
 				instinctiveAptitude ? rolldata += "+2" : rolldata += "+1";
 				label += "<br>using 1 AP</br>";
 			}
-			else if (alt) {
+			else if (event.altKey) {
 				return;
+			}
+			if (event.shiftKey) {
+				const extra = await new Promise((resolve, reject) => {
+					Dialog.confirm({
+						title: `Skill Roll Modifier`,
+						content: `<input type="text" name="skill-roll-modifier" value="0"></input>`,
+						yes: async (html) => {
+							const bonusTxt = html.find('input[name="skill-roll-modifier"]').val()
+					
+							const bonus = !isNaN(Number(bonusTxt)) ? Number(bonusTxt) : parseInt((await (new Roll(bonusTxt)).roll({async:true})).total);
+							if (!isNaN(bonus)) {
+								return resolve(bonus);
+							}
+							return reject();
+						}
+					});
+				});
+				rolldata += `+${extra}`;
+				label += `with ${extra} skill roll modifier</br>`;
 			}
 
 			let roll = new Roll(rolldata, this.actor.system);
@@ -496,7 +538,7 @@ export class PTUGen8CharacterSheet extends ActorSheet {
 
 		/** Show Dialog */
 		let d = new Dialog({
-			title: `${this.actor.data.name}'s ${move.name}`,
+			title: `${this.actor.name}'s ${move.name}`,
 			content: `<div class="pb-1"><p>Would you like to use move ${move.name} or output the move details?</p></div><div><small class="text-muted">Did you know you can skip this dialog box by holding the Shift, Ctrl or Alt key?</small></div>`,
 			buttons: {
 				roll: {
@@ -529,11 +571,11 @@ export class PTUGen8CharacterSheet extends ActorSheet {
 		const currentAP = this.actor.system.ap.value;
 		if (currentAP >= value) {
 			this.actor.update({
-				'data.ap.value': currentAP - value
+				'system.ap.value': currentAP - value
 			});
 			return true;
 		}
-		ui.notifications.error(`${this.actor.data.name} does not have enough AP for this action.`);
+		ui.notifications.error(`${this.actor.name} does not have enough AP for this action.`);
 		return false;
 	}
 

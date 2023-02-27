@@ -105,7 +105,7 @@
     "PTU.SaveCheckAction": "Make Save",
 
     "PTU.ItemEffect": "Item Effect",
-    "PTU.DigestionBuff": "Digestion Buff",
+    "PTU.FoodBuff": "Food Buff",
     "PTU.HpGuidelines": "HP Guidelines",
     "PTU.16th": "1/16th",
     "PTU.10th": "Tick 1/10th",
@@ -193,6 +193,8 @@
 
     "PTU.DexButtonName": "Pokédex",
     "PTU.DexButtonHint": "Scan the pokemon with your pokédex",
+    "PTU.SearchButtonName": "PTR Search",
+    "PTU.SearchButtonHint": "Search the PTR Data Source for information",
 
     "SETTINGS.ptu": ""
 }

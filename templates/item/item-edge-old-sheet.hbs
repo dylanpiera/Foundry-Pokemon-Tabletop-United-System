@@ -1,5 +1,12 @@
 {{#with data}}
-    <form class="{{cssClass}}" autocomplete="off">
+    {{!-- Form Element --}}
+    {{#if cssClass}}
+        <form class="{{cssClass}}" autocomplete="off">
+    {{else}}
+        <form autocomplete="off">
+    {{/if}}
+
+        {{!-- Sheet Header --}}
         <header class="sheet-header mb-2">
             <div class="itemBox">
                 <div class="content">
@@ -13,6 +20,7 @@
             <div class="details readable h-100">
                 <div style="display: grid; grid-template-columns: 45% 50%; justify-content: space-between; padding: 0 5px;">
                     <div class="hgss-box align-items-center" style="display: grid; grid-template-columns: 40% 60%;">
+                        {{!-- Name --}}
                         <div class="hgss-header vertical">
                             <label for="name">Name:</label>
                         </div>
@@ -25,7 +33,8 @@
                                 placeholder="Name"
                             />
                         </div>
-
+                            
+                        {{!-- Origin --}}
                         <div class="hgss-header vertical">
                             <label for="system.origin">Origin:</label>
                         </div>
@@ -39,22 +48,52 @@
                             />
                         </div>
 
-                        {{#if (is "true" (getGameSetting "useTutorPoints"))}}
+                        {{!-- Prerequisites --}}
                         <div class="hgss-header vertical">
-                            <label for="system.cost">Cost:</label>
+                            <label for="system.prerequisites">Prerequisites:</label>
                         </div>
                         <div class="hgss-body">
                             <input
                                 class="ml-2"
-                                name="system.cost"
+                                name="system.prerequisites"
                                 type="text"
-                                value="{{system.cost}}"
-                                placeholder="0"
+                                value="{{system.prerequisites}}"
+                                placeholder=""
                             />
                         </div>
-                        {{/if}}
+
+                        {{!-- Notes --}}
+                        <div class="hgss-header vertical">
+                            <label for="system.notes">Notes:</label>
+                        </div>
+                        <div class="hgss-body">
+                            <input
+                                class="ml-2"
+                                name="system.notes"
+                                type="text"
+                                value="{{system.notes}}"
+                                placeholder=""
+                            />
+                        </div>
                     </div>
                     <div class="hgss-box align-items-center">
+                        {{!-- Free --}}
+                        <div class="hgss-header mb-1">
+                            <label for="name">Free Edge:</label>
+                        </div>
+                        <div class="hgss-body">
+                            <div class="d-flex align-items-center">
+                                <input
+                                    class="ml-2 mr-2"
+                                    data-item-id="{{_id}}" 
+                                    data-binding="system.free" 
+                                    type="checkbox" {{checked system.free}}
+                                />
+                                <label for="system.free"><span class="text-muted" style="word-break: break-word;">Whether this edge should count for max-edges</span></label>
+                            </div>
+                        </div>
+
+                        {{!-- Effect --}}
                         <div class="hgss-header mb-1 " style="padding: 6px 5px;">
                             <label for="system.effect">Effect:</label>
                         </div>
@@ -63,6 +102,8 @@
                                 class="ml-2"
                                 name="system.effect">{{system.effect}}</textarea>
                         </div>
+
+                        {{!-- Snippet --}}
                         <div class="hgss-header mt-1 mb-1 " style="padding: 5px 5px;">
                             <label for="system.snippet">Snippet:</label>
                         </div>

@@ -1,3 +1,44 @@
+## Version 3.2.0.0 - PTR Playtest 1
+Hi all! Welcome to stable version 3.2, with it brings some new features as well as the first PTR Playtest!
+
+### New Features
+- The move 'Transform' will not actually transform your mon (and back) into whatever is targeted!
+- Pokemon show held items in the side bar
+- GMs can now block pokeballs from being thrown (option in settings)
+- Added maneuvers to the sidebar (purely referential, no automation)
+- Added a pop-up when a Pokemon levels up to ask whether it should learn new moves when applicable
+- Added a 'Search' button to the Menu Bar (on the left).
+- Search is part of PTR and will display PTR data. In the future we'll implement to-chat functionality.
+- Trainer Sheets now show how many Feats/Edges you should have based on your level up (including the bonus edges at lvl 2, 6 & 12).
+- Added ad-hoc modifier for Skill Checks just like you can do with moves/damage calc (hold shift when clicking).
+- Added support for female images with the `f` prefix so f.e. `001f.png`
+- Added HP Guidelines section to trainer sheets
+- New design for Item Sheets & Item Icons!
+- Consumable (food buff) items will now show in the sidebar and can be clicked to mark the item as 'Consumed' applying a food buff to the pokemon/target.
+- Food buffs themselves can also be consumed (NOTE: this is purely for tracking purposes as no automation has been implemented yet)
+- When a pokemon breaks out of a capture, a broken ball will automatically be added to the player character's inventory.
+
+### Fixes
+- Fixed an issue with ItemPiles compatability
+- Fixed a style issue with certain items
+- Fixed hovering over maneuvers not showing the details
+- Actors have their token data linked by default now.
+- Active Effects & Source pop-ups work and display as intended again.
+- Item Sorting has been updated to v10 and should now no longer be wonky!
+- Renamed 'Digestion Buff' to 'Food Buff'
+- Fixed long names not wrapping in chat
+- Removed 'Item Notes' as they were unnecessary
+- Added 'Stealth' capability to the compendium
+- Fixed crit button being ignored by the single-target applicator.
+- Wishiwashi's art now generates properly depending on whether it's in solo or schooling form
+- species-data.js has been updated with the latest changes from PTR-Data (99% finished)
+
+### Playtests
+Introducing PTR Playtests! For full details check the #playtests channel on the discord.
+
+This version adds the "Stats & no-more BSR" Playtest, to enable check the new settings category in PTU Settings!
+
+
 ## Version 3.1.0.0 - V10 Support!
 Hey Everyone! It's been a long time coming but we finally have an official v10 build available for you all to play around with.
 

@@ -49,13 +49,16 @@ export default class MenuComponent extends Component {
                 })
                 break;
             case "maneuver":
-
+                output += await renderTemplate("/systems/ptu/module/sidebar/components/menu-component.hbs", {
+                    menu: "maneuver",
+                    maneuvers: await game.packs.get("ptu.maneuvers").getDocuments()
+                })
                 break;
             default:
                 output += await renderTemplate("/systems/ptu/module/sidebar/components/menu-component.hbs", {
                     menu: "none"
                 })
-                break;
+                    break;
         }
 
         this.element.html(output);
@@ -103,11 +106,29 @@ export default class MenuComponent extends Component {
             }
         })
 
-        this.element.children('#menu-content').children('.pokeball-item').on("click", (event) => {
+        this.element.children('#menu-content').children('.pokeball-item').on("click", async(event) => {
             const { entityId, ballName, ownerId } = event.target.dataset;
 
             const owner = game.actors.get(ownerId);
-            game.ptu.utils.throwPokeball(owner, game.user?.targets?.first(), owner?.items.get(entityId));
+            const target = game.user?.targets?.first();
+
+            let allowed = "true";
+            
+            if (game.settings.get("ptu", "pokeball-prompts") == 1 || game.settings.get("ptu", "pokeball-prompts") == 3) {
+                if (game.ptu.utils.api.gm._isMainGM())
+                    allowed = "true"
+                //ask GM to confirm they want to allow player to throw a pokeball?
+                else
+                    allowed = await game.ptu.utils.api.gm.throwPokeballRequest(owner, target, {timeout: 30000});
+            }
+
+            if(allowed == "true"){
+                game.ptu.utils.throwPokeball(owner, target, owner?.items.get(entityId));
+            } else {
+                ui.notifications.error("GM prevented you from throwing a pokeball at this pokemon.");
+                return;
+            }       
+            
         })
 
         this.element.children("#menu-content").children(".struggle-row").children(".movemaster-button[data-struggle-id]").on("mousedown", (event) => {
@@ -129,6 +150,10 @@ export default class MenuComponent extends Component {
                 default: // anything else??
                     this.state.actor.executeMove(move.id)
             }
+        })
+
+        this.element.children("#menu-content").children(".maneuvers-row").children(".movemaster-button[data-maneuver-name]").on("click", (event) => {
+            this._sendManeuverToChat(event.currentTarget.dataset.maneuverName);            
         })
 
         this.element.children(".divider-image").on("click", () => {
@@ -297,5 +322,24 @@ export default class MenuComponent extends Component {
                 amount: item.system.quantity
             }
         });
+    }
+
+    async _sendManeuverToChat(maneuverName) {
+        const maneuver = await game.packs.get("ptu.maneuvers").find(m => m.name.toLowerCase() == maneuverName.toLowerCase());
+
+        const messageData = {
+            title: maneuver.name,
+            user: game.user._id,
+            action: maneuver.system.action,
+            trigger: maneuver.system.trigger,
+            ac: maneuver.system.ac,
+            class: maneuver.system.class,
+            range: maneuver.system.range,
+            effect: maneuver.system.effect,
+            sound: CONFIG.sounds.dice,
+            templateType: 'maneuver',
+        }
+        messageData.content = await renderTemplate("/systems/ptu/templates/chat/maneuver.hbs", messageData)
+        await ChatMessage.create(messageData, {});
     }
 }

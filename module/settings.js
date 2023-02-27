@@ -10,7 +10,8 @@ export function LoadSystemSettings() {
         config: true,
         type: Boolean,
         default: true,
-        category: "rules"
+        category: "rules",
+        onChange: debouncedReload
     });
 
     game.settings.register("ptu", "useTutorPoints", {
@@ -52,7 +53,8 @@ export function LoadSystemSettings() {
             "en": "English",
             "de": "German",
         },
-        category: "general"
+        category: "general",
+        onChange: debouncedReload
     });
 
     game.settings.register("ptu", "canPlayersDeleteTokens", {
@@ -91,6 +93,22 @@ export function LoadSystemSettings() {
         },
         default: 1,
         category: "general"
+    })
+
+    game.settings.register("ptu", "pokeball-prompts", {
+        name: "GM Setting: Request permission from GM when using Pokeballs",
+        hint: "This will prompt the GM to allow or deny the use of a Pokeball or capturing a pokemon.",
+        scope: "world",
+        config: true,
+        type: Number,
+        choices: {
+            1: "Always ask",
+            2: "Only ask for capture",
+            3: "Only ask for Pokéball throw",
+            4: "Never Ask"
+        },
+        default: 1,
+        category: "combat"
     })
 
     game.settings.register("ptu", "auto-add-to-dex", {
@@ -316,7 +334,8 @@ export function LoadSystemSettings() {
         scope: "world",
         config: false,
         type: String,
-        default: ""
+        default: "",
+        onChange: debouncedReload
     });
     game.settings.register("ptu", "customSpeciesData", {
         name: "Custom Species Data",
@@ -373,7 +392,8 @@ export function LoadSystemSettings() {
         config: true,
         type: Boolean,
         default: false,
-        category: "other"
+        category: "other",
+        onChange: debouncedReload
     });
 
     game.settings.register("ptu", "enableMoveAnimations", {
@@ -666,14 +686,15 @@ export function LoadSystemSettings() {
         //     });
 
 
-        //     game.settings.register("PTUMoveMaster", "trackBrokenPokeballs", {
-        //         name: "GM Setting: Track Broken Pokeballs.",
-        //         hint: "The trainer edge 'Poke Ball Repair' allows for re-using balls that break upon failing to capture a Pokemon, so Move Master will automatically created a broken version of balls in the thrower's inventory when a Pokemon breaks free. If you have no use for tracking this, you can disable it here.",
-        //         scope: "world",
-        //         config: true,
-        //         type: Boolean,
-        //         default: true
-        //     });
+        game.settings.register("ptu", "trackBrokenPokeballs", {
+            name: "GM Setting: Track Broken Pokeballs.",
+            hint: "The trainer edge 'Poke Ball Repair' allows for re-using balls that break upon failing to capture a Pokemon, so Move Master will automatically created a broken version of balls in the thrower's inventory when a Pokemon breaks free. If you have no use for tracking this, you can disable it here.",
+            scope: "world",
+            config: true,
+            type: Boolean,
+            default: true,
+            category: "combat"
+        });
 
         game.settings.register("ptu", "customItemIconDirectory", {
             name: "Custom Item Icons Directory",
@@ -741,6 +762,53 @@ export function LoadSystemSettings() {
             default: false,
             category: "combat"
         });
+
+        game.settings.register("ptu", "autoTransform", {
+            name: "GM Setting: Automatically transform pokemon upon using the move 'Transform'.",
+            hint: "This will automatically change the actor's image, move set and capabilities to match the targets",
+            scope: "world",
+            config: true,
+            type: Boolean,
+            default: true,
+            category: "combat"
+        })
+
+        game.settings.register("ptu", "pokemonLearnMovesMessage", {
+            name: "GM Setting: Show message when a pokemon learns a new move from leveling up.",
+            hint: "This will show a pop up for players when there pokemon learns new moves from gaining experience. They can then add those moves to their move list.",
+            scope: "world",
+            config: true,
+            type: Boolean,
+            default: true,
+            category: "other"
+        })
+
+        game.settings.register("ptu", "playtestStats", {
+            name: "Use playtest calculations for stats.",
+            hint: "This will use the playtest calculations for stats instead of the official ones. See: <a href='https://ptufvtt.com/en/Guides/Playtests/Stats-Rework'>https://ptufvtt.com/en/Guides/Playtests/Stats-Rework</a>",
+            scope: "world",
+            config: true,
+            type: Boolean,
+            default: false,
+            category: "playtest",
+            onChange: debouncedReload
+        })
+
+        game.settings.register("ptu", "playtestStatsFactor", {
+            name: "EV strength factor β.",
+            hint: "Base value is 0.35. The higher the number, the stronger Level-Up Points will affect stat totals. See: <a href='https://ptufvtt.com/en/Guides/Playtests/Stats-Rework'>https://ptufvtt.com/en/Guides/Playtests/Stats-Rework</a>",
+            scope: "world",
+            config: true,
+            type: Number,
+            default: 0.35,
+            range: {
+                min: 0.1,
+                max: 1.0,
+                step: 0.05
+            },
+            category: "playtest",
+            onChange: debouncedReload
+        })
     }
 }
 
@@ -752,3 +820,4 @@ export function SetAccessabilityFont(enabled) {
     }
 }
 
+const debouncedReload = foundry.utils.debounce(() => window.location.reload(), 100);

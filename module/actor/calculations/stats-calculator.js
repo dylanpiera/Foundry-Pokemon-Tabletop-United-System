@@ -1,5 +1,5 @@
 function CalcBaseStat(specie, nature, statKey) {
-    if (specie != null) return _calculateStatWithNature(nature, statKey, _fetchSpecieStat(specie, statKey));
+    if (specie != null) return game.settings.get("ptu", "playtestStats") ? _fetchSpecieStat(specie, statKey) : _calculateStatWithNature(nature, statKey, _fetchSpecieStat(specie, statKey));
     return 0;
 }
 
@@ -12,7 +12,7 @@ export function CalcBaseStats(stats, speciesData, nature, ignoreStages = false) 
     newStats.spatk.value = CalcBaseStat(speciesData, nature, "Special Attack", ignoreStages);
     newStats.spdef.value = CalcBaseStat(speciesData, nature, "Special Defense", ignoreStages);
     newStats.spd.value = CalcBaseStat(speciesData, nature, "Speed", ignoreStages);
-
+    
     return newStats;
 }
 
@@ -30,6 +30,7 @@ function _calculateStatWithNature(nature, statKey, stat) {
 }
 
 export function CalculateStatTotal(levelUpPoints, stats, {twistedPower, ignoreStages}) {
+
     for (const [key, value] of Object.entries(stats)) {
         const sub = value["value"] + value["mod"].value + value["mod"].mod + value["levelUp"];
         levelUpPoints -= value["levelUp"];
@@ -56,6 +57,85 @@ export function CalculateStatTotal(levelUpPoints, stats, {twistedPower, ignoreSt
             stats.atk.total += Math.floor(spatkTotal / 2);
             stats.spatk.total += Math.floor(atkTotal / 2);
         //}
+    }
+
+    return {
+        "levelUpPoints": levelUpPoints,
+        "stats": stats
+    };
+}
+
+// Calculate the sigma modifier - standard deviation of the array of stats
+function Dev(stats) {
+    const statsArray = Object.entries(stats);
+    const values = statsArray.map(item => item[1].total);
+  
+    const sum = values.reduce((total, value) => total + value, 0);
+    const mean = sum / values.length;
+  
+    const squaredDiffs = values.map(value => Math.pow(value - mean, 2));
+    const variance = squaredDiffs.reduce((total, value) => total + value, 0) / values.length;
+  
+    const standardDeviation = Math.sqrt(variance);
+  
+    return standardDeviation;
+  }
+
+export function CalculatePTStatTotal(levelUpPoints, level, stats, {twistedPower, ignoreStages}, nature) {
+
+    const factor = game.settings.get("ptu", "playtestStatsFactor") ?? 0.3
+
+    //find the gross stats = (Base Stat + (level * LevelUpPoints) * Level to the power of 1/2.2)/50 + Base Stat + LevelUpPOints/5
+    for (const [key, value] of Object.entries(stats)) {
+        value["total"] = (value["value"] + (level + value["levelUp"]) * Math.pow(level, 1/2.2))/50 + value["value"] + (value["levelUp"]*factor);
+        levelUpPoints -= value["levelUp"];       
+    }
+
+    //calculate sigma modifier = 1 + level/(100*sigma)
+    const sigma = 1 + level/(100*Dev(stats));
+
+    //apply sigma modifier
+    for (const [key, value] of Object.entries(stats)) {
+        value["total"] *= sigma;
+
+        //apply nature
+        if(nature != "" && game.ptu.data.natureData[nature] != null) {
+            if(game.ptu.data.natureData[nature][0] == key) {
+                value["total"] *= 1.1;
+            } else if(game.ptu.data.natureData[nature][1] == key) {
+                value["total"] = Math.max(value["total"] * 0.9, 1);
+            }
+        }
+
+        //round
+        value["total"] = Math.round(value["total"]);
+    }  
+
+    if(twistedPower) {
+        let atkTotal = stats.atk.total;
+        let spatkTotal = stats.spatk.total;
+        //if(Math.abs(atkTotal - spatkTotal) <= 5 ) {
+            stats.atk.total += Math.floor(spatkTotal / 2);
+            stats.spatk.total += Math.floor(atkTotal / 2);
+        //}
+    }
+
+    //apply mods and stages last
+    for (const [key, value] of Object.entries(stats)) {
+        const sub = value["total"] + value["mod"].value + value["mod"].mod;
+        if(ignoreStages) {
+            value["total"] = sub; continue;
+        }
+
+        if ((value["stage"]?.value + value["stage"]?.mod) > 0) {
+            value["total"] = Math.floor(sub * (value["stage"]?.value + value["stage"]?.mod) * 0.2 + sub);
+        } else {
+            if (key == "hp") {
+                value["total"] = sub;
+            } else {
+                value["total"] = Math.ceil(sub * (value["stage"]?.value + value["stage"]?.mod) * 0.1 + sub);
+            }
+        }
     }
 
     return {

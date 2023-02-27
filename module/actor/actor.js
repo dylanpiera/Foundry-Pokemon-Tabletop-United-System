@@ -2,7 +2,7 @@ import { CalcLevel } from "./calculations/level-up-calculator.js";
 import { CalculateEvasions } from "./calculations/evasion-calculator.js";
 import { CalculatePokemonCapabilities, CalculateTrainerCapabilities } from "./calculations/capability-calculator.js";
 import { CalculateSkills } from "./calculations/skills-calculator.js";
-import { CalcBaseStats, CalculateStatTotal, CalculatePoisonedCondition } from "./calculations/stats-calculator.js";
+import { CalcBaseStats, CalculateStatTotal, CalculatePTStatTotal, CalculatePoisonedCondition } from "./calculations/stats-calculator.js";
 import { GetMonEffectiveness } from "./calculations/effectiveness-calculator.js";
 import { CritOptions } from "./character-sheet-gen8.js";
 import { warn, debug, log } from '../ptu.js'
@@ -10,6 +10,7 @@ import { PlayMoveAnimations, move_animation_delay_ms } from "../combat/effects/m
 import { PlayMoveSounds } from "../combat/effects/move_sounds.js";
 import { ActionTypes, FiveStrikeHitsDictionary } from "../combat/damage-calc-tools.js";
 import { timeout } from "../utils/generic-helpers.js";
+import transform from "../utils/transform-helper.js";
 
 /**
  * Extend the base Actor entity by defining a custom roll data structure which is ideal for the Simple system.
@@ -40,8 +41,8 @@ export class PTUActor extends Actor {
 
     // Add extra origin info
 
-    this.origins = mergeObject(this.origins, {
-      data: {
+    this.origins = mergeObject({
+      system: {
         levelUpPoints: [
           { label: "Base Value", change: { type: CONST.ACTIVE_EFFECT_MODES.ADD, value: actorData.type === 'character' ? 9 : 10 } },
           { label: "Level", change: { type: CONST.ACTIVE_EFFECT_MODES.ADD, value: actorSystem.level.current } },
@@ -96,7 +97,7 @@ export class PTUActor extends Actor {
           return map;
         }) : undefined
       }
-    })
+    }, this.origins)
     console.groupEnd();
 
     if (this.id === game.ptu.forms.sidebar?.store?.state?.actorId) game.ptu.forms.sidebar.stateHasChanged();
@@ -108,7 +109,7 @@ export class PTUActor extends Actor {
    */
   /** @override */
   applyActiveEffects(doBaseData = true) {
-    const overrides = {};
+    let overrides = {};
     const origins = {};
     // Organize non-disabled effects by their application priority
     const effects = Array.from(this.effects).concat(this.items.filter(item => item?.effects?.size > 0).flatMap(item => Array.from(item.effects)));
@@ -148,7 +149,7 @@ export class PTUActor extends Actor {
     for (let change of changes) {
       const result = change.effect.apply(this, change);
       if (result !== null) {
-        overrides[change.key] = result;
+        overrides = mergeObject(overrides, result);
         if (!origins[change.key]) origins[change.key] = [];
         origins[change.key].push({ label: change.effect.label, change: { type: change.mode, value: change.value } });
       }
@@ -350,7 +351,7 @@ export class PTUActor extends Actor {
     let actor = await super.create(data, options);
 
     debug("Creating new actor with data:", actor);
-    if (options?.noCharactermancer || actor.data.type != "pokemon") return actor;
+    if (options?.noCharactermancer || actor.type != "pokemon") return actor;
 
     let form = new game.ptu.config.Ui.PokemonCharacterMancer.documentClass(actor, { "submitOnChange": false, "submitOnClose": true });
     form.render(true)
@@ -413,7 +414,9 @@ export class PTUActor extends Actor {
 
     data.levelUpPoints = data.level.current + data.modifiers.statPoints.total + 9;
     data.stats = CalculatePoisonedCondition(duplicate(data.stats), actorData.flags?.ptu);
-    var result = CalculateStatTotal(data.levelUpPoints, data.stats, { twistedPower: actorData.items.find(x => x.name.toLowerCase().replace("[playtest]") == "twisted power") != null });
+    var result = game.settings.get("ptu", "playtestStats") ?
+      CalculatePTStatTotal(data.levelUpPoints, data.level.current, data.stats, { twistedPower: actorData.items.find(x => x.name.toLowerCase().replace("[playtest]") == "twisted power") != null }, data.nature?.value) :
+      CalculateStatTotal(data.levelUpPoints, data.stats, { twistedPower: actorData.items.find(x => x.name.toLowerCase().replace("[playtest]") == "twisted power") != null });
     data.stats = result.stats;
     data.levelUpPoints = result.levelUpPoints;
 
@@ -425,6 +428,16 @@ export class PTUActor extends Actor {
 
     data.evasion = CalculateEvasions(data, actorData.flags?.ptu, actorData.items);
     data.capabilities = CalculateTrainerCapabilities(data.skills, actorData.items, (data.stats.spd.stage.value + data.stats.spd.stage.mod), actorData.flags?.ptu);
+
+    data.feats = {
+      total: actorData.items.filter(x => x.type == "feat" && !x.system.free).length,
+      max: 4 + Math.ceil(data.level.current / 2)
+    }
+
+    data.edges = {
+      total: actorData.items.filter(x => x.type == "edge" && !x.system.free).length,
+      max: 4 + Math.floor(data.level.current / 2) + (data.level.current >= 2 ? 1 : 0) + (data.level.current >= 6 ? 1 : 0) + (data.level.current >= 12 ? 1 : 0)
+    }
 
     data.ap.max = 5 + Math.floor(data.level.current / 5);
 
@@ -476,7 +489,9 @@ export class PTUActor extends Actor {
 
     data.stats = CalcBaseStats(data.stats, speciesData, data.nature.value);
 
-    var result = CalculateStatTotal(data.levelUpPoints, data.stats, { twistedPower: actorData.items.find(x => x.name.toLowerCase().replace("[playtest]") == "twisted power") != null });
+    var result = game.settings.get("ptu", "playtestStats") ?
+    CalculatePTStatTotal(data.levelUpPoints, data.level.current, data.stats, { twistedPower: actorData.items.find(x => x.name.toLowerCase().replace("[playtest]") == "twisted power") != null }, data.nature.value) :
+      CalculateStatTotal(data.levelUpPoints, data.stats, { twistedPower: actorData.items.find(x => x.name.toLowerCase().replace("[playtest]") == "twisted power") != null });
     data.stats = result.stats;
     data.levelUpPoints = result.levelUpPoints;
 
@@ -646,6 +661,11 @@ export class PTUActor extends Actor {
       // If auto combat is turned on automatically apply damage based on result
       // TODO: Apply Attack (+ effects) 
     }, game.settings.get("ptu", "dramaticTiming") == true ? move_animation_delay_ms : 0);
+    
+    // If move used was transform
+    if (moveData.name.toLowerCase() =="transform" && game.settings.get("ptu", "autoTransform")) {
+      transform();
+    }
   }
 
   async _performFullAttack(moveData, token, { bonusDamage, targets, moveName, APBonus }) {

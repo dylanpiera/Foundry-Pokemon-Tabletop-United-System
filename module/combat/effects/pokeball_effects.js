@@ -282,7 +282,7 @@ let pokeballPolymorphFunc = async function (pokeball_image_path, target_token) {
 
 export async function ThrowPokeball(thrower, target, pokeball) {
     if (!target) {
-        console.log("No target to throw pokeball at.");
+        ui.notifications.error ("No target to throw pokeball at.");
         return false;
     }
     if (!thrower) return;
@@ -293,6 +293,15 @@ export async function ThrowPokeball(thrower, target, pokeball) {
     if (!targetToken) return;
     if(targetToken.actor.type != "pokemon") return;
 
+    if(pokeball.system.quantity < 1){
+        ui.notifications.error("You don't have any of those left!");
+        return;
+    }
+
+    console.log(`Consuming item with ID ${pokeball._id} and name ${pokeball.name}`);
+    //reduce the number of balls that the character has by 1
+    ui.notifications.info("Removed 1 quantity from Pokeball in inventory.")
+    pokeball.update({"system.quantity": Number(duplicate(pokeball.system.quantity)) - 1});
 
     const POKEBALL_IMAGE_PATH = pokeball?.img ?? "systems/ptu/images/item_icons/basic ball.webp";
 
@@ -393,6 +402,26 @@ export async function ThrowPokeball(thrower, target, pokeball) {
                 await timeout(1000);
                 // await target.TMFXdeleteFilters("pokeball_transform");
                 await game.ptu.utils.api.gm.removeTokenMagicFilters(target, game.canvas.scene.id, "pokeball_transform");
+            }
+
+            if (game.settings.get("ptu", "trackBrokenPokeballs"))
+            {
+                //check if thrower already has a broken ball of that type
+                const brokenBall = thrower.items.find(i => i.name == "Broken " + pokeball.name);
+
+                if (brokenBall) //if they do, increment the quantity
+                    await brokenBall.update({"system.quantity": duplicate(brokenBall.system.quantity)+1})
+                else //if they don't, create a new item
+                {
+                    await thrower.createEmbeddedDocuments('Item',[{
+                        name: `Broken ${pokeball.name}`,
+                        type: "item",
+                        system: {
+                            quantity: 1
+                        },
+                        img: pokeball.img
+                    }])
+                }
             }
         }
 
