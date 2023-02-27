@@ -682,14 +682,15 @@ export function LoadSystemSettings() {
         //     });
 
 
-        //     game.settings.register("PTUMoveMaster", "trackBrokenPokeballs", {
-        //         name: "GM Setting: Track Broken Pokeballs.",
-        //         hint: "The trainer edge 'Poke Ball Repair' allows for re-using balls that break upon failing to capture a Pokemon, so Move Master will automatically created a broken version of balls in the thrower's inventory when a Pokemon breaks free. If you have no use for tracking this, you can disable it here.",
-        //         scope: "world",
-        //         config: true,
-        //         type: Boolean,
-        //         default: true
-        //     });
+        game.settings.register("ptu", "trackBrokenPokeballs", {
+            name: "GM Setting: Track Broken Pokeballs.",
+            hint: "The trainer edge 'Poke Ball Repair' allows for re-using balls that break upon failing to capture a Pokemon, so Move Master will automatically created a broken version of balls in the thrower's inventory when a Pokemon breaks free. If you have no use for tracking this, you can disable it here.",
+            scope: "world",
+            config: true,
+            type: Boolean,
+            default: true,
+            category: "combat"
+        });
 
         game.settings.register("ptu", "customItemIconDirectory", {
             name: "Custom Item Icons Directory",
@@ -776,6 +777,16 @@ export function LoadSystemSettings() {
             type: Boolean,
             default: true,
             category: "other"
+        })
+
+        game.settings.register("ptu", "playtestStats", {
+            name: "PLAYTEST: Use playtest calculations for stats.",
+            hint: "This will use the playtest calculations for stats instead of the official ones. For further information see the playtest.md file.",
+            scope: "world",
+            config: true,
+            type: Boolean,
+            default: false,
+            category: "general"
         })
     }
 }

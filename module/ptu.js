@@ -62,7 +62,7 @@ export let log = logging.log;
 export let warn = logging.warn;
 export let error = logging.error;
 
-export const LATEST_VERSION = "3.1.0.8";
+export const LATEST_VERSION = "3.1.0.9";
 
 export const ptu = {
   utils: {
@@ -755,7 +755,8 @@ Hooks.on("preCreateItem", async function (item, data, options, sender) {
 });
 
 Hooks.on('preCreateActor', function(document,b,c,d) {
-  document.data.update({"prototypeToken.actorLink":true});
+  console.log(document)
+  document.updateSource({"prototypeToken.actorLink":true});
 });
 
 Hooks.on('getSceneControlButtons', function (hudButtons) {
