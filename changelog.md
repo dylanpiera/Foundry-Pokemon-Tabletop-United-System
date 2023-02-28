@@ -1,3 +1,6 @@
+## Version 3.2.1.0 - Playtest Fix
+The playtest did not properly take Nature into account, also scaling on Trainers have been buffed to be more equal to mons.
+
 ## Version 3.2.0.0 - PTR Playtest 1
 Hi all! Welcome to stable version 3.2, with it brings some new features as well as the first PTR Playtest!
 
