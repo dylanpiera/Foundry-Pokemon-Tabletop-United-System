@@ -62,7 +62,7 @@ export let log = logging.log;
 export let warn = logging.warn;
 export let error = logging.error;
 
-export const LATEST_VERSION = "3.2.1.0";
+export const LATEST_VERSION = "3.2.2.0";
 
 export const ptu = {
   utils: {

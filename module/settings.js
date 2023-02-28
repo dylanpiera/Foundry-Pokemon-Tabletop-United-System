@@ -809,6 +809,22 @@ export function LoadSystemSettings() {
             category: "playtest",
             onChange: debouncedReload
         })
+
+        game.settings.register("ptu", "playtestStatsSigma", {
+            name: "Balance strength factor σ.",
+            hint: "Base value is 2. Changes the minimum value of σ. See: <a href='https://ptufvtt.com/en/Guides/Playtests/Stats-Rework'>https://ptufvtt.com/en/Guides/Playtests/Stats-Rework</a>",
+            scope: "world",
+            config: true,
+            type: Number,
+            default: 2,
+            range: {
+                min: 1,
+                max: 5,
+                step: 0.5
+            },
+            category: "playtest",
+            onChange: debouncedReload
+        })
     }
 }
 

@@ -1,3 +1,6 @@
+## Version 3.2.2.0 - Playtest Fix
+It was detected that the σ modifier could make infinite stats under certain rare circumstances. 
+
 ## Version 3.2.1.0 - Playtest Fix
 The playtest did not properly take Nature into account, also scaling on Trainers have been buffed to be more equal to mons.
 
