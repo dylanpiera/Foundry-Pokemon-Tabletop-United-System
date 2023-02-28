@@ -1,21 +1,41 @@
-# Welcome to the Beta!
-Hey there! You are on the Beta Branch. If you ever have any feedback please do share with us over on [Github](https://github.com/dylanpiera/Foundry-Pokemon-Tabletop-United-System/issues) or [Discord](https://discord.gg/fE3w59q)
+## Version 3.2.2.0 - Playtest Fix
+It was detected that the σ modifier could make infinite stats under certain rare circumstances. 
 
-## Version 3.2.1.x - Playtest Fix
+## Version 3.2.1.0 - Playtest Fix
 The playtest did not properly take Nature into account, also scaling on Trainers have been buffed to be more equal to mons.
-
-## Version 3.2.0.1 - New Main Version!
-Hi all! Version 3.2 dropped and this is just the new Beta Branch ready to go for future updates. For full changelogs check the 3.2.0.0 update! 
 
 ## Version 3.2.0.0 - PTR Playtest 1
 Hi all! Welcome to stable version 3.2, with it brings some new features as well as the first PTR Playtest!
 
 ### New Features
+- The move 'Transform' will not actually transform your mon (and back) into whatever is targeted!
+- Pokemon show held items in the side bar
+- GMs can now block pokeballs from being thrown (option in settings)
+- Added maneuvers to the sidebar (purely referential, no automation)
+- Added a pop-up when a Pokemon levels up to ask whether it should learn new moves when applicable
+- Added a 'Search' button to the Menu Bar (on the left).
+- Search is part of PTR and will display PTR data. In the future we'll implement to-chat functionality.
+- Trainer Sheets now show how many Feats/Edges you should have based on your level up (including the bonus edges at lvl 2, 6 & 12).
+- Added ad-hoc modifier for Skill Checks just like you can do with moves/damage calc (hold shift when clicking).
+- Added support for female images with the `f` prefix so f.e. `001f.png`
+- Added HP Guidelines section to trainer sheets
+- New design for Item Sheets & Item Icons!
 - Consumable (food buff) items will now show in the sidebar and can be clicked to mark the item as 'Consumed' applying a food buff to the pokemon/target.
 - Food buffs themselves can also be consumed (NOTE: this is purely for tracking purposes as no automation has been implemented yet)
 - When a pokemon breaks out of a capture, a broken ball will automatically be added to the player character's inventory.
 
 ### Fixes
+- Fixed an issue with ItemPiles compatability
+- Fixed a style issue with certain items
+- Fixed hovering over maneuvers not showing the details
+- Actors have their token data linked by default now.
+- Active Effects & Source pop-ups work and display as intended again.
+- Item Sorting has been updated to v10 and should now no longer be wonky!
+- Renamed 'Digestion Buff' to 'Food Buff'
+- Fixed long names not wrapping in chat
+- Removed 'Item Notes' as they were unnecessary
+- Added 'Stealth' capability to the compendium
+- Fixed crit button being ignored by the single-target applicator.
 - Wishiwashi's art now generates properly depending on whether it's in solo or schooling form
 - species-data.js has been updated with the latest changes from PTR-Data (99% finished)
 
@@ -24,75 +44,6 @@ Introducing PTR Playtests! For full details check the #playtests channel on the 
 
 This version adds the "Stats & no-more BSR" Playtest, to enable check the new settings category in PTU Settings!
 
-## Version 3.1.0.9 - Bugfixes
-Hi all! Thanks to Alexander Block we have a fix for the trainer sheet issues.
-
-### Fixes 
-- Fixed Trainer Sheet Extra Tab issues
-- Removed Item Notes as they were unnecessary
-- Added 'Stealth' capability to the Compendium (Cheers `Joooooosh🐉#2354`)
-
-## Version 3.1.0.8 - New Item Sheets
-Hi all! Thanks to `Layon [Commander]#1460` we have a new design for our Item Sheets, as well as new icons for all of them. Enjoy!
-
-## Version 3.1.0.7 - Breaking Fixes
-Hi all! It was brought to my attention that 3.1.0.6 had some breaking trainer-sheet changes, so here are your fixes!
-
-### Fixes:
-- All fields in trainer sheet are now properly editable.
-- Item Sorting has been updated to v10 and should now no longer be wonky!
-- Renamed 'Digestion Buff' to 'Food Buff'
-- Fixed long names not wrapping in chat
-
-### New Features:
-- Added HP Guidelines section to trainer sheets
-
-## Version 3.1.0.6 - Bug Fixes & QoL Featurs
-Hi all! Another small patch with some QoL Features and a hotfix from the latest bugfixes~
-
-### New Features:
-- Trainer Sheets now show how many Feats/Edges you should have based on your level up (including the bonus edges at lvl 2, 6 & 12).
-- Added ad-hoc modifier for Skill Checks just like you can do with moves/damage calc (hold shift when clicking).
-- Added support for female images with the `f` prefix so f.e. `001f.png`
-
-### Fixes: 
-- Fixed the AE & Source bugs on Trainer Sheets as well. Oops.
-
-## Version 3.1.0.5 - Bug Fixes
-Hi all! Another small bug update patch with a few major bugs splatted.
-
-### Fixes: 
-- Actors have their token data linked by default now.
-- Active Effects & Source pop-ups work and display as intended again.
-- Fixed crit button being ignored by the single-target applicator.
-
-## Version 3.1.0.4 - Bug Fixes & Search
-Hi all! We have some more awesome bug fixes and new features thanks to `Ellam#6478` and Void!
-
-### New Features
-- Added a pop-up when a Pokemon levels up to ask whether it should learn new moves when applicable.
-- Added a 'Search' button to the Menu Bar (on the left).
-- Search is part of PTR and will display PTR data. In the future we'll implement to-chat functionality.
-
-### Bugfixes
-- Fixed an issue with ItemPiles compatability
-- Fixed a style issue with certain items
-- Fixed hovering over maneuvers not showing the details
-
-## Version 3.1.0.3 - Item Rework & Maneuvers
-Hi all! another update thanks to `Ellam#6478` this time adding some more features:
-
-### New Features
-- Pokemon show their held item in the side bar
-- (held) items marked as consumable will now show a 'Consume' button in chat which will lower their quantity by one (/delete if held item)
-- Add a pop-up that allows GMs to block pokeballs from being thrown (can be configured in settings)
-- Add maneuvers as a reference in the side bar (purely referential, no automation)
-
-## Version 3.1.0.2 - Auto-Transform
-Hi all, one small update thanks to `Ellam#6478`. The move 'Transform' will now actually transform your mon (and back) into whatever it's targeting!
-
-## Version 3.1.0.1
-Hi all! As per usual this is just the beta version of the next full release. No new features actually are applied to this branch vs branch 3.1.0.0
 
 ## Version 3.1.0.0 - V10 Support!
 Hey Everyone! It's been a long time coming but we finally have an official v10 build available for you all to play around with.
@@ -119,93 +70,6 @@ Below follows a short overview of all updates, for more clear details check the 
 - Fix Stab on Pokemon with more than 2 typings
 - Made it so that if you skip someone's turn, effects with a dialog will be able to be triggered again later in the same round
 - Moves that always hit now show their dice roll for crit/effect purposes
-
-## Version 3.0.0.6
-Hi all, more bugfixes & quality of live features!
-
-### Bug Fixes:
-- Fixed static damage moves not working
-- Generating regional forms will now set the proper token art (suffix with _al or _ga)
-- Hardened text has been fixed in Pokemon Sheet
-
-### New Features:
-- Added lots of new move animations (for use with Sequencer and the JB2A Patreon module)
-- Type Boosters & Type Braces now apply their Damage Bonus / Reduction automatically
-
-## Version 3.0.0.5 - Sword/Shield DLC
-Hi all, one more small update for today, thanks to `Joooooosh🐉#2354` for the Galarian DLC dexes!
-
-## Version 3.0.0.4
-Hi all! Some more minor bug fixes and quality of life features.
-
-### New Features:
-- Added >2 types compatibility with the CharacterMancer
-- Added sort buttons for Dex Entry sorting in Player Sheets
-
-### Bug Fixes:
-- Fixed Sequencer errors with certain move types
-- Fixed Charactermancer not opening due to an invalid reference
-- Fixed Charactermancer not showing types
-- Made it so that if you skip someone's turn, effects with a dialog will be able to be triggered again later in the same round
-- Removed some more outdated v9 code in favor of v10 references
-
-## Version 3.0.0.3
-Hi all! Lots of fixes and small new quality of life features today!
-
-### New Features:
-- Added Backup mechanism to the CSE
-- (Please note, currently there is no way to 'import from file' but it is plausible, if you somehow fuck up your data we can help you setup a macro in the discord server to fix your data)
-- Allow for Dice Formulas in Ad-Hoc damage changes (Damage Bonus & Damage Reduction) (Hold shift while doing a move / applying damage)
-- Add 'Skip to Combatant' right click context option to Combat Tracker
-
-### Bug Fixes:
-- Fixed dragging in Pokemon from the Trainer Belt in the Sidebar
-- Fixed Rotom's Tutor Moveset (Thanks `Ellam#6478`)
-- Fix Stab on Pokemon with more than 2 typings
-
-## Version 3.0.0.2
-Hi all! Here to clean up some bugs, as well as add the Hisuian Dex
-
-Thanks to `Joooooosh🐉#2354` for the Hisuian Dex!
-Thanks to `OmletDuFromaj#4242` & `Layon [Commander]#1460` for the bug reports
-### New Features:
-- Added Hisuian Dex
-
-### Bug Fixes:
-- Fixed various bugs with the CSE
-- You can now delete & create custom species again
-- Editing custom species should properly load on refresh again
-- Dragging any item onto the field should no longer prompt the 'Dex Drag-In' popup
-- Dragging items into Pokemon Sheets should now work properly again
-- Using Trainings/Orders should now apply/remove the effect properly again
-- Struggle menu should now be functional again
-
-## Version 3.0.0.1
-Hi all! Welcome to the v10 beta! ...again :)
-
-As of today PTU Development will be back to normal, so I hope the upcomming few betas will provide a more stable v10 experience.
-As per always please report your bugs on our discord server and let me know of any features you'd like see added.
-
-This update has completely changed the `game.ptu` namespace to a new system which should allow for a cleaner maintenance.
-**PLEASE NOTE MACRO DEVELOPERS**: *this means that macros may break* if they make use of the `game.ptu` namespace.
-Please check out the changes using developer tools for clarity.
-
-The new namespace isn't quite 100% done yet as some internal name changes may still happen, but this shouldn't affect macro developers.
-
-Besides this the Custom Species data storage has been overhauled as well, which should provide with a smoother and a more stable experience.
-*please note*: The system will automatically migrate the data over and save a backup of the old data so you're save to delete the journal entry, but you may always keep a copy just in case for your own sake.
-
-## Version 2.2.0.2
-Hi all! Welcome to the v10 beta.
-
-The v10 beta will see a slower update cycle as we are currently working on v3 of the system; featuring a massive resturcturing after which development will be a lot smoother for the team.
-
-The exception to this rule will be any breaking changes, like discovered between v2.2.0.1 and now 2.2.0.2!
-If you find any breaking problems, do let us know in #bug-reports
-
-### Bug Fixes:
-- Fixed type effectiveness not calculating
-- Fixed pokemon generation not working
 
 ## Version 2.1
 Hey everyone! With the release of PTUVTT 2.1 we now have officially moved over to support Foundry V9!

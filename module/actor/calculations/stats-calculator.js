@@ -68,7 +68,7 @@ export function CalculateStatTotal(levelUpPoints, stats, {twistedPower, ignoreSt
 // Calculate the sigma modifier - standard deviation of the array of stats
 function Dev(stats) {
     const statsArray = Object.entries(stats);
-    const values = statsArray.map(item => item[1].total);
+    const values = statsArray.map(item => item[1].levelUp);
   
     const sum = values.reduce((total, value) => total + value, 0);
     const mean = sum / values.length;
@@ -102,11 +102,15 @@ export function CalculatePTStatTotal(levelUpPoints, level, stats, {twistedPower,
     }
 
     //calculate sigma modifier = 1 + level/(100*sigma)
-    const sigma = 1 + level/(100*Dev(stats));
+    const sigmaSetting = game.settings.get("ptu", "playtestStatsSigma") ?? 2
+    const sigmaMod = Math.max(Dev(stats), sigmaSetting);
+    const sigma = 1 + level/(100*sigmaMod);
 
     //apply sigma modifier
+    console.log("key", "std", "sigma", "total")
     for (const [key, value] of Object.entries(stats)) {
         value["total"] *= sigma;
+        console.log(key, sigmaMod, sigma, value.total)
 
         //apply nature
         if(nature && game.ptu.data.natureData[nature]) {
