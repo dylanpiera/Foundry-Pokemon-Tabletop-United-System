@@ -4,10 +4,10 @@
 [![Issues][issues-shield]][issues-url]
 [![All Release Downloads](https://img.shields.io/github/downloads/dylanpiera/Foundry-Pokemon-Tabletop-United-System/total.svg)]()
 
-# PTU System
-A Pokemon Tabletop United System for use in FoundryVTT.
+# PTR System
+The Pokemon Tabletop Reunited system for FoundryVTT is a continuiation of the Pokemon Tabletop United system, with balance changes, and new content, created with FoundryVTT in mind.
 
-For any questions, feel free to open an issue or message me on Discord: SoaringDylan#0380.
+For any questions, feel free to open an issue or message me on Discord: AsheEon#0380.
 You can also join our Discord Server for any questions & feedback: https://discord.gg/ZTFfKYDxZf
 
 ## How to Install
@@ -37,18 +37,7 @@ Custom Species Editor (V1, UI WIP)
 Drag & Drop Support Example
 ![drag & drop support](https://cdn.discordapp.com/attachments/429729503149817856/801898068530167829/drag-and-drop.gif "Drag & Drop Preview")
 
-## Planned Features
-### Version 2: CharacterMancer
-- Add a Roll20 5e inspired CharacterMancer for both Pokémon & Trainers
-- Add quality of life features, like automating specific class features.
-- Enhance the Custom Species Creator
-
-### Version 3: Automated Combat
-- Attempt to fully automate combat by automatically calculating to-hit and damage, as well as applying it + any bonus effects.
-
 ## Links & Recommendations
-- This system was build with [The Furnace](https://github.com/League-of-Foundry-Developers/fvtt-module-furnace) in mind. 
-    - While the system completely functions without it, we recommend installing it for a better experience!
 - [Quick Insert](https://gitlab.com/fvtt-modules-lab/quick-insert) is an amazing addon that allows you to drag & drop all over the place even more easily. We 1000% recommend using their module in conjuncture with our system!
 - [Version 2 QOL Features & Bug Issues](https://github.com/dylanpiera/Foundry-Pokemon-Tabletop-United-System/issues?q=is:open+is:issue+milestone:%22Version+2%22)
 - [Version 2 Charactermancer Issues](https://github.com/dylanpiera/Foundry-Pokemon-Tabletop-United-System/issues?q=is:open+is:issue+milestone:Charactermancer)
