@@ -84,7 +84,7 @@ function Dev(stats) {
 export function CalculatePTStatTotal(levelUpPoints, level, stats, {twistedPower, ignoreStages}, nature, isTrainer) {
 
     const factor = game.settings.get("ptu", "playtestStatsFactor") ?? 0.3
-    const x = isTrainer ? 25 : 50;
+    const levelDivisionConstant = isTrainer ? 25 : 50;
     const longShortStatDict = {
         "HP":              "hp",
         "Attack":          "atk",
@@ -95,9 +95,9 @@ export function CalculatePTStatTotal(levelUpPoints, level, stats, {twistedPower,
        }
    
 
-    //find the gross stats = (Base Stat + (level * LevelUpPoints) * Level to the power of 1/2.2)/50 + Base Stat + LevelUpPOints/5
+    //find the gross stats = (Base Stat + (level * LevelUpPoints) * Level to the power of 1/2.2)/levelDivisionConstant + Base Stat + LevelUpPOints/5
     for (const [key, value] of Object.entries(stats)) {
-        value["total"] = (value["value"] + (level + value["levelUp"]) * Math.pow(level, 1/2.2))/x + value["value"] + (value["levelUp"]*factor);
+        value["total"] = (value["value"] + (level + value["levelUp"]) * Math.pow(level, 1/2.2))/levelDivisionConstant + value["value"] + (value["levelUp"]*factor);
         levelUpPoints -= value["levelUp"];       
     }
 
@@ -109,7 +109,7 @@ export function CalculatePTStatTotal(levelUpPoints, level, stats, {twistedPower,
         value["total"] *= sigma;
 
         //apply nature
-        if(nature != "" && game.ptu.data.natureData[nature] != null) {
+        if(nature && game.ptu.data.natureData[nature]) {
             if(game.ptu.data.natureData[nature][0] == game.ptu.data.natureData[nature][1]){
                 //neutral nature, do nothing
             } else if(longShortStatDict[game.ptu.data.natureData[nature][0]] == key) {

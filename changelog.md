@@ -1,6 +1,9 @@
 # Welcome to the Beta!
 Hey there! You are on the Beta Branch. If you ever have any feedback please do share with us over on [Github](https://github.com/dylanpiera/Foundry-Pokemon-Tabletop-United-System/issues) or [Discord](https://discord.gg/fE3w59q)
 
+## Version 3.2.1.x - Playtest Fix
+The playtest did not properly take Nature into account, also scaling on Trainers have been buffed to be more equal to mons.
+
 ## Version 3.2.0.1 - New Main Version!
 Hi all! Version 3.2 dropped and this is just the new Beta Branch ready to go for future updates. For full changelogs check the 3.2.0.0 update! 
 

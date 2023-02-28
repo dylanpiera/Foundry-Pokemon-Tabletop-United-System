@@ -63,7 +63,7 @@ However we quickly realised that this value may be too restrictive. So during th
 
 In PTU Settings you'll be able to find yourself a EV strength factor (β) slider under the Playtest section. We have changed the default to 0.35 but feel free to play around and let us know what kind of values your party enjoys!
 
-### Does this change acheives our objectives?
+### Does this change achieve our objectives?
 
 If we go back to the list of objectives that this change had:
 
