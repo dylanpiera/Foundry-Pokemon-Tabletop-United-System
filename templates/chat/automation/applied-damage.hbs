@@ -11,7 +11,7 @@
                     <div class="d-flex flex-row" style="flex: 0 0 100%; align-items: center; {{#if @last}}{{else}}border-bottom: 1px solid lightgray;{{/if}}">
                         {{#unless (is info.damage "0")}}
                             <span class="fs-9" style="flex: 0 0 70%; word-break:break-word;">{{info.name}} took {{info.damage}} damage and {{info.injuries}} injuries!</span>
-                            <button class="undo-damage-button fs-10" data-target="{{id}}" data-origin-message="{{info.msgId}}" {{#each info.old as |value key|}}data-old-{{key}}="{{value}}"{{/each}} style="flex: 0 0 30%;">
+                            <button class="undo-damage-button fs-10" data-target="{{info.uuid}}" data-origin-message="{{info.msgId}}" {{#each info.old as |value key|}}data-old-{{key}}="{{value}}"{{/each}} style="flex: 0 0 30%;">
                                 undo
                             </button>
                         {{else}}

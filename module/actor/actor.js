@@ -660,7 +660,6 @@ export class PTUActor extends Actor {
       targetAmount: Object.keys(attack.data).length,
       actorImage: this.img,
     }, attack);
-    console.log(messageData)
 
     messageData.content = await renderTemplate('/systems/ptu/templates/chat/moves/full-attack.hbs', messageData);
 
@@ -860,7 +859,7 @@ export class PTUActor extends Actor {
         }
 
         output[target.id] = attackData;
-        output[target.id].uuid = target.actor.uuid;
+        output[target.id].uuid = target.document.uuid;
       }
       return output;
     }

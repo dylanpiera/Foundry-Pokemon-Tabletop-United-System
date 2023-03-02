@@ -226,7 +226,7 @@ export async function applyDamageAndEffectsToTargets(event) {
     }
 
     if(messageHtml?.length != 0)
-        await updateApplicatorHtml(messageHtml, targets.concat(critTargets).map(t => (t.actor ?? t).uuid), mode, true);
+        await updateApplicatorHtml(messageHtml, targets.concat(critTargets).map(t => (t.document ?? t).uuid), mode, true);
 
     // Return results
     return results;
