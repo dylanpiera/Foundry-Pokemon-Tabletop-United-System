@@ -287,7 +287,13 @@ export async function applyDamageAndEffectsToTargets(event) {
 
         // Step 2.2: Perform Offensive Move automation
         if(move.system.automation?.length > 0) {
-            
+            if(move.parent.system.passives?.move?.length > 0) {
+                const passives = move.parent.system.passives.move;
+                for(const passive of passives.filter(a => a.automation.timing == CONFIG.PTUAutomation.Timing.BEFORE_DAMAGE)) {
+                    modifiers.push(...await ApplyAutomation(move, passive.automation, {targets, roll: options.roll, passiveName: passive.itemName}));
+                }
+            }
+
             for(const automation of move.system.automation.filter(a => a.timing == CONFIG.PTUAutomation.Timing.BEFORE_DAMAGE)) {
                 modifiers.push(...await ApplyAutomation(move, automation, {targets, roll: options.roll}));
             }
@@ -299,7 +305,7 @@ export async function applyDamageAndEffectsToTargets(event) {
                 const attack = attacks.find(a => a.uuid == modifier.uuid);
                 if(attack) {
                     if(modifier.modifier.type == "damage")
-                        attack.damage += modifier.modifier.value;
+                        attack.damage = Number(attack.damage) + Number(modifier.modifier.value);
                     // TODO: add other types of modifiers
                 }
             }
@@ -343,14 +349,13 @@ CONFIG.PTUAutomation = {
  * @returns 
  */
 async function ApplyAutomation(source, automation, options) {
-
     const targets = await findTargets(automation, {targets: options.targets})
     if(targets.length == 0) return [];
 
     const filteredTargets = filterTargetsByCondition(targets, automation, {roll: options.roll, source});
     if(filteredTargets.length == 0) return [];
 
-    return await applyEffects(filteredTargets, automation);
+    return await applyEffects(filteredTargets, automation, options);
 
     async function findTargets(automation, options) {
         const targets = [];
@@ -472,7 +477,7 @@ async function ApplyAutomation(source, automation, options) {
         return filteredTargets
     }
 
-    async function applyEffects(targets, automation) {
+    async function applyEffects(targets, automation, options) {
         const modifiers = [];
         for(const target of targets) {
             const updates = {
@@ -573,7 +578,7 @@ async function ApplyAutomation(source, automation, options) {
                         }
                         if(!modifier.uuid || !modifier.modifier) continue;
 
-                        modifier.message = `Added ${effect.value} damage to ${target.name} due to Effect Automation.`;
+                        modifier.message = `Added ${effect.value} damage to ${target.name} due to ${options?.passiveName ?? "Effect Automation."}`;
                         modifiers.push(modifier);
                         break;
                     }

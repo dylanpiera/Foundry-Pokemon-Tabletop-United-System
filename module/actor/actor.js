@@ -531,6 +531,25 @@ export class PTUActor extends Actor {
     // Calc Type Effectiveness
     data.effectiveness = GetMonEffectiveness(actorData);
 
+    const passives = {}
+    for(const item of actorData.items) {
+      if(item.system.automation?.length > 0) {
+        for (let index = 0; index < item.system.automation.length; index++) {
+          if(!item.system.automation[index].passive) continue;
+          for(const target of item.system.automation[index].targets) {
+            if(!passives[target]) passives[target] = [];
+            passives[target].push({
+              index: index,
+              automation: item.system.automation[index],
+              itemUuid: item.uuid,
+              itemName: item.name
+            })
+          }
+        }
+      }
+    }
+    data.passives = passives;
+
     /* The Corner of Exceptions */
 
     // Shedinja will always be a special case.
