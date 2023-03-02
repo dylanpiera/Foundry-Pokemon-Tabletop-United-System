@@ -240,7 +240,8 @@ export async function applyDamageAndEffectsToTargets(event) {
                 damage: damage,
                 damageReduction: dr,
                 damageType: move.system.type,
-                damageCategory: move.system.category
+                damageCategory: move.system.category,
+                effectiveness: 0
             }
             switch(mode) {
                 case "weak":
@@ -276,14 +277,17 @@ export async function applyDamageAndEffectsToTargets(event) {
 
         // Step 2.1: Perform Defensive automation
         // for each target token; apply defensive effects.
-        // for(const target of targets) {
-        //     const attack = {
-        //         uuid: target.uuid,
-        //         modifier: undefined
-        //     }
+        for(const target of targets) {
+            const system = (target.actor?.system ?? target.system);
+            if(system.passives?.hit?.length > 0) {
+                const passives = system.passives.hit;
+                for(const passive of passives.filter(a => a.automation.timing == CONFIG.PTUAutomation.Timing.BEFORE_DAMAGE)) {
+                    modifiers.push(...await ApplyAutomation(move, passive.automation, {targets: [target], roll: options.roll, passiveName: passive.itemName}));
+                }
+            }
             
-        //     //TODO: Add 'defensive' beforeDamage static effects here
-        // }
+            //TODO: Add 'defensive' beforeDamage static effects here
+        }
 
         // Step 2.2: Perform Offensive Move automation
         if(move.system.automation?.length > 0) {
@@ -297,6 +301,8 @@ export async function applyDamageAndEffectsToTargets(event) {
             for(const automation of move.system.automation.filter(a => a.timing == CONFIG.PTUAutomation.Timing.BEFORE_DAMAGE)) {
                 modifiers.push(...await ApplyAutomation(move, automation, {targets, roll: options.roll}));
             }
+
+            
         }
 
         // Step 2.3: Apply modifiers
@@ -304,9 +310,16 @@ export async function applyDamageAndEffectsToTargets(event) {
             for(const modifier of modifiers) {
                 const attack = attacks.find(a => a.uuid == modifier.uuid);
                 if(attack) {
-                    if(modifier.modifier.type == "damage")
-                        attack.damage = Number(attack.damage) + Number(modifier.modifier.value);
-                    // TODO: add other types of modifiers
+                    switch(modifier.modifier.type) {
+                        case CONFIG.PTUAutomation.Modifiers.DAMAGE: {
+                            attack.damage = Number(attack.damage) + Number(modifier.modifier.value);
+                            break;
+                        }
+                        case CONFIG.PTUAutomation.Modifiers.EFFECTIVENESS: {
+                            attack.effectiveness = Number(attack.effectiveness) + Number(modifier.modifier.value)
+                            break;
+                        }
+                    }
                 }
             }
         }
@@ -323,11 +336,13 @@ CONFIG.PTUAutomation = {
     },
     Target: {
         TARGET: "target",
-        MOVE: "move",
+        ITEM: "item",
     },
     Condition: {
         ATTACK_ROLL: "attackRoll",
         EFFECTIVENESS: "effectiveness",
+        ITEM_TYPE: "itemType",
+        MOVE_TYPE: "moveType",
     },
     RangeIncreases: {
         NONE: "none",
@@ -337,6 +352,11 @@ CONFIG.PTUAutomation = {
         ADD_DAMAGE: "addDamage",
         ADD_EFFECT: "applyEffect",
         REMOVE_EFFECT: "removeEffect",
+        ADD_EFFECTIVENESS: "addEffectiveness"
+    },
+    Modifiers: {
+        DAMAGE: "damage",
+        EFFECTIVENESS: "effectiveness"
     }
 }
 
@@ -413,6 +433,11 @@ async function ApplyAutomation(source, automation, options) {
                     }
                     break;
                 }
+                case CONFIG.PTUAutomation.Target.ITEM: {
+                    if(!(source instanceof Item)) break;
+                    targets.push(source);
+                    break;
+                }
             }
         }
         return targets;
@@ -429,8 +454,7 @@ async function ApplyAutomation(source, automation, options) {
                     case CONFIG.PTUAutomation.Condition.ATTACK_ROLL: {
                         if(!options.roll) continue;
                         const roll = options.roll;
-                        const operator = condition.operator;
-                        const value = condition.value;
+                        const {operator, value} = condition;
                         let range = "";
                         switch(condition.rangeIncrease) {
                             case CONFIG.PTUAutomation.RangeIncreases.NONE: break;
@@ -448,11 +472,10 @@ async function ApplyAutomation(source, automation, options) {
                         }
 
                         if(isNaN(Number(value))) continue; // TODO: Implement Roll values as strings
-                        console.log(`${roll} ${operator} (${value} ${range})`); // TODO: Delete line
                         if(eval(`${roll} ${operator} (${value} ${range})`)) passedConditions++;
                         break;
                     }
-                    case CONFIG.PTUAutomation.Condition.EFFECTIVENESS: {
+                    case CONFIG.PTUAutomation.Condition.EFFECTIVENESS: { //TODO: This does not take into account any prior changes to advantage before this check.
                         // Gets the type of the move against the source or options.moveType
                         let type = options?.source?.system?.type;
                         if(!type) type = options?.moveType;
@@ -468,6 +491,23 @@ async function ApplyAutomation(source, automation, options) {
 
                         // Checks if the effectiveness passes the condition
                         if(eval(`${effectiveness} ${condition.operator} ${condition.value}`)) passedConditions++;
+                        break;
+                    }
+                    case CONFIG.PTUAutomation.Condition.ITEM_TYPE: {
+                        // If not an item type continue
+                        if(!(target instanceof Item)) continue;
+
+                        const {operator, value} = condition;
+                        if(eval(`target.type ${operator} ${value}`)) passedConditions++;
+                        break;
+                    }
+                    case CONFIG.PTUAutomation.Condition.MOVE_TYPE: {
+                        // If not an item type or the item isn't of type move
+                        if(!(target instanceof Item)) continue;
+                        if(target.type != "move") continue;
+
+                        const {operator, value} = condition;
+                        if(eval(`target.system.type ${operator} ${value}`)) passedConditions++;
                         break;
                     }
                 }
@@ -563,6 +603,7 @@ async function ApplyAutomation(source, automation, options) {
                         break;
                     }
                     case CONFIG.PTUAutomation.Effect.ADD_DAMAGE: {
+                        let localTarget = target;
                         const modifier = {
                             uuid: "",
                             modifier: {
@@ -570,15 +611,42 @@ async function ApplyAutomation(source, automation, options) {
                                 value: effect.value,
                             }
                         }
-                        if(target instanceof Token ) {
-                            modifier.uuid = target.actor.uuid;
+                        if(localTarget instanceof Item) {
+                            localTarget = options.targets[0]
                         }
-                        if(target instanceof TokenDocument || target instanceof Actor) {
-                            modifier.uuid = target.uuid;
+                        if(localTarget instanceof Token ) {
+                            modifier.uuid = localTarget.actor.uuid;
+                        }
+                        if(localTarget instanceof TokenDocument || localTarget instanceof Actor) {
+                            modifier.uuid = localTarget.uuid;
                         }
                         if(!modifier.uuid || !modifier.modifier) continue;
 
-                        modifier.message = `Added ${effect.value} damage to ${target.name} due to ${options?.passiveName ?? "Effect Automation."}`;
+                        modifier.message = `Added ${effect.value} damage to ${localTarget.name} due to ${options?.passiveName ?? "Effect Automation."}`;
+                        modifiers.push(modifier);
+                        break;
+                    }
+                    case CONFIG.PTUAutomation.Effect.ADD_EFFECTIVENESS: {
+                        let localTarget = target;
+                        const modifier = {
+                            uuid: "",
+                            modifier: {
+                                type: "effectiveness",
+                                value: effect.value
+                            }
+                        }
+                        if(localTarget instanceof Item) {
+                            localTarget = options.targets[0]
+                        }
+                        if(localTarget instanceof Token ) {
+                            modifier.uuid = localTarget.actor.uuid;
+                        }
+                        if(localTarget instanceof TokenDocument || localTarget instanceof Actor) {
+                            modifier.uuid = localTarget.uuid;
+                        }
+                        if(!modifier.uuid || !modifier.modifier) continue;
+
+                        modifier.message = `${options?.passiveName ?? "Effect Automation."} caused ${localTarget.name} to resist the attack ${effect.value} step${effect.value > 1 || effect.value < -1 ? "s" : ""} ${effect.value >= 0 ? "less" : "more"}!}`;
                         modifiers.push(modifier);
                         break;
                     }

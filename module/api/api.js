@@ -1,7 +1,7 @@
 import { displayAppliedDamageToTargets, ApplyInjuries } from '../combat/damage-calc-tools.js';
 import { LATEST_VERSION } from '../ptu.js'
 import { debug, log } from '../ptu.js';
-import { dataFromPath } from '../utils/generic-helpers.js';
+import { addStepsToEffectiveness, dataFromPath } from '../utils/generic-helpers.js';
 import { PlayPokeballReturnAnimation } from '../combat/effects/pokeball_effects.js';
 
 class ApiError {
@@ -253,7 +253,7 @@ export default class Api {
                         }
 
                         // Calculate effectiveness based on damage type
-                        const effectiveness = actor.system.effectiveness?.All[attack.damageType] ?? 1;
+                        const effectiveness = attack.effectiveness ? addStepsToEffectiveness((actor.system.effectiveness?.All[attack.damageType] ?? 1), attack.effectiveness) : actor.system.effectiveness?.All[attack.damageType] ?? 1;
 
                         // Calculate actual damage
                         actualDamage = Math.max(
