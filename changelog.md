@@ -1,3 +1,12 @@
+## Version 3.2.3.0 - Playtest Update
+After some feedback we noticed that the stats may have been a bit overtuned. So we have decided to update the defaults
+
+***this means you will have to manually update your settings*** to the new defaults, which are as followed:
+- β should be 0.5
+- σ should be 3.5
+
+Please note that just updating these values in version 3.2.2.0 is not the same as there were also some other under-the-hood changes to the formula.
+
 ## Version 3.2.2.0 - Playtest Fix
 It was detected that the σ modifier could make infinite stats under certain rare circumstances. 
 

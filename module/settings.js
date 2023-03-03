@@ -796,11 +796,11 @@ export function LoadSystemSettings() {
 
         game.settings.register("ptu", "playtestStatsFactor", {
             name: "EV strength factor β.",
-            hint: "Base value is 0.35. The higher the number, the stronger Level-Up Points will affect stat totals. See: <a href='https://ptufvtt.com/en/Guides/Playtests/Stats-Rework'>https://ptufvtt.com/en/Guides/Playtests/Stats-Rework</a>",
+            hint: "Base value is 0.5. The higher the number, the stronger Level-Up Points will affect stat totals. See: <a href='https://ptufvtt.com/en/Guides/Playtests/Stats-Rework'>https://ptufvtt.com/en/Guides/Playtests/Stats-Rework</a>",
             scope: "world",
             config: true,
             type: Number,
-            default: 0.35,
+            default: 0.5,
             range: {
                 min: 0.1,
                 max: 1.0,
@@ -812,11 +812,11 @@ export function LoadSystemSettings() {
 
         game.settings.register("ptu", "playtestStatsSigma", {
             name: "Balance strength factor σ.",
-            hint: "Base value is 2. Changes the minimum value of σ. See: <a href='https://ptufvtt.com/en/Guides/Playtests/Stats-Rework'>https://ptufvtt.com/en/Guides/Playtests/Stats-Rework</a>",
+            hint: "Base value is 3.5. Changes the minimum value of σ. See: <a href='https://ptufvtt.com/en/Guides/Playtests/Stats-Rework'>https://ptufvtt.com/en/Guides/Playtests/Stats-Rework</a>",
             scope: "world",
             config: true,
             type: Number,
-            default: 2,
+            default: 3.5,
             range: {
                 min: 1,
                 max: 5,
