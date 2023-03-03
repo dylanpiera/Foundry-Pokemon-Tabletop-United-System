@@ -83,7 +83,7 @@ function Dev(stats) {
 
 export function CalculatePTStatTotal(levelUpPoints, level, stats, {twistedPower, ignoreStages}, nature, isTrainer) {
 
-    const factor = game.settings.get("ptu", "playtestStatsFactor") ?? 0.3
+    const factor = game.settings.get("ptu", "playtestStatsFactor") ?? 0.5
     const levelDivisionConstant = isTrainer ? 25 : 50;
     const longShortStatDict = {
         "HP":              "hp",
@@ -102,9 +102,9 @@ export function CalculatePTStatTotal(levelUpPoints, level, stats, {twistedPower,
     }
 
     //calculate sigma modifier = 1 + level/(100*sigma)
-    const sigmaSetting = game.settings.get("ptu", "playtestStatsSigma") ?? 2
+    const sigmaSetting = game.settings.get("ptu", "playtestStatsSigma") ?? 3.5
     const sigmaMod = Math.max(Dev(stats), sigmaSetting);
-    const sigma = 1 + level/(100*sigmaMod);
+    const sigma = 1 + Math.max(level,35)/(100*sigmaMod);
 
     //apply sigma modifier
     console.log("key", "std", "sigma", "total")
