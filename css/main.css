@@ -1942,6 +1942,64 @@ h3 {
 .move-sheet .sheet-body .move-effect textarea:focus {
   box-shadow: unset;
 }
+/* -------------------------------------------- */
+/*  Level Up Form                               */
+/* -------------------------------------------- */
+.level-up .window-content {
+  background: linear-gradient(45deg, #D1FED4, #dffffe);
+  padding: 4px;
+}
+.level-up #mon-image-component {
+  display: flex;
+  justify-content: space-evenly;
+}
+.level-up #mon-image-component .image-divider {
+  flex: 0 0 10%;
+  font-size: 70px;
+  align-self: center;
+  text-align: center;
+}
+.level-up #mon-image-component .avatar {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 150px;
+  width: 150px;
+  background-color: #fff;
+  box-shadow: 0 0 0 5px #a0cb95, 0 0 0 10px #fffed7, 0 0 0 15px #c8b05f;
+  border-radius: 10px;
+}
+.level-up #mon-image-component .avatar img {
+  width: 100%;
+  height: 100%;
+  border-radius: 10px;
+  object-fit: contain;
+  border: unset;
+}
+.level-up #mon-evolving-component .box {
+  background-color: #9FCB94;
+  width: 100%;
+  height: 45px;
+  border-radius: 13px;
+  display: flex;
+  justify-content: space-evenly;
+}
+.level-up #mon-evolving-component .box .content {
+  flex: 0 0 70%;
+  align-self: center;
+}
+.level-up #mon-evolving-component .box .button {
+  flex: 0 0 15%;
+  align-self: center;
+}
+.level-up .header {
+  background-color: #848572;
+  color: #fff;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 40px;
+}
 .w-25 {
   width: 25% !important;
 }
@@ -2324,6 +2382,9 @@ tbody.collapse.in {
 .macro-sheet .form-group.command .furnace-macro-command textarea,
 .macro-sheet .form-group.command .furnace-macro-command code {
   font-variant: normal;
+}
+#levelsUI .window-content {
+  background: rgba(0, 0, 0, 0.356) !important;
 }
 .sidebar-tab .action-buttons button {
   height: unset;

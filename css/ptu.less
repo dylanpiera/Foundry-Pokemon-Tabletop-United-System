@@ -2338,3 +2338,76 @@ h3 {
     }
   }
 }
+
+/* -------------------------------------------- */
+/*  Level Up Form                               */
+/* -------------------------------------------- */
+.level-up {
+  .window-content {
+    background: linear-gradient(45deg, #D1FED4, #dffffe) ;
+    padding: 4px;
+  }
+
+  #mon-image-component {
+    display: flex;
+    justify-content: space-evenly;
+    
+    .image-divider {
+      flex: 0 0 10%;
+      font-size: 70px;
+      align-self: center;
+      text-align: center;
+    }
+
+    .avatar {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 150px;
+      width: 150px;
+      background-color: #fff;
+      box-shadow: 
+        0 0 0 5px #a0cb95, 
+        0 0 0 10px #fffed7, 
+        0 0 0 15px #c8b05f;
+      border-radius: 10px;
+
+      img {
+        width: 100%;
+        height: 100%;
+        border-radius: 10px;
+        object-fit: contain;
+        border: unset;
+      }
+    }
+  }
+
+  #mon-evolving-component {
+    .box {
+      background-color: #9FCB94;
+      width: 100%;
+      height: 45px;
+      border-radius: 13px;
+      
+      display: flex;
+      justify-content: space-evenly;
+      .content {
+        flex: 0 0 70%;
+        align-self: center;
+      }
+      .button {
+        flex: 0 0 15%;
+        align-self: center;
+      }
+    }
+  }
+
+  .header {
+    background-color: #848572;
+    color: #fff;
+    display: flex;
+    justify-content: space-between;
+    align-items:center;
+    height: 40px;
+  }
+}
