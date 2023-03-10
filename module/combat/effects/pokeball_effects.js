@@ -532,6 +532,7 @@ export async function PlayReleaseOwnedPokemonAnimation(token) {
 
             await timeout(2000);
             await game.ptu.utils.species.playCry(actor.system.species);
+            await target_token.document.update({ "alpha": (1) });
 
 
             // alexander-r-block: Commenting out this block of code because the always_display_token_* properties are for wild pokemon.
