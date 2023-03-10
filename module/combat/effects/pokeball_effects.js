@@ -497,7 +497,7 @@ export async function PlayReleaseOwnedPokemonAnimation(token) {
             if(enable_pokeball_animation)
             {
                 // await target_token.document.update({ "alpha": (0) });
-                await game.ptu.utils.api.gm.updateToken(target_token, {alpha: 0})
+                await game.ptu.utils.api.gm.tokensUpdate(target_token, {alpha: 0})
             }
 
             await AudioHelper.play({src: pokeball_sound_paths["miss"], volume: 0.5, autoplay: true, loop: false}, true);
@@ -527,13 +527,16 @@ export async function PlayReleaseOwnedPokemonAnimation(token) {
                 // await target_token.TMFXaddUpdateFilters(pokeballShoop_params); 
                 await game.ptu.utils.api.gm.addTokenMagicFilters(target_token, game.canvas.scene, pokeballShoop_params);
                 // await target_token.document.update({ "alpha": (1) });
-                await game.ptu.utils.api.gm.updateToken(target_token, {alpha: 1})
+                await game.ptu.utils.api.gm.tokensUpdate(target_token, {alpha: 1})
             }
 
             await timeout(2000);
             await game.ptu.utils.species.playCry(actor.system.species);
 
-            if(always_display_token_name)
+
+            // alexander-r-block: Commenting out this block of code because the always_display_token_* properties are for wild pokemon.
+            //                    This also adds random bars to owned pokemon when using BarBrawl.
+            /* if(always_display_token_name)
             {
                 if(always_display_token_health == true)
                 {
@@ -563,7 +566,7 @@ export async function PlayReleaseOwnedPokemonAnimation(token) {
             else
             {
                 await target_token.document.update({ "alpha": (1) });
-            }
+            }*/
 
         }
         else if (actor.data.type == "pokemon") // Wild Pokemon - no pokeball release effect.
