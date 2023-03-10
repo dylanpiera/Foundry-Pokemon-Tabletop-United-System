@@ -42,7 +42,7 @@ export async function GetItemArt(item_name, type = ".webp") {
         return undefined;
     }
     return path;
-}
+} 
 
 
 Hooks.on("item-piles-preDropItemDetermined", function(a, b, dropped_item, d) {
@@ -67,7 +67,7 @@ Hooks.on("item-piles-preDropItemDetermined", function(a, b, dropped_item, d) {
 Hooks.on("item-piles-createItemPile", async function(created_token, options) {
 
     // check if the item pile being created is a pile or not (chest, vault, merchant are other possibilities)
-    let flags = created_token?.data?.actorData?.flags;
+    // let flags = created_token?.data?.actorData?.flags;
     
     // Set the name of the item pile to be either the name of the item, or a fallback generic name,
     // set the image (have to do it here, not earlier, since we can't do async fetches for item images
@@ -75,6 +75,7 @@ Hooks.on("item-piles-createItemPile", async function(created_token, options) {
     // marks the item pile as a token that should not have the usual tooltips.
     //
     // only activates if the pile is an item pile, and not if the pile is a chest, vault, or merchant
+    /*
     if(flags["item-piles"]?.data?.type == "pile") {
         let pile_name = created_token?.data?.actorData?.items?.[0]?.name ?? "Pile of Items";
         let new_image = await GetItemArt(pile_name);
@@ -83,6 +84,7 @@ Hooks.on("item-piles-createItemPile", async function(created_token, options) {
             "img": ( new_image )
         });
     }
+    */
     await created_token.update({
         "flags.token-tooltip-alt.noTooltip":true
     });
