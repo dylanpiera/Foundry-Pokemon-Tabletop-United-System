@@ -46,6 +46,7 @@ export default function({actorSystem, changeDetails, name, form}) {
             species: actorSystem.species,
             changeDetails,
             name,
+            nature: actorSystem.nature.value,
             evolving: {
                 can: false,
                 is: true,

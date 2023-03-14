@@ -1,5 +1,7 @@
 import MonEvolvingComponent from "../api/front-end/components/monEvolvingComponent.js";
 import MonImageComponent from "../api/front-end/components/monImageComponent.js";
+import MonStatBlockComponent from "../api/front-end/components/monStatBlockComponent.js";
+import MonStatBlockTotalComponent from "../api/front-end/components/monStatBlockTotalComponent.js";
 import initStore from "../api/front-end/levelupStore.js";
 import { log, debug } from "../ptu.js";
 
@@ -66,7 +68,15 @@ export class PTULevelUpForm extends FormApplication {
 
       this.components = {
         monImageComponent: new MonImageComponent(this.store, $('#mon-image-component')),
-        monEvolvingComponent: new MonEvolvingComponent(this.store, $('#mon-evolving-component'))
+        monEvolvingComponent: new MonEvolvingComponent(this.store, $('#mon-evolving-component')),
+        monStatBlockComponent: new MonStatBlockComponent(this.store, $('#mon-stat-block-component')),
+        statHpTotalField: new MonStatBlockTotalComponent(this.store, "hp"),
+        statAtkTotalField: new MonStatBlockTotalComponent(this.store, "atk"),
+        statDefTotalField: new MonStatBlockTotalComponent(this.store, "def"),
+        statSpatkTotalField: new MonStatBlockTotalComponent(this.store, "spatk"),
+        statSpdefTotalField: new MonStatBlockTotalComponent(this.store, "spdef"),
+        statSpdTotalField: new MonStatBlockTotalComponent(this.store, "spd")
+        //level up points
       }
       debug(this.store, this.components);
     }
