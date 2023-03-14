@@ -3,6 +3,8 @@ import { TypeEffectiveness } from "../data/effectiveness-data.js";
 
 const validTypeImageExtensions = ["webp", "png"];
 
+// TypeEffectiveness here is imported from source and only contains the default types
+// in contract, game.ptu.data.TypeEffectiveness contains custom types as well
 const isTypeDefaultType = (typeName) => Object.keys(TypeEffectiveness).includes(typeName);
 
 function fileExists(file) {
@@ -12,7 +14,7 @@ function fileExists(file) {
   return request.status != 404;
 }
   
-function findImagePath(pathWithoutExtension) {
+function findTypeImageExtension(pathWithoutExtension) {
   for (const ext of validTypeImageExtensions) {
     const candidate = `${pathWithoutExtension}.${ext}`
     if (fileExists(candidate)) {
@@ -21,6 +23,13 @@ function findImagePath(pathWithoutExtension) {
   }
 
   return `${pathWithoutExtension}.${validTypeImageExtensions[0]}`;
+}
+
+function findCustomTypeImagePath(type) {
+  let customDir = game.settings.get("ptu", "typeEffectivenessCustomImageDirectory");
+  if (customDir.slice(-1) !== "/") customDir += "/";
+  if (customDir.charAt(0) !== "/") customDir = "/" + customDir;
+  return findTypeImageExtension(`${customDir}${type}IC`);
 }
 
 export async function preloadHandlebarsTemplates() {
@@ -154,47 +163,33 @@ export function registerHandlebars() {
     });
   
     Handlebars.registerHelper("loadTypeImages", function (types, includeSlash = true) {
-      // TypeEffectiveness here is imported from source and only contains the default types
-      // in contract, game.ptu.data.TypeEffectiveness contains custom types as well
-      let customDir = game.settings.get("ptu", "typeEffectivenessCustomImageDirectory");
-      if (customDir.slice(-1) !== "/") customDir += "/"
-      if (customDir.charAt(0) !== "/") customDir = "/" + customDir
       if (!types) return;
       return types.reduce((html, type, index, array) => {
         if (type == "null") type = "Untyped";
         if (isTypeDefaultType(type)) {
           return html += `<img class="mr-1 ml-1" src="/systems/ptu/css/images/types/${type}IC.webp">` + (includeSlash ? (index != (array.length - 1) ? "<span>/</span>" : "") : "");
         } else {
-          const path = findImagePath(`${customDir}${type}IC`);
+          const path = findCustomTypeImagePath(type);
           return html += `<img class="mr-1 ml-1" src="${path}">` + (includeSlash ? (index != (array.length - 1) ? "<span>/</span>" : "") : "");
         }
       }, "")
     });
   
     Handlebars.registerHelper("loadTypeImage", function (type) {
-      // TypeEffectiveness here is imported from source and only contains the default types
-      // in contract, game.ptu.data.TypeEffectiveness contains custom types as well
-      let customDir = game.settings.get("ptu", "typeEffectivenessCustomImageDirectory");
-      if (customDir.slice(-1) !== "/") customDir += "/"
-      if (customDir.charAt(0) !== "/") customDir = "/" + customDir
       if (isTypeDefaultType(type)) {
         return `<img src="/systems/ptu/css/images/types/${type}IC.webp">`;
       } else {
-        const path = findImagePath(`${customDir}${type}IC`);
+        const path = findCustomTypeImagePath(type);
         return `<img src="${path}">`;
       }
     });
 
     Handlebars.registerHelper("loadTypeImageUrl", function (type) {
-      // TypeEffectiveness here is imported from source and only contains the default types
-      // in contract, game.ptu.data.TypeEffectiveness contains custom types as well
-      let customDir = game.settings.get("ptu", "typeEffectivenessCustomImageDirectory");
-      if (customDir.slice(-1) !== "/") customDir += "/"
-      if (customDir.charAt(0) !== "/") customDir = "/" + customDir
+
       if (isTypeDefaultType(type) || type == "Special" || type == "Physical" || type == "Status") {
         return `/systems/ptu/css/images/types2/${type}IC.png`;
       } else { 
-        return findImagePath(`${customDir}${type}IC`);
+        return findCustomTypeImagePath(type);
       }
     });
 
