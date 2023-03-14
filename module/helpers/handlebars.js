@@ -1,7 +1,27 @@
 import { PrepareMoveData } from "../ptu.js";
 import { TypeEffectiveness } from "../data/effectiveness-data.js";
 
+const validTypeImageExtensions = ["webp", "png"];
+
 const isTypeDefaultType = (typeName) => Object.keys(TypeEffectiveness).includes(typeName);
+
+function fileExists(file) {
+  const request = new XMLHttpRequest();
+  request.open('HEAD', file, false);
+  request.send();
+  return request.status != 404;
+}
+  
+function findImagePath(pathWithoutExtension) {
+  for (const ext of validTypeImageExtensions) {
+    const candidate = `${pathWithoutExtension}.${ext}`
+    if (fileExists(candidate)) {
+      return candidate;
+    }
+  }
+
+  return `${pathWithoutExtension}.${validTypeImageExtensions[0]}`;
+}
 
 export async function preloadHandlebarsTemplates() {
     return loadTemplates([
@@ -142,8 +162,12 @@ export function registerHandlebars() {
       if (!types) return;
       return types.reduce((html, type, index, array) => {
         if (type == "null") type = "Untyped";
-        if (isTypeDefaultType(type)) return html += `<img class="mr-1 ml-1" src="/systems/ptu/css/images/types/${type}IC.webp">` + (includeSlash ? (index != (array.length - 1) ? "<span>/</span>" : "") : "");
-        else return html += `<img class="mr-1 ml-1" src="${customDir}${type}IC.webp">` + (includeSlash ? (index != (array.length - 1) ? "<span>/</span>" : "") : "");
+        if (isTypeDefaultType(type)) {
+          return html += `<img class="mr-1 ml-1" src="/systems/ptu/css/images/types/${type}IC.webp">` + (includeSlash ? (index != (array.length - 1) ? "<span>/</span>" : "") : "");
+        } else {
+          const path = findImagePath(`${customDir}${type}IC`);
+          return html += `<img class="mr-1 ml-1" src="${path}">` + (includeSlash ? (index != (array.length - 1) ? "<span>/</span>" : "") : "");
+        }
       }, "")
     });
   
@@ -153,8 +177,12 @@ export function registerHandlebars() {
       let customDir = game.settings.get("ptu", "typeEffectivenessCustomImageDirectory");
       if (customDir.slice(-1) !== "/") customDir += "/"
       if (customDir.charAt(0) !== "/") customDir = "/" + customDir
-      if (isTypeDefaultType(type)) return `<img src="/systems/ptu/css/images/types/${type}IC.webp">`;
-      else return `<img src="${customDir}${type}IC.webp">`
+      if (isTypeDefaultType(type)) {
+        return `<img src="/systems/ptu/css/images/types/${type}IC.webp">`;
+      } else {
+        const path = findImagePath(`${customDir}${type}IC`);
+        return `<img src="${path}">`;
+      }
     });
 
     Handlebars.registerHelper("loadTypeImageUrl", function (type) {
@@ -163,8 +191,11 @@ export function registerHandlebars() {
       let customDir = game.settings.get("ptu", "typeEffectivenessCustomImageDirectory");
       if (customDir.slice(-1) !== "/") customDir += "/"
       if (customDir.charAt(0) !== "/") customDir = "/" + customDir
-      if (isTypeDefaultType(type) || type == "Special" || type == "Physical" || type == "Status") return `/systems/ptu/css/images/types2/${type}IC.png`;
-      else return `${customDir}${type}IC.webp`
+      if (isTypeDefaultType(type) || type == "Special" || type == "Physical" || type == "Status") {
+        return `/systems/ptu/css/images/types2/${type}IC.png`;
+      } else { 
+        return findImagePath(`${customDir}${type}IC`);
+      }
     });
 
     Handlebars.registerHelper("typeSelect", function (selectedType) {        
