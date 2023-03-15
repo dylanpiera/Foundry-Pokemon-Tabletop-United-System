@@ -2,6 +2,7 @@ import MonEvolvingComponent from "../api/front-end/components/monEvolvingCompone
 import MonImageComponent from "../api/front-end/components/monImageComponent.js";
 import MonStatBlockComponent from "../api/front-end/components/monStatBlockComponent.js";
 import MonStatBlockTotalComponent from "../api/front-end/components/monStatBlockTotalComponent.js";
+import MonStatBlockLevelUpPointsComponent from "../api/front-end/components/monStatBlockLevelUpPointsComponent.js";
 import initStore from "../api/front-end/levelupStore.js";
 import { log, debug } from "../ptu.js";
 
@@ -27,8 +28,10 @@ export class PTULevelUpForm extends FormApplication {
     /** @override */
     getData() {
       const data = super.getData();
-      data.dtypes = ["String", "Number", "Boolean"];
+      data.dtypes = ["String", "Number", "Number", "Number", "Boolean"];
       data.name = this.object.actor.name
+      data.oldLvl = this.object.oldLvl
+      data.newLvl = this.object.newLvl
 
       return data;
     }
@@ -75,8 +78,8 @@ export class PTULevelUpForm extends FormApplication {
         statDefTotalField: new MonStatBlockTotalComponent(this.store, "def"),
         statSpatkTotalField: new MonStatBlockTotalComponent(this.store, "spatk"),
         statSpdefTotalField: new MonStatBlockTotalComponent(this.store, "spdef"),
-        statSpdTotalField: new MonStatBlockTotalComponent(this.store, "spd")
-        //level up points
+        statSpdTotalField: new MonStatBlockTotalComponent(this.store, "spd"),
+        levelUpPoints: new MonStatBlockLevelUpPointsComponent(this.store),
       }
       debug(this.store, this.components);
     }

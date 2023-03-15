@@ -43,11 +43,29 @@ export default class monStatBlockComponent extends Component {
         {
             //show the stats for the current species
             const stats = this.state.stats;
+            for(let key in stats){
+                stats[key].newLevelUp = 0;
+                stats[key].newTotal = stats[key].total;
+            }
             const nature = this.state.nature;
 
-            content = await renderTemplate("/systems/ptu/templates/partials/charactermancer/stat-block-partial.hbs", {stats, nature})
+            content = await renderTemplate("/systems/ptu/templates/partials/levelUp/stat-block-partial.hbs", {stats, nature})
         }
 
-        this.element.html(`${headers} ${content}`);
+        //level up points
+        const levelUpPoints = `
+            <div class="w-100 mb-3 bar mt-1 pr-2" style="background: unset; padding: 0.1rem; font-size: 9px;">
+                <div class="d-flex flex-row justify-content-end pr-2">
+                <div style="flex: 0 1 20%">
+                    <input type="text" id="monStatBlockLevelUpPoints" name="data.levelUpPoints" value="${this.state.levelUpPoints}" data-dtype="Number" disabled />
+                </div>
+                <div style="flex: 0 0 25%; padding-left: 5px; color:black; align-self: center;">
+                    <label>Levelup Points Remaining</label>
+                </div>
+                </div>
+            </div>
+        `
+
+        this.element.html(`${headers} ${content} ${levelUpPoints}`);
     }
 }

@@ -1,0 +1,26 @@
+{{#if (and nature stats)}}
+    {{#each stats as |stat key|}}
+        <div class="w-100 justify-content-center mb-1 bar mt-1 {{key}}" style="padding: 0.1rem; font-size: 11px;">
+            <div class="pl-3 pr-2 d-flex flex-row">
+                <div class="stats {{key}} key {{natureCheck ../nature key}}">
+                <label for="data.stats.{{key}}.value" class="resource-label">{{#if (is key "hp")}}HP{{else}}{{stat.label}}{{/if}}</label>
+                </div>
+                <div class="stats {{key}} base ">
+                <input type="text" class="no-box" value="{{stat.total}}" data-dtype="Number"
+                    disabled />
+                </div>
+                <div class="stats {{key}} levelUp">
+                <input type="text" name="data.stats.{{key}}.levelUp" value="{{stat.newLevelUp}}" data-key="{{key}}" data-dtype="Number" />
+                </div>
+                <div class="stats {{key}} total">
+                <input type="text" id="{{key}}-new-total" class="no-box" value="{{stat.newTotal}}" data-dtype="Number"
+                    disabled />
+                </div>
+            </div>
+        </div>
+    {{/each}}
+{{else}}
+    <div class="w-100 justify-content-center mb-1 bar mt-1 {{key}}" style="padding: 0.1rem; font-size: 11px;">
+        <h3>Oops. Seems like I couldn't load stats :(</h3>
+    </div>
+{{/if}}

@@ -45,6 +45,7 @@ export default function({actorSystem, changeDetails, name, form}) {
             stats: actorSystem.stats,
             species: actorSystem.species,
             changeDetails,
+            levelUpPoints: 0,
             name,
             nature: actorSystem.nature.value,
             evolving: {
