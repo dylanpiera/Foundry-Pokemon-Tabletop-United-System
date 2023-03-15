@@ -220,7 +220,11 @@ export class PTUPokemonCharactermancer extends FormApplication {
         }
       }
     }
-    if(formData.imgPath) data.img = formData.imgPath;
+
+    if(formData.imgPath) {
+      data.img = formData.imgPath;
+      data['prototypeToken.texture.src'] = formData.imgPath;   
+    }
 
     log(`CHARACTERMANCER: Updating ${this.object.name}`, data);
     await this.object.update(data);
