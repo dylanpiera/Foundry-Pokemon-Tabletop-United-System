@@ -1,5 +1,7 @@
 import { debug } from '../../../ptu.js';
 import Component from '../lib/component.js';
+import { GetSpeciesData } from '../../../actor/actor.js';
+import { capitalizeFirstLetter } from '../../../utils/generic-helpers.js';
 
 export default class monStatBlockComponent extends Component {
     constructor(store, element) {
@@ -20,7 +22,7 @@ export default class monStatBlockComponent extends Component {
                         <label>Stats</label>
                     </div>
                     <div class="stats base">
-                        <label>Current</label>
+                        <label>${(this.state.evolving.is && this.state.evolving.can && this.state.evolving.into) ? "Base" : "Current"}</label>
                     </div>
                     <div class="stats levelUp" style="font-size: 14px;">
                         <label>Level<br>Stats</label>
@@ -31,26 +33,39 @@ export default class monStatBlockComponent extends Component {
                 </div>
             </div>
         `
+        let stats = duplicate(this.state.stats);
+        const nature = this.state.nature;
+        const isEvolving = (this.state.evolving.can && this.state.evolving.into && this.state.evolving.is);
 
-        if(this.state.evolving.can && this.state.evolving.into && $(`#may-evolve`).is(`:checked`)) {
+        let evoBaseStats = {}
+
+        if (isEvolving) {
+            
+            
             //show the stats for the evolving species and reset level up pounts
             //find the base stats of the evolving species
+            evoBaseStats = await GetSpeciesData(this.state.evolving.into)["Base Stats"];
 
-            //level up points = 10 + new level
-            const levelUpPoints = 10 + this.state.changeDetails.newLvl;
-        }
-        else
-        {
-            //show the stats for the current species
-            const stats = this.state.stats;
-            for(let key in stats){
-                stats[key].newLevelUp = 0;
-                stats[key].newTotal = stats[key].total;
-            }
-            const nature = this.state.nature;
+            //rename labels to matchs stats
+            const renamingDict = {
+                "HP": "hp",
+                "Attack": "atk",
+                "Defense": "def",
+                "Special Attack": "spatk",
+                "Special Defense": "spdef",
+                "Speed": "spd"
+            };
 
-            content = await renderTemplate("/systems/ptu/templates/partials/levelUp/stat-block-partial.hbs", {stats, nature})
+            evoBaseStats = Object.keys(evoBaseStats).reduce((acc, key) => Object.assign(acc, { [renamingDict[key] || key]: evoBaseStats[key] }), {});
         }
+        
+        for(let stat in stats) {
+            stats[stat].total = isEvolving ? evoBaseStats[stat] : stats[stat].total;
+            stats[stat].newTotal = stats[stat].newTotal ? stats[stat].newTotal :stats[stat].total;
+            stats[stat].newLevelUp = stats[stat].newLevelUp ? stats[stat].newLevelUp : 0; 
+        }
+
+        content = await renderTemplate("/systems/ptu/templates/partials/levelUp/stat-block-partial.hbs", {isEvolving, stats, nature})
 
         //level up points
         const levelUpPoints = `
@@ -67,5 +82,16 @@ export default class monStatBlockComponent extends Component {
         `
 
         this.element.html(`${headers} ${content} ${levelUpPoints}`);
+
+        this.element.children().children().children('.levelUp').on("change", (event) => {
+            const levelUpPointsAssigned = {};
+
+            for(let stat in this.state.stats) {
+                levelUpPointsAssigned[stat] = parseInt(document.getElementsByName(`levelUpData.stats.${stat}.levelUp`)[0].value);
+            }
+            
+            this.store.dispatch('changeStats', levelUpPointsAssigned);
+        });
+    
     }
 }

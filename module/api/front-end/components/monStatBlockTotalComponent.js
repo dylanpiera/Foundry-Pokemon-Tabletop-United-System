@@ -19,7 +19,7 @@ export default class MonStatBlockTotalComponent extends Component {
         if(isEmpty(this.state.stats)) return;
         if(!document.contains(this.element[0])) this.element = $(`#mon-stat-block-component .total.${this.statKey} input`)
 
-        const total = this.state.stats[this.statKey].total;
+        const total = this.state.stats[this.statKey].newTotal || this.state.stats[this.statKey].total;
         if(this.element.val() != total) this.element.val(total);
     }
 }
