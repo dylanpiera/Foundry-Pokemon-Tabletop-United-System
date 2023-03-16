@@ -6,8 +6,15 @@
                 <label for="data.stats.{{key}}.value" class="resource-label">{{#if (is key "hp")}}HP{{else}}{{stat.label}}{{/if}}</label>
                 </div>
                 <div class="stats {{key}} base ">
-                <input type="text" class="no-box" value="{{stat.total}}" data-dtype="Number"
-                    disabled />
+                    {{#if ../isEvolving}}
+                        {{log ../evolution}}
+                        {{log key}}
+                        <input type="text" class="no-box" value="{{getStat ../evolution key }}" data-dtype="Number"
+                        disabled />
+                    {{else}}
+                        <input type="text" class="no-box" value="{{stat.total}}" data-dtype="Number"
+                        disabled />
+                    {{/if}}
                 </div>
                 <div class="stats {{key}} levelUp">
                 <input type="text" name="levelUpData.stats.{{key}}.levelUp" value="{{stat.newLevelUp}}" data-key="{{key}}" data-dtype="Number" />

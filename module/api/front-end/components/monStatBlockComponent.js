@@ -65,7 +65,7 @@ export default class monStatBlockComponent extends Component {
             stats[stat].newLevelUp = stats[stat].newLevelUp ? stats[stat].newLevelUp : 0; 
         }
 
-        content = await renderTemplate("/systems/ptu/templates/partials/levelUp/stat-block-partial.hbs", {isEvolving, stats, nature})
+        content = await renderTemplate("/systems/ptu/templates/partials/levelUp/stat-block-partial.hbs", {isEvolving, evolution: this.state.evolving.into, stats, nature})
 
         //level up points
         const levelUpPoints = `
@@ -86,8 +86,8 @@ export default class monStatBlockComponent extends Component {
         this.element.children().children().children('.levelUp').on("change", (event) => {
             const levelUpPointsAssigned = {};
 
-            for(let stat in this.state.stats) {
-                levelUpPointsAssigned[stat] = parseInt(document.getElementsByName(`levelUpData.stats.${stat}.levelUp`)[0].value);
+            for(const stat of Object.keys(this.state.stats)) {
+                levelUpPointsAssigned[stat] = parseInt($(`[name='levelUpData.stats.${stat}.levelUp']`).val());
             }
             
             this.store.dispatch('changeStats', levelUpPointsAssigned);
