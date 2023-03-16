@@ -43,6 +43,8 @@
 
     "PTU.StatsLabel": "Stats",
     "PTU.StatsBase": "Base",
+    "PTU.StatsBaseMod": "Base Mod",
+    "PTU.StatsBaseTotal": "Base Total",
     "PTU.StatsMod": "Mod",
     "PTU.StatsLevelup": "Level-Up",
     "PTU.StatsStage": "Stage",
