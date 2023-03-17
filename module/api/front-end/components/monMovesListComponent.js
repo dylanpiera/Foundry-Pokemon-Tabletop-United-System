@@ -32,10 +32,10 @@ export default class MonMovesListComponent extends Component {
         `)
 
         this.element.find(`.known-moves-name`).on("click", (e) => {
-            console.log(e.target);
+            this.store.dispatch('movesFinalToAvailable', e.target.name);
         })
         this.element.find('.available-moves-name').on("click", (e) => {
-            console.log(e.target);
+            this.store.dispatch('movesAvailableToFinal', e.target.name);
         })
     }   
 

@@ -85,6 +85,34 @@ export default function({actorSystem, changeDetails, name, form, knownMoves}) {
                 await context.commit('updateAvailableMoves', newMoves);
                 await context.commit('updateNewMoves', newMoves);
                 await context.commit('updateFinalMoves', context.state.knownMoves)
+            },
+            async movesFinalToAvailable(context, move) {
+                //find move in FinalMoves
+                //add Move to availableMoves
+                //remove move from finalMoves
+                const newAvailableMoves = context.state.availableMoves;
+                const newFinalMoves = context.state.finalMoves;
+                const moveIndex = newFinalMoves.findIndex(m => m.name === move);
+                if(moveIndex >= 0) {
+                    newAvailableMoves.push(newFinalMoves[moveIndex]);
+                    newFinalMoves.splice(moveIndex, 1);
+                }
+                await context.commit('updateAvailableMoves', newAvailableMoves);
+                await context.commit('updateFinalMoves', newFinalMoves);
+            },
+            async movesAvailableToFinal(context, move) {
+                //find move in availableMoves
+                //add Move to finalMoves
+                //remove move from availableMoves
+                const newAvailableMoves = context.state.availableMoves;
+                const newFinalMoves = context.state.finalMoves;
+                const moveIndex = newAvailableMoves.findIndex(m => m.name === move);
+                if(moveIndex >= 0) {
+                    newFinalMoves.push(newAvailableMoves[moveIndex]);
+                    newAvailableMoves.splice(moveIndex, 1);
+                }
+                await context.commit('updateAvailableMoves', newAvailableMoves);
+                await context.commit('updateFinalMoves', newFinalMoves);
             }
         },
         mutations: {
@@ -121,7 +149,7 @@ export default function({actorSystem, changeDetails, name, form, knownMoves}) {
                 return state;
             },
             async updateFinalMoves(state, newMoves){
-                state.avaulableMoves = newMoves;
+                state.finalMoves = newMoves;
                 return state;
             }
         },
