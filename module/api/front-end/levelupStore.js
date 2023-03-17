@@ -25,7 +25,6 @@ export default function({actorSystem, changeDetails, name, form, knownMoves}) {
                     await context.commit('updateEvolutionStatus', [false, undefined])
                     await context.commit('updateEvolveAllowed', false);
                     return;
-                    await context.commit('updateFinalMoves', context.state.knownMoves)
                 }
             },
             async changeEvolveAllowed(context, allowed) {
