@@ -3,6 +3,7 @@ import MonImageComponent from "../api/front-end/components/monImageComponent.js"
 import MonStatBlockComponent from "../api/front-end/components/monStatBlockComponent.js";
 import MonStatBlockTotalComponent from "../api/front-end/components/monStatBlockTotalComponent.js";
 import MonStatBlockLevelUpPointsComponent from "../api/front-end/components/monStatBlockLevelUpPointsComponent.js";
+import MonMovesListComponent from "../api/front-end/components/monMovesListComponent.js";
 import initStore from "../api/front-end/levelupStore.js";
 import { log, debug } from "../ptu.js";
 
@@ -67,6 +68,7 @@ export class PTULevelUpForm extends FormApplication {
         },
         name: this.object.actor.name,
         form: this,
+        knownMoves: this.object.actor.items.filter(item => item.type === "move"),
       })
 
       this.components = {
@@ -80,6 +82,8 @@ export class PTULevelUpForm extends FormApplication {
         statSpdefTotalField: new MonStatBlockTotalComponent(this.store, "spdef"),
         statSpdTotalField: new MonStatBlockTotalComponent(this.store, "spd"),
         levelUpPoints: new MonStatBlockLevelUpPointsComponent(this.store),
+        knownMovesComponent: new MonMovesListComponent(this.store, "lu-known-moves", "known-moves"),
+        availableMovesComponent: new MonMovesListComponent(this.store, "lu-available-moves", "available-moves"),
       }
       debug(this.store, this.components);
     }
