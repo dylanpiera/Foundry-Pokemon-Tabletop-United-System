@@ -81,14 +81,14 @@ export default function({actorSystem, changeDetails, name, form, knownMoves}) {
                     let moves = {};
 
                     const evoIndex = evo.findIndex(e => e[1].toLowerCase() === context.state.evolving.into.toLowerCase());
-                    while (true) {
+                    while (evoIndex >= 0) {
                         const dexEntry = pokemonData.find(e => e._id.toLowerCase() === evo[evoIndex][1].toLowerCase())
                         minLevel = max(minLevel, evo[evoIndex][3]); //this should be the level that the mon evolved into this mon
                         moves.push([dexEntry["Level Up Move List"]][0].filter(m => (m.level >= minLevel && m.level <= maxLevel) || m.level == "Evo").map(m => m.move));
                         maxLevel = minLevel - 1;
                         minLevel = context.state.changeDetails.oldLvl;
                         evoIndex--;
-                        if (evo[evoIndex][1].toLowerCase === context.state.species.toLowerCase || evoIndex == 0)
+                        if (evo[evoIndex][1].toLowerCase === context.state.species.toLowerCase)
                             break;
                     }
                 } else{
