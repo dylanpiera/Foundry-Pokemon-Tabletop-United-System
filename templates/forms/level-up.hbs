@@ -1,8 +1,42 @@
-<div>
-	<div id="" class="header mb-2"><h3 class="pl-1">{{name}}'s Level Up.  {{oldLvl}} => {{newLvl}}</h3></div>
-	<div id="mon-image-component" class="mt-3 mb-3"></div>
-	<div id="mon-evolving-component" class="mt-2 mb-2"></div>
-	<div id="mon-stat-block-component" class="mt-2 mb-2"></div>
-	<div id="lu-known-moves" class="mt-2 mb-2"></div>
-	<div id="lu-available-moves" class="mt-2 mb-2"></div>
-</div>
+<form
+  class="{{cssClass}} container-fluid"
+  autocomplete="off"
+  style="text-align: center;"
+>
+	{{!-- <div style="
+		width: 100%;
+		height: 100%;
+		display: block;
+		position: absolute;
+		z-index: 1;
+		background: #C42835;
+		clip-path: polygon(0 0, 49% 0, -29% 100%, 0% 100%);">
+	</div><div style="
+		width: 100%;
+		height: 100%;
+		display: block;
+		position: absolute;
+		z-index: 0;
+		background: linear-gradient(45deg, #ECDBEB, #DFFFFE);">
+	</div><div style="
+		width: 100%;
+		height: 100%;
+		display: block;
+		position: absolute;
+		z-index: 2;
+		background: #E33242;
+		clip-path: polygon(0 0, 42% 0, -35% 100%, 0% 100%);">
+	</div> --}}
+	<div class="sheet-body content d-flex align-items-end flex-column h-100">
+		<div id="" class="header mb-2"><h3 class="pl-1">{{name}}'s Level Up.  {{oldLvl}} => {{newLvl}}</h3></div>
+		<div id="mon-image-component" class="mt-3 mb-3"></div>
+		<div id="mon-evolving-component" class="mt-2 mb-2"></div>
+		<div id="mon-stat-block-component" class="mt-2 mb-2"></div>
+		<div id="lu-known-moves" class="mt-2 mb-2"></div>
+		<div id="lu-available-moves" class="mt-2 mb-2"></div>
+
+		<div class="w-100 justify-content-between mt-auto mb-1">
+			<button class="btn" data-value="submit" style="width: 40%;">Submit</button>
+		</div>
+	</div>
+</form>
