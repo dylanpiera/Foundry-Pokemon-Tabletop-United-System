@@ -87,7 +87,8 @@ export default function({actorSystem, changeDetails, name, form, knownMoves}) {
                         moves.push([dexEntry["Level Up Move List"]][0].filter(m => (m.level >= minLevel && m.level <= maxLevel) || m.level == "Evo").map(m => m.move));
                         maxLevel = minLevel - 1;
                         minLevel = context.state.changeDetails.oldLvl;
-                        if (evo[evoIndex][1].toLowerCase === context.state.species.toLowerCase)
+                        evoIndex--;
+                        if (evo[evoIndex][1].toLowerCase === context.state.species.toLowerCase || evoIndex == 0)
                             break;
                     }
                 } else{
