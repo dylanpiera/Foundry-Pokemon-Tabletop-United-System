@@ -71,36 +71,37 @@ export default function({actorSystem, changeDetails, name, form, knownMoves}) {
 
             },
             async initMoves(context) {
+                let moves = [];
 
                 if(context.state.evolving.is && context.state.evolving.into) {
                     const oldDexEntry = pokemonData.find(e => e._id.toLowerCase() === context.state.species.toLowerCase());
                     const evo = oldDexEntry["Evolution"]
                     const newDexEntry = pokemonData.find(e => e._id.toLowerCase() === context.state.evolving.into.toLowerCase());
                     let maxLevel = context.state.changeDetails.newLvl; //inclusive
-                    let minLevel = context.state.changeDetails.oldLvl + 1; //inclusive
-                    let moves = {};
 
-                    const evoIndex = evo.findIndex(e => e[1].toLowerCase() === context.state.evolving.into.toLowerCase());
+                    let evoIndex = evo.findIndex(e => e[1].toLowerCase() === context.state.evolving.into.toLowerCase());
                     while (evoIndex >= 0) {
                         const dexEntry = pokemonData.find(e => e._id.toLowerCase() === evo[evoIndex][1].toLowerCase())
-                        minLevel = max(minLevel, evo[evoIndex][3]); //this should be the level that the mon evolved into this mon
-                        moves.push([dexEntry["Level Up Move List"]][0].filter(m => (m.level >= minLevel && m.level <= maxLevel) || m.level == "Evo").map(m => m.move));
-                        maxLevel = minLevel - 1;
-                        minLevel = context.state.changeDetails.oldLvl + 1;
-                        evoIndex--;
-                        if (evo[evoIndex][1].toLowerCase === context.state.species.toLowerCase)
+                        const minLevel = Math.max(context.state.changeDetails.oldLvl + 1, evo[evoIndex][2] == "Null" ? 0 : evo[evoIndex][2]); //this should be the level that the mon evolved into this mon
+                        moves.push(dexEntry["Level Up Move List"].filter(m => (m.Level >= minLevel && m.Level <= maxLevel)));
+                        if(!(evo[evoIndex][1].toLowerCase() === context.state.species.toLowerCase()))
+                            moves.push(dexEntry["Level Up Move List"].filter(m => m.Level == "Evo"));
+                        maxLevel = minLevel - 1;                        
+                        if (evo[evoIndex][1].toLowerCase() === context.state.species.toLowerCase())
                             break;
+                        evoIndex--;
                     }
                 } else{
-                    const dexEntry = pokemonData.find(e => e._id.toLowerCase() === context.state.evolving.into.toLowerCase() );
-                    const moves=[dexEntry["Level Up Move List"]][0].filter(m => m.Level > context.state.changeDetails.oldLvl && m.Level <= context.state.changeDetails.newLvl).map(m => m.Move);
+                    const dexEntry = pokemonData.find(e => e._id.toLowerCase() === context.state.species.toLowerCase() );
+                    moves.push(dexEntry["Level Up Move List"].filter(m => m.Level > context.state.changeDetails.oldLvl && m.Level <= context.state.changeDetails.newLvl));
                 }
 
+                const flatMoveNames = [].concat(...moves).map(m=>m.Move);
 
-                const newMoveNames = moves.filter(move => !context.state.knownMoves.includes(move));
+                const newMoveNames = flatMoveNames.filter(move => !context.state.knownMoves.map(m=>m.name).includes(move));
 
                 const allMoves =  await GetOrCacheMoves()
-                const newMoves = [...allMoves].filter(m => newMoveNames.includes(m.name));
+                const newMoves = allMoves.filter(m => newMoveNames.includes(m.name));
 
                 await context.commit('updateAvailableMoves', newMoves);
                 await context.commit('updateNewMoves', newMoves);
