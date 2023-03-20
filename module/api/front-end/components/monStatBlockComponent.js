@@ -69,7 +69,7 @@ export default class monStatBlockComponent extends Component {
 
         //level up points
         const levelUpPoints = `
-            <div class="w-100 mb-3 bar mt-1 pr-2" style="background: unset; padding: 0.1rem; font-size: 9px;">
+            <div class="w-100 mb-3 bar mt-1 pr-2 points">
                 <div class="d-flex flex-row justify-content-end pr-2">
                 <div style="flex: 0 1 20%">
                     <input type="text" id="monStatBlockLevelUpPoints" name="data.levelUpPoints" value="${this.state.levelUpPoints}" data-dtype="Number" disabled />

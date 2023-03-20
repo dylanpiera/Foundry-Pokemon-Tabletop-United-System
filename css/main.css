@@ -1333,6 +1333,11 @@ a.hover-button.resist-damage-button {
   background: #272727;
   background: linear-gradient(90deg, #272727 0%, #272727 72%, #3d3c1b 100%);
 }
+.level-up .content .bar.points {
+  background: linear-gradient(90deg, #D5FFDD 0%, #d5ffdf 72%, #862c2c 100%);
+  padding: 0.1rem;
+  font-size: 9px;
+}
 .level-up .content input,
 .level-up .content select {
   background-color: #999;
