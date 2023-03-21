@@ -1597,157 +1597,6 @@ a.hover-button {
   }
 }
 
-.level-up {
-  .window-content {
-    padding: unset;    
-  }
-  .header {
-    width: 100%;
-  }
-  #mon-image-component{
-    align-self: center;
-
-    .image-divider{
-      padding:2rem;
-    }
-  }
-  .container-fluid {
-    text-align: center;
-    padding: unset;
-    position: relative;
-  }
-
-  .content {
-    //padding: 1rem;
-    z-index: 5;
-    position: inherit;
-
-  
-
-    .bar {
-      background-color: #272727;
-      color: white;
-      font-size: 22px;
-      font-weight: bold;
-      padding: 0.75rem;
-
-      &.hp {
-        background: rgb(39, 39, 39);
-        background: linear-gradient(
-          90deg,
-          rgba(39, 39, 39, 1) 0%,
-          rgba(39, 39, 39, 1) 72%,
-          rgba(27, 61, 27, 1) 100%
-        );
-      }
-      &.atk,
-      &.def {
-        background: rgb(39, 39, 39);
-        background: linear-gradient(
-          90deg,
-          rgba(39, 39, 39, 1) 0%,
-          rgba(39, 39, 39, 1) 72%,
-          #3d3d3d 100%
-        );
-      }
-      &.spatk,
-      &.spdef {
-        background: rgb(39, 39, 39);
-        background: linear-gradient(
-          90deg,
-          rgba(39, 39, 39, 1) 0%,
-          rgba(39, 39, 39, 1) 72%,
-          #3d2e1b 100%
-        );
-      }
-      &.spd {
-        background: rgb(39, 39, 39);
-        background: linear-gradient(
-          90deg,
-          rgba(39, 39, 39, 1) 0%,
-          rgba(39, 39, 39, 1) 72%,
-          #3d3c1b 100%
-        );
-      }
-      &.points {        
-        background: linear-gradient(
-          90deg,
-          #D5FFDD 0%,
-          #d5ffdf 72%,
-          #862c2c 100%
-          );
-        padding: 0.1rem;
-        font-size: 9px;
-      }
-    }
-
-    input,
-    select {
-      background-color: #999;
-      color: black;
-      border-color: #666;
-      height: 100%;
-      padding: 0.5rem;
-
-      &.no-box {
-        border: unset;
-        background: unset;
-        color: white;
-        &:focus {
-          box-shadow: unset;
-        }
-      }
-    }
-    
-    .stats{
-      &.key{
-        flex: 1 0 30%;
-        text-align: start;
-      }
-      &.base{
-        flex: 0 1 20%;
-      }
-      &.levelUp{
-        flex: 0 1 20%;
-      }
-      &.total{
-        flex: 1 0 25%;
-      }
-      &.nature-up {
-        color: #b27d94;
-        font-weight: bold;
-      }
-      &.nature-down {
-        color: #98c7c9;
-        font-weight: bold;
-      }
-    }
-
-    .box {
-      h5 {
-        text-decoration: underline;
-      }
-      border: solid 2px #666;
-      background-color: #999;
-      color: #666;
-      padding: 0.1rem;
-    }
-
-    .move-container{
-      display: flex;
-      text-align: center;
-      .itemflexrow {
-        
-        flex-wrap: nowrap;
-
-        &.-name {
-          flex: 1 0 50%;
-        }
-      }      
-    }
-  } 
-}
-
 ul{
   list-style-type: none;
 }
@@ -2565,4 +2414,169 @@ h3 {
     align-items:center;
     height: 40px;
   }
+}
+
+.level-up {
+  .window-content {
+    padding: unset;    
+  }
+  
+  .header {
+    width: 100%;
+    background-color: #272727;
+    color: #fff;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 40px;
+    justify-content: center;
+  }
+
+  #mon-image-component{
+    align-self: center;
+
+    .image-divider{
+      padding:2rem;
+    }
+  }
+  .container-fluid {
+    text-align: center;
+    padding: unset;
+    position: relative;
+  }
+
+  .content {
+    //padding: 1rem;
+    z-index: 5;
+    position: inherit;
+
+  
+
+    .bar {
+      background-color: #272727;
+      color: white;
+      font-size: 22px;
+      font-weight: bold;
+      padding: 0.75rem;
+
+      &.hp {
+        background: rgb(39, 39, 39);
+        background: linear-gradient(
+          90deg,
+          rgba(39, 39, 39, 1) 0%,
+          rgba(39, 39, 39, 1) 72%,
+          rgba(27, 61, 27, 1) 100%
+        );
+      }
+      &.atk,
+      &.def {
+        background: rgb(39, 39, 39);
+        background: linear-gradient(
+          90deg,
+          rgba(39, 39, 39, 1) 0%,
+          rgba(39, 39, 39, 1) 72%,
+          #3d3d3d 100%
+        );
+      }
+      &.spatk,
+      &.spdef {
+        background: rgb(39, 39, 39);
+        background: linear-gradient(
+          90deg,
+          rgba(39, 39, 39, 1) 0%,
+          rgba(39, 39, 39, 1) 72%,
+          #3d2e1b 100%
+        );
+      }
+      &.spd {
+        background: rgb(39, 39, 39);
+        background: linear-gradient(
+          90deg,
+          rgba(39, 39, 39, 1) 0%,
+          rgba(39, 39, 39, 1) 72%,
+          #3d3c1b 100%
+        );
+      }
+      &.points {        
+        background: linear-gradient(
+          45deg,
+          #00000000 0%,
+          #00000000 70%,
+          #862c2c 100%);
+        padding: 0.1rem;
+        font-size: 9px;
+      }
+    }
+
+    input,
+    select {
+      background-color: #999;
+      color: black;
+      border-color: #666;
+      height: 100%;
+      padding: 0.5rem;
+
+      &.no-box {
+        border: unset;
+        background: unset;
+        color: white;
+        &:focus {
+          box-shadow: unset;
+        }
+      }
+    }
+    
+    .stats{
+      &.key{
+        flex: 1 0 30%;
+        text-align: start;
+      }
+      &.base{
+        flex: 0 1 20%;
+      }
+      &.levelUp{
+        flex: 0 1 20%;
+      }
+      &.total{
+        flex: 1 0 25%;
+      }
+      &.nature-up {
+        color: #b27d94;
+        font-weight: bold;
+      }
+      &.nature-down {
+        color: #98c7c9;
+        font-weight: bold;
+      }
+    }
+
+    .box {
+      h5 {
+        text-decoration: underline;
+      }
+      border: solid 2px #666;
+      background-color: #999;
+      color: #666;
+      padding: 0.1rem;
+    }
+
+    .moves-container{
+      display: flex;
+      text-align: center;
+      align-self: center;
+      .itemflexrow {
+        
+        flex-wrap: nowrap;
+
+        .known-moves-name, .available-moves-name{
+          width:75%;
+        }
+        
+      } 
+      
+      p{
+        white-space: pre-line;
+      }
+    }
+  } 
 }

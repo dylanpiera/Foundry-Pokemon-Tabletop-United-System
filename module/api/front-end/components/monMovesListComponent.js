@@ -24,8 +24,10 @@ export default class MonMovesListComponent extends Component {
         console.log("render", "known-moves")
 
         this.element.html(`
-            ${(this.type == "known-moves") ? `<p class="mb-2">Known Moves</p>` : ""}
-            ${(this.type == "available-moves") ? `<p class="mb-2">Available Moves</p>` : ""}
+            ${(this.type == "known-moves") ? `<p class="mb-2">Known Moves
+                (Click to Forget)</p>` : ""}
+            ${(this.type == "available-moves") ? `<p class="mb-2">Available Moves
+                (Click to Learn)</p>` : ""}
             <ul class="inventory-list ${this.type} w-100 >
                 ${this._renderElements(this.type)}
             </ul>
@@ -36,14 +38,7 @@ export default class MonMovesListComponent extends Component {
         })
         this.element.find('.available-moves-name').on("click", (e) => {
             this.store.dispatch('movesAvailableToFinal', e.target.name);
-        })
-        this.element.find('.move-list').on("dragover", (e) => {e.preventDefault();});
-        this.element.find('#lu-available-moves').addEventListener("drop", (e) => {
-            this.store.dispatch('movesFinalToAvailable', e.originalEvent.dataTransfer.getData("text"));
-        });
-        this.element.find('#lu-known-moves').addEventListener("drop", (e) => {
-            this.store.dispatch('movesAvailableToFinal', e.originalEvent.dataTransfer.getData("text"));
-        });
+        })       
 
     }   
 
@@ -65,14 +60,14 @@ export default class MonMovesListComponent extends Component {
     _renderKnownMoveElement(move) {
         return `
             <li class="itemflexrow p-1" data-type="${this.type}" data-id="${move.id}">
-                <button class="mr-1 ml-1 ${this.type}-name" name = "${move.name}" value="${move.name}" index="${move.system.effect}" draggable="true">${move.name}</button>
+                <button class="mr-1 ml-1 ${this.type}-name" name = "${move.name}" value="${move.name}" index="${move.system.effect}">${move.name}</button>
             </li>`;
     }
 
     _renderAvailableMoveElement(move) {
         return `
             <li class="itemflexrow p-1" data-type="${this.type}" data-id="${move.id}">
-                <button class="mr-1 ml-1 ${this.type}-name" name = "${move.name}" value="${move.name}" index="${move.system.effect}" draggable="true">${move.name}</button>
+                <button class="mr-1 ml-1 ${this.type}-name" name = "${move.name}" value="${move.name}" index="${move.system.effect}">${move.name}</button>
             </li>`;
     }
 }
