@@ -18,8 +18,7 @@ export default class MonImageComponent extends Component {
     async render() {
         if(!this.state.species) return;
 
-        console.log(this.state.evolving.is);
-        if(this.state.evolving.is && this.state.evolving.into) {
+        if(this.state.evolving.is && this.state.evolving.into && this.state.species.toLowerCase() != this.state.evolving.into.toLowerCase()) {
             const oldArt = await this._getArt(this.state.species);
             const newArt = await this._getArt(this.state.evolving.into);
             

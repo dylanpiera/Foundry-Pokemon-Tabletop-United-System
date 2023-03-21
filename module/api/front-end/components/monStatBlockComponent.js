@@ -16,7 +16,7 @@ export default class monStatBlockComponent extends Component {
         let content = "";
 
         const headers = `
-            <div class="w-100 justify-content-center mb-3 bar mt-3" style="font-size: 18px;">
+            <div class="w-100 justify-content-center bar mb-2 mt-2" style="font-size: 18px;">
                 <div class="pl-2 pr-2 d-flex flex-row">
                     <div class="stats key" style="text-align: center;">
                         <label>Stats</label>
@@ -69,14 +69,14 @@ export default class monStatBlockComponent extends Component {
 
         //level up points
         const levelUpPoints = `
-            <div class="w-100 justify-content-center mb-1 bar mt-1 points">
+            <div class="w-100 justify-content-center mb-1 bar mt-1 points" style="padding: 0.1rem; font-size: 11px;">
                 <div class="pl-3 pr-2 d-flex flex-row">
                     <div class="stats points key"></div>
                     <div class="stats points base"></div>
                     <div style="flex: 0 1 20%">
                         <input type="text" id="monStatBlockLevelUpPoints" name="data.levelUpPoints" value="${this.state.levelUpPoints}" data-dtype="Number" disabled />
                     </div>
-                    <div style="flex: 0 0 25%; padding-left: 5px; color:black; align-self: center;">
+                    <div style="flex: 1 0 25%; color:black; align-self: center;">
                         <label>Levelup Points Remaining</label>
                     </div>
                 </>
