@@ -13,6 +13,15 @@ export default function({actorSystem, changeDetails, name, form, knownMoves}) {
                 await context.dispatch('changeStats', {"hp": 0, "atk": 0, "def": 0, "spatk": 0, "spdef": 0, "spd": 0});
                 await context.dispatch('initMoves');
             },
+            async changeEvolution(context, species) {
+                await context.commit("updateEvolutionSpecies", species)
+                if(context.state.species.toLowerCase() == species.toLowerCase()) {
+                    await context.dispatch("changeEvolveAllowed", false);
+                }
+                else {
+                    await context.dispatch("changeEvolveAllowed", true);
+                }
+            },
             async changeEvolutionStatus(context) {
                 const currentSpecies = game.ptu.utils.species.get(context.state.species);
                 const speciesByStage = CheckStage(context.state.changeDetails.newLvl, currentSpecies);
@@ -76,7 +85,6 @@ export default function({actorSystem, changeDetails, name, form, knownMoves}) {
                 if(context.state.evolving.is && context.state.evolving.into) {
                     const oldDexEntry = pokemonData.find(e => e._id.toLowerCase() === context.state.species.toLowerCase());
                     const evo = oldDexEntry["Evolution"]
-                    const newDexEntry = pokemonData.find(e => e._id.toLowerCase() === context.state.evolving.into.toLowerCase());
                     let maxLevel = context.state.changeDetails.newLvl; //inclusive
 
                     let evoIndex = evo.findIndex(e => e[1].toLowerCase() === context.state.evolving.into.toLowerCase());
@@ -152,7 +160,15 @@ export default function({actorSystem, changeDetails, name, form, knownMoves}) {
                     into: state.evolving.into
                 }
                 return state;
-            },            
+            },     
+            async updateEvolutionSpecies(state, species) {
+                state.evolving = {
+                    can: state.evolving.can,
+                    is: state.evolving.is,
+                    into: species
+                }
+                return state;
+            },
             async updateStats(state, newStats) {
                 state.stats = newStats;
                 return state;
@@ -182,10 +198,11 @@ export default function({actorSystem, changeDetails, name, form, knownMoves}) {
             levelUpPointsBonus: actorSystem.modifiers.statPoints.total ?? 0,
             name,
             nature: actorSystem.nature.value,
+            gender: actorSystem.gender,
             evolving: {
                 can: false,
                 is: false,
-                into: undefined
+                into: undefined,
             },
             form,
             knownMoves,

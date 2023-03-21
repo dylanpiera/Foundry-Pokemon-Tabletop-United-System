@@ -2386,22 +2386,81 @@ h3 {
     }
   }
 
+  #mon-moves-component {
+    width: 100%;
+    display: flex;
+    justify-content: space-evenly;
+
+    .moves {
+      display: flex;
+      flex-direction: column;
+      width:100%;
+
+      &.known {
+        border-right: black 3px solid; 
+      }
+
+      .move {
+        display: flex;
+        width: 100%;
+        flex-direction: row;
+        justify-content: space-evenly;
+        text-align: center;
+        align-self: center;
+        align-items: center;
+
+        .name {
+          flex: 0 0 50%;
+          font-weight: bold;
+        }
+        .checkbox {
+          flex: 0 0 50%;
+
+          input {
+            height: 20px;
+            width: 20px;
+          }
+        }
+
+        &.header {
+          display: flex;
+
+          &.labels {
+            height: 25px;
+          }
+
+          .name {
+            font-weight: normal;
+          }
+        }
+      }
+    }
+  }
+
   #mon-evolving-component {
     .box {
       background-color: #9FCB94;
       width: 100%;
       height: 45px;
       border-radius: 13px;
+      font-size:14px;
+      font-weight: bold;
       
       display: flex;
       justify-content: space-evenly;
       .content {
-        flex: 0 0 70%;
+        flex: 0 0 55%;
         align-self: center;
       }
       .button {
-        flex: 0 0 15%;
+        flex: 0 0 35%;
         align-self: center;
+        font-size: 10px;
+        padding: unset;
+        
+        select {
+          width: 100%;
+        }
       }
     }
   }
@@ -2417,6 +2476,11 @@ h3 {
 }
 
 .level-up {
+  #may-evolve {
+    width: 25px;
+    height: 25px;
+  }
+
   .window-content {
     padding: unset;    
   }
@@ -2528,7 +2592,7 @@ h3 {
     
     .stats{
       &.key{
-        flex: 1 0 30%;
+        flex: 0 0 30%;
         text-align: start;
       }
       &.base{

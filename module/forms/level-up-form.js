@@ -2,7 +2,6 @@ import MonEvolvingComponent from "../api/front-end/components/monEvolvingCompone
 import MonImageComponent from "../api/front-end/components/monImageComponent.js";
 import MonStatBlockComponent from "../api/front-end/components/monStatBlockComponent.js";
 import MonStatBlockTotalComponent from "../api/front-end/components/monStatBlockTotalComponent.js";
-import MonStatBlockLevelUpPointsComponent from "../api/front-end/components/monStatBlockLevelUpPointsComponent.js";
 import MonMovesListComponent from "../api/front-end/components/monMovesListComponent.js";
 import initStore from "../api/front-end/levelupStore.js";
 import { log, debug } from "../ptu.js";
@@ -20,9 +19,9 @@ export class PTULevelUpForm extends FormApplication {
     return mergeObject(super.defaultOptions, {
       classes: ["ptu", "level-up", "pokemon"],
       template: "systems/ptu/templates/forms/level-up.hbs",
-      width: 550,
-      height: 700,
-      title: "Level-Up Menu!",
+      width: 560,
+      height: 900,
+      title: "Level-Up Menu!"
     });
   }
 
@@ -83,9 +82,7 @@ export class PTULevelUpForm extends FormApplication {
       statSpatkTotalField: new MonStatBlockTotalComponent(this.store, "spatk"),
       statSpdefTotalField: new MonStatBlockTotalComponent(this.store, "spdef"),
       statSpdTotalField: new MonStatBlockTotalComponent(this.store, "spd"),
-      levelUpPoints: new MonStatBlockLevelUpPointsComponent(this.store),
-      knownMovesComponent: new MonMovesListComponent(this.store, "lu-known-moves", "known-moves"),
-      availableMovesComponent: new MonMovesListComponent(this.store, "lu-available-moves", "available-moves"),
+      movesComponent: new MonMovesListComponent(this.store, "mon-moves-component"),
     }
     debug(this.store, this.components);
   }
@@ -166,6 +163,6 @@ export class PTULevelUpForm extends FormApplication {
     }
     await this.object.actor.update(health);
     //close the window
-    super.submit();
+    this.close();
   }
 }
