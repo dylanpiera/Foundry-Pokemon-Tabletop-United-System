@@ -10,6 +10,10 @@ export default class MonMovesListComponent extends Component {
     }
 
     async render() {
+
+        //if no moves learned don't display
+        if(this.state.availableMoves.length === 0) return;
+
         this.element.html(this.prepareKnownMoves() + this.prepareAvailableMoves());
 
         this.element.find(`.moves.known input[type=checkbox]`).on("click", (e) => {

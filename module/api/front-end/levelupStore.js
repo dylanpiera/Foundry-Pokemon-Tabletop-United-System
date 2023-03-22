@@ -5,13 +5,14 @@ import { CheckStage } from '../../utils/calculate-evolution.js';
 import { pokemonData } from '../../data/species-data.js';
 import { GetOrCacheMoves } from "../../utils/cache-helper.js";
 
-export default function({actorSystem, changeDetails, name, form, knownMoves}) {
+export default function({actorSystem, changeDetails, name, form, knownMoves, currentAbilities}) {
     const store = new Store({
         actions: {
             async init(context) {
                 await context.dispatch('changeEvolutionStatus');
                 await context.dispatch('changeStats', {"hp": 0, "atk": 0, "def": 0, "spatk": 0, "spdef": 0, "spd": 0});
                 await context.dispatch('initMoves');
+                await context.dispatch('initAbilities');
             },
             async changeEvolution(context, species) {
                 await context.commit("updateEvolutionSpecies", species)
@@ -41,6 +42,7 @@ export default function({actorSystem, changeDetails, name, form, knownMoves}) {
                 
                 await context.dispatch('changeStats', {"hp:": 0, "atk": 0, "def": 0, "spatk": 0, "spdef": 0, "spd": 0});
                 await context.dispatch('initMoves');
+                await context.dispatch('initAbilities');
             },
             async changeStats(context, levelUpPointsAssigned) {
                 // Take a copy of current stats
@@ -84,8 +86,14 @@ export default function({actorSystem, changeDetails, name, form, knownMoves}) {
 
                 if(context.state.evolving.is && context.state.evolving.into) {
                     const oldDexEntry = pokemonData.find(e => e._id.toLowerCase() === context.state.species.toLowerCase());
-                    const evo = oldDexEntry["Evolution"]
+                    let evo = oldDexEntry["Evolution"]
                     let maxLevel = context.state.changeDetails.newLvl; //inclusive
+
+                    //Deal with beautifly/dustox edge case. (If evoloving.into is dustox then remove beautifly and silcoon from evo. and visa versa.)
+                    if (context.state.evolving.into.toLowerCase() === "beautifly")
+                        evo = evo.filter(e => e[1].toLowerCase !== "cascoon" && e[1].toLowerCase !== "dustox");
+                    if (context.state.evolving.into.toLowerCase() === "dustox")
+                        evo = evo.filter(e => e[1].toLowerCase !== "silcoon" && e[1].toLowerCase !== "beautifly");
 
                     let evoIndex = evo.findIndex(e => e[1].toLowerCase() === context.state.evolving.into.toLowerCase());
                     while (evoIndex >= 0) {
@@ -142,6 +150,34 @@ export default function({actorSystem, changeDetails, name, form, knownMoves}) {
                 }
                 await context.commit('updateAvailableMoves', newAvailableMoves);
                 await context.commit('updateFinalMoves', newFinalMoves);
+            },
+            async initAbilities(context) {
+                const dexEntry = pokemonData.find(e => e._id.toLowerCase() === context.state.species.toLowerCase() );
+                const finalAbilitiesNames = [];
+                
+                if(context.state.evolving.is && context.state.evolving.into) {
+                    const abilities = [];
+                    for(let key in dexEntry["Abilities"])
+                        abilities.push(...dexEntry["Abilities"][key]);
+                    
+                    const newDexEntry = pokemonData.find(e => e._id.toLowerCase() === context.state.evolving.into.toLowerCase() );
+                    const evoAbilities = [];
+                    for(let key in newDexEntry["Abilities"])
+                        evoAbilities.push(...newDexEntry["Abilities"][key]);
+                    
+                    for(let i = context.state.currentAbilities.length - 1; i >= 0; i--) {
+                        //find the index of the ability in the old dex entry
+                        const index = abilities.findIndex(a => a.toLowerCase() === context.state.currentAbilities[i].name.toLowerCase());
+
+                        //get the ability from the new dex entry at the same index and add to finalAbilities
+                        if (index >= 0) finalAbilitiesNames.push(evoAbilities[index]);
+                    }
+                }
+                else {
+                    for(let i = context.state.currentAbilities.length - 1; i >= 0; i--)
+                        finalAbilitiesNames.push(context.state.currentAbilities[i].name);
+                }
+
             }
         },
         mutations: {
@@ -209,6 +245,11 @@ export default function({actorSystem, changeDetails, name, form, knownMoves}) {
             newMoves: [],
             availableMoves: [],
             finalMoves: [],
+            currentAbilities,
+            finalAbilities: [],
+            basicAbilities: [],
+            advancedAbilities: [],
+            highAbilities: [],
         }
     })
 

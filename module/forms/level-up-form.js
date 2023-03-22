@@ -70,6 +70,7 @@ export class PTULevelUpForm extends FormApplication {
       name: this.object.actor.name,
       form: this,
       knownMoves: this.object.actor.items.filter(item => item.type === "move"),
+      currentAbilities: this.object.actor.items.filter(item => item.type === "ability"),
     })
 
     this.components = {
