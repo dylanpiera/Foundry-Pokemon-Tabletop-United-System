@@ -4,6 +4,32 @@
     "templates": {
       "modifiers": {
         "modifiers": {
+          "baseStats": {
+            "hp": {
+              "value": 0,
+              "mod": 0
+            },
+            "atk": {
+              "value": 0,
+              "mod": 0
+            },
+            "def": {
+              "value": 0,
+              "mod": 0
+            },
+            "spatk": {
+              "value": 0,
+              "mod": 0
+            },
+            "spdef": {
+              "value": 0,
+              "mod": 0
+            },
+            "spd": {
+              "value": 0,
+              "mod": 0
+            }
+          },
           "statPoints": {
             "value": 0,
             "mod": 0

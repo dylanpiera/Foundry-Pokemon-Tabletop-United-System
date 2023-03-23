@@ -86,7 +86,7 @@ export default function({level, tabs, initialTab, species, actor}) {
             async changeStats(context, {levelUpStats, speciesData}={levelUpStats: undefined, speciesData: undefined}) {
                 debug(levelUpStats, speciesData)
                 const statChanges = mergeObject(context.state.actor.system.stats, levelUpStats ?? {});
-                const baseStats = CalcBaseStats(statChanges, speciesData ?? context.state.species, context.state.actor.system.nature.value);
+                const baseStats = CalcBaseStats(statChanges, speciesData ?? context.state.species, context.state.actor.system.nature.value, context.state.actor.system.modifiers.baseStats);
 
                 // Recalculate stats
                 const levelUpPoints = context.state.actor.system.modifiers.statPoints?.total + 10 + context.state.level;

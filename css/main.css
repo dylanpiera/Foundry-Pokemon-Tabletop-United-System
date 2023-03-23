@@ -1287,6 +1287,9 @@ a.hover-button.resist-damage-button {
   max-width: 99px;
   margin-left: -2px;
 }
+ul {
+  list-style-type: none;
+}
 .loyalty,
 .loyalty input {
   font-style: italic;
@@ -1942,6 +1945,309 @@ h3 {
 .move-sheet .sheet-body .move-effect textarea:focus {
   box-shadow: unset;
 }
+/* -------------------------------------------- */
+/*  Level Up Form                               */
+/* -------------------------------------------- */
+.level-up .window-content {
+  background: linear-gradient(45deg, #D1FED4, #dffffe);
+  padding: 4px;
+}
+.level-up #mon-image-component {
+  display: flex;
+  justify-content: space-evenly;
+  flex-wrap: wrap;
+}
+.level-up #mon-image-component .image-divider {
+  align-self: center;
+  padding: 0 2rem;
+}
+.level-up #mon-image-component .image-divider::before {
+  content: "";
+  display: inline-block;
+  width: 0;
+  height: 0;
+  border-top: 20px solid transparent;
+  border-bottom: 20px solid transparent;
+  border-left: 20px solid black;
+}
+.level-up #mon-image-component .avatar {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 150px;
+  width: 150px;
+  background-color: #fff;
+  box-shadow: 0 0 0 5px #a0cb95, 0 0 0 10px #fffed7, 0 0 0 15px #c8b05f;
+  border-radius: 10px;
+}
+.level-up #mon-image-component .avatar img {
+  width: 100%;
+  height: 100%;
+  border-radius: 10px;
+  object-fit: contain;
+  border: unset;
+}
+.level-up #mon-moves-component {
+  width: 100%;
+  display: flex;
+  justify-content: space-evenly;
+}
+.level-up #mon-moves-component .moves {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+.level-up #mon-moves-component .moves.known {
+  border-right: black 3px solid;
+}
+.level-up #mon-moves-component .moves .move {
+  display: flex;
+  width: 100%;
+  flex-direction: row;
+  justify-content: space-evenly;
+  text-align: center;
+  align-self: center;
+  align-items: center;
+}
+.level-up #mon-moves-component .moves .move .name {
+  flex: 0 0 50%;
+  font-weight: bold;
+}
+.level-up #mon-moves-component .moves .move .checkbox {
+  flex: 0 0 50%;
+}
+.level-up #mon-moves-component .moves .move .checkbox input {
+  height: 20px;
+  width: 20px;
+}
+.level-up #mon-moves-component .moves .move.header {
+  display: flex;
+}
+.level-up #mon-moves-component .moves .move.header.labels {
+  height: 25px;
+}
+.level-up #mon-moves-component .moves .move.header .name {
+  font-weight: normal;
+}
+.level-up #mon-evolving-component .box {
+  background-color: #9FCB94;
+  width: 100%;
+  height: 45px;
+  border-radius: 13px;
+  font-size: 14px;
+  font-weight: bold;
+  display: flex;
+  justify-content: space-evenly;
+}
+.level-up #mon-evolving-component .box .content {
+  flex: 0 0 55%;
+  align-self: center;
+}
+.level-up #mon-evolving-component .box .button {
+  flex: 0 0 35%;
+  align-self: center;
+  font-size: 10px;
+  padding: unset;
+}
+.level-up #mon-evolving-component .box .button select {
+  width: 100%;
+}
+.level-up .header {
+  background-color: #848572;
+  color: #fff;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 40px;
+}
+.level-up #may-evolve {
+  width: 25px;
+  height: 25px;
+}
+.level-up .window-content {
+  padding: unset;
+}
+.level-up .header {
+  width: 100%;
+  background-color: #272727;
+  color: #fff;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 40px;
+  justify-content: center;
+}
+.level-up #mon-image-component {
+  align-self: center;
+}
+.level-up #mon-image-component .image-divider {
+  padding: 2rem;
+}
+.level-up .container-fluid {
+  text-align: center;
+  padding: unset;
+  position: relative;
+}
+.level-up .content {
+  z-index: 5;
+  position: inherit;
+  justify-content: baseline;
+  height: 100%;
+  overflow: hidden;
+}
+.level-up .content .level-up-inner {
+  flex-direction: column;
+  overflow-y: auto;
+  overflow-x: hidden;
+  height: 100%;
+}
+.level-up .content .bar {
+  background-color: #272727;
+  color: white;
+  font-size: 22px;
+  font-weight: bold;
+  padding: 0.75rem;
+}
+.level-up .content .bar.hp {
+  background: #272727;
+  background: linear-gradient(90deg, #272727 0%, #272727 72%, #1b3d1b 100%);
+}
+.level-up .content .bar.atk,
+.level-up .content .bar.def {
+  background: #272727;
+  background: linear-gradient(90deg, #272727 0%, #272727 72%, #3d3d3d 100%);
+}
+.level-up .content .bar.spatk,
+.level-up .content .bar.spdef {
+  background: #272727;
+  background: linear-gradient(90deg, #272727 0%, #272727 72%, #3d2e1b 100%);
+}
+.level-up .content .bar.spd {
+  background: #272727;
+  background: linear-gradient(90deg, #272727 0%, #272727 72%, #3d3c1b 100%);
+}
+.level-up .content .bar.points {
+  background: linear-gradient(45deg, #00000000 0%, #00000000 70%, #862c2c 100%);
+  padding: 0.1rem;
+  font-size: 9px;
+}
+.level-up .content input,
+.level-up .content select {
+  background-color: #999;
+  color: black;
+  border-color: #666;
+  height: 100%;
+  padding: 0.5rem;
+}
+.level-up .content input.no-box,
+.level-up .content select.no-box {
+  border: unset;
+  background: unset;
+  color: white;
+}
+.level-up .content input.no-box:focus,
+.level-up .content select.no-box:focus {
+  box-shadow: unset;
+}
+.level-up .content .stats.key {
+  flex: 0 0 30%;
+  text-align: start;
+}
+.level-up .content .stats.base {
+  flex: 0 1 20%;
+}
+.level-up .content .stats.levelUp {
+  flex: 0 1 20%;
+}
+.level-up .content .stats.total {
+  flex: 1 0 25%;
+}
+.level-up .content .stats.nature-up {
+  color: #b27d94;
+  font-weight: bold;
+}
+.level-up .content .stats.nature-down {
+  color: #98c7c9;
+  font-weight: bold;
+}
+.level-up .content .box {
+  border: solid 2px #666;
+  background-color: #999;
+  color: #666;
+  padding: 0.1rem;
+}
+.level-up .content .box h5 {
+  text-decoration: underline;
+}
+.level-up .content .moves-container {
+  display: flex;
+  text-align: center;
+  align-self: center;
+}
+.level-up .content .moves-container .itemflexrow {
+  flex-wrap: nowrap;
+}
+.level-up .content .moves-container .itemflexrow .known-moves-name,
+.level-up .content .moves-container .itemflexrow .available-moves-name {
+  width: 75%;
+}
+.level-up .content .moves-container p {
+  white-space: pre-line;
+}
+.level-up .content #mon-abilities-component {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+}
+.level-up .content #mon-abilities-component .abilities-row {
+  flex-direction: row;
+  display: flex;
+  width: 100%;
+  justify-content: center;
+}
+.level-up .content #mon-abilities-component .abilities-col {
+  align-self: center;
+}
+.level-up .content #mon-abilities-component .abilities {
+  width: 100%;
+}
+.level-up .content #mon-abilities-component .abilities.subheader {
+  background-color: #7a7a7a;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  height: 25px;
+  justify-content: center;
+}
+.level-up .content #mon-abilities-component .abilities.replaced {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+.level-up .content #mon-abilities-component .abilities.removed,
+.level-up .content #mon-abilities-component .abilities.gained {
+  flex: 1 0 40%;
+}
+.level-up .content #mon-abilities-component .abilities.choices {
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+}
+.level-up .content #mon-abilities-component .ability-divider::before {
+  content: "";
+  display: inline-block;
+  width: 0;
+  height: 0;
+  border-top: 10px solid transparent;
+  border-bottom: 10px solid transparent;
+  border-left: 10px solid black;
+  margin-right: 10px;
+}
+.level-up .content #mon-abilities-component .ability.gained,
+.level-up .content #mon-abilities-component .ability.removed {
+  font-size: 12px;
+  font-weight: bold;
+}
 .w-25 {
   width: 25% !important;
 }
@@ -2237,6 +2543,12 @@ h3 {
 .fs-12 {
   font-size: 12px;
 }
+.fs-13 {
+  font-size: 13px;
+}
+.fs-14 {
+  font-size: 14px;
+}
 .center-text {
   text-align: center;
 }
@@ -2324,6 +2636,9 @@ tbody.collapse.in {
 .macro-sheet .form-group.command .furnace-macro-command textarea,
 .macro-sheet .form-group.command .furnace-macro-command code {
   font-variant: normal;
+}
+#levelsUI .window-content {
+  background: rgba(0, 0, 0, 0.356) !important;
 }
 .sidebar-tab .action-buttons button {
   height: unset;

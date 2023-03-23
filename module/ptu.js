@@ -56,13 +56,15 @@ import { LANG } from './utils/language-helper.js';
 import logging from "./helpers/logging.js";
 import { registerHandlebars, preloadHandlebarsTemplates } from "./helpers/handlebars.js";
 import { PTRSearch } from "./ptr-search/ptr-search.js";
+import { CalcLevel } from "./actor/calculations/level-up-calculator.js";
+import { PTULevelUpForm } from "./forms/level-up-form.js";
 
 export let debug = logging.debug;
 export let log = logging.log;
 export let warn = logging.warn;
 export let error = logging.error;
 
-export const LATEST_VERSION = "3.2.3.1";
+export const LATEST_VERSION = "3.2.3.2";
 
 export const ptu = {
   utils: {
@@ -180,6 +182,9 @@ export const ptu = {
       },
       DexDragOptions: {
         documentClass: PTUDexDragOptions
+      },
+      LevelUpForm: {
+        documentClass: PTULevelUpForm
       }
     }
   },
@@ -781,3 +786,25 @@ Hooks.on('getSceneControlButtons', function (hudButtons) {
 });
 
 Hooks.on("renderTokenConfig", (config, html, options) => html.find("[name='actorLink']").siblings()[0].outerHTML = "<label>Link Actor Data <span class='readable p10'>Unlinked actors are not supported by the system</span></label>")
+
+Hooks.on("preUpdateActor", async (oldActor, changes, options, sender) => {
+  //check if this is turned off in settings
+  const setting = game.settings.get("ptu", "levelUpScreen")
+  if(!setting) return; // option turned off by GM
+
+  if(changes.system?.level?.exp === undefined) return;
+
+  const oldLvl = CalcLevel(oldActor.system.level.exp, 50, levelProgression);
+  const newLvl = CalcLevel(changes.system.level.exp, 50, levelProgression);
+  
+  
+  if(newLvl > oldLvl) {
+      new game.ptu.config.Ui.LevelUpForm.documentClass({
+        actor: await fromUuid(oldActor.uuid),
+        oldLvl,
+        newLvl,
+        oldExp: oldActor.system.level.exp,
+        newExp: changes.system.level.exp
+      }).render(true);
+  }
+});
