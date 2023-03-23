@@ -2355,12 +2355,21 @@ h3 {
   #mon-image-component {
     display: flex;
     justify-content: space-evenly;
-    
-    .image-divider {
-      flex: 0 0 10%;
-      font-size: 70px;
+    flex-wrap: wrap;
+
+    .image-divider{
       align-self: center;
-      text-align: center;
+      padding: 0 2rem;
+    }
+
+    .image-divider::before{
+      content: "";
+      display: inline-block;
+      width: 0;
+      height: 0;
+      border-top: 20px solid transparent;
+      border-bottom: 20px solid transparent;
+      border-left: 20px solid black;
     }
 
     .avatar {
@@ -2641,6 +2650,70 @@ h3 {
       p{
         white-space: pre-line;
       }
+    }
+
+    #mon-abilities-component{
+      width:100%;
+      display:flex;
+      flex-wrap:wrap;
+    }
+
+    .abilities{
+      width:100%;
+
+      &.subheader{
+        background-color: #7a7a7a;
+        color: #fff;
+        display: flex;
+        align-items: center;
+        height: 20px;
+        justify-content: center;
+        margin-bottom: 3px;
+      }
+
+      &.replaced {
+        display: flex;
+        align-items: center;
+      }
+
+      &.removed, &.gained{
+        flex: 1 0 40%;
+      }
+      
+
+      &.choices{
+        display: flex;
+        justify-content: space-evenly;
+        align-items: center;
+      }
+    }
+
+    .ability-divider::before{
+      content: "";
+      display: inline-block;
+      width: 0;
+      height: 0;
+      border-top: 10px solid transparent;
+      border-bottom: 10px solid transparent;
+      border-left: 10px solid black;
+      margin-right: 10px;
+    }
+
+    #abilities-gained-header {
+      margin-top: 10px;
+      margin-bottom: 0;
+    }
+    #abilities-replaced-header {
+      margin-bottom: 10px;
+    } 
+
+    .ability.removed{
+      text-decoration: line-through;
+    }
+
+
+    .btn{
+      margin-top: 20px;
     }
   } 
 }

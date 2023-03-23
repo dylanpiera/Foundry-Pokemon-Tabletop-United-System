@@ -1955,12 +1955,20 @@ h3 {
 .level-up #mon-image-component {
   display: flex;
   justify-content: space-evenly;
+  flex-wrap: wrap;
 }
 .level-up #mon-image-component .image-divider {
-  flex: 0 0 10%;
-  font-size: 70px;
   align-self: center;
-  text-align: center;
+  padding: 0 2rem;
+}
+.level-up #mon-image-component .image-divider::before {
+  content: "";
+  display: inline-block;
+  width: 0;
+  height: 0;
+  border-top: 20px solid transparent;
+  border-bottom: 20px solid transparent;
+  border-left: 20px solid black;
 }
 .level-up #mon-image-component .avatar {
   display: flex;
@@ -2176,6 +2184,59 @@ h3 {
 }
 .level-up .content .moves-container p {
   white-space: pre-line;
+}
+.level-up .content #mon-abilities-component {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+}
+.level-up .content .abilities {
+  width: 100%;
+}
+.level-up .content .abilities.subheader {
+  background-color: #7a7a7a;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  height: 20px;
+  justify-content: center;
+  margin-bottom: 3px;
+}
+.level-up .content .abilities.replaced {
+  display: flex;
+  align-items: center;
+}
+.level-up .content .abilities.removed,
+.level-up .content .abilities.gained {
+  flex: 1 0 40%;
+}
+.level-up .content .abilities.choices {
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+}
+.level-up .content .ability-divider::before {
+  content: "";
+  display: inline-block;
+  width: 0;
+  height: 0;
+  border-top: 10px solid transparent;
+  border-bottom: 10px solid transparent;
+  border-left: 10px solid black;
+  margin-right: 10px;
+}
+.level-up .content #abilities-gained-header {
+  margin-top: 10px;
+  margin-bottom: 0;
+}
+.level-up .content #abilities-replaced-header {
+  margin-bottom: 10px;
+}
+.level-up .content .ability.removed {
+  text-decoration: line-through;
+}
+.level-up .content .btn {
+  margin-top: 20px;
 }
 .w-25 {
   width: 25% !important;

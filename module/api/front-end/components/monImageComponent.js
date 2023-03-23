@@ -35,7 +35,7 @@ export default class MonImageComponent extends Component {
 
         return `
             <div class="avatar m-2"><img src="${s1}"/></div>
-            <div class="image-divider">=></div>
+            <div class="image-divider"></div>
             <div class="avatar m-2"><img src="${s2}"/></div>
         `;
     }

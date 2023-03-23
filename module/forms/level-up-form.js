@@ -3,10 +3,12 @@ import MonImageComponent from "../api/front-end/components/monImageComponent.js"
 import MonStatBlockComponent from "../api/front-end/components/monStatBlockComponent.js";
 import MonStatBlockTotalComponent from "../api/front-end/components/monStatBlockTotalComponent.js";
 import MonMovesListComponent from "../api/front-end/components/monMovesListComponent.js";
+import MonAbilitiesListComponent from "../api/front-end/components/monAbilitiesListComponent.js";
 import initStore from "../api/front-end/levelupStore.js";
 import { log, debug } from "../ptu.js";
 import { pokemonData } from '../data/species-data.js';
 import { GetSpeciesArt } from '../utils/species-command-parser.js';
+import { GetOrCacheAbilities } from "../utils/cache-helper.js";
 
 /**
  * Extend the basic FormApplication with some very simple modifications
@@ -84,6 +86,7 @@ export class PTULevelUpForm extends FormApplication {
       statSpdefTotalField: new MonStatBlockTotalComponent(this.store, "spdef"),
       statSpdTotalField: new MonStatBlockTotalComponent(this.store, "spd"),
       movesComponent: new MonMovesListComponent(this.store, "mon-moves-component"),
+      abilitiesComponent: new MonAbilitiesListComponent(this.store, $('#mon-abilities-component'))
     }
     debug(this.store, this.components);
   }
@@ -119,7 +122,7 @@ export class PTULevelUpForm extends FormApplication {
           "spdef.levelUp": (state.evolving.is ? 0 : state.stats.spdef.levelUp) + (state.stats.spdef.newLevelUp ?? 0),
           "spd.levelUp": (state.evolving.is ? 0 : state.stats.spd.levelUp) + (state.stats.spd.newLevelUp ?? 0),
         },
-        'moves' : state.finalMoves,
+        'moves' : state.finalMoves
       },
       
       //only change the name if it is the same as the species and we are evolving
@@ -151,6 +154,20 @@ export class PTULevelUpForm extends FormApplication {
     await this.object.actor.deleteEmbeddedDocuments("Item", this.object.actor.items.filter(item => item.type === "move").map(item => item.id));
     //add all new moves
     await this.object.actor.createEmbeddedDocuments("Item", state.finalMoves);
+
+
+    //add the abilities selected in dropdowns to final moves
+    const newAbilities = duplicate (state.finalAbilities);
+
+    const allAbilities = await GetOrCacheAbilities();
+    newAbilities.push(allAbilities.find(a => a.name === state.newBasic)?.data ?? null);
+    newAbilities.push(allAbilities.find(a => a.name === state.newAdvanced)?.data ?? null);
+    newAbilities.push(allAbilities.find(a => a.name === state.newHigh)?.data ?? null);
+
+    //remove all current abilities
+    await this.object.actor.deleteEmbeddedDocuments("Item", this.object.actor.items.filter(item => item.type === "ability").map(item => item.id));
+    //add all new abilities
+    await this.object.actor.createEmbeddedDocuments("Item", newAbilities.filter(a => a !== null));
 
     //update all active tokens
     const tokens = this.object.actor.getActiveTokens();
