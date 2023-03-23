@@ -789,8 +789,8 @@ Hooks.on("renderTokenConfig", (config, html, options) => html.find("[name='actor
 
 Hooks.on("preUpdateActor", async (oldActor, changes, options, sender) => {
   //check if this is turned off in settings
-  // const setting = game.settings.get("ptu", "pokemonLearnMovesMessage")
-  // if(!setting) return; // option turned off by GM
+  const setting = game.settings.get("ptu", "levelUpScreen")
+  if(!setting) return; // option turned off by GM
 
   if(changes.system?.level?.exp === undefined) return;
 
