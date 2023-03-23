@@ -478,7 +478,7 @@ export class PTUActor extends Actor {
 
     // Prepare data with Mods.
     for (let [key, mod] of Object.entries(data.modifiers)) {
-      if (key == "hardened" || key == "flinch_count" || key == 'immuneToEffectDamage') continue;
+      if (key == "hardened" || key == "flinch_count" || key == 'immuneToEffectDamage' || key == 'typeOverwrite') continue;
       if (key == "damageBonus" || key == "damageReduction" || key == "evasion" || key == "baseStats") {
         for (let [subkey, value] of Object.entries(mod)) {
           data.modifiers[key][subkey]["total"] = (value["value"] ?? 0) + (value["mod"] ?? 0);
@@ -509,7 +509,15 @@ export class PTUActor extends Actor {
     data.stats = result.stats;
     data.levelUpPoints = result.levelUpPoints;
 
-    data.typing = speciesData?.Type;
+    const types = [];
+    if(data.modifiers?.typeOverwrite) {
+      const splitTypes = data.modifiers?.typeOverwrite?.split('/');
+      for(const type of splitTypes) {
+        if(game.ptu.data.TypeEffectiveness[Handlebars.helpers.capitalizeFirst(type.toLowerCase())]) types.push(type);
+      }
+    }
+    if(types.length == 0 && speciesData?.Type) types.push(...speciesData.Type);
+    data.typing = types.length > 0 ? types : speciesData?.Type;
 
     data.health.total = 10 + data.level.current + (data.stats.hp.total * 3);
     data.health.max = data.health.injuries > 0 ? Math.trunc(data.health.total * (1 - ((data.modifiers.hardened ? Math.min(data.health.injuries, 5) : data.health.injuries) / 10))) : data.health.total;
