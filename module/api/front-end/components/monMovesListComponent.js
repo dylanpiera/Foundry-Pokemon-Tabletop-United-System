@@ -12,7 +12,7 @@ export default class MonMovesListComponent extends Component {
     async render() {
 
         //if no moves learned don't display
-        if(this.state.availableMoves.length === 0) return;
+        if(this.state.availableMoves.length == 0 && this.state.finalMoves?.length == this.state.knownMoves?.length) return this.element.html("");
 
         this.element.html(this.prepareKnownMoves() + this.prepareAvailableMoves());
 

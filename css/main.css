@@ -2091,6 +2091,15 @@ h3 {
 .level-up .content {
   z-index: 5;
   position: inherit;
+  justify-content: baseline;
+  height: 100%;
+  overflow: hidden;
+}
+.level-up .content .level-up-inner {
+  flex-direction: column;
+  overflow-y: auto;
+  overflow-x: hidden;
+  height: 100%;
 }
 .level-up .content .bar {
   background-color: #272727;
@@ -2190,32 +2199,41 @@ h3 {
   display: flex;
   flex-wrap: wrap;
 }
-.level-up .content .abilities {
+.level-up .content #mon-abilities-component .abilities-row {
+  flex-direction: row;
+  display: flex;
+  width: 100%;
+  justify-content: center;
+}
+.level-up .content #mon-abilities-component .abilities-col {
+  align-self: center;
+}
+.level-up .content #mon-abilities-component .abilities {
   width: 100%;
 }
-.level-up .content .abilities.subheader {
+.level-up .content #mon-abilities-component .abilities.subheader {
   background-color: #7a7a7a;
   color: #fff;
   display: flex;
   align-items: center;
-  height: 20px;
+  height: 25px;
   justify-content: center;
-  margin-bottom: 3px;
 }
-.level-up .content .abilities.replaced {
+.level-up .content #mon-abilities-component .abilities.replaced {
   display: flex;
   align-items: center;
+  flex-direction: column;
 }
-.level-up .content .abilities.removed,
-.level-up .content .abilities.gained {
+.level-up .content #mon-abilities-component .abilities.removed,
+.level-up .content #mon-abilities-component .abilities.gained {
   flex: 1 0 40%;
 }
-.level-up .content .abilities.choices {
+.level-up .content #mon-abilities-component .abilities.choices {
   display: flex;
   justify-content: space-evenly;
   align-items: center;
 }
-.level-up .content .ability-divider::before {
+.level-up .content #mon-abilities-component .ability-divider::before {
   content: "";
   display: inline-block;
   width: 0;
@@ -2225,18 +2243,10 @@ h3 {
   border-left: 10px solid black;
   margin-right: 10px;
 }
-.level-up .content #abilities-gained-header {
-  margin-top: 10px;
-  margin-bottom: 0;
-}
-.level-up .content #abilities-replaced-header {
-  margin-bottom: 10px;
-}
-.level-up .content .ability.removed {
-  text-decoration: line-through;
-}
-.level-up .content .btn {
-  margin-top: 20px;
+.level-up .content #mon-abilities-component .ability.gained,
+.level-up .content #mon-abilities-component .ability.removed {
+  font-size: 12px;
+  font-weight: bold;
 }
 .w-25 {
   width: 25% !important;

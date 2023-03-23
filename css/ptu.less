@@ -2522,8 +2522,17 @@ h3 {
     //padding: 1rem;
     z-index: 5;
     position: inherit;
+    
+    justify-content:baseline;
+    height: 100%;
+    overflow: hidden;
 
-  
+    .level-up-inner {
+      flex-direction: column;
+      overflow-y: auto;
+      overflow-x: hidden;
+      height: 100%;
+    }
 
     .bar {
       background-color: #272727;
@@ -2656,64 +2665,64 @@ h3 {
       width:100%;
       display:flex;
       flex-wrap:wrap;
-    }
 
-    .abilities{
-      width:100%;
-
-      &.subheader{
-        background-color: #7a7a7a;
-        color: #fff;
+      .abilities-row {
+        flex-direction: row;
         display: flex;
-        align-items: center;
-        height: 20px;
+        width: 100%;
         justify-content: center;
-        margin-bottom: 3px;
-      }
-
-      &.replaced {
-        display: flex;
-        align-items: center;
-      }
-
-      &.removed, &.gained{
-        flex: 1 0 40%;
       }
       
-
-      &.choices{
-        display: flex;
-        justify-content: space-evenly;
-        align-items: center;
+      .abilities-col {
+        align-self: center;
       }
-    }
 
-    .ability-divider::before{
-      content: "";
-      display: inline-block;
-      width: 0;
-      height: 0;
-      border-top: 10px solid transparent;
-      border-bottom: 10px solid transparent;
-      border-left: 10px solid black;
-      margin-right: 10px;
-    }
+      .abilities{
+        width:100%;
+  
+        &.subheader{
+          background-color: #7a7a7a;
+          color: #fff;
+          display: flex;
+          align-items: center;
+          height: 25px;
+          justify-content: center;
+        }
+  
+        &.replaced {
+          display: flex;
+          align-items: center;
+          flex-direction: column;
+        }
+  
+        &.removed, &.gained{
+          flex: 1 0 40%;
+        }
+        
+  
+        &.choices{
+          display: flex;
+          justify-content: space-evenly;
+          align-items: center;
+        }
+      }
+  
+      .ability-divider::before{
+        content: "";
+        display: inline-block;
+        width: 0;
+        height: 0;
+        border-top: 10px solid transparent;
+        border-bottom: 10px solid transparent;
+        border-left: 10px solid black;
+        margin-right: 10px;
+      }
 
-    #abilities-gained-header {
-      margin-top: 10px;
-      margin-bottom: 0;
-    }
-    #abilities-replaced-header {
-      margin-bottom: 10px;
-    } 
+      .ability.gained, .ability.removed {
+        font-size: 12px;
+        font-weight: bold;
+      }
 
-    .ability.removed{
-      text-decoration: line-through;
-    }
-
-
-    .btn{
-      margin-top: 20px;
     }
   } 
 }

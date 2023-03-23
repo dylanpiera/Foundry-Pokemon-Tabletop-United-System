@@ -22,7 +22,7 @@ export class PTULevelUpForm extends FormApplication {
       classes: ["ptu", "level-up", "pokemon"],
       template: "systems/ptu/templates/forms/level-up.hbs",
       width: 560,
-      height: 900,
+      height: 890,
       title: "Level-Up Menu!"
     });
   }
@@ -71,8 +71,8 @@ export class PTULevelUpForm extends FormApplication {
       },
       name: this.object.actor.name,
       form: this,
-      knownMoves: this.object.actor.items.filter(item => item.type === "move"),
-      currentAbilities: this.object.actor.items.filter(item => item.type === "ability"),
+      knownMoves: this.object.actor.itemTypes.move ?? this.object.actor.items.filter(item => item.type === "move"),
+      currentAbilities: (this.object.actor.itemTypes.ability ?? this.object.actor.items.filter(item => item.type === "ability")).map(a => a.name),
     })
 
     this.components = {
@@ -86,7 +86,7 @@ export class PTULevelUpForm extends FormApplication {
       statSpdefTotalField: new MonStatBlockTotalComponent(this.store, "spdef"),
       statSpdTotalField: new MonStatBlockTotalComponent(this.store, "spd"),
       movesComponent: new MonMovesListComponent(this.store, "mon-moves-component"),
-      abilitiesComponent: new MonAbilitiesListComponent(this.store, $('#mon-abilities-component'))
+      abilitiesComponent: new MonAbilitiesListComponent(this.store, 'mon-abilities-component')
     }
     debug(this.store, this.components);
   }
@@ -99,6 +99,8 @@ export class PTULevelUpForm extends FormApplication {
 
   /** @override */
   async _updateObject() {
+    const itemIdsToDelete = [];
+    const itemsToAdd = [];
     const state = {...this.store.state};
     const lostHealth = this.object.actor.system.health.max - this.object.actor.system.health.value;
     const searchFor = (state.evolving.is && state.evolving.into) ? state.evolving.into.toLowerCase() : state.species.toLowerCase();
@@ -122,7 +124,7 @@ export class PTULevelUpForm extends FormApplication {
           "spdef.levelUp": (state.evolving.is ? 0 : state.stats.spdef.levelUp) + (state.stats.spdef.newLevelUp ?? 0),
           "spd.levelUp": (state.evolving.is ? 0 : state.stats.spd.levelUp) + (state.stats.spd.newLevelUp ?? 0),
         },
-        'moves' : state.finalMoves
+        // 'health.value': this.object.actor.system.health.max - lostHealth
       },
       
       //only change the name if it is the same as the species and we are evolving
@@ -148,26 +150,41 @@ export class PTULevelUpForm extends FormApplication {
       token.document["texture.src"]= imgPath;
     }
 
-    log(`Level-Up: Updating ${this.object.name}`, data);
+    log(`Level-Up: Updating ${this.object.actor.name}`, data);
     await this.object.actor.update(data);
-    //remove all current moves
-    await this.object.actor.deleteEmbeddedDocuments("Item", this.object.actor.items.filter(item => item.type === "move").map(item => item.id));
-    //add all new moves
-    await this.object.actor.createEmbeddedDocuments("Item", state.finalMoves);
 
+    // Determine which moves to delete
+    const oldMoveNames = state.knownMoves.map(m => m?.name?.toLowerCase());
+    const notPickedMoveIds = state.availableMoves.filter(m => oldMoveNames.includes(m?.name?.toLowerCase())).map(m => m.id ?? m._id);
+    itemIdsToDelete.push(...notPickedMoveIds);
+    // Determine which moves to add
+    const newMoves = state.finalMoves.filter(m => !oldMoveNames.includes(m?.name?.toLowerCase()))
+    itemsToAdd.push(...newMoves);
+
+    // Find all Abilities based on choices made.
+    const newAbilityNames = state.abilityChanges.map(a => a.new?.toLowerCase());
+    if(state.abilityChoices.Basic)
+      newAbilityNames.push(state.abilityChoices.Basic?.toLowerCase())
+    if(state.abilityChoices.Advanced)
+      newAbilityNames.push(state.abilityChoices.Advanced?.toLowerCase())
+    if(state.abilityChoices.High)
+      newAbilityNames.push(state.abilityChoices.High?.toLowerCase())
 
     //add the abilities selected in dropdowns to final moves
-    const newAbilities = duplicate (state.finalAbilities);
-
     const allAbilities = await GetOrCacheAbilities();
-    newAbilities.push(allAbilities.find(a => a.name === state.newBasic)?.data ?? null);
-    newAbilities.push(allAbilities.find(a => a.name === state.newAdvanced)?.data ?? null);
-    newAbilities.push(allAbilities.find(a => a.name === state.newHigh)?.data ?? null);
+    itemsToAdd.push(...allAbilities.filter(a => newAbilityNames.includes(a.name.toLowerCase())))
 
-    //remove all current abilities
-    await this.object.actor.deleteEmbeddedDocuments("Item", this.object.actor.items.filter(item => item.type === "ability").map(item => item.id));
-    //add all new abilities
-    await this.object.actor.createEmbeddedDocuments("Item", newAbilities.filter(a => a !== null));
+    //remove changed abilities
+    if(state.abilityChanges.length > 0) {
+      const names = state.abilityChanges.map(a => a.old?.toLowerCase());
+      itemIdsToDelete.push(...this.object.actor.itemTypes.ability.filter(a => names.includes(a.name.toLowerCase())).map(a => a.id));
+    }
+    
+    if(itemIdsToDelete.length > 0) 
+      await this.object.actor.deleteEmbeddedDocuments("Item", itemIdsToDelete.filter(x => x));
+
+    if(itemsToAdd.length > 0)
+      await this.object.actor.createEmbeddedDocuments("Item", itemsToAdd.filter(x => x));
 
     //update all active tokens
     const tokens = this.object.actor.getActiveTokens();
@@ -175,11 +192,6 @@ export class PTULevelUpForm extends FormApplication {
       await tok.document.update(token.document);
     }
 
-    //update the health
-    const health = {
-      'system.health.value': this.object.actor.system.health.max - lostHealth
-    }
-    await this.object.actor.update(health);
     //close the window
     this.close();
   }

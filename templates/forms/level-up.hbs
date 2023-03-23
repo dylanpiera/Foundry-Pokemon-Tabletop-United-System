@@ -1,5 +1,5 @@
 <form
-  class="{{cssClass}} container-fluid"
+  class="{{cssClass}} container-fluid h-100"
   autocomplete="off"
   style="text-align: center;"
 >
@@ -28,14 +28,16 @@
 		clip-path: polygon(0 0, 42% 0, -35% 100%, 0% 100%);">
 	</div>
 	<div class="sheet-body content d-flex align-items-end flex-column h-100">
-		<div id="" class="header mb-2"><h3 class="pl-1">{{name}}'s Level Up.  {{oldLvl}} ▶ {{newLvl}}</h3></div>
-		<div id="mon-image-component" class="mt-3 mb-3"></div>
-		<div id="mon-evolving-component" class="m-2"></div>
-		<div id="mon-stat-block-component" class="mb-2"></div>
-		<div id="mon-moves-component" class="mb-2"></div>		
-		<div id="mon-abilities-component"></div>
-		<div class="w-100 justify-content-between mt-auto mb-1">
-			<button class="btn" data-value="submit" style="width: 40%;">Submit</button>
+		<div class="header"><h3 class="pl-1">{{name}}'s Level Up.  {{oldLvl}} ▶ {{newLvl}}</h3></div>
+		<div class="d-flex level-up-inner">
+			<div id="mon-image-component" class="mt-3 mb-3"></div>
+			<div id="mon-evolving-component" class="m-2"></div>
+			<div id="mon-stat-block-component" class="mb-2"></div>
+			<div id="mon-moves-component" class="mb-2"></div>		
+			<div id="mon-abilities-component"></div>
+		</div>
+		<div class="w-100 justify-content-between bar mt-1 pt-1 pb-1" style="box-shadow: 0px -2px 8px black;">
+			<button class="btn" data-value="submit" style="width: fit-content;padding: 0 0.75rem;">Submit</button>
 		</div>
 	</div>
 </form>

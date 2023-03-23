@@ -2,17 +2,17 @@ import Store from './lib/store.js';
 import { CalculatePTStatTotal, CalculateStatTotal } from '../../actor/calculations/stats-calculator.js';
 import { debug, log } from '../../ptu.js';
 import { CheckStage } from '../../utils/calculate-evolution.js';
-import { pokemonData } from '../../data/species-data.js';
 import { GetOrCacheAbilities, GetOrCacheMoves } from "../../utils/cache-helper.js";
 
 export default function({actorSystem, changeDetails, name, form, knownMoves, currentAbilities}) {
+    const originalAbilities = currentAbilities;
     const store = new Store({
         actions: {
-            async init(context) {
+            async init(context, currentAbilities) {
                 await context.dispatch('changeEvolutionStatus');
                 await context.dispatch('changeStats', {"hp": 0, "atk": 0, "def": 0, "spatk": 0, "spdef": 0, "spd": 0});
                 await context.dispatch('initMoves');
-                await context.dispatch('initAbilities');
+                await context.dispatch('initAbilities', currentAbilities);
             },
             async changeEvolution(context, species) {
                 await context.commit("updateEvolutionSpecies", species)
@@ -42,7 +42,7 @@ export default function({actorSystem, changeDetails, name, form, knownMoves, cur
                 
                 await context.dispatch('changeStats', {"hp:": 0, "atk": 0, "def": 0, "spatk": 0, "spdef": 0, "spd": 0});
                 await context.dispatch('initMoves');
-                await context.dispatch('initAbilities');
+                await context.dispatch('initAbilities', originalAbilities); 
             },
             async changeStats(context, levelUpPointsAssigned) {
                 // Take a copy of current stats
@@ -85,7 +85,7 @@ export default function({actorSystem, changeDetails, name, form, knownMoves, cur
                 let moves = [];
 
                 if(context.state.evolving.is && context.state.evolving.into) {
-                    const oldDexEntry = pokemonData.find(e => e._id.toLowerCase() === context.state.species.toLowerCase());
+                    const oldDexEntry = game.ptu.utils.species.get(context.state.species);
                     let evo = oldDexEntry["Evolution"]
                     let maxLevel = context.state.changeDetails.newLvl; //inclusive
 
@@ -97,7 +97,7 @@ export default function({actorSystem, changeDetails, name, form, knownMoves, cur
 
                     let evoIndex = evo.findIndex(e => e[1].toLowerCase() === context.state.evolving.into.toLowerCase());
                     while (evoIndex >= 0) {
-                        const dexEntry = pokemonData.find(e => e._id.toLowerCase() === evo[evoIndex][1].toLowerCase())
+                        const dexEntry = game.ptu.utils.species.get(evo[evoIndex][1])
                         const minLevel = Math.max(context.state.changeDetails.oldLvl + 1, evo[evoIndex][2] == "Null" ? 0 : evo[evoIndex][2]); //this should be the level that the mon evolved into this mon
                         moves.push(dexEntry["Level Up Move List"].filter(m => (m.Level >= minLevel && m.Level <= maxLevel)));
                         if(!(evo[evoIndex][1].toLowerCase() === context.state.species.toLowerCase()))
@@ -108,7 +108,7 @@ export default function({actorSystem, changeDetails, name, form, knownMoves, cur
                         evoIndex--;
                     }
                 } else{
-                    const dexEntry = pokemonData.find(e => e._id.toLowerCase() === context.state.species.toLowerCase() );
+                    const dexEntry = game.ptu.utils.species.get(context.state.species);
                     moves.push(dexEntry["Level Up Move List"].filter(m => m.Level > context.state.changeDetails.oldLvl && m.Level <= context.state.changeDetails.newLvl));
                 }
 
@@ -121,7 +121,7 @@ export default function({actorSystem, changeDetails, name, form, knownMoves, cur
 
                 await context.commit('updateAvailableMoves', newMoves);
                 await context.commit('updateNewMoves', newMoves);
-                await context.commit('updateFinalMoves', context.state.knownMoves)
+                await context.commit('updateFinalMoves', duplicate(context.state.knownMoves))
             },
             async movesFinalToAvailable(context, move) {
                 //find move in FinalMoves
@@ -151,37 +151,64 @@ export default function({actorSystem, changeDetails, name, form, knownMoves, cur
                 await context.commit('updateAvailableMoves', newAvailableMoves);
                 await context.commit('updateFinalMoves', newFinalMoves);
             },
-            async initAbilities(context) {
-                const dexEntry = pokemonData.find(e => e._id.toLowerCase() === context.state.species.toLowerCase() );
-                const finalAbilitiesNames = [];
-                let newDexEntry;
+            async initAbilities(context, currentAbilityNamesActor) {
+                const dexEntry = game.ptu.utils.species.get(context.state.species);
+                
+                const newDexEntry = (context.state.evolving.is && context.state.evolving.into && context.state.evolving.into.toLowerCase() !== context.state.species.toLowerCase()) ? game.ptu.utils.species.get(context.state.evolving.into) : undefined;
 
-                if(context.state.evolving.is && context.state.evolving.into) {
-                    const abilities = [];
-                    for(let key in dexEntry["Abilities"])
-                        abilities.push(...dexEntry["Abilities"][key]);
-                    
-                    newDexEntry = pokemonData.find(e => e._id.toLowerCase() === context.state.evolving.into.toLowerCase() );
-                    const evoAbilities = [];
-                    for(let key in newDexEntry["Abilities"])
-                        evoAbilities.push(...newDexEntry["Abilities"][key]);
-                    
-                    for(let i = context.state.currentAbilities.length - 1; i >= 0; i--) {
-                        //find the index of the ability in the old dex entry
-                        const index = abilities.findIndex(a => a.toLowerCase() === context.state.currentAbilities[i].name.toLowerCase());
+                const currentAbilitiesFromDex = [];
+                const changes = [];
 
-                        //get the ability from the new dex entry at the same index and add to finalAbilities
-                        if (index >= 0) finalAbilitiesNames.push(evoAbilities[index]);
+                const curAbilities = [];
+                for(const [key, abilitiesArray] of Object.entries(dexEntry["Abilities"])) {
+                    for (let index = 0; index < abilitiesArray.length; index++) {
+                        curAbilities.push({
+                            tier: key,
+                            index: index,
+                            name: abilitiesArray[index]
+                        });
                     }
                 }
-                else {
-                    for(let i = context.state.currentAbilities.length - 1; i >= 0; i--)
-                        finalAbilitiesNames.push(context.state.currentAbilities[i].name);
+                if(newDexEntry && currentAbilityNamesActor?.length > 0) {
+                    const evoAbilities = [];
+                    for(const [key, abilitiesArray] of Object.entries(newDexEntry["Abilities"])) {
+                        for (let index = 0; index < abilitiesArray.length; index++) {
+                            evoAbilities.push({
+                                tier: key,
+                                index: index,
+                                name: abilitiesArray[index]
+                            });
+                        }
+                    }
+                    
+                    for(const ability of currentAbilityNamesActor) {
+                        const curAbility = curAbilities.find(a => a.name == ability);
+                        const evoAbility = evoAbilities.find(a => a.name == ability);
+                        if(!curAbility) continue; // Ability must be from a different source; ignore.)
+
+                        // If the original stage had the ability, but the new one doesn't it must've changed during evolution.
+                        if(curAbility && !evoAbility) {
+                            const newAbility = evoAbilities.find(a => a.tier == curAbility.tier && a.index == curAbility.index);
+                            if(!newAbility) continue; //Must not be part of base abilities
+                        
+                            // Ability is changed and should be depicted as such
+                            changes.push({old: curAbility.name, new: newAbility.name});
+                            currentAbilitiesFromDex.push(newAbility.name);
+                            continue;
+                        }
+                        currentAbilitiesFromDex.push(curAbility.name);
+                    }
+                } else {
+                    for(const ability of currentAbilityNamesActor) {
+                        const curAbility = curAbilities.find(a => a.name == ability);
+                        if(!curAbility) continue;
+                        currentAbilitiesFromDex.push(curAbility.name);
+                    }
                 }
 
                 //basic ability choices will only show if the abilities are empty
                 const basicAbilityNames = [];
-                if(finalAbilitiesNames.length == 0)
+                if(currentAbilitiesFromDex.length == 0)
                 {
                     if(context.state.evolving.is && context.state.evolving.into) {
                         basicAbilityNames.push(...newDexEntry["Abilities"]["Basic"]);
@@ -194,7 +221,7 @@ export default function({actorSystem, changeDetails, name, form, knownMoves, cur
 
                 //advanced abiliity is gained at level 20
                 const advanced = [];
-                if(context.state.changeDetails.newLvl >= 20 && context.state.changeDetails.oldLvl < 20) {
+                if(currentAbilitiesFromDex.length < 2 && context.state.changeDetails.newLvl >= 20) {
                     if(context.state.evolving.is && context.state.evolving.into) {
                         advanced.push(...newDexEntry["Abilities"]["Basic"]);
                         advanced.push(...newDexEntry["Abilities"]["Advanced"]);
@@ -207,11 +234,11 @@ export default function({actorSystem, changeDetails, name, form, knownMoves, cur
                 }
 
                 //don't show if already known
-                const advancedAbilityNames = advanced.filter(a => !finalAbilitiesNames.includes(a));
+                const advancedAbilityNames = advanced.filter(a => !currentAbilitiesFromDex.includes(a));
 
                 //high ability is gained at level 40
                 const high = [];
-                if(context.state.changeDetails.newLvl >= 40 && context.state.changeDetails.oldLvl < 40) {
+                if(currentAbilitiesFromDex.length < 3 && context.state.changeDetails.newLvl >= 40) {
                     if(context.state.evolving.is && context.state.evolving.into) {
                         high.push(...newDexEntry["Abilities"]["Basic"]);
                         high.push(...newDexEntry["Abilities"]["Advanced"]);
@@ -226,30 +253,31 @@ export default function({actorSystem, changeDetails, name, form, knownMoves, cur
                 }
 
                 //don't show if already known
-                const highAbilityNames = high.filter(a => !finalAbilitiesNames.includes(a));
+                const highAbilityNames = high.filter(a => !currentAbilitiesFromDex.includes(a));
 
-                //set the value of newBasic/newAdvanced/newHigh to the first ability in the list
-                if (basicAbilityNames.length > 0)
-                    await context.commit('updateNewBasic', basicAbilityNames[0]);
-                if (advancedAbilityNames.length > 0)
-                    await context.commit('updateNewAdvanced', advancedAbilityNames[0]);
-                if (highAbilityNames.length > 0)
-                    await context.commit('updateNewHigh', highAbilityNames[0]);
+                await context.commit('updateAbilityOptions', {
+                    Basic: basicAbilityNames,
+                    Advanced: advancedAbilityNames,
+                    High: highAbilityNames
+                })
 
-                //update the state
-                await context.commit('updateFinalAbilities', finalAbilitiesNames);
-                await context.commit('updateBasicAbilities', basicAbilityNames);
-                await context.commit('updateAdvancedAbilities', advancedAbilityNames);
-                await context.commit('updateHighAbilities', highAbilityNames);
+                await context.commit('updateAbilityChoices', {
+                    Basic: basicAbilityNames[0],
+                    Advanced: advancedAbilityNames[0],
+                    High: highAbilityNames[0]
+                });
+
+                await context.commit('updateAbilityChanges', changes);
             },
-            async basicAbilitySelected(context, ability) {
-                await context.commit('updateNewBasic', ability);
-            },
-            async advancedAbilitySelected (context, ability) {
-                await context.commit('updateNewAdvanced', ability);
-            },
-            async highAbilitySelected (context, ability) {
-                await context.commit('updateNewHigh', ability);
+            async changeAbilityChoice(context, {tier, ability}) {
+                const options = context.state.abilityOptions[tier];
+                if(!options || options.length == 0) return;
+
+                if(options.includes(ability)) 
+                    await context.commit('updateAbilityChoice', {
+                        tier,
+                        ability
+                    });
             }
         },
         mutations: {
@@ -297,32 +325,26 @@ export default function({actorSystem, changeDetails, name, form, knownMoves, cur
                 state.finalMoves = newMoves;
                 return state;
             },
-            async updateFinalAbilities(state, newAbilities){
-                state.finalAbilities = newAbilities;
+            async updateAbilityChanges(state, newChanges) {
+                state.abilityChanges - newChanges;
                 return state;
             },
-            async updateBasicAbilities(state, newAbilities){
-                state.basicAbilities = newAbilities;
+            async updateAbilityOptions(state, newOptions) {
+                state.abilityOptions = newOptions;
                 return state;
             },
-            async updateAdvancedAbilities(state, newAbilities){
-                state.advancedAbilities = newAbilities;
+            async updateAbilityChoices(state, newChoices) {
+                state.abilityChoices = newChoices;
                 return state;
             },
-            async updateHighAbilities(state, newAbilities){
-                state.highAbilities = newAbilities;
+            async updateAbilityChoice(state, {tier, ability}) {
+                const abilityChoices = state.abilityChoices;
+                abilityChoices[tier] = ability;
+                state.abilityChoices = abilityChoices;
                 return state;
             },
-            async updateNewBasic(state, newAbility){
-                state.newBasic = newAbility;
-                return state;
-            },
-            async updateNewAdvanced(state, newAbility){
-                state.newAdvanced = newAbility;
-                return state;
-            },
-            async updateNewHigh(state, newAbility){
-                state.newHigh = newAbility;
+            async updateAbilityChanges(state, changes) {
+                state.abilityChanges = changes;
                 return state;
             }
 
@@ -346,18 +368,20 @@ export default function({actorSystem, changeDetails, name, form, knownMoves, cur
             newMoves: [],
             availableMoves: [],
             finalMoves: [],
-            currentAbilities,
-            finalAbilities: [],
-            basicAbilities: [],
-            advancedAbilities: [],
-            highAbilities: [],
-            newBasic: {},
-            newAdvanced: {},
-            newHigh: {},
+            abilityChanges: [],
+            abilityOptions: {
+                Basic: [],
+                Advanced: [],
+                High: []
+            },
+            abilityChoices: {
+                Basic: "",
+                Advanced: "",
+                High: ""
+            }
         }
     })
-
-    store.dispatch('init');
+    store.dispatch('init', originalAbilities);
 
     return store;
 };

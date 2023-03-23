@@ -5,152 +5,134 @@ export default class MonAbilitiesListComponent extends Component {
     constructor(store, element) {
         super({
             store, 
-            element
+            element: $(`#${element}`)
         })
+        this.renderBlock = false;
     }
 
     async render() {
-
-        //if no change in abilities don't display
-        if(!this.abilitiesChanged()) return;
+        if(!this.shouldRender()) return this.element.html("");
+        if(this.renderBlock) return;
 
         this.element.html(this.header() + this.replacedAbilities() + this.newAbilities());
 
+        const ref = this;
         //event listeners for dropdowns
-        this.element.find('#basic-select').on("change", (e) => {
-            this.store.dispatch('basicAbilitySelected', e.target.value);
+        this.element.find('#basic-select').on("change", async (e) => {
+            ref.renderBlock = true;
+            await this.store.dispatch('changeAbilityChoice', {tier: "Basic", ability: e.target.value});
+            ref.renderBlock = false;
         });
-        this.element.find('#advanced-select').on("change", (e) => {
-            this.store.dispatch('advancedAbilitySelected', e.target.value);
+        this.element.find('#advanced-select').on("change", async (e) => {
+            ref.renderBlock = true;
+            await this.store.dispatch('changeAbilityChoice', {tier: "Advanced", ability: e.target.value});
+            ref.renderBlock = false;
         });
-        this.element.find('#high-select').on("change", (e) => {
-            this.store.dispatch('highAbilitySelected', e.target.value);
+        this.element.find('#high-select').on("change", async (e) => {
+            ref.renderBlock = true;
+            await this.store.dispatch('changeAbilityChoice', {tier: "High", ability: e.target.value});
+            ref.renderBlock = false;
         });
     }
+    
+    shouldRender() {
+        // If there's nothing new to gain, or to change, no render.
+        if(this.state.abilityOptions.Basic?.length == 0 && 
+            this.state.abilityOptions.Advanced?.length == 0 && 
+            this.state.abilityOptions.High?.length == 0 && 
+            this.state.abilityChanges?.length == 0) return false;
 
-    abilitiesChanged() {
-        //if finalMoves are different from current moves return false
-        if(!(this.state.currentAbilities.length === this.state.finalAbilities.length
-            && this.state.currentAbilities.every((value) => this.state.finalAbilities.includes(value))))
-                return true;
-
-        //if the basic/advanced/highAbilities have content return true
-        if(this.state.basicAbilities.length > 0 || this.state.advancedAbilities.length > 0 || this.state.highAbilities.length > 0)
-            return true;
-
-        return false;
+        return true;
     }
 
     header() {
         return `
             <div class="abilities header">
-                <h3>Abilities</h3>
+                <h2>Abilities</h2>
             </div>`;
     }
 
     replacedAbilities() {
-        let html = "";
-
         //if no abilities were replaced return empty string
-        if(this.state.currentAbilities.length === this.state.finalAbilities.length
-            && this.state.currentAbilities.every((value) => this.state.finalAbilities.includes(value)))
-                return html;
+        if(this.state.abilityChanges?.length == 0) return "";
 
-        html += `
-            <div class=abilities replaced>
-                <div class="abilities subheader" id="abilities-replaced-header">
-                    <h4>Abilities Replaced due to Evolution</h4>
+        return `
+            <div class="abilities replaced">
+                <div class="abilities subheader mb-2" id="abilities-replaced-header">
+                    <h3>Abilities Replaced due to Evolution</h3>
+                </div>
+
+                <div class="abilities-row mb-2">
+                    <div class="abilities-col">
+                        ${this.state.abilityChanges.map(change => {
+                            return `
+                                <div class="ability removed m-1">${change.old}</div>
+                            `
+                        }).join('')}
+                    </div>
+                    <div class="abilities-col" style="flex: 0 0 15%; font-size: 38px;">▶</div>
+                    <div class="abilities-col">
+                        ${this.state.abilityChanges.map(change => {
+                            return `
+                                <div class="ability gained m-1">${change.new}</div>
+                            `
+                        }).join('')}
+                    </div>
                 </div>
             </div>
-        `
-
-        //abilities that are in currentAbilities but not in finalAbilities
-        const removedAbilities = this.state.currentAbilities.filter((ability) => !this.state.finalAbilities.includes(ability));
-        html += `
-            <div class="abilities replaced">
-                <div class="abilities removed">
-        `
-        for(const ability of removedAbilities) {
-            html += `
-                <div class="ability removed">${ability.name}</div>
-            `
-        }
-        html += `</div>
-        <div class="ability-divider"></div>
-        `
-        //abilities that are in final abilities but not in new abilities
-        const newAbilities = this.state.finalAbilities.filter((ability) => !this.state.currentAbilities.includes(ability));
-        html += `
-            <div class="abilities gained">
-        `
-        for(const ability of newAbilities) {
-            html += `
-                <div class="ability new">${ability.name}</div>
-            `
-        }
-        html += `</div></div>`
-        return html;
+        `;
     }
 
     newAbilities() {
-        let html = "";
-
         //if no new abilities return empty string
-        if(this.state.basicAbilities.length === 0 && this.state.advancedAbilities.length === 0 && this.state.highAbilities.length === 0)
-            return html;
+        if(this.state.abilityOptions.Basic?.length == 0 && 
+            this.state.abilityOptions.Advanced?.length == 0 && 
+            this.state.abilityOptions.High?.length == 0)
+            return "";
 
-        html += `        
+        return `        
         <div class="abilities subheader" id="abilities-gained-header">
             <h4>New Abilities Gained from Level Up</h4>
-        </div> 
-        <div class = "abilities choices">
-        `
-
-        //basic
-        if(this.state.basicAbilities.length > 0) {
-            html += `
-                <div class="abilities basic">
+        </div>
+        <div class="abilities choices">
+            ${this.state.abilityOptions.Basic.length > 0 ?
+                `<div class="abilities basic">
                     <div class="abilities subheader">
                         <h4>Basic</h4>
                     </div>
-                    <div class="button">
+                    <div class="m-1">
                         <select id="basic-select">
-                            ${this.state.basicAbilities.map((ability) => this._prepAbilities(ability, "newBasic")).join('')}
+                            ${this.state.abilityOptions.Basic.map((ability) => this._prepAbilities(ability, "Basic")).join('')}
                         </select>
                     </div>
-                </div>`;
-        }
-        //advanced
-        if(this.state.advancedAbilities.length > 0) {
-            html += `
-                <div class="abilities advanced">
+                </div>`
+            : ""}
+            ${this.state.abilityOptions.Advanced.length > 0 ?
+                `<div class="abilities advanced">
                     <div class="abilities subheader">
                         <h4>Advanced</h4>
                     </div>
-                    <div class="button">
+                    <div class="m-1">
                         <select id="advanced-select">
-                            ${this.state.advancedAbilities.map((ability) => this._prepAbilities(ability, "newAdvanced")).join('')}
+                        ${this.state.abilityOptions.Advanced.map((ability) => this._prepAbilities(ability, "Advanced")).join('')}
                         </select>
                     </div>
-                </div>`;
-        }
-        //high
-        if(this.state.highAbilities.length > 0) {
-            html += `
-                <div class="abilities high">
+                </div>`
+            :""}
+            ${this.state.abilityOptions.High.length > 0 ?
+                `<div class="abilities high">
                     <div class="abilities subheader">
                         <h4>High</h4>
                     </div>
-                    <div class="button">
+                    <div class="m-1">
                         <select id="high-select">
-                            ${this.state.highAbilities.map((ability) => this._prepAbilities(ability, "newHigh")).join('')}
+                        ${this.state.abilityOptions.High.map((ability) => this._prepAbilities(ability, "High")).join('')}
                         </select>
                     </div>
-                </div>`;
-        }
-
-        html += `</div>`
-        return html;
+                </div>`
+            :""}
+        </div> 
+        `;
     }
 
     _prepAbilities(ability, key) {

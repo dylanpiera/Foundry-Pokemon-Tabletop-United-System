@@ -8,6 +8,8 @@ export default class MonImageComponent extends Component {
             store, 
             element
         })
+
+        this.cache = {}
     }
 
     /**
@@ -21,6 +23,9 @@ export default class MonImageComponent extends Component {
         if(this.state.evolving.is && this.state.evolving.into && this.state.species.toLowerCase() != this.state.evolving.into.toLowerCase()) {
             const oldArt = await this._getArt(this.state.species);
             const newArt = await this._getArt(this.state.evolving.into);
+
+            if(oldArt) this.cache[this.state.species] = oldArt;
+            if(newArt) this.cache[this.state.evolving.into] = newArt;
             
             return this.element.html(this._renderHtml(oldArt ?? '/icons/svg/mystery-man-black.svg', newArt ?? '/icons/svg/mystery-man-black.svg'));
         }
@@ -41,6 +46,8 @@ export default class MonImageComponent extends Component {
     }
 
     _getArt(species) {
+        if(this.cache[species]) return this.cache[species];
+
         const imgSrc = game.settings.get("ptu", "defaultPokemonImageDirectory");
         if(!imgSrc) return undefined;
 
