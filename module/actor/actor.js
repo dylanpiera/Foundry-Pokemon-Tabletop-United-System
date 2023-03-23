@@ -414,6 +414,9 @@ export class PTUActor extends Actor {
 
     data.levelUpPoints = data.level.current + data.modifiers.statPoints.total + 9;
     data.stats = CalculatePoisonedCondition(duplicate(data.stats), actorData.flags?.ptu);
+
+    const leftoverLevelUpPoints = data.levelUpPoints - Object.values(data.stats).reduce((a,v) => v.levelUp + a, 0);
+    const actualLevel = Math.max(1, data.level.current - Math.max(0, Math.clamped(0, leftoverLevelUpPoints, leftoverLevelUpPoints-data.modifiers.statPoints.total ?? 0)));
     
     data.stats.hp.base = 10
     data.stats.hp.value = data.modifiers.baseStats.hp.total + data.stats.hp.base;
@@ -429,7 +432,7 @@ export class PTUActor extends Actor {
     data.stats.spd.value = data.modifiers.baseStats.spd.total + data.stats.spd.base;
 
     var result = game.settings.get("ptu", "playtestStats") ?
-      CalculatePTStatTotal(data.levelUpPoints, data.level.current, data.stats, { twistedPower: actorData.items.find(x => x.name.toLowerCase().replace("[playtest]") == "twisted power") != null }, data.nature?.value, true) :
+      CalculatePTStatTotal(data.levelUpPoints, actualLevel, data.stats, { twistedPower: actorData.items.find(x => x.name.toLowerCase().replace("[playtest]") == "twisted power") != null }, data.nature?.value, true) :
       CalculateStatTotal(data.levelUpPoints, data.stats, { twistedPower: actorData.items.find(x => x.name.toLowerCase().replace("[playtest]") == "twisted power") != null });
     data.stats = result.stats;
     data.levelUpPoints = result.levelUpPoints;
@@ -503,8 +506,12 @@ export class PTUActor extends Actor {
 
     data.stats = CalcBaseStats(data.stats, speciesData, data.nature.value, data.modifiers.baseStats);
 
+    const leftoverLevelUpPoints = data.levelUpPoints - Object.values(data.stats).reduce((a,v) => v.levelUp + a, 0);
+    const actualLevel = Math.max(1, data.level.current - Math.max(0, Math.clamped(0, leftoverLevelUpPoints, leftoverLevelUpPoints-data.modifiers.statPoints.total ?? 0)));
+    
+
     var result = game.settings.get("ptu", "playtestStats") ?
-    CalculatePTStatTotal(data.levelUpPoints, data.level.current, data.stats, { twistedPower: actorData.items.find(x => x.name.toLowerCase().replace("[playtest]") == "twisted power") != null }, data.nature.value, false) :
+    CalculatePTStatTotal(data.levelUpPoints, actualLevel, data.stats, { twistedPower: actorData.items.find(x => x.name.toLowerCase().replace("[playtest]") == "twisted power") != null }, data.nature.value, false) :
       CalculateStatTotal(data.levelUpPoints, data.stats, { twistedPower: actorData.items.find(x => x.name.toLowerCase().replace("[playtest]") == "twisted power") != null });
     data.stats = result.stats;
     data.levelUpPoints = result.levelUpPoints;
