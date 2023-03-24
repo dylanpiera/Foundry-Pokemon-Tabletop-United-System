@@ -787,6 +787,51 @@ Hooks.on('getSceneControlButtons', function (hudButtons) {
 
 Hooks.on("renderTokenConfig", (config, html, options) => html.find("[name='actorLink']").siblings()[0].outerHTML = "<label>Link Actor Data <span class='readable p10'>Unlinked actors are not supported by the system</span></label>")
 
+/****************************
+Token Movement Info
+****************************/
+Hooks.on('renderTokenHUD', _addMovementIcons);
+
+function _addMovementIcons(app, html, data) {
+  if(!game.settings.get("ptu", "showMovementIcons")) return;
+
+    // Fetch Actor
+    const actor = game.actors.get(data.actorId);
+    if(actor === undefined) return;
+
+    // Ownership of actor does not need to be checked; token HUD only shows if you have control of said token.
+    
+    // List of capabilities to possibly display, and the icon it should use
+    const capabilitiesMap = {
+        Overland: "fas fa-shoe-prints",
+        Swim: "fas fa-swimmer",
+        Burrow: "fas fa-mountain",
+        Sky: "fas fa-feather",
+        Levitate: "fab fa-fly",
+        Teleporter: "fas fa-people-arrows",
+    }
+
+    const buttons = [];
+    for(const [cap,fac] of Object.entries(capabilitiesMap)) {
+        const val = actor.system.capabilities[cap];
+        // If value is 0 / unset no need to display.
+        if(!val) continue;
+        
+        buttons.push(`<div class="control-icon chalk-icon" title="${cap}: ${val}"><i class="${fac}"></i>${val}</div>`)
+    }
+
+    html.find(".col.middle").before( // if the actor uses a 2nd bar increase height.
+        `<div class="col middle" style="top: -${html.find(".bar2").html().trim() ? 105 : 90}px;">
+            <div class="chalk-container">
+                ${buttons.join("\n")}
+            </div>
+        </div>`
+    )
+
+}
+
+
+
 Hooks.on("preUpdateActor", async (oldActor, changes, options, sender) => {
   //check if this is turned off in settings
   const setting = game.settings.get("ptu", "levelUpScreen")

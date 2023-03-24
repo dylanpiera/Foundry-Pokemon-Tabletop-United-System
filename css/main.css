@@ -2251,6 +2251,29 @@ h3 {
   font-size: 12px;
   font-weight: bold;
 }
+/*****************
+* Movement Icons *
+*****************/
+.control-icon.chalk-icon {
+  width: fit-content;
+  min-width: 42px;
+  flex-basis: auto;
+  padding: 0 8px;
+  margin: 8px 15px 8px 0 !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.control-icon.chalk-icon > * {
+  margin-right: 5px;
+}
+.chalk-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: center;
+  flex: 0 !important;
+}
 .w-25 {
   width: 25% !important;
 }
