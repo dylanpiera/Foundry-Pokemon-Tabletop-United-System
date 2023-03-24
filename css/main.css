@@ -1942,6 +1942,42 @@ h3 {
 .move-sheet .sheet-body .move-effect textarea:focus {
   box-shadow: unset;
 }
+.ptu.automation section {
+  padding: unset;
+}
+.ptu.automation form {
+  padding: unset;
+}
+.ptu.automation .content #tab-component {
+  width: 100%;
+  display: flex;
+  justify-content: space-evenly;
+}
+.ptu.automation .content #tab-component nav.tabs {
+  flex: 0 0 65%;
+  align-items: center;
+}
+.ptu.automation .content #tab-component .automation-dropdown {
+  flex: 0 0 35%;
+  display: flex;
+  box-shadow: none;
+  border-bottom: none;
+  align-items: center;
+}
+.ptu.automation .content #tab-component .automation-dropdown select {
+  flex: 0 0 70%;
+}
+.ptu.automation .content #tab-component .automation-dropdown a {
+  flex: 0 1 30%;
+  align-self: center;
+  background: #ffffffa6;
+  margin: 0 0.5rem;
+  border-radius: 10px;
+  padding: 3px 0;
+}
+.ptu.automation .content .tabbed-content {
+  display: block;
+}
 .w-25 {
   width: 25% !important;
 }

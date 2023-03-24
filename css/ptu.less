@@ -2338,3 +2338,48 @@ h3 {
     }
   }
 }
+
+.ptu.automation {
+  section {
+    padding: unset;
+  }
+  form {
+    padding: unset;
+  }
+  .content {
+    #tab-component {
+      width: 100%;
+      display: flex;
+      justify-content: space-evenly;
+
+      nav.tabs {
+        flex: 0 0 65%;
+        align-items: center;
+      }
+      .automation-dropdown {
+        flex: 0 0 35%;
+        display: flex;
+        box-shadow: none;
+        border-bottom: none;
+        align-items: center;
+
+        select {
+          flex: 0 0 70%;
+        }
+        a {
+          flex: 0 1 30%;
+          align-self: center;
+          background: #ffffffa6;
+          margin: 0 0.5rem;
+          border-radius: 10px;
+          padding: 3px 0;
+        }
+      }
+    }
+
+    .tabbed-content {
+      display: block;
+      
+    }
+  }
+}

@@ -56,6 +56,7 @@ import { LANG } from './utils/language-helper.js';
 import logging from "./helpers/logging.js";
 import { registerHandlebars, preloadHandlebarsTemplates } from "./helpers/handlebars.js";
 import { PTRSearch } from "./ptr-search/ptr-search.js";
+import { PTUAutomationForm } from "./forms/automation-form.js";
 
 export let debug = logging.debug;
 export let log = logging.log;
@@ -180,6 +181,9 @@ export const ptu = {
       },
       DexDragOptions: {
         documentClass: PTUDexDragOptions
+      },
+      AutomationForm: {
+        documentClass: PTUAutomationForm
       }
     }
   },
