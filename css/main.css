@@ -2233,6 +2233,9 @@ h3 {
   justify-content: space-evenly;
   align-items: center;
 }
+.level-up .content #mon-abilities-component .abilities select {
+  max-width: 177px;
+}
 .level-up .content #mon-abilities-component .ability-divider::before {
   content: "";
   display: inline-block;

@@ -1,9 +1,10 @@
-## Version 3.2.3.3 - HotFix
+## Version 3.2.3.4 - HotFix
 It appeared we are 'incentivising' the Playtest a bit too much... considering if you're not running it this update broke! 
 
 ### Fixes
 - Made the level-up form fully compatible for people not running the stat playtest
 - Made it so that Abilities auto default to not all be the same one.
+- Fixed a style issue that sometimes appears in the Level-Up Form
 
 ## Version 3.2.3.2 - Level-Up Popup!
 Hi all! We've been hard at work on this new addition; the Level-Up Form for Pokemon.
