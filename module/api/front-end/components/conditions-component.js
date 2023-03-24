@@ -17,10 +17,15 @@ export default class ConditionsComponent extends Component {
      * @returns {void}
      */
     async render() {
-        if(this.state.activeTab != this.tab) return this.element.html("");
+        if(this.state.activeTab != this.tab) {
+            this.element.css("width", "unset"); 
+            return this.element.html("");
+        }
+
+        // Actually render the component if it is this tab
+        this.element.css("width", "100%");
 
         this.element.html("Conditions!")
-        // Actually render the component if it is this tab
     }
 
     

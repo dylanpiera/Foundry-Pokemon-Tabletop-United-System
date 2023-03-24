@@ -196,5 +196,11 @@
     "PTU.SearchButtonName": "PTR Search",
     "PTU.SearchButtonHint": "Search the PTR Data Source for information",
 
+    "PTU.AutomationTarget.TARGET": "Target",
+    "PTU.AutomationTarget.MOVE": "Move",
+    "PTU.AutomationTarget.HIT": "Hit",
+    "PTU.AutomationTarget.ITEM": "Item",
+    
+
     "SETTINGS.ptu": ""
 }

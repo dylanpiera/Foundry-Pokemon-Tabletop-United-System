@@ -1962,12 +1962,14 @@ h3 {
   display: flex;
   box-shadow: none;
   border-bottom: none;
+  border-top: none;
+  border-right: none;
   align-items: center;
 }
 .ptu.automation .content #tab-component .automation-dropdown select {
   flex: 0 0 70%;
 }
-.ptu.automation .content #tab-component .automation-dropdown a {
+.ptu.automation .content #tab-component .automation-dropdown a.item-create {
   flex: 0 1 30%;
   align-self: center;
   background: #ffffffa6;
@@ -1975,8 +1977,56 @@ h3 {
   border-radius: 10px;
   padding: 3px 0;
 }
-.ptu.automation .content .tabbed-content {
-  display: block;
+.ptu.automation .content .tabbed-content #targets-component {
+  justify-content: space-evenly;
+}
+.ptu.automation .content .tabbed-content #targets-component .target-bar {
+  flex-direction: column;
+  flex: 0 0 30%;
+  padding: 0.4rem;
+  border-radius: 15px;
+  background: #ffffffa6;
+}
+.ptu.automation .content .tabbed-content #targets-component .target-bar .target {
+  display: flex;
+  justify-content: space-between;
+}
+.ptu.automation .content .tabbed-content #targets-component .target-bar .target-select {
+  flex: 0 0 85%;
+  font-size: 10px;
+  max-width: 150px;
+}
+.ptu.automation .content .tabbed-content #targets-component .target-bar a.item-delete {
+  flex: 0 0 10%;
+  align-self: center;
+}
+.ptu.automation .content .tabbed-content #targets-component .help-bar {
+  flex-direction: column;
+  text-align: start;
+  flex: 0 0 60%;
+  white-space: pre-line;
+  background: #ffffffa6;
+  padding: 0.4rem;
+  border-radius: 15px;
+}
+.ptu.automation .content .tabbed-content #targets-component .header {
+  display: flex;
+  padding: 0.25rem;
+  height: 36px;
+  background: #ffffffa6;
+  border-bottom: 1px solid #00000050;
+  border-radius: 15px 15px 0 0;
+}
+.ptu.automation .content .tabbed-content #targets-component .header h4 {
+  flex: 0 0 70%;
+}
+.ptu.automation .content .tabbed-content #targets-component .header a.item-create {
+  flex: 0 0 30%;
+  align-self: center;
+  background: #dddddda6;
+  margin: unset;
+  border-radius: 10px;
+  padding: 3px 0;
 }
 .w-25 {
   width: 25% !important;

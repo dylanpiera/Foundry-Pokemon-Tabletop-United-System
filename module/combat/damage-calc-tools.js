@@ -336,6 +336,8 @@ CONFIG.PTUAutomation = {
     },
     Target: {
         TARGET: "target",
+        MOVE: "move",
+        HIT: "hit",
         ITEM: "item",
     },
     Condition: {

@@ -2361,12 +2361,15 @@ h3 {
         display: flex;
         box-shadow: none;
         border-bottom: none;
+        border-top: none;
+        border-right: none;
         align-items: center;
 
         select {
           flex: 0 0 70%;
         }
-        a {
+
+        a.item-create {
           flex: 0 1 30%;
           align-self: center;
           background: #ffffffa6;
@@ -2378,8 +2381,64 @@ h3 {
     }
 
     .tabbed-content {
-      display: block;
-      
+      #targets-component {
+        justify-content: space-evenly;
+        
+        .target-bar {
+          flex-direction: column;
+          flex: 0 0 30%;
+          padding: 0.4rem;
+          border-radius: 15px;
+          background: #ffffffa6;
+
+          .target {
+            display: flex;
+            justify-content: space-between;
+          }
+
+          .target-select {
+            flex: 0 0 85%;
+            font-size: 10px;
+            max-width: 150px;
+          }
+          a.item-delete {
+            flex: 0 0 10%;
+            align-self: center;
+          }
+        }
+
+        .help-bar {
+          flex-direction: column;
+          text-align: start;
+          flex: 0 0 60%;
+          white-space: pre-line;
+          background: #ffffffa6;
+          padding: 0.4rem;
+          border-radius: 15px;
+        }
+
+        .header {
+          display: flex;
+          padding: 0.25rem;
+          height: 36px;
+          background: #ffffffa6;
+          border-bottom: 1px solid #00000050;
+          border-radius: 15px 15px 0 0;
+
+          h4 {
+            flex: 0 0 70%;
+          }
+
+          a.item-create {
+            flex: 0 0 30%;
+            align-self: center;
+            background: #dddddda6;
+            margin: unset;
+            border-radius: 10px;
+            padding: 3px 0;
+          }
+        }
+      }
     }
   }
 }

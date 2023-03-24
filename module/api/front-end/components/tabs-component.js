@@ -40,7 +40,7 @@ export default class TabsComponent extends Component {
         this.element.find("a.item[data-tab]").click((event) => {
             this.store.dispatch("changeTab", event.currentTarget.dataset.tab);
         })
-        this.element.find("a.item-create").click((_) => {
+        this.element.find("a.item-create[data-type='automation']").click((_) => {
             this.store.dispatch("newAutomation");
         })
     }
