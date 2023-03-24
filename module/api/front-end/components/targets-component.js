@@ -35,6 +35,7 @@ export default class TargetsComponent extends Component {
         })
         this.element.find(`select.target-select`).on("change", async (ev) => {
             this.renderBlock = true;
+            
             await this.store.dispatch(`changeTarget`, {index: ev.currentTarget.dataset.index, value: ev.currentTarget.value});
             this.renderBlock = false;
         })

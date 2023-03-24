@@ -42,7 +42,7 @@ export default class SettingsComponent extends Component {
                                 <select id="timing-select">
                                     ${
                                         possibleTimings.map(t => `
-                                            <option value="${ CONFIG.PTUAutomation.Timing[t]}" ${CONFIG.PTUAutomation.Timing[t] == currentTiming ? `selected="selected"`:""}>${game.i18n.localize("PTU.AutomationTiming."+t)}</option>
+                                            <option value="${ CONFIG.PTUAutomation.Timing[t].value}" ${CONFIG.PTUAutomation.Timing[t] == currentTiming ? `selected="selected"`:""}>${game.i18n.localize("PTU.AutomationTiming."+t)}</option>
                                         `).join('')
                                     }                                    
                                 </select>
@@ -70,7 +70,7 @@ export default class SettingsComponent extends Component {
             this.store.dispatch("togglePassive");
         })
         this.element.find("#timing-select").on("change", (e) => {
-            this.store.dispatch("changeTiming", e.target.value);
+            this.store.dispatch("changeTiming", ev.currentTarget.value);
         })
         this.element.find("a.item-delete").on("click", () => {
             this.store.dispatch("deleteActiveAutomation");
