@@ -136,7 +136,7 @@ export default class MonAbilitiesListComponent extends Component {
     }
 
     _prepAbilities(ability, key) {
-        return `<option value="${ability}" ${ this.state[key] == ability  ? `selected="selected"` : ''}>${ability}</option>`;
+        return `<option value="${ability}" ${ this.state.abilityChoices[key] == ability  ? `selected="selected"` : ''}>${ability}</option>`;
     }
 
 }

@@ -69,7 +69,7 @@ export default function({actorSystem, changeDetails, name, form, knownMoves, cur
                 
                 const result = game.settings.get("ptu", "playtestStats") ?
                     CalculatePTStatTotal(10 + context.state.changeDetails.newLvl, actualLevel, tempStats, {ignoreStages: true}, context.state.nature, false) :
-                    CalculateStatTotal(10 + context.state.changeDetails.newLvl, actualLevel, tempStats, context.state.nature, false);
+                    CalculateStatTotal(10 + context.state.changeDetails.newLvl + context.state.levelUpPointsBonus, tempStats, {twistedPower: false, ignoreStages: false});
                 
                 for(const stat of Object.keys(newStats)) {
                     newStats[stat].newTotal = result.stats[stat].total;    
@@ -263,8 +263,8 @@ export default function({actorSystem, changeDetails, name, form, knownMoves, cur
 
                 await context.commit('updateAbilityChoices', {
                     Basic: basicAbilityNames[0],
-                    Advanced: advancedAbilityNames[0],
-                    High: highAbilityNames[0]
+                    Advanced: basicAbilityNames[0] == advancedAbilityNames[0] ? advancedAbilityNames[1] : advancedAbilityNames[0],
+                    High: basicAbilityNames[0] == highAbilityNames[0] || highAbilityNames[0] == advancedAbilityNames[0] ? advancedAbilityNames[0] == highAbilityNames[1] || highAbilityNames[1] == advancedAbilityNames[1] ? highAbilityNames[2] ?? highAbilityNames[1] ?? highAbilityNames[0] : highAbilityNames[1] ?? highAbilityNames[0] : highAbilityNames[0]
                 });
 
                 await context.commit('updateAbilityChanges', changes);
