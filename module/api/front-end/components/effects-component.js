@@ -36,12 +36,12 @@ export default class EffectsComponent extends Component {
         })
         this.element.find(`select.effect-select`).on("change", async (ev) => {
             this.renderBlock = true;
-            await this.store.dispatch(`changeEffect`, {index: ev.currentTarget.dataset.index, type: ev.currentTarget.value, value:""});
+            await this.store.dispatch(`updateEffect`, ev.currentTarget.dataset.index, {type: ev.currentTarget.value, value: this.state.effects[ev.currentTarget.dataset.index[1]]});
             this.renderBlock = false;
         })
         this.element.find(`input.effect-value`).on("change", async (ev) => {
             this.renderBlock = true;
-            await this.store.dispatch(`changeEffectValue`, {index: ev.currentTarget.dataset.index, value: ev.currentTarget.value});
+            await this.store.dispatch(`updateEffect`, ev.currentTarget.dataset.index, {type: this.state.effects[ev.currentTarget.dataset.index[0]], value:ev.currentTarget.value});
             this.renderBlock = false;
         });
     }
@@ -59,7 +59,7 @@ export default class EffectsComponent extends Component {
                 <select class="effect-select" data-index="${index}">
                     ${this._getSelectItems(effect)}
                 </select>
-                <input type="text" class="effect-value" data-index="${index}" value="${this.state.effectValues[index] ?? ""}"></input>
+                <input type="text" class="effect-value" data-index="${index}" value="${this.state.effects[index].value ?? ""}"></input>
                 <a class="item-control item-delete" data-type="effect" data-index="${index}">
                     <i class="fas fa-trash" style="margin-right: 3px;"></i>
                 </a>

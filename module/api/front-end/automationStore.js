@@ -56,22 +56,18 @@ export default function ({ object }) {
 
             /*** Effects */
             async addEffect(context) {
-                await context.commit("addEffect", CONFIG.PTUAutomation.Effect.ADD_DAMAGE)
+                await context.commit("addEffect", {type:CONFIG.PTUAutomation.Effect.ADD_DAMAGE, value:""})
             },
             async removeEffect(context, index) {
                 if(!context.state.effects[index]) return;
                 await context.commit("removeEffect", index);;
             },
-            async changeEffect(context, {index, value}) {
+            async updateEffect(context, index, {type, value}) {
                 if(!context.state.effects[index]) return;
-                if(!Object.values(CONFIG.PTUAutomation.Effect).includes(value)) return;
-                await context.commit("updateEffect", {index, value});
-                await context.commit("updateEffectValue", {index, value: ""});
+                if(!Object.values(CONFIG.PTUAutomation.Effect).includes(context.state.effects[index][0])) return;
+                await context.commit("updateEffect", index, {type, value});
             },
-            async updateEffectValue(context, { index, value }) {
-                if(!context.state.effects[index]) return;
-                await context.commit("updateEffectValue", {index, value});
-            },
+            
             /*** Settings */
             async togglePassive(context) {
                 const newPassive = !context.state.passive;
@@ -169,9 +165,9 @@ export default function ({ object }) {
             /*** Conditions */
 
             /*** Effects */
-            async addEffect(state, effect) {
+            async addEffect(state, {type, value}) {
                 const effects = duplicate(state.effects);
-                effects.push(effect);
+                effects.push({type, value});
                 state.effects = effects;
                 return state;
             },
@@ -181,16 +177,10 @@ export default function ({ object }) {
                 state.effects = effects;
                 return this.state;
             },
-            async updateEffect(state, {index, value}) {
+            async updateEffect(state, index, {type, value}) {
                 const effects = duplicate(state.effects);
-                effects[index] = value;
+                effects[index] = {type, value};
                 state.effects = effects;
-                return state;
-            },
-            async updateEffectValue(state, {index, value}) {
-                const effectValues = duplicate(state.effectValues);
-                effectValues[index] = value;
-                state.effectValues = effectValues;
                 return state;
             },
 
@@ -218,8 +208,7 @@ export default function ({ object }) {
              */
             targets: [], // Targets Tab
             conditions: [], // Conditions Tab
-            effects: [], // Effects Tab
-            effectValues: [], // Effects Tab
+            effects: [], // Effects will be in the form of {type, value} where type represents the type of effect and value is a string of the value to be applied
             timing: CONFIG.PTUAutomation.Timing.BEFORE_ROLL, // Settings Tab
             passive: false, // Settings Tab
             // Settings tab should also contain 'Delete this automation'
