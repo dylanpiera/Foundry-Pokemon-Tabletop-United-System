@@ -22,7 +22,6 @@ export default class SettingsComponent extends Component {
             return this.element.html("");
         }
 
-        const possibleTimings = Object.keys(CONFIG.PTUAutomation.Timing);
         const currentTiming = this.state.timing;
 
         // Actually render the component if it is this tab
@@ -40,11 +39,7 @@ export default class SettingsComponent extends Component {
                             <td>Timing</td>
                             <td>
                                 <select id="timing-select">
-                                    ${
-                                        possibleTimings.map(t => `
-                                            <option value="${ CONFIG.PTUAutomation.Timing[t].value}" ${CONFIG.PTUAutomation.Timing[t] == currentTiming ? `selected="selected"`:""}>${game.i18n.localize("PTU.AutomationTiming."+t)}</option>
-                                        `).join('')
-                                    }                                    
+                                    ${this._getTimingItems(currentTiming)}
                                 </select>
                             </td>
                         </tr>
@@ -77,5 +72,10 @@ export default class SettingsComponent extends Component {
         })
     }
 
-    
+    _getTimingItems(currentTiming){
+        const possibleTimings = Object.keys(CONFIG.PTUAutomation.Timing);
+        possibleTimings.map(t => `
+            <option value="${ CONFIG.PTUAutomation.Timing[t].value}" ${CONFIG.PTUAutomation.Timing[t] == currentTiming ? `selected="selected"`:""}>${game.i18n.localize("PTU.AutomationTiming."+t)}</option>
+        `).join('')
+    }
 }

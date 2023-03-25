@@ -47,19 +47,19 @@ export default class EffectsComponent extends Component {
     }
 
     _renderEffects() {
-        return ` <div class="effect-bar">
+        return `<div class="effect-bar">
             <div class="header bar">
                 <h4>Effects</h4>
                 <a class="item-control item-create" data-type="effect">
-                <i class="fas fa-plus-circle" style="margin-right: 3px;"></i><span class="readable">Add</span>
-            </a>
-        </div>
+                    <i class="fas fa-plus-circle" style="margin-right: 3px;"></i><span class="readable">Add</span>
+                </a>
+            </div>
         ${this.state.effects.map((effect,index) => `
             <div class="effect mt-2" id="effect-${index}">
                 <select class="effect-select" data-index="${index}">
                     ${this._getSelectItems(effect)}
                 </select>
-                <input type="text" class="effect-value" data-index="${index}" value="${this.state.effects[index].value ?? ""}"></input>
+                <input type="text" class="effect-value" data-index="${index}" value="${effect.value ?? ""}"></input>
                 <a class="item-control item-delete" data-type="effect" data-index="${index}">
                     <i class="fas fa-trash" style="margin-right: 3px;"></i>
                 </a>
@@ -71,17 +71,17 @@ export default class EffectsComponent extends Component {
     _renderHelp() {
         return `<div class="d-flex help-bar">
             <div class="header bar"><h4>Guidelines</h4></div>
-            <div class="mt-2 readable fs-13"><b>addDamage:</b> Damage will be done to the targets, us a negative number to apply healing.</div>
-            <div class="mt-2 readable fs-13"><b>applyEffect:</b> Apply an effect to the targets</div>
-            <div class="mt-2 readable fs-13"><b>removeEffect:</b> remove an effect currently effecting the targets</div>
-            <div class="mt-2 readable fs-13"><b>addEffectiveness</b> change the effectiveness of the target. usually used with certain types of move.</div>
+            <div class="mt-2 readable fs-13"><b>Add Damage:</b> Damage will be done to the targets, us a negative number to apply healing.</div>
+            <div class="mt-2 readable fs-13"><b>Add Effect:</b> Apply an effect to the targets</div>
+            <div class="mt-2 readable fs-13"><b>Remove Effect:</b> remove an effect currently effecting the targets</div>
+            <div class="mt-2 readable fs-13"><b>Add Effectiveness</b> change the effectiveness of the target. usually used with certain types of move.</div>
         </div>`
     }
 
     _getSelectItems(currentEffect) {
         const possibleEffects = Object.keys(CONFIG.PTUAutomation.Effect);
         return possibleEffects.map(e => `
-            <option value="${CONFIG.PTUAutomation.Effect[e]}" ${CONFIG.PTUAutomation.Effect[e] == currentEffect ? "selected" : ""}>${game.i18n.localize("PTU.AutomationEffect"+e)}</option>
+            <option value="${CONFIG.PTUAutomation.Effect[e]}" ${CONFIG.PTUAutomation.Effect[e] == currentEffect.type ? "selected" : ""}>${game.i18n.localize("PTU.AutomationEffect."+e)}</option>
         `).join('');        
     }
 }
