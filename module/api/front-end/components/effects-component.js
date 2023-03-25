@@ -36,12 +36,12 @@ export default class EffectsComponent extends Component {
         })
         this.element.find(`select.effect-select`).on("change", async (ev) => {
             this.renderBlock = true;
-            await this.store.dispatch(`updateEffect`, ev.currentTarget.dataset.index, {type: ev.currentTarget.value, value: this.state.effects[ev.currentTarget.dataset.index[1]]});
+            await this.store.dispatch(`updateEffect`, {index:ev.currentTarget.dataset.index, type:ev.currentTarget.value, value:this.state.effects[ev.currentTarget.dataset.index].value});
             this.renderBlock = false;
         })
         this.element.find(`input.effect-value`).on("change", async (ev) => {
             this.renderBlock = true;
-            await this.store.dispatch(`updateEffect`, ev.currentTarget.dataset.index, {type: this.state.effects[ev.currentTarget.dataset.index[0]], value:ev.currentTarget.value});
+            await this.store.dispatch(`updateEffect`, {index:ev.currentTarget.dataset.index, type:this.state.effects[ev.currentTarget.dataset.index].type, value:ev.currentTarget.value});
             this.renderBlock = false;
         });
     }

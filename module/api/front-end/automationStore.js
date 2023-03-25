@@ -62,10 +62,10 @@ export default function ({ object }) {
                 if(!context.state.effects[index]) return;
                 await context.commit("removeEffect", index);;
             },
-            async updateEffect(context, index, {type, value}) {
+            async updateEffect(context, {index, type, value}) {
                 if(!context.state.effects[index]) return;
-                if(!Object.values(CONFIG.PTUAutomation.Effect).includes(context.state.effects[index][0])) return;
-                await context.commit("updateEffect", index, {type, value});
+                if(!Object.values(CONFIG.PTUAutomation.Effect).includes(type)) return;
+                await context.commit("updateEffect", {index, type, value});
             },
             
             /*** Settings */
@@ -167,7 +167,7 @@ export default function ({ object }) {
             /*** Effects */
             async addEffect(state, {type, value}) {
                 const effects = duplicate(state.effects);
-                effects.push({type, value});
+                effects.push({type:type, value:value});
                 state.effects = effects;
                 return state;
             },
@@ -177,9 +177,9 @@ export default function ({ object }) {
                 state.effects = effects;
                 return this.state;
             },
-            async updateEffect(state, index, {type, value}) {
+            async updateEffect(state, {index, type, value}) {
                 const effects = duplicate(state.effects);
-                effects[index] = {type, value};
+                effects[index] = {type:type, value:value};
                 state.effects = effects;
                 return state;
             },
