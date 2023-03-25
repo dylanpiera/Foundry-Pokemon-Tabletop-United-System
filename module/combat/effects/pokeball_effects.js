@@ -298,6 +298,8 @@ export async function ThrowPokeball(thrower, target, pokeball) {
         return;
     }
 
+    let enable_pokeball_sounds = game.settings.get("ptu", "usePokeballSoundsOnDragOut");
+
     console.log(`Consuming item with ID ${pokeball._id} and name ${pokeball.name}`);
     //reduce the number of balls that the character has by 1
     ui.notifications.info("Removed 1 quantity from Pokeball in inventory.")
@@ -350,7 +352,8 @@ export async function ThrowPokeball(thrower, target, pokeball) {
             .play();
     }
 
-    AudioHelper.play({ src: pokeball_sound_paths[hitType], volume: 0.8, autoplay: true, loop: false }, true);
+    if(enable_pokeball_sounds)
+        AudioHelper.play({ src: pokeball_sound_paths[hitType], volume: 0.8, autoplay: true, loop: false }, true);
 
     await timeout(1000);
     await roll.toMessage({ flavor: `Pokeball throw vs ${target.name}'s ${targetEvasion} Speed Evasion:`, sound: null });
@@ -382,16 +385,17 @@ export async function ThrowPokeball(thrower, target, pokeball) {
 
         if (isCaptured == true) // Captured!
         {
-            await AudioHelper.play({ src: pokeball_sound_paths["capture_success"], volume: 0.8, autoplay: true, loop: false }, true);
+            if(enable_pokeball_sounds) await AudioHelper.play({ src: pokeball_sound_paths["capture_success"], volume: 0.8, autoplay: true, loop: false }, true);
     
             await timeout(1000);
-            await AudioHelper.play({ src: pokeball_sound_paths["capture_jingle"], volume: 0.7, autoplay: true, loop: false }, true);
+            if(enable_pokeball_sounds) await AudioHelper.play({ src: pokeball_sound_paths["capture_jingle"], volume: 0.7, autoplay: true, loop: false }, true);
 
             await applyCapture(thrower, target.actor, pokeball, game.ptu.utils.species.get(target.actor.system.species)); 
         }
         else // Escaped!
         {
-            await AudioHelper.play({ src: pokeball_sound_paths["release"], volume: 0.7, autoplay: true, loop: false }, true);
+            if(enable_pokeball_sounds)
+                await AudioHelper.play({ src: pokeball_sound_paths["release"], volume: 0.7, autoplay: true, loop: false }, true);
             if ((game.modules.get("tokenmagic")?.active) && (game.settings.get("ptu", "enableMoveAnimations") == true))
             {
                 await game.ptu.utils.api.gm.addTokenMagicFilters(target, game.canvas.scene.id, pokeball_capture_TMFX_params);
@@ -461,6 +465,7 @@ export async function PlayReleaseOwnedPokemonAnimation(token) {
 
     let display_token_nature = game.settings.get("ptu", "alwaysDisplayTokenNature");
     let enable_pokeball_animation = game.settings.get("ptu", "usePokeballAnimationOnDragOut");
+    let enable_pokeball_sounds = game.settings.get("ptu", "usePokeballSoundsOnDragOut");
     let always_display_token_name = game.settings.get("ptu", "alwaysDisplayTokenNames");
     let always_display_token_health = game.settings.get("ptu", "alwaysDisplayTokenHealth");
 
@@ -500,7 +505,8 @@ export async function PlayReleaseOwnedPokemonAnimation(token) {
                 await game.ptu.utils.api.gm.updateToken(target_token, {alpha: 0})
             }
 
-            await AudioHelper.play({src: pokeball_sound_paths["miss"], volume: 0.5, autoplay: true, loop: false}, true);
+            if(enable_pokeball_sounds)
+                await AudioHelper.play({src: pokeball_sound_paths["miss"], volume: 0.5, autoplay: true, loop: false}, true);
 
             let targetImagePath = item_icon_path+pokeball+".webp";
 
@@ -521,7 +527,8 @@ export async function PlayReleaseOwnedPokemonAnimation(token) {
                 }
 
                 await timeout(500);
-                await AudioHelper.play({src: pokeball_sound_paths["release"], volume: 0.5, autoplay: true, loop: false}, true); 
+                if(enable_pokeball_sounds)
+                    await AudioHelper.play({src: pokeball_sound_paths["release"], volume: 0.5, autoplay: true, loop: false}, true); 
 
                 await timeout(500);
                 // await target_token.TMFXaddUpdateFilters(pokeballShoop_params); 
@@ -610,6 +617,7 @@ export async function PlayReleaseOwnedPokemonAnimation(token) {
 
 export async function PlayPokeballReturnAnimation(pokemon_token)
 {
+    let enable_pokeball_sounds = game.settings.get("ptu", "usePokeballSoundsOnDragOut");
     let pokemon_actor = await GetActorFromToken(pokemon_token);
     if(pokemon_actor?.type == "pokemon")
     {
@@ -631,7 +639,8 @@ export async function PlayPokeballReturnAnimation(pokemon_token)
             await game.ptu.utils.api.gm.addTokenMagicFilters(pokemon_token.object, game.canvas.scene.id, pokeball_capture_TMFX_params);
         }
     
-        await AudioHelper.play({ src: pokeball_sound_paths["return"], volume: 0.7, autoplay: true, loop: false }, true);
+        if(enable_pokeball_sounds)
+            await AudioHelper.play({ src: pokeball_sound_paths["return"], volume: 0.7, autoplay: true, loop: false }, true);
     
         await timeout(2000);
         await pokemon_token.delete()
@@ -645,13 +654,14 @@ export async function PlayPokeballReturnAnimation(pokemon_token)
 
 export async function PlayPokeballShoopFX(target_token, pokeball_image_path, to_hit_roll, pokeball_item, throwing_actor, target_actor, isCaptured) 
 {
+    let enable_pokeball_sounds = game.settings.get("ptu", "usePokeballSoundsOnDragOut");
     if ((game.modules.get("tokenmagic")?.active) && (game.settings.get("ptu", "enableMoveAnimations") == true)) 
     {
         await game.ptu.utils.api.gm.addTokenMagicFilters(target_token, game.canvas.scene.id, pokeball_capture_TMFX_params);
         await pokeballPolymorphFunc(pokeball_image_path, target_token);
     }
-
-    await AudioHelper.play({ src: pokeball_sound_paths["capture_attempt"], volume: 0.8, autoplay: true, loop: false }, true);
+    if(enable_pokeball_sounds)
+        await AudioHelper.play({ src: pokeball_sound_paths["capture_attempt"], volume: 0.8, autoplay: true, loop: false }, true);
 }
 
 
@@ -699,7 +709,10 @@ export async function PlayPokeballCatchOrEscapeFX(isCaptured, targetToken)
 
 export async function PlayPokeballWiggleFX(target_token)
 {
-    await AudioHelper.play({ src: pokeball_sound_paths["wiggle"], volume: 0.8, autoplay: true, loop: false }, true);
+    let enable_pokeball_sounds = game.settings.get("ptu", "usePokeballSoundsOnDragOut");
+    
+    if(enable_pokeball_sounds)
+        await AudioHelper.play({ src: pokeball_sound_paths["wiggle"], volume: 0.8, autoplay: true, loop: false }, true);
 
     if ((game.modules.get("tokenmagic")?.active) && (game.settings.get("ptu", "enableMoveAnimations") == true))
     {
