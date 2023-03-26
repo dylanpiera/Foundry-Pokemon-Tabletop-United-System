@@ -182,11 +182,12 @@ export default function ({ object }) {
                 }
                 const newAutomationKey = ""+(maxIndex+1);
                 automations[newAutomationKey] = {
-                    targets: duplicate(state.targets),
-                    conditions: duplicate(state.conditions),
-                    effects: duplicate(state.effects),
-                    timing: state.timing,
-                    passive: state.passive,
+                    targets: [],
+                    conditions: [],
+                    effects: [],
+                    effectValues: [],
+                    timing: CONFIG.PTUAutomation.Timing.BEFORE_ROLL,
+                    passive: false,
                 };
                 state.automations = automations;
                 return state;
