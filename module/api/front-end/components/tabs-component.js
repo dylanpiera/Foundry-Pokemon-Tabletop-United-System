@@ -39,10 +39,15 @@ export default class TabsComponent extends Component {
 
         this.element.find("a.item[data-tab]").click((event) => {
             this.store.dispatch("changeTab", event.currentTarget.dataset.tab);
-        })
+        });
         this.element.find("a.item-create[data-type='automation']").click((_) => {
             this.store.dispatch("newAutomation");
-        })
+        });
+        this.element.find("select#automation-select").on("change", async (ev) => {
+            //this.renderBlock = true;
+            await this.store.dispatch("switchAutomation", ev.currentTarget.value);
+            //this.renderBlock = false;
+        });
     }
 
     _getAutomationItems() {
