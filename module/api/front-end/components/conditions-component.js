@@ -27,7 +27,77 @@ export default class ConditionsComponent extends Component {
 
         this.element.html(this._renderConditions() + this._renderHelp());
 
-        //TODO: Add event listeners
+        this.element.find("a.item-create[data-type='condition']").click((_) => {
+            this.store.dispatch("addCondition");
+        });
+        this.element.find("a.item-delete[data-type='condition']").click((event) => {
+            this.store.dispatch("removeCondition", event.currentTarget.dataset.index);
+        });
+        this.element.find(`select.condition-select`).on("change", async (ev) => {
+            this.renderBlock = true;
+            const curCondition = this.state.conditions[ev.currentTarget.dataset.index];
+            this.store.dispatch(`updateCondition`, {
+                index: ev.currentTarget.dataset.index,
+                type: ev.currentTarget.value,
+                operator: curCondition.operator,
+                value: curCondition.value,
+                rangeIncrease: curCondition.rangeIncrease,
+                rangeIncreaseAmount: curCondition.rangeIncreaseAmount,
+            });
+            this.renderBlock = false;
+        });
+        this.element.find(`select.condition-operator-select`).on("change", async (ev) => {
+            this.renderBlock = true;
+            const curCondition = this.state.conditions[ev.currentTarget.dataset.index];
+            this.store.dispatch(`updateCondition`, {
+                index: ev.currentTarget.dataset.index,
+                type: curCondition.type,
+                operator: ev.currentTarget.value,
+                value: curCondition.value,
+                rangeIncrease: curCondition.rangeIncrease,
+                rangeIncreaseAmount: curCondition.rangeIncreaseAmount,
+            });
+            this.renderBlock = false;
+        });
+        this.element.find(`input.condition-value`).on("change", async (ev) => {
+            this.renderBlock = true;
+            const curCondition = this.state.conditions[ev.currentTarget.dataset.index];
+            this.store.dispatch(`updateCondition`, {
+                index: ev.currentTarget.dataset.index,
+                type: curCondition.type,
+                operator: curCondition.operator,
+                value: ev.currentTarget.value,
+                rangeIncrease: curCondition.rangeIncrease,
+                rangeIncreaseAmount: curCondition.rangeIncreaseAmount,
+            });
+            this.renderBlock = false;
+        });
+        this.element.find(`select.condition-rangeIncreases-select`).on("change", async (ev) => {
+            this.renderBlock = true;
+            const curCondition = this.state.conditions[ev.currentTarget.dataset.index];
+            this.store.dispatch(`updateCondition`, {
+                index: ev.currentTarget.dataset.index,
+                type: curCondition.type,
+                operator: curCondition.operator,
+                value: curCondition.value,
+                rangeIncrease: ev.currentTarget.value,
+                rangeIncreaseAmount: curCondition.rangeIncreaseAmount,
+            });
+            this.renderBlock = false;
+        });
+        this.element.find(`input.condition-rangeIncreases-value`).on("change", async (ev) => {
+            this.renderBlock = true;
+            const curCondition = this.state.conditions[ev.currentTarget.dataset.index];
+            this.store.dispatch(`updateCondition`, {
+                index: ev.currentTarget.dataset.index,
+                type: curCondition.type,
+                operator: curCondition.operator,
+                value: curCondition.value,
+                rangeIncrease: curCondition.rangeIncrease,
+                rangeIncreaseAmount: ev.currentTarget.value,
+            });
+            this.renderBlock = false;
+        });
     }
 
     _renderConditions() {
@@ -50,7 +120,7 @@ export default class ConditionsComponent extends Component {
                 <select class="condition-rangeIncreases-select" data-index="${index}">
                     ${this._getRangeIncreasesItems(condition)}
                 </select>
-                input type="number" class="condition-rangeIncreases-value" data-index="${index}" value="${condition.rangeIncreasesAmount}"></input>
+                <input type="number" class="condition-rangeIncreases-value" data-index="${index}" value="${condition.rangeIncreasesAmount}"></input>
                 <a class="item-control item-delete" data-type="condition" data-index="${index}">
                     <i class="fas fa-times-circle" style="margin-right: 3px;"></i><span class="readable">Delete</span>
                 </a>
@@ -63,10 +133,10 @@ export default class ConditionsComponent extends Component {
         //TODO: Fix help text
         return `<div class="d-flex help-bar">
             <div class="header bar"><h4>Guidelines</h4></div>
-            <div class="mt-2 readable fs-13"><b>ATTACK_ROLL:</b> Ellam definately understands this but just to be safe Ashe will edit this bit to explain it later.</div>
-            <div class="mt-2 readable fs-13"><b>EFFECTIVENESS:</b> Ellam definately understands this but just to be safe Ashe will edit this bit to explain it later.</div>
-            <div class="mt-2 readable fs-13"><b>ITEM_TYPE:</b> The type of the item (I can just about work that one out)</div>
-            <div class="mt-2 readable fs-13"><b>MOVE_TYPE</b> The type of the move (I can just about work that one out)</div>
+            <div class="mt-2 readable fs-13"><b>ATTACK_ROLL:</b> The d20 roll made for the accuracy check of a roll.</div>
+            <div class="mt-2 readable fs-13"><b>EFFECTIVENESS:</b> The effectiveness of a move.</div>
+            <div class="mt-2 readable fs-13"><b>ITEM_TYPE:</b> The type of the item.</div>
+            <div class="mt-2 readable fs-13"><b>MOVE_TYPE</b> The type of the move.</div>
         </div>`
     }
 
@@ -80,14 +150,14 @@ export default class ConditionsComponent extends Component {
     _getOperatorItems(currentCondition) {
         const possibleOperators = Object.keys(CONFIG.PTUAutomation.Operators);
         return possibleOperators.map(o => `
-            <option value="${CONFIG.PTUAutomation.Operators[o]}" ${CONFIG.PTUAutomation.Operators[o] == currentCondition.operator ? "selected" : ""}>${game.i18n.localize("PTU.AutomationOperators.EQUALS"+o)}</option>
+            <option value="${CONFIG.PTUAutomation.Operators[o]}" ${CONFIG.PTUAutomation.Operators[o] == currentCondition.operator ? "selected" : ""}>${game.i18n.localize("PTU.AutomationOperators."+o)}</option>
         `).join('');  
     }        
     
     _getRangeIncreasesItems(currentCondition) {
         const possibleRangeIncreases = Object.keys(CONFIG.PTUAutomation.RangeIncreases);
         return possibleRangeIncreases.map(r => `
-            <option value="${CONFIG.PTUAutomation.RangeIncreases[r]}" ${CONFIG.PTUAutomation.RangeIncreases[r] == currentCondition.RangeIncreases ? "selected" : ""}>${game.i18n.localize("PTU.AutomationRangeIncrease."+r)}</option>
+            <option value="${CONFIG.PTUAutomation.RangeIncreases[r]}" ${CONFIG.PTUAutomation.RangeIncreases[r] == currentCondition.rangeIncrease ? "selected" : ""}>${game.i18n.localize("PTU.AutomationRangeIncrease."+r)}</option>
         `).join(''); 
     }       
 }

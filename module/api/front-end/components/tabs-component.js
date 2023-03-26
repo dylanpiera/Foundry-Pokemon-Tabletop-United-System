@@ -28,7 +28,7 @@ export default class TabsComponent extends Component {
             </nav>
             <div class="automation-dropdown swsh-box p-1 mr-1">
                 <select id="automation-select">
-                    <option value="1">Automation 1</option> 
+                    ${this._getAutomationItems()}
                 </select>
                 <a class="item-control item-create" data-type="automation">
                     <i class="fas fa-plus-circle" style="margin-right: 3px;"></i><span class="readable">Add</span>
@@ -45,5 +45,10 @@ export default class TabsComponent extends Component {
         })
     }
 
-    
+    _getAutomationItems() {
+        const possibleAutomations = Object.keys(this.state.automations);
+        return possibleAutomations.map=(a => `
+            <option value="${a}" ${this.state.activeAutomation == a ? "selected" : ""}>"Automation "+${a}</option>
+        `).join('');
+    }
 }

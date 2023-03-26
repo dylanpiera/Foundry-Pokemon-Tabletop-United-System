@@ -30,15 +30,15 @@ export default class EffectsComponent extends Component {
         // Add event listeners
         this.element.find("a.item-create[data-type='effect']").click((_) => {
             this.store.dispatch("addEffect");
-        })
+        });
         this.element.find("a.item-delete[data-type='effect']").click((event) => {
             this.store.dispatch("removeEffect", event.currentTarget.dataset.index);
-        })
+        });
         this.element.find(`select.effect-select`).on("change", async (ev) => {
             this.renderBlock = true;
             await this.store.dispatch(`updateEffect`, {index:ev.currentTarget.dataset.index, type:ev.currentTarget.value, value:this.state.effects[ev.currentTarget.dataset.index].value});
             this.renderBlock = false;
-        })
+        });
         this.element.find(`input.effect-value`).on("change", async (ev) => {
             this.renderBlock = true;
             await this.store.dispatch(`updateEffect`, {index:ev.currentTarget.dataset.index, type:this.state.effects[ev.currentTarget.dataset.index].type, value:ev.currentTarget.value});
@@ -81,7 +81,7 @@ export default class EffectsComponent extends Component {
     _getSelectItems(currentEffect) {
         const possibleEffects = Object.keys(CONFIG.PTUAutomation.Effect);
         return possibleEffects.map(e => `
-            <option value="${CONFIG.PTUAutomation.Effect[e]}" ${CONFIG.PTUAutomation.Effect[e] == currentEffect.type ? "selected" : ""}>${game.i18n.localize("PTU.AutomationEffect."+e)}</option>
+            <option value="${CONFIG.PTUAutomation.Effect[e]}" ${CONFIG.PTUAutomation.Effect[e] == currentEffect.type ? `selected="selected"`:""}>${game.i18n.localize("PTU.AutomationEffect."+e)}</option>
         `).join('');        
     }
 }

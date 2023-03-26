@@ -74,8 +74,8 @@ export default class SettingsComponent extends Component {
 
     _getTimingItems(currentTiming){
         const possibleTimings = Object.keys(CONFIG.PTUAutomation.Timing);
-        possibleTimings.map(t => `
-            <option value="${ CONFIG.PTUAutomation.Timing[t].value}" ${CONFIG.PTUAutomation.Timing[t] == currentTiming ? `selected="selected"`:""}>${game.i18n.localize("PTU.AutomationTiming."+t)}</option>
+        return possibleTimings.map(t => `
+            <option value="${ CONFIG.PTUAutomation.Timing[t]}" ${CONFIG.PTUAutomation.Timing[t] == currentTiming ? `selected="selected"`:""}>${game.i18n.localize("PTU.AutomationTiming."+t)}</option>
         `).join('')
     }
 }

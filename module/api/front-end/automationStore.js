@@ -37,6 +37,21 @@ export default function ({ object }) {
                 //switch to new automation
                 await context.commit("setActiveAutomation", newIndex);
             },
+            async newAutomation(context) {
+                //save current automation
+                await context.commit("saveActiveAutomation");
+                //add new automation
+                await context.commit("addAutomation");
+                //switch to new automation
+                //find the maximum value within Object.keys(context.state.automations)
+                let maxIndex = 0;
+                for (let key of Object.keys(context.state.automations)){
+                    let val = parseInt(key);
+                    if (val > maxIndex) maxIndex = val;
+                }
+
+                await context.commit("setActiveAutomation", ""+maxIndex);
+            },
 
             /*** Targets */
             async addTarget(context) {
@@ -53,6 +68,26 @@ export default function ({ object }) {
             },
 
             /*** Conditions */
+            async addCondition(context) {
+                await context.commit("addCondition", {
+                    type:CONFIG.PTUAutomation.Condition.ATTACK_ROLL,
+                    operator:CONFIG.PTUAutomation.Operators.EQUALS,
+                    value:"",
+                    rangeIncrease:CONFIG.PTUAutomation.RangeIncreases.NONE,
+                    rangeIncreaseAmount:0
+                });
+            },
+            async removeCondition(context, index) {
+                if(!context.state.conditions[index]) return;
+                await context.commit("removeCondition", index);
+            },
+            async updateCondition(context, {index, type, operator, value, rangeIncrease, rangeIncreaseAmount}) {
+                if(!context.state.conditions[index]) return;
+                if(!Object.values(CONFIG.PTUAutomation.Condition).includes(type)) return;
+                if(!Object.values(CONFIG.PTUAutomation.Operators).includes(operator)) return;
+                if(!Object.values(CONFIG.PTUAutomation.RangeIncreases).includes(rangeIncrease)) return;
+                await context.commit("updateCondition", {index, type, operator, value, rangeIncrease, rangeIncreaseAmount});
+            },
 
             /*** Effects */
             async addEffect(context) {
@@ -60,7 +95,7 @@ export default function ({ object }) {
             },
             async removeEffect(context, index) {
                 if(!context.state.effects[index]) return;
-                await context.commit("removeEffect", index);;
+                await context.commit("removeEffect", index);
             },
             async updateEffect(context, {index, type, value}) {
                 if(!context.state.effects[index]) return;
@@ -137,6 +172,25 @@ export default function ({ object }) {
                 state.automations = automations;
                 return state;
             },
+            async addAutomation(state) {
+                const automations = duplicate(state.automations);
+                //find the max value of index in automations                
+                let maxIndex = 0;
+                for (let key of Object.keys(automations)){
+                    let val = parseInt(key);
+                    if (val > maxIndex) maxIndex = val;
+                }
+                const newAutomationKey = ""+(maxIndex+1);
+                automations[newAutomationKey] = {
+                    targets: duplicate(state.targets),
+                    conditions: duplicate(state.conditions),
+                    effects: duplicate(state.effects),
+                    timing: state.timing,
+                    passive: state.passive,
+                };
+                state.automations = automations;
+                return state;
+            },
             async updateTab(state, targetTab) {
                 state.activeTab = targetTab;
                 return state;
@@ -163,6 +217,24 @@ export default function ({ object }) {
             },
             
             /*** Conditions */
+            async addCondition(state, {type, operator, value, rangeIncrease, rangeIncreaseAmount}) {
+                const conditions = duplicate(state.conditions);
+                conditions.push({type:type, operator:operator, value:value, rangeIncrease:rangeIncrease, rangeIncreaseAmount:rangeIncreaseAmount});
+                state.conditions = conditions;
+                return state;
+            },
+            async removeCondition(state, index) {
+                const conditions = duplicate(state.conditions);
+                conditions.splice(index, 1);
+                state.conditions = conditions;
+                return state;
+            },
+            async updateCondition(state, {index, type, operator, value, rangeIncrease, rangeIncreaseAmount}) {
+                const conditions = duplicate(state.conditions);
+                conditions[index] = {type:type, operator:operator, value:value, rangeIncrease:rangeIncrease, rangeIncreaseAmount:rangeIncreaseAmount};
+                state.conditions = conditions;
+                return state;
+            },
 
             /*** Effects */
             async addEffect(state, {type, value}) {

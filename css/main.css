@@ -2084,6 +2084,7 @@ h3 {
 }
 .ptu.automation .content .tabbed-content #conditions-component {
   justify-content: space-evenly;
+  flex-direction: column;
 }
 .ptu.automation .content .tabbed-content #conditions-component .condition-bar {
   flex-direction: column;
@@ -2097,12 +2098,26 @@ h3 {
   justify-content: space-between;
 }
 .ptu.automation .content .tabbed-content #conditions-component .condition-bar .condition-select {
-  flex: 0 0 50%;
+  flex: 0 0 30%;
   font-size: 10px;
-  max-width: 200px;
+  max-width: 160px;
+}
+.ptu.automation .content .tabbed-content #conditions-component .condition-bar .condition-operator-select {
+  flex: 0 0 20%;
+  font-size: 10px;
+  max-width: 150px;
 }
 .ptu.automation .content .tabbed-content #conditions-component .condition-bar .condition-value {
-  flex: 0 0 35%;
+  flex: 0 0 20%;
+}
+.ptu.automation .content .tabbed-content #conditions-component .condition-bar .condition-rangeIncreases-select {
+  flex: 0 0 15%;
+  font-size: 10px;
+  max-width: 90px;
+}
+.ptu.automation .content .tabbed-content #conditions-component .condition-bar .condition-rangeIncreases-value {
+  flex: 0 0 10%;
+  max-width: 40px;
 }
 .ptu.automation .content .tabbed-content #conditions-component .condition-bar a.item-delete {
   flex: 0 0 10%;

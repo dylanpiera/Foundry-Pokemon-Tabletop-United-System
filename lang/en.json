@@ -213,7 +213,7 @@
     "PTU.AutomationCondition.ITEM_TYPE":"Item Type",
     "PTU.AutomationCondition.MOVE_TYPE":"Move Type",
     "PTU.AutomationOperators.EQUALS":"Equals",
-    "PTU.AutomationOperators.NOT_EQUAL":"Not Equal",
+    "PTU.AutomationOperators.NOT_EQUALS":"Not Equal",
     "PTU.AutomationOperators.GREATER_THAN":"Greater Than",
     "PTU.AutomationOperators.LESS_THAN":"Less Than",
     "PTU.AutomationOperators.GREATER_THAN_OR_EQUAL":"Greater Than or Equal",
