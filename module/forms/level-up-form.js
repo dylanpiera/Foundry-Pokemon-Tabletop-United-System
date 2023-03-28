@@ -102,7 +102,18 @@ export class PTULevelUpForm extends FormApplication {
     const itemIdsToDelete = [];
     const itemsToAdd = [];
     const state = {...this.store.state};
-    const lostHealth = this.object.actor.system.health.max - this.object.actor.system.health.value;
+    const oldData = {
+      system: {
+        level:{
+          "current": state.changeDetails.oldLvl,
+          "exp": state.changeDetails.oldExp
+        }
+      }
+    }
+    await this.object.actor.update(oldData);
+    //revert back to previous level for hp calculations
+    const missinghealth = this.object.actor.system.health.max - this.object.actor.system.health.value;
+
     const searchFor = (state.evolving.is && state.evolving.into) ? state.evolving.into.toLowerCase() : state.species.toLowerCase();
     const dexEntry = pokemonData.find(e => e._id.toLowerCase() === searchFor );
     let heightWidth = 1;
@@ -112,7 +123,8 @@ export class PTULevelUpForm extends FormApplication {
       case "gigantic": heightWidth = 4; break;
     }
     const imgPath = await GetSpeciesArt(dexEntry, game.settings.get("ptu", "defaultPokemonImageDirectory"))
-
+    
+    
     const data = {
       system: {
         'species': (state.evolving.is && state.evolving.into) ? state.evolving.into : state.species,
@@ -124,7 +136,10 @@ export class PTULevelUpForm extends FormApplication {
           "spdef.levelUp": (state.evolving.is ? 0 : state.stats.spdef.levelUp) + (state.stats.spdef.newLevelUp ?? 0),
           "spd.levelUp": (state.evolving.is ? 0 : state.stats.spd.levelUp) + (state.stats.spd.newLevelUp ?? 0),
         },
-        // 'health.value': this.object.actor.system.health.max - lostHealth
+        level : {
+          "current": state.changeDetails.newLvl,
+          "exp": state.changeDetails.newExp
+        }
       },
       
       //only change the name if it is the same as the species and we are evolving
@@ -152,6 +167,17 @@ export class PTULevelUpForm extends FormApplication {
 
     log(`Level-Up: Updating ${this.object.actor.name}`, data);
     await this.object.actor.update(data);
+
+    //adjust health to apply missing health
+    const newhealth = this.object.actor.system.health.max - missinghealth;
+    const healthData = {
+      system: {
+        health: {
+          value: newhealth
+        }
+      }
+    };
+    await this.object.actor.update(healthData);
 
     // Determine which moves to delete
     const oldMoveNames = state.knownMoves.map(m => m?.name?.toLowerCase());
