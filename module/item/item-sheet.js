@@ -6,6 +6,10 @@ import { GetItemArt } from '../utils/item-piles-compatibility-handler.js';
  * Extend the basic ItemSheet with some very simple modifications
  * @extends {ItemSheet}
  */
+
+//Constants
+CONFIG.PTUItem = {Consumable: {NOT: 0, YES: 1, FOODBUFF: 2}}
+
 export class PTUItemSheet extends ItemSheet {
 	/** @override */
 	static get defaultOptions() {
@@ -177,7 +181,7 @@ export class PTUItemSheet extends ItemSheet {
 	 * Handle To Chat call.
 	 * @private
 	 */
-	_toChat(ownerId) {
+	_toChat(ownerId, foodBuff = false) {
 		switch(this.object.type) {
 			case "move":
 				return sendMoveMessage({
@@ -195,7 +199,9 @@ export class PTUItemSheet extends ItemSheet {
 						actor: this.actor
 					}),
 					item: this.object,
-					owner: ownerId
+					owner: ownerId,
+					foodBuff: foodBuff,
+					target: game.canvas.tokens.get(game.user.targets.ids[0])?.actor?.uuid
 				});
 		}
 	}
@@ -257,6 +263,7 @@ export class PTUItemSheet extends ItemSheet {
 export async function sendItemMessage(messageData = {}) {
 	messageData = mergeObject({
 		user: game.user.id,
+		target: game.user.targets.ids[0]
 	}, messageData);
 
 	if(!messageData.item) {
@@ -291,27 +298,58 @@ Hooks.on("renderChatMessage", (message, html, data) => {
     }, 500);
 });
 
+// trading in food buff Items
+Hooks.on("renderChatMessage", (message, html, data) => {
+    setTimeout(() => {
+        $(html).find(".use-food-buff").on("click", (event) => consumeBuff(event));
+    }, 500);
+});
+
+export async function consumeBuff(event){
+	//prevent the default action of the button
+	event.preventDefault();
+
+	// Get the item ID and name from the button element's data-item-id and data-item-name attributes
+	const {itemId, itemName, itemParentid} = event.currentTarget.dataset
+
+	//disable the button
+	event.currentTarget.disabled = true;
+
+	//find the actor with id parentId
+	const actor = game.actors.get(itemParentid);
+
+	const buffArray = actor.system.foodBuff.split(", ");
+
+	// Filter buff out of Array
+	const newBuffArray = buffArray.filter(b => b.trim().toLowerCase() != itemName.trim().toLowerCase())
+
+	// Join the Array back to a string
+	const newBuffString = newBuffArray .join(", ");
+
+	//remove the foodbuff from the actor
+	await actor.update({"data.foodBuff": newBuffString});
+
+	//alert the user that the food buff has been consumed
+	ui.notifications.info(`Food buff ${itemName} has been consumed by ${actor.name}!`);
+}
 export async function useItem(event){
     //prevent the default action of the button
     event.preventDefault();
 
     // Get the item ID and name from the button element's data-item-id and data-item-name attributes
-    const itemId = event.currentTarget.dataset.item;
-    const itemName = event.currentTarget.dataset.itemName;
-    const parentId = event.currentTarget.dataset.itemParentid;
+    const {itemId, itemName, itemParentid, targetUuid} = event.currentTarget.dataset
+
+	//find the targeted actor
+	const targetedActor = targetUuid == undefined ? "" : await fromUuid(targetUuid);
     
     //disable the button
     event.currentTarget.disabled = true;
 
     //find the actor with id parentId
-    const actor = game.actors.get(parentId);
-    console.log(actor);
+    const actor = game.actors.get(itemParentid);
     // if the user of the item is of type pokemon
     if (actor.type == "pokemon"){
-        // if(!applyItemEffect(itemName, actor, targetedActor)){
-        //     ui.notifications.error("There was an error applying the item effect.");
-        //     return;
-        // } 
+
         console.log(`Consuming item with ID ${itemId} and name ${itemName}`);
         //change the held item to none
         await actor.update({"data.heldItem": "None"});        
@@ -321,16 +359,24 @@ export async function useItem(event){
             ui.notifications.error("You don't have any of this item left.");
             return;
         }
-        // if(!applyItemEffect(itemName, actor, targetedActor)){
-        //     ui.notifications.error("There was an error applying the item effect.");
-        //     return;
-        // }    
         console.log(`Consuming item with ID ${itemId} and name ${itemName}`);
         //reduce the number of this item that the character has by 1
         const item = actor.items.get(itemId);
         await item.update({"system.quantity": Number(duplicate(item.system.quantity)) - 1});
     }
-}
 
-//applyItemEffect(itemName, actor, targetedActor){
-//}
+	// if the item is a food buff
+	if (game.ptu.data.items.find(i => i.name.toLowerCase().includes(itemName.toLowerCase())).system.consumable == CONFIG.PTUItem.Consumable.FOODBUFF){
+		//if there is a target actor add the food buff to the target actor, else add foodbuff to the user
+		
+		const effectedActor = targetedActor ? targetedActor : actor;
+		//if the target actor already has a food buff, add the new food buff to the list
+		const buffArray = effectedActor.system.foodBuff.split(", ").filter(b => b.trim().length > 0);
+		buffArray.push(itemName);
+		const newBuffString = buffArray.join(', ');
+		await effectedActor.update({"data.foodBuff": newBuffString});
+
+		//alert the user that the item has been consumed
+		ui.notifications.info(`${itemName} has been consumed by ${effectedActor.name}`);
+	}
+}

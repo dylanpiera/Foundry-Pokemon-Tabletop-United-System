@@ -10,7 +10,8 @@ export function LoadSystemSettings() {
         config: true,
         type: Boolean,
         default: true,
-        category: "rules"
+        category: "rules",
+        onChange: debouncedReload
     });
 
     game.settings.register("ptu", "useTutorPoints", {
@@ -52,7 +53,8 @@ export function LoadSystemSettings() {
             "en": "English",
             "de": "German",
         },
-        category: "general"
+        category: "general",
+        onChange: debouncedReload
     });
 
     game.settings.register("ptu", "canPlayersDeleteTokens", {
@@ -146,37 +148,15 @@ export function LoadSystemSettings() {
         category: "general"
     })
 
-    // game.settings.register("ptu", "combatRollPreference", {
-    //     name: "Combat Roll Preference",
-    //     hint: "Choose whether crits should always be rolled, or only when the to-hit is an actual crit.",
-    //     scope: "world",
-    //     config: true,
-    //     type: String,
-    //     choices: {
-    //         "situational": "Show damage situationally",
-    //         "always-normal": "Always roll normal damage",
-    //         "always-crit": "Always roll crit damage",
-    //         "both": "Always roll both"
-    //     },
-    //     default: "situational",
-    //     category: "combat"
-    // });
-
-    // game.settings.register("ptu", "combatDescPreference", {
-    //     name: "Combat Description Preference",
-    //     hint: "Choose whether the move effect should be displayed when rolling To-Hit/Damage.",
-    //     scope: "world",
-    //     config: true,
-    //     type: String,
-    //     choices: {
-    //         "none": "Don't show move effect",
-    //         "snippet": "Show move snippet, or nothing if unset",
-    //         "snippet-or-full": "Show move snippet, or full effect if unset",
-    //         "show": "Show full effect"
-    //     },
-    //     default: "snippet",
-    //     category: "combat"
-    // });
+    game.settings.register("ptu", "levelUpScreen", {
+        name: "Show Level-Up Window",
+        hint: "Allow the level-up window to appear whenever an actor levels up.",
+        scope: "world",
+        config: true,
+        type: Boolean,
+        default: true,
+        category: "general"
+    })
 
     game.settings.register("ptu", "defaultPokemonImageDirectory", {
         name: "Default Pokemon Image Directory",
@@ -332,7 +312,8 @@ export function LoadSystemSettings() {
         scope: "world",
         config: false,
         type: String,
-        default: ""
+        default: "",
+        onChange: debouncedReload
     });
     game.settings.register("ptu", "customSpeciesData", {
         name: "Custom Species Data",
@@ -389,7 +370,8 @@ export function LoadSystemSettings() {
         config: true,
         type: Boolean,
         default: false,
-        category: "other"
+        category: "other",
+        onChange: debouncedReload
     });
 
     game.settings.register("ptu", "enableMoveAnimations", {
@@ -682,14 +664,15 @@ export function LoadSystemSettings() {
         //     });
 
 
-        //     game.settings.register("PTUMoveMaster", "trackBrokenPokeballs", {
-        //         name: "GM Setting: Track Broken Pokeballs.",
-        //         hint: "The trainer edge 'Poke Ball Repair' allows for re-using balls that break upon failing to capture a Pokemon, so Move Master will automatically created a broken version of balls in the thrower's inventory when a Pokemon breaks free. If you have no use for tracking this, you can disable it here.",
-        //         scope: "world",
-        //         config: true,
-        //         type: Boolean,
-        //         default: true
-        //     });
+        game.settings.register("ptu", "trackBrokenPokeballs", {
+            name: "GM Setting: Track Broken Pokeballs.",
+            hint: "The trainer edge 'Poke Ball Repair' allows for re-using balls that break upon failing to capture a Pokemon, so Move Master will automatically created a broken version of balls in the thrower's inventory when a Pokemon breaks free. If you have no use for tracking this, you can disable it here.",
+            scope: "world",
+            config: true,
+            type: Boolean,
+            default: true,
+            category: "combat"
+        });
 
         game.settings.register("ptu", "customItemIconDirectory", {
             name: "Custom Item Icons Directory",
@@ -768,14 +751,47 @@ export function LoadSystemSettings() {
             category: "combat"
         })
 
-        game.settings.register("ptu", "pokemonLearnMovesMessage", {
-            name: "GM Setting: Show message when a pokemon learns a new move from leveling up.",
-            hint: "This will show a pop up for players when there pokemon learns new moves from gaining experience. They can then add those moves to their move list.",
+        game.settings.register("ptu", "playtestStats", {
+            name: "Use playtest calculations for stats.",
+            hint: "This will use the playtest calculations for stats instead of the official ones. See: <a href='https://ptufvtt.com/en/Guides/Playtests/Stats-Rework'>https://ptufvtt.com/en/Guides/Playtests/Stats-Rework</a>",
             scope: "world",
             config: true,
             type: Boolean,
-            default: true,
-            category: "other"
+            default: false,
+            category: "playtest",
+            onChange: debouncedReload
+        })
+
+        game.settings.register("ptu", "playtestStatsFactor", {
+            name: "EV strength factor β.",
+            hint: "Base value is 0.5. The higher the number, the stronger Level-Up Points will affect stat totals. See: <a href='https://ptufvtt.com/en/Guides/Playtests/Stats-Rework'>https://ptufvtt.com/en/Guides/Playtests/Stats-Rework</a>",
+            scope: "world",
+            config: true,
+            type: Number,
+            default: 0.5,
+            range: {
+                min: 0.1,
+                max: 1.0,
+                step: 0.05
+            },
+            category: "playtest",
+            onChange: debouncedReload
+        })
+
+        game.settings.register("ptu", "playtestStatsSigma", {
+            name: "Balance strength factor σ.",
+            hint: "Base value is 3.5. Changes the minimum value of σ. See: <a href='https://ptufvtt.com/en/Guides/Playtests/Stats-Rework'>https://ptufvtt.com/en/Guides/Playtests/Stats-Rework</a>",
+            scope: "world",
+            config: true,
+            type: Number,
+            default: 3.5,
+            range: {
+                min: 1,
+                max: 5,
+                step: 0.5
+            },
+            category: "playtest",
+            onChange: debouncedReload
         })
     }
 }
@@ -788,3 +804,4 @@ export function SetAccessabilityFont(enabled) {
     }
 }
 
+const debouncedReload = foundry.utils.debounce(() => window.location.reload(), 100);

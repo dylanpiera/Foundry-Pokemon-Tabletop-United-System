@@ -222,6 +222,25 @@ export function registerHandlebars() {
       haystack = Handlebars.escapeExpression(haystack);
       return (haystack.indexOf(needle) > -1) ? options.fn(this) : options.inverse(this);
     });
+
+    Handlebars.registerHelper("getStat", function(species, statKey) {
+      const speciesStats = game.ptu.utils.species.get(species);
+      if(!speciesStats) return 0;
+
+      const renamingDict = {
+        "hp": "HP",
+        "atk": "Attack",
+        "def": "Defense",
+        "spatk": "Special Attack",
+        "spdef": "Special Defense",
+        "spd": "Speed"
+      };
+
+      let key = renamingDict[statKey];
+      if(!key) key = statKey;
+
+      return speciesStats["Base Stats"][key] ?? 0;
+    });
   
     Handlebars.registerHelper("inc", function (num) { return Number(num) + 1 })
   
