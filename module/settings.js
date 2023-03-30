@@ -570,6 +570,15 @@ export function LoadSystemSettings() {
             default: true
         });
 
+        game.settings.register("ptu", "usePokeballSoundsOnDragOut", {
+            name: "Enable Pokéball Sounds.",
+            hint: "Enable/Disable pokeball related sounds like when you send out a pokemon"
+            scope: "client",
+            config: true,
+            type: Boolean,
+            default: true
+        });
+
         //     game.settings.register("PTUMoveMaster", "useAlternateChatStyling", {
         //         name: "Player Setting: Styles the chat to have (what I think is) a more readable font, compact size, and low-contrast look.",
         //         hint: "Disable this if you are having compatibility issues with the chat pane styling, or if you just don't like it.",
