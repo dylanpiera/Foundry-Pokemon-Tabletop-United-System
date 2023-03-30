@@ -53,7 +53,7 @@ export default class TabsComponent extends Component {
     _getAutomationItems() {
         const possibleAutomations = Object.keys(this.state.automations);
         return possibleAutomations.map(a => {
-            const selected = this.state.activeAutomation == a ? 'selected="selected"': "";
+            const selected = "" + this.state.activeAutomation == a ? 'selected="selected"': "";
             return `<option value="${a}" ${selected}>Automation ${a}</option>`;
         }).join("");
     }

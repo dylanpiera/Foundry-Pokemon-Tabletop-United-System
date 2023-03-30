@@ -149,16 +149,14 @@ export default function ({ object }) {
                 return state;
             },
             async setActiveAutomation(state, newIndex) {
-                let newState = duplicate(state);
-
-                newState.activeAutomation = newIndex,
-                newState.targets =state.automations[newIndex].targets;
-                newState.conditions = state.automations[newIndex].conditions;
-                newState.effects = state.automations[newIndex].effects;
-                newState.timing = state.automations[newIndex].timing;
-                newState.passive = state.automations[newIndex].passive;
-                
-                return newState;
+                state.activeAutomation = newIndex,
+                state.targets =state.automations[newIndex].targets;
+                state.conditions = state.automations[newIndex].conditions;
+                state.effects = state.automations[newIndex].effects;
+                state.timing = state.automations[newIndex].timing;
+                state.passive = state.automations[newIndex].passive;
+                state.activeTab = "targets";
+                return state;
             },
             async saveActiveAutomation(state) {
                 const activeAutomationKey = state.activeAutomation;
