@@ -50,7 +50,7 @@ export default class TargetsComponent extends Component {
                 </a>
             </div>
             ${this.state.targets.map((target,index) => `
-                <div class="target mt-2" id="target-${index}">
+                <div class="target mt-1" id="target-${index}">
                     <select class="target-select" data-index="${index}">
                         ${this._getSelectItems(target)}
                     </select>

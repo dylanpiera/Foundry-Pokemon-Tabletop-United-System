@@ -1977,6 +1977,14 @@ h3 {
   border-radius: 10px;
   padding: 3px 0;
 }
+.ptu.automation .content .tabbed-content #settings-component .settings {
+  padding: 0.4rem;
+  border-radius: 15px;
+  background: #ffffffa6;
+}
+.ptu.automation .content .tabbed-content #settings-component .settings table tr {
+  height: 30px;
+}
 .ptu.automation .content .tabbed-content #targets-component {
   justify-content: space-evenly;
 }

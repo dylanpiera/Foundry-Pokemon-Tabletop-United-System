@@ -54,8 +54,13 @@ export default class EffectsComponent extends Component {
                     <i class="fas fa-plus-circle" style="margin-right: 3px;"></i><span class="readable">Add</span>
                 </a>
             </div>
+            <div class="effect mt-1">
+                <h4 class="effect-select">Type</h4>
+                <h4 class="effect-value">Value</h4>
+                <span style="flex: 0 0 10%"></span>
+            </div>
         ${this.state.effects.map((effect,index) => `
-            <div class="effect mt-2" id="effect-${index}">
+            <div class="effect mt-1" id="effect-${index}">
                 <select class="effect-select" data-index="${index}">
                     ${this._getSelectItems(effect)}
                 </select>

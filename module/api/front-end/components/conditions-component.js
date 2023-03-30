@@ -91,8 +91,15 @@ export default class ConditionsComponent extends Component {
                     <i class="fas fa-plus-circle" style="margin-right: 3px;"></i><span class="readable">Add</span>
                 </a>
             </div>
+            <div class="condition mt-1">
+                <h4 class="condition-select">Type</h4>
+                <h4 class="condition-operator-select">Operator</h4>
+                <h4 class="condition-value">Value</h4>
+                <h4 class="condition-rangeIncreases-select">Effect Range</h4>
+                <span style="flex: 0 0 10%"></span>
+            </div>
         ${this.state.conditions.map((condition,index) => `
-            <div class="condition mt-2" id="condition-${index}">
+            <div class="condition mt-1" id="condition-${index}">
                 <select class="condition-select" data-index="${index}">
                     ${this._getSelectItems(condition)}
                 </select>
