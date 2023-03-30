@@ -298,9 +298,9 @@ export async function ThrowPokeball(thrower, target, pokeball) {
         return;
     }
 
-    let enable_pokeball_sounds = game.settings.get("ptu", "usePokeballSoundsOnDragOut");
+    const enable_pokeball_sounds = game.settings.get("ptu", "usePokeballSoundsOnDragOut");
 
-    console.log(`Consuming item with ID ${pokeball._id} and name ${pokeball.name}`);
+    
     //reduce the number of balls that the character has by 1
     ui.notifications.info("Removed 1 quantity from Pokeball in inventory.")
     pokeball.update({"system.quantity": Number(duplicate(pokeball.system.quantity)) - 1});
@@ -709,7 +709,7 @@ export async function PlayPokeballCatchOrEscapeFX(isCaptured, targetToken)
 
 export async function PlayPokeballWiggleFX(target_token)
 {
-    let enable_pokeball_sounds = game.settings.get("ptu", "usePokeballSoundsOnDragOut");
+    const enable_pokeball_sounds = game.settings.get("ptu", "usePokeballSoundsOnDragOut");
     
     if(enable_pokeball_sounds)
         await AudioHelper.play({ src: pokeball_sound_paths["wiggle"], volume: 0.8, autoplay: true, loop: false }, true);
