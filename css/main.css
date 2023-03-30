@@ -2091,7 +2091,7 @@ h3 {
   padding: 3px 0;
 }
 .ptu.automation .content .tabbed-content #conditions-component {
-  justify-content: space-evenly;
+  justify-content: space-between;
   flex-direction: column;
 }
 .ptu.automation .content .tabbed-content #conditions-component .condition-bar {
@@ -2131,7 +2131,7 @@ h3 {
 .ptu.automation .content .tabbed-content #conditions-component .help-bar {
   flex-direction: column;
   text-align: start;
-  flex: 0 0 30%;
+  flex: 0 0 35%;
   white-space: pre-line;
   background: #ffffffa6;
   padding: 0.4rem;
