@@ -484,7 +484,7 @@
       "templates": ["base", "automation"],
       "prerequisites": "",
       "frequency": "At Will - Standard Action",
-      "tags": [],
+      "tags": "",
       "notes": "",
       "free": false
     },
