@@ -1945,6 +1945,220 @@ h3 {
 .move-sheet .sheet-body .move-effect textarea:focus {
   box-shadow: unset;
 }
+.ptu.automation section {
+  padding: unset;
+}
+.ptu.automation form {
+  padding: unset;
+}
+.ptu.automation .content #tab-component {
+  width: 100%;
+  display: flex;
+  justify-content: space-evenly;
+}
+.ptu.automation .content #tab-component nav.tabs {
+  flex: 0 0 65%;
+  align-items: center;
+}
+.ptu.automation .content #tab-component .automation-dropdown {
+  flex: 0 0 35%;
+  display: flex;
+  box-shadow: none;
+  border-bottom: none;
+  border-top: none;
+  border-right: none;
+  align-items: center;
+}
+.ptu.automation .content #tab-component .automation-dropdown select {
+  flex: 0 0 70%;
+}
+.ptu.automation .content #tab-component .automation-dropdown a.item-create {
+  flex: 0 1 30%;
+  align-self: center;
+  background: #ffffffa6;
+  margin: 0 0.5rem;
+  border-radius: 10px;
+  padding: 3px 0;
+}
+.ptu.automation .content .tabbed-content #settings-component .settings {
+  padding: 0.4rem;
+  border-radius: 15px;
+  background: #ffffffa6;
+}
+.ptu.automation .content .tabbed-content #settings-component .settings table tr {
+  height: 30px;
+}
+.ptu.automation .content .tabbed-content #targets-component {
+  justify-content: space-evenly;
+}
+.ptu.automation .content .tabbed-content #targets-component .target-bar {
+  flex-direction: column;
+  flex: 0 0 30%;
+  padding: 0.4rem;
+  border-radius: 15px;
+  background: #ffffffa6;
+}
+.ptu.automation .content .tabbed-content #targets-component .target-bar .target {
+  display: flex;
+  justify-content: space-between;
+}
+.ptu.automation .content .tabbed-content #targets-component .target-bar .target-select {
+  flex: 0 0 85%;
+  font-size: 10px;
+  max-width: 150px;
+}
+.ptu.automation .content .tabbed-content #targets-component .target-bar a.item-delete {
+  flex: 0 0 10%;
+  align-self: center;
+}
+.ptu.automation .content .tabbed-content #targets-component .help-bar {
+  flex-direction: column;
+  text-align: start;
+  flex: 0 0 60%;
+  white-space: pre-line;
+  background: #ffffffa6;
+  padding: 0.4rem;
+  border-radius: 15px;
+}
+.ptu.automation .content .tabbed-content #targets-component .header {
+  display: flex;
+  padding: 0.25rem;
+  height: 36px;
+  background: #ffffffa6;
+  border-bottom: 1px solid #00000050;
+  border-radius: 15px 15px 0 0;
+}
+.ptu.automation .content .tabbed-content #targets-component .header h4 {
+  flex: 0 0 70%;
+}
+.ptu.automation .content .tabbed-content #targets-component .header a.item-create {
+  flex: 0 0 30%;
+  align-self: center;
+  background: #dddddda6;
+  margin: unset;
+  border-radius: 10px;
+  padding: 3px 0;
+}
+.ptu.automation .content .tabbed-content #effects-component {
+  justify-content: space-evenly;
+}
+.ptu.automation .content .tabbed-content #effects-component .effect-bar {
+  flex-direction: column;
+  flex: 0 0 60%;
+  padding: 0.4rem;
+  border-radius: 15px;
+  background: #ffffffa6;
+}
+.ptu.automation .content .tabbed-content #effects-component .effect-bar .effect {
+  display: flex;
+  justify-content: space-between;
+}
+.ptu.automation .content .tabbed-content #effects-component .effect-bar .effect-select {
+  flex: 0 0 50%;
+  font-size: 10px;
+  max-width: 200px;
+}
+.ptu.automation .content .tabbed-content #effects-component .effect-bar .effect-value {
+  flex: 0 0 35%;
+}
+.ptu.automation .content .tabbed-content #effects-component .effect-bar a.item-delete {
+  flex: 0 0 10%;
+  align-self: center;
+}
+.ptu.automation .content .tabbed-content #effects-component .help-bar {
+  flex-direction: column;
+  text-align: start;
+  flex: 0 0 30%;
+  white-space: pre-line;
+  background: #ffffffa6;
+  padding: 0.4rem;
+  border-radius: 15px;
+}
+.ptu.automation .content .tabbed-content #effects-component .header {
+  display: flex;
+  padding: 0.25rem;
+  height: 36px;
+  background: #ffffffa6;
+  border-bottom: 1px solid #00000050;
+  border-radius: 15px 15px 0 0;
+}
+.ptu.automation .content .tabbed-content #effects-component .header h4 {
+  flex: 0 0 70%;
+}
+.ptu.automation .content .tabbed-content #effects-component .header a.item-create {
+  flex: 0 0 30%;
+  align-self: center;
+  background: #dddddda6;
+  margin: unset;
+  border-radius: 10px;
+  padding: 3px 0;
+}
+.ptu.automation .content .tabbed-content #conditions-component {
+  justify-content: space-between;
+  flex-direction: column;
+}
+.ptu.automation .content .tabbed-content #conditions-component .condition-bar {
+  flex-direction: column;
+  flex: 0 0 60%;
+  padding: 0.4rem;
+  border-radius: 15px;
+  background: #ffffffa6;
+}
+.ptu.automation .content .tabbed-content #conditions-component .condition-bar .condition {
+  display: flex;
+  justify-content: space-between;
+}
+.ptu.automation .content .tabbed-content #conditions-component .condition-bar .condition-select {
+  flex: 0 0 30%;
+  font-size: 10px;
+  max-width: 160px;
+}
+.ptu.automation .content .tabbed-content #conditions-component .condition-bar .condition-operator-select {
+  flex: 0 0 30%;
+  font-size: 10px;
+  max-width: 150px;
+}
+.ptu.automation .content .tabbed-content #conditions-component .condition-bar .condition-value {
+  flex: 0 0 10%;
+  height: 27px;
+}
+.ptu.automation .content .tabbed-content #conditions-component .condition-bar .condition-rangeIncreases-select {
+  flex: 0 0 25%;
+  font-size: 10px;
+  max-width: 150px;
+}
+.ptu.automation .content .tabbed-content #conditions-component .condition-bar a.item-delete {
+  flex: 0 0 10%;
+  align-self: center;
+}
+.ptu.automation .content .tabbed-content #conditions-component .help-bar {
+  flex-direction: column;
+  text-align: start;
+  flex: 0 0 35%;
+  white-space: pre-line;
+  background: #ffffffa6;
+  padding: 0.4rem;
+  border-radius: 15px;
+}
+.ptu.automation .content .tabbed-content #conditions-component .header {
+  display: flex;
+  padding: 0.25rem;
+  height: 36px;
+  background: #ffffffa6;
+  border-bottom: 1px solid #00000050;
+  border-radius: 15px 15px 0 0;
+}
+.ptu.automation .content .tabbed-content #conditions-component .header h4 {
+  flex: 0 0 70%;
+}
+.ptu.automation .content .tabbed-content #conditions-component .header a.item-create {
+  flex: 0 0 30%;
+  align-self: center;
+  background: #dddddda6;
+  margin: unset;
+  border-radius: 10px;
+  padding: 3px 0;
+}
 /* -------------------------------------------- */
 /*  Level Up Form                               */
 /* -------------------------------------------- */

@@ -56,6 +56,7 @@ import { LANG } from './utils/language-helper.js';
 import logging from "./helpers/logging.js";
 import { registerHandlebars, preloadHandlebarsTemplates } from "./helpers/handlebars.js";
 import { PTRSearch } from "./ptr-search/ptr-search.js";
+import { PTUAutomationForm } from "./forms/automation-form.js";
 import { CalcLevel } from "./actor/calculations/level-up-calculator.js";
 import { PTULevelUpForm } from "./forms/level-up-form.js";
 
@@ -182,6 +183,9 @@ export const ptu = {
       },
       DexDragOptions: {
         documentClass: PTUDexDragOptions
+      },
+      AutomationForm: {
+        documentClass: PTUAutomationForm
       },
       LevelUpForm: {
         documentClass: PTULevelUpForm

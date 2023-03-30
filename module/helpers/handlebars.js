@@ -286,6 +286,11 @@ export function registerHandlebars() {
       while (str.length < len) str = char + str;
       return str;
     });
+
+    Handlebars.registerHelper("diceResult", function (roll, term) {
+      const result = roll.terms.find(t => t.faces == term);
+      if (result) return result.total ?? result.results[0].result;
+    });
   
     function _calcMoveDb(move, bool = false) {
       if (move.category === "Status") return;
