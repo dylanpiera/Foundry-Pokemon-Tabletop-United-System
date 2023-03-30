@@ -572,7 +572,7 @@ export function LoadSystemSettings() {
 
         game.settings.register("ptu", "usePokeballSoundsOnDragOut", {
             name: "Enable Pokéball Sounds.",
-            hint: "Enable/Disable pokeball related sounds like when you send out a pokemon"
+            hint: "Enable/Disable pokeball related sounds like when you send out a pokemon",
             scope: "client",
             config: true,
             type: Boolean,

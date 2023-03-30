@@ -56,8 +56,8 @@ export function addStepsToEffectiveness(input, steps) {
     if(!increase) steps *= -1;
     
     let output = input;
-        if(increase) { // Add Effectiveness 
     for (let index = 0; index < steps; index++) {
+        if(increase) { // Add Effectiveness 
             if(output >= 2) output++; //if 2x or more super effective, increase by 1
             if(output == 1) output = 1.5; //if neutral become 1x super effective
             if(output == 1.5) output = 2; //if 1x super effective become 2x super effective
