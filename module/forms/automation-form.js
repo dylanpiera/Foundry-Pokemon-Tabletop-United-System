@@ -54,11 +54,18 @@ export class PTUAutomationForm extends FormApplication {
     super.activateListeners(html);
 
     this._initializeState();
+
+    const ref = this;
+    $(`.automation .btn[data-value="submit"]`).on('click', (event) => {
+      event.preventDefault();
+      ref.store.dispatch("submitForm");
+    });
   }
 
   async _initializeState() {
     this.store = initStore({
-      object: this.object
+      object: this.object,
+      form: this
     })
 
     this.components = {
@@ -71,6 +78,8 @@ export class PTUAutomationForm extends FormApplication {
     debug(this.store, this.components);
   }
 
+  
+
   async _afterRender() {
     for (const component of Object.values(this.components)) component.render();
   }
@@ -79,7 +88,8 @@ export class PTUAutomationForm extends FormApplication {
 
   /** @override */
   async _updateObject(event, formData) {
-
+    await this.object.update({'system.automation': Object.values(this.store.state.automations)});
+    this.close();
   }
 
 }

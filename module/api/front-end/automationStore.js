@@ -1,15 +1,15 @@
 import Store from './lib/store.js';
 import { debug, log } from '../../ptu.js';
 
-export default function ({ object }) {
+export default function ({ object, form }) {
     const store = new Store({
         actions: {
             /*** INITIALIZATION */
             async init(context) {
                 // If automations are present set them
                 const automations = {};
-                for (let index = 0; index < object.system.automations?.length; index++) {
-                    automations[index + 1] = object.system.automations[index]
+                for (let index = 0; index < object.system.automation?.length; index++) {
+                    automations[index + 1] = object.system.automation[index]
                 }
 
                 // Otherwise initialize a blank one
@@ -25,6 +25,7 @@ export default function ({ object }) {
                 }
 
                 await context.commit("setAutomations", automations);
+                await context.commit("setActiveAutomation", 1);
             },
 
             /*** TABS AND AUTOMATIONS */
@@ -36,6 +37,10 @@ export default function ({ object }) {
                 await context.commit("saveActiveAutomation");
                 //switch to new automation
                 await context.commit("setActiveAutomation", newIndex);
+            },
+            async submitForm(context) {
+                await context.commit("saveActiveAutomation");
+                await form.close({submit: true});
             },
             async newAutomation(context) {
                 //save current automation
