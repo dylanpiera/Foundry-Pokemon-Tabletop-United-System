@@ -361,12 +361,12 @@ CONFIG.PTUAutomation = {
         EFFECTIVENESS: "effectiveness"
     },
     Operators: {
-        EQUALS: "equals",
-        NOT_EQUALS: "notEquals",
-        GREATER_THAN: "greaterThan",
-        LESS_THAN: "lessThan",
-        GREATER_THAN_OR_EQUAL: "greaterThanOrEqual",
-        LESS_THAN_OR_EQUAL: "lessThanOrEqual",
+        EQUALS: "==",
+        NOT_EQUALS: "!=",
+        GREATER_THAN: ">",
+        LESS_THAN: "<",
+        GREATER_THAN_OR_EQUAL: ">=",
+        LESS_THAN_OR_EQUAL: "<=",
     }
 }
 

@@ -132,7 +132,7 @@ export default class ConditionsComponent extends Component {
     _getOperatorItems(currentCondition) {
         const possibleOperators = Object.keys(CONFIG.PTUAutomation.Operators);
         return possibleOperators.map(o => `
-            <option value="${game.i18n.localize(`PTU.AutomationOperators.${o}.Operator`)}" ${CONFIG.PTUAutomation.Operators[o] == currentCondition.operator ? "selected" : ""}>${game.i18n.localize("PTU.AutomationOperators."+o)}</option>
+            <option value="${CONFIG.PTUAutomation.Operators[o]}" ${CONFIG.PTUAutomation.Operators[o] == currentCondition.operator ? "selected" : ""}>${game.i18n.localize("PTU.AutomationOperators."+o)}</option>
         `).join('');  
     }        
     
