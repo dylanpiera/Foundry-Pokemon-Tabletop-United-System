@@ -102,17 +102,14 @@ export class PTULevelUpForm extends FormApplication {
     const itemIdsToDelete = [];
     const itemsToAdd = [];
     const state = {...this.store.state};
-    const oldData = {
-      system: {
-        level:{
-          "current": state.changeDetails.oldLvl,
-          "exp": state.changeDetails.oldExp
-        }
-      }
-    }
-    await this.object.actor.update(oldData);
-    //revert back to previous level for hp calculations
-    const missinghealth = this.object.actor.system.health.max - this.object.actor.system.health.value;
+
+    const oldHealthTotal = 10 + state.changeDetails.oldLvl + (this.object.actor.system.stats.hp.total * 3);
+    const oldHealthMax = this.object.actor.system.health.injuries > 0 ? Math.trunc(oldHealthTotal * (1 - ((this.object.actor.system.modifiers.hardened ? Math.min(this.object.actor.system.health.injuries, 5) : this.object.actor.system.health.injuries) / 10))) : oldHealthTotal;
+    const oldHealthValue = this.object.actor.system.health.value ?? oldHealthMax;
+    
+    const missinghealth = oldHealthMax - oldHealthValue;
+
+    
 
     const searchFor = (state.evolving.is && state.evolving.into) ? state.evolving.into.toLowerCase() : state.species.toLowerCase();
     const dexEntry = pokemonData.find(e => e._id.toLowerCase() === searchFor );
@@ -135,10 +132,6 @@ export class PTULevelUpForm extends FormApplication {
           "spatk.levelUp": (state.evolving.is ? 0 : state.stats.spatk.levelUp) + (state.stats.spatk.newLevelUp ?? 0),
           "spdef.levelUp": (state.evolving.is ? 0 : state.stats.spdef.levelUp) + (state.stats.spdef.newLevelUp ?? 0),
           "spd.levelUp": (state.evolving.is ? 0 : state.stats.spd.levelUp) + (state.stats.spd.newLevelUp ?? 0),
-        },
-        level : {
-          "current": state.changeDetails.newLvl,
-          "exp": state.changeDetails.newExp
         }
       },
       
@@ -168,8 +161,10 @@ export class PTULevelUpForm extends FormApplication {
     log(`Level-Up: Updating ${this.object.actor.name}`, data);
     await this.object.actor.update(data);
 
-    //adjust health to apply missing health
-    const newhealth = this.object.actor.system.health.max - missinghealth;
+    //adjust health as per level up
+    const newHealthTotal = 10 + state.changeDetails.newLvl + (this.object.actor.system.stats.hp.total * 3);
+    const newHealthMax = this.object.actor.system.health.injuries > 0 ? Math.trunc(newHealthTotal * (1 - ((this.object.actor.system.modifiers.hardened ? Math.min(this.object.actor.system.health.injuries, 5) : this.object.actor.system.health.injuries) / 10))) : newHealthTotal;
+    const newhealth = newHealthMax - missinghealth;
     const healthData = {
       system: {
         health: {
