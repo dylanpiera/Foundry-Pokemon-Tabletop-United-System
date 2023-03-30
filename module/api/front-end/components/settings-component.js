@@ -64,7 +64,7 @@ export default class SettingsComponent extends Component {
         this.element.find("#passive-check").on("click", () => {
             this.store.dispatch("togglePassive");
         })
-        this.element.find("#timing-select").on("change", (e) => {
+        this.element.find("#timing-select").on("change", (ev) => {
             this.store.dispatch("changeTiming", ev.currentTarget.value);
         })
         this.element.find("a.item-delete").on("click", () => {

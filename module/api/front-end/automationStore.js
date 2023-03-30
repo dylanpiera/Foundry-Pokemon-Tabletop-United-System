@@ -78,20 +78,19 @@ export default function ({ object, form }) {
                     type:CONFIG.PTUAutomation.Condition.ATTACK_ROLL,
                     operator:CONFIG.PTUAutomation.Operators.EQUALS,
                     value:"",
-                    rangeIncrease:CONFIG.PTUAutomation.RangeIncreases.NONE,
-                    rangeIncreaseAmount:0
+                    rangeIncrease:CONFIG.PTUAutomation.RangeIncreases.NONE
                 });
             },
             async removeCondition(context, index) {
                 if(!context.state.conditions[index]) return;
                 await context.commit("removeCondition", index);
             },
-            async updateCondition(context, {index, type, operator, value, rangeIncrease, rangeIncreaseAmount}) {
+            async updateCondition(context, {index, type, operator, value, rangeIncrease}) {
                 if(!context.state.conditions[index]) return;
                 if(!Object.values(CONFIG.PTUAutomation.Condition).includes(type)) return;
                 if(!Object.values(CONFIG.PTUAutomation.Operators).includes(operator)) return;
                 if(!Object.values(CONFIG.PTUAutomation.RangeIncreases).includes(rangeIncrease)) return;
-                await context.commit("updateCondition", {index, type, operator, value, rangeIncrease, rangeIncreaseAmount});
+                await context.commit("updateCondition", {index, type, operator, value, rangeIncrease});
             },
 
             /*** Effects */
@@ -222,9 +221,9 @@ export default function ({ object, form }) {
             },
             
             /*** Conditions */
-            async addCondition(state, {type, operator, value, rangeIncrease, rangeIncreaseAmount}) {
+            async addCondition(state, {type, operator, value, rangeIncrease}) {
                 const conditions = duplicate(state.conditions);
-                conditions.push({type:type, operator:operator, value:value, rangeIncrease:rangeIncrease, rangeIncreaseAmount:rangeIncreaseAmount});
+                conditions.push({type:type, operator:operator, value:value, rangeIncrease:rangeIncrease});
                 state.conditions = conditions;
                 return state;
             },
@@ -234,9 +233,9 @@ export default function ({ object, form }) {
                 state.conditions = conditions;
                 return state;
             },
-            async updateCondition(state, {index, type, operator, value, rangeIncrease, rangeIncreaseAmount}) {
+            async updateCondition(state, {index, type, operator, value, rangeIncrease}) {
                 const conditions = duplicate(state.conditions);
-                conditions[index] = {type:type, operator:operator, value:value, rangeIncrease:rangeIncrease, rangeIncreaseAmount:rangeIncreaseAmount};
+                conditions[index] = {type:type, operator:operator, value:value, rangeIncrease:rangeIncrease};
                 state.conditions = conditions;
                 return state;
             },

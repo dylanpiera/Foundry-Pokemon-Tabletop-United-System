@@ -42,7 +42,6 @@ export default class ConditionsComponent extends Component {
                 operator: curCondition.operator,
                 value: curCondition.value,
                 rangeIncrease: curCondition.rangeIncrease,
-                rangeIncreaseAmount: curCondition.rangeIncreaseAmount,
             });
             this.renderBlock = false;
         });
@@ -55,7 +54,6 @@ export default class ConditionsComponent extends Component {
                 operator: ev.currentTarget.value,
                 value: curCondition.value,
                 rangeIncrease: curCondition.rangeIncrease,
-                rangeIncreaseAmount: curCondition.rangeIncreaseAmount,
             });
             this.renderBlock = false;
         });
@@ -68,7 +66,6 @@ export default class ConditionsComponent extends Component {
                 operator: curCondition.operator,
                 value: ev.currentTarget.value,
                 rangeIncrease: curCondition.rangeIncrease,
-                rangeIncreaseAmount: curCondition.rangeIncreaseAmount,
             });
             this.renderBlock = false;
         });
@@ -81,20 +78,6 @@ export default class ConditionsComponent extends Component {
                 operator: curCondition.operator,
                 value: curCondition.value,
                 rangeIncrease: ev.currentTarget.value,
-                rangeIncreaseAmount: curCondition.rangeIncreaseAmount,
-            });
-            this.renderBlock = false;
-        });
-        this.element.find(`input.condition-rangeIncreases-value`).on("change", async (ev) => {
-            this.renderBlock = true;
-            const curCondition = this.state.conditions[ev.currentTarget.dataset.index];
-            this.store.dispatch(`updateCondition`, {
-                index: ev.currentTarget.dataset.index,
-                type: curCondition.type,
-                operator: curCondition.operator,
-                value: curCondition.value,
-                rangeIncrease: curCondition.rangeIncrease,
-                rangeIncreaseAmount: ev.currentTarget.value,
             });
             this.renderBlock = false;
         });
@@ -120,7 +103,6 @@ export default class ConditionsComponent extends Component {
                 <select class="condition-rangeIncreases-select" data-index="${index}">
                     ${this._getRangeIncreasesItems(condition)}
                 </select>
-                <input type="number" class="condition-rangeIncreases-value" data-index="${index}" value="${condition.rangeIncreasesAmount}"></input>
                 <a class="item-control item-delete" data-type="condition" data-index="${index}">
                     <i class="fas fa-times-circle" style="margin-right: 3px;"></i><span class="readable">Delete</span>
                 </a>
@@ -150,7 +132,7 @@ export default class ConditionsComponent extends Component {
     _getOperatorItems(currentCondition) {
         const possibleOperators = Object.keys(CONFIG.PTUAutomation.Operators);
         return possibleOperators.map(o => `
-            <option value="${CONFIG.PTUAutomation.Operators[o]}" ${CONFIG.PTUAutomation.Operators[o] == currentCondition.operator ? "selected" : ""}>${game.i18n.localize("PTU.AutomationOperators."+o)}</option>
+            <option value="${game.i18n.localize(`PTU.AutomationOperators.${o}.Operator`)}" ${CONFIG.PTUAutomation.Operators[o] == currentCondition.operator ? "selected" : ""}>${game.i18n.localize("PTU.AutomationOperators."+o)}</option>
         `).join('');  
     }        
     

@@ -2103,21 +2103,18 @@ h3 {
   max-width: 160px;
 }
 .ptu.automation .content .tabbed-content #conditions-component .condition-bar .condition-operator-select {
-  flex: 0 0 20%;
+  flex: 0 0 30%;
   font-size: 10px;
   max-width: 150px;
 }
 .ptu.automation .content .tabbed-content #conditions-component .condition-bar .condition-value {
-  flex: 0 0 20%;
+  flex: 0 0 10%;
+  height: 27px;
 }
 .ptu.automation .content .tabbed-content #conditions-component .condition-bar .condition-rangeIncreases-select {
-  flex: 0 0 15%;
+  flex: 0 0 25%;
   font-size: 10px;
-  max-width: 90px;
-}
-.ptu.automation .content .tabbed-content #conditions-component .condition-bar .condition-rangeIncreases-value {
-  flex: 0 0 10%;
-  max-width: 40px;
+  max-width: 150px;
 }
 .ptu.automation .content .tabbed-content #conditions-component .condition-bar a.item-delete {
   flex: 0 0 10%;
