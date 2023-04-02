@@ -183,3 +183,9 @@ export class PTUSidebar extends FormApplication {
   /* -------------------------------------------- */
 
 }
+
+Hooks.on('collapseSidebar', () => setTimeout(() => {
+  let pos = game.ptu.forms.sidebar.position
+  pos.left = $(window).width()-$('#sidebar').width()-pos.width-10
+  game.ptu.forms.sidebar.setPosition(pos);
+}, 150));

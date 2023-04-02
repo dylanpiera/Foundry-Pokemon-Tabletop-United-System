@@ -20,6 +20,9 @@ p.notes {
   font-size: 10px;
   margin: unset;
 }
+#sidebar-tabs > .collapse {
+  display: unset !important;
+}
 form .form-group > label {
   font-size: 12px;
 }
