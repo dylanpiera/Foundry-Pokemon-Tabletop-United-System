@@ -50,8 +50,8 @@ export default class CseCapabilities extends Component{
 
         this.element.html(html);
 
-        // this.element.find(`input`).on("change", (e) => {
-        //     this.store.dispatch('updateCapabilities', e.target.name, e.target.value);
-        // });
+        this.element.find(`input`).on("change", (e) => {
+            this.store.dispatch('updateCapability', e.target.name, e.target.value);
+        });
     }
 }
