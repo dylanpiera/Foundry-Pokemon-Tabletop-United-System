@@ -792,7 +792,117 @@ Hooks.on('getSceneControlButtons', function (hudButtons) {
 Hooks.on("renderTokenConfig", (config, html, options) => html.find("[name='actorLink']").siblings()[0].outerHTML = "<label>Link Actor Data <span class='readable p10'>Unlinked actors are not supported by the system</span></label>")
 
 Hooks.on("preUpdateActor", async (oldActor, changes, options, sender) => {
-  //check if this is turned off in settings
+  
+  //check if xp changes are NaN
+  //check if xp changes start with + or - and if so increase/decrease value accordingly
+  const expChange = changes.system?.level?.exp;
+  if (expChange) {
+    const operator = expChange.charAt(0);
+    const amountStr = operator === '+' || operator === '-' ? expChange.substring(1) : expChange;
+    const amount = parseInt(amountStr);
+    if (!isNaN(amount)) {
+      const oldValue = oldActor.system.level.exp;
+      changes.system.level.exp = operator === '+' ? oldValue + amount
+                                                : operator === '-' ? oldValue - amount
+                                                                    : amount;
+    } else {
+      changes.system.level.exp = oldActor.system.level.exp;
+    }
+  } else {
+    changes.system.level.exp = oldActor.system.level.exp;
+  }
+
+  //milestones
+  const milestoneChange = changes.system?.level?.milestones;
+  if (milestoneChange) {
+    const operator = milestoneChange.charAt(0);
+    const amountStr = operator === '+' || operator === '-' ? milestoneChange.substring(1) : milestoneChange;
+    const amount = parseInt(amountStr);
+    if (!isNaN(amount)) {
+      const oldValue = oldActor.system.level.milestones;
+      changes.system.level.milestones = operator === '+' ? oldValue + amount
+                                                : operator === '-' ? oldValue - amount
+                                                                    : amount;
+    } else {
+      changes.system.level.milestones = oldActor.system.level.milestones;
+    }
+  } else {
+    changes.system.level.milestones = oldActor.system.level.milestones;
+  }
+
+  //miscExp
+  const miscExpChange = changes.system?.level?.miscexp;
+  if (miscExpChange) {
+    const operator = miscExpChange.charAt(0);
+    const amountStr = operator === '+' || operator === '-' ? miscExpChange.substring(1) : miscExpChange;
+    const amount = parseInt(amountStr);
+    if (!isNaN(amount)) {
+      const oldValue = oldActor.system.level.miscexp;
+      changes.system.level.miscexp = operator === '+' ? oldValue + amount
+                                                : operator === '-' ? oldValue - amount
+                                                                    : amount;
+    } else {
+      changes.system.level.miscexp = oldActor.system.level.miscexp;
+    }
+  } else {
+    changes.system.level.miscexp = oldActor.system.level.miscexp;
+  }
+  
+  //hp
+  const hpChange = changes.system?.health?.value;
+  if (hpChange) {
+    const operator = hpChange.charAt(0);
+    const amountStr = operator === '+' || operator === '-' ? hpChange.substring(1) : hpChange;
+    const amount = parseInt(amountStr);
+    if (!isNaN(amount)) {
+      const oldValue = oldActor.system.health.value;
+      changes.system.health.value = operator === '+' ? oldValue + amount
+                                                : operator === '-' ? oldValue - amount
+                                                                    : amount;
+    } else {
+      changes.system.health.value = oldActor.system.health.value;
+    }
+  } else {
+    changes.system.health.value = oldActor.system.health.value;
+  }  
+
+  //tempHp
+  const tempHpChange = changes.system?.tempHp?.value;
+  if (tempHpChange) {
+    const operator = tempHpChange.charAt(0);
+    const amountStr = operator === '+' || operator === '-' ? tempHpChange.substring(1) : tempHpChange;
+    const amount = parseInt(amountStr);
+    if (!isNaN(amount)) {
+      const oldValue = oldActor.system.tempHp.value;
+      changes.system.tempHp.value = operator === '+' ? oldValue + amount
+                                                : operator === '-' ? oldValue - amount
+                                                                    : amount;
+    } else {
+      changes.system.tempHp.value = oldActor.system.tempHp.value;
+    }
+  } else {
+    changes.system.tempHp.value = oldActor.system.tempHp.value;
+  }
+  
+  //tempHpMax
+  const tempHpMaxChange = changes.system?.tempHp?.max;
+  if (tempHpMaxChange) {
+    const operator = tempHpMaxChange.charAt(0);
+    const amountStr = operator === '+' || operator === '-' ? tempHpMaxChange.substring(1) : tempHpMaxChange;
+    const amount = parseInt(amountStr);
+    if (!isNaN(amount)) {
+      const oldValue = oldActor.system.tempHp.max;
+      changes.system.tempHp.max = operator === '+' ? oldValue + amount
+                                                : operator === '-' ? oldValue - amount
+                                                                    : amount;
+    } else {
+      changes.system.tempHp.max = oldActor.system.tempHp.max;
+    }
+  } else {
+    changes.system.tempHp.max = oldActor.system.tempHp.max;
+  }
+
+  //check if level up form is turned off in settings
   const setting = game.settings.get("ptu", "levelUpScreen")
   if(!setting) return; // option turned off by GM
 

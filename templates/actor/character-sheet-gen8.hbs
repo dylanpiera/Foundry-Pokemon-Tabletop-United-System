@@ -108,8 +108,7 @@
                       <div class="options w-100 d-flex">
                         <label for="progressBar" class="hp"></label>
                         <div class="d-flex pt-1 pb-1" style="text-align: center;">
-                          <input class="ml-1 mr-1" type="text" name="system.health.value" value="{{data.health.value}}"
-                            data-dtype="Number" />
+                          <input class="ml-1 mr-1" type="text" name="system.health.value" value="{{data.health.value}}" />
                           <span style="font-size: 20px;"> / </span>
                           <input class="ml-1" type="text" name="system.health.max" value="{{data.health.max}}" data-dtype="Number"
                             disabled />
@@ -118,9 +117,9 @@
                       <div class="options w-100 d-flex">
                         <div class="temp-hp"><label for="temp-hp">{{localize "PTU.HPTemp"}}</label></div>
                         <div class="d-flex pt-1 pb-1" style="text-align: center;">
-                          <input class="ml-1 mr-1" type="text" name="system.tempHp.value" value="{{data.tempHp.value}}" data-dtype="Number">
+                          <input class="ml-1 mr-1" type="text" name="system.tempHp.value" value="{{data.tempHp.value}}" >
                           <span style="font-size: 20px;"> / </span>
-                          <input class="ml-1" type="text" name="system.tempHp.max" value="{{data.tempHp.max}}" data-dtype="Number">
+                          <input class="ml-1" type="text" name="system.tempHp.max" value="{{data.tempHp.max}}" >
                         </div>
                       </div>
                       <div class="options w-100 pb-1 pt-1">
@@ -190,20 +189,20 @@
                           <div class="d-flex w-100 pt-1 pb-1" style="text-align: center;">
                             {{#if (is "true" (getGameSetting "useDexExp"))}}
                             <div class="col-sm-4">
-                              <input type="text" name="system.level.milestones" value="{{data.level.milestones}}" data-dtype="Number" />
+                              <input type="text" name="system.level.milestones" value="{{data.level.milestones}}" />
                             </div>
                             <div class="col-sm-4">
                               <input type="text" name="system.level.dexexp" value="{{data.level.dexexp}}" data-dtype="Number" disabled/>
                             </div>
                             <div class="col-sm-4">
-                              <input type="text" name="system.level.miscexp" value="{{data.level.miscexp}}" data-dtype="Number" />
+                              <input type="text" name="system.level.miscexp" value="{{data.level.miscexp}}" />
                             </div>
                             {{else}}
                               <div class="col-sm-6">
-                                <input type="text" name="system.level.milestones" value="{{data.level.milestones}}" data-dtype="Number" />
+                                <input type="text" name="system.level.milestones" value="{{data.level.milestones}}"/>
                               </div>
                               <div class="col-sm-6">
-                                <input type="text" name="system.level.miscexp" value="{{data.level.miscexp}}" data-dtype="Number" />
+                                <input type="text" name="system.level.miscexp" value="{{data.level.miscexp}}"/>
                               </div>
                             {{/if}}
                             </div>
