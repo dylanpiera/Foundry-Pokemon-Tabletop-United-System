@@ -272,7 +272,7 @@ export class PTULevelUpForm extends FormApplication {
     ];
 
     for (const tok of tokens) {
-      if(state.evolving.is && state.evolving.into) {
+      if(state.evolving.is && state.evolving.into && game.settings.get("ptu", "useEvolutionAnimation")) {
         await timeout(500);
         await game.ptu.utils.api.gm.addTokenMagicFilters(tok, game.canvas.scene, evolution_params);
         await game.ptu.utils.api.gm.tokensUpdate(tok, {alpha: 1})
