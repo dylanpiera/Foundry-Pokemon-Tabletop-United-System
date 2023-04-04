@@ -9,6 +9,7 @@ import { log, debug } from "../ptu.js";
 import { pokemonData } from '../data/species-data.js';
 import { GetSpeciesArt } from '../utils/species-command-parser.js';
 import { GetOrCacheAbilities } from "../utils/cache-helper.js";
+import { timeout } from "../utils/generic-helpers.js";
 
 /**
  * Extend the basic FormApplication with some very simple modifications
@@ -200,7 +201,83 @@ export class PTULevelUpForm extends FormApplication {
 
     //update all active tokens
     const tokens = this.object.actor.getActiveTokens();
+
+    const evolution_params =
+    [
+        {
+            filterType: "transform",
+            filterId: "evolutionShoop",
+            bpRadiusPercent: 100,
+            autoDestroy: true,
+            animated:
+            {
+                bpStrength:
+                {
+                    animType: "cosOscillation",
+                    val1: 0,
+                    val2: -0.99,
+                    loopDuration: 1500,
+                    loops: 1,
+                }
+            }
+        },
+
+        {
+            filterType: "glow",
+            filterId: "evolutionShoop",
+            outerStrength: 40,
+            innerStrength: 20,
+            color: 0xFFFFFF,
+            quality: 0.5,
+            autoDestroy: true,
+            animated:
+            {
+                color: 
+                {
+                active: true, 
+                loopDuration: 1500, 
+                loops: 1,
+                animType: "colorOscillation", 
+                val1:0xFFFFFF,
+                val2:0x0000FF,
+                }
+            }
+        },
+
+        {
+            filterType: "adjustment",
+            filterId: "evolutionShoop",
+            saturation: 1,
+            brightness: 10,
+            contrast: 1,
+            gamma: 1,
+            red: 1,
+            green: 1,
+            blue: 1,
+            alpha: 1,
+            autoDestroy: true,
+            animated:
+            {
+                alpha: 
+                { 
+                active: true, 
+                loopDuration: 1500, 
+                loops: 1,
+                animType: "syncCosOscillation",
+                val1: 0.35,
+                val2: 0.75 
+                }
+            }
+        }
+    ];
+
     for (const tok of tokens) {
+      if(state.evolving.is && state.evolving.into) {
+        await timeout(500);
+        await game.ptu.utils.api.gm.addTokenMagicFilters(tok, game.canvas.scene, evolution_params);
+        await game.ptu.utils.api.gm.tokensUpdate(tok, {alpha: 1})
+      }
+      
       await tok.document.update(token.document);
     }
 
