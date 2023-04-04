@@ -3,6 +3,7 @@ import initStore from "../api/front-end/cseStore.js";
 import TypeList from "../api/front-end/components/typeList.js";
 import { log, debug } from "../ptu.js";
 import NewMonComponent from "../api/front-end/components/newMonComponent.js";
+import CseCapabilities from "../api/front-end/components/cse-capabilities.js";
 import CseDragAndDropList from "../api/front-end/components/cse-dad-list.js";
 
 /**
@@ -213,6 +214,7 @@ export class PTUCustomSpeciesEditor extends FormApplication {
       this.components = {
         typeList: new TypeList(this.store),
         newMonComponent: new NewMonComponent(this.store),
+        capabilitiesList: new CseCapabilities(this.store, "cse-capabilities"),
         otherCapabilitiesList: new CseDragAndDropList(this.store, "cse-other-capabilities", "capability"),
         basicAbilitiesList: new CseDragAndDropList(this.store, "cse-basic-abilities", "basic-ability"),
         advancedAbilitiesList: new CseDragAndDropList(this.store, "cse-advanced-abilities", "advanced-ability"),
