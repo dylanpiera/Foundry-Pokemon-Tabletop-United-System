@@ -123,8 +123,9 @@ export class PTULevelUpForm extends FormApplication {
       case "huge": heightWidth = 3; break;
       case "gigantic": heightWidth = 4; break;
     }
+    let imgPath="";
     if(state.evolving.is && state.evolving.into){
-      const imgPath = await GetSpeciesArt(dexEntry, game.settings.get("ptu", "defaultPokemonImageDirectory"))
+      imgPath = await GetSpeciesArt(dexEntry, game.settings.get("ptu", "defaultPokemonImageDirectory"), ".webp", this.object.actor.system.shiny)
     }
     
     const data = {
@@ -158,7 +159,7 @@ export class PTULevelUpForm extends FormApplication {
       }
     }
 
-    if (imgPath) {
+    if (imgPath != "") {
       data.img = imgPath;
       data.prototypeToken["texture.src"]= imgPath;
       token.document["texture.src"]= imgPath;
