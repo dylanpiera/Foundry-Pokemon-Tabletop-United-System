@@ -794,10 +794,10 @@ Hooks.on("renderTokenConfig", (config, html, options) => html.find("[name='actor
 /****************************
 Token Movement Info
 ****************************/
-Hooks.on('renderTokenHUD', (_) => {if(!game.modules.get("ptu-movement-info")?.active) _addMovementIcons});
+Hooks.on('renderTokenHUD', _addMovementIcons);
 
 function _addMovementIcons(app, html, data) {
-  if(!game.settings.get("ptu", "showMovementIcons")) return;
+  if(!game.settings.get("ptu", "showMovementIcons") || game.modules.get("ptu-movement-info")?.active) return;
 
   // Fetch Actor
   const actor = game.actors.get(data.actorId);
