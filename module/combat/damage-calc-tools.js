@@ -204,10 +204,23 @@ export async function applyEffectsToTargets(event) {
         }
 
         // Step 2: perform beforeDamage effects
-        await beforeDamage(attacks, targets, move, {roll: acRoll, msgId: messageId});
+        const effectData = await beforeDamage(attacks, targets, move, {roll: acRoll, msgId: messageId});
         
         // Step 3: perform afterDamage effects
         //TODO: add step 4
+
+        //display applied effects to chat
+        if (effectData.length > 0) {
+            const content = await renderTemplate("/systems/ptu/templates/chat/automation/applied-effect.hbs", {effectData})
+            let messageData = {
+                user: game.user.id,
+                content: content,
+                type: CONST.CHAT_MESSAGE_TYPES.WHISPER,
+                whisper: game.users.filter(x => x.isGM)
+            }
+
+            ChatMessage.create(messageData, {})
+        }
 
         return results;
     }
@@ -263,7 +276,7 @@ export async function applyEffectsToTargets(event) {
                 }
             }
         }
-        return {modifiedAttacks: attacks, effects: modifiers};
+        return modifiers;
     }
 }
 
