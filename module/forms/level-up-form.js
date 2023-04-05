@@ -123,8 +123,9 @@ export class PTULevelUpForm extends FormApplication {
       case "huge": heightWidth = 3; break;
       case "gigantic": heightWidth = 4; break;
     }
-    const imgPath = await GetSpeciesArt(dexEntry, game.settings.get("ptu", "defaultPokemonImageDirectory"))
-    
+    if(state.evolving.is && state.evolving.into){
+      const imgPath = await GetSpeciesArt(dexEntry, game.settings.get("ptu", "defaultPokemonImageDirectory"))
+    }
     
     const data = {
       system: {
@@ -272,13 +273,15 @@ export class PTULevelUpForm extends FormApplication {
     ];
 
     for (const tok of tokens) {
-      if(state.evolving.is && state.evolving.into && game.settings.get("ptu", "useEvolutionAnimation")) {
-        await timeout(500);
-        await game.ptu.utils.api.gm.addTokenMagicFilters(tok, game.canvas.scene, evolution_params);
-        await game.ptu.utils.api.gm.tokensUpdate(tok, {alpha: 1})
-      }
-      
-      await tok.document.update(token.document);
+      if(state.evolving.is && state.evolving.into) {
+        if(game.settings.get("ptu", "useEvolutionAnimation")) {
+          await timeout(500);
+          await game.ptu.utils.api.gm.addTokenMagicFilters(tok, game.canvas.scene, evolution_params);
+          await game.ptu.utils.api.gm.tokensUpdate(tok, {alpha: 1})
+        }
+        
+        await tok.document.update(token.document);
+      }     
     }
 
     //close the window
