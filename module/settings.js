@@ -802,6 +802,15 @@ export function LoadSystemSettings() {
             category: "playtest",
             onChange: debouncedReload
         })
+
+        game.settings.register("ptu", "showMovementIcons", {
+            name: "Show Movement Icons",
+            hint: "Show movement icons above controlled tokens.",
+            scope: "client",
+            config: true,
+            type: Boolean,
+            default: true
+        })
     }
 }
 
