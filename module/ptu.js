@@ -794,10 +794,20 @@ Hooks.on("renderTokenConfig", (config, html, options) => html.find("[name='actor
 /****************************
 Token Movement Info
 ****************************/
-Hooks.on('renderTokenHUD', _addMovementIcons);
+Hooks.on('renderTokenHUD', (app, html, data) => {
+  if(!game.settings.get("ptu", "showMovementIcons")) return;
+  
+  if(game.modules.get("ptu-movement-info")?.active){
+    ui.notification.warn("Thanks for using the PTU Movement info module! This module is now included in the PTR system and will no longer by updated. Please ask your GM to disable to PTY Movement Info module.")
+    return;
+  } 
 
-function _addMovementIcons(app, html, data) {
-  if(!game.settings.get("ptu", "showMovementIcons") || game.modules.get("ptu-movement-info")?.active) return;
+  //doesn't work with the barbrawl module
+  if(game.modules.get("barbrawl")?.active) {
+    //warn player that the movement icons don't work with barbrawl
+    ui.notifications.warn("Movement icons are not compatible with the barbrawl module. Please disable the barbrawl module to use movement icons.\nYou can disable movement icons in the PTU settings > Player Preferences to avoid seeing this message.");
+    return;
+  }
 
   // Fetch Actor
   const actor = game.actors.get(data.actorId);
@@ -805,31 +815,31 @@ function _addMovementIcons(app, html, data) {
 
   // List of capabilities to possibly display, and the icon it should use
   const capabilitiesMap = {
-      Overland: "fas fa-shoe-prints",
-      Swim: "fas fa-swimmer",
-      Burrow: "fas fa-mountain",
-      Sky: "fas fa-feather",
-      Levitate: "fab fa-fly",
-      Teleporter: "fas fa-people-arrows",
+    Overland: "fas fa-shoe-prints",
+    Swim: "fas fa-swimmer",
+    Burrow: "fas fa-mountain",
+    Sky: "fas fa-feather",
+    Levitate: "fab fa-fly",
+    Teleporter: "fas fa-people-arrows",
   }
 
   const buttons = [];
-  for(const [cap,fac] of Object.entries(capabilitiesMap)) {
-      const val = actor.system.capabilities[cap];
-      // If value is 0 / unset no need to display.
-      if(!val) continue;
+  for(const [c,i] of Object.entries(capabilitiesMap)) { //c=capability, i=icon
+    const val = actor.system.capabilities[c];
+    // If value is 0 / unset no need to display.
+    if(!val) continue;
 
-      buttons.push(`<div class="control-icon chalk-icon" title="${cap}: ${val}"><i class="${fac}"></i>${val}</div>`)
+    buttons.push(`<div class="control-icon chalk-icon" title="${c}: ${val}"><i class="${i}"></i>${val}</div>`)
   }
 
   html.find(".col.middle").before( // if the actor uses a 2nd bar increase height.
-      `<div class="col middle" style="top: -${html.find(".bar2").html().trim() ? 105 : 90}px;">
-          <div class="chalk-container">
-              ${buttons.join("\n")}
-          </div>
-      </div>`
+    `<div class="col middle" style="top: -${html.find(".bar2").html().trim() ? 105 : 90}px;">
+        <div class="chalk-container">
+            ${buttons.join("\n")}
+        </div>
+    </div>`
   )
-}
+});
 
 Hooks.on("preUpdateActor", async (oldActor, changes, options, sender) => {
   //check if this is turned off in settings
