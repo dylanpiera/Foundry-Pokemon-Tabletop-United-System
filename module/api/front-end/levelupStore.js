@@ -4,7 +4,7 @@ import { debug, log } from '../../ptu.js';
 import { CheckStage } from '../../utils/calculate-evolution.js';
 import { GetOrCacheAbilities, GetOrCacheMoves } from "../../utils/cache-helper.js";
 
-export default function({actorSystem, changeDetails, name, form, knownMoves, currentAbilities}) {
+export default function({actorSystem, changeDetails, name, form, knownMoves, currentAbilities, isShiny}) {
     const originalAbilities = currentAbilities;
     const store = new Store({
         actions: {
@@ -378,7 +378,8 @@ export default function({actorSystem, changeDetails, name, form, knownMoves, cur
                 Basic: "",
                 Advanced: "",
                 High: ""
-            }
+            },
+            isShiny
         }
     })
     store.dispatch('init', originalAbilities);

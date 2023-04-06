@@ -570,6 +570,16 @@ export function LoadSystemSettings() {
             default: true
         });
 
+        game.settings.register("ptu", "useEvolutionAnimation", {
+            name: "Use an animated evolution effect when a pokemon evolves.",
+            hint: "Disable this if you are having problems with the effects.",
+            scope: "world",
+            config: true,
+            type: Boolean,
+            category: "other",
+            default: true
+        })
+
         game.settings.register("ptu", "usePokeballSoundsOnDragOut", {
             name: "Enable Pokéball Sounds.",
             hint: "Enable/Disable pokeball related sounds like when you send out a pokemon",
