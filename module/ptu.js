@@ -402,11 +402,18 @@ Hooks.once("ready", async function () {
   // Wait to register hotbar drop hook on ready so that modules could register earlier if they want to
   Hooks.on("hotbarDrop", (bar, data, slot) => createPTUMacro(data, slot));
 
-  game.socket.on("system.ptu", (data) => {
+  game.socket.on("system.ptu", async (data) => {
     if (data == null) return;
     if (data == "RefreshCustomSpecies" || (data == "ReloadGMSpecies" && game.user.isGM)) Hooks.callAll("updatedCustomSpecies");
     if (data == "RefreshCustomTypings") Hooks.callAll("updatedCustomTypings");
     if (data == "RefreshCustomTypingsAndActors") Hooks.callAll("updatedCustomTypings", { updateActors: true });
+    if (data.type){
+      const { type, species, userId } = data;
+      
+      if(!!userId && game.userId !== userId) return
+
+      await game.ptu.utils.dex.render(species, type)
+    }
   });
 
   /** Display Changelog */
@@ -641,6 +648,9 @@ function _onMoveMacro(actor, item) {
 }
 
 async function _onPokedexMacro() {
+  //ding
+  AudioHelper.play({ src: "systems/ptu/sounds/ui_sounds/ui_pokedex_ding.wav", volume: 0.8, autoplay: true, loop: false }, false);
+
   const permSetting = game.settings.get("ptu", "dex-permission");
   const addToDex = game.settings.get("ptu", "auto-add-to-dex");
   for (let token of game.user.targets.size > 0 ? game.user.targets.values() : canvas.tokens.controlled) {
@@ -685,7 +695,7 @@ async function _onPokedexMacro() {
           case "false": {
             return ui.notifications.info(game.i18n.localize("PTU.DexScan.Denied"));
           }
-          case "timeout": {
+          case "timeout": {            
             return ui.notifications.warn(game.i18n.localize("PTU.DexScan.Timeout"));
           }
           case "description": {
@@ -829,3 +839,29 @@ Hooks.on("preUpdateActor", async (oldActor, changes, options, sender) => {
       }).render(true);
   }
 });
+
+/***************************
+ * Dex Scan Chat messages
+ **************************/
+// Description Only
+Hooks.on("renderChatMessage", (message, html, data) => {
+  setTimeout(() => {
+      $(html).find(".dex-desc-button").on("click", (event) => showPlayerDexEntry(event));
+  }, 500);
+});
+
+// Full Scan
+Hooks.on("renderChatMessage", (message, html, data) => {
+  setTimeout(() => {
+      $(html).find(".dex-scan-button").on("click", (event) => showPlayerDexEntry(event));
+  }, 500);
+});
+
+export async function showPlayerDexEntry(event){
+  const { trainername, pokemonname, type } = event.currentTarget.dataset;
+  const mon = game.ptu.utils.species.get(pokemonname);
+
+  const userId = game.users.find(u => u.character = game.actors.getName(trainername) && !u.isGM)._id
+
+  await game.ptu.utils.api.gm.renderDexToPlayer(mon._id, type, userId)
+}

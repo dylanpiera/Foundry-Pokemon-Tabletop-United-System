@@ -208,6 +208,18 @@ export default class Api {
                     )
                 });
 
+                //if timeout make the dialog a chat message whispered to the GM
+                if (allowed == "timeout") {
+                    let messageData = {
+                        user: game.user.id,
+                        content: await renderTemplate("systems/ptu/templates/chat/dex-scan-request.hbs", {trainerName, pokemonName}),
+                        type: CONST.CHAT_MESSAGE_TYPES.WHISPER,
+                        whisper: game.users.filter(x => x.isGM)
+                    }
+
+                    return ChatMessage.create(messageData, {});
+                }
+
                 return ref._returnBridge({ result: allowed }, data);
 
             },
@@ -676,7 +688,22 @@ export default class Api {
 
         const content = { trainerName: trainerActor.name, pokemonName: pokemonActor.name, options };
         return this._handlerBridge(content, "dexScanRequest", options?.timeout ?? 15000);
-    }    
+    }
+
+     /**
+     * @param {*} species - Species name
+     * @param {*} level - Level of detail ("full" or "desc")
+     * @param {*} userId - the user to be sent the content
+     * @returns nothing.
+     */
+     async renderDexToPlayer(species, type, userId)
+     {
+         await game.socket.emit("system.ptu", {
+             userId: userId,
+             species: species,
+             type: type
+         })
+     }
 
     /**
      * @param {*} object - Instance of or array of either Token, TokenDocument or UUID string. 
@@ -939,6 +966,9 @@ export default class Api {
         debug(content);
         return this._handlerBridge(content, "removeTokenMagicFilters");
     }
+
+    
+
 
     /** API Methods */
     _isMainGM() {
