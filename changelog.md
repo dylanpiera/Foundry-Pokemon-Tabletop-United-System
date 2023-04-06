@@ -1,3 +1,31 @@
+## Version 3.2.3.4 - HotFix
+It appeared we are 'incentivising' the Playtest a bit too much... considering if you're not running it this update broke! 
+
+### Fixes
+- Made the level-up form fully compatible for people not running the stat playtest
+- Made it so that Abilities auto default to not all be the same one.
+- Fixed a style issue that sometimes appears in the Level-Up Form
+
+## Version 3.2.3.2 - Level-Up Popup!
+Hi all! We've been hard at work on this new addition; the Level-Up Form for Pokemon.
+
+Whenever you level up your pokemon (by increasing the EXP value) this pop-up will show up (unless disabled by the GM in settings). 
+It includes the following features:
+- (Re-)assign Stat Points
+- Evolve your Pokemon
+- Learn new moves
+- Gain new Abilities
+- Replace abilities on Evolution
+
+And besides that we have a couple QoL changes that we hope you'll enjoy!
+### New Features
+- New Level-Up Form that displays whenever a Pokemon Levels up (unless disabled)
+- BaseStats Overwrite fields in the Extra Tab (Effect Path: `system.modifiers.baseStats.[STAT].mod`)
+- Type Overwrite (only from effects, path: `system.modifiers.typeOverwrite` sample input for 3 types 'Grass', 'Fire' & 'Water': `Grass/Fire/Water`)
+
+### Fixes
+- Fixed some issues with the playtest where it appeared stats dropped on level-up
+
 ## Version 3.2.3.0 - Playtest Update
 After some feedback we noticed that the stats may have been a bit overtuned. So we have decided to update the defaults
 

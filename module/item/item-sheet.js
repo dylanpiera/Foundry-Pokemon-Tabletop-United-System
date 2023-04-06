@@ -95,6 +95,13 @@ export class PTUItemSheet extends ItemSheet {
 			onclick: () => this._toChat()
 		});
 
+		buttons.unshift({
+			label: "Automations",
+			class: "open-automation",
+			icon: "fas fa-edit",
+			onclick: () => this._loadAutomationSheet()
+		});
+
 		if(this.object.type == "move") return buttons;
 		if(this.object.type == "dexentry") {
 			buttons.unshift({
@@ -164,6 +171,10 @@ export class PTUItemSheet extends ItemSheet {
 		
 		const effect = this.object.effects.contents[0];
 		return effect.sheet.render(true);
+	}
+
+	async _loadAutomationSheet() {
+		return new game.ptu.config.Ui.AutomationForm.documentClass(this.object).render(true);
 	}
 
 	/**

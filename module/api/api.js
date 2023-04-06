@@ -1,7 +1,7 @@
 import { displayAppliedDamageToTargets, ApplyInjuries } from '../combat/damage-calc-tools.js';
 import { LATEST_VERSION } from '../ptu.js'
 import { debug, log } from '../ptu.js';
-import { dataFromPath } from '../utils/generic-helpers.js';
+import { addStepsToEffectiveness, dataFromPath } from '../utils/generic-helpers.js';
 import { PlayPokeballReturnAnimation } from '../combat/effects/pokeball_effects.js';
 
 class ApiError {
@@ -220,6 +220,66 @@ export default class Api {
                     retVal.result.push(await document.actor.modifyTokenAttribute("health", actualDamage * -1, true, true));
                 }
                 await displayAppliedDamageToTargets({ data: retVal.appliedDamage, move: label });
+
+                ref._returnBridge(retVal, data);
+            },
+            async applyAttacks(data) {
+                if (!ref._isMainGM()) return;
+
+                const { attacks, options } = data.content;
+
+                const retVal = { result: [], appliedDamage: {}, appliedInjuries: {} };
+
+                for(const attack of attacks) {
+                    const document = await ref._documentFromUuid(attack.uuid);
+                    if (!document || document.locked) continue;
+                    const actor = (document.actor ?? document);
+                    if(!actor || !(actor instanceof Actor)) continue;
+                    
+                    let actualDamage;
+                    if (attack.isFlat) {
+                        actualDamage = attack.damage;
+                    }
+                    else {
+                        // Calculate defense based on damage category
+                        const defense = attack.damageCategory == "Special" ? actor.system.stats.spdef.total : actor.system.stats.def.total;
+                        // Calculate damage reduction based on damage category
+                        let dr = parseInt(attack.damageCategory == "Special" ? (actor.system.modifiers?.damageReduction?.special?.total ?? 0) : (actor.system.modifiers?.damageReduction?.physical?.total ?? 0));
+                        // If the actor is holding a brace item of the damage type, add 15 damage reduction
+                        if(actor.system.heldItem?.toLowerCase()?.includes("brace")) {
+                            if(actor.system.heldItem.toLowerCase().includes(attack.damageType.toLowerCase())) {
+                                dr += 15;
+                            }
+                        }
+
+                        // Calculate effectiveness based on damage type
+                        const effectiveness = attack.effectiveness ? addStepsToEffectiveness((actor.system.effectiveness?.All[attack.damageType] ?? 1), attack.effectiveness) : actor.system.effectiveness?.All[attack.damageType] ?? 1;
+
+                        // Calculate actual damage
+                        actualDamage = Math.max(
+                            (effectiveness === 0 ? 0 : 1),
+                            Math.floor((attack.damage - parseInt(defense) - dr - parseInt(attack.damageReduction)) * (effectiveness + (attack.isResist ? (effectiveness > 1 ? -0.5 : effectiveness * -0.5) : attack.isWeak ? (effectiveness >= 1 ? effectiveness >= 2 ? 1 : 0.5 : effectiveness) : 0))))
+                    }
+                    log(`Dealing ${actualDamage} damage to ${actor.name}`);
+
+                    retVal.appliedDamage[actor.uuid] = {
+                        name: actor.name,
+                        uuid: attack.uuid,
+                        damage: actualDamage,
+                        old: {
+                            value: duplicate(actor.system.health.value),
+                            temp: duplicate(actor.system.tempHp.value),
+                            injuries: duplicate(actor.system.health.injuries),
+                            ...options.backup,
+                        },
+                        injuries: (await ApplyInjuries(actor, actualDamage)),
+                        msgId: options.msgId,
+                    };
+                    // Apply damage to actor
+                    retVal.result.push(await actor.modifyTokenAttribute("health", actualDamage * -1, true, true));
+                }
+
+                await displayAppliedDamageToTargets({ data: retVal.appliedDamage, effectData: options.effects, move: options.moveName });
 
                 ref._returnBridge(retVal, data);
             },
@@ -566,6 +626,24 @@ export default class Api {
 
         const content = { uuids: tokens.map(t => t.document.uuid), damage, damageType, damageCategory, options };
         return this._handlerBridge(content, "applyDamage");
+    }
+
+    /**
+     * @param {any} attacks - An array of Attacks to resolve.
+     * @param {Object} options - see subproperties:
+     * @param {String} options.label - Label to display in 'undo-damage' text message
+     * @param {Boolean} options.isFlat - Whether to apply this as flat damage (ignore resistance, defenses & DR) 
+     * @param {Boolean} options.isHalf - Whether to half the incoming damage 
+     * @param {Boolean} options.isResist - Whether the damage should be resisted one step further
+     * @param {Number} options.damageReduction - Flat damage reduction applied to this damage
+     * 
+     * @returns {ActorData[]}
+     */
+    async applyAttacks(attacks, options) {
+        if (!attacks || attacks.length == 0) return;
+        
+        const content = { attacks, options };
+        return this._handlerBridge(content, "applyAttacks");
     }
 
     /**

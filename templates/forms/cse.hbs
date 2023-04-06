@@ -304,20 +304,8 @@
                                                 </div>
                                             </div>
                                             <div class="d-flex pt-2 pb-1">
-                                                <div class="d-flex" style="flex: 0 0 49%; flex-wrap: wrap;">
-                                                    {{#each object.Capabilities as |capability key|}}
-                                                        {{#unless (is key "Other")}}
-                                                            <div class="d-flex align-items-center pt-1 pb-1">
-                                                                <div class="col-sm-7">
-                                                                    <label for="Capabilities.{{key}}">{{key}}</label>
-                                                                </div>
-                                                                <div class="col-sm-5">
-                                                                    <input {{#if (not key "Naturewalk" )}}required{{/if}} type="text" name="Capabilities.{{key}}"
-                                                                        value="{{capability}}" />
-                                                                </div>
-                                                            </div>
-                                                        {{/unless}}
-                                                    {{/each}}
+                                                <div class="d-flex" style="flex: 0 0 49%; flex-wrap: wrap;" id="cse-capabilities">
+                                                    
                                                 </div>
                                                 <div style="flex: 0 0 49%; flex-wrap: wrap;" id="cse-other-capabilities">
                                                     

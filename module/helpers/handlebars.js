@@ -248,6 +248,25 @@ export function registerHandlebars() {
       haystack = Handlebars.escapeExpression(haystack);
       return (haystack.indexOf(needle) > -1) ? options.fn(this) : options.inverse(this);
     });
+
+    Handlebars.registerHelper("getStat", function(species, statKey) {
+      const speciesStats = game.ptu.utils.species.get(species);
+      if(!speciesStats) return 0;
+
+      const renamingDict = {
+        "hp": "HP",
+        "atk": "Attack",
+        "def": "Defense",
+        "spatk": "Special Attack",
+        "spdef": "Special Defense",
+        "spd": "Speed"
+      };
+
+      let key = renamingDict[statKey];
+      if(!key) key = statKey;
+
+      return speciesStats["Base Stats"][key] ?? 0;
+    });
   
     Handlebars.registerHelper("inc", function (num) { return Number(num) + 1 })
   
@@ -292,6 +311,11 @@ export function registerHandlebars() {
       str = str.toString();
       while (str.length < len) str = char + str;
       return str;
+    });
+
+    Handlebars.registerHelper("diceResult", function (roll, term) {
+      const result = roll.terms.find(t => t.faces == term);
+      if (result) return result.total ?? result.results[0].result;
     });
   
     function _calcMoveDb(move, bool = false) {

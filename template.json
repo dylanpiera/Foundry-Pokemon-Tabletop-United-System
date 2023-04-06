@@ -4,6 +4,32 @@
     "templates": {
       "modifiers": {
         "modifiers": {
+          "baseStats": {
+            "hp": {
+              "value": 0,
+              "mod": 0
+            },
+            "atk": {
+              "value": 0,
+              "mod": 0
+            },
+            "def": {
+              "value": 0,
+              "mod": 0
+            },
+            "spatk": {
+              "value": 0,
+              "mod": 0
+            },
+            "spdef": {
+              "value": 0,
+              "mod": 0
+            },
+            "spd": {
+              "value": 0,
+              "mod": 0
+            }
+          },
           "statPoints": {
             "value": 0,
             "mod": 0
@@ -470,6 +496,9 @@
         "megaLauncher": false,
         "punkRock": false,
         "strongJaw": false
+      },
+      "automation": {
+        "automation": []
       }
     },
     "dexentry": {
@@ -478,10 +507,10 @@
       "owned": false
     },
     "feat": {
-      "templates": ["base"],
+      "templates": ["base", "automation"],
       "prerequisites": "",
       "frequency": "At Will - Standard Action",
-      "tags": [],
+      "tags": "",
       "notes": "",
       "free": false
     },
@@ -492,12 +521,12 @@
       "free": false
     },
     "ability": {
-      "templates": ["base"],
+      "templates": ["base", "automation"],
       "frequency": "",
       "tier": ""
     },
     "move": {
-      "templates": ["base", "interactions"],
+      "templates": ["base", "interactions", "automation"],
       "type": "Untyped",
       "category": "",
       "damageBase": "",
@@ -518,7 +547,7 @@
       "cost": 0
     },
     "item": {
-      "templates": ["base"],
+      "templates": ["base", "automation"],
       "quantity": 1,
       "category": "",
       "cost": 0,

@@ -92,9 +92,10 @@ export async function GetSpeciesArt(mon, imgDirectoryPath, type = ".webp", shiny
     const paldean_path = mon?._id.toLowerCase().includes("paldean") ? "_pa" : "";
     const female_path = female ? "f" : "";
     const wishiwashi_path = mon?._id.toLowerCase().includes("wishiwashi") ? (mon?._id.toLowerCase().includes("solo") ? "_1" : "_2")  : ""; //if it's not solo then it's schooling
+    const lycanroc_path = mon?._id.toLowerCase().includes("lycanroc") ? (mon?._id.toLowerCase().includes("midday") ? "_1" : (mon?._id.toLowerCase().includes("midnight") ? "_2" : "_3")) : ""; //different lycanroc forms
 
     //combine variation paths so i don't have to keep typing them
-    const variation_path = wishiwashi_path+alolan_path+galarian_path+hisuian_path+paldean_path+female_path;
+    const variation_path = wishiwashi_path+lycanroc_path+alolan_path+galarian_path+hisuian_path+paldean_path+female_path;
 
     let path = basePath+lpad(mon?.number, 4)+variation_path+shiny_path+type;
 

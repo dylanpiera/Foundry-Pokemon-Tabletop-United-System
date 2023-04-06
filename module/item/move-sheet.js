@@ -64,12 +64,19 @@ export class PTUMoveSheet extends ItemSheet {
 	/** @override */
 	_getHeaderButtons() {
 		let buttons = super._getHeaderButtons();
-
+		
 		buttons.unshift({
 			label: "Send to Chat",
 			class: ".to-chat",
 			icon: "fas fa-comment",
 			onclick: () => this._toChat()
+		});
+		
+		buttons.unshift({
+			label: "Automations",
+			class: "open-automation",
+			icon: "fas fa-edit",
+			onclick: () => this._loadAutomationSheet()
 		});
 		
 		return buttons;
@@ -89,5 +96,9 @@ export class PTUMoveSheet extends ItemSheet {
 			templateType: 'details',
 			owner: ownerId
 		});
+	}
+
+	async _loadAutomationSheet() {
+		return new game.ptu.config.Ui.AutomationForm.documentClass(this.object).render(true);
 	}
 }

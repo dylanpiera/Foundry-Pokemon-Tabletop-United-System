@@ -5,7 +5,7 @@ function getTypeEffectiveness(targetType) {
 
 export function GetMonEffectiveness(data) {
     let effectivenesses = {Weakness: [], Normal: [], Resistant: [], Immune: [], All: []}
-    if(!data?.system?.typing) return effectivenesses;
+    if(!data?.system?.typing || data.system.typing.length == 0) return effectivenesses;
     let typing = data.system.typing
     let typeCalc;
     
@@ -123,6 +123,7 @@ export function GetMonEffectiveness(data) {
         }
     }
 
+    try{
     for(const [typeKey,value] of Object.entries(typeCalc)) {
         if(value < 1) {
             if(value == 0) {
@@ -145,6 +146,9 @@ export function GetMonEffectiveness(data) {
             continue;
         }
     }
+}   catch (error) {
+    console.error(error, data)
+}
     
     effectivenesses.All = Object.fromEntries(effectivenesses.All);
 

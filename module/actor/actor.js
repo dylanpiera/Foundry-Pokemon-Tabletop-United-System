@@ -391,7 +391,7 @@ export class PTUActor extends Actor {
 
     for (let [key, mod] of Object.entries(data.modifiers)) {
       if (key == "hardened" || key == "flinch_count" || key == 'immuneToEffectDamage') continue;
-      if (key == "damageBonus" || key == "damageReduction" || key == "evasion") {
+      if (key == "damageBonus" || key == "damageReduction" || key == "evasion" || key == "baseStats") {
         for (let [subkey, value] of Object.entries(mod)) {
           data.modifiers[key][subkey]["total"] = (value["value"] ?? 0) + (value["mod"] ?? 0);
         }
@@ -414,8 +414,25 @@ export class PTUActor extends Actor {
 
     data.levelUpPoints = data.level.current + data.modifiers.statPoints.total + 9;
     data.stats = CalculatePoisonedCondition(duplicate(data.stats), actorData.flags?.ptu);
+
+    const leftoverLevelUpPoints = data.levelUpPoints - Object.values(data.stats).reduce((a,v) => v.levelUp + a, 0);
+    const actualLevel = Math.max(1, data.level.current - Math.max(0, Math.clamped(0, leftoverLevelUpPoints, leftoverLevelUpPoints-data.modifiers.statPoints.total ?? 0)));
+    
+    data.stats.hp.base = 10
+    data.stats.hp.value = data.modifiers.baseStats.hp.total + data.stats.hp.base;
+    data.stats.atk.base = 5
+    data.stats.atk.value = data.modifiers.baseStats.atk.total + data.stats.atk.base;
+    data.stats.def.base = 5
+    data.stats.def.value = data.modifiers.baseStats.def.total + data.stats.def.base;
+    data.stats.spatk.base = 5
+    data.stats.spatk.value = data.modifiers.baseStats.spatk.total + data.stats.spatk.base;
+    data.stats.spdef.base = 5
+    data.stats.spdef.value = data.modifiers.baseStats.spdef.total + data.stats.spdef.base;
+    data.stats.spd.base = 5
+    data.stats.spd.value = data.modifiers.baseStats.spd.total + data.stats.spd.base;
+
     var result = game.settings.get("ptu", "playtestStats") ?
-      CalculatePTStatTotal(data.levelUpPoints, data.level.current, data.stats, { twistedPower: actorData.items.find(x => x.name.toLowerCase().replace("[playtest]") == "twisted power") != null }, data.nature?.value, true) :
+      CalculatePTStatTotal(data.levelUpPoints, actualLevel, data.stats, { twistedPower: actorData.items.find(x => x.name.toLowerCase().replace("[playtest]") == "twisted power") != null }, data.nature?.value, true) :
       CalculateStatTotal(data.levelUpPoints, data.stats, { twistedPower: actorData.items.find(x => x.name.toLowerCase().replace("[playtest]") == "twisted power") != null });
     data.stats = result.stats;
     data.levelUpPoints = result.levelUpPoints;
@@ -464,8 +481,8 @@ export class PTUActor extends Actor {
 
     // Prepare data with Mods.
     for (let [key, mod] of Object.entries(data.modifiers)) {
-      if (key == "hardened" || key == "flinch_count" || key == 'immuneToEffectDamage') continue;
-      if (key == "damageBonus" || key == "damageReduction" || key == "evasion") {
+      if (key == "hardened" || key == "flinch_count" || key == 'immuneToEffectDamage' || key == 'typeOverwrite') continue;
+      if (key == "damageBonus" || key == "damageReduction" || key == "evasion" || key == "baseStats") {
         for (let [subkey, value] of Object.entries(mod)) {
           data.modifiers[key][subkey]["total"] = (value["value"] ?? 0) + (value["mod"] ?? 0);
         }
@@ -487,15 +504,27 @@ export class PTUActor extends Actor {
     // Stats
     data.stats = CalculatePoisonedCondition(duplicate(data.stats), actorData.flags?.ptu);
 
-    data.stats = CalcBaseStats(data.stats, speciesData, data.nature.value);
+    data.stats = CalcBaseStats(data.stats, speciesData, data.nature.value, data.modifiers.baseStats);
+
+    const leftoverLevelUpPoints = data.levelUpPoints - Object.values(data.stats).reduce((a,v) => v.levelUp + a, 0);
+    const actualLevel = Math.max(1, data.level.current - Math.max(0, Math.clamped(0, leftoverLevelUpPoints, leftoverLevelUpPoints-data.modifiers.statPoints.total ?? 0)));
+    
 
     var result = game.settings.get("ptu", "playtestStats") ?
-    CalculatePTStatTotal(data.levelUpPoints, data.level.current, data.stats, { twistedPower: actorData.items.find(x => x.name.toLowerCase().replace("[playtest]") == "twisted power") != null }, data.nature.value, false) :
+    CalculatePTStatTotal(data.levelUpPoints, actualLevel, data.stats, { twistedPower: actorData.items.find(x => x.name.toLowerCase().replace("[playtest]") == "twisted power") != null }, data.nature.value, false) :
       CalculateStatTotal(data.levelUpPoints, data.stats, { twistedPower: actorData.items.find(x => x.name.toLowerCase().replace("[playtest]") == "twisted power") != null });
     data.stats = result.stats;
     data.levelUpPoints = result.levelUpPoints;
 
-    data.typing = speciesData?.Type;
+    const types = [];
+    if(data.modifiers?.typeOverwrite) {
+      const splitTypes = data.modifiers?.typeOverwrite?.split('/');
+      for(const type of splitTypes) {
+        if(game.ptu.data.TypeEffectiveness[Handlebars.helpers.capitalizeFirst(type.toLowerCase())]) types.push(type);
+      }
+    }
+    if(types.length == 0 && speciesData?.Type) types.push(...speciesData.Type);
+    data.typing = types.length > 0 ? types : speciesData?.Type;
 
     data.health.total = 10 + data.level.current + (data.stats.hp.total * 3);
     data.health.max = data.health.injuries > 0 ? Math.trunc(data.health.total * (1 - ((data.modifiers.hardened ? Math.min(data.health.injuries, 5) : data.health.injuries) / 10))) : data.health.total;
@@ -534,6 +563,25 @@ export class PTUActor extends Actor {
 
     // Calc Type Effectiveness
     data.effectiveness = GetMonEffectiveness(actorData);
+
+    const passives = {}
+    for(const item of actorData.items) {
+      if(item.system.automation?.length > 0) {
+        for (let index = 0; index < item.system.automation.length; index++) {
+          if(!item.system.automation[index].passive) continue;
+          for(const target of item.system.automation[index].targets) {
+            if(!passives[target]) passives[target] = [];
+            passives[target].push({
+              index: index,
+              automation: item.system.automation[index],
+              itemUuid: item.uuid,
+              itemName: item.name
+            })
+          }
+        }
+      }
+    }
+    data.passives = passives;
 
     /* The Corner of Exceptions */
 
@@ -641,6 +689,7 @@ export class PTUActor extends Actor {
       hasAC: !(moveData.ac == "" || moveData.ac == "--"),
       move: moveData,
       moveName: move.name,
+      moveUuid: move.uuid,
       targetAmount: Object.keys(attack.data).length,
       actorImage: this.img,
     }, attack);
@@ -653,6 +702,7 @@ export class PTUActor extends Actor {
       if (messageData.targetAmount >= 1 && attack.crit != CritOptions.CRIT_MISS) {
         const applicatorMessageData = duplicate(messageData);
         applicatorMessageData.damageRolls = messageData.damageRolls;
+        applicatorMessageData.attackId = randomID();
         applicatorMessageData.content = await renderTemplate('/systems/ptu/templates/chat/moves/damage-application.hbs', applicatorMessageData);
         timeout(100);
         const applicatorMsg = await ChatMessage.create(applicatorMessageData, {});
@@ -842,6 +892,7 @@ export class PTUActor extends Actor {
         }
 
         output[target.id] = attackData;
+        output[target.id].uuid = target.document.uuid;
       }
       return output;
     }

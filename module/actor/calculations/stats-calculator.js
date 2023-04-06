@@ -3,16 +3,22 @@ function CalcBaseStat(specie, nature, statKey) {
     return 0;
 }
 
-export function CalcBaseStats(stats, speciesData, nature, ignoreStages = false) {
+export function CalcBaseStats(stats, speciesData, nature, baseStatModifier, ignoreStages = false) {
     const newStats = duplicate(stats);
 
-    newStats.hp.value = CalcBaseStat(speciesData, nature, "HP", ignoreStages);
-    newStats.atk.value = CalcBaseStat(speciesData, nature, "Attack", ignoreStages);
-    newStats.def.value = CalcBaseStat(speciesData, nature, "Defense", ignoreStages);
-    newStats.spatk.value = CalcBaseStat(speciesData, nature, "Special Attack", ignoreStages);
-    newStats.spdef.value = CalcBaseStat(speciesData, nature, "Special Defense", ignoreStages);
-    newStats.spd.value = CalcBaseStat(speciesData, nature, "Speed", ignoreStages);
-    
+    newStats.hp.base = CalcBaseStat(speciesData, nature, "HP", ignoreStages);
+    newStats.hp.value = (baseStatModifier?.hp.total ?? 0) + newStats.hp.base;
+    newStats.atk.base = CalcBaseStat(speciesData, nature, "Attack", ignoreStages);
+    newStats.atk.value = (baseStatModifier?.atk.total ?? 0) + newStats.atk.base;
+    newStats.def.base = CalcBaseStat(speciesData, nature, "Defense", ignoreStages);
+    newStats.def.value = (baseStatModifier?.def.total ?? 0) + newStats.def.base;
+    newStats.spatk.base = CalcBaseStat(speciesData, nature, "Special Attack", ignoreStages);
+    newStats.spatk.value = (baseStatModifier?.spatk.total ?? 0)  + newStats.spatk.base;
+    newStats.spdef.base = CalcBaseStat(speciesData, nature, "Special Defense", ignoreStages);
+    newStats.spdef.value = (baseStatModifier?.spdef.total ?? 0)  + newStats.spdef.base;
+    newStats.spd.base = CalcBaseStat(speciesData, nature, "Speed", ignoreStages);
+    newStats.spd.value = (baseStatModifier?.spd.total ?? 0)  + newStats.spd.base;
+
     return newStats;
 }
 
