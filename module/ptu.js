@@ -659,7 +659,7 @@ async function _onPokedexMacro() {
 
     switch (permSetting) {
       case 1: { // Pokedex Disabled
-        return ui.notifications.info("DM has turned off the Pokedex.");
+        return ui.notifications.info(game.i18n.localize("PTU.DexScan.Off"));
       }
       case 2: { //pokemon description only
         game.ptu.utils.dex.render(token.actor.system.species);
@@ -683,10 +683,10 @@ async function _onPokedexMacro() {
         const result = await game.ptu.utils.api.gm.dexScanRequest(game.user.character.uuid, token.actor.uuid, {timeout: 30000})
         switch(result) {
           case "false": {
-            return ui.notifications.info("You are unable to use your Pokédex at this time.");
+            return ui.notifications.info(game.i18n.localize("PTU.DexScan.Denied"));
           }
           case "timeout": {
-            return ui.notifications.warn("Request to DM for Pokédex timed out.");
+            return ui.notifications.warn(game.i18n.localize("PTU.DexScan.Timeout"));
           }
           case "description": {
             game.ptu.utils.dex.render(token.actor.system.species);
