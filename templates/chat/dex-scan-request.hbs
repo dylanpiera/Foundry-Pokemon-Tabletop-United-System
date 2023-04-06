@@ -1,0 +1,24 @@
+<div class="content flexrow pt-1" style="font-variant: normal;">
+    <div class="swsh-box">
+        <div class="swsh-header">
+            <div class="d-flex w-100 mt-1 mb-1 justify-content-center">
+                <span style="padding:5px;text-align:center;word-break:break-word;">Pokédex Scan Request</span>
+            </div>
+        </div>
+        <div class="swsh-body">
+            <div class="d-flex flex-row" style="flex: 0 0 100%; align-items: center;">
+                <span class="fs-9" style="flex: 1 0 90%; word-break:break-word;">{{trainerName}} has requested a Pokédex scan of {{pokemonName}}!</span>
+            </div>
+            <div class="d-flex flex-row" style="flex: 0 0 100%; align-items: center;"></div>
+                <button class="dex-desc-button fs-10" data-trainerName="{{trainerName}}" data-pokemonName="{{pokemonName}}" data-type="desc" data-origin-message="{{msgId}}" style="flex: 0 0 100%;" onclick="showPlayerDexEntry(event)">
+                    Description Only
+                </button>
+            </div>
+            <div class="d-flex flex-row" style="flex: 0 0 100%; align-items: center;"></div>
+                <button class="dex-scan-button fs-10" data-trainerName="{{trainerName}}" data-pokemonName="{{pokemonName}}" data-type="full" data-origin-message="{{msgId}}" style="flex: 0 0 100%;" onclick="showPlayerDexEntry(event)">
+                    Full Scan
+                </button>
+            </div>
+        </div>        
+    </div>
+</div>
