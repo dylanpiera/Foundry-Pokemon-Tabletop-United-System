@@ -2491,6 +2491,10 @@ h3 {
   align-items: center;
   flex: 0 !important;
 }
+button.dialog-button {
+  padding: 0 0.25rem;
+  white-space: nowrap;
+}
 .w-25 {
   width: 25% !important;
 }

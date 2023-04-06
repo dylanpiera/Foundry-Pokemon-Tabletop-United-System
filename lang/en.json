@@ -192,6 +192,7 @@
     "PTU.Goals": "Goals",
     "PTU.Dreams": "Dreams",
     "PTU.Obsessions": "Obsessions",
+    "PTU.Notes": "Notes",
 
     "PTU.DexButtonName": "Pokédex",
     "PTU.DexButtonHint": "Scan the pokemon with your pokédex",
@@ -223,5 +224,9 @@
     "PTU.AutomationRangeIncrease.NONE":"None",
     "PTU.AutomationRangeIncrease.EFFECT_RANGE":"Effect Range",
 
-    "SETTINGS.ptu": ""
+    "PTU.DexScan.Off":"DM has turned off the Pokédex Scan feature.",
+    "PTU.DexScan.Description":"Description Only",
+    "PTU.DexScan.Full":"Full Scan",
+    "PTU.DexScan.Denied":"You are unable to use your Pokédex at this time.",
+    "PTU.DexScan.Timeout":"Request to DM for Pokédex Scan timed out."
 }

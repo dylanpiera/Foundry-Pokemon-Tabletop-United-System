@@ -88,7 +88,7 @@ export function LoadSystemSettings() {
             2: "Dexentry description only (Basic description and details only)",
             3: "Full details on owned Tokens, Dexentry description on un-owned tokens",
             4: "Full details on owned Mons (checks trainer's dex tab), Dexentry Description on un-owned mons",
-            5: "GM Prompt (**NOT YET IMPLEMENTED**)",
+            5: "GM Prompt",
             6: "Always Full Details",
         },
         default: 1,

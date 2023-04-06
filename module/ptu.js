@@ -402,11 +402,18 @@ Hooks.once("ready", async function () {
   // Wait to register hotbar drop hook on ready so that modules could register earlier if they want to
   Hooks.on("hotbarDrop", (bar, data, slot) => createPTUMacro(data, slot));
 
-  game.socket.on("system.ptu", (data) => {
+  game.socket.on("system.ptu", async (data) => {
     if (data == null) return;
     if (data == "RefreshCustomSpecies" || (data == "ReloadGMSpecies" && game.user.isGM)) Hooks.callAll("updatedCustomSpecies");
     if (data == "RefreshCustomTypings") Hooks.callAll("updatedCustomTypings");
     if (data == "RefreshCustomTypingsAndActors") Hooks.callAll("updatedCustomTypings", { updateActors: true });
+    if (data.type){
+      const { type, species, userId } = data;
+      
+      if(!!userId && game.userId !== userId) return
+
+      await game.ptu.utils.dex.render(species, type)
+    }
   });
 
   /** Display Changelog */
@@ -641,6 +648,9 @@ function _onMoveMacro(actor, item) {
 }
 
 async function _onPokedexMacro() {
+  //ding
+  AudioHelper.play({ src: "systems/ptu/sounds/ui_sounds/ui_pokedex_ding.wav", volume: 0.8, autoplay: true, loop: false }, false);
+
   const permSetting = game.settings.get("ptu", "dex-permission");
   const addToDex = game.settings.get("ptu", "auto-add-to-dex");
   for (let token of game.user.targets.size > 0 ? game.user.targets.values() : canvas.tokens.controlled) {
@@ -659,7 +669,7 @@ async function _onPokedexMacro() {
 
     switch (permSetting) {
       case 1: { // Pokedex Disabled
-        return ui.notifications.info("DM has turned off the Pokedex.");
+        return ui.notifications.info(game.i18n.localize("PTU.DexScan.Off"));
       }
       case 2: { //pokemon description only
         game.ptu.utils.dex.render(token.actor.system.species);
@@ -680,7 +690,24 @@ async function _onPokedexMacro() {
         break;
       }
       case 5: { // GM Prompt
-        return ui.notifications.warn("The GM prompt feature has yet to be implemented. Please ask your DM to change to a different Dex Permission Setting");
+        const result = await game.ptu.utils.api.gm.dexScanRequest(game.user.character.uuid, token.actor.uuid, {timeout: 30000})
+        switch(result) {
+          case "false": {
+            return ui.notifications.info(game.i18n.localize("PTU.DexScan.Denied"));
+          }
+          case "timeout": {            
+            return ui.notifications.warn(game.i18n.localize("PTU.DexScan.Timeout"));
+          }
+          case "description": {
+            game.ptu.utils.dex.render(token.actor.system.species);
+            break;
+          }
+          case "full": {
+            game.ptu.utils.dex.render(token.actor.system.species, "full");
+            break;
+          }
+        }
+        break;
       }
       case 6: { // Always Full Details
         game.ptu.utils.dex.render(token.actor.system.species, "full");
@@ -842,7 +869,117 @@ Hooks.on('renderTokenHUD', (app, html, data) => {
 });
 
 Hooks.on("preUpdateActor", async (oldActor, changes, options, sender) => {
-  //check if this is turned off in settings
+  
+  //check if xp changes are NaN
+  //check if xp changes start with + or - and if so increase/decrease value accordingly
+  const expChange = changes.system?.level?.exp;
+  if (expChange) {
+    const operator = expChange.charAt(0);
+    const amountStr = operator === '+' || operator === '-' ? expChange.substring(1) : expChange;
+    const amount = parseInt(amountStr);
+    if (!isNaN(amount)) {
+      const oldValue = oldActor.system.level.exp;
+      changes.system.level.exp = operator === '+' ? oldValue + amount
+                                                : operator === '-' ? oldValue - amount
+                                                                    : amount;
+    } else {
+      changes.system.level.exp = oldActor.system.level.exp;
+    }
+  } else {
+    changes.system.level.exp = oldActor.system.level.exp;
+  }
+
+  //milestones
+  const milestoneChange = changes.system?.level?.milestones;
+  if (milestoneChange) {
+    const operator = milestoneChange.charAt(0);
+    const amountStr = operator === '+' || operator === '-' ? milestoneChange.substring(1) : milestoneChange;
+    const amount = parseInt(amountStr);
+    if (!isNaN(amount)) {
+      const oldValue = oldActor.system.level.milestones;
+      changes.system.level.milestones = operator === '+' ? oldValue + amount
+                                                : operator === '-' ? oldValue - amount
+                                                                    : amount;
+    } else {
+      changes.system.level.milestones = oldActor.system.level.milestones;
+    }
+  } else {
+    changes.system.level.milestones = oldActor.system.level.milestones;
+  }
+
+  //miscExp
+  const miscExpChange = changes.system?.level?.miscexp;
+  if (miscExpChange) {
+    const operator = miscExpChange.charAt(0);
+    const amountStr = operator === '+' || operator === '-' ? miscExpChange.substring(1) : miscExpChange;
+    const amount = parseInt(amountStr);
+    if (!isNaN(amount)) {
+      const oldValue = oldActor.system.level.miscexp;
+      changes.system.level.miscexp = operator === '+' ? oldValue + amount
+                                                : operator === '-' ? oldValue - amount
+                                                                    : amount;
+    } else {
+      changes.system.level.miscexp = oldActor.system.level.miscexp;
+    }
+  } else {
+    changes.system.level.miscexp = oldActor.system.level.miscexp;
+  }
+  
+  //hp
+  const hpChange = changes.system?.health?.value;
+  if (hpChange) {
+    const operator = hpChange.charAt(0);
+    const amountStr = operator === '+' || operator === '-' ? hpChange.substring(1) : hpChange;
+    const amount = parseInt(amountStr);
+    if (!isNaN(amount)) {
+      const oldValue = oldActor.system.health.value;
+      changes.system.health.value = operator === '+' ? oldValue + amount
+                                                : operator === '-' ? oldValue - amount
+                                                                    : amount;
+    } else {
+      changes.system.health.value = oldActor.system.health.value;
+    }
+  } else {
+    changes.system.health.value = oldActor.system.health.value;
+  }  
+
+  //tempHp
+  const tempHpChange = changes.system?.tempHp?.value;
+  if (tempHpChange) {
+    const operator = tempHpChange.charAt(0);
+    const amountStr = operator === '+' || operator === '-' ? tempHpChange.substring(1) : tempHpChange;
+    const amount = parseInt(amountStr);
+    if (!isNaN(amount)) {
+      const oldValue = oldActor.system.tempHp.value;
+      changes.system.tempHp.value = operator === '+' ? oldValue + amount
+                                                : operator === '-' ? oldValue - amount
+                                                                    : amount;
+    } else {
+      changes.system.tempHp.value = oldActor.system.tempHp.value;
+    }
+  } else {
+    changes.system.tempHp.value = oldActor.system.tempHp.value;
+  }
+  
+  //tempHpMax
+  const tempHpMaxChange = changes.system?.tempHp?.max;
+  if (tempHpMaxChange) {
+    const operator = tempHpMaxChange.charAt(0);
+    const amountStr = operator === '+' || operator === '-' ? tempHpMaxChange.substring(1) : tempHpMaxChange;
+    const amount = parseInt(amountStr);
+    if (!isNaN(amount)) {
+      const oldValue = oldActor.system.tempHp.max;
+      changes.system.tempHp.max = operator === '+' ? oldValue + amount
+                                                : operator === '-' ? oldValue - amount
+                                                                    : amount;
+    } else {
+      changes.system.tempHp.max = oldActor.system.tempHp.max;
+    }
+  } else {
+    changes.system.tempHp.max = oldActor.system.tempHp.max;
+  }
+
+  //check if level up form is turned off in settings
   const setting = game.settings.get("ptu", "levelUpScreen")
   if(!setting) return; // option turned off by GM
 
@@ -862,3 +999,29 @@ Hooks.on("preUpdateActor", async (oldActor, changes, options, sender) => {
       }).render(true);
   }
 });
+
+/***************************
+ * Dex Scan Chat messages
+ **************************/
+// Description Only
+Hooks.on("renderChatMessage", (message, html, data) => {
+  setTimeout(() => {
+      $(html).find(".dex-desc-button").on("click", (event) => showPlayerDexEntry(event));
+  }, 500);
+});
+
+// Full Scan
+Hooks.on("renderChatMessage", (message, html, data) => {
+  setTimeout(() => {
+      $(html).find(".dex-scan-button").on("click", (event) => showPlayerDexEntry(event));
+  }, 500);
+});
+
+export async function showPlayerDexEntry(event){
+  const { trainername, pokemonname, type } = event.currentTarget.dataset;
+  const mon = game.ptu.utils.species.get(pokemonname);
+
+  const userId = game.users.find(u => u.character = game.actors.getName(trainername) && !u.isGM)._id
+
+  await game.ptu.utils.api.gm.renderDexToPlayer(mon._id, type, userId)
+}
