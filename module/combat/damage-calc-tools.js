@@ -8,8 +8,9 @@ Hooks.on("renderChatMessage", (message, html, data) => {
         $(html).find(".half-damage-button").on("click", (ev) => game.ptu.utils.combat.applyDamageToTargets(ev, ATTACK_MOD_OPTIONS.HALF));
         $(html).find(".resist-damage-button").on("click", (ev) => game.ptu.utils.combat.applyDamageToTargets(ev, ATTACK_MOD_OPTIONS.RESIST));
         $(html).find(".flat-damage-button").on("click", (ev) => game.ptu.utils.combat.applyDamageToTargets(ev, ATTACK_MOD_OPTIONS.FLAT));
-        $(html).find(".automated-damage-button").click(applyDamageAndEffectsToTargets)
-        $(html).find(".mon-item").click(game.ptu.utils.combat.handleApplicatorItem)
+        $(html).find(".automated-damage-button").click(applyDamageAndEffectsToTargets);
+        $(html).find(".automated-effect-button").click(applyEffectsToTargets);
+        $(html).find(".mon-item").click(game.ptu.utils.combat.handleApplicatorItem);
     }, 500);
 });
 
@@ -123,6 +124,160 @@ export async function undoDamageToTargets(event) {
         await updateApplicatorHtml($(`[data-message-id="${data.msgId}"]`), [data.target], undefined, true, true)
     }
 
+}
+
+export async function applyEffectsToTargets(event) {
+    let dataset;
+    if (event.hasDataset) dataset = event;
+    else {
+        event.preventDefault();
+        if (event.target != event.currentTarget) return;
+        
+        dataset = event.currentTarget.dataset.moveUuid ? event.currentTarget.dataset : event.currentTarget.parentElement.parentElement.dataset;
+    }
+
+    const move = await fromUuid(dataset.moveUuid ?? "");
+    if (!move) return;
+
+    const {target, acRoll} = dataset;
+    const targets = [];
+    const messageHtml = $(event.currentTarget).closest(".chat-message.message");
+
+    // Find targets
+    if (target === "many") {    
+        // Get all tokens that are not disabled (i.e. not already applied)
+        messageHtml.find(".mon-list").filter((k, i) => !i.className.includes("disabled")).each((k, i) => {
+            // const token = canvas.tokens.get(i?.dataset?.target);
+            // if (token && (i.dataset.hit == 'true')) {
+            //     if (i.dataset.crit == "hit" || i.dataset.crit == "crit" || i.dataset.crit == "double-hit")
+            //         critTargets.push(token);
+            //     else
+            //         targets.push(token);
+            // }
+            const actor = fromUuidSync(i?.dataset?.target ?? "");
+            if (actor && (i.dataset.hit == 'true')) {
+                targets.push(actor);
+            }
+        })
+    }
+    else {
+        const document = await fromUuid(target);
+        if(document) {
+            if(document instanceof Token || document instanceof TokenDocument || document instanceof Actor) {
+                targets.push(document);
+            }
+        }
+        else {
+            // If target is a tokenId, add its token to the list
+            if(target) {
+                if(canvas.tokens.get(target)) {
+                    targets.push(canvas.tokens.get(target));
+                }
+            }
+            // Otherwise, add all controlled tokens
+            else {
+                targets.push(...canvas.tokens.controlled);
+            }
+        }
+    }
+
+    if(targets.length == 0) return;
+    const results = [];
+
+    results.push(await applyResult(targets, 0, messageHtml[0]?.dataset?.messageId ?? dataset.messageId));
+
+    return results;
+
+    async function applyResult(targets, damage, messageId) {
+        // Get all attacks
+        const attacks = [];
+        for(const target of targets) {
+            const attackData = {
+                uuid: (target.document ?? target).uuid,
+                damage: damage,
+                damageReduction: 0,
+                damageType: move.system.type,
+                damageCategory: move.system.category,
+                effectiveness: 0
+            }
+            attacks.push(attackData);
+        }
+
+        // Step 2: perform beforeDamage effects
+        const effectData = await beforeDamage(attacks, targets, move, {roll: acRoll, msgId: messageId});
+        
+        // Step 3: perform afterDamage effects
+        //TODO: add step 4
+
+        //display applied effects to chat
+        if (effectData.length > 0) {
+            const content = await renderTemplate("/systems/ptu/templates/chat/automation/applied-effect.hbs", {effectData})
+            let messageData = {
+                user: game.user.id,
+                content: content,
+                type: CONST.CHAT_MESSAGE_TYPES.WHISPER,
+                whisper: game.users.filter(x => x.isGM)
+            }
+
+            ChatMessage.create(messageData, {})
+        }
+
+        return results;
+    }
+    
+    async function beforeDamage(attacks, targets, move, options) {
+        const modifiers = [];
+
+        // Step 2.1: Perform Defensive automation
+        // for each target token; apply defensive effects.
+        for(const target of targets) {
+            const system = (target.actor?.system ?? target.system);
+            if(system.passives?.hit?.length > 0) {
+                const passives = system.passives.hit;
+                for(const passive of passives.filter(a => a.automation.timing == CONFIG.PTUAutomation.Timing.BEFORE_DAMAGE)) {
+                    modifiers.push(...await ApplyAutomation(move, passive.automation, {targets: [target], roll: options.roll, passiveName: passive.itemName}));
+                }
+            }
+            
+            //TODO: Add 'defensive' beforeDamage static effects here
+        }
+
+        // Step 2.2: Perform Offensive Move automation
+        if(move.system.automation?.length > 0) {
+            if(move.parent.system.passives?.move?.length > 0) {
+                const passives = move.parent.system.passives.move;
+                for(const passive of passives.filter(a => a.automation.timing == CONFIG.PTUAutomation.Timing.BEFORE_DAMAGE)) {
+                    modifiers.push(...await ApplyAutomation(move, passive.automation, {targets, roll: options.roll, passiveName: passive.itemName}));
+                }
+            }
+
+            for(const automation of move.system.automation.filter(a => a.timing == CONFIG.PTUAutomation.Timing.BEFORE_DAMAGE)) {
+                modifiers.push(...await ApplyAutomation(move, automation, {targets, roll: options.roll}));
+            }
+
+            
+        }
+
+        // Step 2.3: Apply modifiers
+        if(modifiers.length > 0) {
+            for(const modifier of modifiers) {
+                const attack = attacks.find(a => a.uuid == modifier.uuid);
+                if(attack) {
+                    switch(modifier.modifier.type) {
+                        case CONFIG.PTUAutomation.Modifiers.DAMAGE: {
+                            attack.damage = Number(attack.damage) + Number(modifier.modifier.value);
+                            break;
+                        }
+                        case CONFIG.PTUAutomation.Modifiers.EFFECTIVENESS: {
+                            attack.effectiveness = Number(attack.effectiveness) + Number(modifier.modifier.value)
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+        return modifiers;
+    }
 }
 
 export async function applyDamageAndEffectsToTargets(event) {
