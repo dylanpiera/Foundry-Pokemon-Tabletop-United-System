@@ -187,17 +187,17 @@ export default class Api {
                             },
                             desc: {
                                 icon: '<i class="fas fa-book"></i>',
-                                label: game.i18n.localize("Description Only"),
+                                label: game.i18n.localize("PTU.DexScan.Description"),
                                 callback: _ => resolve("description")
                             },
                             full: {
-                                icon: '<i class-"fas fa-check"></i>',
-                                label: game.i18n.localize("Full Scan"),
+                                icon: '<i class="fas fa-check"></i>',
+                                label: game.i18n.localize("PTU.DexScan.Full"),
                                 callback: _ => resolve("full")
                             }
                         },
                         default: "no",
-                        close: () => resolve("timeout"),
+                        close: () => resolve("timeout")
                     });
                     dialog.render(true);
                     setTimeout(_ => {

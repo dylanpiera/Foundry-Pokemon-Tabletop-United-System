@@ -223,5 +223,10 @@
     "PTU.AutomationRangeIncrease.NONE":"None",
     "PTU.AutomationRangeIncrease.EFFECT_RANGE":"Effect Range",
 
-    "SETTINGS.ptu": ""
+    "SETTINGS.ptu": "",
+
+    "PTU.DexScan.Description":"Description Only",
+    "PTU.DexScan.Full":"Full Scan",
+    "No": "No",
+    "Yes": "Yes"
 }
