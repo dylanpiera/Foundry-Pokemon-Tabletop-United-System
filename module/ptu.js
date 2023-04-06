@@ -818,6 +818,56 @@ Hooks.on('getSceneControlButtons', function (hudButtons) {
 
 Hooks.on("renderTokenConfig", (config, html, options) => html.find("[name='actorLink']").siblings()[0].outerHTML = "<label>Link Actor Data <span class='readable p10'>Unlinked actors are not supported by the system</span></label>")
 
+/****************************
+Token Movement Info
+****************************/
+Hooks.on('renderTokenHUD', (app, html, data) => {
+  if(!game.settings.get("ptu", "showMovementIcons")) return;
+  
+  if(game.modules.get("ptu-movement-info")?.active){
+    ui.notification.warn("Thanks for using the PTU Movement info module! This module is now included in the PTR system and will no longer by updated. Please ask your GM to disable to PTY Movement Info module.")
+    return;
+  } 
+
+  //doesn't work with the barbrawl module
+  if(game.modules.get("barbrawl")?.active) {
+    //warn player that the movement icons don't work with barbrawl
+    ui.notifications.warn("Movement icons are not compatible with the barbrawl module. Please disable the barbrawl module to use movement icons.\nYou can disable movement icons in the PTU settings > Player Preferences to avoid seeing this message.");
+    return;
+  }
+
+  // Fetch Actor
+  const actor = game.actors.get(data.actorId);
+  if(actor === undefined) return;
+
+  // List of capabilities to possibly display, and the icon it should use
+  const capabilitiesMap = {
+    Overland: "fas fa-shoe-prints",
+    Swim: "fas fa-swimmer",
+    Burrow: "fas fa-mountain",
+    Sky: "fas fa-feather",
+    Levitate: "fab fa-fly",
+    Teleporter: "fas fa-people-arrows",
+  }
+
+  const buttons = [];
+  for(const [c,i] of Object.entries(capabilitiesMap)) { //c=capability, i=icon
+    const val = actor.system.capabilities[c];
+    // If value is 0 / unset no need to display.
+    if(!val) continue;
+
+    buttons.push(`<div class="control-icon chalk-icon" title="${c}: ${val}"><i class="${i}"></i>${val}</div>`)
+  }
+
+  html.find(".col.middle").before( // if the actor uses a 2nd bar increase height.
+    `<div class="col middle" style="top: -${html.find(".bar2").html().trim() ? 105 : 90}px;">
+        <div class="chalk-container">
+            ${buttons.join("\n")}
+        </div>
+    </div>`
+  )
+});
+
 Hooks.on("preUpdateActor", async (oldActor, changes, options, sender) => {
   
   //check if xp changes are NaN
