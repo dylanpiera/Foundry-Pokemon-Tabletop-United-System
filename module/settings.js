@@ -576,6 +576,7 @@ export function LoadSystemSettings() {
             scope: "world",
             config: true,
             type: Boolean,
+            category: "other",
             default: true
         })
 
