@@ -1,3 +1,9 @@
+## 3.2.3.6 - HotFix
+### Fixes
+- Fixed an issue with Custom Species in the Level Up Form
+- Added the forgotten Rotom Forms
+- Fixed some compatability issues with Item Piles
+
 ## 3.2.3.5 - Lots of new stuff!
 Hey all, this update brings with it a few big new features, as well as a lot of small QoL additions and bugfixes. 
 Our big new feature is the Secondary Effect Automation Framework. For more details on this check our Discord.

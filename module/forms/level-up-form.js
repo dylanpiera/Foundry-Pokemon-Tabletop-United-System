@@ -117,7 +117,7 @@ export class PTULevelUpForm extends FormApplication {
     const newhealth = newHealthMax - missinghealth;
     
     const searchFor = (state.evolving.is && state.evolving.into) ? state.evolving.into.toLowerCase() : state.species.toLowerCase();
-    const dexEntry = pokemonData.find(e => e._id.toLowerCase() === searchFor );
+    const dexEntry = game.ptu.utils.species.get(searchFor );
     let heightWidth = 1;
     switch (dexEntry["Size Class"].toLowerCase()) {
       case "large": heightWidth = 2; break;
