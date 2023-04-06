@@ -539,8 +539,12 @@ export async function PlayReleaseOwnedPokemonAnimation(token) {
 
             await timeout(2000);
             await game.ptu.utils.species.playCry(actor.system.species);
+            await target_token.document.update({ "alpha": (1) });
 
-            if(always_display_token_name)
+
+            // alexander-r-block: Commenting out this block of code because the always_display_token_* properties are for wild pokemon.
+            //                    This also adds random bars to owned pokemon when using BarBrawl.
+            /* if(always_display_token_name)
             {
                 if(always_display_token_health == true)
                 {
@@ -570,7 +574,7 @@ export async function PlayReleaseOwnedPokemonAnimation(token) {
             else
             {
                 await target_token.document.update({ "alpha": (1) });
-            }
+            }*/
 
         }
         else if (actor.data.type == "pokemon") // Wild Pokemon - no pokeball release effect.
