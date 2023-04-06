@@ -50,3 +50,29 @@ export function timeout(ms) {
 export function capitalizeFirstLetter(string) {
     return string[0].toUpperCase() + string.slice(1);
 }
+export function addStepsToEffectiveness(input, steps) {
+    if(steps == 0) return input;
+    const increase = steps > 0 ? true : false;
+    if(!increase) steps *= -1;
+    
+    let output = input;
+    for (let index = 0; index < steps; index++) {
+        if(increase) { // Add Effectiveness 
+            if(output >= 2) output++; //if 2x or more super effective, increase by 1
+            if(output == 1) output = 1.5; //if neutral become 1x super effective
+            if(output == 1.5) output = 2; //if 1x super effective become 2x super effective
+            if(output < 1) output *= 2; //otherwise if it was some kind of not very effective, x2 it
+            if(output == 0) output == 0.5; // if it was immune it is now not very effective
+            continue;
+        }
+        if(!increase) {
+            if(output <= 1) output /= 2;
+            if(output == 0) continue;
+            if(output == 1.5) output = 1;
+            if(output == 2) output = 1.5;
+            if(output > 2) output--;
+            continue;
+        }
+    }
+    return output;
+}

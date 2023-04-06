@@ -9,6 +9,7 @@ import { log, debug } from "../ptu.js";
 import { pokemonData } from '../data/species-data.js';
 import { GetSpeciesArt } from '../utils/species-command-parser.js';
 import { GetOrCacheAbilities } from "../utils/cache-helper.js";
+import { timeout } from "../utils/generic-helpers.js";
 
 /**
  * Extend the basic FormApplication with some very simple modifications
@@ -73,6 +74,7 @@ export class PTULevelUpForm extends FormApplication {
       form: this,
       knownMoves: this.object.actor.itemTypes.move ?? this.object.actor.items.filter(item => item.type === "move"),
       currentAbilities: (this.object.actor.itemTypes.ability ?? this.object.actor.items.filter(item => item.type === "ability")).map(a => a.name),
+      isShiny: this.object.actor.system.shiny,
     })
 
     this.components = {
@@ -102,7 +104,18 @@ export class PTULevelUpForm extends FormApplication {
     const itemIdsToDelete = [];
     const itemsToAdd = [];
     const state = {...this.store.state};
-    const lostHealth = this.object.actor.system.health.max - this.object.actor.system.health.value;
+
+    const oldHealthTotal = 10 + state.changeDetails.oldLvl + (this.object.actor.system.stats.hp.total * 3);
+    const oldHealthMax = this.object.actor.system.health.injuries > 0 ? Math.trunc(oldHealthTotal * (1 - ((this.object.actor.system.modifiers.hardened ? Math.min(this.object.actor.system.health.injuries, 5) : this.object.actor.system.health.injuries) / 10))) : oldHealthTotal;
+    const oldHealthValue = this.object.actor.system.health.value ?? oldHealthMax;
+    
+    const missinghealth = oldHealthMax - oldHealthValue;
+
+    //adjust health as per level up
+    const newHealthTotal = 10 + state.changeDetails.newLvl + (state.stats.hp.newTotal * 3);
+    const newHealthMax = this.object.actor.system.health.injuries > 0 ? Math.trunc(newHealthTotal * (1 - ((this.object.actor.system.modifiers.hardened ? Math.min(this.object.actor.system.health.injuries, 5) : this.object.actor.system.health.injuries) / 10))) : newHealthTotal;
+    const newhealth = newHealthMax - missinghealth;
+    
     const searchFor = (state.evolving.is && state.evolving.into) ? state.evolving.into.toLowerCase() : state.species.toLowerCase();
     const dexEntry = pokemonData.find(e => e._id.toLowerCase() === searchFor );
     let heightWidth = 1;
@@ -111,8 +124,11 @@ export class PTULevelUpForm extends FormApplication {
       case "huge": heightWidth = 3; break;
       case "gigantic": heightWidth = 4; break;
     }
-    const imgPath = await GetSpeciesArt(dexEntry, game.settings.get("ptu", "defaultPokemonImageDirectory"))
-
+    let imgPath="";
+    if(state.evolving.is && state.evolving.into){
+      imgPath = await GetSpeciesArt(dexEntry, game.settings.get("ptu", "defaultPokemonImageDirectory"), ".webp", this.object.actor.system.shiny)
+    }
+    
     const data = {
       system: {
         'species': (state.evolving.is && state.evolving.into) ? state.evolving.into : state.species,
@@ -124,7 +140,7 @@ export class PTULevelUpForm extends FormApplication {
           "spdef.levelUp": (state.evolving.is ? 0 : state.stats.spdef.levelUp) + (state.stats.spdef.newLevelUp ?? 0),
           "spd.levelUp": (state.evolving.is ? 0 : state.stats.spd.levelUp) + (state.stats.spd.newLevelUp ?? 0),
         },
-        // 'health.value': this.object.actor.system.health.max - lostHealth
+        'health.value': newhealth
       },
       
       //only change the name if it is the same as the species and we are evolving
@@ -144,14 +160,14 @@ export class PTULevelUpForm extends FormApplication {
       }
     }
 
-    if (imgPath) {
+    if (imgPath != "") {
       data.img = imgPath;
       data.prototypeToken["texture.src"]= imgPath;
       token.document["texture.src"]= imgPath;
-    }
+    }  
 
     log(`Level-Up: Updating ${this.object.actor.name}`, data);
-    await this.object.actor.update(data);
+    await this.object.actor.update(data);    
 
     // Determine which moves to delete
     const oldMoveNames = state.knownMoves.map(m => m?.name?.toLowerCase());
@@ -188,8 +204,86 @@ export class PTULevelUpForm extends FormApplication {
 
     //update all active tokens
     const tokens = this.object.actor.getActiveTokens();
+
+    const evolution_params =
+    [
+        {
+            filterType: "transform",
+            filterId: "evolutionShoop",
+            bpRadiusPercent: 100,
+            autoDestroy: true,
+            animated:
+            {
+                bpStrength:
+                {
+                    animType: "cosOscillation",
+                    val1: 0,
+                    val2: -0.99,
+                    loopDuration: 1500,
+                    loops: 1,
+                }
+            }
+        },
+
+        {
+            filterType: "glow",
+            filterId: "evolutionShoop",
+            outerStrength: 40,
+            innerStrength: 20,
+            color: 0xFFFFFF,
+            quality: 0.5,
+            autoDestroy: true,
+            animated:
+            {
+                color: 
+                {
+                active: true, 
+                loopDuration: 1500, 
+                loops: 1,
+                animType: "colorOscillation", 
+                val1:0xFFFFFF,
+                val2:0x0000FF,
+                }
+            }
+        },
+
+        {
+            filterType: "adjustment",
+            filterId: "evolutionShoop",
+            saturation: 1,
+            brightness: 10,
+            contrast: 1,
+            gamma: 1,
+            red: 1,
+            green: 1,
+            blue: 1,
+            alpha: 1,
+            autoDestroy: true,
+            animated:
+            {
+                alpha: 
+                { 
+                active: true, 
+                loopDuration: 1500, 
+                loops: 1,
+                animType: "syncCosOscillation",
+                val1: 0.35,
+                val2: 0.75 
+                }
+            }
+        }
+    ];
+
     for (const tok of tokens) {
-      await tok.document.update(token.document);
+      if(state.evolving.is && state.evolving.into) {
+        if(game.settings.get("ptu", "useEvolutionAnimation")) {
+          await timeout(500);
+          await game.ptu.utils.api.gm.addTokenMagicFilters(tok, game.canvas.scene, evolution_params);
+          await game.ptu.utils.api.gm.tokensUpdate(tok, {alpha: 1})
+        }
+        
+        await tok.document.update(token.document);
+      }     
     }
 
     //close the window

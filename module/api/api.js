@@ -1,7 +1,7 @@
 import { displayAppliedDamageToTargets, ApplyInjuries } from '../combat/damage-calc-tools.js';
 import { LATEST_VERSION } from '../ptu.js'
 import { debug, log } from '../ptu.js';
-import { dataFromPath } from '../utils/generic-helpers.js';
+import { addStepsToEffectiveness, dataFromPath } from '../utils/generic-helpers.js';
 import { PlayPokeballReturnAnimation } from '../combat/effects/pokeball_effects.js';
 
 class ApiError {
@@ -167,6 +167,64 @@ export default class Api {
 
                 return ref._returnBridge({ result: allowed }, data);
             },
+            async dexScanRequest(data){
+                if(!ref._isMainGM()) return;
+
+                const {trainerName, pokemonName} = data.content;
+
+                if (!trainerName) return ref._returnBridge({ result: new ApiError({ message: "Trainer name not found.", type: 400 }) }, data);
+                if (!pokemonName) return ref._returnBridge({ result: new ApiError({ message: "Target pokemon name not found.", type: 400 }) }, data);
+                
+                const allowed = await new Promise((resolve, reject) => {
+                    const dialog = new Dialog({
+                        title: "Pokédex Scan?",
+                        content: `<p class="readable fs-14 mt-0">It seems that ${trainerName} wishes to scan ${pokemonName} with their Pokédex.<br>Will you let them?</p>`,
+                        buttons: {
+                            no: {
+                                icon: '<i class="fas fa-times"></i>',
+                                label: game.i18n.localize("No"),
+                                callback: _ => resolve("false")
+                            },
+                            desc: {
+                                icon: '<i class="fas fa-book"></i>',
+                                label: game.i18n.localize("PTU.DexScan.Description"),
+                                callback: _ => resolve("description")
+                            },
+                            full: {
+                                icon: '<i class="fas fa-check"></i>',
+                                label: game.i18n.localize("PTU.DexScan.Full"),
+                                callback: _ => resolve("full")
+                            }
+                        },
+                        default: "no",
+                        close: () => resolve("timeout")
+                    });
+                    dialog.position.width = "500px";
+                    dialog.position.height = "150px";
+                    dialog.render(true);
+                    setTimeout(_ => {
+                            dialog.close();
+                            resolve("timeout");
+                        },
+                        (data.content.options?.timeout ?? 15000) - 1000
+                    )
+                });
+
+                //if timeout make the dialog a chat message whispered to the GM
+                if (allowed == "timeout") {
+                    let messageData = {
+                        user: game.user.id,
+                        content: await renderTemplate("systems/ptu/templates/chat/dex-scan-request.hbs", {trainerName, pokemonName}),
+                        type: CONST.CHAT_MESSAGE_TYPES.WHISPER,
+                        whisper: game.users.filter(x => x.isGM)
+                    }
+
+                    return ChatMessage.create(messageData, {});
+                }
+
+                return ref._returnBridge({ result: allowed }, data);
+
+            },
             async applyDamage(data) {
                 if (!ref._isMainGM()) return;
 
@@ -220,6 +278,66 @@ export default class Api {
                     retVal.result.push(await document.actor.modifyTokenAttribute("health", actualDamage * -1, true, true));
                 }
                 await displayAppliedDamageToTargets({ data: retVal.appliedDamage, move: label });
+
+                ref._returnBridge(retVal, data);
+            },
+            async applyAttacks(data) {
+                if (!ref._isMainGM()) return;
+
+                const { attacks, options } = data.content;
+
+                const retVal = { result: [], appliedDamage: {}, appliedInjuries: {} };
+
+                for(const attack of attacks) {
+                    const document = await ref._documentFromUuid(attack.uuid);
+                    if (!document || document.locked) continue;
+                    const actor = (document.actor ?? document);
+                    if(!actor || !(actor instanceof Actor)) continue;
+                    
+                    let actualDamage;
+                    if (attack.isFlat) {
+                        actualDamage = attack.damage;
+                    }
+                    else {
+                        // Calculate defense based on damage category
+                        const defense = attack.damageCategory == "Special" ? actor.system.stats.spdef.total : actor.system.stats.def.total;
+                        // Calculate damage reduction based on damage category
+                        let dr = parseInt(attack.damageCategory == "Special" ? (actor.system.modifiers?.damageReduction?.special?.total ?? 0) : (actor.system.modifiers?.damageReduction?.physical?.total ?? 0));
+                        // If the actor is holding a brace item of the damage type, add 15 damage reduction
+                        if(actor.system.heldItem?.toLowerCase()?.includes("brace")) {
+                            if(actor.system.heldItem.toLowerCase().includes(attack.damageType.toLowerCase())) {
+                                dr += 15;
+                            }
+                        }
+
+                        // Calculate effectiveness based on damage type
+                        const effectiveness = attack.effectiveness ? addStepsToEffectiveness((actor.system.effectiveness?.All[attack.damageType] ?? 1), attack.effectiveness) : actor.system.effectiveness?.All[attack.damageType] ?? 1;
+
+                        // Calculate actual damage
+                        actualDamage = Math.max(
+                            (effectiveness === 0 ? 0 : 1),
+                            Math.floor((attack.damage - parseInt(defense) - dr - parseInt(attack.damageReduction)) * (effectiveness + (attack.isResist ? (effectiveness > 1 ? -0.5 : effectiveness * -0.5) : attack.isWeak ? (effectiveness >= 1 ? effectiveness >= 2 ? 1 : 0.5 : effectiveness) : 0))))
+                    }
+                    log(`Dealing ${actualDamage} damage to ${actor.name}`);
+
+                    retVal.appliedDamage[actor.uuid] = {
+                        name: actor.name,
+                        uuid: attack.uuid,
+                        damage: actualDamage,
+                        old: {
+                            value: duplicate(actor.system.health.value),
+                            temp: duplicate(actor.system.tempHp.value),
+                            injuries: duplicate(actor.system.health.injuries),
+                            ...options.backup,
+                        },
+                        injuries: (await ApplyInjuries(actor, actualDamage)),
+                        msgId: options.msgId,
+                    };
+                    // Apply damage to actor
+                    retVal.result.push(await actor.modifyTokenAttribute("health", actualDamage * -1, true, true));
+                }
+
+                await displayAppliedDamageToTargets({ data: retVal.appliedDamage, effectData: options.effects, move: options.moveName });
 
                 ref._returnBridge(retVal, data);
             },
@@ -508,7 +626,7 @@ export default class Api {
         else if (trainerObject instanceof TokenDocument || trainerObject instanceof Token)
             trainerActor = trainerObject.actor;
         else if (typeof trainerObject === "string")
-            trainerActor = await this._documentFromUuid(o);
+            trainerActor = await this._documentFromUuid(trainerObject);
 
         if (!trainerActor) {
             ui.notifications.notify(`Unable to find an actor associated with: ${trainerObject?.uuid ?? trainerObject}`, 'error');
@@ -521,7 +639,7 @@ export default class Api {
         else if (pokemonObject instanceof TokenDocument || pokemonObject instanceof Token)
             pokemonActor = pokemonObject.actor;
         else if (typeof pokemonObject === "string")
-            pokemonActor = await this._documentFromUuid(o);
+            pokemonActor = await this._documentFromUuid(pokemonObject);
 
         if (!pokemonActor) {
             ui.notifications.notify(`Unable to find an actor associated with: ${pokemonObject?.uuid ?? pokemonObject}`, 'error');
@@ -531,6 +649,63 @@ export default class Api {
         const content = { trainerName: trainerActor.name, pokemonName: pokemonActor.name, options };
         return this._handlerBridge(content, "throwPokeballRequest", options?.timeout ?? 15000);
     }
+
+    /**
+     * @param {*} trainerObject - Instance of a PTUActor, Token, TokenDocument or UUID string.
+     * @param {*} pokemonObject - Instance of a PTUActor, Token, TokenDocument or UUID string.
+     * @param {Object} options - See subproperties:
+     * @param {Number} options.timeout - DM Query Timeout duration, default 15 sec
+     * @param {Object} options.permission - Possible Permission overwrite
+     * 
+     * @returns {ApiError | ActorData} - Will return data on success, otherwise will return ApiError.
+     * @ApiError {403} - DM Denied request or Timed Out
+     * @ApiError {400} - Badrequest, see message for details. 
+     */
+    async dexScanRequest(trainerObject, pokemonObject, options) {
+        let trainerActor;
+        if (trainerObject instanceof game.ptu.config.Actor.documentClass)
+            trainerActor = trainerObject;
+        else if (trainerObject instanceof TokenDocument || trainerObject instanceof Token)
+            trainerActor = trainerObject.actor;
+        else if (typeof trainerObject === "string")
+            trainerActor = await this._documentFromUuid(trainerObject);
+
+        if (!trainerActor) {
+            ui.notifications.notify(`Unable to find an actor associated with: ${trainerObject?.uuid ?? trainerObject}`, 'error');
+            return false;
+        }
+
+        let pokemonActor;
+        if (pokemonObject instanceof game.ptu.config.Actor.documentClass)
+            pokemonActor = pokemonObject;
+        else if (pokemonObject instanceof TokenDocument || pokemonObject instanceof Token)
+            pokemonActor = pokemonObject.actor;
+        else if (typeof pokemonObject === "string")
+            pokemonActor = await this._documentFromUuid(pokemonObject);
+
+        if (!pokemonActor) {
+            ui.notifications.notify(`Unable to find an actor associated with: ${pokemonObject?.uuid ?? pokemonObject}`, 'error');
+            return false;
+        }
+
+        const content = { trainerName: trainerActor.name, pokemonName: pokemonActor.name, options };
+        return this._handlerBridge(content, "dexScanRequest", options?.timeout ?? 15000);
+    }
+
+     /**
+     * @param {*} species - Species name
+     * @param {*} level - Level of detail ("full" or "desc")
+     * @param {*} userId - the user to be sent the content
+     * @returns nothing.
+     */
+     async renderDexToPlayer(species, type, userId)
+     {
+         await game.socket.emit("system.ptu", {
+             userId: userId,
+             species: species,
+             type: type
+         })
+     }
 
     /**
      * @param {*} object - Instance of or array of either Token, TokenDocument or UUID string. 
@@ -566,6 +741,24 @@ export default class Api {
 
         const content = { uuids: tokens.map(t => t.document.uuid), damage, damageType, damageCategory, options };
         return this._handlerBridge(content, "applyDamage");
+    }
+
+    /**
+     * @param {any} attacks - An array of Attacks to resolve.
+     * @param {Object} options - see subproperties:
+     * @param {String} options.label - Label to display in 'undo-damage' text message
+     * @param {Boolean} options.isFlat - Whether to apply this as flat damage (ignore resistance, defenses & DR) 
+     * @param {Boolean} options.isHalf - Whether to half the incoming damage 
+     * @param {Boolean} options.isResist - Whether the damage should be resisted one step further
+     * @param {Number} options.damageReduction - Flat damage reduction applied to this damage
+     * 
+     * @returns {ActorData[]}
+     */
+    async applyAttacks(attacks, options) {
+        if (!attacks || attacks.length == 0) return;
+        
+        const content = { attacks, options };
+        return this._handlerBridge(content, "applyAttacks");
     }
 
     /**
@@ -775,6 +968,9 @@ export default class Api {
         debug(content);
         return this._handlerBridge(content, "removeTokenMagicFilters");
     }
+
+    
+
 
     /** API Methods */
     _isMainGM() {

@@ -1,3 +1,31 @@
+## 3.2.3.5 - Lots of new stuff!
+Hey all, this update brings with it a few big new features, as well as a lot of small QoL additions and bugfixes. 
+Our big new feature is the Secondary Effect Automation Framework. For more details on this check our Discord.
+
+### New Features
+- Added the Secondary Effect Automation Framework. (please read discord announcement for more info)
+- Added a setting to disable 'Pokéball Sounds' when Pokémon get sent out.
+- Level-Up form will now update your health appropriately.
+- Added a 'Notes' field in the extra tab of Pokemon
+- Character Sheets now allow +/- in certain fields like HP or EXP (f.e., if your HP is 50, and you change the field to +5, it will apply +5 to your HP.)
+- Implemented the 'GM Prompt' option for the "Pokédex Permission" setting
+- Implemented the PTR Movement Icons module into the system
+- Added a small animation upon Pokémon Evolution through the Level Up Popup
+
+### New Automations
+#### Moves
+- Ember
+#### Abilities
+- Exploit
+
+### Fixes
+- Fixed an issue with Pokémon being sent out didn't play the proper automation causing them not to be added to the Turn Tracker during combat.
+- Fixed a bug with the Level Up Popup showing your remaining Level Up Points as 'undefined'.
+- Enable Foundry Sidebar Collapse
+- Reposition PTR Sidebar with the Foundry Sidebar (upon collapse)
+- Fixed an issue with Capabilities not being editable in the Custom Species Editor
+- Fix issues with Custom Type Images
+
 ## Version 3.2.3.4 - HotFix
 It appeared we are 'incentivising' the Playtest a bit too much... considering if you're not running it this update broke! 
 

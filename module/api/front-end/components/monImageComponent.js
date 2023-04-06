@@ -54,6 +54,6 @@ export default class MonImageComponent extends Component {
         const speciesData = game.ptu.utils.species.get(species)
         if(!speciesData) return undefined;
 
-        return GetSpeciesArt(speciesData, imgSrc);
+        return GetSpeciesArt(speciesData, imgSrc, ".webp", this.state.isShiny);
     }
 }

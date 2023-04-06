@@ -141,8 +141,7 @@
                       <div class="options w-100 d-flex">
                         <label for="progressBar" class="hp"></label>
                         <div class="d-flex pt-1 pb-1" style="text-align: center;">
-                          <input class="ml-1 mr-1" type="text" name="data.health.value" value="{{data.health.value}}"
-                            data-dtype="Number" />
+                          <input class="ml-1 mr-1" type="text" name="data.health.value" value="{{data.health.value}}"/>
                           <span style="font-size: 20px;"> / </span>
                           <input class="ml-1" type="text" name="data.health.max" value="{{data.health.max}}"
                             data-dtype="Number" disabled />
@@ -151,11 +150,9 @@
                       <div class="options w-100 d-flex">
                         <div class="temp-hp"><label for="temp-hp">{{localize "PTU.HPTemp"}}</label></div>
                         <div class="d-flex pt-1 pb-1" style="text-align: center;">
-                          <input class="ml-1 mr-1" type="text" name="data.tempHp.value" value="{{data.tempHp.value}}"
-                            data-dtype="Number">
+                          <input class="ml-1 mr-1" type="text" name="data.tempHp.value" value="{{data.tempHp.value}}"/>
                           <span style="font-size: 20px;"> / </span>
-                          <input class="ml-1" type="text" name="data.tempHp.max" value="{{data.tempHp.max}}"
-                            data-dtype="Number">
+                          <input class="ml-1" type="text" name="data.tempHp.max" value="{{data.tempHp.max}}"/>
                         </div>
                       </div>
                       <div class="options w-100 pb-1 pt-1">
@@ -254,8 +251,7 @@
                       <div class="swsh-body">
                         <div class="options w-100 d-flex">
                           <div class="d-flex w-100 pt-1 pb-1" style="text-align: center;">
-                            <input class="ml-1 mr-1" type="text" name="data.level.exp" value="{{data.level.exp}}"
-                              data-dtype="Number" />
+                            <input class="ml-1 mr-1" type="text" name="data.level.exp" value="{{data.level.exp}}" />
                             <span style="font-size: 20px;"> / </span>
                             <input class="ml-1" type="text" name="till-level-up" value="{{data.level.expTillNextLevel}}"
                               data-dtype="Number" disabled />
@@ -1250,6 +1246,16 @@
                     </div>
                   </div>
                 </div>
+
+                <div class="swsh-box h-25 w-100 mb-2 red">
+                  <div class="swsh-header">
+                    <h3>{{localize "PTU.Notes"}}</h3>
+                  </div>
+                  <div class="swsh-body h-90">
+                    {{editor data.notes target="system.notes" button=true owner=owner editable=editable}}
+                  </div>
+                </div>
+                
               </div>
               <div class="col">
                 <!-- Skills -->

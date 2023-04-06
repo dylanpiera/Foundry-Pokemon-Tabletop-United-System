@@ -35,7 +35,7 @@ export class PTUFeatSheet extends ItemSheet {
     data.editLocked = data.editable == false ? true : this.object.getFlag('ptu', 'editLocked') ?? false;
 
     if(this.object.img == "icons/svg/item-bag.svg" || this.object.img == "icons/svg/mystery-man.svg") {
-      if(this.object.system.tags.toLowerCase().includes("class"))
+      if(this.object.system?.tags && this.object.system.tags.toLowerCase().includes("class"))
 				this.object.update({"img": `/systems/ptu/css/images/icons/class_feat_icon.png`});
       else
         this.object.update({"img": `/systems/ptu/css/images/icons/feat_icon.png`});
@@ -55,6 +55,13 @@ export class PTUFeatSheet extends ItemSheet {
 			class: ".to-chat",
 			icon: "fas fa-comment",
 			onclick: () => this._toChat
+		});
+    
+    buttons.unshift({
+			label: "Automations",
+			class: "open-automation",
+			icon: "fas fa-edit",
+			onclick: () => this._loadAutomationSheet()
 		});
     
     buttons.unshift({
@@ -96,6 +103,10 @@ export class PTUFeatSheet extends ItemSheet {
 		
 		const effect = this.object.effects.contents[0];
 		return effect.sheet.render(true);
+	}
+
+  async _loadAutomationSheet() {
+		return new game.ptu.config.Ui.AutomationForm.documentClass(this.object).render(true);
 	}
 
   /** @override */
