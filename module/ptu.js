@@ -680,7 +680,24 @@ async function _onPokedexMacro() {
         break;
       }
       case 5: { // GM Prompt
-        return ui.notifications.warn("The GM prompt feature has yet to be implemented. Please ask your DM to change to a different Dex Permission Setting");
+        const result = await game.ptu.utils.api.gm.dexScanRequest(game.user.character.uuid, token.actor.uuid, {timeout: 30000})
+        switch(result) {
+          case "false": {
+            return ui.notifications.info("You are unable to use your Pokédex at this time.");
+          }
+          case "timeout": {
+            return ui.notifications.warn("Request to DM for Pokédex timed out.");
+          }
+          case "description": {
+            game.ptu.utils.dex.render(token.actor.system.species);
+            break;
+          }
+          case "full": {
+            game.ptu.utils.dex.render(token.actor.system.species, "full");
+            break;
+          }
+        }
+        break;
       }
       case 6: { // Always Full Details
         game.ptu.utils.dex.render(token.actor.system.species, "full");

@@ -167,6 +167,50 @@ export default class Api {
 
                 return ref._returnBridge({ result: allowed }, data);
             },
+            async dexScanRequest(data){
+                if(!ref._isMainGM()) return;
+
+                const {trainerName, pokemonName} = data.content;
+
+                if (!trainerName) return ref._returnBridge({ result: new ApiError({ message: "Trainer name not found.", type: 400 }) }, data);
+                if (!pokemonName) return ref._returnBridge({ result: new ApiError({ message: "Target pokemon name not found.", type: 400 }) }, data);
+                
+                const allowed = await new Promise((resolve, reject) => {
+                    const dialog = new Dialog({
+                        title: "Pokédex Scan?",
+                        content: `<p>It seems that ${trainerName} wishes to scan ${pokemonName} with their Pokédex.<br>Will you let them?</p>`,
+                        buttons: {
+                            no: {
+                                icon: '<i class="fas fa-times"></i>',
+                                label: game.i18n.localize("No"),
+                                callback: _ => resolve("false")
+                            },
+                            desc: {
+                                icon: '<i class="fas fa-book"></i>',
+                                label: game.i18n.localize("Description Only"),
+                                callback: _ => resolve("description")
+                            },
+                            full: {
+                                icon: '<i class-"fas fa-check"></i>',
+                                label: game.i18n.localize("Full Scan"),
+                                callback: _ => resolve("full")
+                            }
+                        },
+                        default: "no",
+                        close: () => resolve("timeout"),
+                    });
+                    dialog.render(true);
+                    setTimeout(_ => {
+                            dialog.close();
+                            resolve("timeout");
+                        },
+                        (data.content.options?.timeout ?? 15000) - 1000
+                    )
+                });
+
+                return ref._returnBridge({ result: allowed }, data);
+
+            },
             async applyDamage(data) {
                 if (!ref._isMainGM()) return;
 
@@ -568,7 +612,7 @@ export default class Api {
         else if (trainerObject instanceof TokenDocument || trainerObject instanceof Token)
             trainerActor = trainerObject.actor;
         else if (typeof trainerObject === "string")
-            trainerActor = await this._documentFromUuid(o);
+            trainerActor = await this._documentFromUuid(trainerObject);
 
         if (!trainerActor) {
             ui.notifications.notify(`Unable to find an actor associated with: ${trainerObject?.uuid ?? trainerObject}`, 'error');
@@ -581,7 +625,7 @@ export default class Api {
         else if (pokemonObject instanceof TokenDocument || pokemonObject instanceof Token)
             pokemonActor = pokemonObject.actor;
         else if (typeof pokemonObject === "string")
-            pokemonActor = await this._documentFromUuid(o);
+            pokemonActor = await this._documentFromUuid(pokemonObject);
 
         if (!pokemonActor) {
             ui.notifications.notify(`Unable to find an actor associated with: ${pokemonObject?.uuid ?? pokemonObject}`, 'error');
@@ -591,6 +635,48 @@ export default class Api {
         const content = { trainerName: trainerActor.name, pokemonName: pokemonActor.name, options };
         return this._handlerBridge(content, "throwPokeballRequest", options?.timeout ?? 15000);
     }
+
+    /**
+     * @param {*} trainerObject - Instance of a PTUActor, Token, TokenDocument or UUID string.
+     * @param {*} pokemonObject - Instance of a PTUActor, Token, TokenDocument or UUID string.
+     * @param {Object} options - See subproperties:
+     * @param {Number} options.timeout - DM Query Timeout duration, default 15 sec
+     * @param {Object} options.permission - Possible Permission overwrite
+     * 
+     * @returns {ApiError | ActorData} - Will return data on success, otherwise will return ApiError.
+     * @ApiError {403} - DM Denied request or Timed Out
+     * @ApiError {400} - Badrequest, see message for details. 
+     */
+    async dexScanRequest(trainerObject, pokemonObject, options) {
+        let trainerActor;
+        if (trainerObject instanceof game.ptu.config.Actor.documentClass)
+            trainerActor = trainerObject;
+        else if (trainerObject instanceof TokenDocument || trainerObject instanceof Token)
+            trainerActor = trainerObject.actor;
+        else if (typeof trainerObject === "string")
+            trainerActor = await this._documentFromUuid(trainerObject);
+
+        if (!trainerActor) {
+            ui.notifications.notify(`Unable to find an actor associated with: ${trainerObject?.uuid ?? trainerObject}`, 'error');
+            return false;
+        }
+
+        let pokemonActor;
+        if (pokemonObject instanceof game.ptu.config.Actor.documentClass)
+            pokemonActor = pokemonObject;
+        else if (pokemonObject instanceof TokenDocument || pokemonObject instanceof Token)
+            pokemonActor = pokemonObject.actor;
+        else if (typeof pokemonObject === "string")
+            pokemonActor = await this._documentFromUuid(pokemonObject);
+
+        if (!pokemonActor) {
+            ui.notifications.notify(`Unable to find an actor associated with: ${pokemonObject?.uuid ?? pokemonObject}`, 'error');
+            return false;
+        }
+
+        const content = { trainerName: trainerActor.name, pokemonName: pokemonActor.name, options };
+        return this._handlerBridge(content, "dexScanRequest", options?.timeout ?? 15000);
+    }    
 
     /**
      * @param {*} object - Instance of or array of either Token, TokenDocument or UUID string. 
