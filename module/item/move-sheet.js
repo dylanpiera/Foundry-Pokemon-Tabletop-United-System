@@ -44,10 +44,10 @@ export class PTUMoveSheet extends ItemSheet {
 	activateListeners(html) {
 		super.activateListeners(html);
 
+		html.find('.to-chat').click(this._toChat.bind(this));
+
 		// Everything below here is only needed if the sheet is editable
 		if (!this.isEditable) return;
-
-		html.find('.to-chat').click(this._toChat.bind(this));
 
 		html.find('.move-type').on("change", event => {
 			this.object.update({"system.type": event.target.value});
