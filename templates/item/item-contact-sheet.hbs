@@ -28,7 +28,7 @@
                     <input
                         name="name"
                         type="text"
-                        value="{{data.name}}"
+                        value="{{item.name}}"
                         placeholder="Name"
                         {{if editLocked}}disabled{{/if}}
                     />
@@ -43,7 +43,7 @@
                                 name="attitude"
                                 {{if editLocked}}disabled{{/if}} 
                                                             >
-                                {{#select data.attitude}}
+                                {{#select item.system.attitude}}
                                 <option value="0">🔘 Neutral</option>
                                 <option value="1">🟢 Friendly</option>
                                 <option value="-1">⛔ Hostile</option>
@@ -60,7 +60,7 @@
                     name="notes"
                     placeholder="Notes"
                     {{if editLocked}}disabled{{/if}}
-                >{{data.notes}}</textarea>
+                >{{item.system.notes}}</textarea>
             </div>
         </div>
     </div>
