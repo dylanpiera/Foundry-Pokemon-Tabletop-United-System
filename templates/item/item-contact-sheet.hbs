@@ -31,7 +31,6 @@
                         value="{{data.name}}"
                         placeholder="Name"
                         {{if editLocked}}disabled{{/if}}
-                        {{#unless editLocked}}data-edit="name"{{/unless}}
                     />
                 </div>
 
@@ -43,8 +42,7 @@
                                 class="ml-2"
                                 name="attitude"
                                 {{if editLocked}}disabled{{/if}} 
-                                {{#unless editLocked}}data-edit="attitude"{{/unless}}
-                            >
+                                                            >
                                 {{#select data.attitude}}
                                 <option value="0">🔘 Neutral</option>
                                 <option value="1">🟢 Friendly</option>
@@ -62,7 +60,6 @@
                     name="notes"
                     placeholder="Notes"
                     {{if editLocked}}disabled{{/if}}
-                    {{#unless editLocked}}data-edit="notes"{{/unless}}
                 >{{data.notes}}</textarea>
             </div>
         </div>
