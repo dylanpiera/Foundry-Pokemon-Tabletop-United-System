@@ -1213,6 +1213,11 @@
             </div>
           </div>
 
+          <!-- Pokenav -->
+          <div class="tab details pokenav" data-group="primary" data-tab="pokenav">
+
+          </div>
+
           <!-- Effects Tab -->
           <div class="tab details effects" data-group="primary" data-tab="effects">
             <div class="h-100 swsh-box">
@@ -1243,6 +1248,9 @@
         <li><button class="item" data-tab="moves">{{localize "PTU.TabsMoves"}}</button></li>
         <li><button class="item" data-tab="extra">{{localize "PTU.TabsExtra"}}</button></li>
         <li><button class="item" data-tab="dex">{{localize "PTU.TabsDex"}}</button></li>
+        {{#if (is true (getGameSetting "showPokéNavTab"))}}
+          <li><button class="item" data-tab="pokenav">{{localize "PTU.TabsNav"}}</button></li>
+        {{/if}}
         <li><button class="item" data-tab="effects">{{localize "PTU.TabsEffects"}}</button></li>
       </ul>
     </div>

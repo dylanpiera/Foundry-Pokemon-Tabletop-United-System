@@ -478,7 +478,7 @@
     }
   },
   "Item": {
-    "types": ["feat", "edge", "ability", "move", "item", "capability", "pokeedge","dexentry"],
+    "types": ["feat", "edge", "ability", "move", "item", "capability", "pokeedge","dexentry", "contact"],
     "templates": {
       "base": {
         "name": "",
@@ -552,6 +552,12 @@
       "category": "",
       "cost": 0,
       "consumable": 0
+    },
+    "contact": {
+      "name": "",
+      "img": "",
+      "attitude": 0,
+      "notes": ""
     }
   }
 }

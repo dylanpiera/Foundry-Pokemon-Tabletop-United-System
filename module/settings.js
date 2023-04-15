@@ -821,6 +821,17 @@ export function LoadSystemSettings() {
             type: Boolean,
             default: true
         })
+
+        game.settings.register("ptu", "showPokéNavTab", {
+            name: "GM Setting: Show PokéNav Tab",
+            hint: "Show the PokéNav tab in the character sheet.",
+            scope: "world",
+            config: true,
+            type: Boolean,
+            default: true,
+            category: "general",
+            onChange: debouncedReload
+        })
     }
 }
 
