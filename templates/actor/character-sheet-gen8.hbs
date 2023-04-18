@@ -1215,7 +1215,27 @@
 
           <!-- Pokenav -->
           <div class="tab details pokenav" data-group="primary" data-tab="pokenav">
-
+            <div class="row">
+              <div class="col">
+                <div class="swsh-box mt-1 w-100">
+                    <div class="swsh-header d-flex justify-content-around sort-nav" >
+                      <div class="p-1">
+                        <button class="btn rollable sort-nav" data-sort="name">Sort Name</button>
+                      </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <!-- Contacts -->
+              <div class="col">
+                <div class="swsh-box mt-2 w-100">
+                  <div class="swsh-body w-100" style="display: block;">
+                    {{> "systems/ptu/templates/partials/item-display-partial.hbs" title=(localize "ITEM.Contacts") type="contact" data=actor.contacts}}
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
 
           <!-- Effects Tab -->

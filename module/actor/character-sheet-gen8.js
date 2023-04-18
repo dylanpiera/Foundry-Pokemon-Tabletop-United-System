@@ -89,6 +89,7 @@ export class PTUGen8CharacterSheet extends ActorSheet {
 			seen: [],
 			owned: []
 		};
+		const contacts = []
 
 		// Iterate through items, allocating to containers
 		// let totalWeight = 0;
@@ -116,6 +117,7 @@ export class PTUGen8CharacterSheet extends ActorSheet {
 					if (i.system.owned) dex.owned.push(i);
 					else dex.seen.push(i);
 					break;
+				case 'contact' : contacts.push(i); break;
 			}
 		}
 
@@ -132,6 +134,7 @@ export class PTUGen8CharacterSheet extends ActorSheet {
 		actor.moves = moves;
 		actor.capabilities = capabilities;
 		actor.dex = dex;
+		actor.contacts= contacts
 	}
 
 	/* -------------------------------------------- */
@@ -221,6 +224,7 @@ export class PTUGen8CharacterSheet extends ActorSheet {
 		// .on("change", (e) => this._updateDexItem(e))
 
 		html.find('.sort-dex').click(this._onDexSort.bind(this));
+		html.find('.sort-nav').click(this._onNavSort.bind(this));
 
 		// Rollable abilities.
 		html.find('.rollable.skill').click(this._onRoll.bind(this));
@@ -395,6 +399,27 @@ export class PTUGen8CharacterSheet extends ActorSheet {
 		const sortId = (a,b) => parseInt(game.ptu.utils.species.get(a.name).ptuNumber) - parseInt(game.ptu.utils.species.get(b.name).ptuNumber);
 
 		const entries = this.actor.itemTypes.dexentry.sort(dataset.sort === "name" ? sortName : sortId)
+		const itemsToUpdate = [];
+		for(const [index, entry] of entries.entries()) {
+			const item = duplicate(entry);
+			item.sort = 10000*(index+1);
+			itemsToUpdate.push(item)
+		}
+		await this.actor.updateEmbeddedDocuments("Item", itemsToUpdate)
+	}
+
+	/**
+	 * Handle sorting nav entries based on option selected
+	 * @param {Event} event  The originating click event
+	 * @private
+	 */
+	async _onNavSort(event) {
+		event.preventDefault();
+		const dataset = event.currentTarget.dataset;
+
+		const sortName = (a,b) => a.name.localeCompare(b.name);
+
+		const entries = this.actor.itemTypes.contact.sort(dataset.sort === "name" ? sortName : sortName)
 		const itemsToUpdate = [];
 		for(const [index, entry] of entries.entries()) {
 			const item = duplicate(entry);

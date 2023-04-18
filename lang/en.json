@@ -26,9 +26,13 @@
     "ITEM.DeleteButton": "Delete",
     "ITEM.DexEntrySeen": "Seen",
     "ITEM.DexEntryOwned": "Owned",
+    "ITEM.Contacts": "Contacts",
     "ITEM.Origin": "Origin",
     "ITEM.Prerequisites": "Prerequisites",
     "ITEM.Tags": "Tags",
+    "CONTACT.Attitude.0": "🔘 Neutral",
+    "CONTACT.Attitude.1": "🟢 Friendly",
+    "CONTACT.Attitude.-1": "🔴 Hostile",
 
     "PTU.Title": "Pokémon Tabletop United",
     
