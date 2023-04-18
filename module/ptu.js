@@ -8,6 +8,7 @@ import { PTUItemSheet } from "./item/item-sheet.js";
 import { PTUEdgeSheet } from "./item/edge-sheet.js";
 import { PTUFeatSheet } from "./item/feat-sheet.js";
 import { PTUMoveSheet } from "./item/move-sheet.js";
+import { PTUContactSheet } from "./item/contact-sheet.js";
 import { measureDistances } from "./canvas.js";
 import { levelProgression } from "./data/level-progression.js";
 import { pokemonData } from "./data/species-data.js";
@@ -150,6 +151,7 @@ export const ptu = {
         edge: PTUEdgeSheet,
         feat: PTUFeatSheet,
         move: PTUMoveSheet,
+        contact: PTUContactSheet,
       }
     },
     Ui: {
@@ -283,6 +285,7 @@ function registerSheets() {
   Items.registerSheet("ptu", ptu.config.Item.sheetClasses.move, { types: ["move"], makeDefault: true });
   Items.registerSheet("ptu", ptu.config.Item.sheetClasses.edge, { types: ["edge"], makeDefault: true });
   Items.registerSheet("ptu", ptu.config.Item.sheetClasses.feat, { types: ["feat"], makeDefault: true });
+  Items.registerSheet("ptu", ptu.config.Item.sheetClasses.contact, { types: ["contact"], makeDefault: true });
 
   DocumentSheetConfig.registerSheet(ActiveEffect, "core", PTUActiveEffectConfig, { makeDefault: true })
 }

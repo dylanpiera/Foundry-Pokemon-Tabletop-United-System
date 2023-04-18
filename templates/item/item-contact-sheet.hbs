@@ -18,7 +18,7 @@
 
     <div class="sheet-body pt-2 pb-2 h-100 w-100">
         <div class="move-row p-2">
-            <div class="move-column">
+            <div class="move-row">
                 <div class="avatar ml-3 mr-4 mt-2 mb-2">
                     <img class="p-2 content {{#unless editLocked}}profile-img{{/unless}}" src="{{data.img}}" {{#unless editLocked}}data-edit="img"{{/unless}} title="{{name}}"/>
             </div>
@@ -30,7 +30,7 @@
                         type="text"
                         value="{{item.name}}"
                         placeholder="Name"
-                        {{if editLocked}}disabled{{/if}}
+                        {{#if editLocked}}disabled{{/if}}
                     />
                 </div>
 
@@ -41,9 +41,9 @@
                             <select
                                 class="ml-2"
                                 name="attitude"
-                                {{if editLocked}}disabled{{/if}} 
+                                {{#if editLocked}}disabled{{/if}}
                                                             >
-                                {{#select item.system.attitude}}
+                                {{#select data.system.attitude}}
                                 <option value="0">🔘 Neutral</option>
                                 <option value="1">🟢 Friendly</option>
                                 <option value="-1">⛔ Hostile</option>
@@ -54,14 +54,13 @@
                 </div>
             </div>
         </div>
-        <div class="move-row p-2 mt-1 mb-2" style="flex-grow: 1">
-            <div class="move-effect">
-                <textarea
-                    name="notes"
-                    placeholder="Notes"
-                    {{if editLocked}}disabled{{/if}}
-                >{{item.system.notes}}</textarea>
-            </div>
+    </div>
+    <div class="move-row p-2 mt-1 mb-2" style="flex-grow: 1">
+        <div class="move-effect">
+            <textarea
+                name="notes"
+                {{#if editLocked}}disabled{{/if}}
+            >{{data.system.notes}}</textarea>
         </div>
     </div>
 </form>
