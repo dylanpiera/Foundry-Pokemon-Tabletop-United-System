@@ -1395,6 +1395,9 @@ h4.message-sender {
   flex-direction: column;
   height: 100%;
 }
+.tab.details.pokenav.active {
+  display: flex;
+}
 /* MD CSS */
 .md h1,
 .md h2,

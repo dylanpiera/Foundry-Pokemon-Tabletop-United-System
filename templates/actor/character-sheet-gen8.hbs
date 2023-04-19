@@ -1111,82 +1111,78 @@
             </div>
           </div>
 
-          <!-- Pokenav -->
+          
           <div class="tab details pokenav" data-group="primary" data-tab="pokenav">
-            <div class="row">
-              <div class="col-6">
-                <div class="swsh-box mt-1 w-100">
-                    <div class="swsh-header d-flex justify-content-around sort-nav" >
-                      <div class="p-1">
-                        <button class="btn rollable sort-nav" data-sort="name">Sort Name</button>
-                      </div>
-                  </div>
+          <!-- Sort/Search Bar -->
+            <div class="col-6">
+              <div class="swsh-box mt-1 w-100">
+                  <div class="swsh-header d-flex justify-content-around sort-nav" >
+                    <div class="p-1">
+                      <button class="btn rollable sort-nav" data-sort="name">Sort Name</button>
+                    </div>
                 </div>
-              </div>
-              <div class="col-6">
-                <div class="swsh-box mb-2"
-                        style="text-align: center; word-break: keep-all;">
-                  <div class="swsh-header">
-                    <div class="d-flex mt-1 mb-1 w-100">
-                      <div class="col-sm-3">
-                        <label for="system.age">{{localize "PTU.Age"}}:</label>
-                      </div>
-                      <div class="col-sm-3">
-                        <label for="system.sex">{{localize "PTU.Sex"}}:</label>
-                      </div>
-                      <div class="col-sm-3">
-                        <label for="system.height">{{localize "PTU.Height"}}:</label>
-                      </div>
-                      <div class="col-sm-3">
-                        <label for="system.weight">{{localize "PTU.Weight"}}:</label>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="swsh-body">
-                    <div class="d-flex mt-1 mb-1">
-                      <div class="col-sm-3">
-                        <input
-                          name="system.age"
-                          type="text"
-                          value="{{data.age}}"
-                          data-dtype="Number"
-                        />
-                      </div>
-                      <div class="col-sm-3">
-                        <input
-                          type="text"
-                          name="system.sex"
-                          value="{{data.sex}}"
-                        />
-                      </div>
-                      <div class="col-sm-3">
-                        <input
-                          type="text"
-                          name="system.height"
-                          value="{{data.height}}"
-                        />
-                      </div>
-                      <div class="col-sm-3">
-                        <input
-                          type="text"
-                          name="system.weight"
-                          value="{{data.weight}}"
-                        />
-                      </div>
-                    </div>
-                  </div>
+              </div>              
+            
+              <!-- Contacts -->
+              <div class="swsh-box mt-2 w-100">
+                <div class="swsh-body w-100" style="display: block;">
+                  {{> "systems/ptu/templates/partials/item-display-partial.hbs" title=(localize "ITEM.TypeContactPlural") type="contact" data=actor.contacts}}
                 </div>
               </div>
             </div>
-            <div class="row">
-              <!-- Contacts -->
-              <div class="col-6">
-                <div class="swsh-box mt-2 w-100">
-                  <div class="swsh-body w-100" style="display: block;">
-                    {{> "systems/ptu/templates/partials/item-display-partial.hbs" title=(localize "ITEM.TypeContactPlural") type="contact" data=actor.contacts}}
+            <div class="col-6">
+              <div class="swsh-box mb-2"
+                        style="text-align: center; word-break: keep-all;">
+                <div class="swsh-header">
+                  <div class="d-flex mt-1 mb-1 w-100">
+                    <div class="col-sm-3">
+                      <label for="system.age">{{localize "PTU.Age"}}:</label>
+                    </div>
+                    <div class="col-sm-3">
+                      <label for="system.sex">{{localize "PTU.Sex"}}:</label>
+                    </div>
+                    <div class="col-sm-3">
+                      <label for="system.height">{{localize "PTU.Height"}}:</label>
+                    </div>
+                    <div class="col-sm-3">
+                      <label for="system.weight">{{localize "PTU.Weight"}}:</label>
+                    </div>
                   </div>
                 </div>
-              </div>
+                <div class="swsh-body">
+                  <div class="d-flex mt-1 mb-1">
+                    <div class="col-sm-3">
+                      <input
+                        name="system.age"
+                        type="text"
+                        value="{{data.age}}"
+                        data-dtype="Number"
+                      />
+                    </div>
+                    <div class="col-sm-3">
+                      <input
+                        type="text"
+                        name="system.sex"
+                        value="{{data.sex}}"
+                      />
+                    </div>
+                    <div class="col-sm-3">
+                      <input
+                        type="text"
+                        name="system.height"
+                        value="{{data.height}}"
+                      />
+                    </div>
+                    <div class="col-sm-3">
+                      <input
+                        type="text"
+                        name="system.weight"
+                        value="{{data.weight}}"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>            
             
               <div class="col h-100">
                   <!-- Biography -->
@@ -1242,7 +1238,6 @@
                 </div>
               </div>
             </div>
-
           <!-- Effects Tab -->
           <div class="tab details effects" data-group="primary" data-tab="effects">
             <div class="h-100 swsh-box">
