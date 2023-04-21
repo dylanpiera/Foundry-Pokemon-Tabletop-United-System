@@ -798,6 +798,38 @@ Hooks.on('preCreateActor', function(document,b,c,d) {
   document.updateSource({"prototypeToken.actorLink":true});
 });
 
+//right click create contact option
+Hooks.on('getActorDirectoryEntryContext', (html, entryOptions) => {
+  entryOptions.push({
+    name: "Create Contact",
+    condition: html.data("entity") && game.user.isGM && html.data("entity").type === "character",
+    icon: '<i class="fas fa-user"></i>',
+    callback: (actorData) => {
+      const htmlString = actorData[0].innerHTML;
+
+      // Parse the HTML string into a DOM document
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(htmlString, 'text/html');
+
+      // Select the img element and retrieve its src attribute
+      const imgElement = doc.querySelector('img.thumbnail');
+      const srcString = imgElement.getAttribute('src');
+
+      const itemData = {
+        name: actorData[0].firstElementChild.title,
+        type: "contact",
+        data: {},
+        img: srcString,
+      };
+
+      Item.create(itemData).then((item) => {
+        console.log(`Created contact item ${item.name} for actor ${actorData[0].firstElementChild.title}.`);
+      });
+    }
+  });
+  
+});
+
 Hooks.on('getSceneControlButtons', function (hudButtons) {
   const hud = hudButtons.find(val => val.name == "token")
   if (hud) {
