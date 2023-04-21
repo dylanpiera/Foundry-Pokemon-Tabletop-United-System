@@ -89,7 +89,9 @@ export class PTUGen8CharacterSheet extends ActorSheet {
 			seen: [],
 			owned: []
 		};
-		const contacts = []
+		const contacts = [];
+		const filteredContacts = [];
+		const filter = "";
 
 		// Iterate through items, allocating to containers
 		// let totalWeight = 0;
@@ -135,6 +137,8 @@ export class PTUGen8CharacterSheet extends ActorSheet {
 		actor.capabilities = capabilities;
 		actor.dex = dex;
 		actor.contacts= contacts
+		actor.filter = $('#contact-filter')?.val()?.toLowerCase() ?? "";		
+		actor.filteredContacts = contacts.filter(c => c.name.toLowerCase().includes(actor.filter));	
 	}
 
 	/* -------------------------------------------- */
