@@ -802,7 +802,7 @@ Hooks.on('preCreateActor', function(document,b,c,d) {
 Hooks.on('getActorDirectoryEntryContext', (html, entryOptions) => {
   entryOptions.push({
     name: "Create Contact",
-    condition: html.data("entity") && game.user.isGM && html.data("entity").type === "character",
+    condition: game.user.isGM,
     icon: '<i class="fas fa-user"></i>',
     callback: (actorData) => {
       const htmlString = actorData[0].innerHTML;
