@@ -53,6 +53,26 @@ export class PTUGen8CharacterSheet extends ActorSheet {
 			});
 		}
 
+		if (game.user.isGM) {
+			buttons.unshift({
+				label: "Create Contact",
+				class: "create-contact",
+				icon: "fas fa-user-plus",
+				onclick: () => {
+					const itemData = {
+						name: this.actor.name,
+						type: "contact",
+						data: {},
+						img: this.actor.img,
+					};
+
+					Item.create(itemData).then((item) => {
+        				console.log(`Created contact item ${item.name} for actor ${actorData[0].firstElementChild.title}.`);
+					});
+				}
+			});
+		}
+
 		return buttons;
 	}
 
