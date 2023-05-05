@@ -300,6 +300,7 @@ export class PTUCustomSpeciesEditor extends FormApplication {
           "Swim": parseInt(formData["Capabilities.Swim"]) ?? 0,
           "Levitate": parseInt(formData["Capabilities.Levitate"]) ?? 0,
           "Burrow": parseInt(formData["Capabilities.Burrow"]) ?? 0,
+          "Teleporter": parseInt(formData["Capabilities.Teleporter"]) ?? 0,
           "High Jump": parseInt(formData["Capabilities.High Jump"] ?? 0),
           "Long Jump": parseInt(formData["Capabilities.Long Jump"] ?? 0),
           "Power": parseInt(formData["Capabilities.Power"] ?? 0),
