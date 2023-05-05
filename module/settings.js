@@ -1,5 +1,3 @@
-import CustomSpeciesFolder from './entities/custom-species-folder.js'
-
 /* -------------------------------------------- */
 /*  System Setting Initialization               */
 /* -------------------------------------------- */
@@ -12,7 +10,8 @@ export function LoadSystemSettings() {
         config: true,
         type: Boolean,
         default: true,
-        category: "rules"
+        category: "rules",
+        onChange: debouncedReload
     });
 
     game.settings.register("ptu", "useTutorPoints", {
@@ -41,6 +40,21 @@ export function LoadSystemSettings() {
         },
         default: "false",
         category: "rules"
+    });
+
+    game.settings.register("ptu", "gameLanguage", {
+        name: "Localization",
+        hint: "Changes the name of Pokemon in the system. Would you like your language here? Get in contact on how to translate!",
+        scope: "world",
+        config: true,
+        type: String,
+        default: "en",
+        choices: {
+            "en": "English",
+            "de": "German",
+        },
+        category: "general",
+        onChange: debouncedReload
     });
 
     game.settings.register("ptu", "canPlayersDeleteTokens", {
@@ -74,11 +88,27 @@ export function LoadSystemSettings() {
             2: "Dexentry description only (Basic description and details only)",
             3: "Full details on owned Tokens, Dexentry description on un-owned tokens",
             4: "Full details on owned Mons (checks trainer's dex tab), Dexentry Description on un-owned mons",
-            5: "GM Prompt (**NOT YET IMPLEMENTED**)",
+            5: "GM Prompt",
             6: "Always Full Details",
         },
         default: 1,
         category: "general"
+    })
+
+    game.settings.register("ptu", "pokeball-prompts", {
+        name: "GM Setting: Request permission from GM when using Pokeballs",
+        hint: "This will prompt the GM to allow or deny the use of a Pokeball or capturing a pokemon.",
+        scope: "world",
+        config: true,
+        type: Number,
+        choices: {
+            1: "Always ask",
+            2: "Only ask for capture",
+            3: "Only ask for Pokéball throw",
+            4: "Never Ask"
+        },
+        default: 1,
+        category: "combat"
     })
 
     game.settings.register("ptu", "auto-add-to-dex", {
@@ -118,37 +148,15 @@ export function LoadSystemSettings() {
         category: "general"
     })
 
-    // game.settings.register("ptu", "combatRollPreference", {
-    //     name: "Combat Roll Preference",
-    //     hint: "Choose whether crits should always be rolled, or only when the to-hit is an actual crit.",
-    //     scope: "world",
-    //     config: true,
-    //     type: String,
-    //     choices: {
-    //         "situational": "Show damage situationally",
-    //         "always-normal": "Always roll normal damage",
-    //         "always-crit": "Always roll crit damage",
-    //         "both": "Always roll both"
-    //     },
-    //     default: "situational",
-    //     category: "combat"
-    // });
-
-    // game.settings.register("ptu", "combatDescPreference", {
-    //     name: "Combat Description Preference",
-    //     hint: "Choose whether the move effect should be displayed when rolling To-Hit/Damage.",
-    //     scope: "world",
-    //     config: true,
-    //     type: String,
-    //     choices: {
-    //         "none": "Don't show move effect",
-    //         "snippet": "Show move snippet, or nothing if unset",
-    //         "snippet-or-full": "Show move snippet, or full effect if unset",
-    //         "show": "Show full effect"
-    //     },
-    //     default: "snippet",
-    //     category: "combat"
-    // });
+    game.settings.register("ptu", "levelUpScreen", {
+        name: "Show Level-Up Window",
+        hint: "Allow the level-up window to appear whenever an actor levels up.",
+        scope: "world",
+        config: true,
+        type: Boolean,
+        default: true,
+        category: "general"
+    })
 
     game.settings.register("ptu", "defaultPokemonImageDirectory", {
         name: "Default Pokemon Image Directory",
@@ -304,7 +312,28 @@ export function LoadSystemSettings() {
         scope: "world",
         config: false,
         type: String,
-        default: ""
+        default: "",
+        onChange: debouncedReload
+    });
+    game.settings.register("ptu", "customSpeciesData", {
+        name: "Custom Species Data",
+        scope: "world",
+        config: false,
+        type: Object,
+        default: {
+            data: [], 
+            flags: {
+                init: false,
+                migrated: false
+            }
+        }
+    });
+    game.settings.register("ptu", "customSpeciesBackup", {
+        name: "Custom Species data backup",
+        scope: "world",
+        config: false,
+        type: Object,
+        default: []
     });
 
     game.settings.register("ptu", "dismissedVersion", {
@@ -323,6 +352,17 @@ export function LoadSystemSettings() {
         default: undefined
     })
 
+    game.settings.register("ptu", "typeEffectivenessCustomImageDirectory", {
+        name: "Custom Type Image Directory",
+        hint: "Directory from which Images for Custom Types are attempted to load. Looks for [CaseSensitiveTypeName]IC.webp.",
+        scope: "world",
+        config: true,
+        type: String,
+        default: "custom_types/",
+        filePicker: true,
+        category: "other"
+    })
+
     game.settings.register("ptu", "showDebugInfo", {
         name: "Show Debug Info",
         hint: "Only for debug purposes. Logs extra debug messages & shows hidden folders/items",
@@ -330,8 +370,8 @@ export function LoadSystemSettings() {
         config: true,
         type: Boolean,
         default: false,
-        onChange: (value) => CustomSpeciesFolder.updateFolderDisplay(value),
-        category: "other"
+        category: "other",
+        onChange: debouncedReload
     });
 
     game.settings.register("ptu", "enableMoveAnimations", {
@@ -372,7 +412,6 @@ export function LoadSystemSettings() {
         type: String,
         default: "pokemon_cries/",
         filePicker: true,
-        onChange: (value) => CustomSpeciesFolder.updateFolderDisplay(value),
         category: "other"
     });
 
@@ -394,7 +433,6 @@ export function LoadSystemSettings() {
         type: String,
         default: "pokemon_sounds/",
         filePicker: true,
-        onChange: (value) => CustomSpeciesFolder.updateFolderDisplay(value),
         category: "other"
     });
 
@@ -532,6 +570,25 @@ export function LoadSystemSettings() {
             default: true
         });
 
+        game.settings.register("ptu", "useEvolutionAnimation", {
+            name: "Use an animated evolution effect when a pokemon evolves.",
+            hint: "Disable this if you are having problems with the effects.",
+            scope: "world",
+            config: true,
+            type: Boolean,
+            category: "other",
+            default: true
+        })
+
+        game.settings.register("ptu", "usePokeballSoundsOnDragOut", {
+            name: "Enable Pokéball Sounds.",
+            hint: "Enable/Disable pokeball related sounds like when you send out a pokemon",
+            scope: "client",
+            config: true,
+            type: Boolean,
+            default: true
+        });
+
         //     game.settings.register("PTUMoveMaster", "useAlternateChatStyling", {
         //         name: "Player Setting: Styles the chat to have (what I think is) a more readable font, compact size, and low-contrast look.",
         //         hint: "Disable this if you are having compatibility issues with the chat pane styling, or if you just don't like it.",
@@ -626,14 +683,15 @@ export function LoadSystemSettings() {
         //     });
 
 
-        //     game.settings.register("PTUMoveMaster", "trackBrokenPokeballs", {
-        //         name: "GM Setting: Track Broken Pokeballs.",
-        //         hint: "The trainer edge 'Poke Ball Repair' allows for re-using balls that break upon failing to capture a Pokemon, so Move Master will automatically created a broken version of balls in the thrower's inventory when a Pokemon breaks free. If you have no use for tracking this, you can disable it here.",
-        //         scope: "world",
-        //         config: true,
-        //         type: Boolean,
-        //         default: true
-        //     });
+        game.settings.register("ptu", "trackBrokenPokeballs", {
+            name: "GM Setting: Track Broken Pokeballs.",
+            hint: "The trainer edge 'Poke Ball Repair' allows for re-using balls that break upon failing to capture a Pokemon, so Move Master will automatically created a broken version of balls in the thrower's inventory when a Pokemon breaks free. If you have no use for tracking this, you can disable it here.",
+            scope: "world",
+            config: true,
+            type: Boolean,
+            default: true,
+            category: "combat"
+        });
 
         game.settings.register("ptu", "customItemIconDirectory", {
             name: "Custom Item Icons Directory",
@@ -643,7 +701,6 @@ export function LoadSystemSettings() {
             type: String,
             default: "item_icons/",
             filePicker: true,
-            // onChange: (value) => CustomSpeciesFolder.updateFolderDisplay(value),
             category: "other"
         });
 
@@ -702,6 +759,68 @@ export function LoadSystemSettings() {
             default: false,
             category: "combat"
         });
+
+        game.settings.register("ptu", "autoTransform", {
+            name: "GM Setting: Automatically transform pokemon upon using the move 'Transform'.",
+            hint: "This will automatically change the actor's image, move set and capabilities to match the targets",
+            scope: "world",
+            config: true,
+            type: Boolean,
+            default: true,
+            category: "combat"
+        })
+
+        game.settings.register("ptu", "playtestStats", {
+            name: "Use playtest calculations for stats.",
+            hint: "This will use the playtest calculations for stats instead of the official ones. See: <a href='https://ptufvtt.com/en/Guides/Playtests/Stats-Rework'>https://ptufvtt.com/en/Guides/Playtests/Stats-Rework</a>",
+            scope: "world",
+            config: true,
+            type: Boolean,
+            default: false,
+            category: "playtest",
+            onChange: debouncedReload
+        })
+
+        game.settings.register("ptu", "playtestStatsFactor", {
+            name: "EV strength factor β.",
+            hint: "Base value is 0.5. The higher the number, the stronger Level-Up Points will affect stat totals. See: <a href='https://ptufvtt.com/en/Guides/Playtests/Stats-Rework'>https://ptufvtt.com/en/Guides/Playtests/Stats-Rework</a>",
+            scope: "world",
+            config: true,
+            type: Number,
+            default: 0.5,
+            range: {
+                min: 0.1,
+                max: 1.0,
+                step: 0.05
+            },
+            category: "playtest",
+            onChange: debouncedReload
+        })
+
+        game.settings.register("ptu", "playtestStatsSigma", {
+            name: "Balance strength factor σ.",
+            hint: "Base value is 3.5. Changes the minimum value of σ. See: <a href='https://ptufvtt.com/en/Guides/Playtests/Stats-Rework'>https://ptufvtt.com/en/Guides/Playtests/Stats-Rework</a>",
+            scope: "world",
+            config: true,
+            type: Number,
+            default: 3.5,
+            range: {
+                min: 1,
+                max: 5,
+                step: 0.5
+            },
+            category: "playtest",
+            onChange: debouncedReload
+        })
+
+        game.settings.register("ptu", "showMovementIcons", {
+            name: "Show Movement Icons",
+            hint: "Show movement icons above controlled tokens.",
+            scope: "client",
+            config: true,
+            type: Boolean,
+            default: true
+        })
     }
 }
 
@@ -713,3 +832,4 @@ export function SetAccessabilityFont(enabled) {
     }
 }
 
+const debouncedReload = foundry.utils.debounce(() => window.location.reload(), 100);

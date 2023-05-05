@@ -16,30 +16,60 @@ export default class ItemsComponent extends Component {
      */
     async render() {
         if (!this.state.actor) return;
-
-        const items = this.state.actor.itemTypes.item;
-        const dividerIcon = "<img class='divider-image' src='systems/ptu/images/icons/DividerIcon_Items.png' style='border:none; width:200px;'>"
+        let dividerIcon = "";
         let output = "";
-        if (items.length > 0) {
-            output += dividerIcon
+        if (this.state.actor.type == 'character') {
+            const items = this.state.actor.itemTypes.item;
+            dividerIcon = "<img class='divider-image' src='systems/ptu/images/icons/DividerIcon_Items.png' style='border:none; width:200px;'>"
 
-            for (const item of items.sort(this._sort)) {
-                output += await renderTemplate("/systems/ptu/module/sidebar/components/items-component.hbs", {
-                    name: item.data.name,
-                    img: item.data.img,
-                    id: item.id,
-                    color: 'gray',
-                    amount: item.data.data.quantity,
-                    effect: item.data.data.effect,
-                    owner: this.state.actor.id
-                });
+
+            if (items.length > 0) {
+                output += dividerIcon
+
+                for (const item of items.sort(this._sort)) {
+                    output += await renderTemplate("/systems/ptu/module/sidebar/components/items-component.hbs", {
+                        name: item.name,
+                        img: item.img,
+                        id: item.id,
+                        color: 'gray',
+                        amount: item.system.quantity,
+                        effect: item.system.effect,
+                        owner: this.state.actor.id
+                    });
+                }
             }
+        } else if (this.state.actor.type == 'pokemon') {
+            dividerIcon = "<img class='divider-image' src='systems/ptu/images/icons/DividerIcon_HeldItem.png' style='border:none; width:200px;'>"
+            const itemName = this.state.actor.system.heldItem;
+            if (itemName != "None")
+            {
+                let item = game.ptu.data.items.find(i => i.name.toLowerCase().includes(itemName.toLowerCase()));
+                if (item) {
+                    output += dividerIcon             
+                    output += await renderTemplate("/systems/ptu/module/sidebar/components/items-component.hbs", {
+                        name: item.name,
+                        img: item.img,
+                        id: item.id,
+                        color: 'gray',
+                        amount: 1,
+                        effect: item.system.effect,
+                        owner: this.state.actor.id
+                    });
+                }
+            }
+            
         }
         this.element.html(output);
 
         this.element.children(".item").on("click", function(event) {
             const {itemId, itemOwner} = event.currentTarget.dataset;
-            game.actors.get(itemOwner).items.get(itemId).sheet._toChat(); 
+
+            if(game.actors.get(itemOwner).type == 'character') {
+                game.actors.get(itemOwner).items.get(itemId).sheet._toChat(itemOwner);
+            } else if (game.actors.get(itemOwner).type == 'pokemon') {
+                game.ptu.data.items.find(i => i.id == itemId).sheet._toChat(itemOwner);
+            }
+ 
         });
 
         this.element.children(".divider-image").on("click", () => {
@@ -55,8 +85,8 @@ export default class ItemsComponent extends Component {
     }
 
     _sort(a, b) {
-        const an = Number(a.data.data.quantity);
-        const bn = Number(b.data.data.quantity);
+        const an = Number(a.system.quantity);
+        const bn = Number(b.system.quantity);
 
         if (an > bn) return -1;
         if (bn > an) return 1;

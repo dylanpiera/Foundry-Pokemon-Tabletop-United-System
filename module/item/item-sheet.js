@@ -1,17 +1,22 @@
 import { PrepareMoveData, warn, debug } from '../ptu.js';
 import { sendMoveMessage } from '../actor/pokemon-sheet-gen8.js'
+import { GetItemArt } from '../utils/item-piles-compatibility-handler.js';
 
 /**
  * Extend the basic ItemSheet with some very simple modifications
  * @extends {ItemSheet}
  */
+
+//Constants
+CONFIG.PTUItem = {Consumable: {NOT: 0, YES: 1, FOODBUFF: 2}}
+
 export class PTUItemSheet extends ItemSheet {
 	/** @override */
 	static get defaultOptions() {
 		return mergeObject(super.defaultOptions, {
 			classes: ['ptu', 'sheet', 'item'],
-			width: 790,
-			height: 193,
+			width: 750,
+			height: 550,
 			tabs: [
 				{
 					navSelector: '.sheet-tabs',
@@ -30,7 +35,7 @@ export class PTUItemSheet extends ItemSheet {
 
 		// Alternatively, you could use the following return statement to do a
 		// unique item sheet by type, like `weapon-sheet.html`.
-		return `${path}/item-${this.item.data.type}-sheet.html`;
+		return `${path}/item-${this.item.type}-sheet.hbs`;
 	}
 
 	/* -------------------------------------------- */
@@ -39,20 +44,25 @@ export class PTUItemSheet extends ItemSheet {
 	getData() {
 		const data = super.getData();
 
-		if(this.object.type === 'move' && this.object.isOwned)
-			data.data = PrepareMoveData(this.object.actor?.data?.data, data.data);
+		data.editLocked = data.editable == false ? true : this.object.getFlag('ptu', 'editLocked') ?? false;
+
+		if(this.object.img == "icons/svg/item-bag.svg" || this.object.img == "icons/svg/mystery-man.svg") {
+			if(this.object.type == "dexentry")
+				this.object.update({"img": `/systems/ptu/css/images/icons/dex_icon.png`});
+			else if(this.object.type == "pokeedge")
+				this.object.update({"img": `/systems/ptu/css/images/icons/poke_edge_icon.png`});
+			else if (this.object.type == "item")
+				GetItemArt(this.object.name).then((img) => {
+					if(img === "systems/ptu/images/item_icons/generic item.webp")
+						this.object.update({"img": `/systems/ptu/css/images/icons/item_icon.png`});
+					else
+						this.object.update({"img": img});
+				});
+			else
+				this.object.update({"img": `/systems/ptu/css/images/icons/${this.object.type.toLowerCase()}_icon.png`});
+		}
+
 		return data;
-	}
-
-	/* -------------------------------------------- */
-
-	/** @override */
-	setPosition(options = {}) {
-		const position = super.setPosition(options);
-		const sheetBody = this.element.find('.sheet-body');
-		const bodyHeight = position.height - 192;
-		sheetBody.css('height', bodyHeight);
-		return position;
 	}
 
 	/* -------------------------------------------- */
@@ -68,6 +78,10 @@ export class PTUItemSheet extends ItemSheet {
 		html.find('.rollable').click(this._onRoll.bind(this));
 
 		html.find('.to-chat').click(this._toChat.bind(this));
+
+		html.find('.lock-img').on("click", event => {
+			this.object.setFlag('ptu', 'editLocked', !this.object.getFlag('ptu', 'editLocked'));
+		});
 	}
 
 	/** @override */
@@ -81,7 +95,54 @@ export class PTUItemSheet extends ItemSheet {
 			onclick: () => this._toChat()
 		});
 
+		buttons.unshift({
+			label: "Automations",
+			class: "open-automation",
+			icon: "fas fa-edit",
+			onclick: () => this._loadAutomationSheet()
+		});
+
 		if(this.object.type == "move") return buttons;
+		if(this.object.type == "dexentry") {
+			buttons.unshift({
+				label: "Pokedex",
+				class: "open-dex",
+				icon: "fas fa-tablet-alt",
+				onclick: () => {
+					const permSetting = game.settings.get("ptu", "dex-permission");
+					const mon = this.object.data?.data?.id ?? this.object.name;
+
+					// No checks needed; just show full dex.
+					if (game.user.isGM) {
+						return game.ptu.utils.dex.render(mon, "full");
+					}
+				
+					switch (permSetting) {
+						case 1: { // Pokedex Disabled
+							return ui.notifications.info("DM has turned off the Pokedex.");
+						}
+						case 2:
+						case 3: { //pokemon description only
+							return game.ptu.utils.dex.render(mon);
+						}
+						case 4: { // Only owned mons
+							if (!game.user.character) return ui.notifications.warn("Please make sure you have a trainer as your Selected Player Character");
+				
+							return game.ptu.utils.dex.render(mon, 
+								game.user.character.itemTypes.dexentry.some(entry => entry.system.owned && entry.system.name === game.ptu.utils.species.get(mon)?.id?.toLowerCase())
+								? "full" : "desc");
+						}
+						case 5: { // GM Prompt
+							return ui.notifications.warn("The GM prompt feature has yet to be implemented. Please ask your DM to change to a different Dex Permission Setting");
+						}
+						case 6: { // Always Full Details
+							return game.ptu.utils.dex.render(mon, "full");
+						}
+					}
+				}
+			});	
+			return buttons;
+		}
 
 		buttons.unshift({
 			label: "Effects",
@@ -112,27 +173,35 @@ export class PTUItemSheet extends ItemSheet {
 		return effect.sheet.render(true);
 	}
 
+	async _loadAutomationSheet() {
+		return new game.ptu.config.Ui.AutomationForm.documentClass(this.object).render(true);
+	}
+
 	/**
 	 * Handle To Chat call.
 	 * @private
 	 */
-	_toChat() {
-		switch(this.object.data.type) {
+	_toChat(ownerId, foodBuff = false) {
+		switch(this.object.type) {
 			case "move":
 				return sendMoveMessage({
 					speaker: ChatMessage.getSpeaker({
 						actor: this.actor
 					}),
 					name: this.object.name,
-					move: this.object.data.data,
-					templateType: 'details'
+					move: this.object.system,
+					templateType: 'details',
+					owner: ownerId
 				});
 			default: 
 				return sendItemMessage({
 					speaker: ChatMessage.getSpeaker({
 						actor: this.actor
 					}),
-					item: this.object
+					item: this.object,
+					owner: ownerId,
+					foodBuff: foodBuff,
+					target: game.canvas.tokens.get(game.user.targets.ids[0])?.actor?.uuid
 				});
 		}
 	}
@@ -149,7 +218,7 @@ export class PTUItemSheet extends ItemSheet {
 		const dataset = element.dataset;
 
 		if (dataset.roll || dataset.type == 'Status') {
-			let roll = new Roll('1d20+' + dataset.ac, this.actor.data.data);
+			let roll = new Roll('1d20+' + dataset.ac, this.actor.system);
 			let label = dataset.label ? `To-Hit for move: ${dataset.label} ` : '';
 			roll.evaluate({async: false}).toMessage({
 				speaker: ChatMessage.getSpeaker({ actor: this.actor }),
@@ -194,6 +263,7 @@ export class PTUItemSheet extends ItemSheet {
 export async function sendItemMessage(messageData = {}) {
 	messageData = mergeObject({
 		user: game.user.id,
+		target: game.user.targets.ids[0]
 	}, messageData);
 
 	if(!messageData.item) {
@@ -219,3 +289,94 @@ Hooks.on("ptu.SendItemToChat", function(messageData) {
 	debug(messageData);
 	return true;
 })
+
+
+// Using Consumable Items
+Hooks.on("renderChatMessage", (message, html, data) => {
+    setTimeout(() => {
+        $(html).find(".reduce-item-count").on("click", (event) => useItem(event));
+    }, 500);
+});
+
+// trading in food buff Items
+Hooks.on("renderChatMessage", (message, html, data) => {
+    setTimeout(() => {
+        $(html).find(".use-food-buff").on("click", (event) => consumeBuff(event));
+    }, 500);
+});
+
+export async function consumeBuff(event){
+	//prevent the default action of the button
+	event.preventDefault();
+
+	// Get the item ID and name from the button element's data-item-id and data-item-name attributes
+	const {itemId, itemName, itemParentid} = event.currentTarget.dataset
+
+	//disable the button
+	event.currentTarget.disabled = true;
+
+	//find the actor with id parentId
+	const actor = game.actors.get(itemParentid);
+
+	const buffArray = actor.system.foodBuff.split(", ");
+
+	// Filter buff out of Array
+	const newBuffArray = buffArray.filter(b => b.trim().toLowerCase() != itemName.trim().toLowerCase())
+
+	// Join the Array back to a string
+	const newBuffString = newBuffArray .join(", ");
+
+	//remove the foodbuff from the actor
+	await actor.update({"data.foodBuff": newBuffString});
+
+	//alert the user that the food buff has been consumed
+	ui.notifications.info(`Food buff ${itemName} has been consumed by ${actor.name}!`);
+}
+export async function useItem(event){
+    //prevent the default action of the button
+    event.preventDefault();
+
+    // Get the item ID and name from the button element's data-item-id and data-item-name attributes
+    const {itemId, itemName, itemParentid, targetUuid} = event.currentTarget.dataset
+
+	//find the targeted actor
+	const targetedActor = targetUuid == undefined ? "" : await fromUuid(targetUuid);
+    
+    //disable the button
+    event.currentTarget.disabled = true;
+
+    //find the actor with id parentId
+    const actor = game.actors.get(itemParentid);
+    // if the user of the item is of type pokemon
+    if (actor.type == "pokemon"){
+
+        console.log(`Consuming item with ID ${itemId} and name ${itemName}`);
+        //change the held item to none
+        await actor.update({"data.heldItem": "None"});        
+    }
+    if (actor.type == "character"){
+        if(actor.items.get(itemId).system.quantity < 1){
+            ui.notifications.error("You don't have any of this item left.");
+            return;
+        }
+        console.log(`Consuming item with ID ${itemId} and name ${itemName}`);
+        //reduce the number of this item that the character has by 1
+        const item = actor.items.get(itemId);
+        await item.update({"system.quantity": Number(duplicate(item.system.quantity)) - 1});
+    }
+
+	// if the item is a food buff
+	if (game.ptu.data.items.find(i => i.name.toLowerCase().includes(itemName.toLowerCase())).system.consumable == CONFIG.PTUItem.Consumable.FOODBUFF){
+		//if there is a target actor add the food buff to the target actor, else add foodbuff to the user
+		
+		const effectedActor = targetedActor ? targetedActor : actor;
+		//if the target actor already has a food buff, add the new food buff to the list
+		const buffArray = effectedActor.system.foodBuff.split(", ").filter(b => b.trim().length > 0);
+		buffArray.push(itemName);
+		const newBuffString = buffArray.join(', ');
+		await effectedActor.update({"data.foodBuff": newBuffString});
+
+		//alert the user that the item has been consumed
+		ui.notifications.info(`${itemName} has been consumed by ${effectedActor.name}`);
+	}
+}

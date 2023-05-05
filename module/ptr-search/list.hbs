@@ -1,0 +1,16 @@
+<div id="searchresults">
+    <h3>{{total}} results</h3>
+    <div class="searchresults">
+        {{#each items}}
+        <div class="result">
+            <div class="title">
+                {{#if this.ptuNumber}}
+                <a class="result-item" data-compendium="{{this.compendium}}" data-id="{{this.ptuNumber}}">{{capitalize this._id}}</a>
+                {{else}}
+                <a class="result-item" data-compendium="{{this.compendium}}" data-name="{{this.name}}">{{capitalize this.name}}</a>
+                {{/if}}
+            </div>
+        </div>
+        {{/each}}
+    </div>
+</div>

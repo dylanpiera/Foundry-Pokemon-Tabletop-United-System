@@ -16,9 +16,9 @@ export class PTUCombatOverrides extends Combat {
     return result;
   }
 
-  async nextTurn() {
-    if(!game.ptu.api._isMainGM()) {
-      return await game.ptu.api.nextTurn(this.id);
+  async nextTurn(next) {
+    if(!game.ptu.utils.api.gm._isMainGM()) {
+      return await game.ptu.utils.api.gm.nextTurn(this.id);
     }
 
     let turn = this.turn ?? -1;
@@ -26,18 +26,19 @@ export class PTUCombatOverrides extends Combat {
     let round = this.round;
 
     // Determine the next turn number
-    let next = null;
-    for (let [i, t] of this.turns.entries()) {
-      if (t.getFlag("ptu", "last_turn_acted") >= round && t.getFlag("ptu", "has_acted")) continue;
-      if (t.isDefeated) continue;
-      if (i == turn) continue;
-      if (t.getFlag("ptu", "has_acted")) continue;
-      next = i;
-      break;
+    if(next === undefined || next === null || next < 0) {
+      for (let [i, t] of this.turns.entries()) {
+        if (t.getFlag("ptu", "last_turn_acted") >= round && t.getFlag("ptu", "has_acted")) continue;
+        if (t.isDefeated) continue;
+        if (i == turn) continue;
+        if (t.getFlag("ptu", "has_acted")) continue;
+        next = i;
+        break;
+      }
     }
 
     // Maybe advance to the next round
-    if (this.round === 0 || next === null || next >= this.turns.length) {
+    if (this.round === 0 || next === undefined || next === null || next >= this.turns.length) {
       return this.nextRound();
     }
 
@@ -50,9 +51,11 @@ export class PTUCombatOverrides extends Combat {
         combatants: [
           {
             _id: this.turns[this.turn].id,
-            "flags.ptu": {
-              last_turn_acted: this.round,
-              has_acted: true,
+            flags: {
+              ptu: {
+                last_turn_acted: this.round,
+                has_acted: true,
+              }
             },
           },
         ],
@@ -63,7 +66,7 @@ export class PTUCombatOverrides extends Combat {
 
   /** @override */
   async nextRound() {
-    let turn = this.data.turn === null ? null : 0; // Preserve the fact that it's no-one's turn currently.
+    let turn = this.turn === null ? null : 0; // Preserve the fact that it's no-one's turn currently.
     if ( this.settings.skipDefeated && (turn !== null) ) {
       turn = this.turns.findIndex(t => !t.isDefeated);
       if (turn === -1) {
@@ -71,13 +74,17 @@ export class PTUCombatOverrides extends Combat {
         turn = 0;
       }
     }
-    let advanceTime = Math.max(this.turns.length - (this.data.turn || 0), 0) * CONFIG.time.turnTime;
+    let advanceTime = Math.max(this.turns.length - (this.turn || 0), 0) * CONFIG.time.turnTime;
     advanceTime += CONFIG.time.roundTime;
 
     const combattantData = this.turns.map((c) => {
       return {
         _id: c.id,
-        "flags.ptu.has_acted": false,
+        flags: {
+          ptu: {
+            has_acted: false
+          }
+        }
       };
     });
     return this.update({round: this.round + 1, turn, combatants: combattantData}, {advanceTime});
@@ -87,7 +94,7 @@ export class PTUCombatOverrides extends Combat {
     for (const d of documents) {
       const c = this.combatants.get(d?.id);
 
-      if (c.actor.data.data.boss?.is) this._handleBoss(c.actor, c);
+      if (c.actor.system.boss?.is) this._handleBoss(c.actor, c);
     }
 
     super._onUpdateEmbeddedDocuments(
@@ -100,8 +107,8 @@ export class PTUCombatOverrides extends Combat {
   }
 
   _handleBoss(actor, combatant) {
-    if (!game.ptu.api._isMainGM()) return;
-    const turns = actor.data.data.boss.turns;
+    if (!game.ptu.utils.api.gm._isMainGM()) return;
+    const turns = actor.system.boss.turns;
     const combatants = this.turns.filter((c) => c.actor.id == actor.id);
 
     if (combatants.length < turns) {
@@ -114,12 +121,12 @@ export class PTUCombatOverrides extends Combat {
             : combatant.initiative + -5 * (Math.ceil(init / 5) - 1);
 
         newCombatants.push({
-          actorId: combatant.data.actorId,
-          defeated: combatant.data.defeated,
-          hidden: combatant.data.hidden,
+          actorId: combatant.actorId,
+          defeated: combatant.defeated,
+          hidden: combatant.hidden,
           initiative: actualInit,
-          sceneId: combatant.data.sceneId,
-          tokenId: combatant.data.tokenId,
+          sceneId: combatant.sceneId,
+          tokenId: combatant.tokenId,
         });
       }
       return this.setFlag("ptu", "mainBossCombatant", {
@@ -182,15 +189,15 @@ export class PTUCombatOverrides extends Combat {
       }
       const turns = [].concat(playerTurns.sort(this._sortLeaguePlayerCombatants), pokemonTurns.sort(this._sortCombatants));
       //const turns = this.combatants.contents.sort(this._sortCombatants);
-      if ( this.turn !== null) this.data.turn = Math.clamped(this.data.turn, 0, turns.length-1);
+      if ( this.turn !== null) this.turn = Math.clamped(this.turn, 0, turns.length-1);
 
             // Update state tracking
-      let c = turns[this.data.turn];
+      let c = turns[this.turn];
       this.current = {
-        round: this.data.round,
-        turn: this.data.turn,
+        round: this.round,
+        turn: this.turn,
         combatantId: c ? c.id : null,
-        tokenId: c ? c.data.tokenId : null
+        tokenId: c ? c.tokenId : null
       };
       return this.turns = turns;
 
@@ -199,15 +206,15 @@ export class PTUCombatOverrides extends Combat {
     else {
       // Determine the turn order and the current turn
       const turns = this.combatants.contents.sort(this._sortCombatants);
-      if ( this.turn !== null) this.data.turn = Math.clamped(this.data.turn, 0, turns.length-1);
+      if ( this.turn !== null) this.turn = Math.clamped(this.turn, 0, turns.length-1);
 
             // Update state tracking
-      let c = turns[this.data.turn];
+      let c = turns[this.turn];
       this.current = {
-        round: this.data.round,
-        turn: this.data.turn,
+        round: this.round,
+        turn: this.turn,
         combatantId: c ? c.id : null,
-        tokenId: c ? c.data.tokenId : null
+        tokenId: c ? c.tokenId : null
       };
       return this.turns = turns;
      }
@@ -256,5 +263,58 @@ export class PTUCombatTrackerOverrides extends CombatTracker {
       .find(".combatant-control[data-control='toggleActed']")
       .click(this._toggleTurnStatus.bind(this));
     html.find(".toggleTurnStatus").click(this._toggleTurnStatus.bind(this));
+  }
+
+  /**
+   * Get the Combatant entry context options
+   * @returns {object[]}   The Combatant entry context options
+   * @private
+   */
+   _getEntryContextOptions() {
+    return [
+      {
+        name: "Skip to Combatant",
+        icon: '<i class="fas fa-edit"></i>',
+        callback: (li) => {
+          console.log(this);
+          const combatant = this.viewed.combatants.get(li.data("combatant-id"))
+          const index = combatant.combat.turns.findIndex(t => t.id === combatant.id);
+          combatant.combat.nextTurn(index);
+        }
+      },
+      {
+        name: "COMBAT.CombatantUpdate",
+        icon: '<i class="fas fa-edit"></i>',
+        callback: this._onConfigureCombatant.bind(this)
+      },
+      {
+        name: "COMBAT.CombatantClear",
+        icon: '<i class="fas fa-undo"></i>',
+        condition: li => {
+          const combatant = this.viewed.combatants.get(li.data("combatant-id"));
+          return Number.isNumeric(combatant?.initiative);
+        },
+        callback: li => {
+          const combatant = this.viewed.combatants.get(li.data("combatant-id"));
+          if ( combatant ) return combatant.update({initiative: null});
+        }
+      },
+      {
+        name: "COMBAT.CombatantReroll",
+        icon: '<i class="fas fa-dice-d20"></i>',
+        callback: li => {
+          const combatant = this.viewed.combatants.get(li.data("combatant-id"));
+          if ( combatant ) return this.viewed.rollInitiative([combatant.id]);
+        }
+      },
+      {
+        name: "COMBAT.CombatantRemove",
+        icon: '<i class="fas fa-trash"></i>',
+        callback: li => {
+          const combatant = this.viewed.combatants.get(li.data("combatant-id"));
+          if ( combatant ) return combatant.delete();
+        }
+      }
+    ];
   }
 }

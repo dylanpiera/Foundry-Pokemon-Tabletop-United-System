@@ -29,7 +29,7 @@ import { debug } from "../ptu.js";
      * @private
      */
     async _addEffectChange() {
-      const idx = this.document.data.changes.length;
+      const idx = this.document.changes.length;
       await this.submit({preventClose: true, updateData: {
         [`changes.${idx}`]: {key: "", mode: CONST.ACTIVE_EFFECT_MODES.ADD, value: "0", priority: 20}
       }});
@@ -45,9 +45,8 @@ import { debug } from "../ptu.js";
           c.value = c.value.replace("[", "").replace("]", "").split(",")
         }
       }
-      debug(this.object)
-      if(this.object.data.flags?.ptu?.itemEffect) {
-        const obj = mergeObject(duplicate(this.object.data), formData);
+      if(this.object.flags?.ptu?.itemEffect) {
+        const obj = mergeObject(duplicate(this.object), formData);
         return this.object.parent.update({effects: [obj]})
       }
       return this.object.update(formData);

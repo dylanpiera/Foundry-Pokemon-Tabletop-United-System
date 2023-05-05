@@ -276,13 +276,13 @@ let pokeballPolymorphFunc = async function (pokeball_image_path, target_token) {
     // this is the reason why we use an async function (we cant use await in a non-async function)
     // avoid awaiting in a forEach loop, use "for" or "for/of" loop.
     // await target_token.TMFXaddUpdateFilters(polymorph_params);
-    await game.ptu.api.addTokenMagicFilters(target_token, game.canvas.scene, polymorph_params);
+    await game.ptu.utils.api.gm.addTokenMagicFilters(target_token, game.canvas.scene, polymorph_params);
 };
 
 
 export async function ThrowPokeball(thrower, target, pokeball) {
     if (!target) {
-        console.log("No target to throw pokeball at.");
+        ui.notifications.error ("No target to throw pokeball at.");
         return false;
     }
     if (!thrower) return;
@@ -293,15 +293,46 @@ export async function ThrowPokeball(thrower, target, pokeball) {
     if (!targetToken) return;
     if(targetToken.actor.type != "pokemon") return;
 
+    if(pokeball.system.quantity < 1){
+        ui.notifications.error("You don't have any of those left!");
+        return;
+    }
+
+    const enable_pokeball_sounds = game.settings.get("ptu", "usePokeballSoundsOnDragOut");
+
+    
+    //reduce the number of balls that the character has by 1
+    ui.notifications.info("Removed 1 quantity from Pokeball in inventory.")
+    pokeball.update({"system.quantity": Number(duplicate(pokeball.system.quantity)) - 1});
 
     const POKEBALL_IMAGE_PATH = pokeball?.img ?? "systems/ptu/images/item_icons/basic ball.webp";
 
-    const accuracyBonus = thrower?.data?.data?.modifiers?.acBonus?.total ?? 0; // TODO: Get actual value, factor in edges/features that effect this, etc.
-    const BASE_POKEBALL_AC = -6;
+    let accuracyBonus = thrower?.data?.data?.modifiers?.acBonus?.total ?? 0;
+    // The only thing I know of that gives a bonus would be Tools of the Trade, +2AC
+
+    function probablyHasToolsOfTheTrade(actor){
+        // So, TotT (Tools of the Trade) is not a Feature. We do not know how people track it explicitly. So, there are two things to look for
+        // If a Feature includes the string Tools of the Trade in the Title, we guess the Trainer has it
+        // Same for a Feature Description, EXCEPT we must exclude the occurence from the default Description that lists all Capture Techniques.
+        // Otherwise, the default Capture Specialist would trigger it very time.
+        const snippetThatListsAllCaptureTechniques = "Capture Techniques: Capture Skills, Curve Ball, Devitalizing Throw, Fast Pitch, Snare, Tools of the Trade, Catch Combo, False Strike, Relentless Pursuit";
+        if (! actor.feats) return false;
+        for (let feature of actor.feats){
+            if (feature.name.toLowerCase().includes("tools of the trade")) return true;
+            let description = feature.data.effect;
+            if (description.includes(snippetThatListsAllCaptureTechniques)) description = description.replaceAll(snippetThatListsAllCaptureTechniques, "kek");
+            if (description.toLowerCase().includes("tools of the trade")) return true;
+        }
+        return false;
+    }
+
+    if (probablyHasToolsOfTheTrade(thrower)) accuracyBonus += 2;
+
+    const BASE_POKEBALL_AC = 6;
     const targetEvasion = target?.data?.data?.evasion?.speed ?? 0;
 
-    const roll = new Roll("1d20+@accuracyBonus-@acCheck", {
-        accuracyBonus,
+    const roll = new Roll("1d20 + @accuracyBonus - @acCheck", {
+        accuracyBonus: accuracyBonus,
         acCheck: BASE_POKEBALL_AC
     });
 
@@ -321,7 +352,8 @@ export async function ThrowPokeball(thrower, target, pokeball) {
             .play();
     }
 
-    AudioHelper.play({ src: pokeball_sound_paths[hitType], volume: 0.8, autoplay: true, loop: false }, true);
+    if(enable_pokeball_sounds)
+        AudioHelper.play({ src: pokeball_sound_paths[hitType], volume: 0.8, autoplay: true, loop: false }, true);
 
     await timeout(1000);
     await roll.toMessage({ flavor: `Pokeball throw vs ${target.name}'s ${targetEvasion} Speed Evasion:`, sound: null });
@@ -343,7 +375,7 @@ export async function ThrowPokeball(thrower, target, pokeball) {
             await PlayPokeballWiggleFX(targetToken);
             await timeout(10000); // Wiggle sound last for approx 7 seconds
             // await target.TMFXdeleteFilters("pokeballWiggle");
-            await game.ptu.api.removeTokenMagicFilters(target, game.canvas.scene.id, "pokeballWiggle");
+            await game.ptu.utils.api.gm.removeTokenMagicFilters(target, game.canvas.scene.id, "pokeballWiggle");
 
             await PlayPokeballCatchOrEscapeFX(isCaptured, targetToken);
         }
@@ -353,26 +385,47 @@ export async function ThrowPokeball(thrower, target, pokeball) {
 
         if (isCaptured == true) // Captured!
         {
-            await AudioHelper.play({ src: pokeball_sound_paths["capture_success"], volume: 0.8, autoplay: true, loop: false }, true);
+            if(enable_pokeball_sounds) await AudioHelper.play({ src: pokeball_sound_paths["capture_success"], volume: 0.8, autoplay: true, loop: false }, true);
     
             await timeout(1000);
-            await AudioHelper.play({ src: pokeball_sound_paths["capture_jingle"], volume: 0.7, autoplay: true, loop: false }, true);
+            if(enable_pokeball_sounds) await AudioHelper.play({ src: pokeball_sound_paths["capture_jingle"], volume: 0.7, autoplay: true, loop: false }, true);
 
-            await applyCapture(thrower, target.actor, pokeball, game.ptu.GetSpeciesData(target.actor.data.data.species)); 
+            await applyCapture(thrower, target.actor, pokeball, game.ptu.utils.species.get(target.actor.system.species)); 
         }
         else // Escaped!
         {
-            await AudioHelper.play({ src: pokeball_sound_paths["release"], volume: 0.7, autoplay: true, loop: false }, true);
+            if(enable_pokeball_sounds)
+                await AudioHelper.play({ src: pokeball_sound_paths["release"], volume: 0.7, autoplay: true, loop: false }, true);
             if ((game.modules.get("tokenmagic")?.active) && (game.settings.get("ptu", "enableMoveAnimations") == true))
             {
-                await game.ptu.api.addTokenMagicFilters(target, game.canvas.scene.id, pokeball_capture_TMFX_params);
+                await game.ptu.utils.api.gm.addTokenMagicFilters(target, game.canvas.scene.id, pokeball_capture_TMFX_params);
                 
                 await timeout(100);
                 await pokeballPolymorphFunc(POKEBALL_IMAGE_PATH, target);
                 
                 await timeout(1000);
                 // await target.TMFXdeleteFilters("pokeball_transform");
-                await game.ptu.api.removeTokenMagicFilters(target, game.canvas.scene.id, "pokeball_transform");
+                await game.ptu.utils.api.gm.removeTokenMagicFilters(target, game.canvas.scene.id, "pokeball_transform");
+            }
+
+            if (game.settings.get("ptu", "trackBrokenPokeballs"))
+            {
+                //check if thrower already has a broken ball of that type
+                const brokenBall = thrower.items.find(i => i.name == "Broken " + pokeball.name);
+
+                if (brokenBall) //if they do, increment the quantity
+                    await brokenBall.update({"system.quantity": duplicate(brokenBall.system.quantity)+1})
+                else //if they don't, create a new item
+                {
+                    await thrower.createEmbeddedDocuments('Item',[{
+                        name: `Broken ${pokeball.name}`,
+                        type: "item",
+                        system: {
+                            quantity: 1
+                        },
+                        img: pokeball.img
+                    }])
+                }
             }
         }
 
@@ -412,6 +465,7 @@ export async function PlayReleaseOwnedPokemonAnimation(token) {
 
     let display_token_nature = game.settings.get("ptu", "alwaysDisplayTokenNature");
     let enable_pokeball_animation = game.settings.get("ptu", "usePokeballAnimationOnDragOut");
+    let enable_pokeball_sounds = game.settings.get("ptu", "usePokeballSoundsOnDragOut");
     let always_display_token_name = game.settings.get("ptu", "alwaysDisplayTokenNames");
     let always_display_token_health = game.settings.get("ptu", "alwaysDisplayTokenHealth");
 
@@ -428,20 +482,20 @@ export async function PlayReleaseOwnedPokemonAnimation(token) {
         }
 
         let current_token_species = actor.name;
-        if(actor.data.data.species)
+        if(actor.system.species)
         {
-            current_token_species = capitalizeFirstLetter((actor.data.data.species).toLowerCase());
+            current_token_species = capitalizeFirstLetter((actor.system.species).toLowerCase());
         }
         
         let current_token_nature = "";
-        if(actor.data.data.nature && display_token_nature)
+        if(actor.system.nature && display_token_nature)
         {
-            current_token_nature = capitalizeFirstLetter((actor.data.data.nature.value).toLowerCase())+" ";
+            current_token_nature = capitalizeFirstLetter((actor.system.nature.value).toLowerCase())+" ";
         }
 
-        if(actor.data.type == "pokemon" && (actor.data.data.owner != "0" && actor.data.data.owner != "")) // Owned Pokemon
+        if(actor.data.type == "pokemon" && (actor.system.owner != "0" && actor.system.owner != "")) // Owned Pokemon
         {
-            let trainer_actor = game.actors.get(actor.data.data.owner);
+            let trainer_actor = game.actors.get(actor.system.owner);
             let trainer_tokens = trainer_actor.getActiveTokens();
             let actor_token = trainer_tokens[0]; // The throwing trainer
             
@@ -451,7 +505,8 @@ export async function PlayReleaseOwnedPokemonAnimation(token) {
                 await game.ptu.api.tokensUpdate(target_token, {alpha: 0})
             }
 
-            await AudioHelper.play({src: pokeball_sound_paths["miss"], volume: 0.5, autoplay: true, loop: false}, true);
+            if(enable_pokeball_sounds)
+                await AudioHelper.play({src: pokeball_sound_paths["miss"], volume: 0.5, autoplay: true, loop: false}, true);
 
             let targetImagePath = item_icon_path+pokeball+".webp";
 
@@ -472,19 +527,24 @@ export async function PlayReleaseOwnedPokemonAnimation(token) {
                 }
 
                 await timeout(500);
-                await AudioHelper.play({src: pokeball_sound_paths["release"], volume: 0.5, autoplay: true, loop: false}, true); 
+                if(enable_pokeball_sounds)
+                    await AudioHelper.play({src: pokeball_sound_paths["release"], volume: 0.5, autoplay: true, loop: false}, true); 
 
                 await timeout(500);
                 // await target_token.TMFXaddUpdateFilters(pokeballShoop_params); 
-                await game.ptu.api.addTokenMagicFilters(target_token, game.canvas.scene, pokeballShoop_params);
+                await game.ptu.utils.api.gm.addTokenMagicFilters(target_token, game.canvas.scene, pokeballShoop_params);
                 // await target_token.document.update({ "alpha": (1) });
-                await game.ptu.api.tokensUpdate(target_token, {alpha: 1})
+                await game.ptu.api.updateToken(target_token, {alpha: 1})
             }
 
             await timeout(2000);
-            await game.ptu.PlayPokemonCry(actor.data.data.species);
+            await game.ptu.utils.species.playCry(actor.system.species);
+            await target_token.document.update({ "alpha": (1) });
 
-            if(always_display_token_name)
+
+            // alexander-r-block: Commenting out this block of code because the always_display_token_* properties are for wild pokemon.
+            //                    This also adds random bars to owned pokemon when using BarBrawl.
+            /* if(always_display_token_name)
             {
                 if(always_display_token_health == true)
                 {
@@ -514,12 +574,12 @@ export async function PlayReleaseOwnedPokemonAnimation(token) {
             else
             {
                 await target_token.document.update({ "alpha": (1) });
-            }
+            }*/
 
         }
         else if (actor.data.type == "pokemon") // Wild Pokemon - no pokeball release effect.
         {
-            await game.ptu.PlayPokemonCry(actor.data.data.species);
+            await game.ptu.utils.species.playCry(actor.system.species);
 
             if(always_display_token_name)
             {
@@ -561,10 +621,11 @@ export async function PlayReleaseOwnedPokemonAnimation(token) {
 
 export async function PlayPokeballReturnAnimation(pokemon_token)
 {
+    let enable_pokeball_sounds = game.settings.get("ptu", "usePokeballSoundsOnDragOut");
     let pokemon_actor = await GetActorFromToken(pokemon_token);
     if(pokemon_actor?.type == "pokemon")
     {
-        let trainer_actor = game.actors.get(pokemon_token.actor.data.data.owner)
+        let trainer_actor = game.actors.get(pokemon_token.actor.system.owner)
         let trainer_tokens = await trainer_actor?.getActiveTokens();
         let on_field_trainer_token = trainer_tokens?.[0];
     
@@ -579,10 +640,11 @@ export async function PlayPokeballReturnAnimation(pokemon_token)
         }
     
         if ((game.modules.get("tokenmagic")?.active) && (game.settings.get("ptu", "enableMoveAnimations") == true)) {
-            await game.ptu.api.addTokenMagicFilters(pokemon_token.object, game.canvas.scene.id, pokeball_capture_TMFX_params);
+            await game.ptu.utils.api.gm.addTokenMagicFilters(pokemon_token.object, game.canvas.scene.id, pokeball_capture_TMFX_params);
         }
     
-        await AudioHelper.play({ src: pokeball_sound_paths["return"], volume: 0.7, autoplay: true, loop: false }, true);
+        if(enable_pokeball_sounds)
+            await AudioHelper.play({ src: pokeball_sound_paths["return"], volume: 0.7, autoplay: true, loop: false }, true);
     
         await timeout(2000);
         await pokemon_token.delete()
@@ -596,13 +658,14 @@ export async function PlayPokeballReturnAnimation(pokemon_token)
 
 export async function PlayPokeballShoopFX(target_token, pokeball_image_path, to_hit_roll, pokeball_item, throwing_actor, target_actor, isCaptured) 
 {
+    let enable_pokeball_sounds = game.settings.get("ptu", "usePokeballSoundsOnDragOut");
     if ((game.modules.get("tokenmagic")?.active) && (game.settings.get("ptu", "enableMoveAnimations") == true)) 
     {
-        await game.ptu.api.addTokenMagicFilters(target_token, game.canvas.scene.id, pokeball_capture_TMFX_params);
+        await game.ptu.utils.api.gm.addTokenMagicFilters(target_token, game.canvas.scene.id, pokeball_capture_TMFX_params);
         await pokeballPolymorphFunc(pokeball_image_path, target_token);
     }
-
-    await AudioHelper.play({ src: pokeball_sound_paths["capture_attempt"], volume: 0.8, autoplay: true, loop: false }, true);
+    if(enable_pokeball_sounds)
+        await AudioHelper.play({ src: pokeball_sound_paths["capture_attempt"], volume: 0.8, autoplay: true, loop: false }, true);
 }
 
 
@@ -650,11 +713,14 @@ export async function PlayPokeballCatchOrEscapeFX(isCaptured, targetToken)
 
 export async function PlayPokeballWiggleFX(target_token)
 {
-    await AudioHelper.play({ src: pokeball_sound_paths["wiggle"], volume: 0.8, autoplay: true, loop: false }, true);
+    const enable_pokeball_sounds = game.settings.get("ptu", "usePokeballSoundsOnDragOut");
+    
+    if(enable_pokeball_sounds)
+        await AudioHelper.play({ src: pokeball_sound_paths["wiggle"], volume: 0.8, autoplay: true, loop: false }, true);
 
     if ((game.modules.get("tokenmagic")?.active) && (game.settings.get("ptu", "enableMoveAnimations") == true))
     {
-        await game.ptu.api.addTokenMagicFilters(target_token, game.canvas.scene.id, pokeball_wiggle_TMFX_params);
+        await game.ptu.utils.api.gm.addTokenMagicFilters(target_token, game.canvas.scene.id, pokeball_wiggle_TMFX_params);
     }
     
     return true;

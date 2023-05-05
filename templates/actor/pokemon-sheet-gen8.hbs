@@ -41,8 +41,8 @@
                     <div class="row no-gutters header">
                       <div class="col-sm-2 pt-2 pb-2 key stat-header">{{localize "PTU.StatsLabel"}}</div>
                       <div class="col-sm-2 mt-2 mb-2">{{localize "PTU.StatsBase"}}</div>
-                      <div class="col-sm-2 mt-2 mb-2">{{localize "PTU.StatsMod"}}</div>
                       <div class="col-sm-2 mt-2 mb-2" style="font-size: 9px;">{{localize "PTU.StatsLevelup"}}</div>
+                      <div class="col-sm-2 mt-2 mb-2">{{localize "PTU.StatsMod"}}</div>
                       <div class="col-sm-2 mt-2 mb-2">{{localize "PTU.StatsStage"}}</div>
                       <div class="col-sm-2 mt-2 mb-2">{{localize "PTU.StatsTotal"}}</div>
                     </div>
@@ -54,17 +54,7 @@
                       <div class="stats {{key}} base col-sm-2">
                         <input type="text" name="data.stats.{{key}}.value" value="{{stat.value}}" data-dtype="Number"
                           disabled />
-                      </div>
-                      <div class="stats {{key}} mod col-sm-2">
-                        {{> "systems/ptu/templates/partials/mod-field.hbs"
-                        mod=stat.mod.mod
-                        path=(concat "data.stats." key ".mod.value")
-                        value=stat.mod.value
-                        total="ignored"
-                        dtype="Number"
-                        modOrigins=(getProperty ../origins (concat "data.stats." key ".mod.mod"))
-                        flipped=(gt 3 @index)}}
-                      </div>
+                      </div>                     
                       <div class="stats {{key}} levelUp col-sm-2">
                         {{> "systems/ptu/templates/partials/mod-field.hbs"
                         mod=""
@@ -72,7 +62,17 @@
                         value=stat.levelUp
                         dtype="Number"
                         total="ignored"
-                        modOrigins=(getProperty ../origins (concat "data.stats." key ".levelUp"))
+                        modOrigins=(getProperty ../origins (concat "system.stats." key ".levelUp"))
+                        flipped=(gt 3 @index)}}
+                      </div>
+                       <div class="stats {{key}} mod col-sm-2">
+                        {{> "systems/ptu/templates/partials/mod-field.hbs"
+                        mod=stat.mod.mod
+                        path=(concat "data.stats." key ".mod.value")
+                        value=stat.mod.value
+                        total="ignored"
+                        dtype="Number"
+                        modOrigins=(getProperty ../origins (concat "system.stats." key ".mod.mod"))
                         flipped=(gt 3 @index)}}
                       </div>
                       <div class="stats stage stage col-sm-2">
@@ -83,7 +83,7 @@
                         value=stat.stage.value
                         total="ignored"
                         dtype="Number"
-                        modOrigins=(getProperty ../origins (concat "data.stats." key ".stage.mod"))
+                        modOrigins=(getProperty ../origins (concat "system.stats." key ".stage.mod"))
                         flipped=(gt 3 @index)}}
                         {{/if}}
                       </div>
@@ -106,7 +106,7 @@
                         dtype="Number"
                         mod=""
                         total=data.levelUpPoints
-                        modOrigins=(getProperty origins "data.levelUpPoints")
+                        modOrigins=(getProperty origins "system.levelUpPoints")
                         disabled=true}}
                       </div>
                     </div>
@@ -141,8 +141,7 @@
                       <div class="options w-100 d-flex">
                         <label for="progressBar" class="hp"></label>
                         <div class="d-flex pt-1 pb-1" style="text-align: center;">
-                          <input class="ml-1 mr-1" type="text" name="data.health.value" value="{{data.health.value}}"
-                            data-dtype="Number" />
+                          <input class="ml-1 mr-1" type="text" name="data.health.value" value="{{data.health.value}}"/>
                           <span style="font-size: 20px;"> / </span>
                           <input class="ml-1" type="text" name="data.health.max" value="{{data.health.max}}"
                             data-dtype="Number" disabled />
@@ -151,11 +150,9 @@
                       <div class="options w-100 d-flex">
                         <div class="temp-hp"><label for="temp-hp">{{localize "PTU.HPTemp"}}</label></div>
                         <div class="d-flex pt-1 pb-1" style="text-align: center;">
-                          <input class="ml-1 mr-1" type="text" name="data.tempHp.value" value="{{data.tempHp.value}}"
-                            data-dtype="Number">
+                          <input class="ml-1 mr-1" type="text" name="data.tempHp.value" value="{{data.tempHp.value}}"/>
                           <span style="font-size: 20px;"> / </span>
-                          <input class="ml-1" type="text" name="data.tempHp.max" value="{{data.tempHp.max}}"
-                            data-dtype="Number">
+                          <input class="ml-1" type="text" name="data.tempHp.max" value="{{data.tempHp.max}}"/>
                         </div>
                       </div>
                       <div class="options w-100 pb-1 pt-1">
@@ -254,8 +251,7 @@
                       <div class="swsh-body">
                         <div class="options w-100 d-flex">
                           <div class="d-flex w-100 pt-1 pb-1" style="text-align: center;">
-                            <input class="ml-1 mr-1" type="text" name="data.level.exp" value="{{data.level.exp}}"
-                              data-dtype="Number" />
+                            <input class="ml-1 mr-1" type="text" name="data.level.exp" value="{{data.level.exp}}" />
                             <span style="font-size: 20px;"> / </span>
                             <input class="ml-1" type="text" name="till-level-up" value="{{data.level.expTillNextLevel}}"
                               data-dtype="Number" disabled />
@@ -320,7 +316,7 @@
                     value=data.modifiers.damageBonus.physical.value
                     total=data.modifiers.damageBonus.physical.total
                     dtype="Number"
-                    modOrigins=(getProperty origins "data.modifiers.damageBonus.physical.mod")
+                    modOrigins=(getProperty origins "system.modifiers.damageBonus.physical.mod")
                     flipped=true}}
                   </div>
                   <div class="col-sm-6 small-input">
@@ -330,7 +326,7 @@
                     value=data.modifiers.damageBonus.special.value
                     total=data.modifiers.damageBonus.special.total
                     dtype="Number"
-                    modOrigins=(getProperty origins "data.modifiers.damageBonus.special.mod")
+                    modOrigins=(getProperty origins "system.modifiers.damageBonus.special.mod")
                     flipped=true}}
                   </div>
                 </div>
@@ -376,7 +372,7 @@
               </li>
               <ol class="item-list">
                 {{#each actor.moves as | move |}}
-                  {{#unless move.data.isStruggle}}
+                  {{#unless move.system.isStruggle}}
                   <li class="item flexrow" data-item-id="{{move._id}}">
                     <div class="gen8move rollable" data-id="{{move._id}}">
                       <i class="fas fa-dice-d20" style="position:unset; flex: 0 0 3%;"></i>
@@ -387,33 +383,33 @@
                       </h4>
                     </div>
                     <div class="item-name flexcol align-items-center align-self-center" style="flex: 0 0 8%;">
-                      <span class="readable pokemon p8 tight">{{move.data.type}}</span>
+                      <span class="readable pokemon p8 tight">{{move.system.type}}</span>
                     </div>
                     <div class="item-name flexcol align-items-center align-self-center" style="flex: 0 0 7%;">
-                      <span class="readable pokemon p8 tight">{{move.data.category}}</span>
+                      <span class="readable pokemon p8 tight">{{move.system.category}}</span>
                     </div>
                     <div class="item-name flexcol align-items-center align-self-center" style="flex: 0 0 5%;">
-                      <span class="readable pokemon p8 tight">{{calcDb move.data}}</span>
+                      <span class="readable pokemon p8 tight">{{calcDb move.system}}</span>
                     </div>
                     <div class="item-name flexcol align-items-center align-self-center" style="flex: 0 0 13%;">
-                      <span class="readable pokemon p8 tight">{{calcMoveDb ../data move.data true}}</span>
+                      <span class="readable pokemon p8 tight">{{calcMoveDb ../system move.system true}}</span>
                     </div>
                     <div class="item-name flexcol align-items-center align-self-center" style="flex: 0 0 10%;">
-                      <span class="readable pokemon p8 tight">{{move.data.frequency}}</span>
+                      <span class="readable pokemon p8 tight">{{move.system.frequency}}</span>
                     </div>
                     <div class="item-name flexcol align-items-center align-self-center" style="flex: 0 0 4%;">
-                      <span class="readable pokemon p8 tight">{{move.data.ac}}</span>
+                      <span class="readable pokemon p8 tight">{{move.system.ac}}</span>
                     </div>
                     <div class="item-name flexcol align-items-center align-self-center" style="flex: 0 0 13%;">
-                      <span class="readable pokemon p8 tight">{{move.data.range}}</span>
+                      <span class="readable pokemon p8 tight">{{move.system.range}}</span>
                     </div>
                     <div class="item-name flexcol move-col" style="flex: 0 0 20%;">
                       <span class="move-effect">
-                        {{#if move.data.snippet}}
-                        <span class="show-until-hover readable pokemon p8 tight">{{move.data.snippet}}</span>
-                        <span class="hide-until-hover readable pokemon p8 tight">{{move.data.effect}}</span>
+                        {{#if move.system.snippet}}
+                        <span class="show-until-hover readable pokemon p8 tight">{{move.system.snippet}}</span>
+                        <span class="hide-until-hover readable pokemon p8 tight">{{move.system.effect}}</span>
                         {{else}}
-                        <span class="readable pokemon p8 tight">{{move.data.effect}}</span>
+                        <span class="readable pokemon p8 tight">{{move.system.effect}}</span>
                         {{/if}}
                       </span>
                     </div>
@@ -539,34 +535,34 @@
                     <div class="d-flex w-100 mt-1 mb-1">
                       <div class="col-sm-4">
                         {{> "systems/ptu/templates/partials/mod-field.hbs"
-                        path="data.evasion.physical"
+                        path="system.evasion.physical"
                         value=data.evasion.physical
                         dtype="Number"
                         mod=""
                         total=data.evasion.physical
-                        modOrigins=(getProperty origins "data.evasion.physical")
+                        modOrigins=(getProperty origins "system.evasion.physical")
                         disabled=true
                         flipped=true}}
                       </div>
                       <div class="col-sm-4">
                         {{> "systems/ptu/templates/partials/mod-field.hbs"
-                        path="data.evasion.special"
+                        path="system.evasion.special"
                         value=data.evasion.special
                         dtype="Number"
                         mod=""
                         total=data.evasion.special
-                        modOrigins=(getProperty origins "data.evasion.special")
+                        modOrigins=(getProperty origins "system.evasion.special")
                         disabled=true
                         flipped=true}}
                       </div>
                       <div class="col-sm-4">
                         {{> "systems/ptu/templates/partials/mod-field.hbs"
-                        path="data.evasion.speed"
+                        path="system.evasion.speed"
                         value=data.evasion.speed
                         dtype="Number"
                         mod=""
                         total=data.evasion.speed
-                        modOrigins=(getProperty origins "data.evasion.speed")
+                        modOrigins=(getProperty origins "system.evasion.speed")
                         disabled=true
                         flipped=true}}
                       </div>
@@ -582,7 +578,7 @@
                         <label for="data.health.injuries">{{localize "PTU.Injuries"}}</label>
                       </div>
                       <div class="col-sm-3">
-                        <label for="data.modifiers.hardened">{{localize "PTU.Hardened"}}</label>
+                        <label for="modifiers.hardened">{{localize "PTU.Hardened"}}</label>
                       </div>
                       <div class="col-sm-5">
                         <label for="data.health.total">{{localize "PTU.TotalHealth"}}<br><small>{{localize
@@ -609,20 +605,20 @@
                     <div class="d-flex w-100 mt-1 mb-1">
                       <ul style="position: relative; left: 15px; width: 96%; line-height: 15px; text-align: start;">
                         {{#if data.modifiers.hardened}}<li>{{localize "PTU.HardenedEffect0"}}</li>{{/if}}
-                        {{#if (and (is "true" data.modifiers.hardened) (biggerOrEqual data.health.injuries 1))}}<li>
+                        {{#if (and (is 1 data.modifiers.hardened) (biggerOrEqual data.health.injuries 1))}}<li>
                           {{localize "PTU.HardenedEffect1"}}</li>{{/if}}
-                        {{#if (and (is "true" data.modifiers.hardened) (biggerOrEqual data.health.injuries 3))}}<li>
+                        {{#if (and (is 1 data.modifiers.hardened) (biggerOrEqual data.health.injuries 3))}}<li>
                           {{localize "PTU.HardenedEffect2"}}</li>{{/if}}
                         {{#if (biggerOrEqual data.health.injuries 5)}}<li>{{localize "PTU.InjuryEffect1"}}</li>{{/if}}
-                        {{#if (and (is "true" data.modifiers.hardened) (biggerOrEqual data.health.injuries 5))}}<li>
+                        {{#if (and (is 1 data.modifiers.hardened) (biggerOrEqual data.health.injuries 5))}}<li>
                           {{localize "PTU.HardenedEffect3"}}</li>{{/if}}
-                        {{#if (and (not "true" data.modifiers.hardened) (biggerOrEqual data.health.injuries 5))}}<li>
+                        {{#if (and (not 1 data.modifiers.hardened) (biggerOrEqual data.health.injuries 5))}}<li>
                           {{localize "PTU.InjuryEffect2" (ld "injuries" data.health.injuries)}}</li>{{/if}}
-                        {{#if (and (is "true" data.modifiers.hardened) (biggerOrEqual data.health.injuries 7))}}<li>
+                        {{#if (and (is 1 data.modifiers.hardened) (biggerOrEqual data.health.injuries 7))}}<li>
                           {{localize "PTU.HardenedEffect4"}}</li>{{/if}}
-                        {{#if (and (is "true" data.modifiers.hardened) (biggerOrEqual data.health.injuries 9))}}<li>
+                        {{#if (and (is 1 data.modifiers.hardened) (biggerOrEqual data.health.injuries 9))}}<li>
                           {{localize "PTU.HardenedEffect5"}}</li>{{/if}}
-                        {{#if (and (not "true" data.modifiers.hardened) (biggerOrEqual data.health.injuries 10))}}<li>
+                        {{#if (and (not 1 data.modifiers.hardened) (biggerOrEqual data.health.injuries 10))}}<li>
                           <b>{{localize "PTU.InjuryEffect3"}}</b></li>{{/if}}
                       </ul>
                     </div>
@@ -655,11 +651,11 @@
                             <p>{{localize (concat "PTU.Training" (capitalizeFirst key))}}</p>
                           </div>
                           <div class="col-sm-3">
-                            <input data-name="data.training.{{key}}.trained" type="checkbox" {{checked
+                            <input data-name="system.training.{{key}}.trained" type="checkbox" {{checked
                               training.trained}} />
                           </div>
                           <div class="col-sm-3">
-                            <input data-name="data.training.{{key}}.ordered" type="checkbox" {{checked
+                            <input data-name="system.training.{{key}}.ordered" type="checkbox" {{checked
                               training.ordered}} />
                           </div>
                         </div>
@@ -670,7 +666,7 @@
                             <p>{{localize "PTU.TrainingCriticalMoment"}}?</p>
                           </div>
                           <div class="col-sm-6">
-                            <input data-name="data.training.critical" type="checkbox" {{checked
+                            <input data-name="system.training.critical" type="checkbox" {{checked
                               data.training.critical}} />
                           </div>
                         </div>
@@ -696,7 +692,7 @@
                             value=data.modifiers.saveChecks.value
                             total=data.modifiers.saveChecks.total
                             dtype="Number"
-                            modOrigins=(getProperty origins "data.modifiers.saveChecks.mod")}}
+                            modOrigins=(getProperty origins "system.modifiers.saveChecks.mod")}}
                           </div>
                         </div>
                         <div class="d-flex w-100 mt-auto mb-auto">
@@ -724,15 +720,15 @@
                   <div class="swsh-header">
                     <div class="d-flex w-100 mt-1 mb-1">
                       <div class="col">
-                        <label for="data.digestionBuff">{{localize "PTU.DigestionBuff"}}</label>
+                        <label for="data.foodBuff">{{localize "PTU.FoodBuff"}}</label>
                       </div>
                     </div>
                   </div>
                   <div class="swsh-body">
                     <div class="d-flex w-100 mt-1 mb-1">
                       <div class="col">
-                        <input id="digestionBuffInput" type="text" name="data.digestionBuff"
-                          value="{{data.digestionBuff}}" />
+                        <input id="foodBuffInput" type="text" name="data.foodBuff"
+                          value="{{data.foodBuff}}" />
                       </div>
                     </div>
                   </div>
@@ -931,7 +927,7 @@
                         value=data.modifiers.initiative.value
                         total=data.modifiers.initiative.total
                         dtype="Number"
-                        modOrigins=(getProperty origins "data.modifiers.initiative.mod")}}
+                        modOrigins=(getProperty origins "system.modifiers.initiative.mod")}}
                       </div>
                       <div class="col-sm-6">
                         {{> "systems/ptu/templates/partials/mod-field.hbs"
@@ -940,7 +936,7 @@
                         value=data.modifiers.statPoints.value
                         total=data.modifiers.statPoints.total
                         dtype="Number"
-                        modOrigins=(getProperty origins "data.modifiers.statPoints.mod")}}
+                        modOrigins=(getProperty origins "system.modifiers.statPoints.mod")}}
                       </div>
                     </div>
                   </div>
@@ -964,7 +960,7 @@
                         value=data.modifiers.acBonus.value
                         total=data.modifiers.acBonus.total
                         dtype="Number"
-                        modOrigins=(getProperty origins "data.modifiers.acBonus.mod")}}
+                        modOrigins=(getProperty origins "system.modifiers.acBonus.mod")}}
                       </div>
                       <div class="col-sm-6">
                         {{> "systems/ptu/templates/partials/mod-field.hbs"
@@ -973,7 +969,7 @@
                         value=data.modifiers.critRange.value
                         total=data.modifiers.critRange.total
                         dtype="Number"
-                        modOrigins=(getProperty origins "data.modifiers.critRange.mod")}}
+                        modOrigins=(getProperty origins "system.modifiers.critRange.mod")}}
                       </div>
                     </div>
                   </div>
@@ -998,7 +994,7 @@
                         value=data.modifiers.effectRange.value
                         total=data.modifiers.effectRange.total
                         dtype="Number"
-                        modOrigins=(getProperty origins "data.modifiers.effectRange.mod")}}
+                        modOrigins=(getProperty origins "system.modifiers.effectRange.mod")}}
                       </div>
                       <div class="col-sm-6">
                         {{> "systems/ptu/templates/partials/mod-field.hbs"
@@ -1007,7 +1003,7 @@
                         value=data.modifiers.skillBonus.value
                         total=data.modifiers.skillBonus.total
                         dtype="Number"
-                        modOrigins=(getProperty origins "data.modifiers.skillBonus.mod")}}
+                        modOrigins=(getProperty origins "system.modifiers.skillBonus.mod")}}
                       </div>
                     </div>
                   </div>
@@ -1037,7 +1033,7 @@
                         value=data.modifiers.damageReduction.physical.value
                         total=data.modifiers.damageReduction.physical.total
                         dtype="Number"
-                        modOrigins=(getProperty origins "data.modifiers.damageReduction.physical.mod")}}
+                        modOrigins=(getProperty origins "system.modifiers.damageReduction.physical.mod")}}
                       </div>
                       <div class="col-sm-6">
                         {{> "systems/ptu/templates/partials/mod-field.hbs"
@@ -1046,7 +1042,7 @@
                         value=data.modifiers.damageReduction.special.value
                         total=data.modifiers.damageReduction.special.total
                         dtype="Number"
-                        modOrigins=(getProperty origins "data.modifiers.damageReduction.special.mod")}}
+                        modOrigins=(getProperty origins "system.modifiers.damageReduction.special.mod")}}
                       </div>
                     </div>
                   </div>
@@ -1075,7 +1071,7 @@
                         value=data.modifiers.evasion.physical.value
                         total=data.modifiers.evasion.physical.total
                         dtype="Number"
-                        modOrigins=(getProperty origins "data.modifiers.evasion.physical.mod")}}
+                        modOrigins=(getProperty origins "system.modifiers.evasion.physical.mod")}}
                       </div>
                       <div class="col-sm-4">
                         {{> "systems/ptu/templates/partials/mod-field.hbs"
@@ -1084,7 +1080,7 @@
                         value=data.modifiers.evasion.special.value
                         total=data.modifiers.evasion.special.total
                         dtype="Number"
-                        modOrigins=(getProperty origins "data.modifiers.evasion.special.mod")}}
+                        modOrigins=(getProperty origins "system.modifiers.evasion.special.mod")}}
                       </div>
                       <div class="col-sm-4">
                         {{> "systems/ptu/templates/partials/mod-field.hbs"
@@ -1093,7 +1089,7 @@
                         value=data.modifiers.evasion.speed.value
                         total=data.modifiers.evasion.speed.total
                         dtype="Number"
-                        modOrigins=(getProperty origins "data.modifiers.evasion.speed.mod")}}
+                        modOrigins=(getProperty origins "system.modifiers.evasion.speed.mod")}}
                       </div>
                     </div>
                   </div>
@@ -1250,6 +1246,16 @@
                     </div>
                   </div>
                 </div>
+
+                <div class="swsh-box h-25 w-100 mb-2 red">
+                  <div class="swsh-header">
+                    <h3>{{localize "PTU.Notes"}}</h3>
+                  </div>
+                  <div class="swsh-body h-90">
+                    {{editor data.notes target="system.notes" button=true owner=owner editable=editable}}
+                  </div>
+                </div>
+                
               </div>
               <div class="col">
                 <!-- Skills -->
@@ -1268,31 +1274,31 @@
                       {{#each data.skills as |skill key|}}
                       <div class="row no-gutters {{key}} align-items-center">
                         <div class="skill {{key}} col-sm-4 bgcolor key type--{{skill.type}} align-self-center">
-                          <label for="data.skills.{{key}}.label" class="resource-label">{{skill.label}}</label>
+                          <label for="system.skills.{{key}}.label" class="resource-label">{{skill.label}}</label>
                         </div>
                         <div class="skill {{key}} col pl-1 pr-1 fs-9 center-text">
                           {{> "systems/ptu/templates/partials/mod-field.hbs"
-                          path=(concat "data.skills." key ".modifier.value")
+                          path=(concat "system.skills." key ".modifier.value")
                           value=skill.modifier.value
                           dtype="Number"
                           mod=skill.modifier.mod
                           total=skill.modifier.total
-                          modOrigins=(getProperty ../origins (concat "data.skills." key ".modifier.mod") )
+                          modOrigins=(getProperty ../origins (concat "system.skills." key ".modifier.mod") )
                           disabled=true
                           flipped=(gt 8 @index)}}
                         </div>
                         <div class="skill {{key}} col-sm-3 align-self-center bgcolor skill--{{skill.rank}} center-text">
-                          <label for="data.skills.{{key}}.rank" class="resource-label">{{localize (concat "PTU.Skill"
+                          <label for="system.skills.{{key}}.rank" class="resource-label">{{localize (concat "PTU.Skill"
                             skill.rank)}}</label>
                         </div>
                         <div class="skill {{key}} col pl-1 fs-9 center-text">
                           {{> "systems/ptu/templates/partials/mod-field.hbs"
-                          path=(concat "data.skills." key ".value.value")
+                          path=(concat "system.skills." key ".value.value")
                           value=skill.value.value
                           dtype="Number"
                           mod=skill.value.mod
                           total=skill.value.total
-                          modOrigins=(getProperty ../origins (concat "data.skills." key ".value.mod") )
+                          modOrigins=(getProperty ../origins (concat "system.skills." key ".value.mod") )
                           disabled=true
                           flipped=(gt 8 @index)}}
                         </div>
@@ -1300,12 +1306,51 @@
                           data-roll="{{skill.value.total}}d6{{#if skill.modifier.total}}+{{skill.modifier.total}}{{/if}}"
                           data-label="{{skill.label}}">
                           <i class="fas fa-dice-d20"></i>
-                          <label for="data.skills.{{key}}.value" class="resource-label">{{skill.value.total}}d6{{#if
+                          <label for="system.skills.{{key}}.value" class="resource-label">{{skill.value.total}}d6{{#if
                             skill.modifier.total}}+{{skill.modifier.total}}{{/if}}</label>
                         </div>
                       </div>
                       {{/each}}
                     </div>
+                  </div>
+                </div>
+                <div class="d-flex w-100 mt-2 mb-2">
+                  <div class="w-100 stats stat-block mb-2">
+                    <div style="text-align: center;background: #d3d3d1;">
+                      <h3>Base Stat Modifier</h3>
+                    </div>
+                    <div class="row no-gutters header">
+                      <div class="col-sm-3 pt-2 pb-2 key stat-header">{{localize "PTU.StatsLabel"}}</div>
+                      <div class="col-sm-3 mt-2 mb-2">{{localize "PTU.StatsBase"}}</div>
+                      <div class="col-sm-3 mt-2 mb-2">{{localize "PTU.StatsBaseMod"}}</div>
+                      <div class="col-sm-3 mt-2 mb-2">{{localize "PTU.StatsBaseTotal"}}</div>
+                    </div>
+                    {{#each data.stats as |stat key|}}
+                    <div class="row no-gutters {{key}}">
+                      <div class="stats {{key}} col-sm-3 key {{natureCheck ../data.nature.value key}}">
+                        <label for="data.stats.{{key}}.base" class="resource-label">{{key}}</label>
+                      </div>
+                      <div class="stats {{key}} base col-sm-3">
+                        <input type="text" name="data.stats.{{key}}.base" value="{{stat.base}}" data-dtype="Number"
+                          disabled />
+                      </div>                     
+                      {{#with (lookup ../data.modifiers.baseStats key) as |baseStatMod|}}
+                        <div class="stats {{key}} levelUp col-sm-3">
+                          {{> "systems/ptu/templates/partials/mod-field.hbs"
+                            mod=baseStatMod.mod
+                            path=(concat "data.modifiers.baseStats." key ".value")
+                            value=baseStatMod.value
+                            total=baseStatMod.total
+                            dtype="Number"
+                            modOrigins=(getProperty ../../origins (concat "system.modifiers.baseStats." key ".mod"))}}
+                        </div>
+                      {{/with}}
+                        <div class="stats {{key}} total col-sm-3">
+                          <input type="text" name="data.stats.{{key}}.value" value="{{stat.value}}" data-dtype="Number"
+                            disabled />
+                        </div>
+                    </div>
+                    {{/each}}
                   </div>
                 </div>
               </div>

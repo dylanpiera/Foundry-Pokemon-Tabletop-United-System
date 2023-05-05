@@ -7,6 +7,7 @@ import { PTUItem } from "./item/item.js";
 import { PTUItemSheet } from "./item/item-sheet.js";
 import { PTUEdgeSheet } from "./item/edge-sheet.js";
 import { PTUFeatSheet } from "./item/feat-sheet.js";
+import { PTUMoveSheet } from "./item/move-sheet.js";
 import { measureDistances } from "./canvas.js";
 import { levelProgression } from "./data/level-progression.js";
 import { pokemonData } from "./data/species-data.js";
@@ -19,14 +20,12 @@ import { PTUDexDragOptions } from './forms/dex-drag-options-form.js'
 // import { PTUCustomSpeciesEditor } from './forms/custom-species-editor-form.js'
 import { PTUCustomSpeciesEditor } from './forms/cse-form.js'
 import { PTUCustomTypingEditor } from './forms/cte-form.js'
-import { PTUCustomMonEditor } from './forms/custom-mon-editor-form.js'
 import { PTUCharacterNotesForm } from './forms/character-notes-form.js'
 import { RollWithDb } from './utils/roll-calculator.js'
-import { InitCustomSpecies, UpdateCustomSpecies } from './custom-species.js'
-import { InitCustomTypings, UpdateCustomTypings } from './custom-typings.js'
+import { PrepareCustomSpecies, UpdateCustomSpeciesData } from './custom-species.js'
+import { InitCustomTypings as initCustomTypings, UpdateCustomTypings } from './custom-typings.js'
 import { ChangeLog } from './forms/changelog-form.js'
 import { applyDamageToTargets, undoDamageToTargets, newApplyDamageToTargets, handleApplicatorItem, TakeAction } from './combat/damage-calc-tools.js'
-import CustomSpeciesFolder from './entities/custom-species-folder.js'
 import { CreateMonParser, GetSpeciesArt } from './utils/species-command-parser.js'
 import { FinishDexDragPokemonCreation } from './utils/species-command-parser.js'
 import { GetRandomNature } from './utils/random-nature-generator.js'
@@ -37,7 +36,6 @@ import { GiveCapabilities } from './utils/capability-generator.js'
 import { DistributeStatsWeighted, DistributeStatsRandomly, DistributeByBaseStats, BaseStatsWithNature, ApplyLevelUpPoints } from './utils/calculate-stat-distribution.js'
 import { GetOrCreateCachedItem } from './utils/cache-helper.js'
 import { ActorGenerator } from './utils/actor-generator.js'
-import { GetOrCacheAbilities, GetOrCacheCapabilities, GetOrCacheMoves } from './utils/cache-helper.js'
 import { Afflictions } from './combat/effects/afflictions.js'
 import PTUCombat from './combat/combat.js'
 import { PTUCombatOverrides, PTUCombatTrackerOverrides } from './combat/ptu_overrides.js'
@@ -47,57 +45,59 @@ import TMsData from './data/tm-data.js'
 import PTUActiveEffectConfig from './forms/active-effect-config.js';
 import getTrainingChanges from './data/training-data.js';
 import { PTUSettings, PTUSettingCategories } from './forms/settings.js';
-import { LoadSystemSettings, SetAccessabilityFont } from './settings.js'
-import PreloadHandlebarsTemplates from './templates.js'
+import { LoadSystemSettings as loadSystemSettings, SetAccessabilityFont } from './settings.js'
 import Store from "./api/front-end/lib/store.js";
 import Component from "./api/front-end/lib/component.js";
 import { PTUSidebar } from "./sidebar/sidebar-form.js";
 import './utils/item-piles-compatibility-handler.js';
 import './utils/drag-ruler-compatibility-handler.js';
 import { ThrowPokeball } from './combat/effects/pokeball_effects.js';
+import { LANG } from './utils/language-helper.js';
+import logging from "./helpers/logging.js";
+import { registerHandlebars, preloadHandlebarsTemplates } from "./helpers/handlebars.js";
+import { PTRSearch } from "./ptr-search/ptr-search.js";
+import { PTUAutomationForm } from "./forms/automation-form.js";
+import { CalcLevel } from "./actor/calculations/level-up-calculator.js";
+import { PTULevelUpForm } from "./forms/level-up-form.js";
 
-export let debug = (...args) => { if (game.settings.get("ptu", "showDebugInfo") ?? false) console.log("DEBUG: FVTT PTU | ", ...args) };
-export let log = (...args) => console.log("FVTT PTU | ", ...args);
-export let warn = (...args) => console.warn("FVTT PTU | ", ...args);
-export let error = (...args) => console.error("FVTT PTU | ", ...args)
+export let debug = logging.debug;
+export let log = logging.log;
+export let warn = logging.warn;
+export let error = logging.error;
 
-export const LATEST_VERSION = "2.0-Beta-10";
+export const LATEST_VERSION = "3.2.3.6";
 
-/* -------------------------------------------- */
-/*  Foundry VTT Initialization                  */
-/* -------------------------------------------- */
-
-Hooks.once('init', function () {
-  console.groupCollapsed("PTU Init");
-
-  // Create a namespace within the game global
-  game.ptu = {
-    rollItemMacro,
-    moveMacro: _onMoveMacro,
-    pokedexMacro: _onPokedexMacro,
-    renderDex: RenderDex,
-    addToDex: AddMontoPokedex,
-    PTUActor,
-    PTUItem,
-    PTUPokemonCharactermancer,
-    PTUDexDragOptions,
-    PTUCustomSpeciesEditor,
-    PTUCustomTypingEditor,
-    PTUCharacterNotesForm,
-    PTUSidebar,
-    levelProgression,
-    pokemonData,
-    customSpeciesData: [],
-    natureData,
-    DbData,
-    TMsData,
-    TypeEffectiveness,
-    GetSpeciesData,
-    RollWithDb,
-    PlayPokemonCry,
-    FinishDexDragPokemonCreation,
-    ThrowPokeball,
-    monGenerator: {
+export const ptu = {
+  utils: {
+    api: {
+      gm: undefined,
+      ui: {
+        Store,
+        Component
+      }
+    },
+    cache: {
+      GetOrCreateCachedItem,
+    },
+    combat: {
+      instances: new Map(),
+      applyDamageToTargets,
+      undoDamageToTargets,
+      calculateAcRoll: CalculateAcRoll,
+      newApplyDamageToTargets,
+      handleApplicatorItem,
+      takeAction: TakeAction,
+    },
+    
+    combats: new Map(),
+    dex: {
+      render: RenderDex,
+      addMon: AddMontoPokedex,
+    },
+    dice: {
+      dbRoll: RollWithDb
+    },
+    generator: {
       ActorGenerator,
       CreateMonParser,
       GetRandomNature,
@@ -112,53 +112,137 @@ Hooks.once('init', function () {
         BaseStatsWithNature,
         ApplyLevelUpPoints
       },
-      GetSpeciesArt
+      GetSpeciesArt,
+      FinishDexDragPokemonCreation,
     },
-    combat: {
-      applyDamageToTargets,
-      undoDamageToTargets,
-      CalculateAcRoll,
-      newApplyDamageToTargets,
-      handleApplicatorItem,
-      TakeAction,
+    logging,
+    macros: {
+      item: rollItemMacro,
+      move: _onMoveMacro,
+      pokedex: _onPokedexMacro,
+      trainingChanges: getTrainingChanges,
     },
-    combats: new Map(),
-    cache: {
-      GetOrCreateCachedItem,
+    species: {
+      get: GetSpeciesData,
+      playCry: PlayPokemonCry,
     },
-    api: new Api(),
-    getTrainingChanges,
-    settings: PTUSettings,
-    settingCategories: PTUSettingCategories,
-    frontEnd: {
-      Store,
-      Component
+    throwPokeball: ThrowPokeball,
+  },
+  config: {
+    ActiveEffect: {
+      sheetClass: PTUActiveEffectConfig
+    },
+    Actor: {
+      documentClass: PTUActor,
+      sheetClasses: {
+        character: PTUGen8CharacterSheet,
+        pokemon: PTUGen8PokemonSheet
+      }
+    },
+    Combat: {
+      documentClass: PTUCombatOverrides,
+      defeatedStatusId: "effect.other.fainted"
+    },
+    Item: {
+      documentClass: PTUItem,
+      sheetClasses: {
+        item: PTUItemSheet,
+        edge: PTUEdgeSheet,
+        feat: PTUFeatSheet,
+        move: PTUMoveSheet,
+      }
+    },
+    Ui: {
+      Combat: {
+        documentClass: PTUCombatTrackerOverrides
+      },
+      Search: {
+        documentClass: PTRSearch
+      },
+      Sidebar: {
+        documentClass: PTUSidebar
+      },
+      Settings: {
+        documentClass: PTUSettings,
+        categories: PTUSettingCategories
+      },
+      ChangeLog: {
+        documentClass: ChangeLog
+      },
+      CustomSpeciesEditor: {
+        documentClass: PTUCustomSpeciesEditor
+      },
+      CustomTypingEditor: {
+        documentClass: PTUCustomTypingEditor
+      },
+      PokemonCharacterMancer: {
+        documentClass: PTUPokemonCharactermancer,
+      },
+      CharacterNotesForm: {
+        documentClass: PTUCharacterNotesForm
+      },
+      DexDragOptions: {
+        documentClass: PTUDexDragOptions
+      },
+      AutomationForm: {
+        documentClass: PTUAutomationForm
+      },
+      LevelUpForm: {
+        documentClass: PTULevelUpForm
+      }
     }
-  };
+  },
+  data: {
+    levelProgression,
+    pokemonData,
+    customSpeciesData: [],
+    natureData,
+    DbData,
+    TMsData,
+    TypeEffectiveness,
+    items: [],
+  },
+  forms: {
+    sidebar: undefined
+  }
+}
+
+/* -------------------------------------------- */
+/*  Foundry VTT Initialization                  */
+/* -------------------------------------------- */
+
+Hooks.once('init', function () {
+  console.groupCollapsed("PTU Init");
+  console.time("PTU Init")
+
+  window.actor = function() {
+    return canvas.tokens.controlled[0].actor;
+  }
+
+  // Register custom system settings
+  ptu.utils.api.gm = new Api(); // Initialize the GM API
+  game.ptu = ptu;
 
   /**
    * Set an initiative formula for the system
    * @type {String}
    */
-  CONFIG.Combat.initiative = {
+  CONFIG.Combat.initiative = ptu.config.Combat.initiative = {
     formula: "@initiative.value + (1d20 * 0.01)",
     decimals: 2
   };
   // Initialize custom initative hooks
-  CONFIG.Combat.documentClass=PTUCombatOverrides;
+  CONFIG.Combat.documentClass = ptu.config.Combat.documentClass;
 
   // Define custom combat tracker
-  CONFIG.ui.combat = PTUCombatTrackerOverrides;
+  CONFIG.ui.combat = ptu.config.Ui.Combat.documentClass;
 
   // Define custom Entity classes
-  CONFIG.Actor.documentClass = PTUActor;
-  CONFIG.Item.documentClass = PTUItem;
-
-  // Define custom Active Effect class
-  CONFIG.ActiveEffect.sheetClass = PTUActiveEffectConfig;
+  CONFIG.Actor.documentClass = ptu.config.Actor.documentClass;
+  CONFIG.Item.documentClass = ptu.config.Item.documentClass;
 
   // Custom Combat Settings
-  CONFIG.Combat.defeatedStatusId = "effect.other.fainted";
+  CONFIG.Combat.defeatedStatusId = ptu.config.Combat.defeatedStatusId;
 
   // Register sheet application classes
   registerSheets();
@@ -167,23 +251,24 @@ Hooks.once('init', function () {
   registerHandlebars();
 
   // Load System Settings
-  LoadSystemSettings();
+  loadSystemSettings();
 
   if (game.settings.get("ptu", "insurgenceData")) {
-    Array.prototype.push.apply(game.ptu["pokemonData"], insurgenceData);
+    Array.prototype.push.apply(game.ptu.data.pokemonData, insurgenceData);
   }
   if (game.settings.get("ptu", "sageData")) {
-    Array.prototype.push.apply(game.ptu["pokemonData"], sageData);
+    Array.prototype.push.apply(game.ptu.data.pokemonData, sageData);
   }
   if (game.settings.get("ptu", "uraniumData")) {
-    Array.prototype.push.apply(game.ptu["pokemonData"], uraniumData);
+    Array.prototype.push.apply(game.ptu.data.pokemonData, uraniumData);
   }
 
-  InitCustomTypings();
+  initCustomTypings();
 
   // Preload Handlebars Templates
-  PreloadHandlebarsTemplates();
+  preloadHandlebarsTemplates();
 
+  console.timeEnd("PTU Init")
   console.groupEnd();
 });
 
@@ -191,218 +276,15 @@ Hooks.once('init', function () {
 function registerSheets() {
   // Register sheet application classes
   Actors.unregisterSheet("core", ActorSheet);
-  Actors.registerSheet("ptu", PTUGen8CharacterSheet, { types: ["character"], makeDefault: true });
-  Actors.registerSheet("ptu", PTUGen8PokemonSheet, { types: ["pokemon"], makeDefault: true });
+  Actors.registerSheet("ptu", ptu.config.Actor.sheetClasses.character, { types: ["character"], makeDefault: true });
+  Actors.registerSheet("ptu", ptu.config.Actor.sheetClasses.pokemon, { types: ["pokemon"], makeDefault: true });
   Items.unregisterSheet("core", ItemSheet);
-  Items.registerSheet("ptu", PTUItemSheet, { types: ["item", "ability", "move", "capability", "pokeedge", "dexentry"], makeDefault: true });
-  Items.registerSheet("ptu", PTUEdgeSheet, { types: ["edge"], makeDefault: true });
-  Items.registerSheet("ptu", PTUFeatSheet, { types: ["feat"], makeDefault: true });
-}
+  Items.registerSheet("ptu", ptu.config.Item.sheetClasses.item, { types: ["item", "ability", "capability", "pokeedge", "dexentry"], makeDefault: true });
+  Items.registerSheet("ptu", ptu.config.Item.sheetClasses.move, { types: ["move"], makeDefault: true });
+  Items.registerSheet("ptu", ptu.config.Item.sheetClasses.edge, { types: ["edge"], makeDefault: true });
+  Items.registerSheet("ptu", ptu.config.Item.sheetClasses.feat, { types: ["feat"], makeDefault: true });
 
-function registerHandlebars() {
-  Handlebars.registerHelper("concat", function () {
-    var outStr = '';
-    for (var arg in arguments) {
-      if (typeof arguments[arg] != 'object') {
-        outStr += arguments[arg];
-      }
-    }
-    return outStr;
-  });
-
-  Handlebars.registerHelper("toLowerCase", function (str) {
-    return str.toLowerCase ? str.toLowerCase() : str;
-  });
-
-  Handlebars.registerHelper("isdefined", function (value) {
-    return value !== undefined;
-  });
-
-  Handlebars.registerHelper("key", function (obj) {
-    return Object.keys(obj)[0];
-  });
-
-  Handlebars.registerHelper("is", function (a, b) { return a == b });
-  Handlebars.registerHelper("bigger", function (a, b) { return a > b });
-  Handlebars.registerHelper("biggerOrEqual", function (a, b) { return a >= b });
-  Handlebars.registerHelper("and", function (a, b) { return a && b });
-  Handlebars.registerHelper("or", function (a, b) { return a || b });
-  Handlebars.registerHelper("not", function (a, b) { return a != b });
-  Handlebars.registerHelper("itemDescription", function (name) {
-    if (!name) return "";
-    if (name || 0 !== name.length) {
-      let item = game.ptu.items.find(i => i.name.toLowerCase().includes(name.toLowerCase()));
-      if (item) return item.data.data.effect;
-    }
-    return "";
-  });
-  Handlebars.registerHelper("getGameSetting", function (key) { return game.settings.get("ptu", key) });
-  Handlebars.registerHelper("calcDb", function (move) {
-    return (move.damageBase.toString().match(/^[0-9]+$/) != null) ? move.stab ? parseInt(move.damageBase) + 2 : move.damageBase : move.damageBase;
-  });
-  Handlebars.registerHelper("calcDbCalc", _calcMoveDb);
-  Handlebars.registerHelper("calcAc", function (move) {
-    return -parseInt(move.ac) + parseInt(move.acBonus);
-  });
-  Handlebars.registerHelper("calcMoveDb", function (actorData, move, bool = false) {
-    return _calcMoveDb(PrepareMoveData(actorData, move), bool);
-  });
-  Handlebars.registerHelper("calcCritRange", function (actorData) {
-    return actorData.modifiers.critRange?.total ? actorData.modifiers.critRange?.total : 0;
-  });
-  Handlebars.registerHelper("calcCritRangeMove", function (move) {
-    return move.owner ? move.owner.critRange : 0;
-  });
-  Handlebars.registerHelper("getProperty", getProperty);
-  Handlebars.registerHelper("aeTypes", function (id) {
-    const types = Object.entries(CONST.ACTIVE_EFFECT_MODES).reduce((obj, e) => {
-      obj[e[1]] = game.i18n.localize("EFFECT.MODE_" + e[0]);
-      return obj;
-    }, {});
-    return id ? types[id] : types;
-  })
-
-  Handlebars.registerHelper("calcFrequencyIconPath", function (frequency, currentUseCount) {
-    const basePath = "systems/ptu/images/icons/";
-    const useCount = Number(currentUseCount);
-    switch (frequency) {
-      case "At-Will":
-      case "":
-        return basePath + "AtWill" + ".png";
-      case "EOT":
-        return basePath + (useCount == 0 ? "EOT_1" : "EOT_0") + ".png";
-      case "Scene":
-        return basePath + (useCount >= 1 ? "Scene1_0" : "Scene1_1") + ".png";
-      case "Scene x2":
-        return basePath + (useCount >= 2 ? "Scene2_0" : useCount == 1 ? "Scene2_1" : "Scene2_2") + ".png";
-      case "Scene x3":
-        return basePath + (useCount >= 3 ? "Scene3_0" : useCount == 2 ? "Scene3_1" : useCount == 1 ? "Scene3_2" : "Scene3_3") + ".png";
-      case "Daily":
-        return basePath + (useCount >= 1 ? "daily1_0" : "daily1_1") + ".png";
-      case "Daily x2":
-        return basePath + (useCount >= 2 ? "daily2_0" : useCount == 1 ? "daily2_1" : "daily2_2") + ".png";
-      case "Daily x3":
-        return basePath + (useCount >= 3 ? "daily3_0" : useCount == 2 ? "daily3_1" : useCount == 1 ? "daily3_2" : "daily3_3") + ".png";
-    }
-  })
-
-  function keyToNatureStat(key) {
-    switch (key) {
-      case "hp": return "HP";
-      case "atk": return "Attack";
-      case "def": return "Defense";
-      case "spatk": return "Special Attack";
-      case "spdef": return "Special Defense";
-      case "spd": return "Speed";
-    }
-  }
-
-  Handlebars.registerHelper("natureCheck", function (nature, stat) {
-    let statUp = game.ptu.natureData[nature][0] == keyToNatureStat(stat);
-    let statDown = game.ptu.natureData[nature][1] == keyToNatureStat(stat)
-
-    return statUp && !statDown ? "nature-up" : statDown && !statUp ? "nature-down" : "";
-  });
-
-  Handlebars.registerHelper("minMaxDiceCheck", function (roll, faces) {
-    return roll == 1 ? "min" : roll == faces ? "max" : "";
-  });
-
-  Handlebars.registerHelper("hideAcOrDb", function (text) {
-    return text == "" || text == "--";
-  });
-
-  Handlebars.registerHelper("loadTypeImages", function (types, includeSlash = true) {
-    if (!types) return;
-    return types.reduce((html, type, index, array) => {
-      if (type == "null") type = "Untyped";
-      return html += `<img class="mr-1 ml-1" src="/systems/ptu/css/images/types/${type}IC.webp">` + (includeSlash ? (index != (array.length - 1) ? "<span>/</span>" : "") : "");
-    }, "")
-
-    if (!types) return;
-    if (types[1] != "null") return `<img class="mr-1" src="/systems/ptu/css/images/types/${types[0]}IC.webp"><span>/</span><img class="ml-1" src="/systems/ptu/css/images/types/${types[1]}IC.webp">`;
-    return `<img src="/systems/ptu/css/images/types/${types[0]}IC.webp">`;
-  });
-
-  Handlebars.registerHelper("loadTypeImage", function (type) {
-    return `<img src="/systems/ptu/css/images/types/${type}IC.webp">`;
-  });
-
-  Handlebars.registerHelper("isGm", function () {
-    return game.user.isGM;
-  })
-
-  Handlebars.registerHelper("ld", function (key, value) {
-    return { hash: { [key]: value } };
-  })
-
-  Handlebars.registerHelper("toReadableEffectMode", function (effectId) {
-    return Object.entries(CONST.ACTIVE_EFFECT_MODES).reduce((obj, e) => {
-      obj[e[1]] = game.i18n.localize("EFFECT.MODE_" + e[0]);
-      return obj;
-    }, {})[effectId]
-  })
-
-  Handlebars.registerHelper('getEffectivenessColor', function (effectiveness) {
-    const value = Number(effectiveness);
-    if (isNaN(value)) return "regular";
-
-    if(value === -1) return "none";
-    if (value < 1) {
-      if (value == 0) {
-        return "immune";
-      }
-      if(value <= 0.25) {
-        return "doubly_resisted";
-      }
-      return "resisted";
-    }
-    if (value > 1) {
-      if(value >= 2) {
-        return "doubly_effective";
-      }
-      return "effective";
-    }
-    return "regular";
-  })
-
-  Handlebars.registerHelper('contains', function (needle, haystack) {
-    needle = Handlebars.escapeExpression(needle);
-    haystack = Handlebars.escapeExpression(haystack);
-    return (haystack.indexOf(needle) > -1) ? true : false;
-  });
-
-  Handlebars.registerHelper('ifContains', function (needle, haystack, options) {
-    needle = Handlebars.escapeExpression(needle);
-    haystack = Handlebars.escapeExpression(haystack);
-    return (haystack.indexOf(needle) > -1) ? options.fn(this) : options.inverse(this);
-  });
-
-  Handlebars.registerHelper("inc", function (num) { return Number(num) + 1 })
-
-  Handlebars.registerHelper("tmName", function (tmNum) { return game.ptu.TMsData.get(tmNum) });
-
-  /** If furnace ain't installed... */
-  if (!Object.keys(Handlebars.helpers).includes("divide")) {
-
-    Handlebars.registerHelper("divide", (value1, value2) => Number(value1) / Number(value2));
-    Handlebars.registerHelper("multiply", (value1, value2) => Number(value1) * Number(value2));
-    Handlebars.registerHelper("floor", (value) => Math.floor(Number(value)));
-    Handlebars.registerHelper("capitalizeFirst", (e) => { return "string" != typeof e ? e : e.charAt(0).toUpperCase() + e.slice(1) });
-  }
-
-  function _calcMoveDb(move, bool = false) {
-    if (move.category === "Status") return;
-    let bonus = (move.owner ? move.category === "Physical" ? (move.owner.stats.atk.total + (move.owner.damageBonus?.physical?.total ?? 0)) : (move.owner.stats.spatk.total + (move.owner.damageBonus?.special?.total ?? 0)) : 0) + (move.damageBonus ?? 0);
-    if (move.damageBase.toString().match(/^[0-9]+$/) != null) {
-      let db = game.ptu.DbData[move.stab ? parseInt(move.damageBase) + 2 : move.damageBase];
-      if (db) return db + (bool ? " + " : "#") + bonus;
-      return -1;
-    }
-    let db = game.ptu.DbData[move.damageBase];
-    if (db) return db;
-    return -1;
-  }
+  DocumentSheetConfig.registerSheet(ActiveEffect, "core", PTUActiveEffectConfig, { makeDefault: true })
 }
 
 export function PrepareMoveData(actorData, move) {
@@ -416,7 +298,8 @@ export function PrepareMoveData(actorData, move) {
   };
   move.prepared = true;
 
-  move.stab = move.owner?.type && (move.owner.type[0] == move.type || move.owner.type[1] == move.type);
+
+  move.stab = move.owner?.type && move.owner.type.filter(t => t == move.type).length > 0;
   move.acBonus = move.owner.acBonus ? move.owner.acBonus : 0;
   return move;
 }
@@ -482,13 +365,13 @@ Hooks.once("setup", function () {
         if (!objects.length) return;
 
         const uuids = objects.reduce((uuids, o) => {
-          if (o.data.locked || o.document.canUserModify(game.user, "delete")) return uuids;
+          if (o.locked || o.document.canUserModify(game.user, "delete")) return uuids;
           if (!o.document.actor.canUserModify(game.user, "delete")) return uuids;
           uuids.push(o.document?.uuid ?? o.uuid);
           return uuids;
         }, [])
         if (uuids.length) {
-          if (Hooks.call("prePlayerDeleteToken", uuids)) return game.ptu.api.tokensDelete(uuids);
+          if (Hooks.call("prePlayerDeleteToken", uuids)) return game.ptu.utils.api.gm.tokensDelete(uuids);
         }
       }
     }
@@ -500,22 +383,37 @@ Hooks.once("setup", function () {
  */
 Hooks.once("ready", async function () {
   console.groupCollapsed("PTU Ready")
-  await InitCustomSpecies();
-  await InitCustomTypings();
+
+  if (game.settings.get("ptu", "gameLanguage") != "en") {
+    const languageData = LANG[game.settings.get("ptu", "gameLanguage")];
+    for (const mon of game.ptu.data.pokemonData) {
+      if (languageData[mon._id]) mon._id = languageData[mon._id];
+    }
+  }
+
+  await PrepareCustomSpecies();
+  await initCustomTypings();
 
   SetAccessabilityFont(game.settings.get("ptu", "accessability"));
 
   // Globally enable items from item compendium
-  game.ptu["items"] = Array.from(new Set(game.items.filter(x => x.type == "item").concat(await game.packs.get("ptu.items").getDocuments())));
+  game.ptu.data.items = Array.from(new Set(game.items.filter(x => x.type == "item").concat(await game.packs.get("ptu.items").getDocuments())));
 
   // Wait to register hotbar drop hook on ready so that modules could register earlier if they want to
   Hooks.on("hotbarDrop", (bar, data, slot) => createPTUMacro(data, slot));
 
-  game.socket.on("system.ptu", (data) => {
+  game.socket.on("system.ptu", async (data) => {
     if (data == null) return;
     if (data == "RefreshCustomSpecies" || (data == "ReloadGMSpecies" && game.user.isGM)) Hooks.callAll("updatedCustomSpecies");
     if (data == "RefreshCustomTypings") Hooks.callAll("updatedCustomTypings");
     if (data == "RefreshCustomTypingsAndActors") Hooks.callAll("updatedCustomTypings", { updateActors: true });
+    if (data.type){
+      const { type, species, userId } = data;
+      
+      if(!!userId && game.userId !== userId) return
+
+      await game.ptu.utils.dex.render(species, type)
+    }
   });
 
   /** Display Changelog */
@@ -549,8 +447,8 @@ Hooks.once("ready", async function () {
 
   PTUCombat.Initialize();
 
-  game.ptu.sidebar = new game.ptu.PTUSidebar();
-  game.ptu.sidebar.render(true);
+  game.ptu.forms.sidebar = new game.ptu.config.Ui.Sidebar.documentClass();
+  game.ptu.forms.sidebar.render(true);
 
   console.groupEnd();
 });
@@ -558,53 +456,55 @@ Hooks.once("ready", async function () {
 /* -------------------------------------------- */
 /*  Custom Species (Editor) Hooks               */
 /* -------------------------------------------- */
-Hooks.on("updatedCustomSpecies", UpdateCustomSpecies);
+Hooks.on("updatedCustomSpecies", UpdateCustomSpeciesData);
 Hooks.on("updatedCustomTypings", UpdateCustomTypings);
 
-Hooks.on('renderJournalDirectory', function () {
-  CustomSpeciesFolder.updateFolderDisplay(game.settings.get("ptu", "showDebugInfo"));
-})
+// Hooks.on('renderJournalDirectory', function () {
+//   CustomSpeciesFolder.updateFolderDisplay(game.settings.get("ptu", "showDebugInfo"));
+// })
 
 /** DexEntry on Pokemon Sheet updates Species Data */
 Hooks.on('dropActorSheetData', function (actor, sheet, itemDropData,) {
-  if (actor.data.type != "pokemon") return true;
+  if (actor.type != "pokemon") return true;
 
-  let updateActorBasedOnSpeciesItem = function (item) {
-    if (item.data.name) {
-      log(`Updating Species based on Dex Drop (${actor.data.data.species} -> ${item.data.name})`)
-      actor.update({ "data.species": item.data.name }).then(x => log("Finished Updating Species based on Dex Drop"));
+  const updateActorBasedOnSpeciesItem = function (item) {
+    if (item.name) {
+      log(`Updating Species based on Dex Drop (${actor.system.species} -> ${item.name})`)
+      actor.update({ "data.species": item.name }).then(x => log("Finished Updating Species based on Dex Drop"));
     }
-    else if (item.data.data.id) {
-      log(`Updating Species based on Dex Drop (${actor.data.data.species} -> ${item.data.data.id})`)
-      actor.update({ "data.species": item.data.data.id }).then(x => log("Finished Updating Species based on Dex Drop"));
+    else if (item.system.id) {
+      log(`Updating Species based on Dex Drop (${actor.system.species} -> ${item.system.id})`)
+      actor.update({ "data.species": item.system.id }).then(x => log("Finished Updating Species based on Dex Drop"));
     }
   }
 
-  if (itemDropData.pack) {
-    if (itemDropData.pack != "ptu.dex-entries") { return true; }
+  if (itemDropData.uuid.includes("dex-entries") || itemDropData.uuid.includes("uranium-and-sage-dex")) {
     Item.fromDropData(itemDropData).then(updateActorBasedOnSpeciesItem);
+    return false;
   }
-  else {
-    let item = game.items.get(itemDropData.id);
-    if (item.data.type != "dexentry") return true;
-    updateActorBasedOnSpeciesItem(item);
+  if (itemDropData.uuid.startsWith("Item.")) {
+    const uuid = itemDropData.uuid.split(".")[1];
+    const item = game.items.get(uuid);
+    if (item && item.type == "dex-entry") {
+      updateActorBasedOnSpeciesItem(item);
+      return false;
+    }
   }
 
-  return false;
+  return true;
 });
 
 Hooks.on("renderSettingsConfig", function (esc, html, data) {
-  const element = html.find('.tab[data-tab="system"] .settings-list');
-  let header = element.find(".module-header");
-  element.html(
-    `${header[0].outerHTML}
+  const element = html.find(`.tab[data-tab="system"]`);
+  // const element = html.find('.tab[data-tab="system"] .settings-list');
+  // let header = element.find(".module-header");
+  element.html(`
     <div>
       <h3>We have moved!</h3>
       <p class="notes pb-2">All system settings can now be found in the PTU Settings, right under the section with the Configure Settings button in the sidebar!</p>
-      <button onclick="new game.ptu.settings().render(true);" class="mb-2">Open PTU Settings</button>
+      <button onclick="new game.ptu.config.Ui.Settings.documentClass().render(true);" class="mb-2">Open PTU Settings</button>
     </div>
     `);
-  html.height('auto');
 });
 
 /* -------------------------------------------- */
@@ -613,8 +513,7 @@ Hooks.on("renderSettingsConfig", function (esc, html, data) {
 
 Hooks.on("renderSettings", (app, html) => {
   html.find('#settings-game').after($(`<h2>PTU System Settings</h2><div id="ptu-options"></div>`));
-
-  game.ptu.settings.Initialize(html);
+  game.ptu.config.Ui.Settings.documentClass.Initialize(html);
 
   if (game.user.isGM) {
     $('#ptu-options').append($(
@@ -622,13 +521,13 @@ Hooks.on("renderSettings", (app, html) => {
           <i class="fas fa-book-open"></i>
           Edit Custom Species
       </button>`));
-    html.find('button[data-action="ptu-custom-species-editor"').on("click", _ => new game.ptu.PTUCustomSpeciesEditor().render(true));
+    html.find('button[data-action="ptu-custom-species-editor"').on("click", _ => new game.ptu.config.Ui.CustomSpeciesEditor.documentClass().render(true));
     $('#ptu-options').append($(
       `<button data-action="ptu-custom-typing-editor">
           <i class="fas fa-book-open"></i>
           Edit Custom Typings
       </button>`));
-    html.find('button[data-action="ptu-custom-typing-editor"').on("click", _ => new game.ptu.PTUCustomTypingEditor().render(true));
+    html.find('button[data-action="ptu-custom-typing-editor"').on("click", _ => new game.ptu.config.Ui.CustomTypingEditor.documentClass().render(true));
   }
 })
 
@@ -691,7 +590,7 @@ async function createPTUMacro(data, slot) {
   const actor = game.actors.get(data.actorId);
 
   // Create the macro command
-  const command = `game.ptu.rollItemMacro("${data.actorId}","${item._id}","${data.sceneId}", "${data.tokenId}");`;
+  const command = `game.ptu.utils.macros.item("${data.actorId}","${item._id}","${data.sceneId}", "${data.tokenId}");`;
   let macro = game.macros.contents.find(m => (m.name === `${actor.name}'s ${item.name}`) && (m.command === command));
   if (!macro) {
     macro = await Macro.create({
@@ -730,11 +629,11 @@ function rollItemMacro(actorId, itemId, sceneId, tokenId) {
 
   switch (item.type) {
     case 'move': {
-      return game.ptu.moveMacro(actor, isTokenActor ? item : item.data);
+      return game.ptu.utils.macros.move(actor, isTokenActor ? item : item.data);
     }
     case 'item': {
       if (item.data.name == "Pokédex") {
-        return game.ptu.pokedexMacro();
+        return game.ptu.utils.macros.pokedex();
       }
 
       return;
@@ -749,48 +648,69 @@ function _onMoveMacro(actor, item) {
 }
 
 async function _onPokedexMacro() {
+  //ding
+  AudioHelper.play({ src: "systems/ptu/sounds/ui_sounds/ui_pokedex_ding.wav", volume: 0.8, autoplay: true, loop: false }, false);
+
   const permSetting = game.settings.get("ptu", "dex-permission");
   const addToDex = game.settings.get("ptu", "auto-add-to-dex");
   for (let token of game.user.targets.size > 0 ? game.user.targets.values() : canvas.tokens.controlled) {
     if (token.actor.data.type != "pokemon") continue;
-    
+
     // No checks needed; just show full dex.
     if (game.user.isGM) {
-      game.ptu.renderDex(token.actor.data.data.species, "full");
+      game.ptu.utils.dex.render(token.actor.system.species, "full");
       continue;
     }
 
-    if(addToDex && !game.user.isGM){
+    if (addToDex && !game.user.isGM) {
       if (!game.user.character) return ui.notifications.warn("Please make sure you have a trainer as your Selected Player Character");
-      await game.ptu.addToDex(token.actor.data.data.species);
+      await game.ptu.utils.dex.addMon(token.actor.system.species);
     }
 
     switch (permSetting) {
       case 1: { // Pokedex Disabled
-        //game.ptu.renderDesc(token.actor.data.data.species);
-        return ui.notifications.info("DM has turned off the Pokedex.");
+        return ui.notifications.info(game.i18n.localize("PTU.DexScan.Off"));
       }
       case 2: { //pokemon description only
-        game.ptu.renderDex(token.actor.data.data.species);
+        game.ptu.utils.dex.render(token.actor.system.species);
         break;
       }
       case 3: { // Only owned tokens
-        game.ptu.renderDex(token.actor.data.data.species, token.owner ? "full" : "desc");
+        game.ptu.utils.dex.render(token.actor.system.species, token.owner ? "full" : "desc");
         break;
       }
       case 4: { // Only owned mons
         if (!game.user.character) return ui.notifications.warn("Please make sure you have a trainer as your Selected Player Character");
 
-        game.ptu.renderDex(token.actor.data.data.species, 
-          game.user.character.itemTypes.dexentry.some(entry => entry.data.data.owned && entry.data.name === game.ptu.GetSpeciesData(token.actor.data.data.species)?.id?.toLowerCase())
-          ? "full" : "desc");
+        const monData = game.ptu.utils.species.get(token.actor.system.species);
+
+        game.ptu.utils.dex.render(token.actor.system.species,
+          game.user.character.itemTypes.dexentry.some(entry => entry.system.owned && entry.data.name.toLowerCase() === monData?._id?.toLowerCase())
+            ? "full" : "desc");
         break;
       }
       case 5: { // GM Prompt
-        return ui.notifications.warn("The GM prompt feature has yet to be implemented. Please ask your DM to change to a different Dex Permission Setting");
+        const result = await game.ptu.utils.api.gm.dexScanRequest(game.user.character.uuid, token.actor.uuid, {timeout: 30000})
+        switch(result) {
+          case "false": {
+            return ui.notifications.info(game.i18n.localize("PTU.DexScan.Denied"));
+          }
+          case "timeout": {            
+            return ui.notifications.warn(game.i18n.localize("PTU.DexScan.Timeout"));
+          }
+          case "description": {
+            game.ptu.utils.dex.render(token.actor.system.species);
+            break;
+          }
+          case "full": {
+            game.ptu.utils.dex.render(token.actor.system.species, "full");
+            break;
+          }
+        }
+        break;
       }
       case 6: { // Always Full Details
-        game.ptu.renderDex(token.actor.data.data.species, "full");
+        game.ptu.utils.dex.render(token.actor.system.species, "full");
         break;
       }
     }
@@ -798,7 +718,7 @@ async function _onPokedexMacro() {
 }
 
 export async function PlayPokemonCry(species) {
-  if(!species) return;
+  if (!species) return;
   if (game.settings.get("ptu", "playPokemonCriesOnDrop")) {
     let CryDirectory = game.settings.get("ptu", "pokemonCryDirectory");
     let SpeciesCryFilename = species.toString().toLowerCase();
@@ -828,7 +748,7 @@ Hooks.on("updateInitiative", function (actor) {
   const decimal = Number((combatant.initiative - Math.trunc(combatant.initiative).toFixed(2)));
   if (decimal == 0) return;
 
-  const init = actor.data.data.initiative.value;
+  const init = actor.system.initiative.value;
 
   if (init + decimal != combatant.initiative) {
     game.combats.active.setInitiative(combatant.id, init >= 0 ? init + decimal : (Math.abs(init) + decimal) * -1);
@@ -838,9 +758,9 @@ Hooks.on("updateInitiative", function (actor) {
 
 // Whenever a dexentry is added to a sheet, double check if it doesn't already exist
 Hooks.on("preCreateItem", (item, itemData, options, sender) => {
-  if (item.type != "dexentry" || !item.data.data.id) return;
+  if (item.type != "dexentry" || !item.system.id) return;
 
-  const entry = item.parent.itemTypes.dexentry.find(e => e.data.data.id == item.data.data.id);
+  const entry = item.parent.itemTypes.dexentry.find(e => e.system.id == item.system.id);
   if (entry) {
     log("Dex entry already exists, skipping. This may throw an error, which can be ignored.")
     return false;
@@ -851,7 +771,8 @@ Hooks.on("preCreateItem", (item, itemData, options, sender) => {
 Hooks.on("preCreateItem", async function (item, data, options, sender) {
   if (item.type != "move") return;
   let origin = "";
-  const speciesData = game.ptu.GetSpeciesData(item.parent.data.data.species);
+  const speciesData = game.ptu.utils.species.get(item.parent?.system.species);
+  if(!speciesData) return;
 
   // All of these have a slightly different format, change them to just be an array of the names with capital letters included.
   const levelUp = speciesData["Level Up Move List"].map(x => x.Move);
@@ -865,19 +786,242 @@ Hooks.on("preCreateItem", async function (item, data, options, sender) {
   if (EggMoves.includes(item.name)) origin = "Egg Move";
   if (levelUp.includes(item.name)) origin = "Level Up Move";
 
-  // In preCreate[document] hook, you can update a document's data class using `document.data.update` before it is committed to the database and actually created.
-  await item.data.update({ "data.origin": origin });
+  // In preCreate[document] hook, you can update a document's data class using `document.updateSource` before it is committed to the database and actually created.
+  await item.updateSource({ "system.origin": origin });
 });
 
-Hooks.on('getSceneControlButtons', function(hudButtons) {
+Hooks.on('preCreateActor', function(document,b,c,d) {
+  console.log(document)
+  document.updateSource({"prototypeToken.actorLink":true});
+});
+
+Hooks.on('getSceneControlButtons', function (hudButtons) {
   const hud = hudButtons.find(val => val.name == "token")
   if (hud) {
-      hud.tools.push({
-          name: "PTU.DexButtonName",
-          title: "PTU.DexButtonHint",
-          icon: "fas fa-tablet-alt",
-          button: true,
-          onClick: () => game.ptu.pokedexMacro()
-      });
+    hud.tools.push({
+      name: "PTU.DexButtonName",
+      title: "PTU.DexButtonHint",
+      icon: "fas fa-tablet-alt",
+      button: true,
+      onClick: () => game.ptu.utils.macros.pokedex()
+    });
+
+    hud.tools.push({
+      name: "PTU.SearchButtonName",
+      title: "PTU.SearchButtonHint",
+      icon: "fas fa-search",
+      button: true,
+      onClick: () => new game.ptu.config.Ui.Search.documentClass().render(true)
+    });
   }
 });
+
+Hooks.on("renderTokenConfig", (config, html, options) => html.find("[name='actorLink']").siblings()[0].outerHTML = "<label>Link Actor Data <span class='readable p10'>Unlinked actors are not supported by the system</span></label>")
+
+/****************************
+Token Movement Info
+****************************/
+Hooks.on('renderTokenHUD', (app, html, data) => {
+  if(!game.settings.get("ptu", "showMovementIcons")) return;
+  
+  if(game.modules.get("ptu-movement-info")?.active){
+    ui.notification.warn("Thanks for using the PTU Movement info module! This module is now included in the PTR system and will no longer by updated. Please ask your GM to disable to PTY Movement Info module.")
+    return;
+  } 
+
+  //doesn't work with the barbrawl module
+  if(game.modules.get("barbrawl")?.active) {
+    //warn player that the movement icons don't work with barbrawl
+    ui.notifications.warn("Movement icons are not compatible with the barbrawl module. Please disable the barbrawl module to use movement icons.\nYou can disable movement icons in the PTU settings > Player Preferences to avoid seeing this message.");
+    return;
+  }
+
+  // Fetch Actor
+  const actor = game.actors.get(data.actorId);
+  if(actor === undefined) return;
+
+  // List of capabilities to possibly display, and the icon it should use
+  const capabilitiesMap = {
+    Overland: "fas fa-shoe-prints",
+    Swim: "fas fa-swimmer",
+    Burrow: "fas fa-mountain",
+    Sky: "fas fa-feather",
+    Levitate: "fab fa-fly",
+    Teleporter: "fas fa-people-arrows",
+  }
+
+  const buttons = [];
+  for(const [c,i] of Object.entries(capabilitiesMap)) { //c=capability, i=icon
+    const val = actor.system.capabilities[c];
+    // If value is 0 / unset no need to display.
+    if(!val) continue;
+
+    buttons.push(`<div class="control-icon chalk-icon" title="${c}: ${val}"><i class="${i}"></i>${val}</div>`)
+  }
+
+  html.find(".col.middle").before( // if the actor uses a 2nd bar increase height.
+    `<div class="col middle" style="top: -${html.find(".bar2").html().trim() ? 105 : 90}px;">
+        <div class="chalk-container">
+            ${buttons.join("\n")}
+        </div>
+    </div>`
+  )
+});
+
+Hooks.on("preUpdateActor", async (oldActor, changes, options, sender) => {
+  
+  //check if xp changes are NaN
+  //check if xp changes start with + or - and if so increase/decrease value accordingly
+  const expChange = changes.system?.level?.exp;
+  if (expChange) {
+    const operator = expChange.charAt(0);
+    const amountStr = operator === '+' || operator === '-' ? expChange.substring(1) : expChange;
+    const amount = parseInt(amountStr);
+    if (!isNaN(amount)) {
+      const oldValue = oldActor.system.level.exp;
+      changes.system.level.exp = operator === '+' ? oldValue + amount
+                                                : operator === '-' ? oldValue - amount
+                                                                    : amount;
+    } else {
+      changes.system.level.exp = oldActor.system.level.exp;
+    }
+  } else {
+    changes.system.level.exp = oldActor.system.level.exp;
+  }
+
+  //milestones
+  const milestoneChange = changes.system?.level?.milestones;
+  if (milestoneChange) {
+    const operator = milestoneChange.charAt(0);
+    const amountStr = operator === '+' || operator === '-' ? milestoneChange.substring(1) : milestoneChange;
+    const amount = parseInt(amountStr);
+    if (!isNaN(amount)) {
+      const oldValue = oldActor.system.level.milestones;
+      changes.system.level.milestones = operator === '+' ? oldValue + amount
+                                                : operator === '-' ? oldValue - amount
+                                                                    : amount;
+    } else {
+      changes.system.level.milestones = oldActor.system.level.milestones;
+    }
+  } else {
+    changes.system.level.milestones = oldActor.system.level.milestones;
+  }
+
+  //miscExp
+  const miscExpChange = changes.system?.level?.miscexp;
+  if (miscExpChange) {
+    const operator = miscExpChange.charAt(0);
+    const amountStr = operator === '+' || operator === '-' ? miscExpChange.substring(1) : miscExpChange;
+    const amount = parseInt(amountStr);
+    if (!isNaN(amount)) {
+      const oldValue = oldActor.system.level.miscexp;
+      changes.system.level.miscexp = operator === '+' ? oldValue + amount
+                                                : operator === '-' ? oldValue - amount
+                                                                    : amount;
+    } else {
+      changes.system.level.miscexp = oldActor.system.level.miscexp;
+    }
+  } else {
+    changes.system.level.miscexp = oldActor.system.level.miscexp;
+  }
+  
+  //hp
+  const hpChange = changes.system?.health?.value;
+  if (hpChange) {
+    const operator = hpChange.charAt(0);
+    const amountStr = operator === '+' || operator === '-' ? hpChange.substring(1) : hpChange;
+    const amount = parseInt(amountStr);
+    if (!isNaN(amount)) {
+      const oldValue = oldActor.system.health.value;
+      changes.system.health.value = operator === '+' ? oldValue + amount
+                                                : operator === '-' ? oldValue - amount
+                                                                    : amount;
+    } else {
+      changes.system.health.value = oldActor.system.health.value;
+    }
+  } else {
+    changes.system.health.value = oldActor.system.health.value;
+  }  
+
+  //tempHp
+  const tempHpChange = changes.system?.tempHp?.value;
+  if (tempHpChange) {
+    const operator = tempHpChange.charAt(0);
+    const amountStr = operator === '+' || operator === '-' ? tempHpChange.substring(1) : tempHpChange;
+    const amount = parseInt(amountStr);
+    if (!isNaN(amount)) {
+      const oldValue = oldActor.system.tempHp.value;
+      changes.system.tempHp.value = operator === '+' ? oldValue + amount
+                                                : operator === '-' ? oldValue - amount
+                                                                    : amount;
+    } else {
+      changes.system.tempHp.value = oldActor.system.tempHp.value;
+    }
+  } else {
+    changes.system.tempHp.value = oldActor.system.tempHp.value;
+  }
+  
+  //tempHpMax
+  const tempHpMaxChange = changes.system?.tempHp?.max;
+  if (tempHpMaxChange) {
+    const operator = tempHpMaxChange.charAt(0);
+    const amountStr = operator === '+' || operator === '-' ? tempHpMaxChange.substring(1) : tempHpMaxChange;
+    const amount = parseInt(amountStr);
+    if (!isNaN(amount)) {
+      const oldValue = oldActor.system.tempHp.max;
+      changes.system.tempHp.max = operator === '+' ? oldValue + amount
+                                                : operator === '-' ? oldValue - amount
+                                                                    : amount;
+    } else {
+      changes.system.tempHp.max = oldActor.system.tempHp.max;
+    }
+  } else {
+    changes.system.tempHp.max = oldActor.system.tempHp.max;
+  }
+
+  //check if level up form is turned off in settings
+  const setting = game.settings.get("ptu", "levelUpScreen")
+  if(!setting) return; // option turned off by GM
+
+  if(changes.system?.level?.exp === undefined) return;
+
+  const oldLvl = CalcLevel(oldActor.system.level.exp, 50, levelProgression);
+  const newLvl = CalcLevel(changes.system.level.exp, 50, levelProgression);
+  
+  
+  if(newLvl > oldLvl) {
+      new game.ptu.config.Ui.LevelUpForm.documentClass({
+        actor: await fromUuid(oldActor.uuid),
+        oldLvl,
+        newLvl,
+        oldExp: oldActor.system.level.exp,
+        newExp: changes.system.level.exp
+      }).render(true);
+  }
+});
+
+/***************************
+ * Dex Scan Chat messages
+ **************************/
+// Description Only
+Hooks.on("renderChatMessage", (message, html, data) => {
+  setTimeout(() => {
+      $(html).find(".dex-desc-button").on("click", (event) => showPlayerDexEntry(event));
+  }, 500);
+});
+
+// Full Scan
+Hooks.on("renderChatMessage", (message, html, data) => {
+  setTimeout(() => {
+      $(html).find(".dex-scan-button").on("click", (event) => showPlayerDexEntry(event));
+  }, 500);
+});
+
+export async function showPlayerDexEntry(event){
+  const { trainername, pokemonname, type } = event.currentTarget.dataset;
+  const mon = game.ptu.utils.species.get(pokemonname);
+
+  const userId = game.users.find(u => u.character = game.actors.getName(trainername) && !u.isGM)._id
+
+  await game.ptu.utils.api.gm.renderDexToPlayer(mon._id, type, userId)
+}

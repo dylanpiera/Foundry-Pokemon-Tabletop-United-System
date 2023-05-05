@@ -1,10 +1,10 @@
 import { GetOrCacheMoves} from './cache-helper.js'
 
 export async function GiveLatestMoves(actor) {
-    let species = actor.data.data.species;
-    let level = actor.data.data.level.current;
+    let species = actor.system.species;
+    let level = actor.system.level.current;
 
-    let speciesData = game.ptu.GetSpeciesData(species);
+    let speciesData = game.ptu.utils.species.get(species);
     if(!speciesData) return;
 
     let moves = await GetOrCacheMoves();

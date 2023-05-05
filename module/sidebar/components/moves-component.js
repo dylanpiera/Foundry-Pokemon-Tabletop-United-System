@@ -41,7 +41,7 @@ export default class MovesList extends Component {
                 }
                 if (!this.state.actor) return;
                 // But the moves are different than the ones displayed
-                if (!isObjectEmpty(diffObject(this.state.moves, duplicate(this.state.actor.itemTypes.move))) || !isObjectEmpty(diffObject(duplicate(this.state.actor.itemTypes.move), this.state.moves))) {
+                if (!isEmpty(diffObject(this.state.moves, duplicate(this.state.actor.itemTypes.move))) || !isEmpty(diffObject(duplicate(this.state.actor.itemTypes.move), this.state.moves))) {
                     this.updated += 1;
                     await this.store.dispatch("updateMoves", this.state.actor.itemTypes.move);
                     return;
@@ -60,13 +60,16 @@ export default class MovesList extends Component {
             // 'changed move data' during every re-render, causing infinite re-render loops.
             const moveData = duplicate(move);
             
-            moveData.data = this.PrepareMoveData(moveData.data, this.state.actor.data.data, this.state.targetedActors);
+            moveData.system = this.PrepareMoveSystem(moveData.system, this.state.actor.system, this.state.targetedActors);
 
             // If fake move skip
-            if((moveData.data.damageBase == "--" && moveData.data.category == "--") || (moveData.data.damageBase == "" && moveData.data.category == "") || (moveData.data.isStruggle)) continue;
+            if((moveData.system.damageBase == "--" && moveData.system.category == "--") || (moveData.system.damageBase == "" && moveData.system.category == "") || (moveData.system.isStruggle)) continue;
             
+            const tokens = game.user.targets.size > 0 ? [...game.user.targets] : canvas.tokens.controlled
+            const monData = game.ptu.utils.species.get(tokens[0]?.actor?.system?.species);
+
             // If DB is not a number, 
-                if(isNaN(Number(moveData.data.damageBase))) moveData.data.damageBase = "--";
+                if(isNaN(Number(moveData.system.damageBase))) moveData.system.damageBase = "--";
                 switch (effVisible){
                     case 5: //visible to all
                         break;
@@ -77,18 +80,17 @@ export default class MovesList extends Component {
 
                         if (!game.user.character) {
                             ui.notifications.warn("Please make sure you have a trainer as your Selected Player Character");
-                            moveData.data.effectiveness = -1;
+                            moveData.system.effectiveness = -1;
                             break;
                         }
 
-                        if (game.user.targets.size < 1) {
-                            moveData.data.effectiveness = -1;
+                        if (game.user.targets.size != 1) {
+                            moveData.system.effectiveness = -1;
                             break;
                         }
-
-                        const token4 = game.user.targets.size > 0 ? game.user.targets.values() : canvas.tokens.controlled
-                        if((!game.user.character.itemTypes.dexentry.some(entry => entry.data.name.toLowerCase() === game.ptu.GetSpeciesData(token4.actor.data.data.species)?._id?.toLowerCase() && entry.data.data.owned)))
-                            moveData.data.effectiveness = -1;
+                        
+                        if((!game.user.character.itemTypes.dexentry.some(entry => entry.system.name.toLowerCase() === monData?._id?.toLowerCase() && entry.system.owned)))
+                            moveData.system.effectiveness = -1;
                         
 
                         break;
@@ -99,17 +101,16 @@ export default class MovesList extends Component {
 
                         if (!game.user.character) {
                             ui.notifications.warn("Please make sure you have a trainer as your Selected Player Character");
-                            moveData.data.effectiveness = -1;
+                            moveData.system.effectiveness = -1;
                             break;
                         }
                         
-                        if (game.user.targets.size < 1) {
-                            moveData.data.effectiveness = -1;
+                        if (game.user.targets.size != 1) {
+                            moveData.system.effectiveness = -1;
                         }
 
-                        const token3 = game.user.targets.size > 0 ? game.user.targets.values() : canvas.tokens.controlled
-                        if(!game.user.character.itemTypes.dexentry.some(entry => entry.data.name.toLowerCase() === game.ptu.GetSpeciesData(token3.actor.data.data.species)?._id?.toLowerCase()))
-                            moveData.data.effectiveness = -1;
+                        if(!game.user.character.itemTypes.dexentry.some(entry => entry.name.toLowerCase() === monData?._id?.toLowerCase()))
+                            moveData.system.effectiveness = -1;
 
                         break;
                     case 2: //visible to GMs only
@@ -117,11 +118,11 @@ export default class MovesList extends Component {
                             break; //visible to GMs
                         }
 
-                        moveData.data.effectiveness = -1; //don't show effectiveness
+                        moveData.system.effectiveness = -1; //don't show effectiveness
                         break;
 
                     case 1: //disabled
-                        moveData.data.effectiveness = -1; //don't show effectiveness
+                        moveData.system.effectiveness = -1; //don't show effectiveness
                     
                 }
 
@@ -141,7 +142,7 @@ export default class MovesList extends Component {
                                 actor: this.state.actor
                             }),
                             moveName: move.name,
-                            move: move.data,
+                            move: move.system,
                         })
                         break;
                     case 1: // Left click
@@ -167,37 +168,37 @@ export default class MovesList extends Component {
         this.store.dispatch("targetsUpdated");
     }
 
-    PrepareMoveData(moveData, actorData, targetIds) {
+    PrepareMoveSystem(moveSystem, actorData, targetIds) {
         // Old Prepare Move Data 
-        moveData.owner = {
+        moveSystem.owner = {
             type: actorData.typing,
             stats: actorData.stats,
             acBonus: actorData.modifiers.acBonus.total,
             critRange: actorData.modifiers.critRange.total,
             damageBonus: actorData.modifiers.damageBonus
         };
-        moveData.prepared = true;
+        moveSystem.prepared = true;
 
-        moveData.stab = moveData.owner?.type && (moveData.owner.type[0] == moveData.type || moveData.owner.type[1] == moveData.type);
-        moveData.acBonus = moveData.owner.acBonus ? moveData.owner.acBonus : 0;
+        moveSystem.stab = moveSystem.owner?.type && (moveSystem.owner.type[0] == moveSystem.type || moveSystem.owner.type[1] == moveSystem.type);
+        moveSystem.acBonus = moveSystem.owner.acBonus ? moveSystem.owner.acBonus : 0;
 
         // End of Old Prepare Move Data
 
-        moveData.rangeIconsHtml = this._getRangeIcons(moveData.range);
-        moveData.effectiveness = 1;
+        moveSystem.rangeIconsHtml = this._getRangeIcons(moveSystem.range);
+        moveSystem.effectiveness = 1;
 
         if (targetIds.length == 0) {
-            moveData.effectiveness = -1;
-            return moveData;
+            moveSystem.effectiveness = -1;
+            return moveSystem;
         }
         if (targetIds.length == 1) {
-            moveData.effectiveness = this.store.getTarget(targetIds[0]).data.data.effectiveness?.All[moveData.type] ?? 1;
+            moveSystem.effectiveness = this.store.getTarget(targetIds[0]).system.effectiveness?.All[moveSystem.type] ?? 1;
         }
         if (targetIds.length > 1) { // TODO: Maybe add a way to display multiple effectiveness borders?
-            moveData.effectiveness = -1;
+            moveSystem.effectiveness = -1;
         }
 
-        return moveData;
+        return moveSystem;
     }
 
     _sort(a,b) {

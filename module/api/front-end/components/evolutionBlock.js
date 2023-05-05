@@ -28,7 +28,7 @@ export default class EvolutionBlock extends Component {
 
             const stages = {1: [], 2: [], 3: []};
             for(const evo of species.Evolution) {
-                const speciesData = game.ptu.GetSpeciesData(evo[1].replace(/ /g, "-"))
+                const speciesData = game.ptu.utils.species.get(evo[1].replace(/ /g, "-"))
                 if(!speciesData) continue;
 
                 const temp = {

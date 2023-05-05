@@ -4,6 +4,32 @@
     "templates": {
       "modifiers": {
         "modifiers": {
+          "baseStats": {
+            "hp": {
+              "value": 0,
+              "mod": 0
+            },
+            "atk": {
+              "value": 0,
+              "mod": 0
+            },
+            "def": {
+              "value": 0,
+              "mod": 0
+            },
+            "spatk": {
+              "value": 0,
+              "mod": 0
+            },
+            "spdef": {
+              "value": 0,
+              "mod": 0
+            },
+            "spd": {
+              "value": 0,
+              "mod": 0
+            }
+          },
           "statPoints": {
             "value": 0,
             "mod": 0
@@ -58,19 +84,19 @@
             },
             "special": {
               "value": 0,
-              "mod:": 0,
+              "mod": 0,
               "keys": []
             }
           },
           "damageReduction": {
             "physical": {
               "value": 0,
-              "mod:": 0,
+              "mod": 0,
               "keys": []
             },
             "special": {
               "value": 0,
-              "mod:": 0,
+              "mod": 0,
               "keys": []
             }
           }
@@ -330,7 +356,7 @@
         }
       },
       "shared": {
-        "digestionBuff": "",
+        "foodBuff": "",
         "notes": "",
         "tempHp": {
           "value": null,
@@ -470,6 +496,9 @@
         "megaLauncher": false,
         "punkRock": false,
         "strongJaw": false
+      },
+      "automation": {
+        "automation": []
       }
     },
     "dexentry": {
@@ -478,25 +507,27 @@
       "owned": false
     },
     "feat": {
-      "templates": ["base"],
+      "templates": ["base", "automation"],
       "prerequisites": "",
       "frequency": "At Will - Standard Action",
-      "tags": [],
-      "notes": ""
+      "tags": "",
+      "notes": "",
+      "free": false
     },
     "edge": {
       "templates": ["base"],
       "prerequisites": "",
-      "notes": ""
+      "notes": "",
+      "free": false
     },
     "ability": {
-      "templates": ["base"],
+      "templates": ["base", "automation"],
       "frequency": "",
       "tier": ""
     },
     "move": {
-      "templates": ["base", "interactions"],
-      "type": "",
+      "templates": ["base", "interactions", "automation"],
+      "type": "Untyped",
       "category": "",
       "damageBase": "",
       "frequency": "",
@@ -516,10 +547,11 @@
       "cost": 0
     },
     "item": {
-      "templates": ["base"],
+      "templates": ["base", "automation"],
       "quantity": 1,
       "category": "",
-      "cost": 0
+      "cost": 0,
+      "consumable": 0
     }
   }
 }

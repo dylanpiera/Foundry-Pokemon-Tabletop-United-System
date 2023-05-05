@@ -35,7 +35,10 @@
                         <div class="d-flex">
                             <div class="col-sm-12 col-md-4">
                                 <div class="swsh-box m-1 w-100" style="max-height: 900px; overflow-y: scroll;overflow: auto;">
-                                    <div class="swsh-header p-1 justify-content-end text-align-center d-flex">
+                                    <div class="swsh-header p-1 justify-content-between text-align-center d-flex">
+                                        <div class="item-controls flexcol" style="flex: 0 0 35%;">
+                                            <a class="item-control item-create" title="Backup" data-type="backup"><span class="readable">Backup</span><i class="fas fa-cloud" style="margin-left: 3px;"></i></a>
+                                        </div>
                                         <div class="item-controls flexcol" style="flex: 0 0 15%;">
                                             <a class="item-control item-create" title="Add species" data-type="species"><i class="fas fa-plus-circle" style="margin-right: 3px;"></i><span class="readable">Add</span></a>
                                         </div>
@@ -301,20 +304,8 @@
                                                 </div>
                                             </div>
                                             <div class="d-flex pt-2 pb-1">
-                                                <div class="d-flex" style="flex: 0 0 49%; flex-wrap: wrap;">
-                                                    {{#each object.Capabilities as |capability key|}}
-                                                        {{#unless (is key "Other")}}
-                                                            <div class="d-flex align-items-center pt-1 pb-1">
-                                                                <div class="col-sm-7">
-                                                                    <label for="Capabilities.{{key}}">{{key}}</label>
-                                                                </div>
-                                                                <div class="col-sm-5">
-                                                                    <input {{#if (not key "Naturewalk" )}}required{{/if}} type="text" name="Capabilities.{{key}}"
-                                                                        value="{{capability}}" />
-                                                                </div>
-                                                            </div>
-                                                        {{/unless}}
-                                                    {{/each}}
+                                                <div class="d-flex" style="flex: 0 0 49%; flex-wrap: wrap;" id="cse-capabilities">
+                                                    
                                                 </div>
                                                 <div style="flex: 0 0 49%; flex-wrap: wrap;" id="cse-other-capabilities">
                                                     
@@ -346,7 +337,10 @@
                         <div class="d-flex">
                             <div class="col-sm-12 col-md-4">
                                 <div class="swsh-box m-1 w-100" style="max-height: 900px; overflow-y: scroll;overflow: auto;">
-                                    <div class="swsh-header p-1 justify-content-end text-align-center d-flex">
+                                    <div class="swsh-header p-1 justify-content-between text-align-center d-flex">
+                                        <div class="item-controls flexcol" style="flex: 0 0 35%;">
+                                            <a class="item-control item-create" title="Backup" data-type="backup"><span class="readable">Backup</span><i class="fas fa-cloud" style="margin-left: 3px;"></i></a>
+                                        </div>
                                         <div class="item-controls flexcol" style="flex: 0 0 15%;">
                                             <a class="item-control item-create" title="Add species" data-type="species"><i class="fas fa-plus-circle" style="margin-right: 3px;"></i><span class="readable">Add</span></a>
                                         </div>
@@ -487,7 +481,10 @@
                         <div class="d-flex">
                             <div class="col-sm-12 col-md-4">
                                 <div class="swsh-box m-1 w-100" style="max-height: 900px; overflow-y: scroll;overflow: auto;">
-                                    <div class="swsh-header p-1 justify-content-end text-align-center d-flex">
+                                    <div class="swsh-header p-1 justify-content-between text-align-center d-flex">
+                                        <div class="item-controls flexcol" style="flex: 0 0 35%;">
+                                            <a class="item-control item-create" title="Backup" data-type="backup"><span class="readable">Backup</span><i class="fas fa-cloud" style="margin-left: 3px;"></i></a>
+                                        </div>
                                         <div class="item-controls flexcol" style="flex: 0 0 15%;">
                                             <a class="item-control item-create" title="Add species" data-type="species"><i class="fas fa-plus-circle" style="margin-right: 3px;"></i><span class="readable">Add</span></a>
                                         </div>

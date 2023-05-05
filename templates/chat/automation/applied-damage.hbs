@@ -11,12 +11,34 @@
                     <div class="d-flex flex-row" style="flex: 0 0 100%; align-items: center; {{#if @last}}{{else}}border-bottom: 1px solid lightgray;{{/if}}">
                         {{#unless (is info.damage "0")}}
                             <span class="fs-9" style="flex: 0 0 70%; word-break:break-word;">{{info.name}} took {{info.damage}} damage and {{info.injuries}} injuries!</span>
-                            <button class="undo-damage-button fs-10" data-target="{{id}}" data-token-target="{{info.tokenId}}" data-origin-message="{{info.msgId}}" data-target-type="{{info.type}}" data-damage="{{info.damage}}" data-old-temp="{{info.old.temp}}" data-old-value="{{info.old.value}}" data-injuries="{{info.injuries}}" data-old-injuries="{{info.old.injuries}}" style="flex: 0 0 30%;">
+                            <button class="undo-damage-button fs-10" data-target="{{info.uuid}}" data-origin-message="{{info.msgId}}" {{#each info.old as |value key|}}data-old-{{key}}="{{value}}"{{/each}} style="flex: 0 0 30%;">
                                 undo
                             </button>
                         {{else}}
                             <span class="fs-9 pt-1 pb-1" style="flex: 0 0 70%; word-break:break-word;">{{info.name}} was immune! No damage applied</span>
                         {{/unless}}
+                    </div>
+                {{/each}}
+            </div>
+        </div>
+    </div>
+{{/if}}
+{{#if effectData}}
+    <div class="content flexrow pt-1" style="font-variant: normal;">
+        <div class="swsh-box">
+            <div class="swsh-header">
+                <div class="d-flex w-100 mt-1 mb-1 justify-content-center">
+                    <span style="padding:5px;text-align:center;word-break:break-word;">{{move}} Effect</span>
+                </div>
+            </div>
+            <div class="swsh-body">
+                {{#each effectData as |info|}}
+                    <div class="d-flex flex-row" style="flex: 0 0 100%; align-items: center; {{#if @last}}{{else}}border-bottom: 1px solid lightgray;{{/if}}">
+                        <span class="fs-9" style="flex: 1 0 70%; word-break:break-word;">{{info.message}}</span>
+                        {{!-- Implement Effect Undo Button --}}
+                        {{!-- <button class="undo-effect-button fs-10" data-target="{{id}}" data-origin-message="{{info.msgId}}" style="flex: 0 0 30%;">
+                            undo
+                        </button> --}}
                     </div>
                 {{/each}}
             </div>

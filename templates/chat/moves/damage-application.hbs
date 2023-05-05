@@ -26,7 +26,18 @@
                     {{/unless}}
                 </div>
                 {{#each data as | value key |}}
-                    <div class="mon-list d-flex w-100 pt-1 pb-1" data-target="{{key}}" data-hit="{{value.isHit}}" data-crit="{{../crit}}">
+                    <div class="mon-list d-flex w-100 pt-1 pb-1" 
+                    data-target="{{value.uuid}}" 
+                    data-hit="{{value.isHit}}" 
+                    data-crit="{{../crit}}"
+                    data-ac-roll="{{diceResult ../acRoll "20"}}" 
+                    data-move-uuid="{{../moveUuid}}" 
+                    data-move-name="{{../moveName}}" 
+                    data-damage="{{../damageRolls.normal.total}}" 
+                    data-crit-damage="{{../damageRolls.crit.total}}" 
+                    data-type="{{../move.type}}" 
+                    data-category="{{../move.category}}"
+                    data-mode="full">
                         <div class="mon-item icon">
                             <img src="{{value.target.image}}" style="max-height: 50px; border:none;">
                         </div>
@@ -76,7 +87,7 @@
             </div>
         </div>
 
-        {{#unless (or (is move.category "Status") (is (isdefined damageRolls.normal.data.db) false))}}
+        {{#unless (or (is move.category "Status") (and (is (isdefined damageRolls.normal.data.db) false) (is damageRolls.normal.isDeterministic false)))}}
             <div class="swsh-header" style="padding: 0px ! important;  background-color:#272727 ! important;">
                 <div class="d-flex w-100 mt-0 mb-0" style="padding: 0px ! important; background-color:#272727 ! important;">
                     <div class="col" style="padding: 0px ! important; background-color:#272727 ! important;">
@@ -125,7 +136,7 @@
                             <div class="d-flex" style="flex: 0 0 30%;">
                                 <span class="dice-total p-0 m-0" style="flex: 1;">
                                     <h6>
-                                        <button class="automated-damage-button p-0" data-move-name="{{moveName}}" data-damage="{{damageRolls.normal.total}}" data-crit-damage="{{damageRolls.crit.total}}" data-type="{{move.type}}" data-category="{{move.category}}" data-target="many" data-mode="full">
+                                        <button class="automated-damage-button p-0" data-ac-roll="{{diceResult acRoll "20"}}" data-move-uuid="{{moveUuid}}" data-move-name="{{moveName}}" data-damage="{{damageRolls.normal.total}}" data-crit-damage="{{damageRolls.crit.total}}" data-type="{{move.type}}" data-category="{{move.category}}" data-target="many" data-mode="full">
                                             Apply
                                         </button>
                                     </h6>
@@ -133,14 +144,14 @@
                             </div>
                         </div>
                         <div class="row justify-content-center w-100 ml-0 mr-0" style="height: 18px; border: 1px solid #999; box-shadow: 0 0 2px #FFF inset; border-radius: 3px; background: rgba(0, 0, 0, 0.1);">
-                            <div class="small-button-container"><button class="automated-damage-button small" data-move-name="{{moveName}}" data-damage="{{damageRolls.normal.total}}" data-type="{{move.type}}" data-category="{{move.category}}" data-target="many" data-mode="weak" data-crit="false">Resist Less</button></div>
-                            <div class="small-button-container"><button class="automated-damage-button small" data-move-name="{{moveName}}" data-damage="{{damageRolls.normal.total}}" data-type="{{move.type}}" data-category="{{move.category}}" data-target="many" data-mode="resist" data-crit="false">Resist More</button></div>
-                            <div class="small-button-container"><button class="automated-damage-button small" data-move-name="{{moveName}}" data-damage="{{damageRolls.normal.total}}" data-type="{{move.type}}" data-category="{{move.category}}" data-target="many" data-mode="half" data-crit="false">1/2 DMG</button></div>
-                            <div class="small-button-container"><button class="automated-damage-button small" data-move-name="{{moveName}}" data-damage="{{damageRolls.normal.total}}" data-type="{{move.type}}" data-category="{{move.category}}" data-target="many" data-mode="flat" data-crit="false">Flat DMG</button></div>
+                            <div class="small-button-container"><button class="automated-damage-button small" data-ac-roll="{{diceResult acRoll "20"}}" data-move-uuid="{{moveUuid}}" data-move-name="{{moveName}}" data-damage="{{damageRolls.normal.total}}" data-type="{{move.type}}" data-category="{{move.category}}" data-target="many" data-mode="weak" data-crit="false">Resist Less</button></div>
+                            <div class="small-button-container"><button class="automated-damage-button small" data-ac-roll="{{diceResult acRoll "20"}}" data-move-uuid="{{moveUuid}}" data-move-name="{{moveName}}" data-damage="{{damageRolls.normal.total}}" data-type="{{move.type}}" data-category="{{move.category}}" data-target="many" data-mode="resist" data-crit="false">Resist More</button></div>
+                            <div class="small-button-container"><button class="automated-damage-button small" data-ac-roll="{{diceResult acRoll "20"}}" data-move-uuid="{{moveUuid}}" data-move-name="{{moveName}}" data-damage="{{damageRolls.normal.total}}" data-type="{{move.type}}" data-category="{{move.category}}" data-target="many" data-mode="half" data-crit="false">1/2 DMG</button></div>
+                            <div class="small-button-container"><button class="automated-damage-button small" data-ac-roll="{{diceResult acRoll "20"}}" data-move-uuid="{{moveUuid}}" data-move-name="{{moveName}}" data-damage="{{damageRolls.normal.total}}" data-type="{{move.type}}" data-category="{{move.category}}" data-target="many" data-mode="flat" data-crit="false">Flat DMG</button></div>
                         </div>
                     </div>
                 </div>
-                {{!-- {{#if damageRolls.crit}}
+                {{!-- {{#if damageRolls.crit}} 
                     <div class="dice-roll w-100 pt-1 pb-1">
                         <div class="dice-result p-0">
                             <div class="dice-formula p-0 m-0">  
@@ -183,7 +194,7 @@
                     <div class="dice-result p-0">
                         <span class="dice-total p-0 m-0">
                             <h6>
-                                <button disabled class="automated-effect-button p-0" data-move-name="{{moveName}}" data-type="{{move.type}}" data-category="{{move.category}}" data-target="many">
+                                <button class="automated-effect-button p-0" data-move-name="{{moveName}}" data-move-Uuid="{{moveUuid}}" data-type="{{move.type}}" data-category="{{move.category}}" data-target="many">
                                     Apply Effect
                                 </button>
                             </h6>

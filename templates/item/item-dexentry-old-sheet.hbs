@@ -1,9 +1,20 @@
 {{#with data}}
-    <form class="{{cssClass}}" autocomplete="off">
-        <header class="sheet-header mb-2">
-            <div class="itemBox">
-                <div class="content">
-                    Effect: <span class="readable p11 pokemon">{{{data.effect}}}</span>
+    {{!-- Form Element --}}
+    {{#if cssClass}}
+        <form class="{{cssClass}}" autocomplete="off">
+    {{else}}
+        <form autocomplete="off">
+    {{/if}}
+
+        {{!-- Sheet Header --}}
+        <header class="sheet-header mb-2" style="height: auto;">
+            <div class "hgss-box">
+                <div class="hgss-body">
+                    <span
+                    class="readable p-2"
+                    style="word-break: break-word;
+                        line-height: 13px;
+                        font-size: 15px;">{{{system.entry}}}</span>
                 </div>
             </div>
         </header>
@@ -13,6 +24,7 @@
             <div class="details readable h-100">
                 <div style="display: grid; grid-template-columns: 45% 50%; justify-content: space-between; padding: 0 5px;">
                     <div class="hgss-box align-items-center" style="display: grid; grid-template-columns: 40% 60%;">
+                        {{!-- Name --}}
                         <div class="hgss-header vertical">
                             <label for="name">Name:</label>
                         </div>
@@ -26,35 +38,32 @@
                             />
                         </div>
 
+                        {{!-- Owned --}}
                         <div class="hgss-header vertical">
-                            <label for="data.origin">Origin:</label>
+                            <label for="name">Owned:</label>
                         </div>
                         <div class="hgss-body">
-                            <input
-                                class="ml-2"
-                                name="data.origin"
-                                type="text"
-                                value="{{data.origin}}"
-                                placeholder="Level-Up"
-                            />
+                            <div class="d-flex align-items-center">
+                                <input
+                                    class="ml-2"
+                                    data-item-id="{{_id}}" 
+                                    data-binding="system.owned" 
+                                    type="checkbox" {{checked system.owned}}
+                                    disabled
+                                />
+                                <label for="system.owned"><span class="text-muted" style="word-break: break-word; font-size: 9px;">(Please edit in trainer sheet)</span></label>
+                            </div>
                         </div>
                     </div>
                     <div class="hgss-box align-items-center">
+                        {{!-- Entry --}}
                         <div class="hgss-header mb-1 " style="padding: 6px 5px;">
-                            <label for="data.effect">Effect:</label>
+                            <label for="system.entry">Entry:</label>
                         </div>
                         <div class="hgss-body" style="word-break: break-word;">
                             <textarea
                                 class="ml-2"
-                                name="data.effect">{{data.effect}}</textarea>
-                        </div>
-                        <div class="hgss-header mt-1 mb-1 " style="padding: 5px 5px;">
-                            <label for="data.snippet">Snippet:</label>
-                        </div>
-                        <div class="hgss-body" style="word-break: break-word;">
-                            <textarea
-                                class="ml-2"
-                                name="data.snippet">{{data.snippet}}</textarea>
+                                name="system.entry">{{system.entry}}</textarea>
                         </div>
                     </div>
                 </div>

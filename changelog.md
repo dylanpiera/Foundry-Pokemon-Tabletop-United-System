@@ -1,5 +1,179 @@
-# Welcome to the Beta!
-Hey there! You are on the Beta Branch. If you ever have any feedback please do share with us over on [Github](https://github.com/dylanpiera/Foundry-Pokemon-Tabletop-United-System/issues) or [Discord](https://discord.gg/fE3w59q)
+## 3.2.3.6 - HotFix
+### Fixes
+- Fixed an issue with Custom Species in the Level Up Form
+- Added the forgotten Rotom Forms
+- Fixed some compatability issues with Item Piles
+
+## 3.2.3.5 - Lots of new stuff!
+Hey all, this update brings with it a few big new features, as well as a lot of small QoL additions and bugfixes. 
+Our big new feature is the Secondary Effect Automation Framework. For more details on this check our Discord.
+
+### New Features
+- Added the Secondary Effect Automation Framework. (please read discord announcement for more info)
+- Added a setting to disable 'Pokéball Sounds' when Pokémon get sent out.
+- Level-Up form will now update your health appropriately.
+- Added a 'Notes' field in the extra tab of Pokemon
+- Character Sheets now allow +/- in certain fields like HP or EXP (f.e., if your HP is 50, and you change the field to +5, it will apply +5 to your HP.)
+- Implemented the 'GM Prompt' option for the "Pokédex Permission" setting
+- Implemented the PTR Movement Icons module into the system
+- Added a small animation upon Pokémon Evolution through the Level Up Popup
+
+### New Automations
+#### Moves
+- Ember
+#### Abilities
+- Exploit
+
+### Fixes
+- Fixed an issue with Pokémon being sent out didn't play the proper automation causing them not to be added to the Turn Tracker during combat.
+- Fixed a bug with the Level Up Popup showing your remaining Level Up Points as 'undefined'.
+- Enable Foundry Sidebar Collapse
+- Reposition PTR Sidebar with the Foundry Sidebar (upon collapse)
+- Fixed an issue with Capabilities not being editable in the Custom Species Editor
+- Fix issues with Custom Type Images
+
+## Version 3.2.3.4 - HotFix
+It appeared we are 'incentivising' the Playtest a bit too much... considering if you're not running it this update broke! 
+
+### Fixes
+- Made the level-up form fully compatible for people not running the stat playtest
+- Made it so that Abilities auto default to not all be the same one.
+- Fixed a style issue that sometimes appears in the Level-Up Form
+
+## Version 3.2.3.2 - Level-Up Popup!
+Hi all! We've been hard at work on this new addition; the Level-Up Form for Pokemon.
+
+Whenever you level up your pokemon (by increasing the EXP value) this pop-up will show up (unless disabled by the GM in settings). 
+It includes the following features:
+- (Re-)assign Stat Points
+- Evolve your Pokemon
+- Learn new moves
+- Gain new Abilities
+- Replace abilities on Evolution
+
+And besides that we have a couple QoL changes that we hope you'll enjoy!
+### New Features
+- New Level-Up Form that displays whenever a Pokemon Levels up (unless disabled)
+- BaseStats Overwrite fields in the Extra Tab (Effect Path: `system.modifiers.baseStats.[STAT].mod`)
+- Type Overwrite (only from effects, path: `system.modifiers.typeOverwrite` sample input for 3 types 'Grass', 'Fire' & 'Water': `Grass/Fire/Water`)
+
+### Fixes
+- Fixed some issues with the playtest where it appeared stats dropped on level-up
+
+## Version 3.2.3.0 - Playtest Update
+After some feedback we noticed that the stats may have been a bit overtuned. So we have decided to update the defaults
+
+***this means you will have to manually update your settings*** to the new defaults, which are as followed:
+- β should be 0.5
+- σ should be 3.5
+
+Please note that just updating these values in version 3.2.2.0 is not the same as there were also some other under-the-hood changes to the formula.
+
+## Version 3.2.2.0 - Playtest Fix
+It was detected that the σ modifier could make infinite stats under certain rare circumstances. 
+
+## Version 3.2.1.0 - Playtest Fix
+The playtest did not properly take Nature into account, also scaling on Trainers have been buffed to be more equal to mons.
+
+## Version 3.2.0.0 - PTR Playtest 1
+Hi all! Welcome to stable version 3.2, with it brings some new features as well as the first PTR Playtest!
+
+### New Features
+- The move 'Transform' will not actually transform your mon (and back) into whatever is targeted!
+- Pokemon show held items in the side bar
+- GMs can now block pokeballs from being thrown (option in settings)
+- Added maneuvers to the sidebar (purely referential, no automation)
+- Added a pop-up when a Pokemon levels up to ask whether it should learn new moves when applicable
+- Added a 'Search' button to the Menu Bar (on the left).
+- Search is part of PTR and will display PTR data. In the future we'll implement to-chat functionality.
+- Trainer Sheets now show how many Feats/Edges you should have based on your level up (including the bonus edges at lvl 2, 6 & 12).
+- Added ad-hoc modifier for Skill Checks just like you can do with moves/damage calc (hold shift when clicking).
+- Added support for female images with the `f` prefix so f.e. `001f.png`
+- Added HP Guidelines section to trainer sheets
+- New design for Item Sheets & Item Icons!
+- Consumable (food buff) items will now show in the sidebar and can be clicked to mark the item as 'Consumed' applying a food buff to the pokemon/target.
+- Food buffs themselves can also be consumed (NOTE: this is purely for tracking purposes as no automation has been implemented yet)
+- When a pokemon breaks out of a capture, a broken ball will automatically be added to the player character's inventory.
+
+### Fixes
+- Fixed an issue with ItemPiles compatability
+- Fixed a style issue with certain items
+- Fixed hovering over maneuvers not showing the details
+- Actors have their token data linked by default now.
+- Active Effects & Source pop-ups work and display as intended again.
+- Item Sorting has been updated to v10 and should now no longer be wonky!
+- Renamed 'Digestion Buff' to 'Food Buff'
+- Fixed long names not wrapping in chat
+- Removed 'Item Notes' as they were unnecessary
+- Added 'Stealth' capability to the compendium
+- Fixed crit button being ignored by the single-target applicator.
+- Wishiwashi's art now generates properly depending on whether it's in solo or schooling form
+- species-data.js has been updated with the latest changes from PTR-Data (99% finished)
+
+### Playtests
+Introducing PTR Playtests! For full details check the #playtests channel on the discord.
+
+This version adds the "Stats & no-more BSR" Playtest, to enable check the new settings category in PTU Settings!
+
+
+## Version 3.1.0.0 - V10 Support!
+Hey Everyone! It's been a long time coming but we finally have an official v10 build available for you all to play around with.
+
+Below follows a short overview of all updates, for more clear details check the detailed changelog in the discord / on our development branch:
+
+### Breaking Changes: **MUST READ**
+- This update may require you to clear your cache for it to work properly. Make sure every player runs ctrl+f5 on their browser before trying to run a game!
+- The `game.ptu` namespace has been completely adepted. Any existing macros will most likely break. For help fixing your macros you can reach us in #sharing-macros on the discord.
+- Custom Species storage has been updated and will be imported whenever a GM first loads the world (properly, see point 1 of this bullet list). In case of any doubts please reach us. In case of any import errors, old data will be kept in `game.settings.get("ptu", "customSpeciesBackup")`. Import is successfull once you see a chat message stating the same.
+
+## New Features:
+- Added Hisuian Dex & SwSh DLC Dexes
+- Custom Species Backup system
+- Allow for Dice Formulas in Ad-Hoc damage changes (Damage Bonus & Damage Reduction) (Hold shift while doing a move / applying damage)
+- Add 'Skip to Combatant' right click context option to Combat Tracker
+- Added >2 types compatibility with the CharacterMancer
+- Added sort buttons for Dex Entry sorting in Player Sheets
+- Added lots of new move animations (for use with Sequencer and the JB2A Patreon module)
+- Type Boosters & Type Braces now apply their Damage Bonus / Reduction automatically
+
+### Bug Fixes:
+- Fixed Rotom's Tutor Moveset (Thanks `Ellam#6478`)
+- Fix Stab on Pokemon with more than 2 typings
+- Made it so that if you skip someone's turn, effects with a dialog will be able to be triggered again later in the same round
+- Moves that always hit now show their dice roll for crit/effect purposes
+
+## Version 2.1
+Hey everyone! With the release of PTUVTT 2.1 we now have officially moved over to support Foundry V9!
+
+And there are Loooooads of features and bug fixes that have been added in this version, as many beta versions were created before this stable release.
+Because there are so many changes and basically everyone who is using the system has already been using the beta... Well, no real reason to consilidate them.
+But in case you're wondering you're free to read the individual updates down below.
+
+Up next we will start the 3.0 beta which will be for Foundry V10.
+**Please be aware that if you stay on the Beta branch you WILL need to update your foundry to V10 starting the first v3 beta. So we recommend upgrading to stable until Foundry V10 has fully launched as a stable update.**
+
+## 2.0-Beta-12 - All the PR Merges
+Since this version will never actually go live and is just a changelog for you guys in the discord server... A quick update!
+
+### New Features:
+- Tools of the Trade have been automated for Pokeball Captures
+- Added a custom type image setting for those that need it.
+- Alt clicking a skill roll will consume 1AP to add +1 to a skill check.
+
+### Bugfixes:
+- Added 'Sticky Hold' capability.
+- Fixed Quick Ball & Repeat Ball capture calculations.
+- Pokeball Throws now take trainer accuracy into account.
+- Dex entry settings have now been fully fixed and optimized.
+- Fixed Double Strike moves during untargeted combat.
+
+## 2.0-Beta-11 - Hotfix & Quick Feature
+- Fixed an error in the move effectiveness calculation causing the sidebar to break.
+- Added a 'Pokedex' button to 'dexentry' items.
+
+### 11.2 - Hotfix
+- Fixed issues with the new Pokedex Macro
+- Fixed memory issues with new features.
 
 ## 2.0-Beta-10 - Small Features Part 3
 ...If you were wondering where the bugfixes went... Well that was Beta 9 :p

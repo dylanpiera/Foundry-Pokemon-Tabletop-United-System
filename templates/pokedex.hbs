@@ -364,12 +364,12 @@
     </div>
 
     {{#if dexEntry}}
-        {{#if dexEntry.data.data.entry}}
+        {{#if dexEntry.system.entry}}
             <div class='row readable pt-2'>
                 <div class='col' style='text-align: left;'>
                     <h3><strong>Dex Entry</strong></h3>
                 
-                    {{{dexEntry.data.data.entry}}}
+                    {{{dexEntry.system.entry}}}
                 </div>
             </div>
         {{/if}}

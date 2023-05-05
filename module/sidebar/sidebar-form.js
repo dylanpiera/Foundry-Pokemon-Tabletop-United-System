@@ -5,6 +5,7 @@ import AbilitiesList from './components/abilities-component.js';
 import FeaturesList from './components/features-component.js';
 import BeltComponent from './components/belt-component.js';
 import ItemsComponent from './components/items-component.js';
+import FoodBuffComponent from "./components/food-buff-component.js";
 import OrdersComponent from './components/order-component.js';
 import MenuComponent from './components/menu-component.js';
 import { ui_sound_paths } from "./components/menu-component.js";
@@ -88,7 +89,7 @@ export class PTUSidebar extends FormApplication {
   }
 
   /**
-   * Used for external use through game.ptu.sidebar.stateHasChanged() - Forcing all components to evaluate a re-render.
+   * Used for external use through game.ptu.forms.sidebar.stateHasChanged() - Forcing all components to evaluate a re-render.
    */
   stateHasChanged(targetHasChanged = false) {
     if (targetHasChanged) this.store.dispatch("targetsHasChanged");
@@ -117,10 +118,10 @@ export class PTUSidebar extends FormApplication {
     if (canvas.tokens.controlled.length > 1) return;
 
     if (selected) { // Token selection became active
-      const actor = game.actors.get(token.data.actorId);
+      const actor = game.actors.get(token.actor.id);
       if (actor) 
       {
-        self.store.dispatch("setActor", token.data.actorId);
+        self.store.dispatch("setActor", token.actor.id);
         AudioHelper.play({ src: ui_sound_paths["flip"], volume: 0.3, autoplay: true, loop: false }, false);
       }
     }
@@ -139,16 +140,16 @@ export class PTUSidebar extends FormApplication {
   }
 
   async _onTokenTarget(user, token, selected) {
-    if (user.data._id != game.user.data._id) return;
+    if (user._id != game.user._id) return;
 
     const self = this;
 
     if (selected) { // Targeted Token selection became active
-      const actor = game.actors.get(token.data.actorId);
-      if (actor) self.store.dispatch("addTarget", token.data.actorId);
+      const actor = game.actors.get(token.actor.id);
+      if (actor) self.store.dispatch("addTarget", token.actor.id);
     }
     else { // If token got untargeted
-      self.store.dispatch("removeTarget", token.data.actorId);
+      self.store.dispatch("removeTarget", token.actor.id);
     }
   }
 
@@ -166,6 +167,7 @@ export class PTUSidebar extends FormApplication {
       featuresComponent: new FeaturesList(this.store),
       beltComponent: new BeltComponent(this.store),
       itemsComponent: new ItemsComponent(this.store),
+      foodBuffComponent: new FoodBuffComponent(this.store),
       // ordersComponent: new OrdersComponent(this.store),
       menuComponent: new MenuComponent(this.store),
     }
@@ -181,3 +183,9 @@ export class PTUSidebar extends FormApplication {
   /* -------------------------------------------- */
 
 }
+
+Hooks.on('collapseSidebar', () => setTimeout(() => {
+  let pos = game.ptu.forms.sidebar.position
+  pos.left = $(window).width()-$('#sidebar').width()-pos.width-10
+  game.ptu.forms.sidebar.setPosition(pos);
+}, 150));

@@ -1,9 +1,17 @@
 {{#with data}}
-    <form class="{{cssClass}}" autocomplete="off">
+    {{!-- Form Element --}}
+    {{#if cssClass}}
+        <form class="{{cssClass}}" autocomplete="off">
+    {{else}}
+        <form autocomplete="off">
+    {{/if}}
+
+        {{!-- Sheet Header --}}
         <header class="sheet-header mb-2">
             <div class="itemBox">
                 <div class="content">
-                    Effect: <span class="readable p11 pokemon">{{{data.effect}}}</span>
+                    Frequency: <span class="readable pokemon p11">{{system.frequency}}</span><br>
+                    Effect: <span class="readable p11 pokemon">{{{system.effect}}}</span>
                 </div>
             </div>
         </header>
@@ -12,7 +20,9 @@
         <div class="sheet-body">
             <div class="details readable h-100">
                 <div style="display: grid; grid-template-columns: 45% 50%; justify-content: space-between; padding: 0 5px;">
+                    {{!-- Left Column --}}
                     <div class="hgss-box align-items-center" style="display: grid; grid-template-columns: 40% 60%;">
+                        {{!-- Name Input --}}
                         <div class="hgss-header vertical">
                             <label for="name">Name:</label>
                         </div>
@@ -26,50 +36,69 @@
                             />
                         </div>
 
+                        {{!-- Origin Input --}}
                         <div class="hgss-header vertical">
-                            <label for="data.origin">Origin:</label>
+                            <label for="system.origin">Origin:</label>
                         </div>
                         <div class="hgss-body">
                             <input
                                 class="ml-2"
-                                name="data.origin"
+                                name="system.origin"
                                 type="text"
-                                value="{{data.origin}}"
+                                value="{{system.origin}}"
                                 placeholder="Level-Up"
                             />
                         </div>
 
-                        {{#if (is "true" (getGameSetting "useTutorPoints"))}}
+                        {{!-- Tier Input --}}
                         <div class="hgss-header vertical">
-                            <label for="data.cost">Cost:</label>
+                            <label for="system.tier">Tier:</label>
                         </div>
                         <div class="hgss-body">
                             <input
                                 class="ml-2"
-                                name="data.cost"
+                                name="system.tier"
                                 type="text"
-                                value="{{data.cost}}"
-                                placeholder="0"
+                                value="{{system.tier}}"
+                                placeholder=""
                             />
                         </div>
-                        {{/if}}
-                    </div>
+                     </div>
                     <div class="hgss-box align-items-center">
-                        <div class="hgss-header mb-1 " style="padding: 6px 5px;">
-                            <label for="data.effect">Effect:</label>
+                        <div class="hgss-header mb-1" style="padding: 6px 5px;">
+                            {{!-- Frequency Input --}}
+                            <label for="system.frequency">Frequency:</label>
                         </div>
-                        <div class="hgss-body" style="word-break: break-word;">
-                            <textarea
+                        <div class="hgss-body">
+                            <input
                                 class="ml-2"
-                                name="data.effect">{{data.effect}}</textarea>
+                                name="system.frequency"
+                                type="text"
+                                value="{{system.frequency}}"
+                                placeholder=""
+                            />
                         </div>
+                        {{!-- Effect --}}
                         <div class="hgss-header mt-1 mb-1 " style="padding: 5px 5px;">
-                            <label for="data.snippet">Snippet:</label>
+                            <label for="system.effect">Effect:</label>
                         </div>
                         <div class="hgss-body" style="word-break: break-word;">
                             <textarea
                                 class="ml-2"
-                                name="data.snippet">{{data.snippet}}</textarea>
+                                name="system.effect"
+                                type="text"
+                                placeholder="Effect"
+                            >{{{system.effect}}}</textarea>
+                        </div>
+                        {{!-- Snippet --}}
+                        <div class="hgss-header mt-1 mb-1 " style="padding: 5px 5px;">
+                            <label for="system.snippet">Snippet:</label>
+                        </div>
+                        <div class="hgss-body" style="word-break: break-word;">
+                            <textarea
+                                class="ml-2"
+                                name="system.snippet"
+                            >{{{system.snippet}}}</textarea>
                         </div>
                     </div>
                 </div>

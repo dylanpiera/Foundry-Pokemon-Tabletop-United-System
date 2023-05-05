@@ -3,6 +3,7 @@
 @import "compatability.less";
 @import "bootstrap-grid.css";
 @import "movemaster.less";
+@import "search.less";
 
 /* Freeware Font Credits: https://www.fontspace.com/jackster-productions/pokemon-gb */
 @font-face {
@@ -1609,4 +1610,26 @@ input[name="totalwealth"] {
   background-size: 12px 16px;
   background-repeat: no-repeat;
   background-position: 2px 4px;
+}
+
+#client-settings .categories {
+  font-family: monospace;
+
+  label{
+    font-size: 18px;
+    font-weight:bold;
+  }
+
+  button label{
+    font-size: 9px;
+    font-weight: normal;
+  }
+
+  p.notes {
+    font-size: 15px;
+  }
+
+  form .form-group .form-fields {
+    flex: 0;
+  }
 }
