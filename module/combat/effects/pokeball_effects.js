@@ -504,12 +504,6 @@ export async function PlayReleaseOwnedPokemonAnimation(token) {
             let trainer_actor = game.actors.get(actor.system.owner);
             let trainer_tokens = trainer_actor.getActiveTokens();
             let actor_token = trainer_tokens[0]; // The throwing trainer
-            
-            if(enable_pokeball_animation)
-            {
-                // await target_token.document.update({ "alpha": (0) });
-                await game.ptu.api.tokensUpdate(target_token, {alpha: 0})
-            }
 
             if(enable_pokeball_sounds)
                 await AudioHelper.play({src: pokeball_sound_paths["miss"], volume: 0.5, autoplay: true, loop: false}, true);
@@ -537,15 +531,12 @@ export async function PlayReleaseOwnedPokemonAnimation(token) {
                     await AudioHelper.play({src: pokeball_sound_paths["release"], volume: 0.5, autoplay: true, loop: false}, true); 
 
                 await timeout(500);
-                // await target_token.TMFXaddUpdateFilters(pokeballShoop_params); 
                 await game.ptu.utils.api.gm.addTokenMagicFilters(target_token, game.canvas.scene.id, pokeballShoop_params);
-                // await target_token.document.update({ "alpha": (1) });
-                await game.ptu.api.updateToken(target_token, {alpha: 1})
+                await game.ptu.utils.api.gm.tokensUpdate(target_token, {"alpha": 1});
             }
 
             await timeout(2000);
             await game.ptu.utils.species.playCry(actor.system.species);
-            await target_token.document.update({ "alpha": (1) });
 
 
             // alexander-r-block: Commenting out this block of code because the always_display_token_* properties are for wild pokemon.
@@ -651,8 +642,10 @@ export async function PlayPokeballReturnAnimation(pokemon_token)
     
         if(enable_pokeball_sounds)
             await AudioHelper.play({ src: pokeball_sound_paths["return"], volume: 0.7, autoplay: true, loop: false }, true);
-    
-        await timeout(2000);
+            
+        await timeout(1200);
+        await game.ptu.utils.api.gm.tokensUpdate(pokemon_token.object, {"alpha": 0});
+        await timeout(700);
         await pokemon_token.delete()
     }
     else

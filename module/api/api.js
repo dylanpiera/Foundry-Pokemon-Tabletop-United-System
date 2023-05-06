@@ -391,7 +391,7 @@ export default class Api {
             async tokensUpdate(data) {
                 if (!ref._isMainGM()) return;
 
-                const { scale, x, y, tint, height, width, img, brightSight, dimSight, light } = data.content.options;
+                const { scale, x, y, tint, height, width, img, brightSight, dimSight, light, alpha } = data.content.options;
 
                 const documents = [];
                 for (const uuid of data.content.uuids) {
@@ -403,6 +403,7 @@ export default class Api {
                 const newData = {};
 
                 if(scale !== undefined) newData["scale"] = scale;
+                if(alpha !== undefined) newData["alpha"] = alpha;
                 if(x !== undefined) newData["x"] = x;
                 if(y !== undefined) newData["y"] = y;
                 if(tint !== undefined) newData["tint"] = tint;
@@ -453,7 +454,7 @@ export default class Api {
 
 
                 const retVal = { result: [] };
-                for (const document of documents) retVal.result.push(await document.update(newData));
+                for (const document of documents) retVal.result.push(await document.update(newData, {animate: false}));
                 ref._returnBridge(retVal, data);
             },
             async nextTurn(data) {
