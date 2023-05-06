@@ -114,10 +114,10 @@
       "system": "ptu"
     },
     {
-      "label": "uranium & sage dex",
+      "label": "fan game dex",
       "entity": "Item",
-      "name": "uranium-and-sage-dex",
-      "path": "packs/uranium-and-sage-dex.db",
+      "name": "fan-game-dex",
+      "path": "packs/fan-game-dex.db",
       "system": "ptu"
     },
     {
