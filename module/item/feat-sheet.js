@@ -54,7 +54,7 @@ export class PTUFeatSheet extends ItemSheet {
 			label: "Send to Chat",
 			class: ".to-chat",
 			icon: "fas fa-comment",
-			onclick: () => this._toChat
+			onclick: () => this._toChat()
 		});
     
     buttons.unshift({

@@ -263,7 +263,7 @@ function PrepareAbilities(allAbilities) {
 
     let newAbilities = [];
     for(let name of abilityNames) {
-        let a = allAbilities.find(x => x.name.includes(name));
+        let a = allAbilities.find(x => x.name.toLowerCase().trim() == name.toLowerCase().trim());
         if(a) newAbilities.push(a);
     }
         

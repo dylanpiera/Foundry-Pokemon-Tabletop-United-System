@@ -364,7 +364,7 @@ export default function({actorSystem, changeDetails, name, form, knownMoves, cur
                 into: undefined,
             },
             form,
-            knownMoves,
+            knownMoves: knownMoves.filter(m => !m.system.isStruggle),
             newMoves: [],
             availableMoves: [],
             finalMoves: [],
