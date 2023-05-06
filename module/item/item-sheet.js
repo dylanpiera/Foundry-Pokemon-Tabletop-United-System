@@ -110,7 +110,7 @@ export class PTUItemSheet extends ItemSheet {
 				icon: "fas fa-tablet-alt",
 				onclick: () => {
 					const permSetting = game.settings.get("ptu", "dex-permission");
-					const mon = this.object.data?.data?.id ?? this.object.name;
+					const mon = this.object.name;
 
 					// No checks needed; just show full dex.
 					if (game.user.isGM) {

@@ -1,3 +1,30 @@
+## 3.2.3.9 - HotFix
+Hotfix for compendiums, making all new lines display properly
+
+## 3.2.3.8 - HotFix
+Hotfix on the macro shared on Discord so it doesn't reset all item quantities to 1.
+
+## 3.2.3.7 - PTR Data Sync & Bugfixes
+Hey all, this update brings along the full PTR Data sync, removing all [Playtest] tags as we now have 1 'true' version of all items.
+Please check the #announcements channel on the discord on how to easily update all of your existing items!
+
+### New Feature
+- Added type images to the Move List
+- Added PTR Data Sync utility (see discord)
+
+### Fixes
+- Update all Compendiums to the latest PTR-Data version.
+- Fix wrong abilities being generated for some mons (like Fluffy Charge instead of Fluffy).
+- Fix Terrabbit evolution.
+- Fix feat/edge sheet's "to-chat" not functioning.
+- Hide struggles from the Level Up Form.
+- Fix "++" and "--" for Health and the like on trainer sheets.
+- Fix chat wrappers for effects.
+- Fix the base stat source popup on trainer sheets.
+- Fix Teleporter capability not working in the Custom Species Editor.
+- Fixed missing dex-entries.
+- Fixed alt. forms (like Alolan, Galarian etc.) not loading the correct pokedex entry when opened from the 'dexentry' item.
+
 ## 3.2.3.6 - HotFix
 ### Fixes
 - Fixed an issue with Custom Species in the Level Up Form

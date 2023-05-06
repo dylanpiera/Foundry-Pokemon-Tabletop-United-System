@@ -110160,7 +110160,7 @@ export const uraniumData = [
       ],
       [
         2,
-        "Terrabit",
+        "Terrabbit",
         20,
         "Null"
       ],
@@ -110405,7 +110405,7 @@ export const uraniumData = [
       ],
       [
         2,
-        "Terrabit",
+        "Terrabbit",
         20,
         "Null"
       ],
@@ -110634,7 +110634,7 @@ export const uraniumData = [
       ],
       [
         2,
-        "Terrabit",
+        "Terrabbit",
         20,
         "Null"
       ],
