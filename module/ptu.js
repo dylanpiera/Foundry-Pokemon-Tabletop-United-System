@@ -88,7 +88,6 @@ export const ptu = {
       handleApplicatorItem,
       takeAction: TakeAction,
     },
-    
     combats: new Map(),
     dex: {
       render: RenderDex,
@@ -121,6 +120,7 @@ export const ptu = {
       move: _onMoveMacro,
       pokedex: _onPokedexMacro,
       trainingChanges: getTrainingChanges,
+      updateItems
     },
     species: {
       get: GetSpeciesData,
@@ -947,4 +947,64 @@ export async function showPlayerDexEntry(event){
   const userId = game.users.find(u => u.character = game.actors.getName(trainername) && !u.isGM)._id
 
   await game.ptu.utils.api.gm.renderDexToPlayer(mon._id, type, userId)
+}
+
+// Update items to the latest version based on the system's compendiums
+async function updateItems(actors = []) {
+
+  if(!actors.length) actors = game.actors;
+
+  // Loop through each actor
+  for (const actor of actors) {
+    // Loop through each item in the actor's inventory
+    for (const item of actor.items) {
+      console.log(`Checking ${item.name} (${item.uuid}) with system version ${item._stats?.systemVersion}`);
+      // Check if the item's system version is older than the current version
+      if (isNewerVersion(game.system.version, item._stats?.systemVersion ?? 0)) {
+
+        // For each type of item, select the proper compendium
+        let compendium;
+        switch (item.type) {
+          case "ability":
+            compendium = game.packs.get("ptu.abilities");
+            break;
+          case "capability":
+            compendium = game.packs.get("ptu.capabilities");
+            break;
+          case "dexentry":
+            compendium = game.packs.get("ptu.dex-entries");
+            break;
+          case "edge":
+            compendium = game.packs.get("ptu.edges");
+            break;
+          case "feat":
+            compendium = game.packs.get("ptu.feats");
+            break;
+          case "item":
+            compendium = game.packs.get("ptu.items");
+            break;
+          case "move":
+            compendium = game.packs.get("ptu.moves");
+            break;
+          case "pokeedge":
+            compendium = game.packs.get("ptu.poke-edges");
+            break;
+        }
+
+        // Find the item in the compendium with the same name as the current item
+        console.log(item.name?.split("(")[0]?.trim());
+        const index = compendium.index.getName(item.name?.split("(")[0]?.trim())?._id;
+        if(!index) continue;
+
+        const newItem = await compendium.getDocument(index);
+
+        // If a newer version of the item exists, update the current item
+        if (newItem && isNewerVersion(newItem._stats?.systemVersion ?? 0, item._stats?.systemVersion ?? 0)) {
+          console.log(`Updating ${item.name} (${item.uuid}) from ${item._stats?.systemVersion ?? 0} to ${newItem._stats?.systemVersion ?? 0}`)
+          await item.update({system: newItem.system});
+          return;
+        }
+      }
+    }
+  }
 }
