@@ -1,3 +1,6 @@
+## 3.2.3.8 - HotFix
+Hotfix on the macro shared on Discord so it doesn't reset all item quantities to 1.
+
 ## 3.2.3.7 - PTR Data Sync & Bugfixes
 Hey all, this update brings along the full PTR Data sync, removing all [Playtest] tags as we now have 1 'true' version of all items.
 Please check the #announcements channel on the discord on how to easily update all of your existing items!

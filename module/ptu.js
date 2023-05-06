@@ -65,7 +65,7 @@ export let log = logging.log;
 export let warn = logging.warn;
 export let error = logging.error;
 
-export const LATEST_VERSION = "3.2.3.7";
+export const LATEST_VERSION = "3.2.3.8";
 
 export const ptu = {
   utils: {
@@ -1001,6 +1001,7 @@ async function updateItems(actors = []) {
         if (newItem && isNewerVersion(newItem._stats?.systemVersion ?? 0, item._stats?.systemVersion ?? 0)) {
           console.log(`Updating ${item.name} (${item.uuid}) from ${item._stats?.systemVersion ?? 0} to ${newItem._stats?.systemVersion ?? 0}`)
           const name = item.name.includes("[") ? newItem.name : item.name;
+          delete newItem.system.quantity;
           await item.update({name: name, system: newItem.system});
         }
       }
