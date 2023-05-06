@@ -244,6 +244,9 @@ let pokeballPolymorphFunc = async function (pokeball_image_path, target_token) {
                 }
             }];
 
+        await game.ptu.utils.api.gm.removeTokenMagicFilters(target_token, game.canvas.scene.id, "pokeball_transform");
+
+
     }
     else {
         // No. So we create the entirety of the filter
@@ -268,6 +271,9 @@ let pokeballPolymorphFunc = async function (pokeball_image_path, target_token) {
                     }
                 }
             }];
+
+        await game.ptu.utils.api.gm.addTokenMagicFilters(target_token, game.canvas.scene.id, polymorph_params);
+
     }
 
     // all functions that add, update or delete filters are asynchronous
@@ -276,7 +282,7 @@ let pokeballPolymorphFunc = async function (pokeball_image_path, target_token) {
     // this is the reason why we use an async function (we cant use await in a non-async function)
     // avoid awaiting in a forEach loop, use "for" or "for/of" loop.
     // await target_token.TMFXaddUpdateFilters(polymorph_params);
-    await game.ptu.utils.api.gm.addTokenMagicFilters(target_token, game.canvas.scene, polymorph_params);
+    // await game.ptu.utils.api.gm.removeTokenMagicFilters(target_token, game.canvas.scene.id, "pokeball_transform");
 };
 
 
@@ -532,7 +538,7 @@ export async function PlayReleaseOwnedPokemonAnimation(token) {
 
                 await timeout(500);
                 // await target_token.TMFXaddUpdateFilters(pokeballShoop_params); 
-                await game.ptu.utils.api.gm.addTokenMagicFilters(target_token, game.canvas.scene, pokeballShoop_params);
+                await game.ptu.utils.api.gm.addTokenMagicFilters(target_token, game.canvas.scene.id, pokeballShoop_params);
                 // await target_token.document.update({ "alpha": (1) });
                 await game.ptu.api.updateToken(target_token, {alpha: 1})
             }
