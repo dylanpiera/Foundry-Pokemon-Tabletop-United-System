@@ -39,6 +39,7 @@ export async function preloadHandlebarsTemplates() {
         "systems/ptu/templates/partials/active-effects.hbs",
         "systems/ptu/templates/partials/mod-field.hbs",
         "systems/ptu/templates/partials/item-display-partial.hbs",
+        "systems/ptu/templates/partials/contacts-display-partial.hbs",
         
         // Charactermancer Partials
         "systems/ptu/templates/partials/charactermancer-evolution-partial.hbs",

@@ -3021,3 +3021,212 @@ button.dialog-button {
   padding: 0 0.25rem;
   white-space: nowrap;
 }
+
+/*****************
+*  Contacts   *
+*****************/
+
+.contacts {
+  &.swsh-header {
+    background-color: #FC92A6;
+    height: 50px;
+
+    display: flex;
+    flex-direction: row;
+    justify-content: start;
+
+    .icon-wrapper {
+      flex: 0 0 8%;
+
+      .icon-img {
+        height: 100%;
+        border: unset;
+      }
+    }
+
+    .icon-title-wrapper {
+      margin-left:0.5rem;
+      margin-right:0.5rem;
+      flex: 0 0 30%;
+      display: flex;
+      flex-direction: column;
+      .icon-title {
+        color: white;
+        span {
+          font-size: 23px;
+          font-variant: normal;
+          font-family: 'Signika';
+        }
+      }
+      .icon-subtitle {
+        color: white;
+        font-size: 13px;
+        font-family: 'Signika';
+        font-variant-caps: all-small-caps;
+      }
+    }
+
+    .search-bar {
+      flex: 1 0 40%;
+      padding: 0 1rem;
+      display: flex;
+      align-items: center;
+
+      .search-pill {
+        background: white;
+        border-radius: 25px;
+        display: flex;
+        justify-content: center;
+        width: 100%;
+      }
+
+      input {
+        background: white;
+        padding: 0.25rem 0.5rem;
+        border-radius: 25px;
+        color: black;
+        font-size: 9px;
+        align-self: center;
+        border: unset;
+
+        &::placeholder {
+          color: lightgray;
+        }
+      }
+    }
+  }
+
+  &.list {
+    flex-direction: column;
+    align-items: flex-start;
+
+    .item {
+      flex-direction:row;
+      height: 150px;
+      width: 100%;
+      justify-content: space-between;
+      border-bottom: 1px solid lightgray;
+      padding: 0.25rem;
+    }
+    .avatar-wrapper {
+      flex: 0 0 25%;
+      align-self: center;
+      display: flex;
+      justify-content: center;
+    }
+    .avatar {
+      height: 120px;
+      width: 120px;
+      background-color: #fff;
+      border-radius: 50%;
+      border: 3px solid #3988CA;
+      place-self: center;
+
+      img {
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        object-fit: contain;
+        border: unset;
+        &[src$=".svg"] {
+          filter: invert(1);
+        }
+      }
+    }
+    .item-body {
+      flex: 0 0 71%;
+      display: flex;
+      flex-direction: column;
+      margin-top: 0.25rem;
+      justify-content: space-between;
+
+      .name-box {
+        display: flex;
+        flex-direction: column;
+        flex: 0 0 40px;
+
+        .name-wrapper {
+          display: flex;
+          flex-direction: row;
+          justify-content: space-evenly;
+          flex: 0 0 25px;
+          .name-tag {
+            display: flex;
+            flex: 0 1 70%;
+            justify-content: start;
+            .name {
+              font-size: 16px;
+              font-weight: bold;
+              text-align: start;
+              display: flex;
+              align-items: end;
+              padding-right: 0.25rem;
+            }
+            .tag {
+              font-size: 10px;
+              font-weight: normal;
+              text-align: start;
+              color:darkgray;
+              display:flex;
+              align-items:end;
+            }
+  
+          }
+          .badge-container {
+            flex: 1 0 25%;
+          }
+        }
+        .sub-name-wrapper {
+          flex: 0 0 15px;
+          font-size: 8px;
+          display: flex;
+          align-items: center;
+  
+          i.fas {
+            padding-right: 5px;
+          }
+  
+          .dash { 
+            font-size: 12px;
+            color: darkgray;
+            font-weight: bold;
+          }
+          .birthday, .affiliation {
+            color: darkgray;
+          }
+        }
+      }
+
+      .chat {
+        flex: 0 0 55px;
+        display: flex;
+        flex-direction: row;
+        max-height: 55px;
+
+        .chat-message {
+          all: unset;
+          padding: 0.5rem;
+          border-radius: 15px 15px 15px 0;
+          background-color: #F1F1F1;
+          margin-bottom: 0.25rem;
+          align-items: center;
+          display: flex;
+          word-wrap: break-word;
+          font-size: 13px;
+          font-variant: normal;
+          font-family: 'Signika';
+          width: 80%;
+
+          .chat-content {
+            max-height: 32px;
+            overflow: hidden;
+          }
+        }
+      }
+
+      .footer-bar {
+        flex: 0 0 30px;
+      }
+    }
+  }
+}

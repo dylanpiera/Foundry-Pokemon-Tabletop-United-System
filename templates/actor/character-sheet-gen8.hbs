@@ -1115,7 +1115,7 @@
           <div class="tab details pokenav" data-group="primary" data-tab="pokenav">
           <!-- Sort/Search Bar -->
             <div class="col-6">
-              <div class="swsh-box mt-1 w-100">
+              {{!-- <div class="swsh-box mt-1 w-100">
                   <div class="swsh-header d-flex justify-content-around sort-nav" >
                     <div class="p-1">
                       <button class="btn rollable sort-nav" data-sort="name">Sort Name</button>
@@ -1123,12 +1123,29 @@
                       <input type="text" value="{{actor.filter}}" id="contact-filter" name="contact-filter" placeholder="Search Contacts" />
                     </div>
                 </div>
-              </div>              
-            
+              </div>               --}}
               <!-- Contacts -->
               <div class="swsh-box mt-2 w-100">
-                <div class="swsh-body w-100" style="display: block;">                  
-                  {{> "systems/ptu/templates/partials/item-display-partial.hbs" title=(localize "ITEM.TypeContactPlural") type="contact" data=actor.filteredContacts}}
+                <div class="contacts swsh-header">
+                  <div class="icon-wrapper">
+                    <img class="icon-img" src="systems/ptu/css/images/pokeball-hgss.png" title="PokéNav Icon"/>
+                  </div>
+                  <div class="icon-title-wrapper">
+                    <div class="icon-title">
+                      <span>PokéNav</span>
+                    </div>
+                    <div class="icon-subtitle">
+                      <span>product of © Devon Corporation.</span>
+                    </div>
+                  </div>
+                  <div class="search-bar">
+                    <div class="search-pill">
+                      <input type="text" value="{{actor.filter}}" id="contact-filter" name="contact-filter" placeholder="Type to search PokéNav..." />
+                    </div>
+                  </div>
+                </div>
+                <div class="swsh-body w-100" style="display: block;padding:unset;">                  
+                  {{> "systems/ptu/templates/partials/contacts-display-partial.hbs" title=(localize "ITEM.TypeContactPlural") type="contact" contacts=actor.filteredContacts}}
                 </div>
               </div>
             </div>
@@ -1186,7 +1203,7 @@
                 </div>
               </div>            
             
-              <div class="col h-100">
+              <div class="col">
                   <!-- Biography -->
                   
                   <div class="swsh-box h-15 w-100 mb-2 red">

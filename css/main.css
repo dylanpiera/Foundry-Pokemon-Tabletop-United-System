@@ -2498,6 +2498,192 @@ button.dialog-button {
   padding: 0 0.25rem;
   white-space: nowrap;
 }
+/*****************
+*  Contacts   *
+*****************/
+.contacts.swsh-header {
+  background-color: #FC92A6;
+  height: 50px;
+  display: flex;
+  flex-direction: row;
+  justify-content: start;
+}
+.contacts.swsh-header .icon-wrapper {
+  flex: 0 0 8%;
+}
+.contacts.swsh-header .icon-wrapper .icon-img {
+  height: 100%;
+  border: unset;
+}
+.contacts.swsh-header .icon-title-wrapper {
+  margin-left: 0.5rem;
+  margin-right: 0.5rem;
+  flex: 0 0 30%;
+  display: flex;
+  flex-direction: column;
+}
+.contacts.swsh-header .icon-title-wrapper .icon-title {
+  color: white;
+}
+.contacts.swsh-header .icon-title-wrapper .icon-title span {
+  font-size: 23px;
+  font-variant: normal;
+  font-family: 'Signika';
+}
+.contacts.swsh-header .icon-title-wrapper .icon-subtitle {
+  color: white;
+  font-size: 13px;
+  font-family: 'Signika';
+  font-variant-caps: all-small-caps;
+}
+.contacts.swsh-header .search-bar {
+  flex: 1 0 40%;
+  padding: 0 1rem;
+  display: flex;
+  align-items: center;
+}
+.contacts.swsh-header .search-bar .search-pill {
+  background: white;
+  border-radius: 25px;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+.contacts.swsh-header .search-bar input {
+  background: white;
+  padding: 0.25rem 0.5rem;
+  border-radius: 25px;
+  color: black;
+  font-size: 9px;
+  align-self: center;
+  border: unset;
+}
+.contacts.swsh-header .search-bar input::placeholder {
+  color: lightgray;
+}
+.contacts.list {
+  flex-direction: column;
+  align-items: flex-start;
+}
+.contacts.list .item {
+  flex-direction: row;
+  height: 150px;
+  width: 100%;
+  justify-content: space-between;
+  border-bottom: 1px solid lightgray;
+  padding: 0.25rem;
+}
+.contacts.list .avatar-wrapper {
+  flex: 0 0 25%;
+  align-self: center;
+  display: flex;
+  justify-content: center;
+}
+.contacts.list .avatar {
+  height: 120px;
+  width: 120px;
+  background-color: #fff;
+  border-radius: 50%;
+  border: 3px solid #3988CA;
+  place-self: center;
+}
+.contacts.list .avatar img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: contain;
+  border: unset;
+}
+.contacts.list .avatar img[src$=".svg"] {
+  filter: invert(1);
+}
+.contacts.list .item-body {
+  flex: 0 0 71%;
+  display: flex;
+  flex-direction: column;
+  margin-top: 0.25rem;
+  justify-content: space-between;
+}
+.contacts.list .item-body .name-box {
+  display: flex;
+  flex-direction: column;
+  flex: 0 0 40px;
+}
+.contacts.list .item-body .name-box .name-wrapper {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  flex: 0 0 25px;
+}
+.contacts.list .item-body .name-box .name-wrapper .name-tag {
+  display: flex;
+  flex: 0 1 70%;
+  justify-content: start;
+}
+.contacts.list .item-body .name-box .name-wrapper .name-tag .name {
+  font-size: 16px;
+  font-weight: bold;
+  text-align: start;
+  display: flex;
+  align-items: end;
+  padding-right: 0.25rem;
+}
+.contacts.list .item-body .name-box .name-wrapper .name-tag .tag {
+  font-size: 10px;
+  font-weight: normal;
+  text-align: start;
+  color: darkgray;
+  display: flex;
+  align-items: end;
+}
+.contacts.list .item-body .name-box .name-wrapper .badge-container {
+  flex: 1 0 25%;
+}
+.contacts.list .item-body .name-box .sub-name-wrapper {
+  flex: 0 0 15px;
+  font-size: 8px;
+  display: flex;
+  align-items: center;
+}
+.contacts.list .item-body .name-box .sub-name-wrapper i.fas {
+  padding-right: 5px;
+}
+.contacts.list .item-body .name-box .sub-name-wrapper .dash {
+  font-size: 12px;
+  color: darkgray;
+  font-weight: bold;
+}
+.contacts.list .item-body .name-box .sub-name-wrapper .birthday,
+.contacts.list .item-body .name-box .sub-name-wrapper .affiliation {
+  color: darkgray;
+}
+.contacts.list .item-body .chat {
+  flex: 0 0 55px;
+  display: flex;
+  flex-direction: row;
+  max-height: 55px;
+}
+.contacts.list .item-body .chat .chat-message {
+  all: unset;
+  padding: 0.5rem;
+  border-radius: 15px 15px 15px 0;
+  background-color: #F1F1F1;
+  margin-bottom: 0.25rem;
+  align-items: center;
+  display: flex;
+  word-wrap: break-word;
+  font-size: 13px;
+  font-variant: normal;
+  font-family: 'Signika';
+  width: 80%;
+}
+.contacts.list .item-body .chat .chat-message .chat-content {
+  max-height: 32px;
+  overflow: hidden;
+}
+.contacts.list .item-body .footer-bar {
+  flex: 0 0 30px;
+}
 .w-25 {
   width: 25% !important;
 }

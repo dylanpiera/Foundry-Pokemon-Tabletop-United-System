@@ -1,0 +1,47 @@
+<!-- list of contact items can be found in: {{contacts}} -->
+
+<div class="d-flex contacts list">
+    {{#each contacts as |contact|}}
+        <div class="d-flex item">
+            <div class="avatar-wrapper">
+                <div class="avatar">
+                    <img class="content profile-img" src="{{contact.img}}" title="{{contact.name}}"/>
+                </div>
+            </div>
+            <div class="d-flex item-body">
+                <div class="name-box">
+                    <div class="name-wrapper">
+                        <div class="name-tag">
+                            <div class="name">
+                                <span>{{contact.name}}</span>
+                            </div>
+                            <div class="tag">
+                                <span>{{#if contact.system.tag}}{{contact.system.tag}}{{else}}@testuser{{/if}}</span>
+                            </div>
+                        </div>
+                        <div class="badge-container">
+                            <!-- none yet -->
+                        </div>
+                    </div>
+                    <div class="sub-name-wrapper mt-1">
+                        
+                        <span class="birthday ml-1 mr-2"><i class="fas fa-birthday-cake"></i>Birthday {{#if contact.system.birthday}}{{contact.system.birthday}}{{else}}jan 1st 1970{{/if}}</span>
+                        <span class="dash">—</span>
+                        <span class="affiliation ml-2 mr-1"><i class="fas fa-users"></i>{{#if contact.system.affiliation}}{{contact.system.affiliation}}{{else}}Team Testers{{/if}}</span>
+                    </div>
+                </div>
+                <div class="chat">
+                    <!-- Last chat message -->
+                    <div class="chat-message">
+                        <span class="chat-content">
+                            {{#if contact.system.lastChat}}{{contact.system.lastChat}}{{else}}Hi! This is a system test message that's supposed to be relatively long!{{/if}}
+                        </span>
+                    </div>
+                </div>
+                <div class="footer-bar">
+
+                </div>
+            </div>
+        </div>
+    {{/each}}
+</div>
