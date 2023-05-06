@@ -65,7 +65,7 @@ export let log = logging.log;
 export let warn = logging.warn;
 export let error = logging.error;
 
-export const LATEST_VERSION = "3.2.3.6";
+export const LATEST_VERSION = "3.2.3.7";
 
 export const ptu = {
   utils: {
@@ -88,7 +88,6 @@ export const ptu = {
       handleApplicatorItem,
       takeAction: TakeAction,
     },
-    
     combats: new Map(),
     dex: {
       render: RenderDex,
@@ -121,6 +120,7 @@ export const ptu = {
       move: _onMoveMacro,
       pokedex: _onPokedexMacro,
       trainingChanges: getTrainingChanges,
+      updateItems
     },
     species: {
       get: GetSpeciesData,
@@ -868,116 +868,39 @@ Hooks.on('renderTokenHUD', (app, html, data) => {
   )
 });
 
+function changeValue(newValue = null, oldValue)
+{
+  if(!newValue || newValue === undefined) return oldValue;
+
+  const operator = newValue.substring(0,2);
+  const amountStr = operator === '++' || operator === '--' ? newValue.substring(2) : newValue;
+  const amount = parseInt(amountStr);
+
+  if (isNaN(amount)) return oldValue;
+  
+  return operator === '++' ? oldValue + amount
+                            : operator === '--' ? oldValue - amount
+                                                : amount;
+}
 Hooks.on("preUpdateActor", async (oldActor, changes, options, sender) => {
   
-  //check if xp changes are NaN
-  //check if xp changes start with + or - and if so increase/decrease value accordingly
-  const expChange = changes.system?.level?.exp;
-  if (expChange) {
-    const operator = expChange.charAt(0);
-    const amountStr = operator === '+' || operator === '-' ? expChange.substring(1) : expChange;
-    const amount = parseInt(amountStr);
-    if (!isNaN(amount)) {
-      const oldValue = oldActor.system.level.exp;
-      changes.system.level.exp = operator === '+' ? oldValue + amount
-                                                : operator === '-' ? oldValue - amount
-                                                                    : amount;
-    } else {
-      changes.system.level.exp = oldActor.system.level.exp;
-    }
-  } else {
-    changes.system.level.exp = oldActor.system.level.exp;
-  }
-
+  //exp
+  changes.system.level.exp = changeValue(changes.system?.level?.exp, oldActor.system.level.exp);
+  
   //milestones
-  const milestoneChange = changes.system?.level?.milestones;
-  if (milestoneChange) {
-    const operator = milestoneChange.charAt(0);
-    const amountStr = operator === '+' || operator === '-' ? milestoneChange.substring(1) : milestoneChange;
-    const amount = parseInt(amountStr);
-    if (!isNaN(amount)) {
-      const oldValue = oldActor.system.level.milestones;
-      changes.system.level.milestones = operator === '+' ? oldValue + amount
-                                                : operator === '-' ? oldValue - amount
-                                                                    : amount;
-    } else {
-      changes.system.level.milestones = oldActor.system.level.milestones;
-    }
-  } else {
-    changes.system.level.milestones = oldActor.system.level.milestones;
-  }
-
+  changes.system.level.milestones = changeValue(changes.system?.level?.milestones, oldActor.system.level.milestones);
+  
   //miscExp
-  const miscExpChange = changes.system?.level?.miscexp;
-  if (miscExpChange) {
-    const operator = miscExpChange.charAt(0);
-    const amountStr = operator === '+' || operator === '-' ? miscExpChange.substring(1) : miscExpChange;
-    const amount = parseInt(amountStr);
-    if (!isNaN(amount)) {
-      const oldValue = oldActor.system.level.miscexp;
-      changes.system.level.miscexp = operator === '+' ? oldValue + amount
-                                                : operator === '-' ? oldValue - amount
-                                                                    : amount;
-    } else {
-      changes.system.level.miscexp = oldActor.system.level.miscexp;
-    }
-  } else {
-    changes.system.level.miscexp = oldActor.system.level.miscexp;
-  }
+  changes.system.level.miscExp = changeValue(changes.system?.level?.miscExp, oldActor.system.level.miscExp);
   
   //hp
-  const hpChange = changes.system?.health?.value;
-  if (hpChange) {
-    const operator = hpChange.charAt(0);
-    const amountStr = operator === '+' || operator === '-' ? hpChange.substring(1) : hpChange;
-    const amount = parseInt(amountStr);
-    if (!isNaN(amount)) {
-      const oldValue = oldActor.system.health.value;
-      changes.system.health.value = operator === '+' ? oldValue + amount
-                                                : operator === '-' ? oldValue - amount
-                                                                    : amount;
-    } else {
-      changes.system.health.value = oldActor.system.health.value;
-    }
-  } else {
-    changes.system.health.value = oldActor.system.health.value;
-  }  
-
+  changes.system.health.value = changeValue(changes.system?.health?.value, oldActor.system.health.value);
+  
   //tempHp
-  const tempHpChange = changes.system?.tempHp?.value;
-  if (tempHpChange) {
-    const operator = tempHpChange.charAt(0);
-    const amountStr = operator === '+' || operator === '-' ? tempHpChange.substring(1) : tempHpChange;
-    const amount = parseInt(amountStr);
-    if (!isNaN(amount)) {
-      const oldValue = oldActor.system.tempHp.value;
-      changes.system.tempHp.value = operator === '+' ? oldValue + amount
-                                                : operator === '-' ? oldValue - amount
-                                                                    : amount;
-    } else {
-      changes.system.tempHp.value = oldActor.system.tempHp.value;
-    }
-  } else {
-    changes.system.tempHp.value = oldActor.system.tempHp.value;
-  }
+  changes.system.tempHp.value = changeValue(changes.system?.tempHp?.value, oldActor.system.tempHp.value);
   
   //tempHpMax
-  const tempHpMaxChange = changes.system?.tempHp?.max;
-  if (tempHpMaxChange) {
-    const operator = tempHpMaxChange.charAt(0);
-    const amountStr = operator === '+' || operator === '-' ? tempHpMaxChange.substring(1) : tempHpMaxChange;
-    const amount = parseInt(amountStr);
-    if (!isNaN(amount)) {
-      const oldValue = oldActor.system.tempHp.max;
-      changes.system.tempHp.max = operator === '+' ? oldValue + amount
-                                                : operator === '-' ? oldValue - amount
-                                                                    : amount;
-    } else {
-      changes.system.tempHp.max = oldActor.system.tempHp.max;
-    }
-  } else {
-    changes.system.tempHp.max = oldActor.system.tempHp.max;
-  }
+  changes.system.tempHp.max = changeValue(changes.system?.tempHp?.max, oldActor.system.tempHp.max);
 
   //check if level up form is turned off in settings
   const setting = game.settings.get("ptu", "levelUpScreen")
@@ -1024,4 +947,63 @@ export async function showPlayerDexEntry(event){
   const userId = game.users.find(u => u.character = game.actors.getName(trainername) && !u.isGM)._id
 
   await game.ptu.utils.api.gm.renderDexToPlayer(mon._id, type, userId)
+}
+
+// Update items to the latest version based on the system's compendiums
+async function updateItems(actors = []) {
+
+  if(!actors.length) actors = game.actors;
+
+  // Loop through each actor
+  for (const actor of actors) {
+    // Loop through each item in the actor's inventory
+    for (const item of actor.items) {
+      console.log(`Checking ${item.name} (${item.uuid}) with system version ${item._stats?.systemVersion}`);
+      // Check if the item's system version is older than the current version
+      if (isNewerVersion(game.system.version, item._stats?.systemVersion ?? 0)) {
+
+        // For each type of item, select the proper compendium
+        let compendium;
+        switch (item.type) {
+          case "ability":
+            compendium = game.packs.get("ptu.abilities");
+            break;
+          case "capability":
+            compendium = game.packs.get("ptu.capabilities");
+            break;
+          case "dexentry":
+            compendium = game.packs.get("ptu.dex-entries");
+            break;
+          case "edge":
+            compendium = game.packs.get("ptu.edges");
+            break;
+          case "feat":
+            compendium = game.packs.get("ptu.feats");
+            break;
+          case "item":
+            compendium = game.packs.get("ptu.items");
+            break;
+          case "move":
+            compendium = game.packs.get("ptu.moves");
+            break;
+          case "pokeedge":
+            compendium = game.packs.get("ptu.poke-edges");
+            break;
+        }
+
+        // Find the item in the compendium with the same name as the current item
+        const index = compendium.index.getName(item.name?.split("[")[0]?.trim())?._id;
+        if(!index) continue;
+
+        const newItem = await compendium.getDocument(index);
+
+        // If a newer version of the item exists, update the current item
+        if (newItem && isNewerVersion(newItem._stats?.systemVersion ?? 0, item._stats?.systemVersion ?? 0)) {
+          console.log(`Updating ${item.name} (${item.uuid}) from ${item._stats?.systemVersion ?? 0} to ${newItem._stats?.systemVersion ?? 0}`)
+          const name = item.name.includes("[") ? newItem.name : item.name;
+          await item.update({name: name, system: newItem.system});
+        }
+      }
+    }
+  }
 }

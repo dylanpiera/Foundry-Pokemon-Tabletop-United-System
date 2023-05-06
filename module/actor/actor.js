@@ -1172,12 +1172,21 @@ export function GetSpeciesData(species) {
         }
         preJson["Type"][0] = getOricorioType();
       }
-      else preJson = game.ptu.data.pokemonData.find(x => x._id.toLowerCase() === species.toLowerCase());
+      if(!preJson) {
+        preJson = game.ptu.data.pokemonData.find(x => x._id.toLowerCase() === species.toLowerCase());
+      }
       if (!preJson) {
         preJson = game.ptu.data.customSpeciesData.find(x => x._id.toLowerCase() === species.toLowerCase());
-        if (!preJson) return null;
-        extra.isCustomSpecies = true;
+        if (preJson) extra.isCustomSpecies = true;
       };
+      // If still not found, check for a species with an alt name
+      if(!preJson) {
+        preJson = game.ptu.data.pokemonData.find(x => x._id?.toLowerCase() === species.toLowerCase()+"-normal");
+        if (!preJson) {
+          preJson = game.ptu.data.pokemonData.find(x => x._id?.toLowerCase() === species.toLowerCase()+"-male");
+          if (!preJson) return null;
+        }
+      }
     }
     const toReturn = mergeObject(JSON.parse(JSON.stringify(preJson)), extra);
     if (toReturn.Type.indexOf("null") === 1) toReturn.Type.splice(1, 1);
