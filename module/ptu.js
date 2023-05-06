@@ -992,8 +992,7 @@ async function updateItems(actors = []) {
         }
 
         // Find the item in the compendium with the same name as the current item
-        console.log(item.name?.split("(")[0]?.trim());
-        const index = compendium.index.getName(item.name?.split("(")[0]?.trim())?._id;
+        const index = compendium.index.getName(item.name?.split("[")[0]?.trim())?._id;
         if(!index) continue;
 
         const newItem = await compendium.getDocument(index);
@@ -1001,8 +1000,8 @@ async function updateItems(actors = []) {
         // If a newer version of the item exists, update the current item
         if (newItem && isNewerVersion(newItem._stats?.systemVersion ?? 0, item._stats?.systemVersion ?? 0)) {
           console.log(`Updating ${item.name} (${item.uuid}) from ${item._stats?.systemVersion ?? 0} to ${newItem._stats?.systemVersion ?? 0}`)
-          await item.update({system: newItem.system});
-          return;
+          const name = item.name.includes("[") ? newItem.name : item.name;
+          await item.update({name: name, system: newItem.system});
         }
       }
     }
