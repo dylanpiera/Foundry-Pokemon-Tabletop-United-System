@@ -1,3 +1,6 @@
+## 3.2.3.9 - HotFix
+Hotfix for compendiums, making all new lines display properly
+
 ## 3.2.3.8 - HotFix
 Hotfix on the macro shared on Discord so it doesn't reset all item quantities to 1.
 
