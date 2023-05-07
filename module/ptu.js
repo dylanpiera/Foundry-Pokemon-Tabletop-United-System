@@ -65,7 +65,7 @@ export let log = logging.log;
 export let warn = logging.warn;
 export let error = logging.error;
 
-export const LATEST_VERSION = "3.2.3.5";
+export const LATEST_VERSION = "3.2.3.9";
 
 export const ptu = {
   utils: {
@@ -88,7 +88,6 @@ export const ptu = {
       handleApplicatorItem,
       takeAction: TakeAction,
     },
-    
     combats: new Map(),
     dex: {
       render: RenderDex,
@@ -121,6 +120,7 @@ export const ptu = {
       move: _onMoveMacro,
       pokedex: _onPokedexMacro,
       trainingChanges: getTrainingChanges,
+      updateItems
     },
     species: {
       get: GetSpeciesData,
@@ -402,11 +402,18 @@ Hooks.once("ready", async function () {
   // Wait to register hotbar drop hook on ready so that modules could register earlier if they want to
   Hooks.on("hotbarDrop", (bar, data, slot) => createPTUMacro(data, slot));
 
-  game.socket.on("system.ptu", (data) => {
+  game.socket.on("system.ptu", async (data) => {
     if (data == null) return;
     if (data == "RefreshCustomSpecies" || (data == "ReloadGMSpecies" && game.user.isGM)) Hooks.callAll("updatedCustomSpecies");
     if (data == "RefreshCustomTypings") Hooks.callAll("updatedCustomTypings");
     if (data == "RefreshCustomTypingsAndActors") Hooks.callAll("updatedCustomTypings", { updateActors: true });
+    if (data.type){
+      const { type, species, userId } = data;
+      
+      if(!!userId && game.userId !== userId) return
+
+      await game.ptu.utils.dex.render(species, type)
+    }
   });
 
   /** Display Changelog */
@@ -641,6 +648,9 @@ function _onMoveMacro(actor, item) {
 }
 
 async function _onPokedexMacro() {
+  //ding
+  AudioHelper.play({ src: "systems/ptu/sounds/ui_sounds/ui_pokedex_ding.wav", volume: 0.8, autoplay: true, loop: false }, false);
+
   const permSetting = game.settings.get("ptu", "dex-permission");
   const addToDex = game.settings.get("ptu", "auto-add-to-dex");
   for (let token of game.user.targets.size > 0 ? game.user.targets.values() : canvas.tokens.controlled) {
@@ -659,7 +669,7 @@ async function _onPokedexMacro() {
 
     switch (permSetting) {
       case 1: { // Pokedex Disabled
-        return ui.notifications.info("DM has turned off the Pokedex.");
+        return ui.notifications.info(game.i18n.localize("PTU.DexScan.Off"));
       }
       case 2: { //pokemon description only
         game.ptu.utils.dex.render(token.actor.system.species);
@@ -680,7 +690,24 @@ async function _onPokedexMacro() {
         break;
       }
       case 5: { // GM Prompt
-        return ui.notifications.warn("The GM prompt feature has yet to be implemented. Please ask your DM to change to a different Dex Permission Setting");
+        const result = await game.ptu.utils.api.gm.dexScanRequest(game.user.character.uuid, token.actor.uuid, {timeout: 30000})
+        switch(result) {
+          case "false": {
+            return ui.notifications.info(game.i18n.localize("PTU.DexScan.Denied"));
+          }
+          case "timeout": {            
+            return ui.notifications.warn(game.i18n.localize("PTU.DexScan.Timeout"));
+          }
+          case "description": {
+            game.ptu.utils.dex.render(token.actor.system.species);
+            break;
+          }
+          case "full": {
+            game.ptu.utils.dex.render(token.actor.system.species, "full");
+            break;
+          }
+        }
+        break;
       }
       case 6: { // Always Full Details
         game.ptu.utils.dex.render(token.actor.system.species, "full");
@@ -791,8 +818,91 @@ Hooks.on('getSceneControlButtons', function (hudButtons) {
 
 Hooks.on("renderTokenConfig", (config, html, options) => html.find("[name='actorLink']").siblings()[0].outerHTML = "<label>Link Actor Data <span class='readable p10'>Unlinked actors are not supported by the system</span></label>")
 
+/****************************
+Token Movement Info
+****************************/
+Hooks.on('renderTokenHUD', (app, html, data) => {
+  if(!game.settings.get("ptu", "showMovementIcons")) return;
+  
+  if(game.modules.get("ptu-movement-info")?.active){
+    ui.notification.warn("Thanks for using the PTU Movement info module! This module is now included in the PTR system and will no longer by updated. Please ask your GM to disable to PTY Movement Info module.")
+    return;
+  } 
+
+  //doesn't work with the barbrawl module
+  if(game.modules.get("barbrawl")?.active) {
+    //warn player that the movement icons don't work with barbrawl
+    ui.notifications.warn("Movement icons are not compatible with the barbrawl module. Please disable the barbrawl module to use movement icons.\nYou can disable movement icons in the PTU settings > Player Preferences to avoid seeing this message.");
+    return;
+  }
+
+  // Fetch Actor
+  const actor = game.actors.get(data.actorId);
+  if(actor === undefined) return;
+
+  // List of capabilities to possibly display, and the icon it should use
+  const capabilitiesMap = {
+    Overland: "fas fa-shoe-prints",
+    Swim: "fas fa-swimmer",
+    Burrow: "fas fa-mountain",
+    Sky: "fas fa-feather",
+    Levitate: "fab fa-fly",
+    Teleporter: "fas fa-people-arrows",
+  }
+
+  const buttons = [];
+  for(const [c,i] of Object.entries(capabilitiesMap)) { //c=capability, i=icon
+    const val = actor.system.capabilities[c];
+    // If value is 0 / unset no need to display.
+    if(!val) continue;
+
+    buttons.push(`<div class="control-icon chalk-icon" title="${c}: ${val}"><i class="${i}"></i>${val}</div>`)
+  }
+
+  html.find(".col.middle").before( // if the actor uses a 2nd bar increase height.
+    `<div class="col middle" style="top: -${html.find(".bar2").html().trim() ? 105 : 90}px;">
+        <div class="chalk-container">
+            ${buttons.join("\n")}
+        </div>
+    </div>`
+  )
+});
+
+function changeValue(newValue = null, oldValue)
+{
+  if(!newValue || newValue === undefined) return oldValue;
+
+  const operator = newValue.substring(0,2);
+  const amountStr = operator === '++' || operator === '--' ? newValue.substring(2) : newValue;
+  const amount = parseInt(amountStr);
+
+  if (isNaN(amount)) return oldValue;
+  
+  return operator === '++' ? oldValue + amount
+                            : operator === '--' ? oldValue - amount
+                                                : amount;
+}
 Hooks.on("preUpdateActor", async (oldActor, changes, options, sender) => {
-  //check if this is turned off in settings
+  
+  //exp
+  changes.system.level.exp = changeValue(changes.system?.level?.exp, oldActor.system.level.exp);
+  
+  //milestones
+  changes.system.level.milestones = changeValue(changes.system?.level?.milestones, oldActor.system.level.milestones);
+  
+  //miscExp
+  changes.system.level.miscExp = changeValue(changes.system?.level?.miscExp, oldActor.system.level.miscExp);
+  
+  //hp
+  changes.system.health.value = changeValue(changes.system?.health?.value, oldActor.system.health.value);
+  
+  //tempHp
+  changes.system.tempHp.value = changeValue(changes.system?.tempHp?.value, oldActor.system.tempHp.value);
+  
+  //tempHpMax
+  changes.system.tempHp.max = changeValue(changes.system?.tempHp?.max, oldActor.system.tempHp.max);
+
+  //check if level up form is turned off in settings
   const setting = game.settings.get("ptu", "levelUpScreen")
   if(!setting) return; // option turned off by GM
 
@@ -812,3 +922,89 @@ Hooks.on("preUpdateActor", async (oldActor, changes, options, sender) => {
       }).render(true);
   }
 });
+
+/***************************
+ * Dex Scan Chat messages
+ **************************/
+// Description Only
+Hooks.on("renderChatMessage", (message, html, data) => {
+  setTimeout(() => {
+      $(html).find(".dex-desc-button").on("click", (event) => showPlayerDexEntry(event));
+  }, 500);
+});
+
+// Full Scan
+Hooks.on("renderChatMessage", (message, html, data) => {
+  setTimeout(() => {
+      $(html).find(".dex-scan-button").on("click", (event) => showPlayerDexEntry(event));
+  }, 500);
+});
+
+export async function showPlayerDexEntry(event){
+  const { trainername, pokemonname, type } = event.currentTarget.dataset;
+  const mon = game.ptu.utils.species.get(pokemonname);
+
+  const userId = game.users.find(u => u.character = game.actors.getName(trainername) && !u.isGM)._id
+
+  await game.ptu.utils.api.gm.renderDexToPlayer(mon._id, type, userId)
+}
+
+// Update items to the latest version based on the system's compendiums
+async function updateItems(actors = []) {
+
+  if(!actors.length) actors = game.actors;
+
+  // Loop through each actor
+  for (const actor of actors) {
+    // Loop through each item in the actor's inventory
+    for (const item of actor.items) {
+      console.log(`Checking ${item.name} (${item.uuid}) with system version ${item._stats?.systemVersion}`);
+      // Check if the item's system version is older than the current version
+      if (isNewerVersion(game.system.version, item._stats?.systemVersion ?? 0)) {
+
+        // For each type of item, select the proper compendium
+        let compendium;
+        switch (item.type) {
+          case "ability":
+            compendium = game.packs.get("ptu.abilities");
+            break;
+          case "capability":
+            compendium = game.packs.get("ptu.capabilities");
+            break;
+          case "dexentry":
+            compendium = game.packs.get("ptu.dex-entries");
+            break;
+          case "edge":
+            compendium = game.packs.get("ptu.edges");
+            break;
+          case "feat":
+            compendium = game.packs.get("ptu.feats");
+            break;
+          case "item":
+            compendium = game.packs.get("ptu.items");
+            break;
+          case "move":
+            compendium = game.packs.get("ptu.moves");
+            break;
+          case "pokeedge":
+            compendium = game.packs.get("ptu.poke-edges");
+            break;
+        }
+
+        // Find the item in the compendium with the same name as the current item
+        const index = compendium.index.getName(item.name?.split("[")[0]?.trim())?._id;
+        if(!index) continue;
+
+        const newItem = await compendium.getDocument(index);
+
+        // If a newer version of the item exists, update the current item
+        if (newItem && isNewerVersion(newItem._stats?.systemVersion ?? 0, item._stats?.systemVersion ?? 0)) {
+          console.log(`Updating ${item.name} (${item.uuid}) from ${item._stats?.systemVersion ?? 0} to ${newItem._stats?.systemVersion ?? 0}`)
+          const name = item.name.includes("[") ? newItem.name : item.name;
+          delete newItem.system.quantity;
+          await item.update({name: name, system: newItem.system});
+        }
+      }
+    }
+  }
+}

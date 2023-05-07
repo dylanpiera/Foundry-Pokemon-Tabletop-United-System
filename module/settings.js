@@ -88,7 +88,7 @@ export function LoadSystemSettings() {
             2: "Dexentry description only (Basic description and details only)",
             3: "Full details on owned Tokens, Dexentry description on un-owned tokens",
             4: "Full details on owned Mons (checks trainer's dex tab), Dexentry Description on un-owned mons",
-            5: "GM Prompt (**NOT YET IMPLEMENTED**)",
+            5: "GM Prompt",
             6: "Always Full Details",
         },
         default: 1,
@@ -570,6 +570,16 @@ export function LoadSystemSettings() {
             default: true
         });
 
+        game.settings.register("ptu", "useEvolutionAnimation", {
+            name: "Use an animated evolution effect when a pokemon evolves.",
+            hint: "Disable this if you are having problems with the effects.",
+            scope: "world",
+            config: true,
+            type: Boolean,
+            category: "other",
+            default: true
+        })
+
         game.settings.register("ptu", "usePokeballSoundsOnDragOut", {
             name: "Enable Pokéball Sounds.",
             hint: "Enable/Disable pokeball related sounds like when you send out a pokemon",
@@ -801,6 +811,15 @@ export function LoadSystemSettings() {
             },
             category: "playtest",
             onChange: debouncedReload
+        })
+
+        game.settings.register("ptu", "showMovementIcons", {
+            name: "Show Movement Icons",
+            hint: "Show movement icons above controlled tokens.",
+            scope: "client",
+            config: true,
+            type: Boolean,
+            default: true
         })
     }
 }

@@ -125,6 +125,12 @@ export default function({speciesData, form}) {
                 if(context.state.otherCapabilities.includes(newName)) return;
 
                 await context.commit('changeCapability', {index, newName})
+            },            
+            async updateCapability(context, {name, value}) {
+                const key = name.replace("Capabilities.", "");
+                if(key == "Naturewalk")
+                    value = value.split(",").map(nature => nature.trim());
+                await context.commit('updateCapability', {key, value});
             },
             async addMove(context, moveData) {
                 if(!moveData) return;
@@ -222,6 +228,10 @@ export default function({speciesData, form}) {
                 const newCapabilities = duplicate(state.otherCapabilities);
                 newCapabilities[index] = newName;
                 state.otherCapabilities = newCapabilities;
+                return state;
+            },
+            async updateCapabilitiy(state, {key, value}) {
+                state.speciesData.Capabilities[key] = value;
                 return state;
             },
             async addMove(state, moveData) {

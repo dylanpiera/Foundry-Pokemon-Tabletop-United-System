@@ -1,3 +1,64 @@
+## 3.2.3.9 - HotFix
+Hotfix for compendiums, making all new lines display properly
+
+## 3.2.3.8 - HotFix
+Hotfix on the macro shared on Discord so it doesn't reset all item quantities to 1.
+
+## 3.2.3.7 - PTR Data Sync & Bugfixes
+Hey all, this update brings along the full PTR Data sync, removing all [Playtest] tags as we now have 1 'true' version of all items.
+Please check the #announcements channel on the discord on how to easily update all of your existing items!
+
+### New Feature
+- Added type images to the Move List
+- Added PTR Data Sync utility (see discord)
+
+### Fixes
+- Update all Compendiums to the latest PTR-Data version.
+- Fix wrong abilities being generated for some mons (like Fluffy Charge instead of Fluffy).
+- Fix Terrabbit evolution.
+- Fix feat/edge sheet's "to-chat" not functioning.
+- Hide struggles from the Level Up Form.
+- Fix "++" and "--" for Health and the like on trainer sheets.
+- Fix chat wrappers for effects.
+- Fix the base stat source popup on trainer sheets.
+- Fix Teleporter capability not working in the Custom Species Editor.
+- Fixed missing dex-entries.
+- Fixed alt. forms (like Alolan, Galarian etc.) not loading the correct pokedex entry when opened from the 'dexentry' item.
+
+## 3.2.3.6 - HotFix
+### Fixes
+- Fixed an issue with Custom Species in the Level Up Form
+- Added the forgotten Rotom Forms
+- Fixed some compatability issues with Item Piles
+
+## 3.2.3.5 - Lots of new stuff!
+Hey all, this update brings with it a few big new features, as well as a lot of small QoL additions and bugfixes. 
+Our big new feature is the Secondary Effect Automation Framework. For more details on this check our Discord.
+
+### New Features
+- Added the Secondary Effect Automation Framework. (please read discord announcement for more info)
+- Added a setting to disable 'Pokéball Sounds' when Pokémon get sent out.
+- Level-Up form will now update your health appropriately.
+- Added a 'Notes' field in the extra tab of Pokemon
+- Character Sheets now allow +/- in certain fields like HP or EXP (f.e., if your HP is 50, and you change the field to +5, it will apply +5 to your HP.)
+- Implemented the 'GM Prompt' option for the "Pokédex Permission" setting
+- Implemented the PTR Movement Icons module into the system
+- Added a small animation upon Pokémon Evolution through the Level Up Popup
+
+### New Automations
+#### Moves
+- Ember
+#### Abilities
+- Exploit
+
+### Fixes
+- Fixed an issue with Pokémon being sent out didn't play the proper automation causing them not to be added to the Turn Tracker during combat.
+- Fixed a bug with the Level Up Popup showing your remaining Level Up Points as 'undefined'.
+- Enable Foundry Sidebar Collapse
+- Reposition PTR Sidebar with the Foundry Sidebar (upon collapse)
+- Fixed an issue with Capabilities not being editable in the Custom Species Editor
+- Fix issues with Custom Type Images
+
 ## Version 3.2.3.4 - HotFix
 It appeared we are 'incentivising' the Playtest a bit too much... considering if you're not running it this update broke! 
 
