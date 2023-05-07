@@ -128,7 +128,7 @@ export default class Api {
             async throwPokeballRequest(data) {
                 if (!ref._isMainGM()) return;
 
-                const {trainerName, pokemonName} = data.content;
+                const {trainerName, pokemonName, args} = data.content;
                 
                 if (!trainerName) return ref._returnBridge({ result: new ApiError({ message: "Trainer name not found.", type: 400 }) }, data);
                 if (!pokemonName) return ref._returnBridge({ result: new ApiError({ message: "Target pokemon name not found.", type: 400 }) }, data);
@@ -136,7 +136,10 @@ export default class Api {
                 const allowed = (game.settings.get("ptu", "pokeball-prompts") == 1 || game.settings.get("ptu", "pokeball-prompts") == 3) ? await new Promise((resolve, reject) => {
                     const dialog = new Dialog({
                         title: "Throw Pokéball?",
-                        content: `<p>It seems that ${trainerName} wishes to throw a ball at ${pokemonName}.<br>Will you let them?</p>`,
+                        content: `<p>It seems that ${trainerName} wishes to throw a ball at ${pokemonName}. <br>
+                            ${args.accuracyModifier != 0 ? "Custom Accuracy Modifier = " + args.accuracyModifier + '.<br>' : ""} 
+                            ${args.captureRateModifier != 0 ? "Custom Capture Rate Modifier = " + args.captureRateModifier + ".<br>" : ""}
+                            Will you let them?</p>`,
                         buttons: {
                             yes: {
                                 icon: '<i class="fas fa-check"></i>',
@@ -619,7 +622,7 @@ export default class Api {
      * @ApiError {403} - DM Denied request or Timed Out
      * @ApiError {400} - Badrequest, see message for details. 
      */
-    async throwPokeballRequest(trainerObject, pokemonObject, options) {
+    async throwPokeballRequest(trainerObject, pokemonObject, args, options) {
         let trainerActor;
         if (trainerObject instanceof game.ptu.config.Actor.documentClass)
             trainerActor = trainerObject;
@@ -646,7 +649,7 @@ export default class Api {
             return false;
         }
 
-        const content = { trainerName: trainerActor.name, pokemonName: pokemonActor.name, options };
+        const content = { trainerName: trainerActor.name, pokemonName: pokemonActor.name, args: args, options };
         return this._handlerBridge(content, "throwPokeballRequest", options?.timeout ?? 15000);
     }
 

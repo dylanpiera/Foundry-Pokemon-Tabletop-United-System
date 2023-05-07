@@ -82,7 +82,7 @@ export function ActorHasItemWithName(actor, initial_item_name, item_category = "
 };
 
 
-export async function RollCaptureChance(trainer, target, pokeball, to_hit_roll, target_token) 
+export async function RollCaptureChance(trainer, target, pokeball, to_hit_roll, target_token, CaptureRollModifier) 
 {
 	const targetActor = target.actor;
 
@@ -93,7 +93,7 @@ export async function RollCaptureChance(trainer, target, pokeball, to_hit_roll, 
 	}
 
 	const captureData = {
-		rate: 100,
+		rate: 100 + CaptureRollModifier,
 		mod: -trainer.system.level.current
 	}
 

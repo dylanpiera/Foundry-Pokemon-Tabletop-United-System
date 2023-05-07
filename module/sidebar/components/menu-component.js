@@ -113,22 +113,73 @@ export default class MenuComponent extends Component {
             const target = game.user?.targets?.first();
 
             let allowed = "true";
-            
+            let args = { accuracyModifier: 0, captureRateModifier: 0 };
+
+            // Check if Alt key is pressed
+            if (event.altKey) {
+                const dialogPromise = new Promise((resolve, reject) => {
+                    // Display prompt dialog to get custom accuracy and capture rate modifiers                
+                    const d = new Dialog({
+                        title: "Throw Pokeball with Modifiers",
+                        content: `
+                            <form>
+                                <div class="form-group">
+                                    <label>Accuracy Modifier</label>
+                                    <input type="number" name="accuracyModifier" value="0">
+                                </div>
+                                <div class="form-group">
+                                    <label>Capture Rate Modifier</label>
+                                    <input type="number" name="captureRateModifier" value="0">
+                                </div>
+                            </form>
+                        `,
+                        buttons: {
+                            throw: {
+                                icon: '<i class="fas fa-dice-d20"></i>',
+                                label: "Throw",
+                                callback: (html) => {
+                                    args.accuracyModifier = parseInt(html.find('[name="accuracyModifier"]').val());
+                                    args.captureRateModifier = parseInt(html.find('[name="captureRateModifier"]').val());
+                                    resolve(args);
+                                },
+                            },
+                            cancel: {
+                                icon: '<i class="fas fa-times"></i>',
+                                label: "Cancel",
+                                callback: () => reject("User cancelled the dialog"),
+                            }
+                        },
+                        default: "throw",
+                        close: () => reject("User closed the dialog without submitting"),
+                    })
+
+                    d.render(true);
+                });
+
+                await dialogPromise
+                    .then((args) => {
+                        console.log(args);
+                    })
+                    .catch((error) => {
+                        console.log(error);
+                    });
+            }
+
             if (game.settings.get("ptu", "pokeball-prompts") == 1 || game.settings.get("ptu", "pokeball-prompts") == 3) {
                 if (game.ptu.utils.api.gm._isMainGM())
                     allowed = "true"
                 //ask GM to confirm they want to allow player to throw a pokeball?
                 else
-                    allowed = await game.ptu.utils.api.gm.throwPokeballRequest(owner, target, {timeout: 30000});
+                    allowed = await game.ptu.utils.api.gm.throwPokeballRequest(owner, target, args, {timeout: 30000});
             }
 
             if(allowed == "true"){
-                game.ptu.utils.throwPokeball(owner, target, owner?.items.get(entityId));
+                game.ptu.utils.throwPokeball(owner, target, owner?.items.get(entityId), args);
             } else {
                 ui.notifications.error("GM prevented you from throwing a pokeball at this pokemon.");
                 return;
             }       
-            
+        
         })
 
         this.element.children("#menu-content").children(".struggle-row").children(".movemaster-button[data-struggle-id]").on("mousedown", (event) => {

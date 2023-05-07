@@ -280,7 +280,7 @@ let pokeballPolymorphFunc = async function (pokeball_image_path, target_token) {
 };
 
 
-export async function ThrowPokeball(thrower, target, pokeball) {
+export async function ThrowPokeball(thrower, target, pokeball, args = { accuracyModifier: 0, captureRateModifier: 0 }) {
     if (!target) {
         ui.notifications.error ("No target to throw pokeball at.");
         return false;
@@ -307,7 +307,8 @@ export async function ThrowPokeball(thrower, target, pokeball) {
 
     const POKEBALL_IMAGE_PATH = pokeball?.img ?? "systems/ptu/images/item_icons/basic ball.webp";
 
-    let accuracyBonus = thrower?.data?.data?.modifiers?.acBonus?.total ?? 0;
+    let accuracyBonus = args.accuracyModifier;
+    accuracyBonus += thrower?.data?.data?.modifiers?.acBonus?.total ?? 0;
     // The only thing I know of that gives a bonus would be Tools of the Trade, +2AC
 
     function probablyHasToolsOfTheTrade(actor){
@@ -362,7 +363,7 @@ export async function ThrowPokeball(thrower, target, pokeball) {
     {
         await PlayHitShakeAnimation(targetToken);
 
-        let captureData = await RollCaptureChance(thrower, target, pokeball.name, roll, targetToken);
+        let captureData = await RollCaptureChance(thrower, target, pokeball.name, roll, targetToken, args.captureRateModifier);
         const isCaptured = (Number(captureData.roll.total) <= captureData.rate) ? true : false;
 
         if ((game.modules.get("tokenmagic")?.active) && (game.settings.get("ptu", "enableMoveAnimations") == true))
