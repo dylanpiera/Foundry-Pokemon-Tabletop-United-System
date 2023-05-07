@@ -93,8 +93,8 @@ export async function RollCaptureChance(trainer, target, pokeball, to_hit_roll, 
 	}
 
 	const captureData = {
-		rate: 100 + CaptureRollModifier,
-		mod: -trainer.system.level.current
+		rate: 100,
+		mod: -trainer.system.level.current + CaptureRollModifier
 	}
 
 	// let CaptureRollModifier = 0;
