@@ -538,48 +538,13 @@ export async function PlayReleaseOwnedPokemonAnimation(token) {
             }
 
             await timeout(2000);
-            await game.ptu.utils.species.playCry(actor.system.species);
+            await game.ptu.utils.species.playCry(actor.system.species, actor.system.shiny);
             await target_token.document.update({ "alpha": (1) });
-
-
-            // alexander-r-block: Commenting out this block of code because the always_display_token_* properties are for wild pokemon.
-            //                    This also adds random bars to owned pokemon when using BarBrawl.
-            /* if(always_display_token_name)
-            {
-                if(always_display_token_health == true)
-                {
-                    await target_token.document.update({
-                        "bar1.attribute": "health",
-                        "displayBars": 50,
-                        "displayName": 50,
-                        "alpha": (1) 
-                    });  
-                }
-                else
-                {
-                    await target_token.document.update({
-                        "displayName": 50,
-                        "alpha": (1)
-                    });  
-                }
-            }
-            else if (always_display_token_health == true)
-            {
-                await target_token.document.update({
-                    "bar1.attribute": "health",
-                    "displayBars": 50,
-                    "alpha": (1)
-                });  
-            }
-            else
-            {
-                await target_token.document.update({ "alpha": (1) });
-            }*/
 
         }
         else if (actor.data.type == "pokemon") // Wild Pokemon - no pokeball release effect.
         {
-            await game.ptu.utils.species.playCry(actor.system.species);
+            await game.ptu.utils.species.playCry(actor.system.species, actor.system.shiny);
 
             if(always_display_token_name)
             {
@@ -614,6 +579,21 @@ export async function PlayReleaseOwnedPokemonAnimation(token) {
             {
                 await target_token.document.update({ "alpha": (1) });
             }	
+        }
+
+        //if shiny add sparkles upon release
+        if(actor.system.shiny && game.modules.get("sequencer")?.active && game.modules.get("jb2a_patreon")?.active && target_token)
+        {
+            const sparklesFilePath = "modules/jb2a_patreon/Library/Generic/Particles/ParticlesSwirl01_01_Regular_White_400x400.webm"
+            new Sequence("PTU")
+                .effect()
+                .file(sparklesFilePath)
+                .atLocation(target_token)
+                .scale(target_token.document.height*0.5, target_token.document.height*0.5)
+                .randomRotation()
+                .fadeOut(1000)
+                .fadeIn(1000)
+            .play();
         }
     }
 }

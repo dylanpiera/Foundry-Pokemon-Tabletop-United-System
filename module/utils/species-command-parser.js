@@ -276,7 +276,7 @@ export async function FinishDexDragPokemonCreation(formData, update)
     let placedTokenData = await game.scenes.viewed.createEmbeddedDocuments("Token", [tokenData]);
 
     let currentSpecies = game.ptu.utils.species.get(new_actor.system.species)._id;
-    game.ptu.utils.species.playCry(currentSpecies);
+    game.ptu.utils.species.playCry(currentSpecies, new_actor.system.shiny);
     
     return placedTokenData;
 }

@@ -404,6 +404,30 @@ export function LoadSystemSettings() {
         category: "other"
     });
 
+    game.settings.register("ptu", "PokemonShinySound", {
+        name: "Shiny Pokémon Sound Effect",
+        hint: "The sound effect that will play when a shiny Pokémon is encountered.",
+        scope: "world",
+        config: true,
+        type: String,
+        choices: {
+            0: "None",
+            1: "Gen 2 (Gold/Silver/Crystal)",
+            2: "Gen 3 (Ruby/Sapphire/Emerald)",
+            3: "Gen 4 (Diamond/Pearl/Platinum)",
+            4: "Gen 4 (Heart Gold/Soul Silver)",
+            5: "Gen 5 (Black/White/Black 2/White 2)",
+            6: "Gen 6 (X/Y)",
+            6: "Gen 6 (Omega Ruby/Alpha Sapphire)",
+            7: "Gen 7 (Sun/Moon/Ultra Sun/Ultra Moon)",
+            8: "Gen 8 (Sword/Shield)",
+            9: "Legends Arceus",
+            10: "Let's go Pikachu/Eevee"
+        },
+        default: 4,
+        category: "other"
+    })
+
     game.settings.register("ptu", "pokemonCryDirectory", {
         name: "Pokémon Cry Directory",
         hint: "The directory where the user can upload mp3 or wav files (named as the lowercase name of the pokémon).",
