@@ -1045,10 +1045,12 @@ export class PTUActor extends Actor {
     }
 
     // Calculate Stab Bonus
-    if (this.system.typing && (moveData.type == this.system.typing[0] || moveData.type == this.system.typing[1])) {
-      if (abilityBonuses.hasAdaptability) dbBonus += 3;
-      else dbBonus += 2;
-      isStab = true;
+    if (this.system.typing
+      && this.system.typing.filter(t => t == moveData.type).length > 0
+      && !moveData.isStruggle ) {
+        if (abilityBonuses.hasAdaptability) dbBonus += 3;
+        else dbBonus += 2;
+        isStab = true;
     }
 
     // Stored Power

@@ -179,7 +179,10 @@ export default class MovesList extends Component {
         };
         moveSystem.prepared = true;
 
-        moveSystem.stab = moveSystem.owner?.type && (moveSystem.owner.type[0] == moveSystem.type || moveSystem.owner.type[1] == moveSystem.type);
+        moveSystem.stab = moveSystem.owner?.type
+                            && moveSystem.owner.type.filter(t => t == moveSystem.type).length > 0
+                            && !moveSystem.isStruggle;
+
         moveSystem.acBonus = moveSystem.owner.acBonus ? moveSystem.owner.acBonus : 0;
 
         // End of Old Prepare Move Data
