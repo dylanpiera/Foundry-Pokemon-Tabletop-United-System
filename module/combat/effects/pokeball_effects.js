@@ -584,7 +584,7 @@ export async function PlayReleaseOwnedPokemonAnimation(token) {
         //if shiny add sparkles upon release
         if(actor.system.shiny && game.modules.get("sequencer")?.active && game.modules.get("jb2a_patreon")?.active && target_token)
         {
-            const sparklesFilePath = "modules/jb2a_patreon/Library/Generic/Fireflies/Fireflies_01_Yellow_Many02_400x400.webm"
+            const sparklesFilePath = "modules/jb2a_patreon/Library/Generic/Item/GlintMany01_02_Regular_Yellow_200x200.webm"
             new Sequence("PTU")
                 .effect()
                 .file(sparklesFilePath)
