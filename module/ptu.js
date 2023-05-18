@@ -725,35 +725,22 @@ export async function PlayPokemonCry(species, shiny=false) {
 
     const response_mp3 = await fetch(CryDirectory + SpeciesCryFilename + ".mp3");
     if (response_mp3.status >= 200 && response_mp3.status <= 299) {
-      AudioHelper.play({ src: CryDirectory + SpeciesCryFilename + ".mp3", volume: 0.8, autoplay: true, loop: false }, true);
+      await AudioHelper.play({ src: CryDirectory + SpeciesCryFilename + ".mp3", volume: 0.8, autoplay: true, loop: false }, true);
     }
     else {
       const response_wav = await fetch(CryDirectory + SpeciesCryFilename + ".wav");
       if (response_wav.status >= 200 && response_wav.status <= 299) {
-        AudioHelper.play({ src: CryDirectory + SpeciesCryFilename + ".wav", volume: 0.8, autoplay: true, loop: false }, true);
+        await AudioHelper.play({ src: CryDirectory + SpeciesCryFilename + ".wav", volume: 0.8, autoplay: true, loop: false }, true);
       }
     }
+  }
 
-    const shinySparkle = game.settings.get("ptu", "shinySparkle");
-    let shinySparkleSoundFiles = [
-      "", //0 None,
-      "",//1  Gen 2 (Gold/Silver/Crystal)
-      "",//2 Gen 3 (Ruby/Sapphire/Emerald)
-      "",//3 Gen 4 (Diamond/Pearl/Platinum)
-      "",//4 Gen 4 (Heart Gold/Soul Silver)
-      "",//5 Gen 5 (Black/White/Black 2/White 2)
-      "",//6 Gen 6 (X/Y)
-      "",//6 Gen 6 (Omega Ruby/Alpha Sapphire)
-      "",//7 Gen 7 (Sun/Moon/Ultra Sun/Ultra Moon)
-      "",//8 Gen 8 (Sword/Shield)
-      "modules/ptu/sounds/shiny_sparkles_sounds/legends-arceus-shiny-By-tuna.voicemod.net.mp3", //9 Legends Arceus
-      //10 Let's go Pikachu/Eevee
-
-    ]
-    
-    if (shiny && shinySparkle != 0) {
-      AudioHelper.play({src : shinySparkleSoundFiles[shinySparkle], volume: 0.8, autoplay: true, loop: false}, true);
-    }
+  const shinySparkle = game.settings.get("ptu", "PokemonShinySound");
+  
+  if (shiny && shinySparkle != "") {
+    new Promise(resolve => setTimeout(resolve, 1000)).then(() => {
+      AudioHelper.play({src : shinySparkle, volume: 0.8, autoplay: true, loop: false}, true);
+    });    
   }
 }
 
