@@ -99,7 +99,7 @@ export async function GetSpeciesArt(mon, imgDirectoryPath, type = ".webp", shiny
     //combine variation paths so i don't have to keep typing them
     const variation_path = wishiwashi_path+lycanroc_path+alolan_path+galarian_path+hisuian_path+paldean_path+form_path;
 
-    let path = basePath+lpad(mon?.number, 4)+variation_path+shiny_path+type;
+    let path = basePath+lpad(mon?.number, 4)+female_path+shiny_path+variation_path+type;
 
     if(animated)
     {
