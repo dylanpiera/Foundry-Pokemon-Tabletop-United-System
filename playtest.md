@@ -21,7 +21,7 @@ To work out the new stat line of a pokemon we took some inspiration from the Gen
 
 
 we have tweaked this calculation so that it works better for our game and helps acheive our objectives and now it looks like this
-![image](https://cdn.discordapp.com/attachments/1064977756720476282/1079822026396684318/image.png)
+![image](https://github.com/dylanpiera/Foundry-Pokemon-Tabletop-United-System/assets/43385250/1cc558bc-b871-4380-9547-d9c247efbfd1)
 
 This can obviously look confusing, but the main changes from the current system are
 - All stats now scale with level as well as how many points you put into them.
@@ -36,6 +36,7 @@ This section is what I refer to as the Sigma Modifier.
 the σ symbol represents the standard deviation of the pokemons stats, before this modifier and the natures is applied. The basics of this is that the bigger the range of stats (say a glass cannon has put all 100 points into special attack) the bigger this σ value will be, which means that the fraction Level/100σ will be a much smaller number.
 In contrast to this if a player evenly distributes their stats the value of σ will be smaller, which means that the Sigma modifier will be bigger, and overall the total of their stats will actually by higher than the specialised glass cannon.
 This effect also scales with level, so will have a higher impact in later levels.
+We also have a setting for you to play with called α which can be used to set the minimum value of the σ modifier, this prevents pokemon having perfectly equal stat lines being rediculously powerful. By default this is set to 3.5.
 
 <details>
   <summary> Graphs showing this effect </summary>
