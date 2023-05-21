@@ -904,6 +904,7 @@ export class PTUActor extends Actor {
         lastChanceApplies: false,
         typeStratagistApplies: false,
         typeBoosterApplies: false,
+        hasAuraStorm: false,
       };
       // Currently only checks Abilities, change the loop to include other types of items if desired.
       for (const item of actor.items.filter(x => x.type == "ability")) {
@@ -912,6 +913,7 @@ export class PTUActor extends Actor {
           case "adaptability": output.hasAdaptability = true; break;
           case `last chance (${moveData.type.toLowerCase()})`: output.lastChanceApplies = true; break;
           case `type strategist (${moveData.type.toLowerCase()})`: output.typeStratagistApplies = true; break;
+          case `aura storm`: output.hasAuraStorm = true; break;
         }
       }
       if(actor.system.heldItem?.toLowerCase()?.includes("booster")) {
@@ -1076,6 +1078,12 @@ export class PTUActor extends Actor {
 
     // Normal Move
     const rollString = critType == CritOptions.DOUBLE_CRIT_HIT ? `@roll+@baseRoll+@baseRoll+@bonus` : critType == CritOptions.CRIT_HIT ? moveData.fiveStrike.is === true ? "@roll+@roll+@bonus" : "@roll+@baseRoll+@bonus" : "@roll+@bonus"
+
+    // Does the actor have the Aura Storm Ability?
+    if (abilityBonuses.hasAuraStorm) {
+      //increase damage bonus by 3 times the number of injuries
+      damageBonus += 3 * actorData.health.injuries;
+    }
 
     return new Roll(rollString, {
       roll: game.ptu.data.DbData[(db * hitCount) + dbBonus],
