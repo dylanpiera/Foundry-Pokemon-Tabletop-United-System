@@ -86,76 +86,74 @@ export async function GetSpeciesArt(mon, imgDirectoryPath, type = ".webp", shiny
 
     const female_path = female ? "f" : "";
     const shiny_path = shiny ? "s" : "";
+  
+    //if mon has a form add it to the forms array
+    if(mon?.form) forms.push(mon.form);
 
-    const alolan_path = mon?._id.toLowerCase().includes("alolan") ? "_al" : "";
-    const galarian_path = mon?._id.toLowerCase().includes("galarian") ? "_ga" : "";
-    const hisuian_path = mon?._id.toLowerCase().includes("hisuian") ? "_hi" : "";
-    const paldean_path = mon?._id.toLowerCase().includes("paldean") ? "_pa" : "";
-    
-    const wishiwashi_path = mon?._id.toLowerCase().includes("wishiwashi") ? (mon?._id.toLowerCase().includes("solo") ? "_Solo" : "_School")  : ""; //if it's not solo then it's schooling
-    const lycanroc_path = mon?._id.toLowerCase().includes("lycanroc") ? (mon?._id.toLowerCase().includes("midday") ? "_Midday" : (mon?._id.toLowerCase().includes("midnight") ? "_Midnight" : "_Dusk")) : ""; //different lycanroc forms
+    //get a random shap for unown
+    const unown_types = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z","!","Qu"]
+    if (mon?._id.toLowerCase().includes("unown")) forms.push(unown_types[Math.floor(Math.random() * unown_types.length)]);
 
     const form_path = forms.length > 0 ? "_"+forms.join("_") : ""; //if there are forms then add them to the path e.g. "MEGA" or "GMAX"
-    //combine variation paths so i don't have to keep typing them
-    const variation_path = wishiwashi_path+lycanroc_path+alolan_path+galarian_path+hisuian_path+paldean_path+form_path;
+    
 
-    let path = basePath+lpad(mon?.number, 4)+female_path+shiny_path+variation_path+type;
+    let path = basePath+lpad(mon?.number, 4)+female_path+shiny_path+form_path+type;
 
     if(animated)
     {
-        path = basePath+lpad(mon?.number, 4)+female_path+shiny_path+variation_path+animated_type;
+        path = basePath+lpad(mon?.number, 4)+female_path+shiny_path+form_path+animated_type;
     }
     let result = await fetch(path);
 
     if(animated && (result.status === 404 && mon?.number < 1000)) {
-        path = basePath+lpad(mon?.number, 3)+female_path+shiny_path+variation_path+animated_type;
+        path = basePath+lpad(mon?.number, 3)+female_path+shiny_path+form_path+animated_type;
         result = await fetch(path);
     }
     if(result.status === 404 && mon?.number < 1000) {
-        path = basePath+lpad(mon?.number, 3)+female_path+shiny_path+variation_path+type;
+        path = basePath+lpad(mon?.number, 3)+female_path+shiny_path+form_path+type;
         result = await fetch(path);
     }
     if(result.status === 404 && mon?.number < 1000) {
-        path = basePath+lpad(mon?.number, 3)+female_path+shiny_path+variation_path+alt_type;
+        path = basePath+lpad(mon?.number, 3)+female_path+shiny_path+form_path+alt_type;
         result = await fetch(path);
     }
 
     if(animated && (result.status === 404)) {
-        path = basePath+lpad(mon?.number, 4)+female_path+shiny_path+variation_path+animated_type;
+        path = basePath+lpad(mon?.number, 4)+female_path+shiny_path+form_path+animated_type;
         result = await fetch(path);
     }
     if(result.status === 404) {
-        path = basePath+lpad(mon?.number, 4)+female_path+shiny_path+variation_path+type;
+        path = basePath+lpad(mon?.number, 4)+female_path+shiny_path+form_path+type;
         result = await fetch(path);
     }
     if(result.status === 404) {
-        path = basePath+lpad(mon?.number, 4)+female_path+shiny_path+variation_path+alt_type;
+        path = basePath+lpad(mon?.number, 4)+female_path+shiny_path+form_path+alt_type;
         result = await fetch(path);
     }
 
     if(animated && (result.status === 404)) {
-        path = basePath+mon?._id+female_path+shiny_path+variation_path+animated_type;
+        path = basePath+mon?._id+female_path+shiny_path+form_path+animated_type;
         result = await fetch(path);
     }
     if(result.status === 404) {
-        path = basePath+mon?._id+female_path+shiny_path+variation_path+type;
+        path = basePath+mon?._id+female_path+shiny_path+form_path+type;
         result = await fetch(path);
     }
     if(result.status === 404) {
-        path = basePath+mon?._id+female_path+shiny_path+variation_path+alt_type;
+        path = basePath+mon?._id+female_path+shiny_path+form_path+alt_type;
         result = await fetch(path);
     }
 
     if(animated && (result.status === 404)) {
-        path = basePath+mon?._id?.toLowerCase()+female_path+shiny_path+variation_path+animated_type;
+        path = basePath+mon?._id?.toLowerCase()+female_path+shiny_path+form_path+animated_type;
         result = await fetch(path);
     }
     if(result.status === 404) {
-        path = basePath+mon?._id?.toLowerCase()+female_path+shiny_path+variation_path+type;
+        path = basePath+mon?._id?.toLowerCase()+female_path+shiny_path+form_path+type;
         result = await fetch(path);
     }
     if(result.status === 404) {
-        path = basePath+mon?._id?.toLowerCase()+female_path+shiny_path+variation_path+alt_type;
+        path = basePath+mon?._id?.toLowerCase()+female_path+shiny_path+form_path+alt_type;
         result = await fetch(path);
     }
 
