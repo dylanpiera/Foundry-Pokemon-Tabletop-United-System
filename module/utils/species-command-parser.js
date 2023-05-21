@@ -79,7 +79,7 @@ export async function CreateMonParser(input, andCreate = false) {
     return commands;
 }
 
-export async function GetSpeciesArt(mon, imgDirectoryPath, type = ".webp", shiny = false, animated = false, female = false, animated_type = ".webm", forms = []) {
+export async function GetSpeciesArt(mon, imgDirectoryPath, type = ".webp", shiny = false, animated = false, female = false, animated_type = ".webm", nature, forms = []) {
 
     const alt_type = ".png";
     const basePath = imgDirectoryPath+(imgDirectoryPath.endsWith('/') ? '' : '/')
@@ -93,6 +93,11 @@ export async function GetSpeciesArt(mon, imgDirectoryPath, type = ".webp", shiny
     //get a random shap for unown
     const unown_types = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z","!","Qu"]
     if (mon?._id.toLowerCase().includes("unown")) forms.push(unown_types[Math.floor(Math.random() * unown_types.length)]);
+
+    //toxtricity form is based on nature:
+    const lowKeyNatures = ["lonely","bold","relaxed","timid","serious","modest","mild","quiet","bashful","calm","gentle","careful"]
+    nature = nature.toLowerCase();
+    if(lowKeyNatures.includes(nature) && mon?._id.toLowerCase().includes("toxtricity")) forms.push("LowKey");
 
     const form_path = forms.length > 0 ? "_"+forms.join("_") : ""; //if there are forms then add them to the path e.g. "MEGA" or "GMAX"
     
@@ -158,7 +163,7 @@ export async function GetSpeciesArt(mon, imgDirectoryPath, type = ".webp", shiny
     }
 
     if(result.status === 404) {
-        if(female) return GetSpeciesArt(mon, imgDirectoryPath, type, shiny, animated, false, animated_type);
+        if(female) return GetSpeciesArt(mon, imgDirectoryPath, type, shiny, animated, false, animated_type, nature, forms);
         return undefined;
     }
     return path;
@@ -265,7 +270,7 @@ export async function FinishDexDragPokemonCreation(formData, update)
     protoToken.displayName=  40; 
     protoToken.bar1.attribute = "health";
 
-    protoToken.img = await GetSpeciesArt(game.ptu.utils.species.get(new_actor.system.species), imgSrc, ".webp", new_actor.system.shiny, true, new_actor.system.gender.toLowerCase().includes("female"));
+    protoToken.img = await GetSpeciesArt(game.ptu.utils.species.get(new_actor.system.species), imgSrc, ".webp", new_actor.system.shiny, true, new_actor.system.gender.toLowerCase().includes("female"), ".webm", new_actor.system.nature.value);
     
     new_actor = await new_actor.update({"prototypeToken": protoToken});
 
