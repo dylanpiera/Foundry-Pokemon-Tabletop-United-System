@@ -307,8 +307,7 @@ export async function ThrowPokeball(thrower, target, pokeball, args = { accuracy
 
     const POKEBALL_IMAGE_PATH = pokeball?.img ?? "systems/ptu/images/item_icons/basic ball.webp";
 
-    let accuracyBonus = args.accuracyModifier;
-    accuracyBonus += thrower?.data?.data?.modifiers?.acBonus?.total ?? 0;
+    const accuracyBonus = args?.accuracyModifier ?? 0 + thrower?.data?.data?.modifiers?.acBonus?.total ?? 0;
     // The only thing I know of that gives a bonus would be Tools of the Trade, +2AC
 
     function probablyHasToolsOfTheTrade(actor){
