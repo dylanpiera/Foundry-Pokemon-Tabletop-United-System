@@ -90,11 +90,39 @@ export const pokeballStyles = {
         highlight: "#FFECF5",
         bandColor: "#222224"
     },
+    "Hail Ball": {
+        backgroundColor: "#DBE0E0",
+        gradientColors: "#ECDBEB, #DFFFFE",
+        topLightColor: "#C4F4FF",
+        highlight: "#DBE0E0",
+        bandColor: "#222224"
+    },
+    "Heal Ball": {
+        backgroundColor: "#DA2E8B",
+        gradientColors: "#DA2E8B, #E84E96",
+        topLightColor: "#EE4C97",
+        highlight: "#FFF4DC",
+        bandColor: "#7C97CE"
+    },
+    "Heavy Ball": {
+        backgroundColor: "#797C86",
+        gradientColors: "#ECDBEB, #DFFFFE",
+        topLightColor: "#9B9FA4",
+        highlight: "#5B7AB9",
+        bandColor: "#222224"
+    },
+    "Park Ball": {
+        backgroundColor: "#DA9C22",
+        gradientColors: "#ECDBEB, #DFFFFE",
+        topLightColor: "#F5D152",
+        highlight: "",
+        bandColor: "#2F6DB7"
+    },
     "default": {
-      backgroundColor: "#C42835",
-      gradientColors: "#ECDBEB, #DFFFFE",
-      topLightColor: "#E33242",
-      highlight: "",
-      bandColor: "#222224"
+        backgroundColor: "#C42835",
+        gradientColors: "#ECDBEB, #DFFFFE",
+        topLightColor: "#E33242",
+        highlight: "",
+        bandColor: "#222224"
     }
 };
