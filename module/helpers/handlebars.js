@@ -323,7 +323,7 @@ export function registerHandlebars() {
     Handlebars.registerHelper('pokeballStyles', function (pokeball) {
     
       // Get the styles for the provided Pokeball type
-      const styles = pokeballStyles[pokeball] || pokeballStyles.default;
+      const styles = game.settings.get("ptu", "pokeballBackgroundThemes") ? (pokeballStyles[pokeball] || pokeballStyles.default) : pokeballStyles.default;
     
       // Construct the CSS styles string for the first div
       const topBase = `

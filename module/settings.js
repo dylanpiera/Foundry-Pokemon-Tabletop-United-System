@@ -436,6 +436,16 @@ export function LoadSystemSettings() {
         category: "other"
     });
 
+    game.settings.register("ptu", "pokeballBackgroundThemes", {
+        name: "Pokeball Background Themes",
+        hint: "Use the pokemons current pokeball as the background for it's character sheet.",
+        scope: "world",
+        config: true,
+        type: Boolean,
+        default: true,
+        category: "other"
+    })
+
     game.settings.register("ptu", "transferOwnershipDefaultValue", {
         name: "Transfer Ownership Preference",
         hint: "After ownership of a mon is transfered, would you like for it to also set default permissions for other players?",
