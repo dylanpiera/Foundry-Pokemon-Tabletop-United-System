@@ -918,7 +918,8 @@ Hooks.on("preUpdateActor", async (oldActor, changes, options, sender) => {
         oldLvl,
         newLvl,
         oldExp: oldActor.system.level.exp,
-        newExp: changes.system.level.exp
+        newExp: changes.system.level.exp,
+        pokeball: oldActor.system.pokeball
       }).render(true);
   }
 });

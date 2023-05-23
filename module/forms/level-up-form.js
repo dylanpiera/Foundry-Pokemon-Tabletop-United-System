@@ -37,7 +37,7 @@ export class PTULevelUpForm extends FormApplication {
     data.name = this.object.actor.name
     data.oldLvl = this.object.oldLvl
     data.newLvl = this.object.newLvl
-
+    data.pokeball = this.object.pokeball
     return data;
   }
 

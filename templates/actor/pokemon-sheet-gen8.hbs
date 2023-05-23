@@ -1,33 +1,7 @@
 <form class="{{cssClass}} container-fluid" autocomplete="off">
   <div class="row justify-content-between h-100">
     <div class="col-sm-12" style="padding-left: unset;">
-      <div style="
-        width: 100%;
-        height: 100%;
-        display: block;
-        position: absolute;
-        z-index: 1;
-        background: #C42835;
-        clip-path: polygon(0 0, 52% 0, 22% 100%, 0% 100%);">
-      </div>
-      <div style="
-        width: 100%;
-        height: 100%;
-        display: block;
-        position: absolute;
-        z-index: 0;
-        background: linear-gradient(45deg, #ECDBEB, #DFFFFE);
-        clip-path: polygon(100% 0, 45% 0, 15% 100%, 100% 100%);">
-      </div>
-      <div style="
-        width: 100%;
-        height: 100%;
-        display: block;
-        position: absolute;
-        z-index: 2;
-        background: #E33242;
-        clip-path: polygon(0 0, 44% 0, 14% 100%, 0% 100%);">
-      </div>
+      {{{pokeballStyles data.pokeball}}}
       <div class="panel gen8character h-100">
         <div class="sheet-body no-hd h-100">
           <div class="tab details stats h-100" data-group="primary" data-tab="stats">

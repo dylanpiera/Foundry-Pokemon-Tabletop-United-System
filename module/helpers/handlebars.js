@@ -1,5 +1,6 @@
 import { PrepareMoveData } from "../ptu.js";
 import { TypeEffectiveness } from "../data/effectiveness-data.js";
+import { pokeballStyles } from "../data/pokeball-themes.js";
 
 const validTypeImageExtensions = ["webp", "png"];
 
@@ -316,6 +317,78 @@ export function registerHandlebars() {
     Handlebars.registerHelper("diceResult", function (roll, term) {
       const result = roll.terms.find(t => t.faces == term);
       if (result) return result.total ?? result.results[0].result;
+    });
+
+    //pokeball themed background for pokemon
+    Handlebars.registerHelper('pokeballStyles', function (pokeball) {
+    
+      // Get the styles for the provided Pokeball type
+      const styles = pokeballStyles[pokeball] || pokeballStyles.default;
+    
+      // Construct the CSS styles string for the first div
+      const topBase = `
+        width: 100%;
+        height: 100%;
+        display: block;
+        position: absolute;
+        z-index: 1;
+        background: ${styles.backgroundColor};
+        clip-path: polygon(0 0, 52% 0, 22% 100%, 0% 100%);
+      `;
+    
+      // Construct the gradient CSS string for the second div
+      const gradient = `linear-gradient(45deg, ${styles.gradientColors})`;
+    
+      // Construct the CSS styles string for the third div
+      const topLight = `
+        width: 100%;
+        height: 100%;
+        display: block;
+        position: absolute;
+        z-index: 1;
+        background: ${styles.topLightColor};
+        clip-path: polygon(0 0, 44% 0, 14% 100%, 0% 100%);
+      `;
+
+      const highlight = `
+        width: 100%;
+        height: 100%;
+        display: block;
+        position: absolute;
+        z-index: 2;
+        background: ${styles.highlight};
+        clip-path: polygon(0 0, 44% 0, 14% 100%, 0% 100%);
+        transform: translateY(-50%) translateX(20%);
+      `;
+    
+      // Construct the CSS styles string for the band
+      const bandStyles = `
+        width: 100%;
+        height: 100%;
+        display: block;
+        position: absolute;
+        z-index: 0;
+        background: ${styles.bandColor};
+        clip-path: polygon(0 0, 52% 0, 22% 100%, 0% 100%);
+        transform: translateY(0%) translateX(2%);
+      `;
+
+      // Return the constructed styles
+      return new Handlebars.SafeString(`
+        <div name="top" style="${topBase}"></div>
+        <div name ="bottom" style="
+          width: 100%;
+          height: 100%;
+          display: block;
+          position: absolute;
+          z-index: 0;
+          background: ${gradient};
+          clip-path: polygon(100% 0, 45% 0, 15% 100%, 100% 100%);
+        "></div>
+        ${styles.highlight == '' ? '' : `<div name="highlight" style="${highlight}"></div>`}
+        <div name="toplight" style="${topLight}"></div>
+        <div name="band" style="${bandStyles}"></div>
+      `);
     });
   
     function _calcMoveDb(move, bool = false) {
