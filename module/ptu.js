@@ -215,7 +215,7 @@ Hooks.once('init', function () {
   console.groupCollapsed("PTU Init");
   console.time("PTU Init")
 
-  window.actor = function() {
+  window.actor = function () {
     return canvas.tokens.controlled[0].actor;
   }
 
@@ -407,10 +407,10 @@ Hooks.once("ready", async function () {
     if (data == "RefreshCustomSpecies" || (data == "ReloadGMSpecies" && game.user.isGM)) Hooks.callAll("updatedCustomSpecies");
     if (data == "RefreshCustomTypings") Hooks.callAll("updatedCustomTypings");
     if (data == "RefreshCustomTypingsAndActors") Hooks.callAll("updatedCustomTypings", { updateActors: true });
-    if (data.type){
+    if (data.type) {
       const { type, species, userId } = data;
-      
-      if(!!userId && game.userId !== userId) return
+
+      if (!!userId && game.userId !== userId) return
 
       await game.ptu.utils.dex.render(species, type)
     }
@@ -690,12 +690,12 @@ async function _onPokedexMacro() {
         break;
       }
       case 5: { // GM Prompt
-        const result = await game.ptu.utils.api.gm.dexScanRequest(game.user.character.uuid, token.actor.uuid, {timeout: 30000})
-        switch(result) {
+        const result = await game.ptu.utils.api.gm.dexScanRequest(game.user.character.uuid, token.actor.uuid, { timeout: 30000 })
+        switch (result) {
           case "false": {
             return ui.notifications.info(game.i18n.localize("PTU.DexScan.Denied"));
           }
-          case "timeout": {            
+          case "timeout": {
             return ui.notifications.warn(game.i18n.localize("PTU.DexScan.Timeout"));
           }
           case "description": {
@@ -772,7 +772,7 @@ Hooks.on("preCreateItem", async function (item, data, options, sender) {
   if (item.type != "move") return;
   let origin = "";
   const speciesData = game.ptu.utils.species.get(item.parent?.system.species);
-  if(!speciesData) return;
+  if (!speciesData) return;
 
   // All of these have a slightly different format, change them to just be an array of the names with capital letters included.
   const levelUp = speciesData["Level Up Move List"].map(x => x.Move);
@@ -790,9 +790,9 @@ Hooks.on("preCreateItem", async function (item, data, options, sender) {
   await item.updateSource({ "system.origin": origin });
 });
 
-Hooks.on('preCreateActor', function(document,b,c,d) {
+Hooks.on('preCreateActor', function (document, b, c, d) {
   console.log(document)
-  document.updateSource({"prototypeToken.actorLink":true});
+  document.updateSource({ "prototypeToken.actorLink": true });
 });
 
 Hooks.on('getSceneControlButtons', function (hudButtons) {
@@ -822,15 +822,15 @@ Hooks.on("renderTokenConfig", (config, html, options) => html.find("[name='actor
 Token Movement Info
 ****************************/
 Hooks.on('renderTokenHUD', (app, html, data) => {
-  if(!game.settings.get("ptu", "showMovementIcons")) return;
-  
-  if(game.modules.get("ptu-movement-info")?.active){
+  if (!game.settings.get("ptu", "showMovementIcons")) return;
+
+  if (game.modules.get("ptu-movement-info")?.active) {
     ui.notification.warn("Thanks for using the PTU Movement info module! This module is now included in the PTR system and will no longer by updated. Please ask your GM to disable to PTY Movement Info module.")
     return;
-  } 
+  }
 
   //doesn't work with the barbrawl module
-  if(game.modules.get("barbrawl")?.active) {
+  if (game.modules.get("barbrawl")?.active) {
     //warn player that the movement icons don't work with barbrawl
     ui.notifications.warn("Movement icons are not compatible with the barbrawl module. Please disable the barbrawl module to use movement icons.\nYou can disable movement icons in the PTU settings > Player Preferences to avoid seeing this message.");
     return;
@@ -838,7 +838,7 @@ Hooks.on('renderTokenHUD', (app, html, data) => {
 
   // Fetch Actor
   const actor = game.actors.get(data.actorId);
-  if(actor === undefined) return;
+  if (actor === undefined) return;
 
   // List of capabilities to possibly display, and the icon it should use
   const capabilitiesMap = {
@@ -851,10 +851,10 @@ Hooks.on('renderTokenHUD', (app, html, data) => {
   }
 
   const buttons = [];
-  for(const [c,i] of Object.entries(capabilitiesMap)) { //c=capability, i=icon
+  for (const [c, i] of Object.entries(capabilitiesMap)) { //c=capability, i=icon
     const val = actor.system.capabilities[c];
     // If value is 0 / unset no need to display.
-    if(!val) continue;
+    if (!val) continue;
 
     buttons.push(`<div class="control-icon chalk-icon" title="${c}: ${val}"><i class="${i}"></i>${val}</div>`)
   }
@@ -868,58 +868,63 @@ Hooks.on('renderTokenHUD', (app, html, data) => {
   )
 });
 
-function changeValue(newValue = null, oldValue)
-{
-  if(!newValue || newValue === undefined) return oldValue;
+function changeValue(newValue = null, oldValue) {
+  if (!newValue || newValue === undefined) return oldValue;
 
-  const operator = newValue.substring(0,2);
-  const amountStr = operator === '++' || operator === '--' ? newValue.substring(2) : newValue;
+  const operator = (""+newValue).substring(0, 2);
+  const amountStr = operator === '++' || operator === '--' ? (""+newValue).substring(2) : newValue;
   const amount = parseInt(amountStr);
 
   if (isNaN(amount)) return oldValue;
-  
+
   return operator === '++' ? oldValue + amount
-                            : operator === '--' ? oldValue - amount
-                                                : amount;
+    : operator === '--' ? oldValue - amount
+      : amount;
 }
 Hooks.on("preUpdateActor", async (oldActor, changes, options, sender) => {
-  
+
   //exp
-  changes.system.level.exp = changeValue(changes.system?.level?.exp, oldActor.system.level.exp);
-  
+  if (changes.system?.level?.exp)
+    changes.system.level.exp = changeValue(changes.system?.level?.exp, oldActor.system.level.exp);
+
   //milestones
-  changes.system.level.milestones = changeValue(changes.system?.level?.milestones, oldActor.system.level.milestones);
-  
+  if (changes.system?.level?.milestones)
+    changes.system.level.milestones = changeValue(changes.system?.level?.milestones, oldActor.system.level.milestones);
+
   //miscExp
-  changes.system.level.miscExp = changeValue(changes.system?.level?.miscExp, oldActor.system.level.miscExp);
-  
+  if (changes.system?.level?.miscExp)
+    changes.system.level.miscExp = changeValue(changes.system?.level?.miscExp, oldActor.system.level.miscExp);
+
   //hp
-  changes.system.health.value = changeValue(changes.system?.health?.value, oldActor.system.health.value);
-  
+  if (changes.system?.health?.value)
+    changes.system.health.value = changeValue(changes.system?.health?.value, oldActor.system.health.value);
+
   //tempHp
-  changes.system.tempHp.value = changeValue(changes.system?.tempHp?.value, oldActor.system.tempHp.value);
-  
+  if (changes.system?.tempHp?.value)
+    changes.system.tempHp.value = changeValue(changes.system?.tempHp?.value, oldActor.system.tempHp.value);
+
   //tempHpMax
-  changes.system.tempHp.max = changeValue(changes.system?.tempHp?.max, oldActor.system.tempHp.max);
+  if (changes.system?.tempHp?.max)
+    changes.system.tempHp.max = changeValue(changes.system?.tempHp?.max, oldActor.system.tempHp.max);
 
   //check if level up form is turned off in settings
   const setting = game.settings.get("ptu", "levelUpScreen")
-  if(!setting) return; // option turned off by GM
+  if (!setting) return; // option turned off by GM
 
-  if(changes.system?.level?.exp === undefined) return;
+  if (changes.system?.level?.exp === undefined) return;
 
   const oldLvl = CalcLevel(oldActor.system.level.exp, 50, levelProgression);
   const newLvl = CalcLevel(changes.system.level.exp, 50, levelProgression);
-  
-  
-  if(newLvl > oldLvl) {
-      new game.ptu.config.Ui.LevelUpForm.documentClass({
-        actor: await fromUuid(oldActor.uuid),
-        oldLvl,
-        newLvl,
-        oldExp: oldActor.system.level.exp,
-        newExp: changes.system.level.exp
-      }).render(true);
+
+
+  if (newLvl > oldLvl) {
+    new game.ptu.config.Ui.LevelUpForm.documentClass({
+      actor: await fromUuid(oldActor.uuid),
+      oldLvl,
+      newLvl,
+      oldExp: oldActor.system.level.exp,
+      newExp: changes.system.level.exp
+    }).render(true);
   }
 });
 
@@ -929,18 +934,18 @@ Hooks.on("preUpdateActor", async (oldActor, changes, options, sender) => {
 // Description Only
 Hooks.on("renderChatMessage", (message, html, data) => {
   setTimeout(() => {
-      $(html).find(".dex-desc-button").on("click", (event) => showPlayerDexEntry(event));
+    $(html).find(".dex-desc-button").on("click", (event) => showPlayerDexEntry(event));
   }, 500);
 });
 
 // Full Scan
 Hooks.on("renderChatMessage", (message, html, data) => {
   setTimeout(() => {
-      $(html).find(".dex-scan-button").on("click", (event) => showPlayerDexEntry(event));
+    $(html).find(".dex-scan-button").on("click", (event) => showPlayerDexEntry(event));
   }, 500);
 });
 
-export async function showPlayerDexEntry(event){
+export async function showPlayerDexEntry(event) {
   const { trainername, pokemonname, type } = event.currentTarget.dataset;
   const mon = game.ptu.utils.species.get(pokemonname);
 
@@ -952,7 +957,7 @@ export async function showPlayerDexEntry(event){
 // Update items to the latest version based on the system's compendiums
 async function updateItems(actors = []) {
 
-  if(!actors.length) actors = game.actors;
+  if (!actors.length) actors = game.actors;
 
   // Loop through each actor
   for (const actor of actors) {
@@ -993,7 +998,7 @@ async function updateItems(actors = []) {
 
         // Find the item in the compendium with the same name as the current item
         const index = compendium.index.getName(item.name?.split("[")[0]?.trim())?._id;
-        if(!index) continue;
+        if (!index) continue;
 
         const newItem = await compendium.getDocument(index);
 
@@ -1002,7 +1007,7 @@ async function updateItems(actors = []) {
           console.log(`Updating ${item.name} (${item.uuid}) from ${item._stats?.systemVersion ?? 0} to ${newItem._stats?.systemVersion ?? 0}`)
           const name = item.name.includes("[") ? newItem.name : item.name;
           delete newItem.system.quantity;
-          await item.update({name: name, system: newItem.system});
+          await item.update({ name: name, system: newItem.system });
         }
       }
     }

@@ -46,7 +46,7 @@ Hooks.on("endOfCombat", async function (combat, participants) {
     for (const effect of actor.effects.values()) {
       if (
         effect.flags?.core?.statusId?.includes(".volatile.") ||
-        effect.label == "Flinch"
+        effect.name == "Flinch"
       ) {
         debug(
           `Adding ${effect.id} (${effect.label}) to list of effects to remove`

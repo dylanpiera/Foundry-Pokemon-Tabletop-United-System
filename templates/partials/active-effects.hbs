@@ -1,7 +1,7 @@
 {{#each actor.effects as |effect|}}
     <div class="swsh-box mb-2 w-100 no-shadow">
         <div class="swsh-header pl-2 effect-header">
-            <h3 style="flex: 1 0 50%">{{label}} {{#if (is disabled true)}}({{localize "PTU.EffectDisabled"}}){{/if}}</h3>
+            <h3 style="flex: 1 0 50%">{{name}} {{#if (is disabled true)}}({{localize "PTU.EffectDisabled"}}){{/if}}</h3>
             <div class="item-controls pr-1 flexcol" style="flex: 0 0 13%;">
                 <a class="item-control effect-suspend" data-id="{{id}}" title="{{#if (is disabled true)}}Enable Effect{{else}}Disable Effect{{/if}}"><i
                     class="fas {{#if (is disabled true)}}fa-times-circle{{else}}fa-check-circle{{/if}}" style="margin-right: 3px;"></i><span

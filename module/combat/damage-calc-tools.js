@@ -701,19 +701,19 @@ async function ApplyAutomation(source, automation, options) {
                             const effectData = CONFIG.statusEffects.find(e => e.id === effect.value);
                             if(!effectData) continue;
                             if(target instanceof Token || target instanceof TokenDocument) {
-                                const ae = target.actor.effects.find(e => e.label == effectData.label);
+                                const ae = target.actor.effects.find(e => e.name == effectData.name);
                                 if(ae) continue; 
                                 updates.effects.toggle.push(effectData);
                                 modifiers.push({ 
-                                    message: `Applied effect ${effectData.label} to ${target.name}`,
+                                    message: `Applied effect ${effectData.name} to ${target.name}`,
                                 });
                             }
                             if(target instanceof Actor) {
-                                const ae = target.effects.find(e => e.label == effectData.label);
+                                const ae = target.effects.find(e => e.name == effectData.name);
                                 if(ae) continue;
                                 updates.effects.add.push(effectData);
                                 modifiers.push({ 
-                                    message: `Applied effect ${effectData.label} to ${target.name}`,
+                                    message: `Applied effect ${effectData.name} to ${target.name}`,
                                 });
                             }
                         }
@@ -721,7 +721,7 @@ async function ApplyAutomation(source, automation, options) {
                         if(typeof effect.value === "object") {
                             updates.effects.add.push(effect.value);
                             modifiers.push({ 
-                                message: `Applied effect ${effect.label} to ${target.name}`,
+                                message: `Applied effect ${effect.name} to ${target.name}`,
                             });
                         }
                         break;
@@ -730,38 +730,38 @@ async function ApplyAutomation(source, automation, options) {
                         // If the effect is a string, it is a pre-made effect
                         if(typeof effect.value === "string") {
                             if(target instanceof Token || target instanceof TokenDocument) {
-                                const ae = target.actor.effects.find(e => e.label == effect.value);
+                                const ae = target.actor.effects.find(e => e.name == effect.value);
                                 if(!ae) continue;
                                 updates.effects.toggle.push(effectData);
                                 modifiers.push({ 
-                                    message: `Removed effect ${ae.label} to ${target.name}`,
+                                    message: `Removed effect ${ae.name} to ${target.name}`,
                                 });
                             }
                             if(target instanceof Actor) {
-                                const ae = target.effects.find(e => e.label == effect.value);
+                                const ae = target.effects.find(e => e.name == effect.value);
                                 if(!ae) continue;
                                 updates.effects.remove.push(ae.id);
                                 modifiers.push({ 
-                                    message: `Removed effect ${ae.label} to ${target.name}`,
+                                    message: `Removed effect ${ae.name} to ${target.name}`,
                                 });
                             }
                         }
                         // If the effect is an object, it is a custom effect
                         if(typeof effect.value === "object") {
                             if(target instanceof Token || target instanceof TokenDocument) {
-                                const ae = target.actor.effects.find(e => e.label == effect.value.label);
+                                const ae = target.actor.effects.find(e => e.name == effect.value.name);
                                 if(!ae) continue;
                                 updates.effects.remove.push(ae.id);
                                 modifiers.push({ 
-                                    message: `Removed effect ${ae.label} to ${target.name}`,
+                                    message: `Removed effect ${ae.name} to ${target.name}`,
                                 });
                             }
                             if(target instanceof Actor) {
-                                const ae = target.effects.find(e => e.label == effect.value.label);
+                                const ae = target.effects.find(e => e.name == effect.value.name);
                                 if(!ae) continue;
                                 updates.effects.remove.push(ae.id);
                                 modifiers.push({ 
-                                    message: `Removed effect ${ae.label} to ${target.name}`,
+                                    message: `Removed effect ${ae.name} to ${target.name}`,
                                 });
                             }
                         }

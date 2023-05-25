@@ -151,7 +151,7 @@ export class PTUActor extends Actor {
       if (result !== null) {
         overrides = mergeObject(overrides, result);
         if (!origins[change.key]) origins[change.key] = [];
-        origins[change.key].push({ label: change.effect.label, change: { type: change.mode, value: change.value } });
+        origins[change.key].push({ label: change.effect.name, change: { type: change.mode, value: change.value } });
       }
     }
     // Expand the set of final overrides
@@ -406,10 +406,10 @@ export class PTUActor extends Actor {
 
     if (dexExpEnabled) {
       data.level.dexexp = actorData.items.filter(x => x.type == "dexentry" && x.system.owned).length;
-      data.level.current = data.level.milestones + Math.trunc((data.level.dexexp + data.level.miscexp) / 10) + 1 > 50 ? 50 : data.level.milestones + Math.trunc((data.level.dexexp + data.level.miscexp) / 10) + 1;
+      data.level.current = Number(data.level.milestones) + Math.trunc((data.level.dexexp + Number(data.level.miscexp)) / 10) + 1 > 50 ? 50 : Number(data.level.milestones) + Math.trunc((Number(data.level.dexexp) + Number(data.level.miscexp)) / 10) + 1;
     }
     else {
-      data.level.current = data.level.milestones + Math.trunc(data.level.miscexp / 10) + 1 > 50 ? 50 : data.level.milestones + Math.trunc(data.level.miscexp / 10) + 1;
+      data.level.current = Number(data.level.milestones) + Math.trunc(Number(data.level.miscexp) / 10) + 1 > 50 ? 50 : Number(data.level.milestones) + Math.trunc(Number(data.level.miscexp) / 10) + 1;
     }
 
     data.levelUpPoints = data.level.current + data.modifiers.statPoints.total + 9;

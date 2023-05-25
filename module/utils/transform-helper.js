@@ -93,6 +93,6 @@
         //add old moves and abilities
         await selectedActor.createEmbeddedDocuments("Item", duplicate(initialItems))
         //remove effects to change capabilities
-        await selectedActor.deleteEmbeddedDocuments("ActiveEffect", selectedActor.effects.filter(e => e.label.toLowerCase() === "transform").map(e => e.id));
+        await selectedActor.deleteEmbeddedDocuments("ActiveEffect", selectedActor.effects.filter(e => e.name.toLowerCase() === "transform").map(e => e.id));
     }
   }
