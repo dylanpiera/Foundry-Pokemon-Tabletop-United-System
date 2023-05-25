@@ -52,84 +52,84 @@
   "packs": [
     {
       "label": "abilities",
-      "entity": "Item",
+      "type": "Item",
       "name": "abilities",
       "path": "packs/abilities.db",
       "system": "ptu"
     },
     {
       "label": "moves",
-      "entity": "Item",
+      "type": "Item",
       "name": "moves",
       "path": "packs/moves.db",
       "system": "ptu"
     },
     {
       "label": "feats",
-      "entity": "Item",
+      "type": "Item",
       "name": "feats",
       "path": "packs/feats.db",
       "system": "ptu"
     },
     {
       "label": "edges",
-      "entity": "Item",
+      "type": "Item",
       "name": "edges",
       "path": "packs/edges.db",
       "system": "ptu"
     },
     {
       "label": "items",
-      "entity": "Item",
+      "type": "Item",
       "name": "items",
       "path": "packs/items.db",
       "system": "ptu"
     },
     {
       "label": "capabilities",
-      "entity": "Item",
+      "type": "Item",
       "name": "capabilities",
       "path": "packs/capabilities.db",
       "system": "ptu"
     },
     {
       "label": "poke edges",
-      "entity": "Item",
+      "type": "Item",
       "name": "poke-edges",
       "path": "packs/poke-edges.db",
       "system": "ptu"
     },
     {
       "label": "dex entries",
-      "entity": "Item",
+      "type": "Item",
       "name": "dex-entries",
       "path": "packs/dex-entries.db",
       "system": "ptu"
     },
     {
       "label": "fan game content",
-      "entity": "Item",
+      "type": "Item",
       "name": "fan-game-content",
       "path": "packs/fan-game-content.db",
       "system": "ptu"
     },
     {
       "label": "fan game dex",
-      "entity": "Item",
+      "type": "Item",
       "name": "fan-game-dex",
       "path": "packs/fan-game-dex.db",
       "system": "ptu"
     },
     {
       "label": "habitats",
-      "entity": "RollTable",
+      "type": "RollTable",
       "name": "habitats",
       "path": "packs/habitats.db",
       "system": "ptu"
     },
     {
       "label": "maneuvers",
-      "entity": "Item",
+      "type": "Item",
       "name": "maneuvers",
       "path": "packs/maneuvers.db",
       "system": "ptu"
