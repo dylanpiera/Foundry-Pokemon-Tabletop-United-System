@@ -8,7 +8,7 @@
 The Pokemon Tabletop Reunited system for FoundryVTT is a continuiation of the Pokemon Tabletop United system, with balance changes, and new content, created with FoundryVTT in mind.
 
 For any questions, feel free to open an issue or message me on Discord: AsheEon#0380.
-You can also join our Discord Server for any questions & feedback: https://discord.gg/ZTFfKYDxZf
+You can also join our Discord Server for any questions & feedback: https://discord.gg/ptrfvtt
 
 ## How to Install
 #### Release Build
