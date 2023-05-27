@@ -17,6 +17,10 @@ If you would like to use the latest stable build, just import the following mani
 #### Beta Build
 If you would like to have the latest features, or would like to help find us any bugs in the system, you can also try out Beta version by instead using the following manifest:
  `https://github.com/dylanpiera/Foundry-Pokemon-Tabletop-United-System/raw/development/system.json`
+ 
+### PTU 1.05
+If you're looking for the Non-PTR version you can install the [PTU Branch](https://github.com/dylanpiera/Foundry-Pokemon-Tabletop-United-System/tree/PTU-1.05)
+Please note that this branch is no longer receiving updates.
 
 ## Current Features
 - SwSh Inspired Character Sheets
