@@ -11,12 +11,9 @@ For any questions, feel free to open an issue or message me on Discord: SoaringD
 You can also join our Discord Server for any questions & feedback: https://discord.gg/ZTFfKYDxZf
 
 ## How to Install
-#### Release Build
-If you would like to use the latest stable build, just import the following manifest into foundry: 
-`https://github.com/dylanpiera/Foundry-Pokemon-Tabletop-United-System/releases/latest/download/system.json`
-#### Beta Build
-If you would like to have the latest features, or would like to help find us any bugs in the system, you can also try out Beta version by instead using the following manifest:
- `https://github.com/dylanpiera/Foundry-Pokemon-Tabletop-United-System/raw/development/system.json`
+Download the zip of the [PTU 1.05 Branch](https://github.com/dylanpiera/Foundry-Pokemon-Tabletop-United-System/archive/refs/heads/PTU-1.05.zip)
+
+Then store all the files in your foundry install's system folder, the default path for windows is: `%localappdata%/FoundryVTT/Data/systems/ptu`
 
 ## Current Features
 - SwSh Inspired Character Sheets
