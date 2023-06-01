@@ -331,7 +331,7 @@ export class PTUGen8PokemonSheet extends ActorSheet {
 			return changes;
 		} 
 
-		const effect = this.actor.effects.find(x => x.label == "Hardened Injuries")
+		const effect = this.actor.effects.find(x => x.name == "Hardened Injuries")
 		if(value === 0 || !isHardened) {
 			if(effect) {
 				await effect.delete();
@@ -343,7 +343,7 @@ export class PTUGen8PokemonSheet extends ActorSheet {
 		if(!effect) {
 			const effectData = {
 				changes: calcHardenedChanges(value),
-				label: 'Hardened Injuries',
+				name: 'Hardened Injuries',
 				icon: "",
 				transfer: false,
 				"flags.ptu.editLocked": true,

@@ -26,7 +26,7 @@ export async function cureActorAffliction(actor, affliction_name, silent=false)
 	{
 		if(eval('actor.data.flags.ptu.'+lowercase_affliction_name) == "true")
 		{
-			for(let effect of actor.effects.filter(x => x.data.label == affliction_name))
+			for(let effect of actor.effects.filter(x => x.data.name == affliction_name))
   			{
 				await effect.delete();
 			}

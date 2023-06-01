@@ -206,7 +206,7 @@ export const EffectFns = new Map([
 
         let applyPoison = async () => {
             const token = canvas.tokens.get(lastCombatant.token.id);
-            const badly_poisoned_effect = token.actor.effects.find(x => x.label == "Badly Poisoned");
+            const badly_poisoned_effect = token.actor.effects.find(x => x.name == "Badly Poisoned");
             const toxicDamage = (a,b=5) => a > 0 ? toxicDamage(a-1,b+b) : b;
             await ApplyFlatDamage([token], "Toxic Damage", toxicDamage(badly_poisoned_effect.flags.ptu?.roundsElapsed ?? 0));
         }
@@ -413,7 +413,7 @@ export const EffectFns = new Map([
                     success: true
                 }
 
-                await actor.effects.find(x => x.label == "Confused").delete();
+                await actor.effects.find(x => x.name == "Confused").delete();
             }
             else {
                 messageData = {
@@ -449,7 +449,7 @@ export const EffectFns = new Map([
                     success: true
                 }
 
-                await actor.effects.find(x => x.label == "Confused").delete();
+                await actor.effects.find(x => x.name == "Confused").delete();
             }
         }
         const content = await renderTemplate('/systems/ptu/templates/chat/save-check.hbs', messageData);
@@ -527,7 +527,7 @@ export const EffectFns = new Map([
                 success: true
             }
 
-            await actor.effects.find(x => x.label == Handlebars.helpers.capitalizeFirst(effect)).delete();
+            await actor.effects.find(x => x.name == Handlebars.helpers.capitalizeFirst(effect)).delete();
         }
         else {
             messageData = {
@@ -569,7 +569,7 @@ export const EffectFns = new Map([
                     success: true
                 }
 
-                await actor.effects.find(x => x.label == "Infatuation").delete();
+                await actor.effects.find(x => x.name == "Infatuation").delete();
             }
             else {
                 messageData = {
@@ -605,7 +605,7 @@ export const EffectFns = new Map([
                     success: true
                 }
 
-                await actor.effects.find(x => x.label == "Infatuation").delete();
+                await actor.effects.find(x => x.name == "Infatuation").delete();
             }
         }
         const content = await renderTemplate('/systems/ptu/templates/chat/save-check.hbs', messageData);
@@ -638,7 +638,7 @@ export const EffectFns = new Map([
                 success: true
             }
 
-            await actor.effects.find(x => x.label == "Rage").delete();
+            await actor.effects.find(x => x.name == "Rage").delete();
         }
         else {
             messageData = {
@@ -678,8 +678,8 @@ export const EffectFns = new Map([
                 success: true
             }
 
-            await actor.effects.find(x => x.label == "Sleep").delete();
-            const bad_sleep = actor.effects.find(x => x.label == "BadSleep");
+            await actor.effects.find(x => x.name == "Sleep").delete();
+            const bad_sleep = actor.effects.find(x => x.name == "BadSleep");
             if (bad_sleep) await bad_sleep.delete();
         }
         else {
@@ -737,7 +737,7 @@ export const EffectFns = new Map([
             roll._total = roll.total;
             let messageData = {};
 
-            const vortex_effect = actor.effects.find(x => x.label == "Vortex");
+            const vortex_effect = actor.effects.find(x => x.name == "Vortex");
 
             const DC = Math.max(0, 20 - ((vortex_effect.flags.ptu?.roundsElapsed ?? 0) * 6));
 
@@ -749,7 +749,7 @@ export const EffectFns = new Map([
                     success: true
                 }
 
-                await actor.effects.find(x => x.label == "Vortex").delete();
+                await actor.effects.find(x => x.name == "Vortex").delete();
             }
             else {
                 messageData = {

@@ -46,7 +46,7 @@ Hooks.on("endOfCombat", async function (combat, participants) {
     for (const effect of actor.effects.values()) {
       if (
         effect.flags?.core?.statusId?.includes(".volatile.") ||
-        effect.label == "Flinch"
+        effect.name == "Flinch"
       ) {
         debug(
           `Adding ${effect.id} (${effect.label}) to list of effects to remove`
@@ -607,4 +607,22 @@ Hooks.on("createToken", async (token, options, id) => {
     }
 	}
 
+});
+
+
+Hooks.on("preCreateToken", async (token, options, id) => { 
+  // If an owned Pokemon is dropped onto the field and pokeball animations are enabled, \
+  // start its transparency at 0 so it looks like it pops out of the Pokeball.
+
+  let actor = game.actors.get(token.actorId);
+  
+  if(actor.data.type == "pokemon" && (actor.system.owner != "0" && actor.system.owner != "")) // Owned Pokemon
+  {
+    let enable_pokeball_animation = game.settings.get("ptu", "usePokeballAnimationOnDragOut");
+
+    if(enable_pokeball_animation)
+    {
+      token.data.update({alpha: 0});
+    }
+  }
 });
