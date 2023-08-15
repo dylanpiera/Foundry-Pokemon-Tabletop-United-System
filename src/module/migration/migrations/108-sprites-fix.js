@@ -16,4 +16,15 @@ export class Migration108SpritesFix extends MigrationBase {
 
         actor.img = `${path.startsWith('/') ? "" : "/"}${path}${path.endsWith('/') ? "" : "/"}${name}.${ext}`
     }
+
+    async updateToken(token) {
+        const match = /(\d+.+).(webp|png)/.exec(token.texture.src);
+        if(!match) return;
+
+        let [_, name, ext] = match;
+        const path = game.settings.get("ptu", "defaultPokemonImageDirectory");
+        if(path === "systems/ptu/static/images/sprites/" && ext === "png") ext = "webp";
+
+        token.texture.src = `${path.startsWith('/') ? "" : "/"}${path}${path.endsWith('/') ? "" : "/"}${name}.${ext}`
+    }
 }
