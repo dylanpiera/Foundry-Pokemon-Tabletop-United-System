@@ -124,5 +124,9 @@
       "name": "English",
       "path": "static/lang/en.json"
     }
-  ]
+  ],
+  "url": "https://github.com/pokemon-tabletop-reunited/Foundry-Pokemon-Tabletop-United-System",  
+  "manifest": "https://github.com/pokemon-tabletop-reunited/Foundry-Pokemon-Tabletop-United-System/raw/development/system.json",
+  "changelog": "https://github.com/pokemon-tabletop-reunited/Foundry-Pokemon-Tabletop-United-System/raw/development/changelog.md",
+  "download": "https://github.com/pokemon-tabletop-reunited/Foundry-Pokemon-Tabletop-United-System/archive/development.zip"
 }
