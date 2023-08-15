@@ -941,7 +941,7 @@ export function registerSettings() {
 
         game.settings.register("ptu", "worldSchemaVersion", {
             name: "World Schema Version",
-            hint: "Records the schema version for documents in the PF2e system (don't modify this unless you know what you are doing).",
+            hint: "Records the schema version for documents in the PTR system (don't modify this unless you know what you are doing).",
             scope: "world",
             config: true,
             default: MigrationRunner.MINIMUM_SAFE_VERSION,

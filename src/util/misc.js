@@ -95,7 +95,7 @@ export function isItemUUID(uuid) {
 
     const [type, scope, packId, id] = uuid.split(".");
     if (type !== "Compendium") return false;
-    if (!(scope && packId && id)) throw ErrorPF2e(`Unable to parse UUID: ${uuid}`);
+    if (!(scope && packId && id)) throw Error(`Unable to parse UUID: ${uuid}`);
 
     const pack = game.packs.get(`${scope}.${packId}`);
     return pack?.documentName === "Item";

@@ -24,6 +24,15 @@ class PTUPartySheet extends FormApplication {
         });
     };
 
+    /** @override */
+    _canDragStart(selector) {
+        return this.isEditable;
+    }
+    /** @override */
+    _canDragDrop(selector) {
+        return this.isEditable;
+    }
+
     getData() {
         const data = super.getData();
        

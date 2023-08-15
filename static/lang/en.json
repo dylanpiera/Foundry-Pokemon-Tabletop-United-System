@@ -210,7 +210,6 @@
     "Shiny": "Shiny",
     "Loyalty": "Loyalty",
     "GmOnly": "gm only",
-    "ModifiersTotal": "Total",
     "Bonus": "Bonus",
     "Initiative": "Initative",
     "StatPoint": "Stat Point",
@@ -547,6 +546,8 @@
       "untyped": "Untyped"
     },
     "Modifiers": {
+      "Label": "Modifiers",
+      "Total": "Total",
       "Defense": "Defense",
       "SpecialDefense": "Special Defense",
       "DamageReduction": "Damage Reduction",

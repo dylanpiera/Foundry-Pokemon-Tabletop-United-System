@@ -1,7 +1,7 @@
 <span class="mod-input" {{#if (isdefined mod)}}data-mod="{{#if (gt mod 0)}}+{{/if}}{{mod}}"{{/if}}>
     {{#if modOrigins}}
     <div class="mod-tooltip" style="display: none;" data-position="{{position}}">
-        <h1 style="font-size:14px; text-align:center; width: 85%;">{{localize "PTU.Modifiers"}}:</h1>
+        <h1 style="font-size:14px; text-align:center; width: 85%;">{{localize "PTU.Modifiers.Label"}}:</h1>
         {{#each modOrigins}}
             <div class="d-flex w-100 flex-row justify-content-between align-items-center" {{#if @last}}style="border-bottom: unset; padding-bottom: 2px;"{{/if}}>
                 {{#if sourceId}}
@@ -24,7 +24,7 @@
         {{/each}}
         {{#unless (is total "ignored")}}
             <span class="total">
-                <b>{{localize "PTU.ModifiersTotal"}}:</b> {{total}}
+                <b>{{localize "PTU.Modifiers.Total"}}:</b> {{total}}
             </span>
         {{/unless}}
     </div>

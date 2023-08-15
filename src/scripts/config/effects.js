@@ -85,7 +85,7 @@ export const statusEffects = [
     {
         "id": "badly-poisoned",
         "label": "PTU.ConditionBadlyPoisoned",
-        "icon": "systems/ptu/static/images/conditions/Badly Poisoned.svg",
+        "icon": "systems/ptu/static/images/conditions/Badly-Poisoned.svg",
         "changes": [
             {
                 "key": "flags.ptu.is_poisoned",
@@ -207,7 +207,7 @@ export const statusEffects = [
     {
         "id": "bad-sleep",
         "label": "PTU.ConditionBadSleep",
-        "icon": "systems/ptu/static/images/conditions/Bad Sleep.svg",
+        "icon": "systems/ptu/static/images/conditions/Bad-Sleep.svg",
         "changes": [
             {
                 "key": "flags.ptu.is_badly_sleeping",
@@ -258,7 +258,7 @@ export const statusEffects = [
     {
         "id": "total-blindness",
         "label": "PTU.ConditionTotalBlindness",
-        "icon": "systems/ptu/static/images/conditions/Total Blindness.svg",
+        "icon": "systems/ptu/static/images/conditions/Total-Blindness.svg",
         "changes": [
             {
                 "key": "flags.ptu.is_blind",
