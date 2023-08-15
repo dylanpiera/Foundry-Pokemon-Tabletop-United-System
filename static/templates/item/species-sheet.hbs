@@ -1,0 +1,221 @@
+{{!-- Form Element --}}
+<form class="item-sheet {{cssClass}}" autocomplete="off">
+    <header class="sheet-header sheet-tabs {{#if (is view "entry")}}disabled{{/if}}" data-group="primary" style="background: #AED3A2;">
+        <nav class="tabs" data-group="primary">
+            <a class="item tooltip ball-themes nest" title="Overview" data-tab="overview"><i class="fas fa-house"></i></a>
+            <a class="item tooltip ball-themes nest" title="Capabilities & Other" data-tab="capabilities"><i class="fas fa-transporter"></i></a>
+            <a class="item tooltip ball-themes nest" title="Evolutions" data-tab="evolutions"><i class="fas fa-up"></i></a>
+            <a class="item tooltip ball-themes nest" title="Moves" data-tab="moves"><i class="fas fa-burst"></i></a>
+            <a class="item tooltip ball-themes nest" title="Abilities" data-tab="abilities"><i class="fas fa-star"></i></a>
+            <a class="item tooltip ball-themes nest" title="Rules" data-tab="rules"><i class="fas fa-toolbox"></i></a>
+        </nav>
+    </header>
+
+    <div class="sheet-body h-100 w-100">
+        {{!-- Sheet Header --}}
+        <header class="header w-100 p-2">
+            <input
+                name="name"
+                type="text"
+                value="{{item.name}}"
+                placeholder="Name"
+            />
+            <span class="d-flex fb-20 align-items-center ml-2" >
+                <label for="system.number" style="font-size: 26px;">#</label>
+                <input
+                    class="ml-1"
+                    name="system.number"
+                    type="Number"
+                    value="{{item.system.number}}"
+                    placeholder=""
+                />
+            </span>
+        </header>
+        <div class="tab overview h-100" data-group="primary" data-tab="overview">
+            {{#if (is view "entry")}}
+                <div class="move-row" style="flex-grow: 1">
+                    <div class="move-effect">
+                        <textarea disabled>{{item.system.dexentry}}</textarea>
+                    </div>
+                </div>
+            {{else}}
+                <div class="move-row p-2">
+                    <div class="move-column">
+                        <div class="avatar ml-3 mr-4 mt-2 mb-2">
+                            <img class="p-2 content {{#unless editLocked}}profile-img{{/unless}}" src="{{data.img}}" {{#unless editLocked}}data-edit="img"{{/unless}} title="{{name}}"/>
+                        </div>
+                    </div>
+
+                    <div class="move-info ml-3">
+                        <div class="d-flex flex-row justify-content-between">
+                            <div class="fb-45 d-flex flex-column">
+                                <div class="d-flex justify-content-between mb-1 align-items-center">
+                                    <b>Hp:</b>
+                                    <input class="ml-1 fb-60" name="system.stats.hp" type="number" value="{{item.system.stats.hp}}" min="1"/>
+                                </div>
+                                <div class="d-flex justify-content-between mb-1 align-items-center">
+                                    <b>Atk:</b>
+                                    <input class="ml-1 fb-60" name="system.stats.atk" type="number" value="{{item.system.stats.atk}}" min="1"/>
+                                </div>
+                                <div class="d-flex justify-content-between mb-1 align-items-center">
+                                    <b>Def:</b>
+                                    <input class="ml-1 fb-60" name="system.stats.def" type="number" value="{{item.system.stats.def}}" min="1"/>
+                                </div>
+                                <div class="d-flex justify-content-between mb-1 align-items-center">
+                                    <b>Sp.Atk:</b>
+                                    <input class="ml-1 fb-60" name="system.stats.spatk" type="number" value="{{item.system.stats.spatk}}" min="1"/>
+                                </div>
+                                <div class="d-flex justify-content-between mb-1 align-items-center">
+                                    <b>Sp.Def:</b>
+                                    <input class="ml-1 fb-60" name="system.stats.spdef" type="number" value="{{item.system.stats.spdef}}" min="1"/>
+                                </div>
+                                <div class="d-flex justify-content-between mb-1 align-items-center">
+                                    <b>Speed:</b>
+                                    <input class="ml-1 fb-60" name="system.stats.spd" type="number" value="{{item.system.stats.spd}}" min="1"/>
+                                </div>
+                            </div>
+                            <!-- Typing -->
+                            <ol class="inventory-list p-0 m-0">
+                                {{#each item.system.types as |type|}}
+                                    <li class="item pb-1 arrow-box">
+                                        {{#select type}}
+                                            <select name="system.type.{{@index}}" class="type-select" style="background: url('{{loadTypeImageUrl type}}')">
+                                                {{#each ../types}}
+                                                    <option value="{{this}}">{{this}}</option>
+                                                {{/each}}
+                                            </select>
+                                        {{/select}}
+                                    </li>
+                                    {{#if (and @last (not type "Untyped"))}}
+                                        <li class="item pb-1 arrow-box optional">
+                                            {{#select "Untyped"}}
+                                                <select name="system.type.{{inc @index}}" class="type-select" style="background: url('{{loadTypeImageUrl "Untyped"}}')">
+                                                    {{#each ../types}}
+                                                        <option value="{{this}}">{{this}}</option>
+                                                    {{/each}}
+                                                </select>
+                                            {{/select}}
+                                        </li>
+                                    {{/if}}
+                                {{/each}}
+
+                            </ol>
+                        </div>  
+                    </div>
+                </div>
+                <div class="move-row pl-3 p-2 mt-1 mb-2" style="flex-grow: 1">
+                    <!-- Skills -->
+                    <div class="d-flex flex-row skills">
+                        <div class="d-flex justify-content-between pb-1 mb-1 align-items-center skill-row center-text" style="border-bottom: 1px solid var(--color-underline-header);">
+                            <b class="skill">Skill</b>
+                            <b class="dice">Dice</b>
+                            <b class="mod">Mod</b>
+                        </div>
+                        <div class="d-flex justify-content-between pb-1 mb-1 align-items-center skill-row center-text" style="border-bottom: 1px solid var(--color-underline-header);">
+                            <b class="skill">Skill</b>
+                            <b class="dice">Dice</b>
+                            <b class="mod">Mod</b>
+                        </div>
+                        {{#each item.system.skills as |skill key|}}
+                            <div class="d-flex justify-content-between mb-1 align-items-center skill-row">
+                                <b class="skill ml-1">{{localize (concat "SKILL." key)}}</b>
+                                <input class="dice ml-1" name="system.skills.{{key}}.value" type="number" value="{{skill.value}}" min="1"/>
+                                <input class="mod ml-1" name="system.skills.{{key}}.modifier" type="number" value="{{skill.modifier}}" min="1"/>
+                            </div>
+                        {{/each}}
+                    </div>
+                </div>
+            {{/if}}
+        </div>
+        <div class="tab capabilities h-100" data-group="primary" data-tab="capabilities">
+            <div class="d-flex flex-row">
+                <div class="fb-48 p-1 d-flex flex-column" style="gap: 5px;">
+                    <div class="item-row">
+                        <label for="system.size.height">{{localize "SPECIES.Height"}}</label>
+                        <input class="ml-1 mr-1" name="system.size.height" type="number" step="0.1" value="{{item.system.size.height}}" placeholder="{{localize "SPECIES.Height"}}"/>
+                    </div>
+                    <div class="item-row">
+                        <label for="system.size.weight">{{localize "SPECIES.Weight"}}</label>
+                        <input class="ml-1 mr-1" name="system.size.weight" type="number" step="0.1" value="{{item.system.size.weight}}" placeholder="{{localize "SPECIES.Weight"}}"/>
+                    </div>
+                    <div class="item-row">
+                        <label for="system.size.sizeClass">{{localize "SPECIES.SizeClass"}}</label>
+                        <input class="ml-1 mr-1" name="system.size.sizeClass" type="text" value="{{item.system.size.sizeClass}}" placeholder="{{localize "SPECIES.SizeClass"}}"/>
+                    </div>
+                    <div class="item-row">
+                        <label for="system.size.weightClass">{{localize "SPECIES.WeightClass"}}</label>
+                        <input class="ml-1 mr-1" name="system.size.weightClass" type="number" value="{{item.system.size.weightClass}}" placeholder="{{localize "SPECIES.WeightClass"}}"/>
+                    </div>
+                    <div class="item-row">
+                        <label for="system.habitats">{{localize "SPECIES.Habitats"}}</label>
+                        <input class="ml-1 mr-1" name="system.habitats" type="text" value="{{item.system.habitats}}" placeholder="{{localize "SPECIES.Habitats"}}"/>
+                    </div>
+                    <div class="item-row">
+                        <label for="system.diet">{{localize "SPECIES.Diet"}}</label>
+                        <input class="ml-1 mr-1" name="system.diet" type="text" value="{{item.system.diet}}" placeholder="{{localize "SPECIES.Diet"}}"/>
+                    </div>
+                    <div class="item-row">
+                        <label for="system.breeding.eggGroups">{{localize "SPECIES.EggGroups"}}</label>
+                        <input class="ml-1 mr-1" name="system.breeding.eggGroups" type="text" value="{{item.system.breeding.eggGroups}}" placeholder="{{localize "SPECIES.EggGroups"}}"/>
+                    </div>
+                </div>
+                <div class="fb-48 p-1 d-flex flex-column">
+                    {{#each item.system.capabilities as |value key|}}
+                        {{#unless (or (is key "other") (is key "naturewalk"))}}
+                            <div class="d-flex justify-content-between mb-1 align-items-center">
+                                <b class="fb-40 ml-1">{{localize (concat "SPECIES." (capitalizeFirst key))}}</b>
+                                <input class="ml-1" name="system.capabilities.{{key}}" type="number" value="{{value}}" min="1"/>
+                            </div>
+                        {{/unless}}
+                    {{/each}}
+                    <div class="d-flex justify-content-between mb-1 align-items-center">
+                        <b class="fb-40 ml-1">{{localize "SPECIES.Naturewalk"}}</b>
+                        <input class="ml-1" name="system.capabilities.naturewalk" type="text" value="{{item.system.capabilities.naturewalk}}"/>
+                    </div>
+                </div>
+            </div>
+            <div class="d-flex flex-column">
+                {{> systems/ptu/static/templates/partials/species-item-partial.hbs title=(localize "SPECIES.Other") type="capability" items=item.system.capabilities.other}}
+            </div>
+        </div>
+        <div class="tab evolutions h-100" data-group="primary" data-tab="evolutions">
+            {{> systems/ptu/static/templates/partials/species-item-partial.hbs title=(localize "SPECIES.Evolutions") type="evolution" items=item.system.evolutions}}
+        </div>
+        <div class="tab moves h-100" data-group="primary" data-tab="moves">
+            <div class="fb-100 d-flex flex-column mb-2 drop-zone" data-zone="move" data-sub-zone="level">
+                {{> systems/ptu/static/templates/partials/species-item-partial.hbs title=(localize "SPECIES.MovesLevel") type="move" subtype="level" items=item.system.moves.level}}
+            </div>
+            <div class="fb-100 d-flex flex-column drop-zone" data-zone="move" data-sub-zone="machine">
+                {{> systems/ptu/static/templates/partials/species-item-partial.hbs title=(localize "SPECIES.MovesMachine") type="move" subtype="machine" items=item.system.moves.machine}}
+            </div>
+            <div class="fb-100 d-flex flex-column drop-zone" data-zone="move" data-sub-zone="tutor">
+                {{> systems/ptu/static/templates/partials/species-item-partial.hbs title=(localize "SPECIES.MovesTutor") type="move" subtype="tutor" items=item.system.moves.tutor}}
+            </div>
+            <div class="fb-100 d-flex flex-column mb-2 drop-zone" data-zone="move" data-sub-zone="egg">
+                {{> systems/ptu/static/templates/partials/species-item-partial.hbs title=(localize "SPECIES.MovesEgg") type="move" subtype="egg" items=item.system.moves.egg}}
+            </div>
+        </div>
+        <div class="tab abilities h-100" data-group="primary" data-tab="abilities">
+            <div class="fb-100 d-flex flex-column mb-2 drop-zone" data-zone="ability" data-sub-zone="basic">
+                {{> systems/ptu/static/templates/partials/species-item-partial.hbs title=(localize "SPECIES.AbilitiesBasic") type="ability" subtype="basic" items=item.system.abilities.basic}}
+            </div>
+            <div class="fb-100 d-flex flex-column mb-2 drop-zone" data-zone="ability" data-sub-zone="advanced">
+                {{> systems/ptu/static/templates/partials/species-item-partial.hbs title=(localize "SPECIES.AbilitiesAdvanced") type="ability" subtype="advanced" items=item.system.abilities.advanced}}
+            </div>
+            <div class="fb-100 d-flex flex-column drop-zone" data-zone="ability" data-sub-zone="high">
+                {{> systems/ptu/static/templates/partials/species-item-partial.hbs title=(localize "SPECIES.AbilitiesHigh") type="ability" subtype="high" items=item.system.abilities.high}}
+            </div>
+        </div>
+        <div class="tab rules h-100" data-group="primary" data-tab="rules">
+            {{> systems/ptu/static/templates/partials/rules/rule-partial.hbs item=item}}
+            {{#unless (is view "entry")}}
+                <div class="move-row mt-auto" style="min-height: 275px;">
+                    <div class="move-effect">
+                        {{log this}}
+                        <textarea disabled>{{item.system.dexentry}}</textarea>
+                    </div>
+                </div>
+            {{/unless}}
+        </div>
+    </div>
+</form>

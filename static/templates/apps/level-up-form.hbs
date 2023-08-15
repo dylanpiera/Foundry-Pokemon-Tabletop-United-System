@@ -1,0 +1,169 @@
+<form class="{{cssClass}} ball-themes {{data.ballStyle}} gradient container-fluid" autocomplete="off">
+    <div class="d-flex flex-column h-100">
+        <div class="d-flex flex-row justify-content-center header-bar ball-themes {{data.ballStyle}} highlight">
+            <h3 class="fb-100 center-text">{{data.pokemon.name}}'s Level Up. {{data.level.current}}   ▶   {{data.level.new}}</h3>
+        </div>
+
+        <div class="d-flex flex-row justify-content-center mt-2 mb-2">
+            <div class="avatar fb-30">
+                <img src="{{data.pokemon.img}}" alt="">
+            </div>
+            {{#if (not data.evolutions.current.slug data.pokemon.species.slug)}}
+                <div class="image-divider"></div>
+                <div class="avatar fb-30">
+                    <img src="{{data.evolutions.current.image}}" alt="">
+                </div>
+            {{/if}}
+        </div>
+
+        {{#if (gt data.evolutions.available.length 1)}}
+            <div class="d-flex flex-row justify-content-center mb-2 evolution-bar">
+                <span class="fb-60 center-text d-flex justify-content-center">
+                    <div class="fb-75">
+                        {{localize "PTU.LevelUpForm.EvolutionHint" (formatLocalize "name" data.pokemon.name)}}
+                    </div>
+                </span>
+                <div class="fb-25" style="align-self: center;">
+                    {{#select data.evolutions.current.slug}}
+                        <select id="evolve-select">
+                            {{#each data.evolutions.available as | evolution |}}
+                                <option value="{{evolution.slug}}">{{formatSlug evolution.slug}}</option>
+                            {{/each}}
+                        </select>
+                    {{/select}}
+                </div>
+            </div>
+        {{/if}}
+
+        <div class="stats-bar d-flex flex-row justify-content-evenly mt-2 center-text header-bar ball-themes {{data.ballStyle}} highlight">
+            <span class="fb-25">{{localize "PTU.LevelUpForm.Stats"}}</span>
+            {{#if (not data.evolutions.current.slug data.pokemon.species.slug)}}
+                <span class="fb-20">{{localize "PTU.LevelUpForm.Base"}}</span>
+            {{else}}
+                <span class="fb-20">{{localize "PTU.LevelUpForm.Current"}}</span>
+            {{/if}}
+            <span class="fb-20">{{localize "PTU.LevelUpForm.Level"}}</span>
+            <span class="fb-20">{{localize "PTU.LevelUpForm.Final"}}</span>
+        </div>
+
+        {{#each data.pokemon.system.stats as | value key |}}
+            <div class="d-flex flex-row {{key}} stats justify-content-evenly mt-2 center-text header-bar ball-themes {{data.ballStyle}} highlight">
+                <span class="stats-keys {{key}} key {{natureCheck ../data.pokemon.system.nature.value key}} fb-25">{{localize (concat "PTU.Stats." key)}}</span>
+                {{#if (not ../data.evolutions.current.slug ../data.pokemon.species.slug)}}
+                    <span class="fb-20">{{value.value}}</span>
+                {{else}}
+                    <span class="fb-20">{{value.total}}</span>
+                {{/if}}
+                {{#with (lookup ../data.stats key) as | dataStats |}}
+                    <span class="fb-20"><input type="number" name="stats.{{key}}.newLevelUp" value="{{dataStats.newLevelUp}}"/></span>
+                    <span class="fb-20">{{dataStats.newTotal}}{{#if dataStats.altered}}<span class="tooltip" title="{{dataStats.altered}}">*</span>{{/if}}</span>
+                {{/with}}
+            </div>
+        {{/each}}
+        <div class="d-flex flex-row justify-content-evenly mt-2 center-text header-bar stats">
+            <span class="fb-25"></span><span class="fb-20"></span>
+            <span class="fb-20"><input type="number" value="{{data.levelUpPoints}}" disabled></span>
+            <span class="fb-20">{{localize "PTU.Stats.LevelUpPointsRemaining"}}</span>
+        </div>
+
+        {{!-- {{#if (gt data.moves.available.length 0)}} --}}
+        <div class="d-flex flex-row mt-2 center-text moves">
+            <div class="d-flex flex-column fb-50 moves-dropzone" data-zone="known">
+                <div class="d-flex flex-row justify-content-center header-bar ball-themes {{data.ballStyle}} highlight">
+                    <h3>{{localize "PTU.LevelUpForm.KnownMoves"}} ({{data.moves.known.length}}/6)</h3>
+                </div>
+                <div class="d-flex flex-column pt-2 pb-2">
+                    {{#each data.moves.known as | move |}}
+                        <div class="d-flex flex-row justify-content-center move">
+                            <span class="linked-item">@UUID[{{move.uuid}}]</span>
+                        </div>
+                    {{/each}}
+                </div>
+            </div>
+            <div class="d-flex flex-column fb-50 moves-dropzone" data-zone="available">
+                <div class="d-flex flex-row justify-content-center header-bar ball-themes {{data.ballStyle}} highlight">
+                    <h3>{{localize "PTU.LevelUpForm.AvailableMoves"}}</h3>
+                </div>
+                <div class="d-flex flex-column pt-2 pb-2">
+                    {{#each data.moves.available as | move |}}
+                        <div class="d-flex flex-row justify-content-center move">
+                            <span class="linked-item">@UUID[{{move.uuid}}]</span>
+                        </div>
+                    {{/each}}
+                </div>
+            </div>
+        </div>
+        {{!-- {{/if}} --}}
+
+        <div class="d-flex flex-row justify-content-center center-text header-bar ball-themes {{data.ballStyle}} highlight">
+            <h3>{{localize "ITEM.TypeAbilityPlural"}}</h3>
+        </div>
+        <div class="d-flex flex-row p-1 justify-content-evenly center-text header-bar ball-themes {{data.ballStyle}} highlight">
+            <span class="fb-30">{{localize "PTU.LevelUpForm.Abilities.Basic"}}</span>
+            <span class="fb-30">{{localize "PTU.LevelUpForm.Abilities.Advanced"}}</span>
+            <span class="fb-30">{{localize "PTU.LevelUpForm.Abilities.High"}}</span>
+        </div>
+        <div class="d-flex flex-row justify-content-evenly center-text abilities mb-3">
+            <div class="d-flex flex-column abilities-column">
+                <div class="d-flex flex-row justify-content-center mb-1 ability-header" data-zone="basic">
+                    <div class="border {{#if (is data.abilities.helpText.basic "locked")}}locked{{else}}select{{/if}}">
+                        {{#if data.abilities.current.basic}}
+                            <span class="linked-item">@UUID[{{data.abilities.current.basic.uuid}}]</span>
+                        {{else}}
+                            <span class="linked-item">{{localize "PTU.LevelUpForm.Abilities.Select"}}</span>
+                        {{/if}}
+                    </div>
+                </div>
+                {{#each data.abilities.basic as | ability |}}
+                    <div class="d-flex flex-row justify-content-center ability" data-type="ability" data-uuid="{{ability.uuid}}" data-category="basic" data-slug="{{ability.slug}}">
+                        <span class="linked-item">@UUID[{{ability.uuid}}]</span>
+                    </div>
+                {{/each}}
+            </div>
+            <div class="d-flex flex-column abilities-column">
+                <div class="d-flex flex-row justify-content-center mb-1 ability-header" data-zone="advanced">
+                    <div class="border {{#if (is data.abilities.helpText.advanced "locked")}}locked{{else}}select{{/if}}" >
+                        {{#if data.abilities.current.advanced}}
+                            <span class="linked-item">@UUID[{{data.abilities.current.advanced.uuid}}]</span>
+                        {{else}}
+                            {{#if (is data.abilities.helpText.advanced "locked")}}
+                                <span class="linked-item locked">{{localize "PTU.LevelUpForm.Abilities.Locked"}} 20</span>
+                            {{else}}
+                                <span class="linked-item select">{{localize "PTU.LevelUpForm.Abilities.Select"}}</span>
+                            {{/if}}
+                        {{/if}}
+                    </div>
+                </div>
+                {{#each data.abilities.advanced as | ability |}}
+                    <div class="d-flex flex-row justify-content-center ability" data-type="ability" data-uuid="{{ability.uuid}}" data-category="advanced" data-slug="{{ability.slug}}">
+                        <span class="linked-item">@UUID[{{ability.uuid}}]</span>
+                    </div>
+                {{/each}}
+            </div>
+            <div class="d-flex flex-column abilities-column">
+                <div class="d-flex flex-row justify-content-center mb-1 ability-header" data-zone="high">
+                    <div class="border {{#if (is data.abilities.helpText.high "locked")}}locked{{else}}select{{/if}}">
+                        {{#if data.abilities.current.high}}
+                            <span class="linked-item">@UUID[{{data.abilities.current.high.uuid}}]</span>
+                        {{else}}
+                            {{#if (is data.abilities.helpText.high "locked")}}
+                                <span class="linked-item locked">{{localize "PTU.LevelUpForm.Abilities.Locked"}} 40</span>
+                            {{else}}
+                                <span class="linked-item select">{{localize "PTU.LevelUpForm.Abilities.Select"}}</span>
+                            {{/if}}
+                        {{/if}}
+                    </div>
+                </div>
+                {{#each data.abilities.high as | ability |}}
+                    <div class="d-flex flex-row justify-content-center ability" data-type="ability" data-uuid="{{ability.uuid}}" data-category="high" data-slug="{{ability.slug}}">
+                        <span class="linked-item">@UUID[{{ability.uuid}}]</span>
+                    </div>
+                {{/each}}
+            </div>
+        </div>
+        
+        <div class="d-flex flex-row mt-auto">
+            <button type="submit">{{localize "PTU.Submit"}}</button>
+        </div>
+    </div>
+</form>

@@ -1,0 +1,18 @@
+<div class="dice-shadow {{#if crit.hit}}crit {{#unless crit.show}}hidden{{/unless}}{{/if}}">
+    {{#if crit.hit}}
+        <span class="flavor-text">
+            <div class="header-bar tags">
+                <span class="tag tag-transparent" data-slug="crit-double-mod">Crit Doubles Base Modifier</span>
+            </div>
+        </span>
+    {{/if}}
+    <div class="dice-roll attack-roll attack">
+        <div class="dice-result">
+            <div class="dice-formula">{{formula}}</div>
+            {{{tooltip}}}
+            <div class="dice-total">
+                <span class="num-total">{{@root/total}} {{#if crit.hit}}Crit{{/if}} Damage</span>
+            </div>
+        </div>
+    </div>
+</div>

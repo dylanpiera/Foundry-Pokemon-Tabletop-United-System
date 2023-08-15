@@ -3,153 +3,130 @@
   "title": "Pokemon Tabletop Reunited",
   "description": "A re-imagining of the Pokemon Tabletop United TTRPG System now made with FoundryVTT as a central pilar.",
   "compatibility": {
-    "minimum": 10,
-    "verified": "10.291",
-    "maximum": 10
+    "minimum": 11,
+    "verified": "11.299",
+    "maximum": 11
   },
-  "version": "3.2.3.10",
+  "version": "4.0.0.alpha.1",
   "templateVersion": 2,
   "authors": [
     {
       "name": "Ashe Piera",
       "email": "ptu@soaringnetwork.com",
-      "url": "https://github.com/dylanpiera/Foundry-Pokemon-Tabletop-United-System"
-    },
-    {
-      "name": "GSV A Nest of Kindled Embers"
+      "url": "https://github.com/pokemon-tabletop-reunited/Foundry-Pokemon-Tabletop-Reunited-System"
     },
     {
       "name": "Ellam Fox"
     },
     {
-      "name": "Muhsigbokz"
-    },
-    {
-      "name": "Tymo Wessel"
-    },
-    {
-      "name": "Jeffrey Hollander"
-    },
-    {
-      "name": "Efren A. Mariño"
-    },
-    {
-      "name": "Cody Swendrowski",
-      "url": "https://swendrowski.us"
+      "name": "GSV A Nest of Kindled Embers"
     }
   ],
-  "esmodules": ["module/ptu.js"],
+  "esmodules": ["src/ptr.js"],
   "socket": true,
   "styles": [
-    "css/ptu.css",
-    "css/main.css",
-    "import/jquery-ui.css"
+    "static/css/fonts.css",
+    "static/css/utils.css",
+    "static/css/main.css",
+    "static/css/tooltipster.css",
+    "static/css/progress-bar.css"
   ],
   "scripts": [
-    "import/jquery-ui.js",
-    "css/bootstrap.js"
+    "static/js/tooltipster.js"
   ],
+  "flags": {
+    "hotReload": {
+      "extensions": ["css", "js", "hbs", "json"]
+    }
+  },
   "packs": [
     {
       "label": "abilities",
-      "entity": "Item",
+      "type": "Item",
       "name": "abilities",
       "path": "packs/abilities.db",
       "system": "ptu"
     },
     {
       "label": "moves",
-      "entity": "Item",
+      "type": "Item",
       "name": "moves",
       "path": "packs/moves.db",
       "system": "ptu"
     },
     {
       "label": "feats",
-      "entity": "Item",
+      "type": "Item",
       "name": "feats",
       "path": "packs/feats.db",
       "system": "ptu"
     },
     {
+      "label": "dex entries",
+      "type": "Item",
+      "name": "dex-entries",
+      "path": "packs/dex-entries.db",
+      "system": "ptu"
+    },
+    {
       "label": "edges",
-      "entity": "Item",
+      "type": "Item",
       "name": "edges",
       "path": "packs/edges.db",
       "system": "ptu"
     },
     {
       "label": "items",
-      "entity": "Item",
+      "type": "Item",
       "name": "items",
       "path": "packs/items.db",
       "system": "ptu"
     },
     {
       "label": "capabilities",
-      "entity": "Item",
+      "type": "Item",
       "name": "capabilities",
       "path": "packs/capabilities.db",
       "system": "ptu"
     },
     {
       "label": "poke edges",
-      "entity": "Item",
+      "type": "Item",
       "name": "poke-edges",
       "path": "packs/poke-edges.db",
       "system": "ptu"
     },
     {
-      "label": "dex entries",
-      "entity": "Item",
-      "name": "dex-entries",
-      "path": "packs/dex-entries.db",
-      "system": "ptu"
-    },
-    {
-      "label": "fan game content",
-      "entity": "Item",
-      "name": "fan-game-content",
-      "path": "packs/fan-game-content.db",
-      "system": "ptu"
-    },
-    {
-      "label": "fan game dex",
-      "entity": "Item",
-      "name": "fan-game-dex",
-      "path": "packs/fan-game-dex.db",
-      "system": "ptu"
-    },
-    {
       "label": "habitats",
-      "entity": "RollTable",
+      "type": "RollTable",
       "name": "habitats",
       "path": "packs/habitats.db",
       "system": "ptu"
     },
     {
-      "label": "maneuvers",
-      "entity": "Item",
-      "name": "maneuvers",
-      "path": "packs/maneuvers.db",
-      "system": "ptu"
+      "label": "effects",
+      "type": "Item",
+      "name": "effects",
+      "path": "packs/effects.db",
+      "system": "ptr"
+    },
+    {
+      "label": "species",
+      "type": "Item",
+      "name": "species",
+      "path": "packs/species.db",
+      "system": "ptr"
     }
   ],
   "languages": [
     {
       "lang": "en",
       "name": "English",
-      "path": "lang/en.json"
+      "path": "static/lang/en.json"
     }
   ],
-  "gridDistance": 1,
-  "gridUnits": "m",
-  "primaryTokenAttribute": "health",
-  "secondaryTokenAttribute": "exp",
-  "url": "https://github.com/dylanpiera/Foundry-Pokemon-Tabletop-United-System",  
-  "manifest": "https://github.com/dylanpiera/Foundry-Pokemon-Tabletop-United-System/raw/development/system.json",
-  "changelog": "https://github.com/dylanpiera/Foundry-Pokemon-Tabletop-United-System/raw/development/changelog.md",
-  "download": "https://github.com/dylanpiera/Foundry-Pokemon-Tabletop-United-System/archive/development.zip",
-  "initiative": "",
-  "license": "LICENSE.txt"
+  "url": "https://github.com/pokemon-tabletop-reunited/Foundry-Pokemon-Tabletop-United-System",  
+  "manifest": "https://github.com/pokemon-tabletop-reunited/Foundry-Pokemon-Tabletop-United-System/raw/development/system.json",
+  "changelog": "https://github.com/pokemon-tabletop-reunited/Foundry-Pokemon-Tabletop-United-System/raw/development/changelog.md",
+  "download": "https://github.com/pokemon-tabletop-reunited/Foundry-Pokemon-Tabletop-United-System/archive/development.zip"
 }

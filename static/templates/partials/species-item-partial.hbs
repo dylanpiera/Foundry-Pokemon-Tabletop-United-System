@@ -1,0 +1,65 @@
+<div class="item-list-header {{subtype}} p-1">
+    <h3 class="title">{{title}}</h3>
+    {{#if (is subtype "level")}}
+        <div class="move-level"><b>Level</b></div>
+    {{/if}}
+    {{#if (is type "evolution")}}
+        <div class="evolution-level"><b>Level</b></div>
+        <div class="evolution-restriction center-text"><b>Restriction</b></div>
+        <div class="evolution-item center-text"><b>Item</b></div>
+    {{/if}}
+    <div class="item-controls">
+        <!-- possibly replace / add a 'browse' button here -->
+        {{!-- <a class="item-control item-create" title="Add {{type}}" data-type="{{type}}" data-subtype="{{subtype}}">
+            <i class="fas fa-plus-circle" style="margin-right: 3px;"></i>
+            <span class="readable">{{localize "ITEM.AddButton"}}</span>
+        </a> --}}
+    </div>
+</div>
+
+<ol class="item-list pl-1 {{subtype}}">
+    {{#each items as | item |}}
+        <li class="item {{../type}}-item draggable" data-item-type="{{../type}}" data-item-subtype="{{../subtype}}" data-item-uuid="{{item.uuid}}" data-item-slug="{{item.slug}}" data-item-index="{{@index}}">
+            <div class="item-name">
+                <h4>{{formatSlug item.slug}}</h4>
+            </div>
+            {{#if (is ../subtype "level")}}
+                <div class="move-level">
+                    <input type="text" name="system.moves.level.{{@index}}.level" value="{{item.level}}"/>
+                    <input type="hidden" name="system.moves.level.{{@index}}.uuid" value="{{item.uuid}}"/>
+                    <input type="hidden" name="system.moves.level.{{@index}}.slug" value="{{item.slug}}"/>
+                </div>
+            {{/if}}
+            {{#if (is ../type "evolution")}}
+                <div class="evolution-level">
+                    <input type="text" name="system.evolutions.{{@index}}.level" value="{{item.level}}"/>
+                    <input type="hidden" name="system.evolutions.{{@index}}.uuid" value="{{item.uuid}}"/>
+                    <input type="hidden" name="system.evolutions.{{@index}}.slug" value="{{item.slug}}"/>
+                </div>
+                <div class="evolution-restriction">
+                    <input type="text" name="system.evolutions.{{@index}}.other.restrictions" value="{{item.other.restrictions}}"/>
+                </div>
+                <div class="evolution-item" data-index="{{@index}}">
+                    {{#if item.other.evolutionItem}}
+                        <span class="evolution-item-item linked-item">@UUID[{{item.other.evolutionItem.uuid}}]</span>
+                    {{else}}
+                        <span class="empty"><small><i>Drop item here</i></small></span>
+                    {{/if}}
+                </div>
+            {{/if}}
+            <div class="item-controls">
+                {{#if (is ../type "evolution")}}
+                    <a class="item-control sub-item-delete" title="Delete Evolution Item"><i class="far fa-trash"></i></a>
+                {{/if}}
+                <a class="item-control item-delete" title="Delete {{../type}}"><i class="fas fa-trash"></i></a>
+            </div>
+        </li>
+    {{/each}}
+    {{#unless items}}
+        <li class="item {{type}}-item empty" data-item-type="{{type}}" data-item-subtype="{{subtype}}">
+            <div class="item-name">
+                <small><i>Drop items here</i></small>
+            </div>
+        </li>
+    {{/unless}}
+</ol> 

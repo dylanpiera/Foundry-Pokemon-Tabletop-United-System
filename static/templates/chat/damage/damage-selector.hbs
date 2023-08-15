@@ -1,0 +1,65 @@
+<div class="mon-list">
+    <div class="mon-list-header w-100 pt-1 pb-1">
+        <div class="mon-item-header icon">
+            <h4>Icon</h4>
+        </div>
+        <div class="hit-crit">
+            <div class="mon-item-header hit">
+                <h4>Hit</h4>
+            </div>
+            <div class="mon-item-header crit">
+                <h4>Crit</h4>
+            </div>
+        </div>
+        <div class="mon-item-header applicators">
+            <h4>Applicators</h4>
+        </div>
+    </div>
+    <div class="d-flex flex-column">
+    {{#each targets}}
+        <div class="mon-list-item {{#if this.applied}}disabled{{/if}}" data-uuid="{{this.actor.uuid}}">
+            <div class="icon">
+                <img src="{{this.actor.img}}" />
+            </div>
+            <div class="hit-crit">
+                {{#if (or (is this.outcome "hit") (or (is this.outcome "crit-hit") (is this.outcome "blocked-crit")))}}
+                    <div class="hit">
+                        <i class="tooltip fas fa-certificate" title="{{localize "PTU.Applicators.Hit"}}"></i>
+                    </div>
+                {{else}}
+                    <div class="hit">
+                        <i class="tooltip fas fa-times-circle" title="{{localize "PTU.Applicators.Miss"}}"></i>
+                    </div>
+                {{/if}}
+                {{#if (or (is this.outcome "crit-hit") (is this.outcome "blocked-crit"))}}
+                    <div class="crit">
+                        <i class="tooltip fas fa-crosshairs" title="{{localize "PTU.Applicators.Crit"}}"></i>
+                    </div>
+                {{else}}
+                    <div class="crit">
+                        <i class="tooltip fas fa-times-circle" title="{{localize "PTU.Applicators.NoCrit"}}"></i>
+                    </div>
+                {{/if}}
+            </div>
+            <div class="applicators {{#unless (or (is this.outcome "hit") (or (is this.outcome "crit-hit") (is this.outcome "blocked-crit")))}}disabled{{/unless}}">
+                <i class="tooltip full fas fa-circle" title="{{localize "PTU.Applicators.Full"}}" data-mode="full"></i>
+                <i class="tooltip half fas fa-adjust" title="{{localize "PTU.Applicators.Half"}}" data-mode="half"></i>
+                <i class="tooltip weak fas fa-minus-square" title="{{localize "PTU.Applicators.Weak"}}" data-mode="weak"></i>
+                <i class="tooltip resist fas fa-plus-square" title="{{localize "PTU.Applicators.Resist"}}" data-mode="resist"></i>
+                <i class="tooltip flat fas fa-stop" title="{{localize "PTU.Applicators.Flat"}}" data-mode="flat"></i>
+            </div>
+        </div>
+    {{/each}}
+    </div>
+    <div class="flavor-text pt-1 pb-1">
+        <div class="message-buttons">
+            <span class="apply">
+                <button class="button" data-mode="full">{{localize "PTU.ApplyButtons.Apply"}}</button>
+            </span>
+            <button class="button half" data-mode="half">{{localize "PTU.ApplyButtons.Half"}}</button>
+            <button class="button weak" data-mode="weak">{{localize "PTU.ApplyButtons.Weak"}}</button>
+            <button class="button resist" data-mode="resist">{{localize "PTU.ApplyButtons.Resist"}}</button>
+            <button class="button flat" data-mode="flat">{{localize "PTU.ApplyButtons.Flat"}}</button>
+        </div>
+    </div>
+</div>
