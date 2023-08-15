@@ -1,3 +1,7 @@
 2023/08/15-19:27:15.259 25fc Recovering log #162
 2023/08/15-19:27:15.265 25fc Delete type=0 #162
 2023/08/15-19:27:15.265 25fc Delete type=3 #160
+2023/08/15-20:26:22.069 91a0 Level-0 table #167: started
+2023/08/15-20:26:22.069 91a0 Level-0 table #167: 0 bytes OK
+2023/08/15-20:26:22.070 91a0 Delete type=0 #165
+2023/08/15-20:26:22.077 91a0 Manual compaction at level-0 from '!items!076lO1W2x9ayAcy3' @ 72057594037927935 : 1 .. '!items!zyrvCDXykruLOC8Y' @ 0 : 0; will stop at (end)
