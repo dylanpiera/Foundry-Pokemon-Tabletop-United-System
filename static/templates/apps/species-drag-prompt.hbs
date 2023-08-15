@@ -1,0 +1,35 @@
+<form class="{{cssClass}} container-fluid" autocomplete="off">
+    <div class="d-flex flex-column center-text">
+        <div class="d-flex flex-column justify-content-center mb-2">
+            <h3>{{localize "PTU.QuickPokemonGeneration"}}</h3>
+            <h1>{{species}}</h1>
+        </div>
+        <div class="d-flex flex-row justify-content-center mb-2">
+            <label for="level">{{localize "PTU.LevelRange"}}</label>
+        </div>
+        <div class="d-flex flex-row justify-content-center mb-2">
+            <input class="level" type="number" name="level.min" min="1" max="100" value="{{levelMinDefault}}"/>
+            <span class="ml-2 mr-2" style="align-self: center;">-</span>
+            <input class="level" type="number" name="level.max" min="1" max="100" value="{{levelMaxDefault}}"/>
+        </div>
+        <div class="d-flex flex-row justify-content-center mb-2">
+            <label for="shiny-chance">{{localize "PTU.ShinyChance"}}</label>
+        </div>
+        <div class="d-flex flex-row justify-content-center mb-2">
+            <input type="number" name="shiny-chance" step="0.001" min="0" max="1" value="{{shinyChanceDefault}}"/>
+        </div>
+        <div class="d-flex flex-row justify-content-center mb-2">
+            <label for="stat-randomness">{{localize "PTU.StatRandomness"}}</label>
+        </div>
+        <div class="d-flex flex-row justify-content-center mb-2">
+            <input type="number" name="stat-randomness" step="0.01" min="0" max="1" value="{{statRandomnessDefault}}"/>
+        </div> 
+        <div class="d-flex flex-column justify-content-center align-items-center mb-2">
+            <label for="prevent-evolution">{{localize "PTU.PreventEvolution"}}</label>
+            <input type="checkbox" name="prevent-evolution" {{checked preventDefault}}/>
+        </div>
+    </div>
+    <div class="d-flex flex-row justify-content-center mt-auto">
+        <input type="submit" autofocus value="{{localize "PTU.Submit"}}"/>
+    </div>
+</form>

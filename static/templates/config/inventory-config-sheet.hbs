@@ -1,0 +1,80 @@
+<form class="{{cssClass}} container-fluid" id="{{object.id}}" autocomplete="off">
+    <div class="ball-themes element background {{ballStyle}}"></div>
+    <div class="ball-themes element gradient {{ballStyle}}"></div>
+    <!-- Highlight Shape JS insert -->
+    <div class="ball-themes element light-color {{ballStyle}}"></div>
+    <div class="ball-themes element band {{ballStyle}}"></div>
+    <main class="sheet-body h-100">
+        <div class="d-flex flex-row justify-content-between h-100" style="gap: 8px;">
+            <!-- Column One -->
+            <div class="fb-33">
+                <div class="swsh-box h-100" data-column="one">
+                    <div class="swsh-header justify-content-center ball-themes {{ballStyle}} highlight pt-2 pb-2 w-100">
+                        <b>Left Column</b>
+                    </div>
+                    <div class="swsh-body p-0">
+                        <ol class="item-list w-100" >
+                            {{#each columns.one as | category|}}
+                                <li class="item category p-1" data-column="one" data-category="{{category}}" draggable="true">
+                                    <div class="item-name">
+                                        <h4>{{category}}</h4>
+                                    </div>
+                                    <div class="item-controls" style="flex: 0 0 20px;">
+                                        <a class="item-control move-available" title="Move to Available"><i class="fas fa-arrow-right"></i></a>
+                                    </div>
+                                </li>
+                            {{/each}}
+                        </ol>
+                    </div>
+                </div>
+            </div>
+            <!-- Available Inventory -->
+            <div class="fb-33">
+                <div class="swsh-box h-100" data-column="available">
+                    <div class="swsh-header justify-content-center ball-themes {{ballStyle}} highlight pt-2 pb-2 w-100">
+                        <b>Available</b>
+                    </div>
+                    <div class="swsh-body p-0">
+                        <ol class="item-list w-100" >
+                            {{#each columns.available as | category|}}
+                                <li class="item category p-1" data-column="available" data-category="{{category}}" draggable="true">
+                                    <div class="item-controls" style="flex: 0 0 20px;">
+                                        <a class="item-control move-one" title="Move to Available"><i class="fas fa-arrow-left"></i></a>
+                                    </div>
+                                    <div class="item-name">
+                                        <h4>{{category}}</h4>
+                                    </div>
+                                    <div class="item-controls" style="flex: 0 0 20px;">
+                                        <a class="item-control move-two" title="Move to Available"><i class="fas fa-arrow-right"></i></a>
+                                    </div>
+                                </li>
+                            {{/each}}
+                        </ol>
+                    </div>
+                </div>
+            </div>
+            <!-- Column Two -->
+            <div class="fb-33">
+                <div class="swsh-box h-100" data-column="two">
+                    <div class="swsh-header justify-content-center ball-themes {{ballStyle}} highlight pt-2 pb-2 w-100">
+                        <b>Right Column</b>
+                    </div>
+                    <div class="swsh-body p-0">
+                        <ol class="item-list w-100" >
+                            {{#each columns.two as | category|}}
+                                <li class="item category p-1" data-column="two" data-category="{{category}}" draggable="true">
+                                    <div class="item-controls" style="flex: 0 0 20px;">
+                                        <a class="item-control move-available" title="Move to Available"><i class="fas fa-arrow-left"></i></a>
+                                    </div>
+                                    <div class="item-name">
+                                        <h4>{{category}}</h4>
+                                    </div>
+                                </li>
+                            {{/each}}
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</form>

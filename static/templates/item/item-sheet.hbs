@@ -1,0 +1,114 @@
+{{!-- Form Element --}}
+<form class="item-sheet {{cssClass}}" autocomplete="off">
+    <header class="sheet-header sheet-tabs" data-group="primary" style="background: #AED3A2;">
+        <nav class="tabs" data-group="primary">
+            <a class="item tooltip ball-themes nest" title="Overview" data-tab="overview"><i class="fas fa-house"></i></a>
+            <a class="item tooltip ball-themes nest" title="Details" data-tab="details"><i class="fas fa-gear"></i></a>
+            <a class="item tooltip ball-themes nest" title="Rules" data-tab="rules"><i class="fas fa-toolbox"></i></a>
+        </nav>
+    </header>
+
+    <div class="sheet-body h-100 w-100">
+        {{!-- Sheet Header --}}
+        <header class="header w-100 p-2">
+            <input
+                name="name"
+                type="text"
+                value="{{item.name}}"
+                placeholder="Name"
+                {{#if editLocked}}disabled{{/if}}
+            />
+        </header>
+        <div class="tab overview h-100" data-group="primary" data-tab="overview">
+            <div class="move-row p-2">
+                <div class="move-column">
+                    <div class="avatar ml-3 mr-4 mt-2 mb-2">
+                        <img class="p-2 content {{#unless editLocked}}profile-img{{/unless}}" src="{{data.img}}" {{#unless editLocked}}data-edit="img"{{/unless}} title="{{name}}"/>
+                    </div>
+                    <div class="origin-box">
+                        <input
+                            name=""
+                            type="text"
+                            value="{{item.system.origin}}"
+                            placeholder="Origin"
+                            disabled
+                        />
+                    </div>
+                </div>
+
+                <div class="move-info ml-3">
+                    <div class="move-info-row">
+                        <div class="move-info-col">
+                            <div class="move-other-info mt-2">
+                                <span style="flex: 0 0 100%;">
+                                    QNTY 
+                                    <input
+                                        name=""
+                                        type="text"
+                                        value="{{item.system.quantity}}"
+                                        placeholder=""
+                                        disabled
+                                    />
+                                </span>
+                                <span style="flex: 0 0 100%;">
+                                    COST 
+                                    <input
+                                        name=""
+                                        type="text"
+                                        value="{{item.system.cost}}"
+                                        placeholder=""
+                                        disabled
+                                    />
+                                </span>
+                                <span style="flex: 0 0 100%">
+                                    CATG 
+                                    <input
+                                        name=""
+                                        type="text"
+                                        value="{{item.system.category}}"
+                                        placeholder=""
+                                        disabled
+                                    />
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="move-row" style="flex-grow: 1">
+                <div class="move-effect">
+                    <textarea disabled>{{item.system.effect}}</textarea>
+                </div>
+            </div>
+        </div>
+        <div class="tab details h-100" data-group="primary" data-tab="details">
+            <div class="item-row">
+                <label for="system.quantity">{{localize "ITEM.Quantity"}}</label>
+                <input class="ml-1 mr-1" name="system.quantity" type="text" value="{{item.system.quantity}}" placeholder="{{localize "ITEM.Quantity"}}"/>
+            </div>
+            <div class="item-row">
+                <label for="system.cost">{{localize "ITEM.Cost"}}</label>
+                <input class="ml-1 mr-1" name="system.cost" type="text" value="{{item.system.cost}}" placeholder="{{localize "ITEM.Cost"}}"/>
+            </div>
+            <div class="item-row">
+                <label for="system.category">{{localize "ITEM.Category"}}</label>
+                <input class="ml-1 mr-1" name="system.category" type="text" value="{{item.system.category}}" placeholder="{{localize "ITEM.Category"}}"/>
+            </div>
+            <div class="item-row">
+                <label for="system.origin">{{localize "ITEM.Origin"}}</label>
+                <input class="ml-1 mr-1" name="system.origin" type="text" value="{{item.system.origin}}" placeholder="{{localize "ITEM.Origin"}}"/>
+            </div>
+            <div class="item-row">
+                <label for="system.effect">{{localize "ITEM.Effect"}}</label>
+                <textarea class="ml-1 mr-1" name="system.effect">{{item.system.effect}}</textarea>
+            </div>
+            <div class="item-row" style="justify-content: flex-start;">
+                <label for="system.container">{{localize "ITEM.Container"}}</label>
+                <input class="ml-1 mr-1" name="system.container" type="checkbox" {{checked item.system.container}}/>
+            </div>
+        </div>
+        <div class="tab rules h-100" data-group="primary" data-tab="rules">
+            {{> systems/ptu/static/templates/partials/rules/rule-partial.hbs item=item}}
+        </div>
+    </div>
+</form>

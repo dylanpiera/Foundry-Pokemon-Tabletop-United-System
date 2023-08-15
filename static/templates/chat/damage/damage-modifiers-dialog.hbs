@@ -1,0 +1,61 @@
+<form class="check-modifiers-content d-flex flex-column" autocomplete="off" spPTUellcheck="off">
+    <div class="block">
+        {{#if substitutions}}
+            <div class="dialog-row header">
+                <span class="mod">Substitution</span>
+                <span class="type">Roll</span>
+                <span class="exclude">Utilize?</span>
+            </div>
+            <div class="substitutions">
+                {{#each substitutions as |sub idx|}}
+                    <div class="dialog-row{{#if sub.ignored}} disabled{{/if}}">
+                        <span class="mod">{{sub.label}}</span>
+                        <span class="type">{{sub.value}}</span>
+                        <label class="exclude toggle">
+                            <input type="checkbox" id="{{@root.appId}}-sub-{{idx}}" data-sub-index="{{idx}}" {{checked (not sub.ignored)}} />
+                            <label for="{{@root.appId}}-sub-{{idx}}"></label>
+                        </label>
+                    </div>
+                {{/each}}
+            </div>
+        <hr />
+        {{/if}}
+        <div class="dialog-row header">
+            <span class="type fb-45">{{localize "PTU.Roll.Type"}}</span>
+            <span class="mod fb-25">{{localize "PTU.Roll.Modifier"}}</span>
+            <span class="exclude fb-20"></span>
+        </div>
+        <div class="d-flex flex-column">
+            {{#each modifiers as |modifier idx|}}
+                <div class="dialog-row{{#unless modifier.enabled}} disabled{{#if modifier.hideIfDisabled}} hidden{{/if}}{{/unless}}">
+                    <span class="mod fb-45">{{modifier.label}}</span>
+                    <span class="value fb-25">{{numberFormat modifier.modifier decimals=0 sign=true}}</span>
+                    <label class="exclude toggle fb-20">
+                        <input type="checkbox" id="{{@root.appId}}-modifier-{{idx}}" data-modifier-index="{{idx}}" {{checked (not modifier.ignored true)}} />
+                        <label for="{{@root.appId}}-modifier-{{idx}}"></label>
+                    </label>
+                </div>
+            {{/each}}
+        </div>
+        <hr />
+        <div class="add-modifier-panel d-flex flex-row justify-content-between align-items-center">
+            <input type="text" class="add-modifier-name fb-45" placeholder={{localize "PTU.ModifierTitle"}}>
+            <input type="number" class="add-modifier-value fb-25" placeholder="+1">
+            <button type="button" class="add-modifier fb-20">+{{localize "PTU.Roll.Add"}}</button>
+        </div>
+        <hr/>
+        <div class="roll-mode-panel d-flex flex-row align-items-center justify-content-between">
+            <span class="label fb-30">{{localize "PTU.RollModeLabel"}}</span>
+            <select class="fb-50" name="rollmode">
+                {{#select rollMode}}
+                    {{#each rollModes as |label key|}}
+                        <option value="{{key}}">{{localize label}}</option>
+                    {{/each}}
+                {{/select}}
+            </select>
+        </div>
+        <hr/>
+    </div>
+
+    <button type="button" class="roll mt-auto">{{localize "PTU.Roll.Roll"}} ({{numberFormat totalModifier decimals=0 sign=true}})</button>
+</form>

@@ -1,0 +1,33 @@
+<span class="mod-input" {{#if (isdefined mod)}}data-mod="{{#if (gt mod 0)}}+{{/if}}{{mod}}"{{/if}}>
+    {{#if modOrigins}}
+    <div class="mod-tooltip" style="display: none;" data-position="{{position}}">
+        <h1 style="font-size:14px; text-align:center; width: 85%;">{{localize "PTU.Modifiers"}}:</h1>
+        {{#each modOrigins}}
+            <div class="d-flex w-100 flex-row justify-content-between align-items-center" {{#if @last}}style="border-bottom: unset; padding-bottom: 2px;"{{/if}}>
+                {{#if sourceId}}
+                    <span class="fb-80 linked-item">@UUID[{{sourceId}}]</span>
+                {{else}}
+                    <span class="fb-80"><b>{{source}}</b>:</span>
+                {{/if}}
+                <span class="fb-15 ml-1">
+                    {{#if (is mode "add")}}
+                        {{#if (gt value -1)}}+{{/if}}{{value}}                
+                    {{else}}
+                        {{#if (is mode "multiply")}}
+                            x {{value}}
+                        {{else}}
+                            {{mode}} {{value}}
+                        {{/if}}
+                    {{/if}} 
+                </span>
+            </div>
+        {{/each}}
+        {{#unless (is total "ignored")}}
+            <span class="total">
+                <b>{{localize "PTU.ModifiersTotal"}}:</b> {{total}}
+            </span>
+        {{/unless}}
+    </div>
+    {{/if}}
+    <input type="text" name="{{path}}" value="{{value}}" data-dtype="{{dtype}}" {{#if disabled}}disabled{{/if}}/>
+</span>

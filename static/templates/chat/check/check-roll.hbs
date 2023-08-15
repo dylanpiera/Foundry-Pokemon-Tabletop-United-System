@@ -1,0 +1,48 @@
+<div class="dice-shadow">
+    <div class="dice-roll attack-roll attack">
+        <div class="dice-result">
+            <div class="dice-formula">{{formula}}</div>
+            {{{tooltip}}}
+            {{#if (gt targets.length 0)}}
+                {{#each targets as |target|}}
+                    <div class="dice-total">
+                        <span class="num-total">{{@root/total}}</span>
+                        <span>vs.</span>
+                        <span>{{target.dc.value}}</span>
+                        {{log target}}
+                    </div>
+                    <div class="img-row">
+                        <img src="{{@root/self.img}}"/>
+                        <span >{{target.name}}'s {{localize target.dc.slug}}</span>
+                        <img src="{{target.img}}"/>
+                    </div>
+                    <div class="d-flex flex-row justify-content-center">
+                        <span class="type-img">
+                            {{#switch (lookup @root/outcome target._id)}}
+                                {{#case "hit"}}
+                                    <img src="/systems/ptu/images/icons/HitIcon.png">
+                                {{/case}}
+                                {{#case "crit-hit"}}
+                                    <img src="/systems/ptu/images/icons/CriticalHit.png">
+                                {{/case}}
+                                {{#case "blocked-crit"}}
+                                    <img class="blocked tooltip" title="{{localize "PTU.CriticalImmunityLabel"}}" src="/systems/ptu/images/icons/HitIcon.png">
+                                {{/case}}
+                                {{#case "crit-miss"}}
+                                    <img src="/systems/ptu/images/icons/CriticalMiss.png">
+                                {{/case}}
+                                {{#case "miss"}}
+                                    <img src="/systems/ptu/images/icons/MissIcon.png">
+                                {{/case}}
+                            {{/switch}}
+                        </span>
+                    </div>
+                {{/each}}
+            {{else}}
+                <div class="dice-total">
+                    <span class="num-total">{{#if (is type "initiative")}}{{padDecimal total 2}}{{else}}{{total}}{{/if}}</span>
+                </div>
+            {{/if}}
+        </div>
+    </div>
+</div>

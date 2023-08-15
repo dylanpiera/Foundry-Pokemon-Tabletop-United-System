@@ -1,0 +1,36 @@
+<div class="content">
+    <h3>{{localize prompt}}</h3>
+    <div class="choices{{#if selectMenu}} select-menu{{/if}}">
+        {{#if selectMenu}}
+            <select name="choice">
+                {{#each choices as |choice|}}
+                    <option value="{{choice.value}}">{{choice.label}}</option>
+                {{/each}}
+            </select>
+            {{#> dropZone}}{{/dropZone}}
+            <button type="button" value="select">{{localize "PTU.RuleElement.ChoiceSet.SaveLabel"}}</button>
+        {{else}}
+            {{#each choices as |choice|}}
+                <button type="button" value="{{choice.value}}"{{#if choice.img}} class="with-image"{{/if}}>
+                    {{#if choice.img}}<img src="{{choice.img}}" />{{/if}}
+                    <span>{{choice.label}}</span>
+                </button>
+            {{/each}}
+            {{#if allowNoSelection}}
+                <button type="button" data-action="close">
+                    <span>{{localize "PTU.RuleElement.ChoiceSet.DeclineLabel"}}</span>
+                </button>
+            {{/if}}
+            {{#> dropZone}}{{/dropZone}}
+        {{/if}}
+    </div>
+</div>
+
+{{#*inline "dropZone"}}
+    {{#if @root.includeDropZone}}
+        <div class="drop-zone with-image">
+            <i class="fas fa-info-circle" title="{{localize "PTU.RuleElement.ChoiceSet.DragItemHere"}}"></i>
+            <span>{{localize "PTU.RuleElement.ChoiceSet.DragItem"}}</span>
+        </div>
+    {{/if}}
+{{/inline}}

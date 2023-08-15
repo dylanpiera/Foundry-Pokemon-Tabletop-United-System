@@ -1,0 +1,1108 @@
+<form class="{{cssClass}} container-fluid" autocomplete="off">
+
+    <div class="ball-themes element background {{ballStyle}}"></div>
+    <div class="ball-themes element gradient {{ballStyle}}"></div>
+    <!-- Highlight Shape JS insert -->
+    <div class="ball-themes element light-color {{ballStyle}}"></div>
+    <div class="ball-themes element band {{ballStyle}}"></div>
+
+    <header class="sheet-header sheet-tabs ball-themes background {{ballStyle}}" data-group="primary">
+        <nav class="tabs" data-group="primary">
+            <a class="item tooltip ball-themes {{ballStyle}}" title="Stats" data-tab="stats"><i class="fas fa-bars-progress"></i></a>
+            <a class="item tooltip ball-themes {{ballStyle}}" title="Inventory" data-tab="inventory"><i class="fas fa-backpack"></i></a>
+            <a class="item tooltip ball-themes {{ballStyle}}" title="Features" data-tab="features"><i class="fas fa-crown"></i></a>
+            <a class="item tooltip ball-themes {{ballStyle}}" title="Combat" data-tab="combat"><i class="fas fa-hand-fist"></i></a>
+            <a class="item tooltip ball-themes {{ballStyle}}" title="Moves" data-tab="moves"><i class="fas fa-burst"></i></a>
+            <a class="item tooltip ball-themes {{ballStyle}}" title="Extra" data-tab="extra"><i class="fas fa-gear"></i></a>
+            {{!-- <a class="item tooltip ball-themes {{ballStyle}}" title="Dex" data-tab="dex"><i class="fas fa-tablet-alt"></i></a> --}}
+            <a class="item tooltip ball-themes {{ballStyle}}" title="Effects" data-tab="effects"><i class="fas fa-stars"></i></a>
+        </nav>
+    </header>
+    <main class="sheet-body h-100">
+        <!-- Stats Tab -->
+        <div class="tab details stats h-100" data-group="primary" data-tab="stats">
+            <div class="d-flex justify-content-between flex-row h-100">
+                <!-- Left Col -->
+                <div class="d-flex skills">
+                    <!-- Skills -->
+                    <div class="swsh-box w-100 mb-2" style="height: fit-content;">
+                        <div class="swsh-header d-flex flex-row center-text ball-themes {{ballStyle}} highlight" style="padding:unset;">
+                            <div class="fb-25 mt-2 mb-2"><b>{{localize "PTU.SkillLabel"}}</b></div>
+                            <div class="fb-15 mt-2 mb-2"><b>{{localize "PTU.SkillValue"}}</b></div>
+                            <div class="fb-25 mt-2 mb-2"><b>{{localize "PTU.SkillRank"}}</b></div>
+                            <div class="fb-15 mt-2 mb-2"><b>{{localize "PTU.SkillMod"}}</b></div>
+                            <div class="fb-20 mt-2 mb-2"><b>{{localize "PTU.SkillDice"}}</b></div>
+                        </div>
+                        <div class="swsh-body p-0">
+                            {{#each actor.system.skills as |skill key|}}
+                            <div class="d-flex flex-row {{key}} align-items-center w-100">
+                                <div class="skill {{key}} fb-25 bgcolor key type--{{skill.type}} align-self-center">
+                                    <label for="system.skills.{{key}}.label" class="resource-label">{{skill.label}}</label>
+                                </div>
+                                <div class="skill {{key}} fb-15 pl-1 pr-1 center-text center-self">
+                                    {{> "systems/ptu/static/templates/partials/mod-field.hbs" 
+                                        path=(concat "system.skills." key ".value.value") 
+                                        value=skill.value.value
+                                        dtype="Number" 
+                                        mod=skill.value.mod
+                                        total=skill.value.total
+                                        modOrigins=(getProperty ../actor.origins (concat "system.skills." key ".value.mod"))
+                                        flipped=(gt 8 @index)}}
+                                </div>
+                                <div
+                                    class="skill {{key}} fb-25 align-self-center bgcolor skill--{{skill.rank}} center-text center-self">
+                                    <label for="system.skills.{{key}}.rank" class="resource-label">{{localize (concat "PTU.Skill" skill.rank)}}</label>
+                                </div>
+                                <div class="skill {{key}} fb-15 pl-1 center-text center-self">
+                                    {{> "systems/ptu/static/templates/partials/mod-field.hbs" 
+                                        path=(concat "system.skills." key ".modifier.value") 
+                                        value=skill.modifier.value
+                                        dtype="Number" 
+                                        mod=skill.modifier.mod
+                                        total=skill.modifier.total
+                                        modOrigins=(getProperty ../actor.origins (concat "system.skills." key ".modifier.mod") )
+                                        flipped=(gt 8 @index)}}
+                                </div>
+                                <div class="skill {{key}} fb-20 align-self-center bgcolor center-text rollable center-self"
+                                    data-roll="{{#if (is true (getGameSetting "ignoreVirtuosoLimit"))}}{{skill.value.total}}{{else}}{{#if (bigger skill.value.total 6)}}6{{else}}{{skill.value.total}}{{/if}}{{/if}}d6{{#if skill.modifier.total}}+{{skill.modifier.total}}{{/if}}"
+                                    data-label="{{skill.label}}">
+                                    <i class="fas fa-dice-d20"></i>
+                                    <label for="system.skills.{{key}}.value"
+                                    class="resource-label">{{#if (is true (getGameSetting "ignoreVirtuosoLimit"))}}{{skill.value.total}}{{else}}{{#if (bigger skill.value.total 6)}}6{{else}}{{skill.value.total}}{{/if}}{{/if}}d6{{#if skill.modifier.total}}+{{skill.modifier.total}}{{/if}}</label>
+                                </div>
+                            </div>
+                            {{/each}}
+
+                        </div>
+                    </div>
+
+                </div>
+
+                <!--div class="d-flex avatar">
+                    {{!-- <div class="avatar"> --}}
+                        <img class="profile-img" src="{{actor.img}}" data-edit="img" title="{{actor.name}}" />
+                        {{!--
+                    </div> --}}
+                </div-->
+
+                <!-- Right Col -->
+                <div class="d-flex other">
+                    <div class="d-flex align-items-center flex-column h-100">
+                        
+                        <div class="swsh-box mb-2">
+                            <div class="swsh-header ball-themes {{ballStyle}} highlight pt-2 pb-2 d-flex flex-row" style="justify-content: center;">
+                                <input class="fb-85" name="name" type="text" value="{{actor.name}}" placeholder="Name" style="border: unset;" />
+                            </div>
+                            <div class="swsh-header ball-themes {{ballStyle}} highlight pt-2 pb-2 d-flex flex-row center-text justify-content-between">
+                                <div class="fb-25">
+                                    <b>Temp HP</b>
+                                </div>
+                                <div class="fb-35">
+                                    <b>Current HP</b>
+                                </div>
+                                <div class="fb-25">
+                                    <b>Max HP</b>
+                                </div>
+                            </div>
+                            <div class="swsh-body d-flex flex-row center-text justify-content-between">
+                                <div class="fb-25">
+                                    <input name="system.tempHp.value" type="text" value="{{actor.system.tempHp.value}}" placeholder="Temp HP" />
+                                </div>
+                                <div class="fb-35">
+                                    <input name="system.health.value" type="text" value="{{actor.system.health.value}}" placeholder="Current HP" />
+                                </div>
+                                <div class="fb-25">
+                                    <input name="system.health.max" type="text" value="{{actor.system.health.max}}" placeholder="Max HP" disabled/>
+                                </div>
+                                <div class="options w-100 pb-1 pt-1 mt-1">
+                                    <div class="progress-bar p{{actor.system.health.percent}}" id="progressBar"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mb-2">
+                            <img class="profile-img" src="{{actor.img}}" data-edit="img" title="{{actor.name}}" />
+                        </div>
+
+                        <!-- Action Points -->
+                        <div class="w-100 level-box mt-1 mb-1">
+                            <div class="swsh-box center-text" style="word-break: keep-all;">
+                                <div class="swsh-header ball-themes {{ballStyle}} highlight pt-2 pb-2">
+                                    <h3 class="m-auto">{{localize "PTU.ActionPoints"}}</h3>
+                                </div>
+                                <div class="swsh-body justify-content-center">
+                                    <div class="w-100">
+                                        <input type="range" class="w-75 ap-range" name="system.ap.value"
+                                            value="{{actor.system.ap.value}}" data-dtype="Integer" min="0" max="{{actor.system.ap.max}}" step="1" />
+                                    </div>
+                                    <div class="resource-content hp-info flexrow flex-group-right hp-info pt-1 pb-1">
+                                        <input type="text" name="system.ap.value input" value="{{actor.system.ap.value}}"/>
+                                        <span>/</span>
+                                        <input type="text" name="system.ap.max" value="{{actor.system.ap.max}}" disabled />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Experience + Level -->
+                        <div class="w-100 level-box mt-1 mb-1">
+                            <div class="swsh-box" style="text-align: center; word-break: keep-all;">
+                                <div class="swsh-header ball-themes {{ballStyle}} highlight p-1">
+                                    <div class="d-flex w-100 align-items-center justify-content-center" style="gap: 8px;">
+                                        <div class="fb-10">
+                                            <label for="system.level.current">{{localize "PTU.Level"}}:</label>
+                                        </div>
+                                        <div class="fb-15">
+                                            <input class="p-0" type="text" name="system.level.current"
+                                                value="{{actor.system.level.current}}" data-dtype="Number" disabled />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="swsh-header ball-themes {{ballStyle}} highlight">
+                                    <div class="d-flex w-100 mt-2 mb-2 align-items-center justify-content-between ">
+                                        {{#if (is "true" (getGameSetting "useDexExp"))}}
+                                        <div class="fb-30">
+                                            <label for="system.level.milestones"><b>{{localize
+                                                "PTU.LevelMilestones"}}</b></label>
+                                        </div>
+                                        <div class="fb-30">
+                                            <label for="system.level.dexexp"><b>{{localize "PTU.LevelDexExp"}}</b></label>
+                                        </div>
+                                        <div class="fb-30">
+                                            <label for="system.level.miscexp"><b>{{localize
+                                                "PTU.LevelMiscExp"}}</b></label>
+                                        </div>
+                                        {{else}}
+                                        <div class="fb-45">
+                                            <label for="system.level.milestones"><b>{{localize
+                                                "PTU.LevelMilestones"}}</b></label>
+                                        </div>
+                                        <div class="fb-45">
+                                            <label for="system.level.miscexp"><b>{{localize
+                                                "PTU.LevelMiscExp"}}</b></label>
+                                        </div>
+                                        {{/if}}
+                                    </div>
+                                </div>
+                                <div class="swsh-body">
+                                    <div class="options w-100 d-flex">
+                                        <div class="d-flex w-100 pt-1 pb-1 align-items-center justify-content-between center-text">
+                                            {{#if (is "true" (getGameSetting "useDexExp"))}}
+                                            <div class="fb-30">
+                                                <input type="text" name="system.level.milestones"
+                                                    value="{{actor.system.level.milestones}}" data-dtype="Number" />
+                                            </div>
+                                            <div class="fb-30">
+                                                <input type="text" name="system.level.dexexp"
+                                                    value="{{actor.system.level.dexexp}}" data-dtype="Number" disabled />
+                                            </div>
+                                            <div class="fb-30">
+                                                <input type="text" name="system.level.miscexp"
+                                                    value="{{actor.system.level.miscexp}}" data-dtype="Number" />
+                                            </div>
+                                            {{else}}
+                                            <div class="fb-45">
+                                                <input type="text" name="system.level.milestones"
+                                                    value="{{actor.system.level.milestones}}" data-dtype="Number"/>
+                                            </div>
+                                            <div class="fb-45">
+                                                <input type="text" name="system.level.miscexp"
+                                                    value="{{actor.system.level.miscexp}}" data-dtype="Number"/>
+                                            </div>
+                                            {{/if}}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Inventory -->
+        <div class="tab details inventory" data-group="primary" data-tab="inventory">
+            <div class="d-flex flex-row justify-content-between">
+                <div class="fb-48">
+                    <!-- Items Col one -->
+                    <div class="swsh-box w-100">
+                        <div class="swsh-body w-100 p-0" style="display: block;">
+                            {{#each columns.one as | category|}}
+                                {{#if (is category "Money")}}
+                                    <div class="swsh-header d-flex flex-row justify-content-between ball-themes {{../ballStyle}} highlight pt-2 pb-2">
+                                        <div class="fb-48 center-self center-text">
+                                            <b for="system.money" class="mb-0">{{localize "PTU.Money"}}</b>
+                                        </div>
+                                        <div class="fb-48 center-self center-text">
+                                            <b for="totalwealth" class="mb-0">Total Worth</b>
+                                        </div>
+                                    </div>
+                                    <div class="swsh-body d-flex flex-row justify-content-between pt-1 pb-1">
+                                        <div class="fb-48 center-text">
+                                            <input type="text" name="system.money" value="{{../actor.system.money}}">
+                                        </div>
+                                        <div class="fb-48 center-text">
+                                            <input type="text" name="totalwealth" value="{{../totalWealth}}" data-dtype="Number" disabled>
+                                        </div>
+                                    </div>
+                                {{else}}
+                                    <div class="color-wrapper" data-category="{{category}}">
+                                        {{> "systems/ptu/static/templates/partials/item-display-partial.hbs" title=(concat (concat
+                                        (localize "ITEM.TypeItemPlural") ": ") category) type="item" items=(lookup ../items_categorized category) settings="columns"}}
+                                    </div>
+                                {{/if}}
+                            {{/each}}
+                        </div>
+                    </div>
+                </div>
+                <div class="fb-48">
+                    <!-- Items Col two -->
+                    <div class="swsh-box w-100">
+                        <div class="swsh-body w-100 p-0" style="display: block;">
+                            {{#each columns.two as | category|}}
+                                {{#if (is category "Money")}}
+                                    <div class="swsh-header d-flex flex-row justify-content-between ball-themes {{../ballStyle}} highlight pt-2 pb-2">
+                                        <div class="fb-48 center-self center-text">
+                                            <b for="system.money" class="mb-0">{{localize "PTU.Money"}}</b>
+                                        </div>
+                                        <div class="fb-48 center-self center-text">
+                                            <b for="totalwealth" class="mb-0">Total Worth</b>
+                                        </div>
+                                    </div>
+                                    <div class="swsh-body d-flex flex-row justify-content-between pt-1 pb-1">
+                                        <div class="fb-48 center-text">
+                                            <input type="text" name="system.money" value="{{../actor.system.money}}">
+                                        </div>
+                                        <div class="fb-48 center-text">
+                                            <input type="text" name="totalwealth" value="{{../totalWealth}}" data-dtype="Number" disabled>
+                                        </div>
+                                    </div>
+                                {{else}}
+                                    <div class="color-wrapper" data-category="{{category}}">
+                                        {{> "systems/ptu/static/templates/partials/item-display-partial.hbs" title=(concat (concat
+                                        (localize "ITEM.TypeItemPlural") ": ") category) type="item" items=(lookup ../items_categorized category) settings="columns"}}
+                                    </div>
+                                {{/if}}
+                            {{/each}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Features & Edges Tab -->
+        <div class="tab details feats" data-group="primary" data-tab="features">
+            <div class="d-flex flex-row justify-content-between h-100 w-100">
+                <div class="fb-48">
+                    <!-- Feats -->
+                    <div class="swsh-box w-100">
+                        <div class="swsh-body w-100" style="display: block;">
+                            {{> "systems/ptu/static/templates/partials/item-display-partial.hbs" title=(localize
+                            "ITEM.TypeFeatPlural") type="feat" items=feats featsOrEdges=actor.system.feats}}
+                        </div>
+                    </div>
+                </div>
+                <div class="fb-48">
+                    <!-- Edges-->
+                    <div class="swsh-box w-100">
+                        <div class="swsh-body w-100" style="display: block;">
+                            {{> "systems/ptu/static/templates/partials/item-display-partial.hbs" title=(localize
+                            "ITEM.TypeEdgePlural") type="edge" items=edges featsOrEdges=actor.system.edges}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Combat Tab -->
+        <div class="tab details combat h-100" data-group="primary" data-tab="combat">
+            <div class="d-flex flex-row justify-content-between h-100">
+                <!-- Left Col -->
+                <div class="fb-48">
+                    <div class="d-flex flex-column h-100">
+                        <!-- Stats -->
+                        <div class="w-100 stats swsh-box mb-2">
+                            <div class="d-flex flex-row swsh-header ball-themes {{ballStyle}} highlight pt-2 pb-2">
+                                <div class="fb-20 pt-2 pb-2 key stat-header">{{localize "PTU.StatsLabel"}}</div>
+                                <div class="fb-15 mt-2 mb-2">{{localize "PTU.StatsBase"}}</div>
+                                <div class="fb-20 mt-2 mb-2">{{localize "PTU.StatsLevelup"}}</div>
+                                <div class="fb-15 mt-2 mb-2">{{localize "PTU.StatsMod"}}</div>
+                                <div class="fb-15 mt-2 mb-2">{{localize "PTU.StatsStage"}}</div>
+                                <div class="fb-15 mt-2 mb-2">{{localize "PTU.StatsTotal"}}</div>
+                            </div>
+                            <div class="swsh-body p-0">
+                                {{#each actor.system.stats as |stat key|}}
+                                    <div class="d-flex flex-row {{key}}">
+                                        <div class="stats {{key}} key fb-20">
+                                            <label for="system.stats.{{key}}.value" class="resource-label">{{key}}</label>
+                                        </div>
+                                        <div class="stats {{key}} base fb-15">
+                                            <input type="text" name="system.stats.{{key}}.value" value="{{stat.value}}"
+                                                data-dtype="Number" disabled />
+                                        </div>
+                                        <div class="stats {{key}} levelUp fb-20">
+                                            {{> "systems/ptu/static/templates/partials/mod-field.hbs"
+                                            path=(concat "system.stats." key ".levelUp")
+                                            value=stat.levelUp
+                                            dtype="Number"
+                                            mod=""
+                                            total="ignored"
+                                            modOrigins=(getProperty ../actor.origins (concat "system.stats." key
+                                            ".levelUp"))
+                                            flipped=(gt 3 @index)}}
+                                        </div>
+                                        <div class="stats {{key}} mod fb-15">
+                                            {{> "systems/ptu/static/templates/partials/mod-field.hbs"
+                                            mod=stat.mod.mod
+                                            path=(concat "system.stats." key ".mod.value")
+                                            value=stat.mod.value
+                                            total="ignored"
+                                            dtype="Number"
+                                            modOrigins=(getProperty ../actor.origins (concat "system.stats." key
+                                            ".mod.mod"))
+                                            flipped=(gt 3 @index)}}
+                                        </div>
+                                        <div class="stats stage stage fb-15">
+                                            {{#if (isdefined stat.stage)}}
+                                            {{> "systems/ptu/static/templates/partials/mod-field.hbs"
+                                            mod=stat.stage.mod
+                                            path=(concat "system.stats." key ".stage.value")
+                                            value=stat.stage.value
+                                            total="ignored"
+                                            dtype="Number"
+                                            modOrigins=(getProperty ../actor.origins (concat "system.stats." key
+                                            ".stage.mod"))
+                                            flipped=(gt 3 @index)}}
+                                            {{/if}}
+                                        </div>
+                                        <div class="stats {{key}} total fb-15">
+                                            <input type="text" name="system.stats.{{key}}.total" value="{{stat.total}}"
+                                                data-dtype="Number" disabled />
+                                        </div>
+                                    </div>
+                                {{/each}}
+                            </div>
+                            {{#if actor.system.levelUpPoints}}
+                                <div class="d-flex flex-row levelUpPoints center-text align-items-center">
+                                    <div class="fb-70">
+                                        <label for="system.levelUpPoints" class="resource-label">{{localize "PTU.StatsRemainingLevelupPoints"}}:</label>
+                                    </div>
+                                    <div class="fb-30">
+                                        {{> "systems/ptu/static/templates/partials/mod-field.hbs"
+                                        path="system.levelUpPoints"
+                                        value=actor.system.levelUpPoints
+                                        dtype="Number"
+                                        mod=""
+                                        total=actor.system.levelUpPoints
+                                        modOrigins=(getProperty actor.origins "system.levelUpPoints")
+                                        disabled=true}}
+                                    </div>
+                                </div>
+                            {{/if}}
+                        </div>
+
+                        <!-- Capabilities -->
+                        <div class="swsh-box mb-2 w-100">
+                            <div class="swsh-header ball-themes {{ballStyle}} highlight pt-2 pb-2 center-text justify-content-center">
+                                <b>{{localize "ITEM.TypeCapabilityPlural"}}</b>
+                            </div>
+                            <div class="swsh-body flex-row w-100 align-items-center" style="white-space: nowrap;">
+                                {{#each actor.system.capabilities as |capability key|}}
+                                    {{#if (not key "Other")}}
+                                        <div class="fb-35">
+                                            <label class="pl-1" for="system.capabilities.{{key}}">{{key}}</label>
+                                        </div>
+                                        <div class="fb-15 p-1 center-text">
+                                            <input type="text" name="system.capabilities.{{key}}" value="{{capability}}" disabled />
+                                        </div>
+                                    {{/if}}
+                                {{/each}}
+                            </div>
+
+                            <!-- Other Capabilities -->
+                            <div class="swsh-body w-100 mt-2" style="display: block;">
+                                {{> "systems/ptu/static/templates/partials/item-display-partial.hbs" title=(localize
+                                "PTU.CapabilityOther") type="capability" items=capabilities}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Col -->
+                <div class="fb-48">
+                    <div class="d-flex flex-column h-100">
+                        <!-- Health -->
+                        <div class="swsh-box mb-2 w-100 center-text" style="word-break: keep-all;">
+                            <!-- Injuries -->
+                            <div class="swsh-header ball-themes {{ballStyle}} highlight pt-2 pb-2">
+                                <div class="d-flex flex-row w-100 mt-1 mb-1 justify-content-between align-items-center">
+                                    <div class="fb-48">
+                                        <label for="system.health.injuriesfeatsd">{{localize "PTU.Injuries"}}</label>
+                                    </div>
+                                    <div class="fb-48">
+                                        <label for="system.health.total">
+                                            {{localize "PTU.TotalHealth"}}
+                                            <br>
+                                            <small>{{localize "PTU.IgnoringInjuries"}}</small>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="swsh-body" style="display: block;">
+                                <div class="d-flex w-100 mt-1 mb-1 justify-content-between">
+                                    <div class="fb-48">
+                                        <input name="system.health.injuries" type="text"
+                                            value="{{actor.system.health.injuries}}" data-dtype="Number" />
+                                    </div>
+                                    <div class="fb-48">
+                                        <input type="text" name="system.health.total" value="{{actor.system.health.total}}"
+                                            data-dtype="Number" disabled />
+                                    </div>
+                                </div>
+                                {{#if (or (bigger actor.system.health.injuries 4) (is true actor.system.modifiers.hardened))}}
+                                    <div class="d-flex w-100 mt-1 mb-1">
+                                        <ul
+                                            style="position: relative; left: 15px; width: 96%; line-height: 15px; text-align: start;">
+                                            {{#if actor.system.modifiers.hardened}}<li>{{localize "PTU.HardenedEffect0"}}</li>
+                                            {{/if}}
+                                            {{#if (and (is "true" actor.system.modifiers.hardened) (biggerOrEqual
+                                            actor.system.health.injuries 1))}}<li>{{localize "PTU.HardenedEffect1"}}</li>{{/if}}
+                                            {{#if (and (is "true" actor.system.modifiers.hardened) (biggerOrEqual
+                                            actor.system.health.injuries 3))}}<li>{{localize "PTU.HardenedEffect2"}}</li>{{/if}}
+                                            {{#if (biggerOrEqual actor.system.health.injuries 5)}}<li>{{localize
+                                                "PTU.InjuryEffect1"}}</li>{{/if}}
+                                            {{#if (and (is "true" actor.system.modifiers.hardened) (biggerOrEqual
+                                            actor.system.health.injuries 5))}}<li>{{localize "PTU.HardenedEffect3"}}</li>{{/if}}
+                                            {{#if (and (not "true" actor.system.modifiers.hardened) (biggerOrEqual
+                                            actor.system.health.injuries 5))}}<li>{{localize "PTU.InjuryEffect2" (ld "injuries"
+                                                actor.system.health.injuries)}}</li>{{/if}}
+                                            {{#if (and (is "true" actor.system.modifiers.hardened) (biggerOrEqual
+                                            actor.system.health.injuries 7))}}<li>{{localize "PTU.HardenedEffect4"}}</li>{{/if}}
+                                            {{#if (and (is "true" actor.system.modifiers.hardened) (biggerOrEqual
+                                            actor.system.health.injuries 9))}}<li>{{localize "PTU.HardenedEffect5"}}</li>{{/if}}
+                                            {{#if (and (not "true" actor.system.modifiers.hardened) (biggerOrEqual
+                                            actor.system.health.injuries 10))}}<li><b>{{localize "PTU.InjuryEffect3"}}</b></li>
+                                            {{/if}}
+                                        </ul>
+                                    </div>
+                                {{/if}}
+                            </div>
+                        
+                            <!-- Tick/HP Guidelines -->
+                            <div class="swsh-header justify-content-center center-text ball-themes {{ballStyle}} highlight pt-2">
+                                <b>HP Guidelines</b>
+                            </div>
+                            <div class="swsh-header ball-themes {{ballStyle}} highlight pb-2">
+                                <div class="d-flex flex-row w-100 hp-guidelines center-text justify-content-between align-items-center">
+                                    <div class="fb-15">
+                                        <label for="1/16th">1/16th</label>
+                                    </div>
+                                    <div class="fb-15">
+                                        <label for="1/10th">Tick<br>1/10th</label>
+                                    </div>
+                                    <div class="fb-15">
+                                        <label for="1/8th">1/8th</label>
+                                    </div>
+                                    <div class="fb-15">
+                                        <label for="3/10th">3/10th</label>
+                                    </div>
+                                    <div class="fb-15">
+                                        <label for="1/4th">1/4th</label>
+                                    </div>
+                                    <div class="fb-15">
+                                        <label for="1/2nd">1/2nd</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="swsh-body">
+                                <div class="d-flex w-100 mt-1 mb-1 hp-guidelines justify-content-between center-text align-items-center">
+                                    <div class="fb-15">
+                                        <input disabled name="1/16th" type="text"
+                                            value="{{floor (divide actor.system.health.total 16)}}">
+                                    </div>
+                                    <div class="fb-15">
+                                        <input disabled name="1/10th" type="text"
+                                            value="{{floor (divide actor.system.health.total 10)}}">
+                                    </div>
+                                    <div class="fb-15">
+                                        <input disabled name="1/8th" type="text"
+                                            value="{{floor (divide actor.system.health.total 8)}}">
+                                    </div>
+                                    <div class="fb-15">
+                                        <input disabled name="3/10th" type="text"
+                                            value="{{floor (multiply actor.system.health.total (divide 3 10))}}">
+                                    </div>
+                                    <div class="fb-15">
+                                        <input disabled name="1/4th" type="text"
+                                            value="{{floor (divide actor.system.health.total 4)}}">
+                                    </div>
+                                    <div class="fb-15">
+                                        <input disabled name="1/2nd" type="text"
+                                            value="{{floor (divide actor.system.health.total 2)}}">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Evasion -->
+                        <div class="swsh-box mb-2 w-100" style="text-align: center; word-break: keep-all;">
+                            <div class="swsh-header ball-themes {{ballStyle}} highlight pt-2 pb-2">
+                                <div class="d-flex w-100 align-items-center justify-content-between">
+                                    <div class="fb-33">
+                                        <label for="system.evasion.physical">{{{localize "PTU.EvasionPhysical"}}}</label>
+                                    </div>
+                                    <div class="fb-33">
+                                        <label for="system.evasion.special">{{{localize "PTU.EvasionSpecial"}}}</label>
+                                    </div>
+                                    <div class="fb-33">
+                                        <label for="system.evasion.speed">{{{localize "PTU.EvasionSpeed"}}}</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="swsh-body" style="display: block; overflow: unset;">
+                                <div class="d-flex w-100 mt-1 mb-1 justify-content-between">
+                                    <div class="fb-33">
+                                        {{> "systems/ptu/static/templates/partials/mod-field.hbs"
+                                        path="system.evasion.physical"
+                                        value=actor.system.evasion.physical
+                                        dtype="Number"
+                                        mod=""
+                                        total=actor.system.evasion.physical
+                                        modOrigins=(getProperty actor.origins "system.evasion.physical")
+                                        disabled=true
+                                        flipped=true}}
+                                    </div>
+                                    <div class="fb-33">
+                                        {{> "systems/ptu/static/templates/partials/mod-field.hbs"
+                                        path="system.evasion.special"
+                                        value=actor.system.evasion.special
+                                        dtype="Number"
+                                        mod=""
+                                        total=actor.system.evasion.special
+                                        modOrigins=(getProperty actor.origins "system.evasion.special")
+                                        disabled=true
+                                        flipped=true}}
+                                    </div>
+                                    <div class="fb-33">
+                                        {{> "systems/ptu/static/templates/partials/mod-field.hbs"
+                                        path="system.evasion.speed"
+                                        value=actor.system.evasion.speed
+                                        dtype="Number"
+                                        mod=""
+                                        total=actor.system.evasion.speed
+                                        modOrigins=(getProperty actor.origins "system.evasion.speed")
+                                        disabled=true
+                                        flipped=true}}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Save Checks -->
+                            <div class="swsh-box mb-2">
+                                <div class="swsh-header ball-themes {{ballStyle}} highlight pt-2 pb-2 justify-content-center">
+                                    <b>{{localize "PTU.SaveCheckLabel"}}</b>
+                                </div>
+                                <div class="swsh-body justify-content-between align-items-center">
+                                    <div class="fb-48 center-text">
+                                        {{> "systems/ptu/static/templates/partials/mod-field.hbs"
+                                            mod=actor.system.modifiers.saveChecks.mod
+                                            path="system.modifiers.saveChecks.value"
+                                            value=actor.system.modifiers.saveChecks.value
+                                            total=actor.system.modifiers.saveChecks.total
+                                            dtype="Number"
+                                            modOrigins=(getProperty actor.origins "system.modifiers.saveChecks.mod")}}
+                                    </div>
+                                    <div class="fb-48">
+                                        <button class="btn rollable save">{{localize "PTU.SaveCheckAction"}}</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                        <!-- Abilities -->
+                        <div class="swsh-box abilities mb-2 w-100">
+                            <div class="swsh-body" style="display: block;">
+                                {{> "systems/ptu/static/templates/partials/item-display-partial.hbs" title=(localize
+                                "ITEM.TypeAbilityPlural") type="ability" items=abilities}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Moves Tab -->
+        <div class="tab details moves h-100" data-group="primary" data-tab="moves">
+            <!-- Moves -->
+            <div class="d-flex flex-row justify-content-between h-100 w-100">
+                <div class="fb-75">
+                    <!-- Moves -->
+                    <div class="swsh-box w-100">
+                        <div class="swsh-body w-100" style="display: block;">
+                            {{> "systems/ptu/static/templates/partials/item-display-partial.hbs" title=(localize
+                            "ITEM.TypeMovePlural") type="move" items=actions.moves ballStyle=ballStyle}}
+                        </div>
+                    </div>
+
+                    <div class="swsh-box w-100 mt-2">
+                        <div class="swsh-body w-100" style="display: block;">
+                            {{> "systems/ptu/static/templates/partials/item-display-partial.hbs" title=(localize
+                            "ITEM.TypeStrugglePlural") type="move" items=actions.struggles ballStyle=ballStyle no-add=true}}
+                        </div>
+                    </div>
+                </div>
+                <div class="fb-0">
+                    
+                </div>
+            </div>
+        </div>
+
+        <!-- Extra Tab -->
+        <!-- Extra Tab -->
+        <div class="tab details extra" data-group="primary" data-tab="extra">
+            <div class="d-flex flex-row justify-content-between h-100 w-100">
+                <div class="fb-48">
+                    <!-- Modifiers -->
+                    <div class="swsh-box w-100 mb-2">
+                        <div class="swsh-header ball-themes {{ballStyle}} highlight pt-2 center-text justify-content-center">
+                            <b>{{localize "PTU.Modifiers"}}</b>
+                        </div>
+                        <div class="swsh-header d-flex flex-row ball-themes {{ballStyle}} highlight pb-2 center-text justify-content-between">
+                            <div class="fb-48">
+                                <label for="system.modifiers.initiative.value"><b>{{localize "PTU.Initiative"}} {{localize "PTU.Bonus"}}</b></label>
+                            </div>
+                            <div class="fb-48">
+                                <label for="system.modifiers.statPoints.value"><b>{{localize "PTU.StatPoint"}} {{localize "PTU.Bonus"}}</b></label>
+                            </div>
+                        </div>
+                        <div class="swsh-body mt-1 mb-1 justify-content-between">
+                            <div class="fb-48 center-text pl-2 pr-2">
+                                {{> "systems/ptu/static/templates/partials/mod-field.hbs"
+                                    mod=actor.system.modifiers.initiative.mod
+                                    path="system.modifiers.initiative.value"
+                                    value=actor.system.modifiers.initiative.value
+                                    total=actor.system.modifiers.initiative.total
+                                    dtype="Number"
+                                    modOrigins=(getProperty actor.origins "system.modifiers.initiative.mod")}}
+                            </div>
+                            <div class="fb-48 center-text pl-2 pr-2">
+                                {{> "systems/ptu/static/templates/partials/mod-field.hbs"
+                                    mod=actor.system.modifiers.statPoints.mod
+                                    path="system.modifiers.statPoints.value"
+                                    value=actor.system.modifiers.statPoints.value
+                                    total=actor.system.modifiers.statPoints.total
+                                    dtype="Number"
+                                    modOrigins=(getProperty actor.origins "system.modifiers.statPoints.mod")}}
+                            </div>
+                        </div>
+                        <div class="swsh-header d-flex flex-row ball-themes {{ballStyle}} highlight pt-2 pb-2 center-text justify-content-between">
+                            <div class="fb-48">
+                                <label for="system.modifiers.acBonus"><b>{{localize "PTU.Accuracy"}} {{localize "PTU.Bonus"}}</b></label>
+                            </div>
+                            <div class="fb-48">
+                                <label for="system.modifiers.critRange"><b>{{localize "PTU.CritRange"}} {{localize "PTU.Bonus"}}</b></label>
+                            </div>
+                        </div>
+                        <div class="swsh-body mt-1 mb-1 justify-content-between">
+                            <div class="fb-48 center-text pl-2 pr-2">
+                                {{> "systems/ptu/static/templates/partials/mod-field.hbs"
+                                    mod=actor.system.modifiers.acBonus.mod
+                                    path="system.modifiers.acBonus.value"
+                                    value=actor.system.modifiers.acBonus.value
+                                    total=actor.system.modifiers.acBonus.total
+                                    dtype="Number"
+                                    modOrigins=(getProperty actor.origins "system.modifiers.acBonus.mod")}}
+                            </div>
+                            <div class="fb-48 center-text pl-2 pr-2">
+                                {{> "systems/ptu/static/templates/partials/mod-field.hbs"
+                                    mod=actor.system.modifiers.critRange.mod
+                                    path="system.modifiers.critRange.value"
+                                    value=actor.system.modifiers.critRange.value
+                                    total=actor.system.modifiers.critRange.total
+                                    dtype="Number"
+                                    modOrigins=(getProperty actor.origins "system.modifiers.critRange.mod")}}
+                            </div>
+                        </div>
+                        <div class="swsh-header d-flex flex-row ball-themes {{ballStyle}} highlight pt-2 pb-2 center-text justify-content-between">
+                            <div class="fb-48 center-text pl-2 pr-2">
+                                <label for="system.modifiers.effectRange.value"><b>{{localize "PTU.EffectRange"}} {{localize "PTU.Bonus"}}</b></label>
+                            </div>
+                            <div class="fb-48 center-text pl-2 pr-2">
+                                <label for="system.modifiers.skillBonus.value"><b>{{localize "PTU.Skill"}} {{localize "PTU.Bonus"}}</b></label>
+                            </div>
+                        </div>
+                        <div class="swsh-body mt-1 mb-1 justify-content-between">
+                            <div class="fb-48 center-text pl-2 pr-2">
+                                {{> "systems/ptu/static/templates/partials/mod-field.hbs"
+                                    mod=actor.system.modifiers.effectRange.mod
+                                    path="system.modifiers.effectRange.value"
+                                    value=actor.system.modifiers.effectRange.value
+                                    total=actor.system.modifiers.effectRange.total
+                                    dtype="Number"
+                                    modOrigins=(getProperty actor.origins "system.modifiers.effectRange.mod")}}
+                            </div>
+                            <div class="fb-48 center-text pl-2 pr-2">
+                                {{> "systems/ptu/static/templates/partials/mod-field.hbs"
+                                    mod=actor.system.modifiers.skillBonus.mod
+                                    path="system.modifiers.skillBonus.value"
+                                    value=actor.system.modifiers.skillBonus.value
+                                    total=actor.system.modifiers.skillBonus.total
+                                    dtype="Number"
+                                    modOrigins=(getProperty actor.origins "system.modifiers.skillBonus.mod")}}
+                            </div>
+                        </div>
+                        <div class="swsh-header d-flex flex-row ball-themes {{ballStyle}} highlight pt-2 center-text justify-content-center">
+                            <label for="system.modifiers.damageReduction"><b>{{localize "PTU.DamageReduction"}}</b></label>
+                        </div>
+                        <div class="swsh-header d-flex flex-row ball-themes {{ballStyle}} highlight pb-2 center-text justify-content-between">
+                            <div class="fb-48">
+                                <label for="system.modifiers.damageReduction.physical.value"><b>{{localize "PTU.Physical"}}</b></label>
+                            </div>
+                            <div class="fb-48">
+                                <label for="system.modifiers.damageReduction.special.value"><b>{{localize "PTU.Special"}}</b></label>
+                            </div>
+                        </div>
+                        <div class="swsh-body mt-1 mb-1 justify-content-between">
+                            <div class="fb-48 center-text pl-2 pr-2">
+                                {{> "systems/ptu/static/templates/partials/mod-field.hbs"
+                                    mod=actor.system.modifiers.damageReduction.physical.mod
+                                    path="system.modifiers.damageReduction.physical.value"
+                                    value=actor.system.modifiers.damageReduction.physical.value
+                                    total=actor.system.modifiers.damageReduction.physical.total
+                                    dtype="Number"
+                                    modOrigins=(getProperty actor.origins "system.modifiers.damageReduction.physical.mod")}}
+                            </div>
+                            <div class="fb-48 center-text pl-2 pr-2">
+                                {{> "systems/ptu/static/templates/partials/mod-field.hbs"
+                                    mod=actor.system.modifiers.damageReduction.special.mod
+                                    path="system.modifiers.damageReduction.special.value"
+                                    value=actor.system.modifiers.damageReduction.special.value
+                                    total=actor.system.modifiers.damageReduction.special.total
+                                    dtype="Number"
+                                    modOrigins=(getProperty actor.origins "system.modifiers.damageReduction.special.mod")}}
+                            </div>
+                        </div>
+                        <div class="swsh-header d-flex flex-row ball-themes {{ballStyle}} highlight pt-2 pb-2 center-text justify-content-between">
+                            <div class="fb-33">
+                                <label for="system.modifiers.evasion.physical.value">
+                                    <b>{{localize "PTU.EvasionPhysicalShort"}} {{localize "PTU.EvasionShort"}} {{localize "PTU.Bonus"}}</b>
+                                </label>
+                            </div>
+                            <div class="fb-33">
+                                <label for="system.modifiers.evasion.special.value">
+                                    <b>{{localize "PTU.EvasionSpecialShort"}} {{localize "PTU.EvasionShort"}} {{localize "PTU.Bonus"}}</b>
+                                </label>
+                            </div>
+                            <div class="fb-33">
+                                <label for="system.modifiers.evasion.speed.value">
+                                    <b>{{localize "PTU.EvasionSpeedShort"}} {{localize "PTU.EvasionShort"}} {{localize "PTU.Bonus"}}</b>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="swsh-body mt-1 mb-1 justify-content-between">
+                            <div class="fb-33 center-text pl-2 pr-2">
+                                {{> "systems/ptu/static/templates/partials/mod-field.hbs"
+                                    mod=actor.system.modifiers.evasion.physical.mod
+                                    path="system.modifiers.evasion.physical.value"
+                                    value=actor.system.modifiers.evasion.physical.value
+                                    total=actor.system.modifiers.evasion.physical.total
+                                    dtype="Number"
+                                    modOrigins=(getProperty actor.origins "system.modifiers.evasion.physical.mod")}}
+                            </div>
+                            <div class="fb-33 center-text pl-2 pr-2">
+                                {{> "systems/ptu/static/templates/partials/mod-field.hbs"
+                                    mod=actor.system.modifiers.evasion.special.mod
+                                    path="system.modifiers.evasion.special.value"
+                                    value=actor.system.modifiers.evasion.special.value
+                                    total=actor.system.modifiers.evasion.special.total
+                                    dtype="Number"
+                                    modOrigins=(getProperty actor.origins "system.modifiers.evasion.special.mod")}}
+                            </div>
+                            <div class="fb-33 center-text pl-2 pr-2">
+                                {{> "systems/ptu/static/templates/partials/mod-field.hbs"
+                                    mod=actor.system.modifiers.evasion.speed.mod
+                                    path="system.modifiers.evasion.speed.value"
+                                    value=actor.system.modifiers.evasion.speed.value
+                                    total=actor.system.modifiers.evasion.speed.total
+                                    dtype="Number"
+                                    modOrigins=(getProperty actor.origins "system.modifiers.evasion.speed.mod")}}
+                            </div>
+                        </div>
+                        <div class="swsh-header d-flex flex-row ball-themes {{ballStyle}} highlight pt-2 center-text justify-content-center">
+                            <b>{{localize "PTU.BaseStatModifiers"}}</b>
+                        </div>
+                        <div class="swsh-header d-flex flex-row ball-themes {{ballStyle}} highlight pb-2 center-text justify-content-between">
+                            <div class="fb-20 key stat-header"><b>{{localize "PTU.StatsLabel"}}</b></div>
+                            <div class="fb-20"><b>{{localize "PTU.StatsBase"}}</b></div>
+                            <div class="fb-20"><b>{{localize "PTU.StatsBaseMod"}}</b></div>
+                            <div class="fb-20"><b>{{localize "PTU.StatsBaseTotal"}}</b></div>
+                        </div>
+                        <div class="swsh-body" style="display:block">
+                            {{#each actor.system.stats as |stat key|}}
+                                <div class="d-flex flex-row {{key}} justify-content-between center-text">
+                                    <div class="stats {{key}} fb-20 ml-2 mr-2 key">
+                                        <label for="system.stats.{{key}}.base" class="resource-label">{{key}}</label>
+                                    </div>
+                                    <div class="stats {{key}} base fb-20 ml-2 mr-2">
+                                        <input type="text" name="system.stats.{{key}}.base" value="{{stat.base}}"
+                                            data-dtype="Number" disabled />
+                                    </div>
+                                    {{#with (lookup ../actor.system.modifiers.baseStats key) as |baseStatMod|}}
+                                        <div class="stats {{key}} levelUp fb-20 ml-2 mr-2">
+                                            {{> "systems/ptu/static/templates/partials/mod-field.hbs"
+                                                mod=baseStatMod.mod
+                                                path=(concat "system.modifiers.baseStats." key ".value")
+                                                value=baseStatMod.value
+                                                total=baseStatMod.total
+                                                dtype="Number"
+                                                modOrigins=(getProperty ../../actor.origins (concat "system.modifiers.baseStats." key ".mod"))}}
+                                        </div>
+                                    {{/with}}
+                                    <div class="stats {{key}} total fb-20 ml-2 mr-2">
+                                        <input type="text" name="system.stats.{{key}}.value" value="{{stat.value}}"
+                                            data-dtype="Number" disabled />
+                                    </div>
+                                </div>
+                            {{/each}}
+                        </div>
+                    </div>
+
+                    <!-- Skill Background -->
+                    <div class="swsh-box mb-2 w-100">
+                        <div class="swsh-header ball-themes {{ballStyle}} highlight pt-2 center-text justify-content-center">
+                            <b>{{localize "PTU.SkillBackground"}}</b>
+                        </div>
+                        <div class="swsh-header ball-themes {{ballStyle}} highlight pb-2 center-text justify-content-between">
+                            <div class="fb-33">
+                                <label for="system.background.pathetic.one"><b>{{localize "PTU.SkillPathetic"}} 1</b></label>
+                            </div>
+                            <div class="fb-33">
+                                <label for="system.background.pathetic.two"><b>{{localize "PTU.SkillPathetic"}} 2</b></label>
+                            </div>
+                            <div class="fb-33">
+                                <label for="system.background.pathetic.three"><b>{{localize "PTU.SkillPathetic"}} 3</b></label>
+                            </div>
+                        </div>
+                        <div class="swsh-body mt-1 mb-1">
+                            <div class="fb-33 center-text">
+                                {{#select actor.system.background.pathetic.one}}
+                                    <select name="system.background.pathetic.one">
+                                        <option value="blank">{{localize "PTU.SelectNone"}}</option>
+                                        {{#each skills as | skill key |}}
+                                            <option value="{{key}}">{{skill.label}}</option>
+                                        {{/each}}
+                                    </select>
+                                {{/select}}
+                            </div>
+                            <div class="fb-33 center-text">
+                                {{#select actor.system.background.pathetic.two}}
+                                    <select name="system.background.pathetic.two">
+                                        <option value="blank">{{localize "PTU.SelectNone"}}</option>
+                                        {{#each skills as | skill key |}}
+                                            <option value="{{key}}">{{skill.label}}</option>
+                                        {{/each}}
+                                    </select>
+                                {{/select}}
+                            </div>
+                            <div class="fb-33 center-text">
+                                {{#select actor.system.background.pathetic.three}}
+                                    <select name="system.background.pathetic.three">
+                                        <option value="blank">{{localize "PTU.SelectNone"}}</option>
+                                        {{#each skills as | skill key |}}
+                                            <option value="{{key}}">{{skill.label}}</option>
+                                        {{/each}}
+                                    </select>
+                                {{/select}}
+                            </div>
+                        </div>
+                        <div class="swsh-header ball-themes {{ballStyle}} highlight pt-2 pb-2 center-text justify-content-between">
+                            <div class="fb-50">
+                                <label for="system.background.novice"><b>{{localize "PTU.SkillNovice"}} {{localize "PTU.Skill"}}</b></label>
+                            </div>
+                            <div class="fb-50">
+                                <label for="system.background.adept"><b>{{localize "PTU.SkillAdept"}} {{localize "PTU.Skill"}}</b></label>
+                            </div>
+                        </div>
+                        <div class="swsh-body mt-1 mb-1">
+                            <div class="fb-50 center-text">
+                                {{#select actor.system.background.novice}}
+                                    <select name="system.background.novice">
+                                        <option value="blank">{{localize "PTU.SelectNone"}}</option>
+                                        {{#each skills as | skill key |}}
+                                            <option value="{{key}}">{{skill.label}}</option>
+                                        {{/each}}
+                                    </select>
+                                {{/select}}
+                            </div>
+                            <div class="fb-50 center-text">
+                                {{#select actor.system.background.adept}}
+                                    <select name="system.background.adept">
+                                        <option value="blank">{{localize "PTU.SelectNone"}}</option>
+                                        {{#each skills as | skill key |}}
+                                            <option value="{{key}}">{{skill.label}}</option>
+                                        {{/each}}
+                                    </select>
+                                {{/select}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="fb-48">
+                    <!-- Bio -->
+                    <div class="swsh-box mb-2 w-100">
+                        <div class="swsh-header ball-themes {{ballStyle}} highlight pt-2 pb-2 center-text justify-content-between">
+                            <div class="fb-25 center-text">
+                                <label for="system.age"><b>{{localize "PTU.Age"}}</b></label>
+                            </div>
+                            <div class="fb-25 center-text">
+                                <label for="system.sex"><b>{{localize "PTU.Sex"}}</b></label>
+                            </div>
+                            <div class="fb-25 center-text">
+                                <label for="system.height"><b>{{localize "PTU.Height"}}</b></label>
+                            </div>
+                            <div class="fb-25 center-text">
+                                <label for="system.weight"><b>{{localize "PTU.Weight"}}</b></label>
+                            </div>
+                        </div>
+                        <div class="swsh-body mt-1 mb-1 justify-content-between">
+                            <div class="fb-25 center-text pl-2 pr-2">
+                                <input type="text" name="system.age" value="{{actor.system.age}}" data-dtype="String" />
+                            </div>
+                            <div class="fb-25 center-text pl-2 pr-2">
+                                <input type="text" name="system.sex" value="{{actor.system.sex}}" data-dtype="String" />
+                            </div>
+                            <div class="fb-25 center-text pl-2 pr-2">
+                                <input type="text" name="system.height" value="{{actor.system.height}}" data-dtype="String" />
+                            </div>
+                            <div class="fb-25 center-text pl-2 pr-2">
+                                <input type="text" name="system.weight" value="{{actor.system.weight}}" data-dtype="String" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Bio Boxes -->
+                    <div class="swsh-box mb-2 w-100">
+                        <div class="swsh-header ball-themes {{ballStyle}} highlight pt-2 pb-2 center-text justify-content-center">
+                            <label for="system.biography.physicalDescription"><b>{{localize "PTU.PhysicalDescription"}}</b></label>
+                        </div>
+                        <div class="swsh-body bio mt-1 mb-1">
+                            {{editor actor.system.biography.physicalDescription target="system.biography.physicalDescription" button=true owner=owner editable=editable}}
+                        </div>
+                    </div>
+                    <div class="swsh-box mb-2 w-100">
+                        <div class="swsh-header ball-themes {{ballStyle}} highlight pt-2 pb-2 center-text justify-content-center">
+                            <label for="system.biography.background"><b>{{localize "PTU.Background"}}</b></label>
+                        </div>
+                        <div class="swsh-body bio mt-1 mb-1">
+                            {{editor actor.system.biography.background target="system.biography.background" button=true owner=owner editable=editable}}
+                        </div>
+                    </div>
+                    <div class="swsh-box mb-2 w-100">
+                        <div class="swsh-header ball-themes {{ballStyle}} highlight pt-2 pb-2 center-text justify-content-center">
+                            <label for="system.biography.personality"><b>{{localize "PTU.Personality"}}</b></label>
+                        </div>
+                        <div class="swsh-body bio mt-1 mb-1">
+                            {{editor actor.system.biography.personality target="system.biography.personality" button=true owner=owner editable=editable}}
+                        </div>
+                    </div>
+                    <div class="swsh-box mb-2 w-100">
+                        <div class="swsh-header ball-themes {{ballStyle}} highlight pt-2 pb-2 center-text justify-content-center">
+                            <label for="system.biography.goals"><b>{{localize "PTU.Goals"}}</b></label>
+                        </div>
+                        <div class="swsh-body bio mt-1 mb-1">
+                            {{editor actor.system.biography.goals target="system.biography.goals" button=true owner=owner editable=editable}}
+                        </div>
+                    </div>
+                    <div class="swsh-box mb-2 w-100">
+                        <div class="swsh-header ball-themes {{ballStyle}} highlight pt-2 pb-2 center-text justify-content-center">
+                            <label for="system.biography.dreams"><b>{{localize "PTU.Dreams"}}</b></label>
+                        </div>
+                        <div class="swsh-body bio mt-1 mb-1">
+                            {{editor actor.system.biography.dreams target="system.biography.dreams" button=true owner=owner editable=editable}}
+                        </div>
+                    </div>
+                    <div class="swsh-box mb-2 w-100">
+                        <div class="swsh-header ball-themes {{ballStyle}} highlight pt-2 pb-2 center-text justify-content-center">
+                            <label for="system.biography.obsessions"><b>{{localize "PTU.Obsessions"}}</b></label>
+                        </div>
+                        <div class="swsh-body bio mt-1 mb-1">
+                            {{editor actor.system.biography.obsessions target="system.biography.obsessions" button=true owner=owner editable=editable}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {{!--
+
+        <!-- Dex -->
+        <div class="tab details dex" data-group="primary" data-tab="dex">
+            <div class="row">
+                <div class="col-6">
+                    <div class="swsh-box mt-1">
+                        <div class="swsh-header d-flex justify-content-around sort-dex">
+                            <div class="p-1">
+                                <button class="btn rollable sort-dex" data-sort="name">Sort Name</button>
+                            </div>
+                            <div class="p-1">
+                                <button class="btn rollable sort-dex" data-sort="id">Sort Id</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <!-- Seen -->
+                <div class="col">
+                    <div class="swsh-box mt-2 w-100">
+                        <div class="swsh-body w-100" style="display: block;">
+                            {{> "systems/ptu/templates/partials/item-display-partial.hbs" title=(localize
+                            "ITEM.DexEntrySeen") type="dexentry" data=actor.dex.seen}}
+                        </div>
+                    </div>
+                </div>
+                <!-- Owned -->
+                <div class="col">
+                    <div class="swsh-box mt-2 w-100">
+                        <div class="swsh-body w-100" style="display: block;">
+                            {{> "systems/ptu/templates/partials/item-display-partial.hbs" title=(localize
+                            "ITEM.DexEntryOwned") type="dexentry" data=actor.dex.owned}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div> --}}
+
+        <!-- Effects Tab -->
+        <div class="tab details effects" data-group="primary" data-tab="effects">
+            <div class="d-flex flex-row justify-content-between h-100 w-100">
+                <div class="fb-75">
+                    <div class="swsh-box">
+                        <div class="swsh-body pt-3 p-2">
+                            {{> "systems/ptu/static/templates/partials/item-display-partial.hbs" title=(localize
+                                "TYPES.Item.conditionPlural") type="condition" items=conditions}}
+                        </div>
+                        <div class="swsh-body pt-3 p-2">
+                            {{> "systems/ptu/static/templates/partials/item-display-partial.hbs" title=(localize
+                                "TYPES.Item.effectPlural") type="effect" items=effects}}
+                        </div>
+                    </div>
+                </div>
+                <div class="fb-0">
+
+                </div>
+            </div>
+        </div> 
+    </main>
+</form>
+
+<!-- 
+
+{{localize "PTU.TabsSkills"}}
+{{localize "PTU.TabsInventory"}}
+{{localize "PTU.TabsFeatsAndEdges"}}
+{{localize "PTU.TabsCombat"}}
+{{localize "PTU.TabsMoves"}}
+{{localize "PTU.TabsExtra"}}
+{{localize "PTU.TabsDex"}}
+{{localize "PTU.TabsEffects"}}
+
+    -->
