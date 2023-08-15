@@ -1,6 +1,6 @@
 import { MigrationBase } from "../base.js";
 
-export class Migration106ActiveEffectsToEffectItem extends MigrationBase {
+export class Migration107ActiveEffectsToEffectItem extends MigrationBase {
     static version = 0.106;
     requiresFlush = true;
 
@@ -34,7 +34,7 @@ export class Migration106ActiveEffectsToEffectItem extends MigrationBase {
                         return {
                             key: "ActiveEffectLike",
                             path: change.key.replaceAll("data.data", "system"),
-                            mode: Migration106ActiveEffectsToEffectItem.CHANGE_MODES[change.mode],
+                            mode: Migration107ActiveEffectsToEffectItem.CHANGE_MODES[change.mode],
                             priority: isNaN(Number(change.priority)) ? 0 : Number(change.priority),
                             value: isNaN(Number(change.value)) ? change.value : Number(change.value),
                         };
