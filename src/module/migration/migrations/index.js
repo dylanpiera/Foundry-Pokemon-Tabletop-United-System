@@ -5,3 +5,4 @@ export { Migration104DexEntryDeletion } from './104-dex-entry-deletion.js';
 export { Migration105CustomSpeciesMigration} from './105-custom-species-migration.js';
 export { Migration106SpeciesFieldToSpeciesItem} from './106-species-field-to-species-item.js';
 export { Migration107ActiveEffectsToEffectItem} from './107-active-effects-to-effect-item.js';
+export { Migration108SpritesFix} from './108-sprites-fix.js';

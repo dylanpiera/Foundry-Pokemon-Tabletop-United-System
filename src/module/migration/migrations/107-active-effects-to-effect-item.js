@@ -1,7 +1,7 @@
 import { MigrationBase } from "../base.js";
 
 export class Migration107ActiveEffectsToEffectItem extends MigrationBase {
-    static version = 0.106;
+    static version = 0.107;
     requiresFlush = true;
 
     static CHANGE_MODES = {
