@@ -2,3 +2,14 @@
 2023/08/15-20:27:12.118 9ae8 Delete type=2 #227
 2023/08/15-20:27:12.118 9ae8 Delete type=0 #231
 2023/08/15-20:27:12.118 9ae8 Delete type=3 #218
+2023/08/16-09:50:21.676 8fb0 Level-0 table #239: started
+2023/08/16-09:50:21.680 8fb0 Level-0 table #239: 4327 bytes OK
+2023/08/16-09:50:21.684 8fb0 Delete type=0 #237
+2023/08/16-09:50:21.684 8fb0 Manual compaction at level-0 from '!folders!CMymFngAhNsaPlS5' @ 72057594037927935 : 1 .. '!items!zyXhWVwTmu553jFn' @ 0 : 0; will stop at '!items!YaJuAJYFkKQcHbAv' @ 12280 : 1
+2023/08/16-09:50:21.684 8fb0 Compacting 1@0 + 1@1 files
+2023/08/16-09:50:21.712 8fb0 Generated table #240@0: 512 keys, 2117450 bytes
+2023/08/16-09:50:21.712 8fb0 Compacted 1@0 + 1@1 files => 2117450 bytes
+2023/08/16-09:50:21.714 8fb0 compacted to: files[ 0 4 0 0 0 0 0 ]
+2023/08/16-09:50:21.714 8fb0 Delete type=2 #233
+2023/08/16-09:50:21.715 8fb0 Delete type=2 #239
+2023/08/16-09:50:21.715 8fb0 Manual compaction at level-0 from '!items!YaJuAJYFkKQcHbAv' @ 12280 : 1 .. '!items!zyXhWVwTmu553jFn' @ 0 : 0; will stop at (end)

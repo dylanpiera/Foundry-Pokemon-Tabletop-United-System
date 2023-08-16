@@ -40,9 +40,10 @@
                     <div class="move-info-row">
                         <div class="move-info-col">
                             <div class="move-other-info mt-2">
-                                <span style="flex: 0 0 100%;">
-                                    QNTY 
+                                <span class="d-flex justify-content-between" style="flex: 0 0 100%;">
+                                    <span>Quantity</span> 
                                     <input
+                                        class="fb-80"
                                         name=""
                                         type="text"
                                         value="{{item.system.quantity}}"
@@ -50,9 +51,10 @@
                                         disabled
                                     />
                                 </span>
-                                <span style="flex: 0 0 100%;">
-                                    COST 
+                                <span class="d-flex justify-content-between" style="flex: 0 0 100%;">
+                                    Cost 
                                     <input
+                                        class="fb-80"
                                         name=""
                                         type="text"
                                         value="{{item.system.cost}}"
@@ -60,9 +62,10 @@
                                         disabled
                                     />
                                 </span>
-                                <span style="flex: 0 0 100%">
-                                    CATG 
+                                <span class="d-flex justify-content-between" style="flex: 0 0 100%">
+                                    Category 
                                     <input
+                                        class="fb-80"
                                         name=""
                                         type="text"
                                         value="{{item.system.category}}"
@@ -70,6 +73,19 @@
                                         disabled
                                     />
                                 </span>
+                                {{#if (is item.system.subtype "pokeball")}}
+                                <span class="d-flex justify-content-between" style="flex: 0 0 100%">
+                                    Modifier 
+                                    <input
+                                        class="fb-80"
+                                        name=""
+                                        type="text"
+                                        value="{{item.system.modifier}}"
+                                        placeholder=""
+                                        disabled
+                                    />
+                                </span>
+                                {{/if}}
                             </div>
                         </div>
                     </div>
@@ -98,6 +114,12 @@
                 <label for="system.origin">{{localize "ITEM.Origin"}}</label>
                 <input class="ml-1 mr-1" name="system.origin" type="text" value="{{item.system.origin}}" placeholder="{{localize "ITEM.Origin"}}"/>
             </div>
+            {{#if (is item.system.subtype "pokeball")}}
+                <div class="item-row">
+                    <label for="system.modifier">{{localize "ITEM.Modifier"}}</label>
+                    <input class="ml-1 mr-1" name="system.modifier" type="number" value="{{item.system.modifier}}" placeholder="{{localize "ITEM.Modifier"}}"/>
+                </div>
+            {{/if}}
             <div class="item-row">
                 <label for="system.effect">{{localize "ITEM.Effect"}}</label>
                 <textarea class="ml-1 mr-1" name="system.effect">{{item.system.effect}}</textarea>

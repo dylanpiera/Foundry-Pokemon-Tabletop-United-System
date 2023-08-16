@@ -38,12 +38,6 @@ class PTUTrainerActor extends PTUActor {
     
         // Prepare data with Mods.
     
-        for (let [key, skill] of Object.entries(system.skills)) {
-            skill["value"]["total"] = skill["value"]["value"] + skill["value"]["mod"];
-            skill["rank"] = PTUSkills.getRankSlug(skill["value"]["total"]);
-            skill["modifier"]["total"] = skill["modifier"]["value"] + skill["modifier"]["mod"];
-        }
-    
         // Prepare data with Mods
         for (let [key, mod] of Object.entries(system.modifiers)) {
             // Skip these modifiers
@@ -59,6 +53,12 @@ class PTUTrainerActor extends PTUActor {
     
             // Otherwise, just calculate the total
             system.modifiers[key]["total"] = (mod["value"] ?? 0) + (mod["mod"] ?? 0);
+        }
+
+        for (let [key, skill] of Object.entries(system.skills)) {
+            skill["value"]["total"] = skill["value"]["value"] + skill["value"]["mod"];
+            skill["rank"] = PTUSkills.getRankSlug(skill["value"]["total"]);
+            skill["modifier"]["total"] = skill["modifier"]["value"] + skill["modifier"]["mod"] + (system.modifiers.skillBonus?.total ?? 0);
         }
 
         // Prepare flat modifiers

@@ -51,7 +51,8 @@
     "TypeItemPlural": "Items",
     "TypeCapabilityPlural": "Capabilities",
     "TypePokeedgePlural": "Poké Edges",
-    "TypeDexentryPlural": "Dex Entries"
+    "TypeDexentryPlural": "Dex Entries",
+    "Modifier": "Modifier"
   },
 
   "SPECIES.Height": "Height",
@@ -476,7 +477,9 @@
       "DamageSelector": "Damage Selector",
       "Damage": "Damage",
       "Apply": "Apply Damage",
-      "CaptureRoll": "Capture Roll"
+      "CaptureRoll": "Capture Roll",
+      "CaptureNoTarget": "You need to target a Pokémon to capture",
+      "CaptureWrongTarget": "You need to target a Pokémon to capture"
     },
 
     "Traits": {

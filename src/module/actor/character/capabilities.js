@@ -116,7 +116,7 @@ function calculateTrainerCapabilities(trainerSkills, items, speedCombatStages, i
     if (spcsChanges > 0 || spcsChanges < 0) {
         if (capabilities["Overland"] > 0) { 
             capabilities["Overland"] = Math.max(capabilities["Overland"] + spcsChanges, capabilities["Overland"] > 1 ? 2 : 1)
-            if(isSlowed) capabilities["Overland"] = Math.max(1, Math.floor(scapabilities["Overland"] * 0.5));
+            if(isSlowed) capabilities["Overland"] = Math.max(1, Math.floor(capabilities["Overland"] * 0.5));
         }
     }
 

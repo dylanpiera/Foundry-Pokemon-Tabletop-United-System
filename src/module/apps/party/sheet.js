@@ -20,6 +20,7 @@ class PTUPartySheet extends FormApplication {
                 {dragSelector: undefined, dropSelector: '.party-list.droppable'},
                 {dragSelector: undefined, dropSelector: undefined}
             ],
+            resizable: true,
             //tabs: [{ navSelector: ".tabs", contentSelector: ".sheet-body", initial: "description" }]
         });
     };

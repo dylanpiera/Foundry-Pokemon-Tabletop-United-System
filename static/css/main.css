@@ -2551,13 +2551,13 @@
   background: #E94737 !important;
 }
 .ball-themes.cherish.gradient {
-  background: linear-gradient(45deg, #F37B73, #A33D2D) !important;
+  background: linear-gradient(45deg, #F37B73, #ffa698) !important;
 }
 .ball-themes.cherish.light-color {
   background: #F37B73 !important;
 }
 .ball-themes.cherish.band {
-  background: #4A4E52 !important;
+  background: #ff9d9d !important;
 }
 .ball-themes.cherish.highlight {
   background: #F37B73 !important;
@@ -2640,16 +2640,16 @@
   background: #788B20 !important;
 }
 .ball-themes.fabulous.background {
-  background: #A439CF !important;
+  background: #9642b8 !important;
 }
 .ball-themes.fabulous.gradient {
-  background: linear-gradient(45deg, #A439CF, #AB5EF2) !important;
+  background: linear-gradient(45deg, #DEC3FF, #f4eaff) !important;
 }
 .ball-themes.fabulous.light-color {
   background: #AB5EF2 !important;
 }
 .ball-themes.fabulous.band {
-  background: #7C97CE !important;
+  background: #8db3ff !important;
 }
 .ball-themes.fabulous.highlight {
   background: #DEC3FF !important;

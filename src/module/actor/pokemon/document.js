@@ -183,7 +183,7 @@ class PTUPokemonActor extends PTUActor {
             system.skills[key]["value"]["value"] = skill["value"]
             system.skills[key]["value"]["total"] = skill["value"] + system.skills[key]["value"]["mod"];
             system.skills[key]["modifier"]["value"] = skill["modifier"]
-            system.skills[key]["modifier"]["total"] = skill["modifier"] + system.skills[key]["modifier"]["mod"];
+            system.skills[key]["modifier"]["total"] = skill["modifier"] + system.skills[key]["modifier"]["mod"] + (system.modifiers.skillBonus?.total ?? 0);
             system.skills[key]["rank"] = PTUSkills.getRankSlug(system.skills[key]["value"]["total"]);
         }
 
