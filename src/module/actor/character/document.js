@@ -123,7 +123,7 @@ class PTUTrainerActor extends PTUActor {
         system.health.tick = Math.floor(system.health.total / 10);
     
         system.evasion = calculateEvasions(system, this.flags?.ptu, this.items);
-        system.capabilities = calculateTrainerCapabilities(system.skills, this.items, (system.stats.spd.stage.value + system.stats.spd.stage.mod), this.flags?.ptu);
+        system.capabilities = calculateTrainerCapabilities(system.skills, this.items, (system.stats.spd.stage.value + system.stats.spd.stage.mod), this.rollOptions.conditions?.["slowed"]);
     
         system.feats = {
             total: this.items.filter(x => x.type == "feat" && !x.system.free).length,

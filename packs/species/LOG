@@ -1,15 +1,18 @@
-2023/08/15-20:27:12.112 9ae8 Recovering log #231
-2023/08/15-20:27:12.118 9ae8 Delete type=2 #227
-2023/08/15-20:27:12.118 9ae8 Delete type=0 #231
-2023/08/15-20:27:12.118 9ae8 Delete type=3 #218
-2023/08/16-09:50:21.676 8fb0 Level-0 table #239: started
-2023/08/16-09:50:21.680 8fb0 Level-0 table #239: 4327 bytes OK
-2023/08/16-09:50:21.684 8fb0 Delete type=0 #237
-2023/08/16-09:50:21.684 8fb0 Manual compaction at level-0 from '!folders!CMymFngAhNsaPlS5' @ 72057594037927935 : 1 .. '!items!zyXhWVwTmu553jFn' @ 0 : 0; will stop at '!items!YaJuAJYFkKQcHbAv' @ 12280 : 1
-2023/08/16-09:50:21.684 8fb0 Compacting 1@0 + 1@1 files
-2023/08/16-09:50:21.712 8fb0 Generated table #240@0: 512 keys, 2117450 bytes
-2023/08/16-09:50:21.712 8fb0 Compacted 1@0 + 1@1 files => 2117450 bytes
-2023/08/16-09:50:21.714 8fb0 compacted to: files[ 0 4 0 0 0 0 0 ]
-2023/08/16-09:50:21.714 8fb0 Delete type=2 #233
-2023/08/16-09:50:21.715 8fb0 Delete type=2 #239
-2023/08/16-09:50:21.715 8fb0 Manual compaction at level-0 from '!items!YaJuAJYFkKQcHbAv' @ 12280 : 1 .. '!items!zyXhWVwTmu553jFn' @ 0 : 0; will stop at (end)
+2023/08/16-15:47:42.897 1ea8 Recovering log #243
+2023/08/16-15:47:42.902 1ea8 Delete type=0 #243
+2023/08/16-15:47:42.903 1ea8 Delete type=3 #241
+2023/08/16-17:28:54.780 b8bc Level-0 table #248: started
+2023/08/16-17:28:54.785 b8bc Level-0 table #248: 39213 bytes OK
+2023/08/16-17:28:54.789 b8bc Delete type=0 #246
+2023/08/16-17:28:54.789 b8bc Manual compaction at level-0 from '!folders!CMymFngAhNsaPlS5' @ 72057594037927935 : 1 .. '!items!zyXhWVwTmu553jFn' @ 0 : 0; will stop at '!items!ogFge5xpV8cFVkPq' @ 12296 : 1
+2023/08/16-17:28:54.789 b8bc Compacting 1@0 + 3@1 files
+2023/08/16-17:28:54.819 b8bc Generated table #249@0: 508 keys, 2117151 bytes
+2023/08/16-17:28:54.843 b8bc Generated table #250@0: 512 keys, 2117485 bytes
+2023/08/16-17:28:54.869 b8bc Generated table #251@0: 512 keys, 2121020 bytes
+2023/08/16-17:28:54.869 b8bc Compacted 1@0 + 3@1 files => 6355656 bytes
+2023/08/16-17:28:54.870 b8bc compacted to: files[ 0 4 0 0 0 0 0 ]
+2023/08/16-17:28:54.870 b8bc Delete type=2 #226
+2023/08/16-17:28:54.871 b8bc Delete type=2 #234
+2023/08/16-17:28:54.871 b8bc Delete type=2 #240
+2023/08/16-17:28:54.872 b8bc Delete type=2 #248
+2023/08/16-17:28:54.874 b8bc Manual compaction at level-0 from '!items!ogFge5xpV8cFVkPq' @ 12296 : 1 .. '!items!zyXhWVwTmu553jFn' @ 0 : 0; will stop at (end)

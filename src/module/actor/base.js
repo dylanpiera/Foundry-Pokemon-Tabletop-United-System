@@ -699,7 +699,7 @@ class PTUActor extends Actor {
 
     prepareMoves({ includeStruggles = true } = {}) {
         const struggles = includeStruggles ? (() => {
-            const types = Object.keys(CONFIG.PTU.data.typeEffectiveness).filter(x => x != "Untyped");
+            const types = Object.keys(CONFIG.PTU.data.typeEffectiveness)
 
             const struggles = types.reduce((arr, type) => {
                 if (this.rollOptions.all[`self:struggle:${type.toLocaleLowerCase(game.i18n.lang)}`]) {
@@ -943,7 +943,7 @@ class PTUActor extends Actor {
                 label: "Accuracy Check",
                 type: move.system.type,
                 category: move.system.category,
-                modifier: -move.system.ac
+                modifier: isNaN(Number(move.system.ac)) ? Infinity : -Number(move.system.ac)
             }));
 
             if (this.system.modifiers.acBonus.total != 0) {

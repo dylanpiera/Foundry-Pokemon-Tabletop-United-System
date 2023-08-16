@@ -128,6 +128,7 @@ class PTUCheck {
         };
         if (attack) options.attack = attack;
         
+        const isInfinity = check.totalModifier === Infinity;
         const totalModifiersPart = check.totalModifier?.signedString() ?? "";
         options.modifierPart = totalModifiersPart;
         
@@ -136,7 +137,7 @@ class PTUCheck {
             options.checkModifier = totalModifiersPart;
         }
 
-        const roll = await new RollCls(`${dice}${totalModifiersPart}`, {}, options).evaluate({ async: true });
+        const roll = await new RollCls(`${dice}${isInfinity ? "" :totalModifiersPart}`, {}, options).evaluate({ async: true });
 
         for(const target of context.targets ?? []) {
             const [success, degree] = target.dc ? (() => {
@@ -166,14 +167,14 @@ class PTUCheck {
                     return [false, "miss"];
                 }
 
-                if (result === 1) return [false, "crit-miss"];
+                if (result === 1 && !isInfinity) return [false, "crit-miss"];
                 if (result > 20 - critModifier) {
                     // If target is immune to crit; return hit
                     if(target.options.has("target:immune:crit")) return [true, "blocked-crit"];
 
                     return [true, "crit-hit"];
                 }
-                if (total >= dc.value) return [true, "hit"];
+                if (isInfinity || total >= dc.value) return [true, "hit"];
                 return [false, "miss"];
             })() : [null, null];
 

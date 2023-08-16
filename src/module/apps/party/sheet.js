@@ -452,26 +452,42 @@ class PTUPartySheet extends FormApplication {
     }
 
     static async importParty() {
-        const [fileHandler] = await window.showOpenFilePicker({
-            types: [
-                {
-                    description: "JSON Files",
-                    accept: {
-                        "text/json": [".json"]
-                    }
+        const text = await (async () => {
+            if(window.showOpenFilePicker) {
+                const [fileHandler] = await window.showOpenFilePicker({
+                    types: [
+                        {
+                            description: "JSON Files",
+                            accept: {
+                                "text/json": [".json"]
+                            }
+                        }
+                    ],
+                    excludeAcceptAllOption: true,
+                    multiple: false
+                });
+                const file = await fileHandler.getFile();
+                if(!file) return;
+                if(!file.name.startsWith("fvtt-ptuParty-")) {
+                    ui.notifications.error("Invalid file type. Please select a PTU Party file.");
+                    return;
                 }
-            ],
-            excludeAcceptAllOption: true,
-            multiple: false
-        });
-        const file = await fileHandler.getFile();
-        if(!file) return;
-        if(!file.name.startsWith("fvtt-ptuParty-")) {
-            ui.notifications.error("Invalid file type. Please select a PTU Party file.");
-            return;
-        }
-
-        const text = await file.text();
+                return await file.text();
+            }
+            
+            const input = document.createElement('input');
+            input.type = 'file';
+            let resolve = undefined;
+            const promise = new Promise((r, reject) => {resolve = r;});
+            input.onchange = function () {
+                input.files[0].arrayBuffer().then(function (arrayBuffer) {
+                    const text = new TextDecoder().decode(arrayBuffer);
+                    resolve(text);
+                });
+            }
+            input.click();
+            return await promise;
+        })();
         const json = JSON.parse(text);
 
         const { trainer, party, boxed } = json;

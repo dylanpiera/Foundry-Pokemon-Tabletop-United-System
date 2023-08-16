@@ -65,7 +65,7 @@ export class PokemonGenerator {
     async create({ folder, generate = true } = { folder: canvas.scene.name ?? null, generate: true }) {
         if (!this.prepared) await this.prepare();
 
-        if (typeof folder === "string") {
+        if (typeof folder === "string" && folder.length > 0) {
             const exists = game.folders.get(folder) || game.folders.getName(folder);
             if (!exists) {
                 ui.notifications.notify(game.i18n.format("PTU.FolderNotFound", { folder }));
