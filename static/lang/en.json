@@ -627,7 +627,7 @@
         "Predicate": "Predicate",
         "Primitive": "Primitive",
         "Range": "Range",
-        "Selector": "Selector",
+        "Selectors": "Selectors",
         "Value": "Value",
         "Domain": "Domain",
         "Option": "Option",

@@ -712,7 +712,7 @@ class PTUActor extends Actor {
 
             const struggles = types.reduce((arr, type) => {
                 if (this.rollOptions.struggle?.[`${type.toLocaleLowerCase(game.i18n.lang)}`]) {
-                    const rule = this.rules.find(r => !r.ignored && r.key == "RollOption" && r.option == `self:struggle:${type.toLocaleLowerCase(game.i18n.lang)}`);
+                    const rule = this.rules.find(r => !r.ignored && r.key == "RollOption" && r.domain == "struggle" && r.option == type.toLocaleLowerCase(game.i18n.lang));
                     const strugglePlus = this.system.skills?.combat?.value?.total > 4;
                     const moveData = {
                         name: `Struggle (${type})`,

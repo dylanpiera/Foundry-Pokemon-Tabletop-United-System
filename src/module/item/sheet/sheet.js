@@ -26,6 +26,8 @@ class PTUItemSheet extends ItemSheet {
 
         this.object._updateIcon({update: true});
 
+        data.itemEffect = this.item.system.effect ? await TextEditor.enrichHTML(duplicate(this.item.system.effect), {async: true}) : this.item.system.effect;
+
         const rules = this.item.toObject().system.rules ?? [];
         this.ruleElementForms = {};
         for(const [index, rule] of rules.entries()) {
