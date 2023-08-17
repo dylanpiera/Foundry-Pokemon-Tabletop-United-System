@@ -147,12 +147,42 @@ class PTUItem extends Item {
             }
         }
 
-        const items = sources.map((source) => {
-            if (!(context.keepId || context.keepEmbeddedIds)) source._id = randomID();
-            return new PTUItem(source, { parent: actor });
-        })
+        const items = await (async () => {
+            /** Internal function to recursively get all simple granted items */
+            async function getSimpleGrants(item) {
+                const granted = (await item.createGrantedItems?.({ size: context.parent?.size })) ?? [];
+                if (!granted.length) return [];
+                const reparented = granted.map(
+                    (i) =>
+                    (i.parent
+                        ? i
+                        : new CONFIG.Item.documentClass(i._source, { parent: actor }))
+                );
+                return [...reparented, ...(await Promise.all(reparented.map(getSimpleGrants))).flat()];
+            }
+
+            const items = sources.map((source) => {
+                if (!(context.keepId || context.keepEmbeddedIds)) {
+                    source._id = randomID();
+                }
+                return new CONFIG.Item.documentClass(source, { parent: actor })
+            });
+
+            // If any item we plan to add will add new items, add those too
+            // When this occurs, keepId is switched on.
+            for (const item of [...items]) {
+                const grants = await getSimpleGrants(item);
+                if (grants.length) {
+                    context.keepId = true;
+                    items.push(...grants);
+                }
+            }
+
+            return items;
+        })();
 
         const outputSources = items.map((i) => i._source).filter(s => {
+            if (!s) return false;
             if (s.type !== "condition") return true;
 
             const existing = actor.itemTypes.condition.find(c => c.slug === sluggify(s.name));

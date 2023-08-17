@@ -105,6 +105,17 @@ export function isTokenUUID(uuid) {
     return typeof uuid === "string" && /^Scene\.[A-Za-z0-9]{16}\.Token\.[A-Za-z0-9]{16}$/.test(uuid);
 }
 
+export function sortStringRecord(record){
+    return Object.fromEntries(
+        Object.entries(record)
+            .map((entry) => {
+                entry[1] = game.i18n.localize(entry[1]);
+                return entry;
+            })
+            .sort((a, b) => a[1].localeCompare(b[1], game.i18n.lang))
+    );
+}
+
 /**
  * @param uuid The UUID of the item to get and first search param
  * @param name The name of the item to get and second search param, type required to succeed

@@ -112,6 +112,11 @@
     }
 }
 
+a.content-link {
+    img {
+        border: unset;
+    }
+}
 
 .dice-checks.dialog {
     section {
@@ -1981,6 +1986,104 @@
                             .rule-body {
                                 textarea {
                                     min-height: 72px;
+                                }
+
+                                label, .labelled-element {
+                                    display: flex;
+                                    align-items: center;
+                                    gap: 4px;
+                                    input, tags {
+                                        flex: 0;
+                                    }
+                                    flex: 0 0 20%;
+
+                                    &.fill {
+                                        flex-grow: 1;
+                                    }
+                                }
+                        
+                                .range {
+                                    display: flex;
+                                    gap: 3px;
+                                    align-items: center;
+                                    input {
+                                        width: 40px;
+                                    }
+                                }
+                        
+                                .attached-input {
+                                    display: flex;
+                                    align-items: center;
+                                    justify-content: center;
+                                    flex: 1;
+                        
+                                    .attachment {
+                                        display: flex;
+                                        justify-content: center;
+                                        align-items: center;
+                                        padding: 0 6px;
+                                        margin: 0;
+                                        line-height: unset;
+                                        flex: 0 0 auto;
+                                        width: auto;
+                                        min-width: 68px;
+                        
+                                        align-self: stretch;
+                                        border: 1px solid #aaa;
+                                        border-right: none;
+                                        border-radius: 3px 0 0 3px;
+                                    }
+                                    input, tags {
+                                        border-top-left-radius: 0;
+                                        border-bottom-left-radius: 0;
+                                        margin: 0;
+                                        flex: 1;
+                                    }
+                                }
+                        
+                                // Main element for the value of a form group
+                                // Flex row with gaps between items
+                                .spaced-fields {
+                                    display: flex;
+                                    align-items: center;
+                                    gap: 4px;
+                        
+                                    label {
+                                        font-weight: 500;
+                                        font-size: 12px;
+                                        padding-right: 2px;
+                                        &:not(:first-child) {
+                                            padding-left: 2px;
+                                        }
+                                        flex: 0 0 135px;
+                                    }
+
+                                    &.bracket {
+                                        padding-left: 22%;
+                                        label {
+                                            flex: 0;
+                                        }
+                                    }
+                                }
+                        
+                                &[data-key="FlatModifier"] {
+                                    .type-input {
+                                        flex: 0;
+                                    }
+                                }
+                        
+                                &[data-key="GrantItem"] {
+                                    a.granted {
+                                        display: flex;
+                                        flex: 0 0 auto;
+                                        flex-direction: row;
+                                        align-items: center;
+                                        gap: 3px;
+                                        img {
+                                            width: 16px;
+                                            height: 16px;
+                                        }
+                                    }
                                 }
                             }
                         }

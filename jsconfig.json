@@ -3,5 +3,6 @@
         "src/**/*.js",
         "app/**/*.js",
         "app/**/*.mjs",
+        "static/js/tagify"
     ]
 }

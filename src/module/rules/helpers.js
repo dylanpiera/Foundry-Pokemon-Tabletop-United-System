@@ -40,4 +40,34 @@ function extractRollSubstitutions(substitutions, domains, rollOptions) {
         .filter((s) => s.predicate?.test(rollOptions) ?? true);
 }
 
-export { extractEphemeralEffects, extractRollSubstitutions, extractModifiers }
+async function processPreUpdateActorHooks(changed,{ pack }){
+    const actorId = String(changed._id);
+    const actor = pack ? await game.packs.get(pack)?.getDocument(actorId) : game.actors.get(actorId);
+    if (!(actor instanceof CONFIG.PTU.Actor.documentClass)) return;
+
+    // Run preUpdateActor rule element callbacks
+    const rules = actor.rules.filter((r) => !!r.preUpdateActor);
+    if (rules.length === 0) return;
+
+    actor.flags.ptu.rollOptions = actor.clone(changed, { keepId: true }).flags.ptu.rollOptions;
+    const createDeletes = (
+        await Promise.all(
+            rules.map(
+                (r) =>
+                    actor.items.has(r.item.id) ? r.preUpdateActor() : new Promise(() => ({ create: [], delete: [] }))
+            )
+        )
+    ).reduce(
+        (combined, cd) => ({
+            create: [...combined.create, ...cd.create],
+            delete: Array.from(new Set([...combined.delete, ...cd.delete])),
+        }),
+        { create: [], delete: [] }
+    );
+    createDeletes.delete = createDeletes.delete.filter((id) => actor.items.has(id));
+
+    await actor.createEmbeddedDocuments("Item", createDeletes.create, { keepId: true, render: false });
+    await actor.deleteEmbeddedDocuments("Item", createDeletes.delete, { render: false });
+}
+
+export { extractEphemeralEffects, extractRollSubstitutions, extractModifiers, processPreUpdateActorHooks}

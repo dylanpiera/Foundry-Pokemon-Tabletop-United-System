@@ -1,5 +1,5 @@
 export { PTUItem, PTUItemProxy } from './base.js'
-export { PTUItemSheet } from './sheet.js'
+export { PTUItemSheet } from './sheet/sheet.js'
 export { PTUEffect } from './effect-types/effect/document.js'
 export { PTUEffectSheet } from './effect-types/effect/sheet.js'
 export { PTUEdge } from './edge/document.js'

@@ -92,6 +92,9 @@
   flex: 0 1 350px;
   overflow-y: scroll;
 }
+a.content-link img {
+  border: unset;
+}
 .dice-checks.dialog section {
   background: linear-gradient(45deg, #ECDBEB, #DFFFFE);
 }
@@ -1594,6 +1597,93 @@
 }
 .sheet.item section form.item-sheet .sheet-body .rules .rules-list .rule-element .rule-body textarea {
   min-height: 72px;
+}
+.sheet.item section form.item-sheet .sheet-body .rules .rules-list .rule-element .rule-body label,
+.sheet.item section form.item-sheet .sheet-body .rules .rules-list .rule-element .rule-body .labelled-element {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex: 0 0 20%;
+}
+.sheet.item section form.item-sheet .sheet-body .rules .rules-list .rule-element .rule-body label input,
+.sheet.item section form.item-sheet .sheet-body .rules .rules-list .rule-element .rule-body .labelled-element input,
+.sheet.item section form.item-sheet .sheet-body .rules .rules-list .rule-element .rule-body label tags,
+.sheet.item section form.item-sheet .sheet-body .rules .rules-list .rule-element .rule-body .labelled-element tags {
+  flex: 0;
+}
+.sheet.item section form.item-sheet .sheet-body .rules .rules-list .rule-element .rule-body label.fill,
+.sheet.item section form.item-sheet .sheet-body .rules .rules-list .rule-element .rule-body .labelled-element.fill {
+  flex-grow: 1;
+}
+.sheet.item section form.item-sheet .sheet-body .rules .rules-list .rule-element .rule-body .range {
+  display: flex;
+  gap: 3px;
+  align-items: center;
+}
+.sheet.item section form.item-sheet .sheet-body .rules .rules-list .rule-element .rule-body .range input {
+  width: 40px;
+}
+.sheet.item section form.item-sheet .sheet-body .rules .rules-list .rule-element .rule-body .attached-input {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+}
+.sheet.item section form.item-sheet .sheet-body .rules .rules-list .rule-element .rule-body .attached-input .attachment {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0 6px;
+  margin: 0;
+  line-height: unset;
+  flex: 0 0 auto;
+  width: auto;
+  min-width: 68px;
+  align-self: stretch;
+  border: 1px solid #aaa;
+  border-right: none;
+  border-radius: 3px 0 0 3px;
+}
+.sheet.item section form.item-sheet .sheet-body .rules .rules-list .rule-element .rule-body .attached-input input,
+.sheet.item section form.item-sheet .sheet-body .rules .rules-list .rule-element .rule-body .attached-input tags {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+  margin: 0;
+  flex: 1;
+}
+.sheet.item section form.item-sheet .sheet-body .rules .rules-list .rule-element .rule-body .spaced-fields {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.sheet.item section form.item-sheet .sheet-body .rules .rules-list .rule-element .rule-body .spaced-fields label {
+  font-weight: 500;
+  font-size: 12px;
+  padding-right: 2px;
+  flex: 0 0 135px;
+}
+.sheet.item section form.item-sheet .sheet-body .rules .rules-list .rule-element .rule-body .spaced-fields label:not(:first-child) {
+  padding-left: 2px;
+}
+.sheet.item section form.item-sheet .sheet-body .rules .rules-list .rule-element .rule-body .spaced-fields.bracket {
+  padding-left: 22%;
+}
+.sheet.item section form.item-sheet .sheet-body .rules .rules-list .rule-element .rule-body .spaced-fields.bracket label {
+  flex: 0;
+}
+.sheet.item section form.item-sheet .sheet-body .rules .rules-list .rule-element .rule-body[data-key="FlatModifier"] .type-input {
+  flex: 0;
+}
+.sheet.item section form.item-sheet .sheet-body .rules .rules-list .rule-element .rule-body[data-key="GrantItem"] a.granted {
+  display: flex;
+  flex: 0 0 auto;
+  flex-direction: row;
+  align-items: center;
+  gap: 3px;
+}
+.sheet.item section form.item-sheet .sheet-body .rules .rules-list .rule-element .rule-body[data-key="GrantItem"] a.granted img {
+  width: 16px;
+  height: 16px;
 }
 .sheet.item section form.item-sheet .sheet-body .rules .rules-list .create-rule-element {
   display: flex;

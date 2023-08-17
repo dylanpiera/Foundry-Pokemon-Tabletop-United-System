@@ -1,4 +1,6 @@
 import { PTUItem } from "../../../item/index.js";
+import { MigrationList } from "../../../migration/index.js";
+import { MigrationRunner } from "../../../migration/runner/index.js";
 import { RuleElementPTU } from "../base.js";
 
 class GrantItemRuleElement extends RuleElementPTU {
@@ -66,12 +68,17 @@ class GrantItemRuleElement extends RuleElementPTU {
 
         if(!this.test()) return;
 
+        const migrations = MigrationList.constructFromVersion(grantedItem.schemaVersion);
+        if(migrations.length) {
+            await MigrationRunner.ensureSchemaVersion(grantedItem, migrations);
+        }
+
         const existingItem = this.actor.items.find((i) => i.sourceId === uuid || (grantedItem.type === "condition" && i.slug === grantedItem.slug));
         if(!this.allowDuplicate && existingItem) {
             if(this.replaceSelf) {
                 pendingItems.splice(pendingItems.indexOf(existingItem), 1);
             }
-            this.#setGrantFlags(itemSource, existingItem);
+            //this.#setGrantFlags(itemSource, existingItem);
 
             return ui.notifications.warn(`Item ${grantedItem.name} is already granted to ${this.actor.name}.`);
         }
@@ -142,6 +149,8 @@ class GrantItemRuleElement extends RuleElementPTU {
         await this.preCreate({ itemSource, pendingItems, context, ruleSource, reevaluation: true });
 
         if(pendingItems.length > 0) {
+            const updatedGrants = itemSource.flags.ptu.itemGrants ?? {};
+            await this.item.update({"flags.ptu.itemGrants": updatedGrants}, { render: false });
             return { create: pendingItems, delete: [] };
         }
         return noAction;

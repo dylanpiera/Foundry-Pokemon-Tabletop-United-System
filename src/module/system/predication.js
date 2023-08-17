@@ -85,7 +85,7 @@ class PTUPredicate extends Array {
             ("or" in statement && statement.or.some((s) => this._isTrue(s, domain))) ||
             ("nor" in statement && statement.nor.some((s) => this._isTrue(s, domain))) ||
             ("not" in statement && !this._isTrue(statement.not, domain)) ||
-            ("if" in statement && !(this._isTrue(statement.if, domain) && !this._isTrue(statement.then, domain)))
+            ("if" in statement && this._isTrue(statement.if, domain) && this._isTrue(statement.then, domain))
         );
     }
 }

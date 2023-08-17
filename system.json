@@ -29,10 +29,13 @@
     "static/css/utils.css",
     "static/css/main.css",
     "static/css/tooltipster.css",
-    "static/css/progress-bar.css"
+    "static/css/progress-bar.css",
+    "static/css/tagify.css"
   ],
   "scripts": [
-    "static/js/tooltipster.js"
+    "static/js/tooltipster.js",
+    "static/js/tagify",
+    "static/js/tagify.polyfills.min.js"
   ],
   "flags": {
     "hotReload": {

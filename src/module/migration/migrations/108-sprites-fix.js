@@ -24,7 +24,9 @@ export class Migration108SpritesFix extends MigrationBase {
         if(!match) return;
 
         let [_, name, ext] = match;
-        const path = game.settings.get("ptu", "defaultPokemonImageDirectory");
+        const oldPath = game.settings.get("ptu", "defaultPokemonImageDirectory");
+        const path = oldPath.includes("systems/ptu/images/pokemon_sprites") ? "systems/ptu/static/images/sprites/" : game.settings.get("ptu", "defaultPokemonImageDirectory");
+        if(oldPath != path) await game.settings.set("ptu", "defaultPokemonImageDirectory", path)
         if(path === "systems/ptu/static/images/sprites/" && ext === "png") ext = "webp";
 
         token.texture.src = `${path.startsWith('/') ? "" : "/"}${path}${path.endsWith('/') ? "" : "/"}${name}.${ext}`

@@ -74,9 +74,11 @@
                 </div>
                 <div class="d-flex flex-column pt-2 pb-2">
                     {{#each data.moves.known as | move |}}
-                        <div class="d-flex flex-row justify-content-center move">
-                            <span class="linked-item">@UUID[{{move.uuid}}]</span>
-                        </div>
+                        {{#if move.uuid}}
+                            <div class="d-flex flex-row justify-content-center move">
+                                <span class="linked-item">@UUID[{{move.uuid}}]</span>
+                            </div>
+                        {{/if}}
                     {{/each}}
                 </div>
             </div>
@@ -86,9 +88,11 @@
                 </div>
                 <div class="d-flex flex-column pt-2 pb-2">
                     {{#each data.moves.available as | move |}}
-                        <div class="d-flex flex-row justify-content-center move">
-                            <span class="linked-item">@UUID[{{move.uuid}}]</span>
-                        </div>
+                        {{#if move.uuid}}
+                            <div class="d-flex flex-row justify-content-center move">
+                                <span class="linked-item">@UUID[{{move.uuid}}]</span>
+                            </div>
+                        {{/if}}
                     {{/each}}
                 </div>
             </div>
@@ -115,9 +119,11 @@
                     </div>
                 </div>
                 {{#each data.abilities.basic as | ability |}}
-                    <div class="d-flex flex-row justify-content-center ability" data-type="ability" data-uuid="{{ability.uuid}}" data-category="basic" data-slug="{{ability.slug}}">
-                        <span class="linked-item">@UUID[{{ability.uuid}}]</span>
-                    </div>
+                    {{#if ability.uuid}}
+                        <div class="d-flex flex-row justify-content-center ability" data-type="ability" data-uuid="{{ability.uuid}}" data-category="basic" data-slug="{{ability.slug}}">
+                            <span class="linked-item">@UUID[{{ability.uuid}}]</span>
+                        </div>
+                    {{/if}}
                 {{/each}}
             </div>
             <div class="d-flex flex-column abilities-column">
@@ -135,9 +141,11 @@
                     </div>
                 </div>
                 {{#each data.abilities.advanced as | ability |}}
-                    <div class="d-flex flex-row justify-content-center ability" data-type="ability" data-uuid="{{ability.uuid}}" data-category="advanced" data-slug="{{ability.slug}}">
-                        <span class="linked-item">@UUID[{{ability.uuid}}]</span>
-                    </div>
+                    {{#if ability.uuid}}
+                        <div class="d-flex flex-row justify-content-center ability" data-type="ability" data-uuid="{{ability.uuid}}" data-category="advanced" data-slug="{{ability.slug}}">
+                            <span class="linked-item">@UUID[{{ability.uuid}}]</span>
+                        </div>
+                    {{/if}}
                 {{/each}}
             </div>
             <div class="d-flex flex-column abilities-column">
@@ -155,9 +163,11 @@
                     </div>
                 </div>
                 {{#each data.abilities.high as | ability |}}
-                    <div class="d-flex flex-row justify-content-center ability" data-type="ability" data-uuid="{{ability.uuid}}" data-category="high" data-slug="{{ability.slug}}">
-                        <span class="linked-item">@UUID[{{ability.uuid}}]</span>
-                    </div>
+                    {{#if ability.uuid}}
+                        <div class="d-flex flex-row justify-content-center ability" data-type="ability" data-uuid="{{ability.uuid}}" data-category="high" data-slug="{{ability.slug}}">
+                            <span class="linked-item">@UUID[{{ability.uuid}}]</span>
+                        </div>
+                    {{/if}}
                 {{/each}}
             </div>
         </div>

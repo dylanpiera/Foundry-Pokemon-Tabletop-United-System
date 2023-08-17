@@ -47,6 +47,42 @@ class PTUPokemonActor extends PTUActor {
     }
 
     /** @override */
+    prepareBaseData() {
+        super.prepareBaseData();
+
+        const system = this.system;
+
+        // Add Skill Background traits
+        // Background Increases
+        for (const skill of Object.values(this.system.background.increased)) {
+            if (!system.skills[skill]) continue;
+            system.skills[skill]["value"]["mod"] += 1;
+        }
+        // Background Decreases
+        for (const skill of Object.values(this.system.background.decreased)) {
+            if (!system.skills[skill]) continue;
+            system.skills[skill]["value"]["mod"] -= 1;
+        }
+
+        system.level.current = calculateLevel(system.level.exp);
+        
+        system.level.expTillNextLevel = CONFIG.PTU.data.levelProgression[Math.min(system.level.current + 1, 100)];
+        system.level.percent = Math.round(
+            (
+                (system.level.exp - CONFIG.PTU.data.levelProgression[system.level.current]) 
+                / 
+                (system.level.expTillNextLevel - CONFIG.PTU.data.levelProgression[system.level.current])
+            ) * 100);
+        
+
+        // Set attributes which are underrived data
+        this.attributes = {
+            level: {current: system.level.current, tillNext: system.level.expTillNextLevel, percent: system.level.percent},
+            health: { current: system.health.value },
+        }
+    }
+
+    /** @override */
     prepareDerivedData() {
         super.prepareDerivedData();
 
@@ -94,13 +130,7 @@ class PTUPokemonActor extends PTUActor {
         }
 
         // Calculate Level related data
-        system.level.current = calculateLevel(system.level.exp);
-
         system.levelUpPoints = system.level.current + system.modifiers.statPoints.total + 10;
-
-        system.level.expTillNextLevel = (system.level.current < 100) ? CONFIG.PTU.data.levelProgression[system.level.current + 1] : CONFIG.PTU.data.levelProgression[100];
-        system.level.percent = Math.round(((system.level.exp - CONFIG.PTU.data.levelProgression[system.level.current]) / (system.level.expTillNextLevel - CONFIG.PTU.data.levelProgression[system.level.current])) * 100);
-
         // Calculate Stats related data
         if (this.flags?.ptu?.is_poisoned) {
             system.stats.spdef.stage.mod -= 2;
@@ -161,22 +191,6 @@ class PTUPokemonActor extends PTUActor {
         system.capabilities = this._calcCapabilities();
 
         system.egggroup = (speciesSystem?.breeding?.eggGroups ?? []).join(' & ');
-
-        // Only run background skills if the actor is not constructed
-        // This is to prevent the background skills from being applied twice
-        // This is a temporary fix until the background skills are moved into rules
-        if (!this.constructed) {
-            // Background Increases
-            for (const skill of Object.values(this.system.background.increased)) {
-                if (!system.skills[skill]) continue;
-                system.skills[skill]["value"]["mod"] += 1;
-            }
-            // Background Decreases
-            for (const skill of Object.values(this.system.background.decreased)) {
-                if (!system.skills[skill]) continue;
-                system.skills[skill]["value"]["mod"] -= 1;
-            }
-        }
 
         // Calculate Skill Ranks
         for (const [key, skill] of Object.entries(speciesSystem?.skills ?? {})) {

@@ -1,7 +1,7 @@
 import { sluggify } from "../../util/misc.js";
 import { PTUCondition } from "../item/index.js";
 import { ChatMessagePTU } from "../message/base.js";
-import { extractRollSubstitutions, extractEphemeralEffects, extractModifiers } from "../rules/helpers.js";
+import { extractRollSubstitutions, extractEphemeralEffects, extractModifiers, processPreUpdateActorHooks } from "../rules/helpers.js";
 import { PTUCheck, eventToRollParams } from "../system/check/check.js";
 import { PTUDamage } from "../system/damage/damage.js";
 import { PTUMoveDamage } from "../system/damage/move.js";
@@ -301,6 +301,15 @@ class PTUActor extends Actor {
         }
 
         return super.createEmbeddedDocuments(embeddedName, data, context);
+    }
+
+    /** @override */
+    static async updateDocuments(updates, context) {
+        for(const changed of updates) {
+            await processPreUpdateActorHooks(changed, {pack: context.pack ?? null})
+        }
+
+        return super.updateDocuments(updates, context); 
     }
 
     getContextualClone(rollOptions, ephemeralEffects = []) {
@@ -702,7 +711,7 @@ class PTUActor extends Actor {
             const types = Object.keys(CONFIG.PTU.data.typeEffectiveness)
 
             const struggles = types.reduce((arr, type) => {
-                if (this.rollOptions.all[`self:struggle:${type.toLocaleLowerCase(game.i18n.lang)}`]) {
+                if (this.rollOptions.struggle?.[`${type.toLocaleLowerCase(game.i18n.lang)}`]) {
                     const rule = this.rules.find(r => !r.ignored && r.key == "RollOption" && r.option == `self:struggle:${type.toLocaleLowerCase(game.i18n.lang)}`);
                     const strugglePlus = this.system.skills?.combat?.value?.total > 4;
                     const moveData = {

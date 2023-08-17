@@ -615,7 +615,30 @@
       "Singular": "Item"
     },
     "OK": "OK",
-    "UserNeedsToOwnCharacter": "You need to set a character for your user in order to use this feature."
+    "UserNeedsToOwnCharacter": "You need to set a character for your user in order to use this feature.",
+
+    "RuleEditor": {
+      "FlatModifier": {
+        "HideIfDisabled": "Hide (If Disabled)"
+      },
+      "General": {
+        "Brackets": "Brackets",
+        "Label": "Label",
+        "Predicate": "Predicate",
+        "Primitive": "Primitive",
+        "Range": "Range",
+        "Selector": "Selector",
+        "Value": "Value",
+        "Domain": "Domain",
+        "Option": "Option",
+        "UUID": "UUID"
+      },
+      "GrantItem": {
+        "AllowDuplicate": "Allow Duplicates",
+        "ReevaluateOnUpdate": "Reevaluate on Update",
+        "ReplaceSelf": "Replace Self"
+      }
+    }
   },
 
   "physical-evasion": "Physical Evasion",

@@ -1,3 +1,5 @@
+import { isBracketedValue } from "../module/rules/rule-element/base.js";
+
 /**
  * Callback used to parse and look up values when calculating rules. Parses strings that look like
  * {actor|x.y.z}, {item|x.y.z} or {rule|x.y.z} where x.y.z is the path on the current actor, item or rule.
@@ -133,14 +135,6 @@ function resolveValue(valueData, injectionData, defaultValue = 0, { evaluate = t
         : typeof value === "string" && evaluate
             ? saferEval(Roll.replaceFormulaData(value, { actor, item, rule }))
             : value;
-}
-
-function isBracketedValue(value) {
-    return (
-        typeof value === "object" &&
-        Array.isArray(value.brackets) &&
-        (typeof value.field === "string" || !("fields" in value))
-    );
 }
 
 export { resolveInjectedProperties, resolveValue };

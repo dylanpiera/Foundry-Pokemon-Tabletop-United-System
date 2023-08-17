@@ -106,13 +106,13 @@
                             </div>
                             <div class="swsh-body d-flex flex-row center-text justify-content-between">
                                 <div class="fb-25">
-                                    <input name="system.tempHp.value" type="text" value="{{actor.system.tempHp.value}}" placeholder="Temp HP" />
+                                    <input name="system.tempHp.value" type="number" value="{{actor.system.tempHp.value}}" placeholder="Temp HP" />
                                 </div>
                                 <div class="fb-35">
-                                    <input name="system.health.value" type="text" value="{{actor.system.health.value}}" placeholder="Current HP" />
+                                    <input name="system.health.value" type="number" value="{{actor.system.health.value}}" placeholder="Current HP" />
                                 </div>
                                 <div class="fb-25">
-                                    <input name="system.health.max" type="text" value="{{actor.system.health.max}}" placeholder="Max HP" disabled/>
+                                    <input name="system.health.max" type="number" value="{{actor.system.health.max}}" placeholder="Max HP" disabled/>
                                 </div>
                                 <div class="options w-100 pb-1 pt-1 mt-1">
                                     <div class="progress-bar p{{actor.system.health.percent}}" id="progressBar"></div>
@@ -135,9 +135,9 @@
                                             value="{{actor.system.ap.value}}" data-dtype="Integer" min="0" max="{{actor.system.ap.max}}" step="1" />
                                     </div>
                                     <div class="resource-content hp-info flexrow flex-group-right hp-info pt-1 pb-1">
-                                        <input type="text" name="system.ap.value input" value="{{actor.system.ap.value}}"/>
+                                        <input type="number" name="system.ap.value input" value="{{actor.system.ap.value}}"/>
                                         <span>/</span>
-                                        <input type="text" name="system.ap.max" value="{{actor.system.ap.max}}" disabled />
+                                        <input type="number" name="system.ap.max" value="{{actor.system.ap.max}}" disabled />
                                     </div>
                                 </div>
                             </div>
@@ -188,24 +188,24 @@
                                         <div class="d-flex w-100 pt-1 pb-1 align-items-center justify-content-between center-text">
                                             {{#if (is "true" (getGameSetting "useDexExp"))}}
                                             <div class="fb-30">
-                                                <input type="text" name="system.level.milestones"
+                                                <input type="number" name="system.level.milestones"
                                                     value="{{actor.system.level.milestones}}" data-dtype="Number" />
                                             </div>
                                             <div class="fb-30">
-                                                <input type="text" name="system.level.dexexp"
+                                                <input type="number" name="system.level.dexexp"
                                                     value="{{actor.system.level.dexexp}}" data-dtype="Number" disabled />
                                             </div>
                                             <div class="fb-30">
-                                                <input type="text" name="system.level.miscexp"
+                                                <input type="number" name="system.level.miscexp"
                                                     value="{{actor.system.level.miscexp}}" data-dtype="Number" />
                                             </div>
                                             {{else}}
                                             <div class="fb-45">
-                                                <input type="text" name="system.level.milestones"
+                                                <input type="number" name="system.level.milestones"
                                                     value="{{actor.system.level.milestones}}" data-dtype="Number"/>
                                             </div>
                                             <div class="fb-45">
-                                                <input type="text" name="system.level.miscexp"
+                                                <input type="number" name="system.level.miscexp"
                                                     value="{{actor.system.level.miscexp}}" data-dtype="Number"/>
                                             </div>
                                             {{/if}}
@@ -238,10 +238,10 @@
                                     </div>
                                     <div class="swsh-body d-flex flex-row justify-content-between pt-1 pb-1">
                                         <div class="fb-48 center-text">
-                                            <input type="text" name="system.money" value="{{../actor.system.money}}">
+                                            <input type="number" name="system.money" value="{{../actor.system.money}}">
                                         </div>
                                         <div class="fb-48 center-text">
-                                            <input type="text" name="totalwealth" value="{{../totalWealth}}" data-dtype="Number" disabled>
+                                            <input type="number" name="totalwealth" value="{{../totalWealth}}" data-dtype="Number" disabled>
                                         </div>
                                     </div>
                                 {{else}}
@@ -270,10 +270,10 @@
                                     </div>
                                     <div class="swsh-body d-flex flex-row justify-content-between pt-1 pb-1">
                                         <div class="fb-48 center-text">
-                                            <input type="text" name="system.money" value="{{../actor.system.money}}">
+                                            <input type="number" name="system.money" value="{{../actor.system.money}}">
                                         </div>
                                         <div class="fb-48 center-text">
-                                            <input type="text" name="totalwealth" value="{{../totalWealth}}" data-dtype="Number" disabled>
+                                            <input type="number" name="totalwealth" value="{{../totalWealth}}" data-dtype="Number" disabled>
                                         </div>
                                     </div>
                                 {{else}}
@@ -336,7 +336,7 @@
                                             <label for="system.stats.{{key}}.value" class="resource-label">{{key}}</label>
                                         </div>
                                         <div class="stats {{key}} base fb-15">
-                                            <input type="text" name="system.stats.{{key}}.value" value="{{stat.value}}"
+                                            <input type="number" name="system.stats.{{key}}.value" value="{{stat.value}}"
                                                 data-dtype="Number" disabled />
                                         </div>
                                         <div class="stats {{key}} levelUp fb-20">
@@ -375,7 +375,7 @@
                                             {{/if}}
                                         </div>
                                         <div class="stats {{key}} total fb-15">
-                                            <input type="text" name="system.stats.{{key}}.total" value="{{stat.total}}"
+                                            <input type="number" name="system.stats.{{key}}.total" value="{{stat.total}}"
                                                 data-dtype="Number" disabled />
                                         </div>
                                     </div>
@@ -412,7 +412,7 @@
                                             <label class="pl-1" for="system.capabilities.{{key}}">{{key}}</label>
                                         </div>
                                         <div class="fb-15 p-1 center-text">
-                                            <input type="text" name="system.capabilities.{{key}}" value="{{capability}}" disabled />
+                                            <input type="number" name="system.capabilities.{{key}}" value="{{capability}}" disabled />
                                         </div>
                                     {{/if}}
                                 {{/each}}
@@ -450,11 +450,11 @@
                             <div class="swsh-body" style="display: block;">
                                 <div class="d-flex w-100 mt-1 mb-1 justify-content-between">
                                     <div class="fb-48">
-                                        <input name="system.health.injuries" type="text"
+                                        <input name="system.health.injuries" type="number"
                                             value="{{actor.system.health.injuries}}" data-dtype="Number" />
                                     </div>
                                     <div class="fb-48">
-                                        <input type="text" name="system.health.total" value="{{actor.system.health.total}}"
+                                        <input type="number" name="system.health.total" value="{{actor.system.health.total}}"
                                             data-dtype="Number" disabled />
                                     </div>
                                 </div>
@@ -516,27 +516,27 @@
                             <div class="swsh-body">
                                 <div class="d-flex w-100 mt-1 mb-1 hp-guidelines justify-content-between center-text align-items-center">
                                     <div class="fb-15">
-                                        <input disabled name="1/16th" type="text"
+                                        <input disabled name="1/16th" type="number"
                                             value="{{floor (divide actor.system.health.total 16)}}">
                                     </div>
                                     <div class="fb-15">
-                                        <input disabled name="1/10th" type="text"
+                                        <input disabled name="1/10th" type="number"
                                             value="{{floor (divide actor.system.health.total 10)}}">
                                     </div>
                                     <div class="fb-15">
-                                        <input disabled name="1/8th" type="text"
+                                        <input disabled name="1/8th" type="number"
                                             value="{{floor (divide actor.system.health.total 8)}}">
                                     </div>
                                     <div class="fb-15">
-                                        <input disabled name="3/10th" type="text"
+                                        <input disabled name="3/10th" type="number"
                                             value="{{floor (multiply actor.system.health.total (divide 3 10))}}">
                                     </div>
                                     <div class="fb-15">
-                                        <input disabled name="1/4th" type="text"
+                                        <input disabled name="1/4th" type="number"
                                             value="{{floor (divide actor.system.health.total 4)}}">
                                     </div>
                                     <div class="fb-15">
-                                        <input disabled name="1/2nd" type="text"
+                                        <input disabled name="1/2nd" type="number"
                                             value="{{floor (divide actor.system.health.total 2)}}">
                                     </div>
                                 </div>
@@ -843,7 +843,7 @@
                                         <label for="system.stats.{{key}}.base" class="resource-label">{{key}}</label>
                                     </div>
                                     <div class="stats {{key}} base fb-20 ml-2 mr-2">
-                                        <input type="text" name="system.stats.{{key}}.base" value="{{stat.base}}"
+                                        <input type="number" name="system.stats.{{key}}.base" value="{{stat.base}}"
                                             data-dtype="Number" disabled />
                                     </div>
                                     {{#with (lookup ../actor.system.modifiers.baseStats key) as |baseStatMod|}}
@@ -858,7 +858,7 @@
                                         </div>
                                     {{/with}}
                                     <div class="stats {{key}} total fb-20 ml-2 mr-2">
-                                        <input type="text" name="system.stats.{{key}}.value" value="{{stat.value}}"
+                                        <input type="number" name="system.stats.{{key}}.value" value="{{stat.value}}"
                                             data-dtype="Number" disabled />
                                     </div>
                                 </div>
@@ -965,7 +965,7 @@
                         </div>
                         <div class="swsh-body mt-1 mb-1 justify-content-between">
                             <div class="fb-25 center-text pl-2 pr-2">
-                                <input type="text" name="system.age" value="{{actor.system.age}}" data-dtype="String" />
+                                <input type="number" name="system.age" value="{{actor.system.age}}" data-dtype="String" />
                             </div>
                             <div class="fb-25 center-text pl-2 pr-2">
                                 <input type="text" name="system.sex" value="{{actor.system.sex}}" data-dtype="String" />

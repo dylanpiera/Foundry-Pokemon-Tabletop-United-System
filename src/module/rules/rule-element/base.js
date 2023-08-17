@@ -134,7 +134,9 @@ class RuleElementPTU extends foundry.abstract.DataModel {
     async afterRoll(params) {};
 
     /** Runs before the rule's parent item's owning actor is updated */
-    preUpdateActor() {};
+    preUpdateActor() {
+        return { create: [], delete: [] };
+    };
 
     /**
      * Runs before this rules element's parent item is created. The item is temporarilly constructed. A rule element can
@@ -278,7 +280,7 @@ class RuleElementPTU extends foundry.abstract.DataModel {
             value = this.resolveInjectedProperties(value);
         }
 
-        if(this.isBracketedValue(valueData)) {
+        if(isBracketedValue(valueData)) {
             const bracketNumber = (() => {
                 if(!valueData?.field) return 0;
                 const field = String(valueData.field);
@@ -333,14 +335,6 @@ class RuleElementPTU extends foundry.abstract.DataModel {
             : value;
     }
 
-    isBracketedValue(value) {
-        return (
-            typeof value === "object" &&
-            Array.isArray(value.brackets) &&
-            (typeof value.field === "string" || !("fields" in value))
-        );
-    }
-
     failValidation(...message) {
         const fullMessage = message.join(" ");
         const { name, uuid } = this.item;
@@ -354,4 +348,12 @@ class RuleElementPTU extends foundry.abstract.DataModel {
     }
 }
 
-export { RuleElementPTU}
+function isBracketedValue(value) {
+    return (
+        typeof value === "object" &&
+        Array.isArray(value.brackets) &&
+        (typeof value.field === "string" || !("fields" in value))
+    );
+}
+
+export { RuleElementPTU, isBracketedValue}
