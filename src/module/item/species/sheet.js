@@ -16,10 +16,10 @@ class PTUSpeciesSheet extends PTUItemSheet {
     }
 
     /** @override */
-    getData() {
-        const data = super.getData();
+    async getData() {
+        const data = await super.getData();
         
-        data.types = Object.keys(CONFIG.PTU.data.typeEffectiveness).filter(type => type != "Untyped");
+        data.types = [...Object.keys(CONFIG.PTU.data.typeEffectiveness).filter(type => type != "Untyped")];
         data.types.unshift("");
 
         data.view = (() => {

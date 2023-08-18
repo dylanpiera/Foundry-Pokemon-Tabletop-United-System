@@ -7,7 +7,7 @@
     "verified": "11.307",
     "maximum": 11
   },
-  "version": "4.0.0.alpha.9",
+  "version": "4.0.0.alpha.10",
   "templateVersion": 2,
   "authors": [
     {
@@ -65,7 +65,7 @@
       "system": "ptu"
     },
     {
-      "label": "dex entries",
+      "label": "Dex (DO NOT USE)",
       "type": "Item",
       "name": "dex-entries",
       "path": "packs/dex-entries.db",
