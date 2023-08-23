@@ -35,12 +35,12 @@ export function registerSettings() {
         hint: "Whether the system should check how many pokemon are marked as 'Caught' in a Trainer's dex tab, and add that to their dex experience total.",
         scope: "world",
         config: true,
-        type: String,
+        type: Boolean,
         choices: {
             "true": "Use Dex Exp",
             "false": "Don't use Dex Exp"
         },
-        default: "false",
+        default: false,
         category: "rules"
     });
 
@@ -947,6 +947,44 @@ export function registerSettings() {
             default: MigrationRunner.MINIMUM_SAFE_VERSION,
             type: Number,
         });
+
+        //#region AutoAnimations        
+        game.settings.register("autoanimations", "playonDamageCore", {
+            name: "Play Animation on Damage Rolls",
+            hint: "Automatically play animations on damage rolls",
+            scope: "world",
+            config: true,
+            type: Boolean,
+            default: true
+        })
+
+        game.settings.register("autoanimations", "disableAEAnimations", {
+            name: "Disable Active Effect Animations",
+            hint: "Disable Active Effect Animations",
+            scope: "world",
+            config: true,
+            type: Boolean,
+            default: false
+        })
+
+        game.settings.register("autoanimations", "disableGrantedAuraEffects", {
+            name: "Disable Granted Aura Effects",
+            hint: "Disable Granted Aura Effects",
+            scope: "world",
+            config: true,
+            type: Boolean,
+            default: false
+        })
+
+        game.settings.register("autoanimations", "disableNestedEffects", {
+            name: "Disable Nested Effects",
+            hint: "Disable Nested Effects to save on performance",
+            scope: "world",
+            config: true,
+            type: Boolean,
+            default: false
+        })
+        //#endregion
     }
 }
 

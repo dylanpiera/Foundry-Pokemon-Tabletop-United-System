@@ -79,6 +79,7 @@ class PTUPokemonActor extends PTUActor {
         this.attributes = {
             level: {current: system.level.current, tillNext: system.level.expTillNextLevel, percent: system.level.percent},
             health: { current: system.health.value },
+            skills: {},
         }
     }
 
@@ -199,6 +200,7 @@ class PTUPokemonActor extends PTUActor {
             system.skills[key]["modifier"]["value"] = skill["modifier"]
             system.skills[key]["modifier"]["total"] = skill["modifier"] + system.skills[key]["modifier"]["mod"] + (system.modifiers.skillBonus?.total ?? 0);
             system.skills[key]["rank"] = PTUSkills.getRankSlug(system.skills[key]["value"]["total"]);
+            this.attributes.skills[key] = PTUSkills.calculate({actor: this, context: {skill: key, options: []}})
         }
 
         // Calc Type Effectiveness

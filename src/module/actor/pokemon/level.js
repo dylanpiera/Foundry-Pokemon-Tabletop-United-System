@@ -27,3 +27,5 @@ function _recursiveLevelCalc(exp, level, json) {
     return exp == json[level] ? level : level - 1;
 }
 export { calculateLevel }
+
+globalThis.calculateLevel = calculateLevel;

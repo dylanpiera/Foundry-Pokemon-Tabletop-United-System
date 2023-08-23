@@ -106,6 +106,11 @@ class ChatMessagePTU extends ChatMessage {
 
         const message = this;
 
+        $html.find('.tag.tooltip').tooltipster({
+			theme: `tooltipster-shadow ball-themes default`,
+			position: 'top'
+		});
+
         $html.find(".buttons .button[data-action]").on("click", async event => {
             event.preventDefault();
 

@@ -317,6 +317,72 @@ class PTUItem extends Item {
         await this.update(updates, { diff: false, recursive: false });
         ui.notifications.info(`PTU | Item ${this.name} updated from compendium`);
     }
+
+    async sendToChat() {
+        const tags = await (async () => {
+            const tags = [];
+            if(this.system.frequency) tags.push({slug: "frequency", label: game.i18n.localize("PTU.Tags.Frequency"), value: this.system.frequency });
+            if(this.system.range) tags.push({slug: "range", label: game.i18n.localize("PTU.Tags.Range"), value: this.system.range });
+            if(this.system.damageBase) tags.push({slug: "db", label: game.i18n.localize("PTU.Tags.DB"), value: this.system.damageBase+" DB" });
+            return tags;
+        })();
+
+        const flavor = await (async () => {
+            const typeAndCategoryHeader = (() => {
+                if(this.type !== "move") return null;
+
+                const header = document.createElement("div");
+                header.classList.add("header-bar");
+                header.classList.add("type-category");
+
+                const type = document.createElement("div");
+                type.classList.add("type-img");
+
+                const typeImg = document.createElement("img");
+                typeImg.src = `/systems/ptu/static/css/images/types2/${this.system.type}IC.png`;
+                type.append(typeImg);
+
+                const category = document.createElement("div");
+                category.classList.add("type-img");
+
+                const categoryImg = document.createElement("img");
+                categoryImg.src = `/systems/ptu/static/css/images/categories/${this.system.category}.png`;
+                category.append(categoryImg);
+
+                header.append(category, type);
+                return [header]
+            })();
+
+            const header = document.createElement("div");
+            header.classList.add("header-bar");
+            if(this.img) {
+                header.append((() => {
+                    const img = document.createElement("img");
+                    img.classList.add("item-img", "item-icon");
+                    img.src = this.img;
+                    return img;
+                })());
+            }
+            header.append((() => {
+                const h3 = document.createElement("h3");
+                h3.classList.add("action");
+                h3.innerHTML = this.name;
+                return h3;
+            })());
+            return [header, typeAndCategoryHeader ?? []]
+                .flat()
+                .map(e => (typeof e === "string" ? e : e.outerHTML))
+                .join("");
+        })();
+
+        const chatData = {
+            user: game.user._id,
+            item: this,
+            tags
+        }
+
+        ChatMessage.create({content: await renderTemplate(`/systems/ptu/static/templates/chat/chat-items.hbs`, chatData), flavor})
+    }
 }
 
 const PTUItemProxy = new Proxy(PTUItem, {

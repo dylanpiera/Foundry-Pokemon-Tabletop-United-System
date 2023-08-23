@@ -1,6 +1,6 @@
 /**
  * @typedef {Object} RuleElementFormOptions
- * @property {PTRItem} item
+ * @property {PTUItem} item
  * @property {number} index
  * @property {RuleElementPTU} rule
  * @property {RuleElementPTU | null} object

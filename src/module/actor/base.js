@@ -153,7 +153,9 @@ class PTUActor extends Actor {
             ephemeralEffects: {},
             modifierAdjustments: { all: [], damage: [] },
             statisticsModifiers: { all: [], damage: [] },
-            rollSubstitutions: {}
+            rollSubstitutions: {},
+            rollNotes: {},
+            damageDice: {},
         }
 
         super._initialize();
@@ -1244,7 +1246,6 @@ class PTUActor extends Actor {
             ...selfOptions,
             ...itemOptions,
             ...(targetActor ? getTargetRollOptions(targetActor) : targetRollOptions),
-            "attack"
         ])
         if (targetDistance) rollOptions.add(targetDistance);
 

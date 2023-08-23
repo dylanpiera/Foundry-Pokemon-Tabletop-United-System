@@ -197,6 +197,11 @@ a.content-link {
         }
     }
 
+    .item-to-chat {
+        padding: 0.2rem 0.2rem 0.2rem 0.4rem;
+        word-wrap: break-word;
+    }
+
     .flavor-text {
         display: flex;
         flex-direction: column;
@@ -212,18 +217,26 @@ a.content-link {
             justify-content: center;
             max-width: 100%;
             overflow: hidden;
+            position: relative;
+
+            &:has(.item-icon) {
+                .action {
+                    text-align: left;
+                }
+            }
 
             .action {
+                flex-grow: 1;
                 padding: 0.5rem 0;
-                margin: 0 0.25rem;
-                font-size: 32px;
+                margin: 0;
+                font-size: 28px;
                 font-weight: bolder;
                 color: white;
                 overflow-wrap: normal;
                 word-break: keep-all;
                 border: unset;
                 text-align: center;
-                line-height: 34px;
+                line-height: 31px;
 
                 &.sub-action {
                     font-size: 22px;
@@ -334,6 +347,11 @@ a.content-link {
                         box-shadow: unset;
                         border: 1px inset #93c47daa;
                     }
+                    &.db {
+                        background: #b27d94 !important;
+                        box-shadow: unset;
+                        border: 1px inset #b27d94;
+                    }
                 }
             }
 
@@ -368,6 +386,20 @@ a.content-link {
                 }
             }
         }
+
+        &:has(.item-to-chat) {
+            padding: 0.25rem;
+        }
+    }
+
+    .item-icon {
+        height: 40px;
+        width: 40px;
+        object-fit: contain;
+        border: unset;
+        align-self: center;
+        margin: 0 0.5rem 0 0.25rem;;
+        flex: 0 0 40px;
     }
 
     .dice-shadow {
@@ -381,6 +413,17 @@ a.content-link {
 
         .crit.hidden {
             display: none;
+        }
+
+        .item-to-chat {
+            display: flex;
+            span {
+                align-self: center;
+                &.small {
+                    font-size: 12px;
+                    font-style: italic;
+                }
+            }
         }
     }
 
@@ -1088,6 +1131,19 @@ a.content-link {
                 .effects {
                     .swsh-body {
                         display: block;
+                    }
+                }
+
+                .tp-box {
+                    padding-top: 0.25rem;
+                    text-align: center;
+                    align-items: center;
+                    span {
+                        align-self: center;
+                        padding: 0 0.5rem;
+                    }
+                    input {
+                        flex: 0 0 50px;
                     }
                 }
             }

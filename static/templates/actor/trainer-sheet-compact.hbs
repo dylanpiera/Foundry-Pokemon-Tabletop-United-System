@@ -65,7 +65,7 @@
                                 </div>
                                 <div class="skill {{key}} fb-20 align-self-center bgcolor center-text rollable center-self"
                                     data-roll="{{#if (is true (getGameSetting "ignoreVirtuosoLimit"))}}{{skill.value.total}}{{else}}{{#if (bigger skill.value.total 6)}}6{{else}}{{skill.value.total}}{{/if}}{{/if}}d6{{#if skill.modifier.total}}+{{skill.modifier.total}}{{/if}}"
-                                    data-label="{{skill.label}}">
+                                    data-skill="{{key}}">
                                     <i class="fas fa-dice-d20"></i>
                                     <label for="system.skills.{{key}}.value"
                                     class="resource-label">{{#if (is true (getGameSetting "ignoreVirtuosoLimit"))}}{{skill.value.total}}{{else}}{{#if (bigger skill.value.total 6)}}6{{else}}{{skill.value.total}}{{/if}}{{/if}}d6{{#if skill.modifier.total}}+{{skill.modifier.total}}{{/if}}</label>

@@ -1,6 +1,7 @@
 import { ItemSummaryRenderer } from "../sheet/item-summary.js";
 import { InventoryConfigSheet } from "../sheet/inventory-config.js";
 import { PTUPartySheet } from "../../apps/party/sheet.js";
+import { Statistic } from "../../system/statistic/index.js";
 
 export class PTUCharacterSheet extends ActorSheet {
     
@@ -503,74 +504,22 @@ export class PTUCharacterSheet extends ActorSheet {
 	 */
 	async _onSkillRoll(event) {
 		event.preventDefault();
-		const element = event.currentTarget;
-		const dataset = element.dataset;
-
-		if (dataset.roll) {
-			let rolldata = dataset.roll;
-			let label = dataset.label ? `Rolling ${dataset.label}` : '';
-
-			// Add +1 to the roll if alt is held on click
-			if (event.altKey && this.useAP()) { // Only if AP are available
-				// Does the character have Instinctive Aptitude?
-				let instinctiveAptitude = false;
-				this.actor.edges.forEach((e) => {
-					if (e.name === "Instinctive Aptitude") {
-						instinctiveAptitude = true;
-					}
-				})
-
-				instinctiveAptitude ? rolldata += "+2" : rolldata += "+1";
-				label += "<br>using 1 AP</br>";
-			}
-			else if (event.altKey) {
-				return;
-			}
-			if (event.shiftKey) {
-				const extra = await new Promise((resolve, reject) => {
-					Dialog.confirm({
-						title: `Skill Roll Modifier`,
-						content: `<input type="text" name="skill-roll-modifier" value="0"></input>`,
-						yes: async (html) => {
-							const bonusTxt = html.find('input[name="skill-roll-modifier"]').val()
-					
-							const bonus = !isNaN(Number(bonusTxt)) ? Number(bonusTxt) : parseInt((await (new Roll(bonusTxt)).roll({async:true})).total);
-							if (!isNaN(bonus)) {
-								return resolve(bonus);
-							}
-							return reject();
-						}
-					});
-				});
-				rolldata += `+${extra}`;
-				label += `with ${extra} skill roll modifier</br>`;
-			}
-
-			let roll = new Roll(rolldata, this.actor.system);
-			(await roll.evaluate({ async: true })).toMessage({
-				speaker: ChatMessage.getSpeaker({
-					actor: this.actor
-				}),
-				flavor: label
-			});
-		}
+		const skill = event.currentTarget.dataset.skill;
+		await this.actor.attributes.skills[skill].roll();
 	}
 
 	async _onSaveRoll(event) {
 		event.preventDefault();
 		if(event.screenX == 0 && event.screenY == 0) return;
 
-		let mod = this.actor.system.modifiers.saveChecks?.total;
-		let roll = new Roll("1d20 + @mod", {mod: mod});
-		
-		await roll.evaluate({async: true});
-
-		return roll.toMessage({
-			speaker: ChatMessage.getSpeaker({
-				actor: this.actor
-			}),
-			flavor: "Rolling Save Check"
+		const statistic = new Statistic(this.actor, {
+			slug: "save-check",
+			label: game.i18n.format("PTU.SaveCheck", { name: this.actor.name, save: ""}),
+			check: { type: "save-check", domains: ["save-check"], modifiers: [] },
+			//dc: { modifiers: [], domains: ["save-dc"] },
+			domains: []
 		});
+		return await statistic.roll({skipDialog: false})
 	}
 
 	#onMoveRoll(event) {

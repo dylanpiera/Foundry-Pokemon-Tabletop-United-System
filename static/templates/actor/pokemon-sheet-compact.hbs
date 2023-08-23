@@ -383,13 +383,6 @@
                             "PTU.CapabilityOther") type="capability" items=capabilities}}
                         </div>
                     </div>
-                    <!-- Edges-->
-                    <div class="swsh-box w-100 mt-2 mb-2">
-                        <div class="swsh-body w-100" style="display: block;">
-                            {{> "systems/ptu/static/templates/partials/item-display-partial.hbs" title=(localize
-                            "ITEM.TypePokeedgePlural") type="pokeedge" items=edges}}
-                        </div>
-                    </div>
                 </div>
                 <div class="d-flex fb-48 skills">
                     <!-- Skills -->
@@ -435,7 +428,7 @@
                                 </div>
                                 <div class="skill {{key}} fb-20 align-self-center bgcolor center-text rollable center-self"
                                     data-roll="{{#if (is true (getGameSetting "ignoreVirtuosoLimit"))}}{{skill.value.total}}{{else}}{{#if (bigger skill.value.total 6)}}6{{else}}{{skill.value.total}}{{/if}}{{/if}}d6{{#if skill.modifier.total}}+{{skill.modifier.total}}{{/if}}"
-                                    data-label="{{skill.label}}">
+                                    data-skill="{{key}}">
                                     <i class="fas fa-dice-d20"></i>
                                     <label for="system.skills.{{key}}.value"
                                     class="resource-label">{{#if (is true (getGameSetting "ignoreVirtuosoLimit"))}}{{skill.value.total}}{{else}}{{#if (bigger skill.value.total 6)}}6{{else}}{{skill.value.total}}{{/if}}{{/if}}d6{{#if skill.modifier.total}}+{{skill.modifier.total}}{{/if}}</label>
@@ -709,25 +702,59 @@
                         </div>
 
                         <!-- Save Checks -->
-                            <div class="swsh-box mb-2">
-                                <div class="swsh-header ball-themes {{ballStyle}} highlight pt-2 pb-2 justify-content-center">
-                                    <b>{{localize "PTU.SaveCheckLabel"}}</b>
+                        <div class="swsh-box mb-2">
+                            <div class="swsh-header ball-themes {{ballStyle}} highlight pt-2 pb-2 justify-content-center">
+                                <b>{{localize "PTU.SaveCheckLabel"}}</b>
+                            </div>
+                            <div class="swsh-body justify-content-between align-items-center">
+                                <div class="fb-48 center-text">
+                                    {{> "systems/ptu/static/templates/partials/mod-field.hbs"
+                                        mod=actor.system.modifiers.saveChecks.mod
+                                        path="system.modifiers.saveChecks.value"
+                                        value=actor.system.modifiers.saveChecks.value
+                                        total=actor.system.modifiers.saveChecks.total
+                                        dtype="Number"
+                                        modOrigins=(getProperty actor.origins "system.modifiers.saveChecks.mod")}}
                                 </div>
-                                <div class="swsh-body justify-content-between align-items-center">
-                                    <div class="fb-48 center-text">
-                                        {{> "systems/ptu/static/templates/partials/mod-field.hbs"
-                                            mod=actor.system.modifiers.saveChecks.mod
-                                            path="system.modifiers.saveChecks.value"
-                                            value=actor.system.modifiers.saveChecks.value
-                                            total=actor.system.modifiers.saveChecks.total
-                                            dtype="Number"
-                                            modOrigins=(getProperty actor.origins "system.modifiers.saveChecks.mod")}}
-                                    </div>
-                                    <div class="fb-48">
-                                        <button class="btn rollable save">{{localize "PTU.SaveCheckAction"}}</button>
-                                    </div>
+                                <div class="fb-48">
+                                    <button class="btn rollable save">{{localize "PTU.SaveCheckAction"}}</button>
                                 </div>
                             </div>
+                        </div>
+
+                        <!-- Edges-->
+                        <div class="swsh-box w-100 mb-2">
+                            <!-- Tutor Points -->
+                                {{#if (is "true" (getGameSetting "useTutorPoints"))}}
+                                    <div class="swsh-header ball-themes {{ballStyle}} highlight pt-2 pb-2 justify-content-center">
+                                        <b class="m-auto">{{localize "PTU.TutorPoints"}}</b>
+                                    </div>
+                                    <div class="swsh-body tp-box">
+                                        <div class="d-flex flex-row justify-content-center w-100">
+                                            <input type="text" name="system.tp.value" value="{{actor.system.tp.value}}" data-dtype="Number" />
+                                            <span> / </span>
+                                            <input type="text" name="system.tp.max" value="{{actor.system.tp.max}}" data-dtype="Number" disabled />
+                                        </div>
+                                    </div>
+                                {{else}}
+                                    <div class="swsh-header ball-themes {{ballStyle}} highlight pt-2 pb-2 justify-content-center">
+                                        <b class="m-auto">{{localize "PTU.PokeedgePoints"}}</b>
+                                    </div>
+                                    <div class="swsh-body tp-box">
+                                        <div class="d-flex flex-row justify-content-center w-100">
+                                            <input type="text" {{#if (gt actor.system.tp.pep.value actor.system.tp.pep.max)}}class="error-text" {{/if}}
+                                                name="system.tp.pep.value" value="{{actor.system.tp.pep.value}}" data-dtype="Number" disabled />
+                                            <span> / </span>
+                                            <input type="text" name="system.tp.pep.max" value="{{actor.system.tp.pep.max}}" data-dtype="Number"
+                                                disabled />
+                                        </div>
+                                    </div>
+                                {{/if}}
+                            <div class="swsh-body w-100" style="display: block;">
+                                {{> "systems/ptu/static/templates/partials/item-display-partial.hbs" title=(localize
+                                "ITEM.TypePokeedgePlural") type="pokeedge" items=edges}}
+                            </div>
+                        </div>
 
                         <!-- Abilities -->
                         {{!-- <div class="swsh-box abilities mb-2 w-100">

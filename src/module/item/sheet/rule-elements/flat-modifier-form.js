@@ -117,7 +117,7 @@ class FlatModifierForm extends RuleElementForm {
         }
 
         // Remove empty string, null, or falsy values for certain optional parameters
-        for (const optional of ["label", "hideIfDisabled"]) {
+        for (const optional of ["label"]) {
             if (!formData[optional]) {
                 delete formData[optional];
             }

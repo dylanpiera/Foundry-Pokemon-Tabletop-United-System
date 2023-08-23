@@ -74,8 +74,9 @@ export class CheckModifiersDialog extends Application {
             });
         }
 
-        for (const checkbox of $html.find(".modifier-container input[type=checkbox]")) {
-            checkbox.addEventListener("click", () => {
+        for (const checkbox of $html.find(".dialog-row input[type=checkbox]")) {
+            checkbox.addEventListener("click", (event) => {
+                const checkbox = event.currentTarget;
                 const index = Number(checkbox.dataset.modifierIndex);
                 this.check.modifiers[index].ignored = !checkbox.checked;
                 this.check.calculateTotal();

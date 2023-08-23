@@ -1,11 +1,12 @@
 import { AttackRoll } from "./attack/attack-roll.js";
 import { CaptureRoll } from "./capture-roll.js";
 import { CheckModifiersDialog } from "./dialog.js";
+import { CheckDiceModifiersDialog } from "./diceDialog.js";
 import { InitiativeRoll } from "./initiative-roll.js";
 import { CheckRoll } from "./roll.js";
 
 class PTUCheck {
-    static async roll(check, context, event, callback) {
+    static async roll(check, context, event, callback, diceStatistic = null) {
         if (event) mergeObject(context, eventToRollParams(event));
 
         context.skipDialog ??= game.settings.get("ptu", "skipRollDialog");
@@ -23,6 +24,13 @@ class PTUCheck {
 
         context.title ??= `${context.item?.name}: Attack Roll` ?? check.slug;
 
+        if (!context.skipDialog && diceStatistic) {
+            const dialogClosed = new Promise((resolve) => {
+                new CheckDiceModifiersDialog(diceStatistic, resolve, context).render(true);
+            });
+            const rolled = await dialogClosed;
+            if (!rolled) return null;
+        }
         if (!context.skipDialog) {
             const dialogClosed = new Promise((resolve) => {
                 new CheckModifiersDialog(check, resolve, context).render(true);
@@ -31,6 +39,7 @@ class PTUCheck {
             if (!rolled) return null;
         }
 
+
         const isReroll = context.isReroll ?? false;
         if (isReroll) context.rollTwice = false;
         const substitutions = context.substitutions ?? [];
@@ -38,6 +47,14 @@ class PTUCheck {
 
         const [dice, tagsFromDice] = (() => {
             const substitutions = context.substitutions?.filter((s) => (!s.ignored && s.predicate?.test(rollOptions)) ?? true) ?? [];
+
+            if(diceStatistic) {
+                const isOverwrite = context.type === "skill-check";
+                if(isOverwrite) {
+                    return [diceStatistic.totalModifier, [`${diceStatistic.label}: ${diceStatistic.totalModifier}`]];
+                }
+            }
+
             const rollTwice = context.rollTwice ?? false;
 
             const fortuneMisfortune = new Set(
@@ -73,11 +90,12 @@ class PTUCheck {
 
         const isAttack = context.type === "attack-roll";
         const RollCls = (() => {
-            switch(context.type) {
+            switch (context.type) {
                 case "attack-roll": return AttackRoll;
                 case "capture-throw": return CheckRoll;
                 case "capture-calculation": return CaptureRoll;
                 case "initiative": return InitiativeRoll;
+                case "skill-check": return CheckRoll;
                 default: return CheckRoll;
             }
         })();
@@ -117,33 +135,35 @@ class PTUCheck {
             isReroll,
             totalModifiers: check.totalModifiers,
             domains: context.domains,
-            targets: (context.targets ?? []).map(target => ({...target, dc: (() => {
-                if(!target.dc) return null;
-                return {
-                    value: Math.abs(target.dc.value) === Infinity ? ""+target.dc.value : target.dc.value,
-                    flat: target.dc.flat,
-                    slug: target.dc.slug
-                }
-            })()}))
+            targets: (context.targets ?? []).map(target => ({
+                ...target, dc: (() => {
+                    if (!target.dc) return null;
+                    return {
+                        value: Math.abs(target.dc.value) === Infinity ? "" + target.dc.value : target.dc.value,
+                        flat: target.dc.flat,
+                        slug: target.dc.slug
+                    }
+                })()
+            }))
         };
         if (attack) options.attack = attack;
-        
+
         const isInfinity = check.totalModifier === Infinity;
         const totalModifiersPart = check.totalModifier?.signedString() ?? "";
         options.modifierPart = totalModifiersPart;
-        
+
         if (context.captureModifier) {
             options.captureModifier = context.captureModifier;
             options.checkModifier = totalModifiersPart;
         }
 
-        const roll = await new RollCls(`${dice}${isInfinity ? "" :totalModifiersPart}`, {}, options).evaluate({ async: true });
+        const roll = await new RollCls(`${dice}${isInfinity ? "" : totalModifiersPart}`, {}, options).evaluate({ async: true });
 
-        for(const target of context.targets ?? []) {
+        for (const target of context.targets ?? []) {
             const [success, degree] = target.dc ? (() => {
                 const critModifier = (() => {
                     const actor = context.actor;
-                    if(!actor) return 0;
+                    if (!actor) return 0;
 
                     return actor.system.modifiers?.critRange?.total ?? 0;
                 })();
@@ -156,21 +176,21 @@ class PTUCheck {
                 const total = roll.total;
                 const dc = target.dc;
 
-                if(roll instanceof CaptureRoll) {
-                    if(result === 1 || result === 100) return [true, "crit-hit"];
-                    if(total <= dc.value) return [true, "hit"];
+                if (roll instanceof CaptureRoll) {
+                    if (result === 1 || result === 100) return [true, "crit-hit"];
+                    if (total <= dc.value) return [true, "hit"];
                     return [false, "miss"];
                 }
 
-                if(dc.flat) {
-                    if(total >= dc.value) return [true, "hit"];
+                if (dc.flat) {
+                    if (total >= dc.value) return [true, "hit"];
                     return [false, "miss"];
                 }
 
                 if (result === 1 && !isInfinity) return [false, "crit-miss"];
                 if (result > 20 - critModifier) {
                     // If target is immune to crit; return hit
-                    if(target.options.has("target:immune:crit")) return [true, "blocked-crit"];
+                    if (target.options.has("target:immune:crit")) return [true, "blocked-crit"];
 
                     return [true, "crit-hit"];
                 }
@@ -178,19 +198,19 @@ class PTUCheck {
                 return [false, "miss"];
             })() : [null, null];
 
-            if(context.dc && success === null && degree === null) {
+            if (context.dc && success === null && degree === null) {
                 const result = roll.total;
                 const dc = context.dc.value;
 
-                if(result >= dc) {
+                if (result >= dc) {
                     target.outcome = "hit";
-                    if(!roll.options.outcome) roll.options.outcome = {};
+                    if (!roll.options.outcome) roll.options.outcome = {};
                     roll.options.outcome[target.actor?._id] = "hit";
                 }
-            } 
+            }
             else if (success !== null) {
                 target.outcome = degree;
-                if(!roll.options.outcome) roll.options.outcome = {};
+                if (!roll.options.outcome) roll.options.outcome = {};
                 roll.options.outcome[target.actor?._id] = degree;
             }
         }
@@ -201,7 +221,7 @@ class PTUCheck {
             const result = undefined;// await this.createResultFlavor({ dc: context.dc, success, target: context.targets ?? null });
             const tags = this.createTagFlavor({ check, context, extraTags })
             const typeAndCategoryHeader = (() => {
-                if(!item || !isAttack) return null;
+                if (!item || !isAttack) return null;
 
                 const header = document.createElement("div");
                 header.classList.add("header-bar");
@@ -379,7 +399,9 @@ class PTUCheck {
         const modifiersAndExtras = document.createElement("div");
         modifiersAndExtras.classList.add("header-bar");
         modifiersAndExtras.classList.add("tags");
-        modifiersAndExtras.append(...modifiers, ...tagsFromOptions);
+        if (modifiers?.length + tagsFromOptions?.length === 0) return [];
+        if(context.type === "skill-check") modifiersAndExtras.append(...tagsFromOptions, ...modifiers);
+        else modifiersAndExtras.append(...modifiers, ...tagsFromOptions);
 
         return [modifiersAndExtras];
     }
@@ -402,3 +424,5 @@ function isRelevantEvent(event) {
 }
 
 export { PTUCheck, eventToRollParams }
+
+globalThis.calculate = PTUCheck.calculate;

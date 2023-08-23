@@ -1,0 +1,42 @@
+<div class="dice-shadow d-flex">
+    {{#if item.system.effect}}
+        <div class="item-to-chat effect">
+            <span>{{item.system.effect}}</span>
+        </div>
+    {{else}}
+        <div class="item-to-chat">
+            <span class="small">No effect was provided</span>
+        </div>
+    {{/if}}
+</div>
+{{#unless (is tags.length 0)}}
+    <div class="dice-shadow">
+        <div class="flavor-text footer">
+            <div class="tags">
+                {{#each tags as |tag|}}
+                    {{#unless (is tag.slug "effect")}}
+                        {{#if (is tag.slug "range")}}
+                            {{#each (split tag.value ",") as | range |}}
+                                {{#if (helpText range)}}
+                                    <div class="tag tooltip ball-themes gradient default range" title="{{helpText range}}">
+                                        <span>{{#if (isNumber range)}}Range {{/if}}{{range}}</span>
+                                    </div>
+                                {{else}}
+                                    <div class="tag ball-themes gradient default range">
+                                        <span>{{range}}</span>
+                                    </div>
+                                {{/if}}
+                            {{/each}}
+                        {{else}}
+                            {{#if (helpText tag.value)}}
+                                <div class="tag tooltip ball-themes gradient default {{tag.slug}}" title="{{helpText tag.value}}"><span>{{#if (is tag.slug "frequency")}}{{tag.value}}{{else}}{{tag.label}}{{/if}}</span></div>
+                            {{else}}
+                                <div class="tag {{#if (or (is tag.slug "effect") (is tag.slug "db"))}}tooltip{{/if}} ball-themes gradient default {{tag.slug}}" {{#if (or (is tag.slug "effect") (is tag.slug "db"))}}title="{{tag.value}}"{{/if}}><span>{{#if (is tag.slug "frequency")}}{{tag.value}}{{else}}{{tag.label}}{{/if}}</span></div>
+                            {{/if}}
+                        {{/if}}
+                    {{/unless}}
+                {{/each}}
+            </div>
+        </div>
+    </div>
+{{/unless}}

@@ -495,7 +495,8 @@
     "Tags": {
       "Effect": "Effect",
       "Frequency": "Frequency",
-      "Range": "Range"
+      "Range": "Range",
+      "DB": "Damage Base"
     },
 
     "Applicators": {
@@ -638,6 +639,12 @@
         "ReevaluateOnUpdate": "Reevaluate on Update",
         "ReplaceSelf": "Replace Self"
       }
+    },
+    "Check": {
+      "Check": "Check",
+      "SkillCheck": "{skill} Check",
+      "SkillMod": "Skill Mod",
+      "SkillDice": "Skill Rank"
     }
   },
 

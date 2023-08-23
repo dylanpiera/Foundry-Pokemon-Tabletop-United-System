@@ -154,6 +154,10 @@ a.content-link img {
 .chat-message.message:not(.attack-roll, .attack-selector) .dice-roll {
   padding: 5px;
 }
+.chat-message.message .item-to-chat {
+  padding: 0.2rem 0.2rem 0.2rem 0.4rem;
+  word-wrap: break-word;
+}
 .chat-message.message .flavor-text {
   display: flex;
   flex-direction: column;
@@ -169,18 +173,23 @@ a.content-link img {
   justify-content: center;
   max-width: 100%;
   overflow: hidden;
+  position: relative;
+}
+.chat-message.message .flavor-text .header-bar:has(.item-icon) .action {
+  text-align: left;
 }
 .chat-message.message .flavor-text .header-bar .action {
+  flex-grow: 1;
   padding: 0.5rem 0;
-  margin: 0 0.25rem;
-  font-size: 32px;
+  margin: 0;
+  font-size: 28px;
   font-weight: bolder;
   color: white;
   overflow-wrap: normal;
   word-break: keep-all;
   border: unset;
   text-align: center;
-  line-height: 34px;
+  line-height: 31px;
 }
 .chat-message.message .flavor-text .header-bar .action.sub-action {
   font-size: 22px;
@@ -280,6 +289,11 @@ a.content-link img {
   box-shadow: unset;
   border: 1px inset #93c47daa;
 }
+.chat-message.message .flavor-text.footer .tags .tag.db {
+  background: #b27d94 !important;
+  box-shadow: unset;
+  border: 1px inset #b27d94;
+}
 .chat-message.message .flavor-text.footer .effect {
   margin: 0.5rem 0.25rem 0 0.25rem;
   padding: 0.15rem;
@@ -305,6 +319,18 @@ a.content-link img {
 .chat-message.message .flavor-text.footer .buttons .damage {
   flex-basis: 50%;
 }
+.chat-message.message .flavor-text:has(.item-to-chat) {
+  padding: 0.25rem;
+}
+.chat-message.message .item-icon {
+  height: 40px;
+  width: 40px;
+  object-fit: contain;
+  border: unset;
+  align-self: center;
+  margin: 0 0.5rem 0 0.25rem;
+  flex: 0 0 40px;
+}
 .chat-message.message .dice-shadow {
   border: #000 solid 1px;
   box-shadow: 0 0 4px 1px #000;
@@ -315,6 +341,16 @@ a.content-link img {
 }
 .chat-message.message .dice-shadow .crit.hidden {
   display: none;
+}
+.chat-message.message .dice-shadow .item-to-chat {
+  display: flex;
+}
+.chat-message.message .dice-shadow .item-to-chat span {
+  align-self: center;
+}
+.chat-message.message .dice-shadow .item-to-chat span.small {
+  font-size: 12px;
+  font-style: italic;
 }
 .chat-message.message .attack-roll,
 .chat-message.message .attack-selector {
@@ -878,6 +914,18 @@ a.content-link img {
 }
 .ptu.sheet.gen8.actor.compact main.sheet-body .effects .swsh-body {
   display: block;
+}
+.ptu.sheet.gen8.actor.compact main.sheet-body .tp-box {
+  padding-top: 0.25rem;
+  text-align: center;
+  align-items: center;
+}
+.ptu.sheet.gen8.actor.compact main.sheet-body .tp-box span {
+  align-self: center;
+  padding: 0 0.5rem;
+}
+.ptu.sheet.gen8.actor.compact main.sheet-body .tp-box input {
+  flex: 0 0 50px;
 }
 .ptu.sheet.gen8.actor section {
   padding: unset;

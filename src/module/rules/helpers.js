@@ -19,6 +19,16 @@ function extractModifierAdjustments(
     return adjustments.filter((a) => [slug, null].includes(a.slug));
 }
 
+function extractNotes(rollNotes, selectors) {
+    return selectors.flatMap(s => (rollNotes[s] ?? []).map(n => n.clone()));
+}
+
+function extractDamageDice(deferredDice, selectors, options = {}) {
+    return selectors
+        .flatMap(s => deferredDice[s] ?? [])
+        .flatMap(d => d(options) ?? []);
+}
+
 async function extractEphemeralEffects({ affects, origin, target, item, domains, options }) {
     if (!(origin && target)) return [];
 
@@ -70,4 +80,11 @@ async function processPreUpdateActorHooks(changed,{ pack }){
     await actor.deleteEmbeddedDocuments("Item", createDeletes.delete, { render: false });
 }
 
-export { extractEphemeralEffects, extractRollSubstitutions, extractModifiers, processPreUpdateActorHooks}
+export { extractEphemeralEffects, extractDamageDice, extractNotes, extractModifierAdjustments, extractRollSubstitutions, extractModifiers, processPreUpdateActorHooks}
+
+globalThis.extractEphemeralEffects = extractEphemeralEffects;
+globalThis.extractDamageDice = extractDamageDice;
+globalThis.extractNotes = extractNotes;
+globalThis.extractModifierAdjustments = extractModifierAdjustments;
+globalThis.extractRollSubstitutions = extractRollSubstitutions;
+globalThis.extractModifiers = extractModifiers;

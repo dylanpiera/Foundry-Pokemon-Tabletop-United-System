@@ -30,7 +30,7 @@ class PTUTrainerActor extends PTUActor {
             system.skills[novice].value.mod += 1;
         }
 
-        system.level.dexexp = game.settings.get("ptu", "useDexExp") ? (this.system.dex?.owned?.length || 0) : 0;
+        system.level.dexexp = game.settings.get("ptu", "useDexExp") == false ? (this.system.dex?.owned?.length || 0) : 0;
         system.level.current =
             Math.clamped(
                 1,
@@ -49,6 +49,7 @@ class PTUTrainerActor extends PTUActor {
             // ),
             level: { current: system.level.current },
             health: { current: system.health.value },
+            skills: {}
         }
     }
 
@@ -57,9 +58,6 @@ class PTUTrainerActor extends PTUActor {
         super.prepareDerivedData()
 
         const system = this.system;
-
-        const dexExpEnabled = "true" == game.settings.get("ptu", "useDexExp") ?? false;
-
         // Prepare data with Mods.
 
         // Prepare data with Mods
@@ -83,6 +81,7 @@ class PTUTrainerActor extends PTUActor {
             skill["value"]["total"] = skill["value"]["value"] + skill["value"]["mod"];
             skill["rank"] = PTUSkills.getRankSlug(skill["value"]["total"]);
             skill["modifier"]["total"] = skill["modifier"]["value"] + skill["modifier"]["mod"] + (system.modifiers.skillBonus?.total ?? 0);
+            this.attributes.skills[key] = PTUSkills.calculate({actor: this, context: {skill: key, options: []}});
         }
 
         // Prepare flat modifiers

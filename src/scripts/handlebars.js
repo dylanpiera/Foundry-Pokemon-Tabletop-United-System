@@ -262,6 +262,10 @@ function _registerPTUHelpers() {
             return CONFIG.PTU.data.helpText["Target"](item.toString().split(" ")[0]);
         }
 
+        if (item.toString().match(/^[0-9]+\sDB$/) != null) {
+            return CONFIG.PTU.data.helpText["DamageBase"](item.toString().split(" ")[0]);
+        }
+
         return CONFIG.PTU.data.helpText[item];
     });
 

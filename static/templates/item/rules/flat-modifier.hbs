@@ -2,10 +2,10 @@
     <label class="short">{{localize "PTU.RuleEditor.General.Label"}}</label>
     <div class="spaced-fields details-container-flex-row">
         <input type="text" name="system.rules.{{index}}.label" value="{{rule.label}}" {{#unless rule.label}}placeholder="{{object.data.label}}"{{/unless}} />
-        {{!-- <label>
+        <label>
             {{localize "PTU.RuleEditor.FlatModifier.HideIfDisabled"}}
             <input type="checkbox" name="system.rules.{{index}}.hideIfDisabled" {{checked rule.hideIfDisabled}}>
-        </label> --}}
+        </label>
     </div>
 </div>
 

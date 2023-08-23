@@ -1,5 +1,5 @@
 import { isObject } from '../../../util/misc.js';
-import { CheckModifier, StatisticModifier } from '../../actor/modifiers.js';
+import { CheckModifier, StatisticDiceModifier, StatisticModifier } from '../../actor/modifiers.js';
 import { extractModifiers, extractRollSubstitutions } from '../../rules/helpers.js';
 import { PTUCheck, eventToRollParams } from '../check/check.js';
 
@@ -56,6 +56,7 @@ class Statistic extends SimpleStatistic {
     constructor(actor, data, options = {}) {
         data.modifiers ??= [];
         super(actor, data);
+
 
         this.options = options;
         if (data.filter) {
@@ -214,6 +215,7 @@ class StatisticCheck {
             data.check?.domains ? extractModifiers(parent.actor.synthetics, data.check.domains) : []
         ].flat();
         this.modifiers = allCheckModifiers.map(m => m.clone({test: rollOptions}));
+        this.diceModifiers = data.check?.diceModifiers ?? [];
         this.mod = new StatisticModifier(this.label, this.modifiers, rollOptions).totalModifier
     }
 
@@ -282,7 +284,7 @@ class StatisticCheck {
         const dc = args.dc ?? rollContext?.dc ?? null;
 
         for(const rule of actor.rules.filter(r => !r.ignored)) {
-            rule.beforeRoll?.(domains, options);
+            rule.beforeRoll?.(domains, {options: options});
         }
 
         const context = {
@@ -305,7 +307,8 @@ class StatisticCheck {
             new CheckModifier(args.label || this.label, {modifiers: this.modifiers}, extraModifiers),
             context,
             null,
-            args.callback
+            args.callback,
+            new StatisticDiceModifier(args.label || this.label, this.diceModifiers, options)
         )
 
         for(const rule of actor.rules.filter(r => !r.ignored)) {
