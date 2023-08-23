@@ -217,6 +217,7 @@ class StatisticCheck {
         this.modifiers = allCheckModifiers.map(m => m.clone({test: rollOptions}));
         this.diceModifiers = data.check?.diceModifiers ?? [];
         this.mod = new StatisticModifier(this.label, this.modifiers, rollOptions).totalModifier
+        this.extraRollOptions = options.extraRollOptions ?? [];
     }
 
     /**
@@ -273,7 +274,7 @@ class StatisticCheck {
                 statistic: this,
                 target: targetToken,
                 targetDC: args.dc?.slug ?? "evasion",
-                options: new Set(),
+                options: new Set(this.extraRollOptions),
             })
         })()
 

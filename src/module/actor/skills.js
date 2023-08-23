@@ -32,6 +32,10 @@ class PTUSkills {
         const resolvables = { item, actor };
         const injectables = resolvables;
 
+        if(skill) {
+            options.push(`skill:${skill}`, `skill:${sluggify(actor.system.skills[skill].rank)}`)
+        }
+
         const fromSelectors = extractModifiers(actor.synthetics, baseDomains, { injectables, resolvables });
         const modifiers = fromSelectors
             .flatMap(modifier => {
@@ -41,8 +45,7 @@ class PTUSkills {
         const selectors = (() => {
             const selectors = [...baseDomains];
             if (skill) {
-                const rank = sluggify(actor.system.skills[skill].rank)
-                selectors.push(`skill:${skill}`, `skill:${rank}`);
+                selectors.push('skill-check');
             }
             return selectors;
         })();
@@ -78,6 +81,8 @@ class PTUSkills {
             options: [...options],
             domains: [],
             notes
+        }, {
+            extraRollOptions: [...options]
         })
 
         return testedModifier
