@@ -1,17 +1,14 @@
-2023/08/20-17:54:21.908 11f6c Recovering log #200
-2023/08/20-17:54:21.908 11f6c Level-0 table #202: started
-2023/08/20-17:54:21.913 11f6c Level-0 table #202: 736 bytes OK
-2023/08/20-17:54:21.918 11f6c Delete type=0 #200
-2023/08/20-17:54:21.919 11f6c Delete type=3 #199
-2023/08/26-17:09:43.346 11e04 Level-0 table #205: started
-2023/08/26-17:09:43.351 11e04 Level-0 table #205: 257783 bytes OK
-2023/08/26-17:09:43.352 11e04 Delete type=0 #203
-2023/08/26-17:09:43.360 11e04 Manual compaction at level-0 from '!folders!rmoa0NFMp7Td9R3R' @ 72057594037927935 : 1 .. '!items!ztjoTjB46kPDTEfV' @ 0 : 0; will stop at '!items!YF6nPyAUJhTgdRkW' @ 527 : 1
-2023/08/26-17:09:43.360 11e04 Compacting 2@0 + 1@1 files
-2023/08/26-17:09:43.363 11e04 Generated table #206@0: 569 keys, 172252 bytes
-2023/08/26-17:09:43.364 11e04 Compacted 2@0 + 1@1 files => 172252 bytes
-2023/08/26-17:09:43.365 11e04 compacted to: files[ 0 1 0 0 0 0 0 ]
-2023/08/26-17:09:43.365 11e04 Delete type=2 #194
-2023/08/26-17:09:43.365 11e04 Delete type=2 #202
-2023/08/26-17:09:43.365 11e04 Delete type=2 #205
-2023/08/26-17:09:43.379 11e04 Manual compaction at level-0 from '!items!YF6nPyAUJhTgdRkW' @ 527 : 1 .. '!items!ztjoTjB46kPDTEfV' @ 0 : 0; will stop at (end)
+2023/08/26-17:10:56.702 3cb8 Recovering log #204
+2023/08/26-17:10:56.710 3cb8 Delete type=0 #204
+2023/08/26-17:10:56.710 3cb8 Delete type=3 #201
+2023/08/27-09:25:14.603 10110 Level-0 table #210: started
+2023/08/27-09:25:14.604 10110 Level-0 table #210: 2386 bytes OK
+2023/08/27-09:25:14.606 10110 Delete type=0 #208
+2023/08/27-09:25:14.609 10110 Manual compaction at level-0 from '!folders!rmoa0NFMp7Td9R3R' @ 72057594037927935 : 1 .. '!items!ztjoTjB46kPDTEfV' @ 0 : 0; will stop at '!items!yuAHTkC3WhqTqR9r' @ 2070 : 1
+2023/08/27-09:25:14.609 10110 Compacting 1@0 + 1@1 files
+2023/08/27-09:25:14.613 10110 Generated table #211@0: 576 keys, 175042 bytes
+2023/08/27-09:25:14.613 10110 Compacted 1@0 + 1@1 files => 175042 bytes
+2023/08/27-09:25:14.614 10110 compacted to: files[ 0 1 0 0 0 0 0 ]
+2023/08/27-09:25:14.614 10110 Delete type=2 #206
+2023/08/27-09:25:14.614 10110 Delete type=2 #210
+2023/08/27-09:25:14.626 10110 Manual compaction at level-0 from '!items!yuAHTkC3WhqTqR9r' @ 2070 : 1 .. '!items!ztjoTjB46kPDTEfV' @ 0 : 0; will stop at (end)
