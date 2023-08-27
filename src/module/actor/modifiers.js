@@ -307,7 +307,7 @@ class PTUDiceModifier {
     }
 
     get signedValue() {
-        return `${this.kind === "bonus" ? "+" : "-"}${this.value}`;
+        return `${this.kind === "bonus" ? "+" : ""}${this.value}`;
     }
 
     getRollOptions() {
@@ -373,6 +373,13 @@ class StatisticDiceModifier {
         return game.i18n.localize(this.slug);
     }
 
+    get tags() {
+        // const allLabelsAreEqual = this._modifiers.every((obj, _, arr) => obj.label === arr[0].label);
+        // if(allLabelsAreEqual) return [`${this.label}: ${this.totalModifier}`];
+
+        return this._modifiers.map(m => `${m.label} ${m.signedValue}`);
+    }
+
     push(modifier) {
         if(this._modifiers.find(m => m.slug === modifier.slug) === undefined) {
             this._modifiers.push(modifier);
@@ -419,13 +426,13 @@ class StatisticDiceModifier {
         }
 
         const terms = this._modifiers.filter(m => m.enabled)
-            // .reduce((total, mod) => {
-            //     total[mod.dieSize] = { 
-            //         dieSize: mod.dieSize,
-            //         diceNumber: (total[mod.dieSize]?.diceNumber ?? 0) + mod.diceNumber
-            //     }
-            //     return total;
-            // }, [])
+            .reduce((total, mod) => {
+                total[mod.dieSize] = { 
+                    dieSize: mod.dieSize,
+                    diceNumber: (total[mod.dieSize]?.diceNumber ?? 0) + mod.diceNumber
+                }
+                return total;
+            }, [])
             .flatMap(mod => ({...mod, string: `${mod.diceNumber}d${mod.dieSize}`}));
 
         this.totalModifier = terms.map(t => t.string).join(" + ");

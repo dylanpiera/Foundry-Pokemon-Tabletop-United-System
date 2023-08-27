@@ -155,12 +155,12 @@
             </div>
             <div class="item-row">
                 <label for="system.ac">{{localize "ITEM.AC"}}</label>
-                <input class="ml-1 mr-1" name="system.ac" type="number" value="{{item.system.ac}}" placeholder="0"/>
+                <input class="ml-1 mr-1" name="system.ac" type="text" value="{{item.system.ac}}" placeholder="0"/>
             </div>
             {{#unless (is item.system.category "Status")}}
             <div class="item-row">
                 <label for="system.damageBase">{{localize "ITEM.DB"}}</label>
-                <input class="ml-1 mr-1" name="system.damageBase" type="number" value="{{item.system.damageBase}}" placeholder="0"/>
+                <input class="ml-1 mr-1" name="system.damageBase" type="text" value="{{item.system.damageBase}}" placeholder="0"/>
             </div>
             <div class="item-row">
                 <label for="system.damageBonus">{{localize "ITEM.DamageBonus"}}</label>
@@ -178,10 +178,6 @@
             <div class="item-row">
                 <label for="system.effect">{{localize "ITEM.Effect"}}</label>
                 <textarea class="ml-1 mr-1" name="system.effect">{{item.system.effect}}</textarea>
-            </div>
-            <div class="item-row" style="justify-content: flex-start;">
-                <label for="system.free">{{localize "ITEM.FreeFeat"}}</label>
-                <input class="ml-1 mr-1" data-item-id="{{_id}}" data-binding="system.free" type="checkbox" {{checked item.system.free}}/>
             </div>
         </div>
         <div class="tab rules h-100" data-group="primary" data-tab="rules">

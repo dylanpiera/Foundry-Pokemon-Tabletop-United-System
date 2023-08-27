@@ -51,7 +51,7 @@ class PTUCheck {
             if(diceStatistic) {
                 const isOverwrite = context.type === "skill-check";
                 if(isOverwrite) {
-                    return [diceStatistic.totalModifier, [`${diceStatistic.label}: ${diceStatistic.totalModifier}`]];
+                    return [diceStatistic.totalModifier, diceStatistic.tags];
                 }
             }
 

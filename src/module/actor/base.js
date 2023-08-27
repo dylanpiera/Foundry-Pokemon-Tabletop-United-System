@@ -808,7 +808,8 @@ class PTUActor extends Actor {
             });
 
             if (this.types.includes(move.system.type)) {
-                clone = move.clone({ "system.damageBase": move.system.damageBase + 2 }, { keepId: true });
+                const db = isNaN(Number(move.system.damageBase)) ? 0 : Number(move.system.damageBase);
+                clone = move.clone({ "system.damageBase": db + 2 }, { keepId: true });
             }
             else clone = move.clone({}, { keepId: true });
 
