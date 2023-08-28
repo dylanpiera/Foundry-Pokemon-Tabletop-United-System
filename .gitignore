@@ -11,5 +11,8 @@ foundry.js
 system.zip
 foundry-0.8.3.js
 
-/packs/**/_source
+/packs/**/_source/*
+/packs/*.json
+/packs/.gitignore
+/packs/README.md
 app/
