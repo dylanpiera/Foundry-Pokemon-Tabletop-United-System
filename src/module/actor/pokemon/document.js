@@ -278,7 +278,7 @@ class PTUPokemonActor extends PTUActor {
         const leftoverLevelUpPoints = system.levelUpPoints - Object.values(system.stats).reduce((a, v) => v.levelUp + a, 0);
         const actualLevel = Math.max(1, system.level.current - Math.max(0, Math.clamped(0, leftoverLevelUpPoints, leftoverLevelUpPoints - system.modifiers.statPoints.total ?? 0)));
 
-        const result = game.settings.get("ptu", "playtestStats") ?
+        const result = true ?
             calculatePTStatTotal(system.levelUpPoints, actualLevel, system.stats, { twistedPower: this.items.find(x => x.name.toLowerCase().replace("[playtest]") == "twisted power") != null }, system.nature.value, false) :
             calculateOldStatTotal(system.levelUpPoints, system.stats, { twistedPower: this.items.find(x => x.name.toLowerCase().replace("[playtest]") == "twisted power") != null });
         system.stats = result.stats;

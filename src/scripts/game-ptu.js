@@ -7,6 +7,8 @@ import { EffectTracker } from "../module/system/effect-tracker.js"
 import { getSpeciesData } from "../module/system/index.js"
 import { findItemInCompendium, querySpeciesCompendium } from "../util/misc.js"
 import { resolveInjectedProperties, resolveValue } from "../util/value-resolver.js"
+import { pokedex } from "./macros/pokedex.js"
+import { changeRotomForm } from "./macros/rotom-form-change.js"
 
 const GamePTU = {
     onInit() {
@@ -32,6 +34,10 @@ const GamePTU = {
                 MigrationList,
                 MigrationRunner,
                 MigrationSummary
+            },
+            macros: {
+                changeRotomForm,
+                pokedex
             }
         }
 

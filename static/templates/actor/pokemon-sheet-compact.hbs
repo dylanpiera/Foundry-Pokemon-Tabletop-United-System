@@ -357,25 +357,30 @@
                         <div class="swsh-body flex-row w-100 align-items-center" style="white-space: nowrap;">
                             {{#each actor.system.capabilities as |capability key|}}
                                 {{#if (and (not key "Other") (not key "other"))}}
-                                    {{#if (or (is key "Naturewalk") (is key "naturewalk"))}}
-                                        <div class="fb-100 d-flex flex-row align-items-center">
-                                            <div class="fb-35">
-                                                <label class="pl-1" for="system.capabilities.{{key}}">{{key}}</label>
-                                            </div>
-                                            <div class="fb-65 p-1">
-                                                <input type="text" name="system.capabilities.{{key}}" value="{{capability}}" disabled />
-                                            </div>
-                                        </div>
-                                    {{else}}
+                                    {{#unless (or (is key "Naturewalk") (is key "naturewalk"))}}
                                         <div class="fb-35">
-                                            <label class="pl-1" for="system.capabilities.{{key}}">{{key}}</label>
+                                            <label class="pl-1" for="system.capabilities.{{key}}">{{localize key}}</label>
                                         </div>
                                         <div class="fb-15 p-1 center-text">
                                             <input type="number" name="system.capabilities.{{key}}" value="{{capability}}" disabled />
                                         </div>
-                                    {{/if}}
+                                    {{/unless}}
                                 {{/if}}
                             {{/each}}
+                            <div class="fb-35">
+                                <label class="pl-1" for="system.size.weightClass">{{localize "weightClass"}}</label>
+                            </div>
+                            <div class="fb-15 p-1 center-text">
+                                <input type="number" name="system.size.weightClass" value="{{actor.species.system.size.weightClass}}" disabled />
+                            </div>
+                            <div class="fb-100 d-flex flex-row align-items-center">
+                                <div class="fb-35">
+                                    <label class="pl-1" for="system.capabilities.naturewalk">{{localize "naturewalk"}}</label>
+                                </div>
+                                <div class="fb-65 p-1">
+                                    <input type="text" name="system.capabilities.naturewalk" value="{{actor.system.capabilities.naturewalk}}" disabled />
+                                </div>
+                            </div>
                         </div>
                         <!-- Other Capabilities -->
                         <div class="swsh-body w-100 mt-2" style="display: block;">

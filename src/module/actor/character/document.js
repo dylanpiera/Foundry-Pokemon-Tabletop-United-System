@@ -30,7 +30,7 @@ class PTUTrainerActor extends PTUActor {
             system.skills[novice].value.mod += 1;
         }
 
-        system.level.dexexp = game.settings.get("ptu", "useDexExp") == false ? (this.system.dex?.owned?.length || 0) : 0;
+        system.level.dexexp = game.settings.get("ptu", "useDexExp") == true ? (this.system.dex?.owned?.length || 0) : 0;
         system.level.current =
             Math.clamped(
                 1,
@@ -124,7 +124,7 @@ class PTUTrainerActor extends PTUActor {
         system.stats.spd.base = 5
         system.stats.spd.value = system.modifiers.baseStats.spd.total + system.stats.spd.base;
 
-        var result = game.settings.get("ptu", "playtestStats") ?
+        var result = true ?
             calculatePTStatTotal(system.levelUpPoints, actualLevel, system.stats, { twistedPower: this.items.find(x => x.name.toLowerCase().replace("[playtest]") == "twisted power") != null }, system.nature?.value, true) :
             calculateOldStatTotal(system.levelUpPoints, system.stats, { twistedPower: this.items.find(x => x.name.toLowerCase().replace("[playtest]") == "twisted power") != null });
         system.stats = result.stats;

@@ -7,7 +7,7 @@
     "verified": "11.308",
     "maximum": 11
   },
-  "version": "4.0.0.alpha.14",
+  "version": "4.0.0.alpha.15",
   "templateVersion": 2,
   "authors": [
     {
@@ -111,14 +111,20 @@
       "type": "Item",
       "name": "effects",
       "path": "packs/effects.db",
-      "system": "ptr"
+      "system": "ptu"
     },
     {
       "label": "species",
       "type": "Item",
       "name": "species",
       "path": "packs/species.db",
-      "system": "ptr"
+      "system": "ptu"
+    }, 
+    {
+      "label": "macros",
+      "type": "Macro",
+      "name": "macros",
+      "system": "ptu"
     }
   ],
   "languages": [

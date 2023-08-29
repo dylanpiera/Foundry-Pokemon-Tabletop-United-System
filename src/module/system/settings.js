@@ -88,8 +88,8 @@ export function registerSettings() {
         choices: {
             1: "Disable Pokédex",
             2: "Dexentry description only (Basic description and details only)",
-            3: "Full details on owned Tokens, Dexentry description on un-owned tokens",
-            4: "Full details on owned Mons (checks trainer's dex tab), Dexentry Description on un-owned mons",
+            3: "Full details on owned Tokens",
+            4: "Full details on owned Mons (checks trainer's dex tab)",
             5: "GM Prompt",
             6: "Always Full Details",
         },
@@ -660,11 +660,11 @@ export function registerSettings() {
             config: true,
             type: String,
             choices: {
-                "Clear": "Clear Weather is the default weather, conferring no innate bonuses or penalties of any sort.",
-                "Sunny": "While Sunny, Fire-Type Attacks gain a +5 bonus to Damage Rolls, and Water-Type Attacks suffer a -5 Damage penalty.",
-                "Rainy": "While Rainy, Water-Type Attacks gain a +5 bonus to Damage Rolls, and Fire-Type Attacks suffer a -5 Damage penalty.",
-                "Hail": "While it is Hailing, all non-Ice Type Pokémon lose a Tick of Hit Points at the beginning of their turn.",
-                "Sandstorm": "While it is Sandstorming, all non-Ground, Rock, or Steel Type Pokémon lose a Tick of Hit Points at the beginning of their turn.",
+                "Clear": "Clear",//"Clear Weather is the default weather, conferring no innate bonuses or penalties of any sort.",
+                "Sunny": "Sunny",//"While Sunny, Fire-Type Attacks gain a +5 bonus to Damage Rolls, and Water-Type Attacks suffer a -5 Damage penalty.",
+                "Rainy": "Rainy",//"While Rainy, Water-Type Attacks gain a +5 bonus to Damage Rolls, and Fire-Type Attacks suffer a -5 Damage penalty.",
+                "Hail": "Hail",//"While it is Hailing, all non-Ice Type Pokémon lose a Tick of Hit Points at the beginning of their turn.",
+                "Sandstorm": "Sandstorm"//"While it is Sandstorming, all non-Ground, Rock, or Steel Type Pokémon lose a Tick of Hit Points at the beginning of their turn.",
             },
             default: "Clear",
             category: "combat"
@@ -823,49 +823,6 @@ export function registerSettings() {
             type: Boolean,
             default: true,
             category: "combat"
-        })
-
-        game.settings.register("ptu", "playtestStats", {
-            name: "Use playtest calculations for stats.",
-            hint: "This will use the playtest calculations for stats instead of the official ones. See: <a href='https://ptufvtt.com/en/Guides/Playtests/Stats-Rework'>https://ptufvtt.com/en/Guides/Playtests/Stats-Rework</a>",
-            scope: "world",
-            config: true,
-            type: Boolean,
-            default: false,
-            category: "playtest",
-            onChange: debouncedReload
-        })
-
-        game.settings.register("ptu", "playtestStatsFactor", {
-            name: "EV strength factor β.",
-            hint: "Base value is 0.5. The higher the number, the stronger Level-Up Points will affect stat totals. See: <a href='https://ptufvtt.com/en/Guides/Playtests/Stats-Rework'>https://ptufvtt.com/en/Guides/Playtests/Stats-Rework</a>",
-            scope: "world",
-            config: true,
-            type: Number,
-            default: 0.5,
-            range: {
-                min: 0.1,
-                max: 1.0,
-                step: 0.05
-            },
-            category: "playtest",
-            onChange: debouncedReload
-        })
-
-        game.settings.register("ptu", "playtestStatsSigma", {
-            name: "Balance strength factor σ.",
-            hint: "Base value is 3.5. Changes the minimum value of σ. See: <a href='https://ptufvtt.com/en/Guides/Playtests/Stats-Rework'>https://ptufvtt.com/en/Guides/Playtests/Stats-Rework</a>",
-            scope: "world",
-            config: true,
-            type: Number,
-            default: 3.5,
-            range: {
-                min: 1,
-                max: 5,
-                step: 0.5
-            },
-            category: "playtest",
-            onChange: debouncedReload
         })
 
         game.settings.register("ptu", "showMovementIcons", {

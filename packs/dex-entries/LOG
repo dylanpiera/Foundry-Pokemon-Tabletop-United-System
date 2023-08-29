@@ -1,3 +1,7 @@
-2023/08/28-10:09:57.802 faac Recovering log #153
-2023/08/28-10:09:57.809 faac Delete type=0 #153
-2023/08/28-10:09:57.809 faac Delete type=3 #152
+2023/08/29-14:18:35.756 5fa8 Recovering log #161
+2023/08/29-14:18:35.762 5fa8 Delete type=0 #161
+2023/08/29-14:18:35.762 5fa8 Delete type=3 #160
+2023/08/29-16:45:15.320 198c Level-0 table #165: started
+2023/08/29-16:45:15.320 198c Level-0 table #165: 0 bytes OK
+2023/08/29-16:45:15.321 198c Delete type=0 #163
+2023/08/29-16:45:15.333 198c Manual compaction at level-0 from '!items!00NxeCghePCTFezd' @ 72057594037927935 : 1 .. '!items!zskGVWQJ7ih85MQp' @ 0 : 0; will stop at (end)

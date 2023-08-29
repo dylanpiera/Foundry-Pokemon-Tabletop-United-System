@@ -19,7 +19,7 @@ function calcBaseStats(stats, speciesData, nature, baseStatModifier, ignoreStage
 
 function _calcBaseStat(speciesData, nature, statKey) {
     if (speciesData == null) return 0;
-    return game.settings.get("ptu", "playtestStats") ?
+    return true ?
         _fetchSpecieStat(speciesData, statKey) :
         _calculateStatWithNature(nature, statKey, _fetchSpecieStat(speciesData, statKey));
 }
@@ -170,7 +170,7 @@ function calculateStatTotal({ level, actorStats, nature, isTrainer, twistedPower
 
 function calculatePTStatTotal(levelUpPoints, level, stats, { twistedPower, ignoreStages }, nature, isTrainer) {
 
-    const factor = game.settings.get("ptu", "playtestStatsFactor") ?? 0.5
+    const factor = 0.5
     const levelDivisionConstant = isTrainer ? 25 : 50;
     const longShortStatDict = {
         "HP": "hp",
@@ -189,7 +189,7 @@ function calculatePTStatTotal(levelUpPoints, level, stats, { twistedPower, ignor
     }
 
     //calculate sigma modifier = 1 + level/(100*sigma)
-    const sigmaSetting = game.settings.get("ptu", "playtestStatsSigma") ?? 3.5
+    const sigmaSetting = 3.5
     const sigmaMod = Math.max(dev(stats), sigmaSetting);
     const sigma = 1 + Math.max(level, 35) / (100 * sigmaMod);
 

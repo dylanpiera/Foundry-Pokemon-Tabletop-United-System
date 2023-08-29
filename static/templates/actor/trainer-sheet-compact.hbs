@@ -159,7 +159,7 @@
                                 </div>
                                 <div class="swsh-header ball-themes {{ballStyle}} highlight">
                                     <div class="d-flex w-100 mt-2 mb-2 align-items-center justify-content-between ">
-                                        {{#if (is "true" (getGameSetting "useDexExp"))}}
+                                        {{#if (is true (getGameSetting "useDexExp"))}}
                                         <div class="fb-30">
                                             <label for="system.level.milestones"><b>{{localize
                                                 "PTU.LevelMilestones"}}</b></label>
@@ -186,7 +186,7 @@
                                 <div class="swsh-body">
                                     <div class="options w-100 d-flex">
                                         <div class="d-flex w-100 pt-1 pb-1 align-items-center justify-content-between center-text">
-                                            {{#if (is "true" (getGameSetting "useDexExp"))}}
+                                            {{#if (is true (getGameSetting "useDexExp"))}}
                                             <div class="fb-30">
                                                 <input type="number" name="system.level.milestones"
                                                     value="{{actor.system.level.milestones}}" data-dtype="Number" />
@@ -409,7 +409,7 @@
                                 {{#each actor.system.capabilities as |capability key|}}
                                     {{#if (not key "Other")}}
                                         <div class="fb-35">
-                                            <label class="pl-1" for="system.capabilities.{{key}}">{{key}}</label>
+                                            <label class="pl-1" for="system.capabilities.{{key}}">{{localize key}}</label>
                                         </div>
                                         <div class="fb-15 p-1 center-text">
                                             <input type="number" name="system.capabilities.{{key}}" value="{{capability}}" disabled />

@@ -652,5 +652,16 @@
   "special-evasion": "Special Evasion",
   "speed-evasion": "Speed Evasion",
   "vulnerable": "Vulnerable: No Evasion",
-  "capture-dc": "Capture DC"
+  "capture-dc": "Capture DC",
+
+  "overland": "Overland",
+  "sky": "Sky",
+  "swim": "Swim",
+  "levitate": "Levitate",
+  "burrow": "Burrow",
+  "highJump": "High Jump",
+  "longJump": "Long Jump",
+  "power": "Power",
+  "naturewalk": "Naturewalk",
+  "weightClass": "Weight Class"
 }
