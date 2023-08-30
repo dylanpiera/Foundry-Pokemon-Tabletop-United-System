@@ -468,7 +468,7 @@
       "StatusAttackWhileRaging": "You cannot use a Status Move while Raging",
       "DisabledMove": "This move is disabled",
       "SuppressedMove": "While suppressed you can only use at-will moves",
-      "ConfusionFail": "{name} hurt itself in its confusion! and takes {damage} damage. (The move failed)",
+      "ConfusionFail": "{name} hurt itself in its confusion! and takes {damage} damage.",
       "Paralyzed": {
         "Suppressed": {
           "One": "The effects of",

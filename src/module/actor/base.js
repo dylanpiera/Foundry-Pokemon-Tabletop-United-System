@@ -944,10 +944,6 @@ class PTUActor extends Actor {
                     isConfused = true;
                 }
             }
-            if(isConfused) {
-                const success = await PTUCondition.HandleConfusion(move, this);
-                if(!success) return null;
-            }
 
             const modifiers = [];
             modifiers.push(new PTUModifier({
@@ -1000,7 +996,9 @@ class PTUActor extends Actor {
                 context,
                 params.event,
                 params.callback
-            )?.[0];
+            );
+
+            if(isConfused) await PTUCondition.HandleConfusion(move, this);
 
             for (const context of contexts) {
                 for (const rule of this.rules.filter(r => !r.ignored))

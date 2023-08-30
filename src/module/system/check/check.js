@@ -39,7 +39,6 @@ class PTUCheck {
             if (!rolled) return null;
         }
 
-
         const isReroll = context.isReroll ?? false;
         if (isReroll) context.rollTwice = false;
         const substitutions = context.substitutions ?? [];
@@ -425,4 +424,4 @@ function isRelevantEvent(event) {
 
 export { PTUCheck, eventToRollParams }
 
-globalThis.calculate = PTUCheck.calculate;
+globalThis.PTUCheck = PTUCheck;
