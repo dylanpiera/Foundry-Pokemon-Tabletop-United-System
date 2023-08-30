@@ -18,18 +18,23 @@ class PTUDexSheet extends FormApplication {
         this.hideUnknown = false;
         this.filter = "";
 
-        PTUDexSheet.speciesArtCache = new Map();
-        this.promise = new Promise((resolve, reject) => {
-            game.packs.get("ptu.species").getDocuments()
-                .then(docs => resolve(docs));
-        })
-            .then(docs => this.speciesDocs = docs)
-            .then(docs => docs.reduce((map, s) => {
-                map.set(s.slug, s);
-                return map;
-            }, new Map()))
-            .then(map => PTUDexSheet.speciesMap = map)
-            .then(() => this.render(true));
+        if (PTUDexSheet.speciesArtCache.size === 0) PTUDexSheet.speciesArtCache = new Map();
+        if (PTUDexSheet.speciesMap.size === 0) {
+            new Promise(
+                (resolve, reject) => {
+                    game.packs.get("ptu.species").getDocuments()
+                        .then(docs => resolve(docs));
+                }
+            ).then(docs => this.speciesDocs = docs)
+                .then(docs => docs.reduce((map, s) => {
+                    map.set(s.slug, s);
+                    return map;
+                }, new Map()))
+                .then(map => PTUDexSheet.speciesMap = map)
+                .then(() => this.render(true));
+        } else {
+            this.speciesDocs = Array.from(PTUDexSheet.speciesMap.values());
+        }
     }
 
     get allowedTypes() {
