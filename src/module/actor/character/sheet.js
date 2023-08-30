@@ -2,6 +2,7 @@ import { ItemSummaryRenderer } from "../sheet/item-summary.js";
 import { InventoryConfigSheet } from "../sheet/inventory-config.js";
 import { PTUPartySheet } from "../../apps/party/sheet.js";
 import { Statistic } from "../../system/statistic/index.js";
+import { PTUDexSheet } from "../../apps/dex/sheet.js";
 
 export class PTUCharacterSheet extends ActorSheet {
     
@@ -71,16 +72,16 @@ export class PTUCharacterSheet extends ActorSheet {
 
 		if (this.actor.isOwner) {
 			buttons.unshift({
-				label: "Notes",
-				class: "open-notes",
-				icon: "fas fa-edit",
-				onclick: () => new game.ptu.config.Ui.CharacterNotesForm.documentClass(this.actor, { "submitOnClose": true, "closeOnSubmit": false }).render(true)
-			});
-			buttons.unshift({
 				label: "Party",
 				class: "party-screen",
 				icon: "fas fa-user-group",
 				onclick: () => new PTUPartySheet({actor: this.actor}).render(true) 
+			});
+			buttons.unshift({
+				label: "Dex",
+				class: "dex-screen",
+				icon: "fas fa-tablet-alt",
+				onclick: () => new PTUDexSheet(this.actor, this.ballStyle).render(true) 
 			});
 		}
 

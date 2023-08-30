@@ -338,7 +338,15 @@
     "PartySheet.NoTrainer": "This Pokémon does not belong to any party, please assign one from a trainer's sheet.",
     "PartySheet.NoFolder": "The trainer needs to have its own folder in the actor's directory.",
     "PartySheet.Title": "Party Sheet",
-
+    "DexSheet": {
+      "Title": "Dex",
+      "Notifications": {
+        "Unowned": "Removed {name} from your owned dex.",
+        "Owned": "Added {name} to your owned dex.",
+        "Unseen": "Removed {name} from your seen dex.",
+        "Seen": "Added {name} to your seen dex."
+      }
+    },
     "BaseStatModifiers": "Base Stat Modifiers",
 
     "RuleParseSyntaxError": "Syntax error in rule element definition: {message}",

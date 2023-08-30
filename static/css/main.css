@@ -964,361 +964,6 @@ a.content-link img {
   height: 30px;
   width: 30px;
 }
-.ptu.sheet.gen8.actor .item-list-header {
-  display: flex;
-  flex-direction: row;
-  border-bottom: 1px solid black;
-}
-.ptu.sheet.gen8.actor .item-list-header .title {
-  flex: 1;
-  margin: unset;
-}
-.ptu.sheet.gen8.actor .item-list-header .item-amount {
-  display: flex;
-  align-items: center;
-  flex: 0 0 143px;
-}
-.ptu.sheet.gen8.actor .item-list-header .item-amount input {
-  width: 30px;
-  text-align: center;
-}
-.ptu.sheet.gen8.actor .item-list-header .item-amount h4 {
-  word-break: break-word;
-}
-.ptu.sheet.gen8.actor .item-list-header .item-controls {
-  flex: 0 0 66px;
-  justify-content: end;
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  align-self: center;
-}
-.ptu.sheet.gen8.actor .item-list-header .item-controls .item-control.item-create {
-  background: #ffffffa6;
-  border-radius: 5px;
-  font-weight: 400;
-  color: rgba(0, 0, 0, 0.6);
-  line-height: 18px;
-  padding-top: 2px;
-  flex: 0 0 44px;
-  font-size: 12px;
-  text-align: center;
-}
-.ptu.sheet.gen8.actor .item-list-header .item-controls .item-control.item-create:hover {
-  background: #788898cc;
-  text-shadow: unset;
-}
-.ptu.sheet.gen8.actor .item-list-header .item-controls .item-control.item-settings {
-  flex: 0 0 18px;
-  font-size: 12px;
-  text-align: center;
-  background: #ffffffa6;
-  color: rgba(0, 0, 0, 0.6);
-  border-radius: 5px;
-}
-.ptu.sheet.gen8.actor .item-list-header .item-controls .item-control.item-settings:hover {
-  background: #788898cc;
-  text-shadow: unset;
-}
-.ptu.sheet.gen8.actor .item-list {
-  padding: unset;
-}
-.ptu.sheet.gen8.actor .item-list.move-list .item .item-icon {
-  flex: 0 0 42px;
-  max-width: 42px;
-  max-height: 42px;
-}
-.ptu.sheet.gen8.actor .item-list.move-list .item .item-icon img {
-  background: lightgray;
-  height: 42px;
-  width: 42px;
-  object-fit: scale-down;
-}
-.ptu.sheet.gen8.actor .item-list.move-list .item .item-icon .icon {
-  display: block;
-}
-.ptu.sheet.gen8.actor .item-list.move-list .item .item-icon .dice {
-  display: none;
-  background: lightslategray;
-}
-.ptu.sheet.gen8.actor .item-list.move-list .item .item-icon.rollable:hover > .icon {
-  display: none;
-}
-.ptu.sheet.gen8.actor .item-list.move-list .item .item-icon.rollable:hover > .dice {
-  display: block;
-  cursor: pointer;
-}
-.ptu.sheet.gen8.actor .item-list.move-list .item .move-info {
-  flex: 1;
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-}
-.ptu.sheet.gen8.actor .item-list.move-list .item .move-info .item-name {
-  flex: 0 1 auto;
-}
-.ptu.sheet.gen8.actor .item-list.move-list .item .move-info .item-tags {
-  flex: 1 1 0;
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  gap: 5px;
-  padding-left: 5px;
-}
-.ptu.sheet.gen8.actor .item-list.move-list .item .move-info .item-tags .tag {
-  height: 20px;
-  margin: 0;
-  white-space: nowrap;
-  flex: 0 0 auto;
-  border: none;
-  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.3), inset 0 0 0 2px rgba(255, 255, 255, 0.2);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 4px;
-}
-.ptu.sheet.gen8.actor .item-list.move-list .item .move-info .item-tags .tag.shadowless {
-  box-shadow: unset;
-}
-.ptu.sheet.gen8.actor .item-list.move-list .item .move-info .item-tags .tag img {
-  height: auto;
-  width: 19px;
-  object-fit: scale-down;
-  border: unset;
-  padding-left: 1px;
-  border-radius: unset;
-}
-.ptu.sheet.gen8.actor .item-list.move-list .item .move-info .item-tags .tag span {
-  padding-left: 3px;
-  padding-right: 3px;
-}
-.ptu.sheet.gen8.actor .item-list.move-list .item .move-info .move-tags {
-  flex: 0 0 100%;
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  gap: 5px;
-  padding-left: 5px;
-  padding-top: 2px;
-}
-.ptu.sheet.gen8.actor .item-list.move-list .item .move-info .move-tags .tag {
-  height: 20px;
-  margin: 0;
-  white-space: nowrap;
-  flex: 0 0 auto;
-  border: none;
-  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.3), inset 0 0 0 2px rgba(255, 255, 255, 0.2);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 4px;
-}
-.ptu.sheet.gen8.actor .item-list.move-list .item .move-info .move-tags .tag img {
-  height: 18px;
-  width: 19px;
-  object-fit: scale-down;
-  border: unset;
-  padding-left: 1px;
-  border-radius: unset;
-}
-.ptu.sheet.gen8.actor .item-list.move-list .item .move-info .move-tags .tag span {
-  padding-left: 3px;
-  padding-right: 3px;
-}
-.ptu.sheet.gen8.actor .item-list.move-list .item .item-summary {
-  padding-left: 41px;
-}
-.ptu.sheet.gen8.actor .item-list .item {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  padding: 2px 0;
-  flex-wrap: wrap;
-}
-.ptu.sheet.gen8.actor .item-list .item.disabled {
-  filter: opacity(0.7) grayscale(100%);
-  pointer-events: none;
-}
-.ptu.sheet.gen8.actor .item-list .item:nth-child(odd) {
-  background: #eeeeeea6;
-}
-.ptu.sheet.gen8.actor .item-list .item:nth-child(even) {
-  background: #dddddda6;
-}
-.ptu.sheet.gen8.actor .item-list .item .item-icon {
-  flex: 0 0 41px;
-  max-width: 41px;
-  max-height: 41px;
-}
-.ptu.sheet.gen8.actor .item-list .item .item-icon img {
-  background: #000000;
-  height: 41px;
-  width: 41px;
-  object-fit: scale-down;
-}
-.ptu.sheet.gen8.actor .item-list .item .item-icon .icon {
-  display: block;
-}
-.ptu.sheet.gen8.actor .item-list .item .item-icon .dice {
-  display: none;
-}
-.ptu.sheet.gen8.actor .item-list .item .item-icon.rollable:hover > .icon {
-  display: none;
-}
-.ptu.sheet.gen8.actor .item-list .item .item-icon.rollable:hover > .dice {
-  display: block;
-  cursor: pointer;
-}
-.ptu.sheet.gen8.actor .item-list .item .item-info {
-  flex: 1 0 65%;
-  display: flex;
-  flex-wrap: wrap;
-}
-.ptu.sheet.gen8.actor .item-list .item .item-info .item-tags {
-  flex: 1 1 0;
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  gap: 5px;
-  padding-left: 5px;
-}
-.ptu.sheet.gen8.actor .item-list .item .item-info .item-tags .tag {
-  height: 20px;
-  margin: 0;
-  white-space: nowrap;
-  flex: 0 0 auto;
-  border: none;
-  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.3), inset 0 0 0 2px rgba(255, 255, 255, 0.2);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 4px;
-}
-.ptu.sheet.gen8.actor .item-list .item .item-info .item-tags .tag.shadowless {
-  box-shadow: unset;
-}
-.ptu.sheet.gen8.actor .item-list .item .item-info .item-tags .tag img {
-  height: auto;
-  width: 19px;
-  object-fit: scale-down;
-  border: unset;
-  padding-left: 1px;
-  border-radius: unset;
-}
-.ptu.sheet.gen8.actor .item-list .item .item-info .item-tags .tag span {
-  padding-left: 3px;
-  padding-right: 3px;
-}
-.ptu.sheet.gen8.actor .item-list .item .item-name {
-  flex: 0 1 auto;
-  margin-left: 5px;
-  align-self: center;
-}
-.ptu.sheet.gen8.actor .item-list .item .item-name h4 {
-  cursor: pointer;
-  margin: unset;
-}
-.ptu.sheet.gen8.actor .item-list .item .item-name h4:hover {
-  text-shadow: 0 0 10px #ff0000a0;
-}
-.ptu.sheet.gen8.actor .item-list .item .item-quantity {
-  flex: 0 0 45px;
-  text-align: center;
-  font-size: 12px;
-  margin: 0 0.25rem;
-}
-.ptu.sheet.gen8.actor .item-list .item .item-quantity input[type="number"] {
-  -moz-appearance: auto;
-}
-.ptu.sheet.gen8.actor .item-list .item .item-quantity input[type="number"]::-webkit-inner-spin-button,
-.ptu.sheet.gen8.actor .item-list .item .item-quantity input[type="number"]::-webkit-outer-spin-button {
-  -webkit-appearance: auto;
-  opacity: 1;
-}
-.ptu.sheet.gen8.actor .item-list .item .item-controls {
-  flex: 0 0 72px;
-  justify-content: end;
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  align-self: center;
-  margin-right: 0.25rem;
-}
-.ptu.sheet.gen8.actor .item-list .item .item-controls .item-control {
-  flex: 0 0 18px;
-  font-size: 12px;
-  text-align: center;
-}
-.ptu.sheet.gen8.actor .item-list .item .item-summary {
-  height: 0;
-  opacity: 0;
-  margin: 0.25rem 0.5rem;
-  transition: all 0.4s linear;
-  flex: 1 1 100%;
-  margin-right: 0.5rem;
-}
-.ptu.sheet.gen8.actor .item-list .item .item-summary.transitioning {
-  height: auto;
-  margin: 0;
-}
-.ptu.sheet.gen8.actor .item-list .item .item-summary.show {
-  height: auto;
-  opacity: 1;
-}
-.ptu.sheet.gen8.actor .item-list .item .item-summary p {
-  margin: 0;
-  padding: 0;
-  word-break: break-word;
-  white-space: pre-line;
-}
-.ptu.sheet.gen8.actor .item-list .item .nested-items {
-  flex: 1 1 100%;
-  margin: 2px 0 2px 31px;
-  padding: 4px 4px 4px 4px;
-  background: #ddddddc6;
-  box-shadow: inset black 0px 0px 5px 0px;
-  height: 0;
-  opacity: 0;
-  transition: all 0.4s linear;
-}
-.ptu.sheet.gen8.actor .item-list .item .nested-items .item {
-  padding: unset;
-}
-.ptu.sheet.gen8.actor .item-list .item .nested-items .item:not(:first-child) {
-  padding-top: 2px;
-}
-.ptu.sheet.gen8.actor .item-list .item .nested-items .item:not(:last-child) {
-  padding-bottom: 2px;
-}
-.ptu.sheet.gen8.actor .item-list .item .nested-items .item .item-controls {
-  margin-right: calc(0.25rem - 4px);
-}
-.ptu.sheet.gen8.actor .item-list .item .nested-items .item .nested-items .item .item-controls {
-  margin-right: calc(0.25rem - 8px);
-}
-.ptu.sheet.gen8.actor .item-list .item .nested-items .item .nested-items .item .nested-items .item .item-controls {
-  margin-right: calc(0.25rem - 12px);
-}
-.ptu.sheet.gen8.actor .item-list .item .nested-items .item .nested-items .item .nested-items .item .nested-items .item .item-controls {
-  margin-right: calc(0.25rem - 16px);
-}
-.ptu.sheet.gen8.actor .item-list .item .nested-items.transitioning {
-  height: auto;
-  margin: 0;
-  padding: 0;
-}
-.ptu.sheet.gen8.actor .item-list .item .nested-items.show {
-  height: auto;
-  opacity: 1;
-}
-.ptu.sheet.gen8.actor .item-list .item .nested-items.hide {
-  padding: 0;
-  margin: 0;
-  margin-left: 31px;
-}
-.ptu.sheet.gen8.actor .item-list .item .nested-items.hide .item {
-  display: none;
-}
 .ptu.sheet.gen8.actor main.sheet-body {
   z-index: 10;
   position: inherit;
@@ -1467,6 +1112,518 @@ a.content-link img {
   background: whitesmoke;
   border-radius: 50%;
   border: 2px solid whitesmoke;
+}
+.ptu.sheet.gen8.actor .item-list-header,
+.ptu.sheet.gen8.dex .item-list-header {
+  display: flex;
+  flex-direction: row;
+  border-bottom: 1px solid black;
+}
+.ptu.sheet.gen8.actor .item-list-header .title,
+.ptu.sheet.gen8.dex .item-list-header .title {
+  flex: 1;
+  margin: unset;
+}
+.ptu.sheet.gen8.actor .item-list-header .item-amount,
+.ptu.sheet.gen8.dex .item-list-header .item-amount {
+  display: flex;
+  align-items: center;
+  flex: 0 0 143px;
+}
+.ptu.sheet.gen8.actor .item-list-header .item-amount input,
+.ptu.sheet.gen8.dex .item-list-header .item-amount input {
+  width: 30px;
+  text-align: center;
+}
+.ptu.sheet.gen8.actor .item-list-header .item-amount h4,
+.ptu.sheet.gen8.dex .item-list-header .item-amount h4 {
+  word-break: break-word;
+}
+.ptu.sheet.gen8.actor .item-list-header .item-controls,
+.ptu.sheet.gen8.dex .item-list-header .item-controls {
+  flex: 0 0 66px;
+  justify-content: end;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-self: center;
+}
+.ptu.sheet.gen8.actor .item-list-header .item-controls .item-control.item-create,
+.ptu.sheet.gen8.dex .item-list-header .item-controls .item-control.item-create {
+  background: #ffffffa6;
+  border-radius: 5px;
+  font-weight: 400;
+  color: rgba(0, 0, 0, 0.6);
+  line-height: 18px;
+  padding-top: 2px;
+  flex: 0 0 44px;
+  font-size: 12px;
+  text-align: center;
+}
+.ptu.sheet.gen8.actor .item-list-header .item-controls .item-control.item-create:hover,
+.ptu.sheet.gen8.dex .item-list-header .item-controls .item-control.item-create:hover {
+  background: #788898cc;
+  text-shadow: unset;
+}
+.ptu.sheet.gen8.actor .item-list-header .item-controls .item-control.item-settings,
+.ptu.sheet.gen8.dex .item-list-header .item-controls .item-control.item-settings {
+  flex: 0 0 18px;
+  font-size: 12px;
+  text-align: center;
+  background: #ffffffa6;
+  color: rgba(0, 0, 0, 0.6);
+  border-radius: 5px;
+}
+.ptu.sheet.gen8.actor .item-list-header .item-controls .item-control.item-settings:hover,
+.ptu.sheet.gen8.dex .item-list-header .item-controls .item-control.item-settings:hover {
+  background: #788898cc;
+  text-shadow: unset;
+}
+.ptu.sheet.gen8.actor .item-list,
+.ptu.sheet.gen8.dex .item-list {
+  padding: unset;
+}
+.ptu.sheet.gen8.actor .item-list.move-list .item .item-icon,
+.ptu.sheet.gen8.dex .item-list.move-list .item .item-icon {
+  flex: 0 0 42px;
+  max-width: 42px;
+  max-height: 42px;
+}
+.ptu.sheet.gen8.actor .item-list.move-list .item .item-icon img,
+.ptu.sheet.gen8.dex .item-list.move-list .item .item-icon img {
+  background: lightgray;
+  height: 42px;
+  width: 42px;
+  object-fit: scale-down;
+}
+.ptu.sheet.gen8.actor .item-list.move-list .item .item-icon .icon,
+.ptu.sheet.gen8.dex .item-list.move-list .item .item-icon .icon {
+  display: block;
+}
+.ptu.sheet.gen8.actor .item-list.move-list .item .item-icon .dice,
+.ptu.sheet.gen8.dex .item-list.move-list .item .item-icon .dice {
+  display: none;
+  background: lightslategray;
+}
+.ptu.sheet.gen8.actor .item-list.move-list .item .item-icon.rollable:hover > .icon,
+.ptu.sheet.gen8.dex .item-list.move-list .item .item-icon.rollable:hover > .icon {
+  display: none;
+}
+.ptu.sheet.gen8.actor .item-list.move-list .item .item-icon.rollable:hover > .dice,
+.ptu.sheet.gen8.dex .item-list.move-list .item .item-icon.rollable:hover > .dice {
+  display: block;
+  cursor: pointer;
+}
+.ptu.sheet.gen8.actor .item-list.move-list .item .move-info,
+.ptu.sheet.gen8.dex .item-list.move-list .item .move-info {
+  flex: 1;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+.ptu.sheet.gen8.actor .item-list.move-list .item .move-info .item-name,
+.ptu.sheet.gen8.dex .item-list.move-list .item .move-info .item-name {
+  flex: 0 1 auto;
+}
+.ptu.sheet.gen8.actor .item-list.move-list .item .move-info .item-tags,
+.ptu.sheet.gen8.dex .item-list.move-list .item .move-info .item-tags {
+  flex: 1 1 0;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 5px;
+  padding-left: 5px;
+}
+.ptu.sheet.gen8.actor .item-list.move-list .item .move-info .item-tags .tag,
+.ptu.sheet.gen8.dex .item-list.move-list .item .move-info .item-tags .tag {
+  height: 20px;
+  margin: 0;
+  white-space: nowrap;
+  flex: 0 0 auto;
+  border: none;
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.3), inset 0 0 0 2px rgba(255, 255, 255, 0.2);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 4px;
+}
+.ptu.sheet.gen8.actor .item-list.move-list .item .move-info .item-tags .tag.shadowless,
+.ptu.sheet.gen8.dex .item-list.move-list .item .move-info .item-tags .tag.shadowless {
+  box-shadow: unset;
+}
+.ptu.sheet.gen8.actor .item-list.move-list .item .move-info .item-tags .tag img,
+.ptu.sheet.gen8.dex .item-list.move-list .item .move-info .item-tags .tag img {
+  height: auto;
+  width: 19px;
+  object-fit: scale-down;
+  border: unset;
+  padding-left: 1px;
+  border-radius: unset;
+}
+.ptu.sheet.gen8.actor .item-list.move-list .item .move-info .item-tags .tag span,
+.ptu.sheet.gen8.dex .item-list.move-list .item .move-info .item-tags .tag span {
+  padding-left: 3px;
+  padding-right: 3px;
+}
+.ptu.sheet.gen8.actor .item-list.move-list .item .move-info .move-tags,
+.ptu.sheet.gen8.dex .item-list.move-list .item .move-info .move-tags {
+  flex: 0 0 100%;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 5px;
+  padding-left: 5px;
+  padding-top: 2px;
+}
+.ptu.sheet.gen8.actor .item-list.move-list .item .move-info .move-tags .tag,
+.ptu.sheet.gen8.dex .item-list.move-list .item .move-info .move-tags .tag {
+  height: 20px;
+  margin: 0;
+  white-space: nowrap;
+  flex: 0 0 auto;
+  border: none;
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.3), inset 0 0 0 2px rgba(255, 255, 255, 0.2);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 4px;
+}
+.ptu.sheet.gen8.actor .item-list.move-list .item .move-info .move-tags .tag img,
+.ptu.sheet.gen8.dex .item-list.move-list .item .move-info .move-tags .tag img {
+  height: 18px;
+  width: 19px;
+  object-fit: scale-down;
+  border: unset;
+  padding-left: 1px;
+  border-radius: unset;
+}
+.ptu.sheet.gen8.actor .item-list.move-list .item .move-info .move-tags .tag span,
+.ptu.sheet.gen8.dex .item-list.move-list .item .move-info .move-tags .tag span {
+  padding-left: 3px;
+  padding-right: 3px;
+}
+.ptu.sheet.gen8.actor .item-list.move-list .item .item-summary,
+.ptu.sheet.gen8.dex .item-list.move-list .item .item-summary {
+  padding-left: 41px;
+}
+.ptu.sheet.gen8.actor .item-list .item,
+.ptu.sheet.gen8.dex .item-list .item {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 2px 0;
+  flex-wrap: wrap;
+}
+.ptu.sheet.gen8.actor .item-list .item.disabled,
+.ptu.sheet.gen8.dex .item-list .item.disabled {
+  filter: opacity(0.7) grayscale(100%);
+  pointer-events: none;
+}
+.ptu.sheet.gen8.actor .item-list .item:nth-child(odd),
+.ptu.sheet.gen8.dex .item-list .item:nth-child(odd) {
+  background: #eeeeeea6;
+}
+.ptu.sheet.gen8.actor .item-list .item:nth-child(even),
+.ptu.sheet.gen8.dex .item-list .item:nth-child(even) {
+  background: #dddddda6;
+}
+.ptu.sheet.gen8.actor .item-list .item .item-icon,
+.ptu.sheet.gen8.dex .item-list .item .item-icon {
+  flex: 0 0 41px;
+  max-width: 41px;
+  max-height: 41px;
+}
+.ptu.sheet.gen8.actor .item-list .item .item-icon img,
+.ptu.sheet.gen8.dex .item-list .item .item-icon img {
+  background: #000000;
+  height: 41px;
+  width: 41px;
+  object-fit: scale-down;
+}
+.ptu.sheet.gen8.actor .item-list .item .item-icon .icon,
+.ptu.sheet.gen8.dex .item-list .item .item-icon .icon {
+  display: block;
+}
+.ptu.sheet.gen8.actor .item-list .item .item-icon .dice,
+.ptu.sheet.gen8.dex .item-list .item .item-icon .dice {
+  display: none;
+}
+.ptu.sheet.gen8.actor .item-list .item .item-icon.rollable:hover > .icon,
+.ptu.sheet.gen8.dex .item-list .item .item-icon.rollable:hover > .icon {
+  display: none;
+}
+.ptu.sheet.gen8.actor .item-list .item .item-icon.rollable:hover > .dice,
+.ptu.sheet.gen8.dex .item-list .item .item-icon.rollable:hover > .dice {
+  display: block;
+  cursor: pointer;
+}
+.ptu.sheet.gen8.actor .item-list .item .item-info,
+.ptu.sheet.gen8.dex .item-list .item .item-info {
+  flex: 1 0 65%;
+  display: flex;
+  flex-wrap: wrap;
+}
+.ptu.sheet.gen8.actor .item-list .item .item-info .item-tags,
+.ptu.sheet.gen8.dex .item-list .item .item-info .item-tags {
+  flex: 1 1 0;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 5px;
+  padding-left: 5px;
+}
+.ptu.sheet.gen8.actor .item-list .item .item-info .item-tags .tag,
+.ptu.sheet.gen8.dex .item-list .item .item-info .item-tags .tag {
+  height: 20px;
+  margin: 0;
+  white-space: nowrap;
+  flex: 0 0 auto;
+  border: none;
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.3), inset 0 0 0 2px rgba(255, 255, 255, 0.2);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 4px;
+}
+.ptu.sheet.gen8.actor .item-list .item .item-info .item-tags .tag.shadowless,
+.ptu.sheet.gen8.dex .item-list .item .item-info .item-tags .tag.shadowless {
+  box-shadow: unset;
+}
+.ptu.sheet.gen8.actor .item-list .item .item-info .item-tags .tag img,
+.ptu.sheet.gen8.dex .item-list .item .item-info .item-tags .tag img {
+  height: auto;
+  width: 19px;
+  object-fit: scale-down;
+  border: unset;
+  padding-left: 1px;
+  border-radius: unset;
+}
+.ptu.sheet.gen8.actor .item-list .item .item-info .item-tags .tag span,
+.ptu.sheet.gen8.dex .item-list .item .item-info .item-tags .tag span {
+  padding-left: 3px;
+  padding-right: 3px;
+}
+.ptu.sheet.gen8.actor .item-list .item .item-name,
+.ptu.sheet.gen8.dex .item-list .item .item-name {
+  flex: 0 1 auto;
+  margin-left: 5px;
+  align-self: center;
+}
+.ptu.sheet.gen8.actor .item-list .item .item-name h4,
+.ptu.sheet.gen8.dex .item-list .item .item-name h4 {
+  cursor: pointer;
+  margin: unset;
+}
+.ptu.sheet.gen8.actor .item-list .item .item-name h4:hover,
+.ptu.sheet.gen8.dex .item-list .item .item-name h4:hover {
+  text-shadow: 0 0 10px #ff0000a0;
+}
+.ptu.sheet.gen8.actor .item-list .item .item-quantity,
+.ptu.sheet.gen8.dex .item-list .item .item-quantity {
+  flex: 0 0 45px;
+  text-align: center;
+  font-size: 12px;
+  margin: 0 0.25rem;
+}
+.ptu.sheet.gen8.actor .item-list .item .item-quantity input[type="number"],
+.ptu.sheet.gen8.dex .item-list .item .item-quantity input[type="number"] {
+  -moz-appearance: auto;
+}
+.ptu.sheet.gen8.actor .item-list .item .item-quantity input[type="number"]::-webkit-inner-spin-button,
+.ptu.sheet.gen8.dex .item-list .item .item-quantity input[type="number"]::-webkit-inner-spin-button,
+.ptu.sheet.gen8.actor .item-list .item .item-quantity input[type="number"]::-webkit-outer-spin-button,
+.ptu.sheet.gen8.dex .item-list .item .item-quantity input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: auto;
+  opacity: 1;
+}
+.ptu.sheet.gen8.actor .item-list .item .item-controls,
+.ptu.sheet.gen8.dex .item-list .item .item-controls {
+  flex: 0 0 72px;
+  justify-content: end;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-self: center;
+  margin-right: 0.25rem;
+}
+.ptu.sheet.gen8.actor .item-list .item .item-controls .item-control,
+.ptu.sheet.gen8.dex .item-list .item .item-controls .item-control {
+  flex: 0 0 18px;
+  font-size: 12px;
+  text-align: center;
+}
+.ptu.sheet.gen8.actor .item-list .item .item-summary,
+.ptu.sheet.gen8.dex .item-list .item .item-summary {
+  height: 0;
+  opacity: 0;
+  margin: 0.25rem 0.5rem;
+  transition: all 0.4s linear;
+  flex: 1 1 100%;
+  margin-right: 0.5rem;
+}
+.ptu.sheet.gen8.actor .item-list .item .item-summary.transitioning,
+.ptu.sheet.gen8.dex .item-list .item .item-summary.transitioning {
+  height: auto;
+  margin: 0;
+}
+.ptu.sheet.gen8.actor .item-list .item .item-summary.show,
+.ptu.sheet.gen8.dex .item-list .item .item-summary.show {
+  height: auto;
+  opacity: 1;
+}
+.ptu.sheet.gen8.actor .item-list .item .item-summary p,
+.ptu.sheet.gen8.dex .item-list .item .item-summary p {
+  margin: 0;
+  padding: 0;
+  word-break: break-word;
+  white-space: pre-line;
+}
+.ptu.sheet.gen8.actor .item-list .item .nested-items,
+.ptu.sheet.gen8.dex .item-list .item .nested-items {
+  flex: 1 1 100%;
+  margin: 2px 0 2px 31px;
+  padding: 4px 4px 4px 4px;
+  background: #ddddddc6;
+  box-shadow: inset black 0px 0px 5px 0px;
+  height: 0;
+  opacity: 0;
+  transition: all 0.4s linear;
+}
+.ptu.sheet.gen8.actor .item-list .item .nested-items .item,
+.ptu.sheet.gen8.dex .item-list .item .nested-items .item {
+  padding: unset;
+}
+.ptu.sheet.gen8.actor .item-list .item .nested-items .item:not(:first-child),
+.ptu.sheet.gen8.dex .item-list .item .nested-items .item:not(:first-child) {
+  padding-top: 2px;
+}
+.ptu.sheet.gen8.actor .item-list .item .nested-items .item:not(:last-child),
+.ptu.sheet.gen8.dex .item-list .item .nested-items .item:not(:last-child) {
+  padding-bottom: 2px;
+}
+.ptu.sheet.gen8.actor .item-list .item .nested-items .item .item-controls,
+.ptu.sheet.gen8.dex .item-list .item .nested-items .item .item-controls {
+  margin-right: calc(0.25rem - 4px);
+}
+.ptu.sheet.gen8.actor .item-list .item .nested-items .item .nested-items .item .item-controls,
+.ptu.sheet.gen8.dex .item-list .item .nested-items .item .nested-items .item .item-controls {
+  margin-right: calc(0.25rem - 8px);
+}
+.ptu.sheet.gen8.actor .item-list .item .nested-items .item .nested-items .item .nested-items .item .item-controls,
+.ptu.sheet.gen8.dex .item-list .item .nested-items .item .nested-items .item .nested-items .item .item-controls {
+  margin-right: calc(0.25rem - 12px);
+}
+.ptu.sheet.gen8.actor .item-list .item .nested-items .item .nested-items .item .nested-items .item .nested-items .item .item-controls,
+.ptu.sheet.gen8.dex .item-list .item .nested-items .item .nested-items .item .nested-items .item .nested-items .item .item-controls {
+  margin-right: calc(0.25rem - 16px);
+}
+.ptu.sheet.gen8.actor .item-list .item .nested-items.transitioning,
+.ptu.sheet.gen8.dex .item-list .item .nested-items.transitioning {
+  height: auto;
+  margin: 0;
+  padding: 0;
+}
+.ptu.sheet.gen8.actor .item-list .item .nested-items.show,
+.ptu.sheet.gen8.dex .item-list .item .nested-items.show {
+  height: auto;
+  opacity: 1;
+}
+.ptu.sheet.gen8.actor .item-list .item .nested-items.hide,
+.ptu.sheet.gen8.dex .item-list .item .nested-items.hide {
+  padding: 0;
+  margin: 0;
+  margin-left: 31px;
+}
+.ptu.sheet.gen8.actor .item-list .item .nested-items.hide .item,
+.ptu.sheet.gen8.dex .item-list .item .nested-items.hide .item {
+  display: none;
+}
+.ptu.sheet.gen8.dex section {
+  padding: 0;
+}
+.ptu.sheet.gen8.dex form {
+  overflow: hidden;
+}
+.ptu.sheet.gen8.dex .header {
+  height: fit-content !important;
+  flex-direction: row;
+  justify-content: space-between;
+  margin: 0.25rem;
+}
+.ptu.sheet.gen8.dex .header .swsh-header {
+  background-color: #AED3A2;
+}
+.ptu.sheet.gen8.dex .header .header-label {
+  font-weight: bold;
+  flex: 0 0 28px;
+  display: flex;
+}
+.ptu.sheet.gen8.dex .header .header-label span {
+  align-self: center;
+}
+.ptu.sheet.gen8.dex .header .header-item {
+  align-self: center;
+  text-align: center;
+  height: 28px;
+  width: 100%;
+}
+.ptu.sheet.gen8.dex .header .header-item input[name="hideUnknown"]:checked {
+  accent-color: #d15555;
+}
+.ptu.sheet.gen8.dex .header .header-item input[name="hideSeen"]:checked {
+  accent-color: #dd7600;
+}
+.ptu.sheet.gen8.dex .header .header-item input[name="hideOwned"]:checked {
+  accent-color: green;
+}
+.ptu.sheet.gen8.dex div.help-text {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.ptu.sheet.gen8.dex span.help-text {
+  color: gray;
+  font-style: italic;
+  word-break: break-word;
+}
+.ptu.sheet.gen8.dex .dex-grid {
+  display: grid;
+  height: 100%;
+  width: 100%;
+  column-gap: 5px;
+  row-gap: 5px;
+  grid-template-columns: repeat(5, 1fr);
+  grid-auto-rows: 120px;
+  overflow-y: scroll;
+}
+.ptu.sheet.gen8.dex .dex-item {
+  display: flex;
+  flex-direction: column;
+  max-height: 120px;
+}
+.ptu.sheet.gen8.dex .dex-item .dex-item-img img {
+  filter: grayscale(100%) brightness(0);
+}
+.ptu.sheet.gen8.dex .dex-item.seen .dex-item-img img {
+  filter: grayscale(75%) brightness(75%) blur(1px);
+}
+.ptu.sheet.gen8.dex .dex-item.owned .dex-item-img img {
+  filter: unset;
+}
+.ptu.sheet.gen8.dex .dex-item-img {
+  width: calc(100% - 17px);
+  height: calc(100% - 17px);
+  align-self: center;
+  background: #AED3A2a6;
+  border-radius: 50%;
+}
+.ptu.sheet.gen8.dex .dex-item-img img {
+  border: unset;
+}
+.ptu.sheet.gen8.dex .dex-item-name {
+  font-weight: bold;
+  text-align: center;
+  height: 17px;
 }
 .ptu.sheet.gen8 .nature-up {
   color: #b27d94;
@@ -2371,6 +2528,9 @@ a.content-link img {
 }
 .sheet.party .party-list .party-item.empty:hover {
   background: #AED3A2a6;
+}
+.sheet.dex .window-content {
+  background: #D1FED4;
 }
 .app.choice-set-prompt {
   min-width: 250px;

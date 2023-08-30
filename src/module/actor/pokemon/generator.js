@@ -328,76 +328,53 @@ export class PokemonGenerator {
     }
 
     static async getImage(species, { gender = game.i18n.localize("PTU.Male"), shiny = false, extension = game.settings.get("ptu", "defaultPokemonImageExtension"), suffix = "" } = {}) {
+        // Check for default
         let path = species.getImagePath({ gender, shiny, extension, suffix });
         let result = await fetch(path)
         if (result.status != 404) return path;
 
+        // Default with webp
         path = species.getImagePath({ gender, shiny, extension: "webp", suffix });
         result = await fetch(path);
         if (result.status != 404) return path;
 
-        //look for male images
-        path = species.getImagePath({ shiny, suffix });
-        result = await fetch(path);
-        if (result.status != 404) return path;
+        // look for male images
+        if(gender != game.i18n.localize("PTU.Male")) {
+            // Check default with Male
+            path = species.getImagePath({ shiny, suffix });
+            result = await fetch(path);
+            if (result.status != 404) return path;
 
-        path = species.getImagePath({ shiny, extension: "webp", suffix });
-        result = await fetch(path);
-        if (result.status != 404) return path;
+            // Male with webp
+            path = species.getImagePath({ shiny, extension: "webp", suffix });
+            result = await fetch(path);
+            if (result.status != 404) return path;
+        }
 
         //look for non-shiny images
-        path = species.getImagePath({ gender, suffix });
-        result = await fetch(path)
-        if (result.status != 404) return path;
+        if(shiny) {
+            path = species.getImagePath({ gender, suffix });
+            result = await fetch(path)
+            if (result.status != 404) return path;
 
-        path = species.getImagePath({ gender, extension: "webp", suffix });
-        result = await fetch(path);
-        if (result.status != 404) return path;
+            path = species.getImagePath({ gender, extension: "webp", suffix });
+            result = await fetch(path);
+            if (result.status != 404) return path;
 
-        //look for male non-shiny images
-        path = species.getImagePath({ suffix });
-        result = await fetch(path);
-        if (result.status != 404) return path;
-
-        path = species.getImagePath({ extension: "webp", suffix });
-        result = await fetch(path);
-        if (result.status != 404) return path;
+            //look for male non-shiny images
+            if(gender != game.i18n.localize("PTU.Male")) {
+                path = species.getImagePath({ suffix });
+                result = await fetch(path);
+                if (result.status != 404) return path;
+        
+                path = species.getImagePath({ extension: "webp", suffix });
+                result = await fetch(path);
+                if (result.status != 404) return path;
+            }
+        }
 
         //all again but ignoring the custom suffix
-        path = species.getImagePath({ gender, shiny, extension });
-        result = await fetch(path)
-        if (result.status != 404) return path;
-
-        path = species.getImagePath({ gender, shiny, extension: "webp" });
-        result = await fetch(path);
-        if (result.status != 404) return path;
-
-        //look for male images
-        path = species.getImagePath({ shiny });
-        result = await fetch(path);
-        if (result.status != 404) return path;
-
-        path = species.getImagePath({ shiny, extension: "webp" });
-        result = await fetch(path);
-        if (result.status != 404) return path;
-
-        //look for non-shiny images
-        path = species.getImagePath({ gender });
-        result = await fetch(path)
-        if (result.status != 404) return path;
-
-        path = species.getImagePath({ gender, extension: "webp" });
-        result = await fetch(path);
-        if (result.status != 404) return path;
-
-        //look for male non-shiny images
-        path = species.getImagePath();
-        result = await fetch(path);
-        if (result.status != 404) return path;
-
-        path = species.getImagePath({ extension: "webp" });
-        result = await fetch(path);
-        if (result.status != 404) return path;
+        if(suffix) return await this.getImage(species, {gender, shiny, extension});
 
         return undefined;
     }
