@@ -617,7 +617,13 @@
 
     "Actor": {
       "Plural": "Actors",
-      "Singular": "Actor"
+      "Singular": "Actor",
+      "Config": {
+        "Theme": {
+          "Label": "Theme",
+          "Hint": "if empty will default to your pokeball (if a pokemon) or 'default', if theme cannot be found the parchment theme will be used."
+        }
+      }
     },
     "Item": {
       "Plural": "Items",
@@ -653,7 +659,8 @@
       "SkillCheck": "{skill} Check",
       "SkillMod": "Skill Mod",
       "SkillDice": "Skill Rank"
-    }
+    },
+    "Configure": "Configuring {name}"
   },
 
   "physical-evasion": "Physical Evasion",

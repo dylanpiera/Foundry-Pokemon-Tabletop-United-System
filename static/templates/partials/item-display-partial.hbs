@@ -52,37 +52,37 @@
                     </div>
                     <div class="move-tags">
                         {{#if item.system.type}}
-                            <div class="tag ball-themes gradient {{../ballStyle}}">
+                            <div class="tag gradient">
                                 <img src="/systems/ptu/static/css/images/types2/{{item.system.type}}IC_Icon.png" title="{{item.system.type}}"/>
                                 <span>{{item.system.type}}</span>
                             </div>
                         {{/if}}
                         {{#if item.system.category}}
-                            <div class="tag ball-themes gradient {{../ballStyle}}">
+                            <div class="tag gradient">
                                 <img src="/systems/ptu/static/css/images/types2/{{item.system.category}}IC_Icon.png" title="{{item.system.category}}"/>
                                 <span>{{item.system.category}}</span>
                             </div>
                         {{/if}}
                         {{#if item.system.damageBase}}
                             {{#unless (is item.system.category "Status")}}
-                                <div class="tag tooltip ball-themes gradient {{../ballStyle}}" title="DB: {{item.system.damageBase}} ({{moveDbToDice item ../actor}})">
+                                <div class="tag tooltip gradient" title="DB: {{item.system.damageBase}} ({{moveDbToDice item ../actor}})">
                                     <span>DB: {{item.system.damageBase}}</span>
                                 </div>
                             {{/unless}}
                         {{/if}}
                         {{#if item.system.frequency}}
-                            <div class="tag ball-themes gradient {{../ballStyle}}">
+                            <div class="tag gradient">
                                 <span>{{item.system.frequency}}</span>
                             </div>
                         {{/if}}
                         {{#if item.system.range}}
                             {{#each (split item.system.range ",") as | range |}}
                                 {{#if (helpText range)}}
-                                    <div class="tag tooltip ball-themes gradient {{@root.ballStyle}}" title="{{helpText range}}">
+                                    <div class="tag tooltip gradient" title="{{helpText range}}">
                                         <span>{{#if (isNumber range)}}Range {{/if}}{{range}}</span>
                                     </div>
                                 {{else}}
-                                    <div class="tag ball-themes gradient {{@root.ballStyle}}">
+                                    <div class="tag gradient">
                                         <span>{{range}}</span>
                                     </div>
                                 {{/if}}

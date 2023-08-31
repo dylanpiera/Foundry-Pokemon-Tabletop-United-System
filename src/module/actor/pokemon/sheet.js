@@ -1,8 +1,9 @@
 import { PTUPartySheet } from "../../apps/party/sheet.js";
 import { Statistic } from "../../system/statistic/index.js";
+import { PTUActorSheet } from "../sheet.js";
 import { ItemSummaryRenderer } from "../sheet/item-summary.js";
 
-export class PTUPokemonSheet extends ActorSheet {
+export class PTUPokemonSheet extends PTUActorSheet {
     /** @override */
 	static get defaultOptions() {
 		const options = mergeObject(super.defaultOptions, {
@@ -31,6 +32,7 @@ export class PTUPokemonSheet extends ActorSheet {
 	}
 
 	get ballStyle() {
+		if(this.actor.flags.ptu.theme) return this.actor.flags.ptu.theme;
         if(this.actor.system.pokeball) {
             const ball = this.actor.system.pokeball.toLowerCase().replace('ball', '').trim();
             if(ball == "basic" || ball == "poke" ) return "default";

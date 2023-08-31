@@ -1288,6 +1288,10 @@ a.content-link img {
   align-items: center;
   gap: 4px;
 }
+.ptu.sheet.gen8.actor .item-list.move-list .item .move-info .move-tags .tag.gradient,
+.ptu.sheet.gen8.dex .item-list.move-list .item .move-info .move-tags .tag.gradient {
+  background: linear-gradient(45deg, #ECDBEB, #DFFFFE);
+}
 .ptu.sheet.gen8.actor .item-list.move-list .item .move-info .move-tags .tag img,
 .ptu.sheet.gen8.dex .item-list.move-list .item .move-info .move-tags .tag img {
   height: 18px;
@@ -2748,11 +2752,11 @@ a.content-link img {
 }
 .ball-themes.air.item:hover {
   text-shadow: unset;
-  text-shadow: 0 0 8px #000000;
+  text-shadow: 0 0 8px #44879E;
 }
 .ball-themes.air.item.active {
   text-shadow: unset;
-  background: #000000 !important;
+  background: #6FB4CA !important;
 }
 .ball-themes.great.background {
   background: #0040a1 !important;
@@ -2767,15 +2771,15 @@ a.content-link img {
   background: #222224 !important;
 }
 .ball-themes.great.highlight {
-  background: #ff0000 !important;
+  background: #e2444c !important;
 }
 .ball-themes.great.item:hover {
   text-shadow: unset;
-  text-shadow: 0 0 8px #000000;
+  text-shadow: 0 0 8px #0175c9;
 }
 .ball-themes.great.item.active {
   text-shadow: unset;
-  background: #000000 !important;
+  background: #B03023 !important;
 }
 .ball-themes.ultra.background {
   background: #333437 !important;
@@ -2824,13 +2828,13 @@ a.content-link img {
   background: #6a3aa1 !important;
 }
 .ball-themes.premier.background {
-  background: #fffafa !important;
+  background: #fff !important;
 }
 .ball-themes.premier.gradient {
-  background: linear-gradient(45deg, #fffafa, #f3f5ff) !important;
+  background: linear-gradient(45deg, #ffefef, #fffafa, #ffefef) !important;
 }
 .ball-themes.premier.light-color {
-  background: #FFFFFF !important;
+  background: #fdfdfd !important;
 }
 .ball-themes.premier.band {
   background: #C42835 !important;
@@ -2840,7 +2844,7 @@ a.content-link img {
 }
 .ball-themes.premier.item:hover {
   text-shadow: unset;
-  text-shadow: 0 0 8px #000000;
+  text-shadow: 0 0 8px #AE574d;
 }
 .ball-themes.premier.item.active {
   text-shadow: unset;
@@ -2850,7 +2854,7 @@ a.content-link img {
   background: #E94737 !important;
 }
 .ball-themes.cherish.gradient {
-  background: linear-gradient(45deg, #F37B73, #ffa698) !important;
+  background: linear-gradient(45deg, #F37B73, #ffa698, #fdd2cb) !important;
 }
 .ball-themes.cherish.light-color {
   background: #F37B73 !important;
@@ -2863,7 +2867,7 @@ a.content-link img {
 }
 .ball-themes.cherish.item:hover {
   text-shadow: unset;
-  text-shadow: 0 0 8px #000000;
+  text-shadow: 0 0 8px #F37B73;
 }
 .ball-themes.cherish.item.active {
   text-shadow: unset;
@@ -2873,7 +2877,7 @@ a.content-link img {
   background: #6499C3 !important;
 }
 .ball-themes.dive.gradient {
-  background: linear-gradient(45deg, #6499C3, #7FCAEF) !important;
+  background: linear-gradient(45deg, #6499C3, #7FCAEF, #a5d7f0) !important;
 }
 .ball-themes.dive.light-color {
   background: #7FCAEF !important;
@@ -2886,7 +2890,7 @@ a.content-link img {
 }
 .ball-themes.dive.item:hover {
   text-shadow: unset;
-  text-shadow: 0 0 8px #000000;
+  text-shadow: 0 0 8px #7FCAEF;
 }
 .ball-themes.dive.item.active {
   text-shadow: unset;
@@ -2896,7 +2900,7 @@ a.content-link img {
   background: #524746 !important;
 }
 .ball-themes.dusk.gradient {
-  background: linear-gradient(45deg, #524746, #635755) !important;
+  background: linear-gradient(45deg, #6b5f5c, #443a39, #4d4240, #8b7b78) !important;
 }
 .ball-themes.dusk.light-color {
   background: #635755 !important;
@@ -2928,11 +2932,11 @@ a.content-link img {
   background: #222224 !important;
 }
 .ball-themes.earth.highlight {
-  background: #676F24 !important;
+  background: #788B20 !important;
 }
 .ball-themes.earth.item:hover {
   text-shadow: unset;
-  text-shadow: 0 0 8px #000000;
+  text-shadow: 0 0 8px #788B20;
 }
 .ball-themes.earth.item.active {
   text-shadow: unset;
@@ -2942,10 +2946,10 @@ a.content-link img {
   background: #9642b8 !important;
 }
 .ball-themes.fabulous.gradient {
-  background: linear-gradient(45deg, #DEC3FF, #f4eaff) !important;
+  background: linear-gradient(45deg, #AC5DF3, #DEC3FF, #f8f1ff) !important;
 }
 .ball-themes.fabulous.light-color {
-  background: #AB5EF2 !important;
+  background: #9749C9 !important;
 }
 .ball-themes.fabulous.band {
   background: #8db3ff !important;
@@ -2955,17 +2959,17 @@ a.content-link img {
 }
 .ball-themes.fabulous.item:hover {
   text-shadow: unset;
-  text-shadow: 0 0 8px #000000;
+  text-shadow: 0 0 8px #d6b4ff;
 }
 .ball-themes.fabulous.item.active {
   text-shadow: unset;
-  background: #7C97CE !important;
+  background: #d6b4ff !important;
 }
 .ball-themes.fast.background {
   background: #C56121 !important;
 }
 .ball-themes.fast.gradient {
-  background: linear-gradient(45deg, #ECDBEB, #DFFFFE) !important;
+  background: linear-gradient(45deg, #f5d5bd, #ffe9b3) !important;
 }
 .ball-themes.fast.light-color {
   background: #EA8E49 !important;
@@ -2978,7 +2982,7 @@ a.content-link img {
 }
 .ball-themes.fast.item:hover {
   text-shadow: unset;
-  text-shadow: 0 0 8px #000000;
+  text-shadow: 0 0 8px #F9C642;
 }
 .ball-themes.fast.item.active {
   text-shadow: unset;
@@ -2988,7 +2992,7 @@ a.content-link img {
   background: #6A963E !important;
 }
 .ball-themes.friend.gradient {
-  background: linear-gradient(45deg, #ECDBEB, #DFFFFE) !important;
+  background: linear-gradient(45deg, #a4cf79, #acd484, #d5ffaa) !important;
 }
 .ball-themes.friend.light-color {
   background: #7FBA43 !important;
@@ -2997,24 +3001,24 @@ a.content-link img {
   background: #222224 !important;
 }
 .ball-themes.friend.highlight {
-  background: #C6614B !important;
+  background: #db664c !important;
 }
 .ball-themes.friend.item:hover {
   text-shadow: unset;
-  text-shadow: 0 0 8px #000000;
+  text-shadow: 0 0 8px #db664c;
 }
 .ball-themes.friend.item.active {
   text-shadow: unset;
-  background: #C6614B !important;
+  background: #db664c !important;
 }
 .ball-themes.gossamer.background {
   background: #E9CFE1 !important;
 }
 .ball-themes.gossamer.gradient {
-  background: linear-gradient(45deg, #ECDBEB, #DFFFFE) !important;
+  background: linear-gradient(45deg, #f1dbe5, #fff9fd) !important;
 }
 .ball-themes.gossamer.light-color {
-  background: #e2d8df !important;
+  background: #f1dbe5 !important;
 }
 .ball-themes.gossamer.band {
   background: #222224 !important;
@@ -3024,17 +3028,17 @@ a.content-link img {
 }
 .ball-themes.gossamer.item:hover {
   text-shadow: unset;
-  text-shadow: 0 0 8px #000000;
+  text-shadow: 0 0 8px #f3b7d4;
 }
 .ball-themes.gossamer.item.active {
   text-shadow: unset;
-  background: #e2d8df !important;
+  background: #f3b7d4 !important;
 }
 .ball-themes.hail.background {
   background: #DBE0E0 !important;
 }
 .ball-themes.hail.gradient {
-  background: linear-gradient(45deg, #ECDBEB, #DFFFFE) !important;
+  background: linear-gradient(45deg, #dbebec, #DFFFFE) !important;
 }
 .ball-themes.hail.light-color {
   background: #C4F4FF !important;
@@ -3047,30 +3051,30 @@ a.content-link img {
 }
 .ball-themes.hail.item:hover {
   text-shadow: unset;
-  text-shadow: 0 0 8px #000000;
+  text-shadow: 0 0 8px #C4F4FF;
 }
 .ball-themes.hail.item.active {
   text-shadow: unset;
   background: #C4F4FF !important;
 }
 .ball-themes.heal.background {
-  background: #DA2E8B !important;
+  background: #d63a8d !important;
 }
 .ball-themes.heal.gradient {
-  background: linear-gradient(45deg, #DA2E8B, #E84E96) !important;
+  background: linear-gradient(45deg, #fcc3a6, #FFF2CD, #fff7e2) !important;
 }
 .ball-themes.heal.light-color {
-  background: #EE4C97 !important;
+  background: #E8529B !important;
 }
 .ball-themes.heal.band {
   background: #7C97CE !important;
 }
 .ball-themes.heal.highlight {
-  background: #FFF4DC !important;
+  background: #fdc89d !important;
 }
 .ball-themes.heal.item:hover {
   text-shadow: unset;
-  text-shadow: 0 0 8px #000000;
+  text-shadow: 0 0 8px #FFF4DC;
 }
 .ball-themes.heal.item.active {
   text-shadow: unset;
@@ -3080,7 +3084,7 @@ a.content-link img {
   background: #797C86 !important;
 }
 .ball-themes.heavy.gradient {
-  background: linear-gradient(45deg, #ECDBEB, #DFFFFE) !important;
+  background: linear-gradient(45deg, #dbebec, #DFFFFE) !important;
 }
 .ball-themes.heavy.light-color {
   background: #9B9FA4 !important;
@@ -3093,7 +3097,7 @@ a.content-link img {
 }
 .ball-themes.heavy.item:hover {
   text-shadow: unset;
-  text-shadow: 0 0 8px #000000;
+  text-shadow: 0 0 8px #5B7AB9;
 }
 .ball-themes.heavy.item.active {
   text-shadow: unset;
@@ -3103,7 +3107,7 @@ a.content-link img {
   background: #DA9C22 !important;
 }
 .ball-themes.park.gradient {
-  background: linear-gradient(45deg, #ECDBEB, #DFFFFE) !important;
+  background: linear-gradient(45deg, #f7e4a2, #fffcee) !important;
 }
 .ball-themes.park.light-color {
   background: #F5D152 !important;
@@ -3116,17 +3120,17 @@ a.content-link img {
 }
 .ball-themes.park.item:hover {
   text-shadow: unset;
-  text-shadow: 0 0 8px #000000;
+  text-shadow: 0 0 8px #F5D152;
 }
 .ball-themes.park.item.active {
   text-shadow: unset;
-  background: #2F6DB7 !important;
+  background: #F5D152 !important;
 }
 .ball-themes.level.background {
   background: #ecb90d !important;
 }
 .ball-themes.level.gradient {
-  background: linear-gradient(45deg, #ECDBEB, #DFFFFE) !important;
+  background: linear-gradient(45deg, #fff4c4, #fff8e6) !important;
 }
 .ball-themes.level.light-color {
   background: #303332 !important;
@@ -3135,21 +3139,21 @@ a.content-link img {
   background: #222224 !important;
 }
 .ball-themes.level.highlight {
-  background: #cc4938 !important;
+  background: #e65340 !important;
 }
 .ball-themes.level.item:hover {
   text-shadow: unset;
-  text-shadow: 0 0 8px #000000;
+  text-shadow: 0 0 8px #e65340;
 }
 .ball-themes.level.item.active {
   text-shadow: unset;
-  background: #cc4938 !important;
+  background: #e65340 !important;
 }
 .ball-themes.love.background {
   background: #aa5286 !important;
 }
 .ball-themes.love.gradient {
-  background: linear-gradient(45deg, #ECDBEB, #DFFFFE) !important;
+  background: linear-gradient(45deg, #ECDBEB, #fff6fd) !important;
 }
 .ball-themes.love.light-color {
   background: #c580a8 !important;
@@ -3162,7 +3166,7 @@ a.content-link img {
 }
 .ball-themes.love.item:hover {
   text-shadow: unset;
-  text-shadow: 0 0 8px #000000;
+  text-shadow: 0 0 8px #fcbbd6;
 }
 .ball-themes.love.item.active {
   text-shadow: unset;
@@ -3185,7 +3189,7 @@ a.content-link img {
 }
 .ball-themes.lure.item:hover {
   text-shadow: unset;
-  text-shadow: 0 0 8px #000000;
+  text-shadow: 0 0 8px #f6af50;
 }
 .ball-themes.lure.item.active {
   text-shadow: unset;
@@ -3208,49 +3212,52 @@ a.content-link img {
 }
 .ball-themes.luxury.item:hover {
   text-shadow: unset;
-  text-shadow: 0 0 8px #000000;
+  text-shadow: 0 0 8px #d59340;
 }
 .ball-themes.luxury.item.active {
   text-shadow: unset;
   background: #d59340 !important;
 }
 .ball-themes.mold.background {
-  background: #490002 !important;
+  background: #3c0d09 !important;
 }
 .ball-themes.mold.gradient {
-  background: linear-gradient(45deg, #ECDBEB, #DFFFFE) !important;
+  background: linear-gradient(45deg, #222224, #5a0401) !important;
 }
 .ball-themes.mold.light-color {
-  background: #584550 !important;
+  background: #3b3438 !important;
 }
 .ball-themes.mold.band {
   background: #222224 !important;
 }
 .ball-themes.mold.highlight {
-  background: #584550 !important;
+  background: #6b5862 !important;
+}
+.ball-themes.mold.highlight input {
+  color: #222224;
 }
 .ball-themes.mold.item {
   color: #222224 !important;
 }
 .ball-themes.mold.item:hover {
   text-shadow: unset;
-  text-shadow: 0 0 8px #490002 !important;
+  text-shadow: 0 0 8px #6b5862 !important;
 }
 .ball-themes.mold.item.active {
   text-shadow: unset;
-  background: #584550 !important;
+  background: #6b5862 !important;
 }
 .ball-themes.moon.background {
   background: #2f322f !important;
 }
 .ball-themes.moon.gradient {
-  background: linear-gradient(45deg, #ECDBEB, #DFFFFE) !important;
+  background: linear-gradient(45deg, #dbeaec, #DFFFFE) !important;
 }
 .ball-themes.moon.light-color {
   background: #465152 !important;
 }
 .ball-themes.moon.band {
-  background: #222224 !important;
+  background: #f5b851 !important;
 }
 .ball-themes.moon.highlight {
   background: #29a5b9 !important;
@@ -3264,13 +3271,13 @@ a.content-link img {
 }
 .ball-themes.moon.item.active {
   text-shadow: unset;
-  background: #f5b851 !important;
+  background: #29a5b9 !important;
 }
 .ball-themes.nest.background {
   background: #e3e174 !important;
 }
 .ball-themes.nest.gradient {
-  background: linear-gradient(45deg, #ECDBEB, #DFFFFE) !important;
+  background: linear-gradient(45deg, #dbecdb, #DFFFFE) !important;
 }
 .ball-themes.nest.light-color {
   background: #82bc51 !important;
@@ -3293,10 +3300,10 @@ a.content-link img {
   background: #82bc51 !important;
 }
 .ball-themes.net.background {
-  background: #377184 !important;
+  background: #465152 !important;
 }
 .ball-themes.net.gradient {
-  background: linear-gradient(45deg, #ECDBEB, #DFFFFE) !important;
+  background: linear-gradient(45deg, #87a1aa, #DFFFFE) !important;
 }
 .ball-themes.net.light-color {
   background: #259da4 !important;
@@ -3305,50 +3312,50 @@ a.content-link img {
   background: #222224 !important;
 }
 .ball-themes.net.highlight {
-  background: #24322d !important;
+  background: #4e9bb4 !important;
 }
 .ball-themes.net.item {
   color: #222224 !important;
 }
 .ball-themes.net.item:hover {
   text-shadow: unset;
-  text-shadow: 0 0 8px #24322d !important;
+  text-shadow: 0 0 8px #377184 !important;
 }
 .ball-themes.net.item.active {
   text-shadow: unset;
-  background: #24322d !important;
+  background: #377184 !important;
 }
 .ball-themes.power.background {
   background: #f23100 !important;
 }
 .ball-themes.power.gradient {
-  background: linear-gradient(45deg, #ECDBEB, #DFFFFE) !important;
+  background: linear-gradient(45deg, #ffc977, #ffe1bf) !important;
 }
 .ball-themes.power.light-color {
-  background: #45504b !important;
+  background: #272c2a !important;
 }
 .ball-themes.power.band {
   background: #222224 !important;
 }
 .ball-themes.power.highlight {
-  background: #ef8710 !important;
+  background: #ff9206 !important;
 }
 .ball-themes.power.item {
   color: #222224 !important;
 }
 .ball-themes.power.item:hover {
   text-shadow: unset;
-  text-shadow: 0 0 8px #24322d !important;
+  text-shadow: 0 0 8px #ff9206 !important;
 }
 .ball-themes.power.item.active {
   text-shadow: unset;
-  background: #ef8710 !important;
+  background: #ff9206 !important;
 }
 .ball-themes.quick.background {
   background: #3984CA !important;
 }
 .ball-themes.quick.gradient {
-  background: linear-gradient(45deg, #3984CA, #73b4e5) !important;
+  background: linear-gradient(45deg, #3984CA, #9ed2fa) !important;
 }
 .ball-themes.quick.light-color {
   background: #73b4e5 !important;
@@ -3357,7 +3364,7 @@ a.content-link img {
   background: #281c12 !important;
 }
 .ball-themes.quick.highlight {
-  background: #ecee2e !important;
+  background: #efdb2a !important;
 }
 .ball-themes.quick.item {
   color: #222224 !important;
@@ -3374,7 +3381,7 @@ a.content-link img {
   background: #6291ff !important;
 }
 .ball-themes.rain.gradient {
-  background: linear-gradient(45deg, #e7eaf1, #DFFFFE) !important;
+  background: linear-gradient(45deg, #9db3e5, #dffffd) !important;
 }
 .ball-themes.rain.light-color {
   background: #2959fb !important;
@@ -3400,7 +3407,7 @@ a.content-link img {
   background: #C42835 !important;
 }
 .ball-themes.repeat.gradient {
-  background: linear-gradient(45deg, #ECDBEB, #DFFFFE) !important;
+  background: linear-gradient(45deg, #ffefef, #fffef2) !important;
 }
 .ball-themes.repeat.light-color {
   background: #E33242 !important;
@@ -3409,24 +3416,24 @@ a.content-link img {
   background: #222224 !important;
 }
 .ball-themes.repeat.highlight {
-  background: #fced3f !important;
+  background: #ffe853 !important;
 }
 .ball-themes.repeat.item {
   color: #222224 !important;
 }
 .ball-themes.repeat.item:hover {
   text-shadow: unset;
-  text-shadow: 0 0 8px #716f6e !important;
+  text-shadow: 0 0 8px #ffe853 !important;
 }
 .ball-themes.repeat.item.active {
   text-shadow: unset;
-  background: #fced3f !important;
+  background: #ffe853 !important;
 }
 .ball-themes.safari.background {
-  background: #716225 !important;
+  background: #766c2d !important;
 }
 .ball-themes.safari.gradient {
-  background: linear-gradient(45deg, #e0dedc, #ffffea) !important;
+  background: linear-gradient(45deg, #d6d377, #fffff4) !important;
 }
 .ball-themes.safari.light-color {
   background: #a8a446 !important;
@@ -3435,27 +3442,27 @@ a.content-link img {
   background: #222224 !important;
 }
 .ball-themes.safari.highlight {
-  background: #2a7f55 !important;
+  background: #368859 !important;
 }
 .ball-themes.safari.item {
   color: #222224 !important;
 }
 .ball-themes.safari.item:hover {
   text-shadow: unset;
-  text-shadow: 0 0 8px #2a7f55 !important;
+  text-shadow: 0 0 8px #368859 !important;
 }
 .ball-themes.safari.item.active {
   text-shadow: unset;
-  background: #2a7f55 !important;
+  background: #368859 !important;
 }
 .ball-themes.sand.background {
   background: #fcd255 !important;
 }
 .ball-themes.sand.gradient {
-  background: linear-gradient(45deg, #fdf9eb, #cfcabd) !important;
+  background: linear-gradient(45deg, #ffe7aa, #fdf9eb) !important;
 }
 .ball-themes.sand.light-color {
-  background: #d3ba73 !important;
+  background: #d1ba75 !important;
 }
 .ball-themes.sand.band {
   background: #222224 !important;
@@ -3468,11 +3475,11 @@ a.content-link img {
 }
 .ball-themes.sand.item:hover {
   text-shadow: unset;
-  text-shadow: 0 0 8px #d3ba73 !important;
+  text-shadow: 0 0 8px #ffae00 !important;
 }
 .ball-themes.sand.item.active {
   text-shadow: unset;
-  background: #d3ba73 !important;
+  background: #ffae00 !important;
 }
 .ball-themes.solid.background {
   background: #797d83 !important;
@@ -3487,7 +3494,7 @@ a.content-link img {
   background: #222224 !important;
 }
 .ball-themes.solid.highlight {
-  background: #89773b !important;
+  background: #a58429 !important;
 }
 .ball-themes.solid.item {
   color: #222224 !important;
@@ -3553,19 +3560,19 @@ a.content-link img {
   background: #fbb900 !important;
 }
 .ball-themes.timer.background {
-  background: #d6d0e6 !important;
+  background: #f48f36 !important;
 }
 .ball-themes.timer.gradient {
-  background: linear-gradient(45deg, #fef5f0, #d2c5de) !important;
+  background: linear-gradient(45deg, #ffffff, #fffdfe) !important;
 }
 .ball-themes.timer.light-color {
-  background: #6a6963 !important;
+  background: #be5335 !important;
 }
 .ball-themes.timer.band {
   background: #222224 !important;
 }
 .ball-themes.timer.highlight {
-  background: #d25538 !important;
+  background: #E98C45 !important;
 }
 .ball-themes.timer.item {
   color: #222224 !important;
@@ -3576,5 +3583,5 @@ a.content-link img {
 }
 .ball-themes.timer.item.active {
   text-shadow: unset;
-  background: #eb962c !important;
+  background: #d25538 !important;
 }

@@ -125,6 +125,7 @@
                 <label for="system.type">{{localize "ITEM.Type"}}</label>
                 <div class="arrow-box">
                     <select data-target="system.type" class="type-select" style="background: url('{{loadTypeImageUrl item.system.type}}');" {{#if editLocked}}disabled{{/if}}>
+                        {{log this}}
                         {{#select item.system.type}}
                             {{#each types}}
                                 <option value="{{this}}">{{this}}</option>

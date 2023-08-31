@@ -3,8 +3,9 @@ import { InventoryConfigSheet } from "../sheet/inventory-config.js";
 import { PTUPartySheet } from "../../apps/party/sheet.js";
 import { Statistic } from "../../system/statistic/index.js";
 import { PTUDexSheet } from "../../apps/dex/sheet.js";
+import { PTUActorSheet } from "../sheet.js";
 
-export class PTUCharacterSheet extends ActorSheet {
+export class PTUCharacterSheet extends PTUActorSheet {
     
 	/** @override */
 	static get defaultOptions() {
@@ -33,9 +34,8 @@ export class PTUCharacterSheet extends ActorSheet {
 		return options;
 	}
 
-	// TODO: make this proper
 	get ballStyle() {
-		return "default";
+		return this.actor.flags.ptu.theme || "default";
 	}
 
 	/* -------------------------------------------- */

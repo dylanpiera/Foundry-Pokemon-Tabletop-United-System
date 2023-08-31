@@ -1,4 +1,5 @@
 export function dexSync() {
+    ui.notifications.info("Syncing Dexes...");
     let owned = new Set();
     let seen = new Set();
     let updates = [];
@@ -14,4 +15,5 @@ export function dexSync() {
     seen = seen.filter(s => !owned.has(s));
 
     if(updates.length > 0) Actor.updateDocuments(updates.map(({ _id }) => ({ _id, "system.dex.seen": [...seen], "system.dex.owned": [...owned] })));
+    ui.notifications.info("Syncing Dexes Complete!");
 }

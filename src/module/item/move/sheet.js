@@ -8,8 +8,8 @@ class PTUMoveSheet extends PTUItemSheet {
     }
 
     /** @override */
-    getData() {
-        const data = super.getData();
+    async getData() {
+        const data = await super.getData();
         
         data.types = Object.keys(CONFIG.PTU.data.typeEffectiveness)
 
