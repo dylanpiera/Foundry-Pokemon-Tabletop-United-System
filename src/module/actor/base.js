@@ -50,6 +50,10 @@ class PTUActor extends Actor {
         return true;
     }
 
+    get sizeClass() {
+        return "Medium;"
+    }
+
     get types() {
         return this.system.typing
             || (this.system.modifiers.typeOverwrite
@@ -156,6 +160,7 @@ class PTUActor extends Actor {
             rollSubstitutions: {},
             rollNotes: {},
             damageDice: {},
+            tokenOverrides: {}
         }
 
         super._initialize();
@@ -702,7 +707,21 @@ class PTUActor extends Actor {
         super._onDelete(options, userId);
     }
 
+    /** @override */
+    _onEmbeddedDocumentChange(embeddedName) {
+        if (this.isToken) {
+            return super._onEmbeddedDocumentChange(embeddedName);
+        } else if (game.combat?.getCombatantByActor(this.id)) {
+            // Needs to be done since `super._onEmbeddedDocumentChange` isn't called
+            ui.combat.render();
+        }
 
+        // For linked tokens, replace parent method with alternative workflow to control canvas re-rendering
+        const tokenDocs = this.getActiveTokens(true, true);
+        for (const tokenDoc of tokenDocs) {
+            tokenDoc.onActorEmbeddedItemChange();
+        }
+    }
 
     /* -------------------------------------------- */
     /* Moves                                        */

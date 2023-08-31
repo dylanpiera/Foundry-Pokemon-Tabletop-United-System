@@ -41,6 +41,7 @@ export const Init = {
 
             // Define Custom Token Object Class
             CONFIG.Token.objectClass = PTUCONFIG.Token.objectClass;
+            CONFIG.Token.documentClass = PTUCONFIG.Token.documentClass;
 
             // Define Custom Roll classes
             CONFIG.Dice.rolls ??= []

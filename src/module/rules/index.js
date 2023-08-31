@@ -4,6 +4,7 @@ import { GrantItemRuleElement } from "./rule-element/grant-item/rule-element.js"
 import { RollOptionRuleElement } from "./rule-element/roll-option.js";
 import { ChoiceSetRuleElement } from "./rule-element/choice-set/rule-element.js";
 import { FlatModifierRuleElement } from "./rule-element/flat-modifier.js";
+import { TokenImageRuleElement } from "./rule-element/token-image.js";
 
 class RuleElements {
     static builtin = {
@@ -12,6 +13,7 @@ class RuleElements {
         "RollOption": RollOptionRuleElement,
         "ChoiceSet": ChoiceSetRuleElement,
         "FlatModifier": FlatModifierRuleElement,
+        "TokenImage": TokenImageRuleElement
     }
 
     static custom = {}

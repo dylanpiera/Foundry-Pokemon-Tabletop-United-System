@@ -498,7 +498,8 @@
       "dexentry",
       "effect",
       "species",
-      "condition"
+      "condition",
+      "reference"
     ],
     "templates": {
       "base": {
@@ -521,9 +522,6 @@
         "megaLauncher": false,
         "punkRock": false,
         "strongJaw": false
-      },
-      "automation": {
-        "automation": []
       }
     },
     "dexentry": {
@@ -532,7 +530,7 @@
       "owned": false
     },
     "feat": {
-      "templates": ["base", "automation"],
+      "templates": ["base"],
       "prerequisites": "",
       "frequency": "At Will - Standard Action",
       "tags": "",
@@ -588,12 +586,12 @@
       "persistent": null
     },
     "ability": {
-      "templates": ["base", "automation"],
+      "templates": ["base"],
       "frequency": "",
       "tier": ""
     },
     "move": {
-      "templates": ["base", "interactions", "automation"],
+      "templates": ["base", "interactions"],
       "type": "Untyped",
       "category": "",
       "damageBase": "",
@@ -614,7 +612,7 @@
       "cost": 0
     },
     "item": {
-      "templates": ["base", "automation"],
+      "templates": ["base"],
       "quantity": 1,
       "category": "",
       "cost": 0,
@@ -765,6 +763,9 @@
       },
       "slug": "",
       "rules": []
+    },
+    "reference": {
+      "templates": ["base"]
     }
   }
 }

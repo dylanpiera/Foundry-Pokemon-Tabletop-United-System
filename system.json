@@ -7,7 +7,7 @@
     "verified": "11.308",
     "maximum": 11
   },
-  "version": "4.0.0.alpha.21",
+  "version": "4.0.0.alpha.23",
   "templateVersion": 2,
   "authors": [
     {
@@ -124,6 +124,12 @@
       "label": "macros",
       "type": "Macro",
       "name": "macros",
+      "system": "ptu"
+    },
+    {
+      "label": "references",
+      "type": "Item",
+      "name": "references",
       "system": "ptu"
     }
   ],

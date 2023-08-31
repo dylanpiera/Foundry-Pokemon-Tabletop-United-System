@@ -111,7 +111,8 @@
     "GrantItem": "Grant Item",
     "RollOption": "Roll Option",
     "ChoiceSet": "Choice Set",
-    "FlatModifier": "Flat Modifier"
+    "FlatModifier": "Flat Modifier",
+    "TokenImage": "Token Image"
   },
   "PTU": {
     "Title": "Pokémon Tabletop United",

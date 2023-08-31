@@ -34,6 +34,7 @@ import { InitiativeRoll } from '../../module/system/check/initiative-roll.js';
 import { PTUCombatant } from '../../module/combat/combatant.js';
 import { PTUCombatTrackerConfig } from '../../module/combat/config.js';
 import { PTUCombatTracker } from '../../module/combat/tracker.js';
+import { PTUTokenDocument } from '../../module/canvas/token/document.js';
 
 const data = {
   skills: {
@@ -186,7 +187,8 @@ export const PTUCONFIG = {
     }
   },
   Token: {
-    objectClass: PTUToken
+    objectClass: PTUToken,
+    documentClass: PTUTokenDocument
   },
   combat,
   combatant: {
@@ -209,6 +211,7 @@ export const PTUCONFIG = {
       effect: PTUEffect,
       species: PTUSpecies,
       condition: PTUCondition,
+      reference: PTUItem
     },
     sheetClasses: {
       item: PTUItemSheet,

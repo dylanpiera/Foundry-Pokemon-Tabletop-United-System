@@ -34,6 +34,11 @@ class PTUPokemonActor extends PTUActor {
     }
 
     /** @override */
+    get sizeClass() {
+        return this.species?.system?.size?.sizeClass ?? "Medium";
+    }
+
+    /** @override */
     async createEmbeddedDocuments(embeddedName, data, options) {
         if (embeddedName === "Item") {
             for (const itemData of data) {
@@ -206,25 +211,6 @@ class PTUPokemonActor extends PTUActor {
         // Calc Type Effectiveness
         system.effectiveness = getEffectiveness(this);
 
-        const passives = {}
-        for (const item of this.items) {
-            if (item.system.automation?.length > 0) {
-                for (let index = 0; index < item.system.automation.length; index++) {
-                    if (!item.system.automation[index].passive) continue;
-                    for (const target of item.system.automation[index].targets) {
-                        if (!passives[target]) passives[target] = [];
-                        passives[target].push({
-                            index: index,
-                            automation: item.system.automation[index],
-                            itemUuid: item.uuid,
-                            itemName: item.name
-                        })
-                    }
-                }
-            }
-        }
-        system.passives = passives;
-
         /* The Corner of Exceptions */
 
         // Shedinja will always be a special case.
@@ -331,25 +317,6 @@ class PTUPokemonActor extends PTUActor {
 
         // Calc Type Effectiveness
         system.effectiveness = getEffectiveness(this);
-
-        const passives = {}
-        for (const item of this.items) {
-            if (item.system.automation?.length > 0) {
-                for (let index = 0; index < item.system.automation.length; index++) {
-                    if (!item.system.automation[index].passive) continue;
-                    for (const target of item.system.automation[index].targets) {
-                        if (!passives[target]) passives[target] = [];
-                        passives[target].push({
-                            index: index,
-                            automation: item.system.automation[index],
-                            itemUuid: item.uuid,
-                            itemName: item.name
-                        })
-                    }
-                }
-            }
-        }
-        system.passives = passives;
 
         /* The Corner of Exceptions */
 
