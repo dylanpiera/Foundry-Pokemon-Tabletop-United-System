@@ -253,6 +253,22 @@ class PTUToken extends Token {
             target,
         }, options);
     }
+
+    /* -------------------------------------------- */
+    /*  Event Handlers                              */
+    /* -------------------------------------------- */
+
+    /** @override */
+    _onControl(options = {}) {
+        if(game.ready) game.ptu.tokenPanel.refresh(true);
+        super._onControl(options);
+    }
+
+    /** @override */
+    _onRelease(options) {
+        game.ptu.tokenPanel.refresh(true);
+        super._onRelease(options);
+    }
 }
 
 export { PTUToken } 

@@ -205,6 +205,7 @@ class PTUCombat extends Combat {
             // Reset all data to get updated encounter roll options
             this.resetActors();
             await game.ptu.effectTracker.refresh();
+            game.ptu.tokenPanel.refresh();
         });
     }
 

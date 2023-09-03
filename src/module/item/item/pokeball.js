@@ -24,7 +24,7 @@ class PokeballItem extends PTUItemItem {
 
     /** @override */
     prepareDerivedData() {
-        this.system.action = this._createAction();
+        this.action = this._createAction();
     }
 
     _createAction() {
@@ -348,7 +348,7 @@ class PokeballItem extends PTUItemItem {
         //TODO: Request GM throw roll
 
         // Step 1: Roll to-hit
-        return this.system.action.roll({ event, callback: (...args) => this.requestGmRoll(event, args) });
+        return this.action.roll({ event, callback: (...args) => this.requestGmRoll(event, args) });
     }
 
     async requestGmRoll(event, args) {
@@ -359,7 +359,7 @@ class PokeballItem extends PTUItemItem {
 
     async rollCapture(event, args) {
         const target = await fromUuid(args[1]?.[0]?.token ?? "")?.object;
-        return this.system.action.capture({ event, target, callback: (...args) => this.handleCapture(args) });
+        return this.action.capture({ event, target, callback: (...args) => this.handleCapture(args) });
     }
 
     async handleCapture(args) {

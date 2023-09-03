@@ -259,13 +259,13 @@ export class PokemonGenerator {
         const evoMoves = this.species.system.moves.level.filter(m => m.level == "Evo");
 
         const moves = evoMoves ? evoMoves : [];
-        for (const move of levelUpMoves.sort((a, b) => a.level - b.level)) {
+        for (const move of levelUpMoves.sort((a, b) => b.level - a.level)) {
             if (moves.find(m => m.slug == move.slug)) continue;
             moves.push(move);
             if (moves.length >= 6) break;
         }
 
-        return this.moves = moves;
+        return this.moves = moves.sort((a, b) => a.level === "Evo" ? -1 : b.level === "Evo" ? 1 : a.level - b.level);
     }
 
     prepareAbilities() {

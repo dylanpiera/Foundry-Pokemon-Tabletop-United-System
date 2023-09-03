@@ -1,5 +1,6 @@
 import { PokemonGenerator } from "../module/actor/pokemon/generator.js"
 import { MigrationSummary } from "../module/apps/migration-summary.js"
+import { TokenPanel } from "../module/apps/token-panel.js"
 import { StatusEffects } from "../module/canvas/status-effect.js"
 import { MigrationList } from "../module/migration/index.js"
 import { MigrationRunner } from "../module/migration/runner/index.js"
@@ -40,7 +41,8 @@ const GamePTU = {
                 changeRotomForm,
                 pokedex,
                 dexSync
-            }
+            },
+            tokenPanel: new TokenPanel()
         }
 
         game.ptu = mergeObject(game.ptu ?? {}, initData)

@@ -70,6 +70,13 @@
                                 </div>
                             {{/unless}}
                         {{/if}}
+                        {{#if item.system.ac}}
+                            {{#unless (is item.system.ac "--")}}
+                                <div class="tag gradient" title="AC: {{item.system.ac}}">
+                                    <span>AC: {{item.system.ac}}</span>
+                                </div>
+                            {{/unless}}
+                        {{/if}}
                         {{#if item.system.frequency}}
                             <div class="tag gradient">
                                 <span>{{item.system.frequency}}</span>

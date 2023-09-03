@@ -160,7 +160,6 @@ class PTUTrainerActor extends PTUActor {
             system.initiative.value -= (system.modifiers.flinch_count.value * 5);
         }
         Hooks.call("updateInitiative", this);
-
     }
 
     /** @override */

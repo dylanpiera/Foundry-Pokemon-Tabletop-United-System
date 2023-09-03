@@ -112,7 +112,11 @@
     "RollOption": "Roll Option",
     "ChoiceSet": "Choice Set",
     "FlatModifier": "Flat Modifier",
-    "TokenImage": "Token Image"
+    "TokenImage": "Token Image",
+    "TokenName": "Token Name",
+    "TokenLight": "Token Light",
+    "TemporarySpecies": "Temporary Species",
+    "TypeOverwrite": "Type Overwrite"
   },
   "PTU": {
     "Title": "Pokémon Tabletop United",

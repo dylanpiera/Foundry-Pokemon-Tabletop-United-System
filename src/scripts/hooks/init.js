@@ -22,6 +22,8 @@ export const Init = {
             // Add PTUCONFIG to CONFIG
             CONFIG.PTU = PTUCONFIG
 
+            CONFIG.User.documentClass = PTUCONFIG.User.documentClass;
+
             // Set custom combat settings
             CONFIG.Combat.initiative = PTUCONFIG.combat.initiative;
             CONFIG.Combat.documentClass = PTUCONFIG.combat.documentClass;
@@ -50,6 +52,17 @@ export const Init = {
             // Define Custom Chat 
             CONFIG.ui.chat = PTUCONFIG.ui.chatlog.documentClass;
             CONFIG.ChatMessage.documentClass = PTUCONFIG.ChatMessage.documentClass;
+
+
+            // Insert templates into DOM tree so Applications can render into
+            if (document.querySelector("#ui-top") !== null) {
+                // Template element for effects-panel
+                const uiTop = document.querySelector("#ui-top");
+                const template = document.createElement("template");
+                template.setAttribute("id", "ptu-token-panel");
+                uiTop?.insertAdjacentElement("afterend", template);
+            }
+
 
             // Register stuff with the Foundry client
             registerSheets();

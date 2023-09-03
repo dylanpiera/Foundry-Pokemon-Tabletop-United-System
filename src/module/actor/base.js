@@ -55,7 +55,8 @@ class PTUActor extends Actor {
     }
 
     get types() {
-        return this.system.typing
+        return this.synthetics.typeOverride.typing 
+            || this.system.typing
             || (this.system.modifiers.typeOverwrite
                 ? Array.isArray(this.system.modifiers.typeOverwrite)
                     ? this.system.modifiers.typeOverwrite.filter(x => x)
@@ -160,7 +161,9 @@ class PTUActor extends Actor {
             rollSubstitutions: {},
             rollNotes: {},
             damageDice: {},
-            tokenOverrides: {}
+            tokenOverrides: {},
+            speciesOverride: {},
+            typeOverride: {},
         }
 
         super._initialize();
@@ -184,10 +187,12 @@ class PTUActor extends Actor {
 
         // Refresh sidebar if needed
         if (this.constructed && canvas.ready && game.ptu) {
-            if (this.id === game.ptu.forms.sidebar?.store?.state?.actorId)
-                game.ptu.forms.sidebar.stateHasChanged();
-            if (game.ptu.forms.sidebar?.store?.state?.targetedActors.includes(this.id))
-                game.ptu.forms.sidebar.stateHasChanged(true);
+            const thisTokenIsControlled = canvas.tokens.controlled.some(
+                t => t.document === this.parent || (t.document.actorLink && t.actor === this)
+            )
+            if(game.user.character === this || thisTokenIsControlled) {
+                game.ptu.tokenPanel.refresh();
+            }
         }
     }
 
@@ -210,6 +215,12 @@ class PTUActor extends Actor {
 
     prepareDerivedData() {
         this.prepareSynthetics();
+
+        // Extra Rolloptions
+        if(!this.types.includes("Untyped")) delete this.flags.ptu.rollOptions.all["self:types:untyped"]
+        for (const type of this.types) {
+            this.flags.ptu.rollOptions.all["self:types:" + type.toLowerCase()] = true;
+        }
 
         if (this.allowedItemTypes.includes('move')) {
             this.system.attacks = this.prepareMoves();
@@ -347,11 +358,10 @@ class PTUActor extends Actor {
         const flatDamage = effectiveness === -1;
         if (flatDamage) effectiveness = 1;
 
-        const { finalDamage, applications } = typeof damage === "number"
-            ? { finalDamage: damage, applications: [] }
-            : skipIWR || flatDamage
-                ? { finalDamage: damage.total, applications: [] }
-                : this.applyIWR({ actor: this, damage, item, effectiveness, rollOptions });
+        const currentDamage = typeof damage === "number"
+            ? damage
+            : damage.total;
+        const applications = [];
 
         // Calculate defenses & damage reduction
         const defense = (() => {
@@ -373,7 +383,7 @@ class PTUActor extends Actor {
             if (item?.system.category == "Special") return this.system.stats.spdef.total;
             return 0;
         })();
-        const damageAbsorbedByDefense = finalDamage > 0 ? Math.min(finalDamage, defense) : 0;
+        const damageAbsorbedByDefense = currentDamage > 0 ? Math.min(currentDamage, defense) : 0;
 
         if (damageAbsorbedByDefense > 0 && !applications.some(a => a.category == "defense")) {
             applications.push({
@@ -389,7 +399,7 @@ class PTUActor extends Actor {
             if (item?.system.category == "Special") return this.system.modifiers.damageReduction.special.total;
             return 0;
         })();
-        const damageAbsorbedByReduction = finalDamage > 0 ? Math.min(finalDamage - damageAbsorbedByDefense, damageReduction) : 0;
+        const damageAbsorbedByReduction = currentDamage > 0 ? Math.min(currentDamage - damageAbsorbedByDefense, damageReduction) : 0;
 
         if (damageAbsorbedByReduction > 0) {
             applications.push({
@@ -399,7 +409,15 @@ class PTUActor extends Actor {
             })
         }
 
-        const hpUpdate = this.calculateHealthDelta(finalDamage <= 0 ? finalDamage : Math.max(1, finalDamage - damageAbsorbedByDefense - damageAbsorbedByReduction));
+        const { finalDamage, additionalApplications } = typeof damage === "number"
+            ? { finalDamage: Math.max((currentDamage - damageAbsorbedByDefense - damageAbsorbedByReduction), 1), additionalApplications: [] }
+            : skipIWR || flatDamage
+                ? { finalDamage: Math.max((currentDamage - damageAbsorbedByDefense - damageAbsorbedByReduction), 1), additionalApplications: [] }
+                : this.applyIWR({ actor: this, damage: {...damage, reduced: currentDamage - damageAbsorbedByDefense - damageAbsorbedByReduction}, item, effectiveness, rollOptions });
+
+        applications.push(...additionalApplications);
+
+        const hpUpdate = this.calculateHealthDelta(finalDamage <= 0 ? finalDamage : Math.max(1, finalDamage));
         const hpDamage = hpUpdate.totalApplied;
 
         const preUpdateSource = this.toObject();
@@ -506,7 +524,7 @@ class PTUActor extends Actor {
             return { finalDamage: 0, applications: [] };
         }
 
-        const { total, totalCritImmune } = damage;
+        const { total, totalCritImmune, reduced } = damage;
 
         const { immunities, weaknesses, resistances } = actor.iwr;
 
@@ -526,7 +544,7 @@ class PTUActor extends Actor {
                 return [{
                     category: "immunity",
                     type: immunity.label,
-                    adjustment: -1 * total,
+                    adjustment: -1 * reduced,
                 }]
             }
 
@@ -541,11 +559,11 @@ class PTUActor extends Actor {
                 applications.push({
                     category: "immunity",
                     type: critImmunity.label,
-                    adjustment: -1 * (total - critImmuneTotal),
+                    adjustment: -1 * (reduced - critImmuneTotal),
                 })
             }
 
-            const afterImmunities = Math.max(total + applications.reduce((sum, a) => sum + a.adjustment, 0), 0);
+            const afterImmunities = Math.max(reduced + applications.reduce((sum, a) => sum + a.adjustment, 0), 0);
             if (afterImmunities == 0) return applications;
 
             // Step 3: Weaknesses
@@ -555,12 +573,12 @@ class PTUActor extends Actor {
 
             const afterWeaknesses = afterImmunities * (weaknessModifier ?? 1);
 
-            if (mainWeaknesses?.length > 0 && afterWeaknesses < afterImmunities) {
+            if (mainWeaknesses?.length > 0 && afterWeaknesses > afterImmunities) {
                 for (const weakness of mainWeaknesses) {
                     applications.push({
                         category: "weakness",
                         type: weakness.label,
-                        modifier: weakness.value
+                        modifier: weakness.value > 2 ? Math.log2(weakness.value) : weakness.value == 2 ? 1.5 : weakness.value
                     })
                 }
             }
@@ -606,9 +624,9 @@ class PTUActor extends Actor {
         })();
 
         const adjustment = applications.filter(a => a.adjustment).reduce((sum, a) => sum + a.adjustment, 0);
-        const finalDamage = Math.max(total + adjustment, 0);
+        const finalDamage = Math.max(reduced + adjustment, 0);
 
-        return { finalDamage, applications };
+        return { finalDamage, additionalApplications: applications };
     }
 
     calculateHealthDelta(damage) {

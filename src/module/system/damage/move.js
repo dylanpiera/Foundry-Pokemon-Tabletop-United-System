@@ -6,8 +6,13 @@ class PTUMoveDamage {
     static async calculate({move, actor, context, modifiers = []}) {
         if(!move || !actor) return null;
 
-        const damageBase = Number(move.system.damageBase);
-        if(isNaN(damageBase)) return null;
+        const damageBaseModifiers = [];
+        if(isNaN(Number(move.system.damageBase))) return null;
+        damageBaseModifiers.push(new PTUModifier({
+            slug: "damage-base",
+            label: "Damage Base",
+            modifier: Number(move.system.damageBase),
+        }));
 
         context.skipDialog ??= game.settings.get("ptu", "skipRollDialog");
 
@@ -92,7 +97,14 @@ class PTUMoveDamage {
         modifiers.push(
             ...extractModifiers(actor.synthetics, domains, { injectables: move, test: options})
         )
+        damageBaseModifiers.push(
+            ...extractModifiers(actor.synthetics, ["damage-base"], { injectables: move, test: options})
+        )
 
+        const damageBase = Object.values(damageBaseModifiers.reduce((a, b) => {
+            if(!b.ignored && !a[b.slug]) a[b.slug] = b.modifier;
+            return a;
+        }, {})).reduce((a, b) => a + b, 0);
         options.add(`damage-base:${damageBase}`)
 
         for(const rule of actor.rules.filter(r => !r.ignored)) {

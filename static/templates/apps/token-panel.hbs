@@ -1,0 +1,85 @@
+<section class="token-panel" {{#unless actor}}style="display: none;"{{/unless}}>
+    <div class="party-overview">
+
+    </div>
+    <div class="overview">
+        <div class="name-tag">
+            {{actor.name}}
+        </div>
+        <div class="avatar">
+            <img src="{{actor.img}}" alt="{{actor.name}}">
+            {{!-- <div class="action-bar">
+                <div class="action">
+                    <i class="fas fa-play" title="Standard Action"></i>
+                </div>
+                <div class="action">
+                    <i class="fas fa-arrows-alt" title="Shift Action"></i>
+                </div>
+                <div class="action">
+                    <i class="fas fa-asterisk" title="Swift Action"></i>
+                </div>
+            </div> --}}
+        </div>
+        <div class="action-accordion">
+            <div class="move-actions">
+                {{#each attacks as |attack|}}
+                    <div class="action {{#if attack.rollable}}rollable{{/if}}" data-id="{{attack.id}}" title="{{attack.effect}}">
+                        <div class="icon">
+                            <img class="icon" src="{{attack.img}}" alt="{{attack.name}}">
+                            <img class="dice" src="/icons/svg/d20.svg" title="Roll {{attack.name}}">
+                        </div>
+                        <div class="name">
+                            {{attack.name}}
+                        </div>
+                        <div class="tags">
+                            {{#if attack.db}}
+                                <div class="tag db" title="{{attack.db}}">
+                                    DB: {{attack.db}}
+                                </div>
+                            {{/if}}
+                            {{#if attack.ac}}
+                                <div class="tag ac" title="{{attack.ac}}">
+                                    AC: {{attack.ac}}
+                                </div>
+                            {{/if}}
+                            {{#if attack.frequency}}
+                                <div class="tag frequency" title="{{attack.frequency}}">
+                                    {{attack.frequency}}
+                                </div>
+                            {{/if}}
+                        </div>
+                    </div>
+                {{/each}}
+            </div>
+            <div class="struggle-actions">
+                {{#each struggles as |struggle|}}
+                    <div class="action">
+                        <div class="icon">
+                            <img src="{{struggle.img}}" alt="{{struggle.name}}">
+                        </div>
+                        <div class="name">
+                            {{struggle.name}}
+                        </div>
+                        <div class="tags">
+                            {{#if struggle.db}}
+                                <div class="tag db" title="{{struggle.db}}">
+                                    DB: {{struggle.db}}
+                                </div>
+                            {{/if}}
+                            {{#if struggle.ac}}
+                                <div class="tag ac" title="{{struggle.ac}}">
+                                    AC: {{struggle.ac}}
+                                </div>
+                            {{/if}}
+                            {{#if struggle.frequency}}
+                                <div class="tag frequency" title="{{struggle.frequency}}">
+                                    {{struggle.frequency}}
+                                </div>
+                            {{/if}}
+                        </div>
+                    </div>
+                {{/each}}
+            </div>
+        </div>
+    </div>
+</section>

@@ -35,6 +35,7 @@ import { PTUCombatant } from '../../module/combat/combatant.js';
 import { PTUCombatTrackerConfig } from '../../module/combat/config.js';
 import { PTUCombatTracker } from '../../module/combat/tracker.js';
 import { PTUTokenDocument } from '../../module/canvas/token/document.js';
+import { PTUUser } from '../../module/user.js';
 
 const data = {
   skills: {
@@ -253,5 +254,8 @@ export const PTUCONFIG = {
       attack: AttackMessagePTU,
       damage: DamageMessagePTU
     }
+  },
+  User: {
+    documentClass: PTUUser
   }
 }

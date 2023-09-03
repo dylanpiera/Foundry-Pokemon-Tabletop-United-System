@@ -13,6 +13,29 @@ function _registerPTUHelpers() {
 
     Handlebars.registerHelper("json", function (context) { return JSON.stringify(context); });
 
+    Handlebars.registerHelper("shortFrequency", function (frequency) {
+        switch (frequency.toLowerCase()) {
+            case "at-will":
+              return "At-Will";
+            case "eot":
+              return "EOT";
+            case "scene":
+              return "1x Scene";
+            case "scene x2":
+              return "2x S";
+            case "scene x3":
+              return "3x S";
+            case "daily":
+              return "1x D";
+            case "daily x2":
+              return "2x D";
+            case "daily x3":
+              return "3x D";
+            default:
+              return frequency;
+          }
+    })
+
     // //pokeball themed background for pokemon
     // Handlebars.registerHelper('pokeballStyles', function (pokeball) {
 

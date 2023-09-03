@@ -5,6 +5,10 @@ import { RollOptionRuleElement } from "./rule-element/roll-option.js";
 import { ChoiceSetRuleElement } from "./rule-element/choice-set/rule-element.js";
 import { FlatModifierRuleElement } from "./rule-element/flat-modifier.js";
 import { TokenImageRuleElement } from "./rule-element/token-image.js";
+import { TemporarySpeciesRuleElement } from "./rule-element/temp-species.js";
+import { TokenNameRuleElement } from "./rule-element/token-name.js";
+import { TokenLightRuleElement } from "./rule-element/token-light.js";
+import { TypeOverwriteRuleElement } from "./rule-element/type-overwrite.js";
 
 class RuleElements {
     static builtin = {
@@ -13,7 +17,11 @@ class RuleElements {
         "RollOption": RollOptionRuleElement,
         "ChoiceSet": ChoiceSetRuleElement,
         "FlatModifier": FlatModifierRuleElement,
-        "TokenImage": TokenImageRuleElement
+        "TokenImage": TokenImageRuleElement,
+        "TokenName": TokenNameRuleElement,
+        "TokenLight": TokenLightRuleElement,
+        "TemporarySpecies": TemporarySpeciesRuleElement,
+        "TypeOverwrite": TypeOverwriteRuleElement
     }
 
     static custom = {}

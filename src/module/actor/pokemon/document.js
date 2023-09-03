@@ -18,6 +18,9 @@ class PTUPokemonActor extends PTUActor {
 
     get species() {
         if (this.itemTypes.species.length > 1) console.warn(`Found more than one species for ${this.name}`);
+        if(this.synthetics.speciesOverride.species) {
+            return this.synthetics.speciesOverride.species;
+        }
         return this.itemTypes.species[0];
     }
 
@@ -167,10 +170,13 @@ class PTUPokemonActor extends PTUActor {
         }
 
         system.typing = speciesSystem?.types ?? ['Untyped'];
+        if(types.length > 0) system.typing = types;
+        if(this.synthetics.typeOverride.typing) system.typing = this.synthetics.typeOverride.typing;
 
-        for (const type of system.typing) {
-            this.flags.ptu.rollOptions.all["self:pokemon:type:" + type.toLowerCase()] = true;
-        }
+        // for (const type of system.typing) {
+        //     this.flags.ptu.rollOptions.all["self:types:" + type.toLowerCase()] = true;
+        // }
+        if(system.shiny) this.flags.ptu.rollOptions.all["self:pokemon:shiny"] = true;
 
         system.health.total = 10 + system.level.current + (system.stats.hp.total * 3);
         system.health.max = system.health.injuries > 0 ? Math.trunc(system.health.total * (1 - ((system.modifiers.hardened ? Math.min(system.health.injuries, 5) : system.health.injuries) / 10))) : system.health.total;
@@ -354,7 +360,7 @@ class PTUPokemonActor extends PTUActor {
             "speed": Math.max(Math.min(Math.floor(this.system.stats.spd.total / 5), 6) + this.system.modifiers.evasion.speed.total, 0)
         };
 
-        if (this.rollOptions.conditions?.["stuck"] && !this.rollOptions.all["self:pokemon:type:ghost"]) evasion.speed = 0;
+        if (this.rollOptions.conditions?.["stuck"] && !this.rollOptions.all["self:types:ghost"]) evasion.speed = 0;
 
         return evasion;
     }
