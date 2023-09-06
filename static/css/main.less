@@ -95,40 +95,79 @@
 
     @overview-height: 150px;
 
-    .overview {
+    .main-panel {
         min-width: 300px;
         max-height: @overview-height;
         height: @overview-height;
         background: url(/ui/denim075.png) repeat;
+        max-width: calc(100vw - 320px - 205px);
 
         display: flex;
         flex-direction: row;
         justify-content: start;
         align-items: center;
         border-radius: 5px 0 0 5px;
+        
         overflow: hidden;
 
-        .name-tag {
+        .action-bar {
+            display: none !important;
+            //TODO: Implement
+        }
+
+        .items-body {
+            min-width: 182px;
+            max-height: @overview-height;
+            height: @overview-height;
+
+            display: flex;
+            flex-direction: row;
+            flex: 1;
+            justify-content: start;
+            align-items: center;
+
+            max-width: calc(100vw - 100px - 130px - 320px - 205px);
+            overflow-y: hidden;
+            overflow-x: auto;
+        }
+
+        .name-tag, .header-toggle {
             writing-mode: vertical-rl;
             transform: rotate(180deg);
             align-self: center;
             color: whitesmoke;
             font-style: italic;
+            padding: 0 3px;
+            margin: 0 3px;
+            height: @overview-height;
+            line-height: 20px;
+            text-align: center;
+        }
+        .header-toggle {
+            color: black;
+            background: linear-gradient(45deg, #ECDBEB, #DFFFFE);
+
+            &:hover, &.shown-actions:hover {
+                box-shadow: inset 0 0 5px #222224;
+            }
+
+            &.shown-actions {
+                box-shadow: inset 0 0 10px #222224;
+            }
         }
         .avatar {
             display: flex;
             flex-direction: row;
             align-items: center;
+            min-width: 85px;
 
             background: linear-gradient(45deg, #ECDBEB, #DFFFFE) !important;
-            margin: 0 0.25rem;
 
             img {
                 object-fit: cover;
                 border: unset;
-                width: 75px;
+                width: 85px;
                 height: @overview-height;
-                
             }
             .action-bar {
                 display: flex;
@@ -154,29 +193,93 @@
                 }
             }
         }
-        .action-accordion {
-            margin: 0 0.25rem;
-            display: flex;
 
-            .move-actions, .struggle-actions {
+        .misc-menu {
+            display: flex;
+            flex-direction: column;
+            min-width: 100px;
+            max-width: 100px;
+            height: @overview-height;
+            justify-content: start;
+            padding: 1rem 0.5rem;
+
+            background: #222224bb;
+
+            .header {
+                text-align: center;
+                font-size: 18px;
+                font-weight: bold;
+                color: whitesmoke;
+                margin-bottom: 0.25rem;
+            }
+            .ap-row {
+                display: flex;
+                flex-direction: row;
+                justify-content: center;
+                max-width: 90px;
+                color: whitesmoke;
+
+                span {
+                    flex: 0 0 auto;
+                    margin: 0 5px;
+                }
+            }
+            .item {
+                display: flex;
+                justify-content: center;
+                .icon {
+                    width: 32px;
+                    height: 32px;
+                    border: unset;
+                }
+                .name {
+                    color: whitesmoke;
+                    align-self: center;
+                    margin-left: 5px;
+                }
+            }
+        }
+
+        .actions-accordion, .items-accordion {
+            //margin: 0 0.25rem;
+            display: flex;
+            &.splitter_container {
+                min-width: 468px;
+            }
+            position: relative;
+
+            .splitter_panel {
+                overflow-y: hidden;
+            }
+
+            .actions-actions, .struggles-actions {
                 display: grid;
                 grid-template-rows: 48px 48px 48px;
                 grid-auto-flow: column;
-                grid-auto-columns: 160px;
+                grid-auto-columns: 150px;
                 gap: 3px;
 
+                overflow-y: hidden;
+                overflow-x: auto;
                 flex: 1;
                 height: @overview-height;
             }
 
-            .struggle-actions {
-                margin-left: 5px;
+            .resizer {
+                background-color: #cbd5e0;
+                cursor: ew-resize;
+                height: @overview-height;
+                width: 10px;
+            }
+            .struggles-actions {
+                margin-left: 1px;
             }
 
             .action {
                 display: flex;
                 flex-direction: row;
                 flex-wrap: wrap;
+                overflow: hidden;
                 gap: 3px;
                 border-radius: 5px 5px 5px 5px;
                 background: linear-gradient(45deg, #ECDBEB, #DFFFFE) !important;
@@ -240,7 +343,7 @@
                     img {
                         height: 25px;
                         width: 25px;
-                        object-fit: cover;
+                        object-fit: fill;
                         border: unset;
                         border-radius: 5px 0 0 0
                     }
@@ -249,11 +352,324 @@
                 .name {
                     flex: 0 0 auto;
                     align-self: center;
-                    //margin-left:5px;
                 }
                 .tags {
                     flex: 0 0 100%;
                     height: 20px;
+                }
+            }
+        }
+
+        .items-accordion {
+            .pokeball-items, .other-items {
+                display: grid;
+                grid-template-rows: 33px 33px 33px 33px;
+                grid-auto-flow: column;
+                grid-auto-columns: 150px;
+                gap: 6px;
+
+                overflow: hidden;
+                overflow-x: auto;
+                flex: 1;
+                height: @overview-height;
+            }
+
+            .other-items {
+                margin-left: 1px;
+            }
+
+            .action {
+                .icon {
+                    flex: 0 0 33px;
+                    img {
+                        height: 33px;
+                        width: 33px;
+                        object-fit: fill;
+                        border: unset;
+                        border-radius: 5px 0 0 0
+                    }
+                }
+            }
+        }
+
+        .feats, .abilities {
+            display: grid;
+            grid-template-rows: 48px 48px 48px;
+            grid-auto-flow: column;
+            grid-auto-columns: 150px;
+            gap: 3px;
+            position: relative;
+
+            overflow: hidden;
+            overflow-x: auto;
+            flex: 1 0 fit-content;
+            height: @overview-height;
+            
+            .action {
+                display: flex;
+                flex-direction: row;
+                flex-wrap: wrap;
+                overflow: hidden;
+                gap: 3px;
+                border-radius: 5px 5px 5px 5px;
+                background: linear-gradient(45deg, #ECDBEB, #DFFFFE) !important;
+
+                .icon {
+                    display: block;
+                }
+
+                .dice {
+                    display: none;
+                    background: lightslategray
+                }
+
+                &.rollable:hover {
+                    background: linear-gradient(45deg, #e6bfe3, #c2fffd) !important;
+                    cursor: pointer;
+
+                    img.icon {
+                        display: none;
+                    }
+
+                    img.dice {
+                        display: block;
+                    }
+                }
+
+                .tags {
+                    display: flex;
+                    flex-direction: row;
+                    justify-content: space-evenly;
+
+                    .tag {
+                        height: 20px;
+                        width: fit-content;
+                        font-size: 11px;
+                        padding: 0 3px;
+                        white-space: nowrap;
+                        display: flex;
+                        justify-content: left;
+                        align-items: center;
+                        color: #222224;
+                        max-width: 140px;
+                        text-align: left;
+
+                        span {
+                            overflow: hidden;
+                            white-space: nowrap;
+                            text-overflow: ellipsis;
+                        }
+
+                        &.frequency {
+                            background: #ffe599aa;
+                            border: 1px inset #ffe599aa;
+                        }
+                        &.tag-tags {
+                            background: #55e9b8aa;
+                            border: 1px inset #55e9b8aa;
+                        }
+                    }
+
+                }
+
+                .icon {
+                    flex: 0 0 25px;
+                    img {
+                        height: 25px;
+                        width: 25px;
+                        object-fit: fill;
+                        border: unset;
+                        border-radius: 5px 0 0 0
+                    }
+                    display: flex;
+                }
+                .name {
+                    flex: 1;
+                    align-self: center;
+                    white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                }
+                .tags {
+                    flex: 0 0 100%;
+                    height: 20px;
+                }
+            }
+        }
+
+        .divider {
+            min-width: 8px;
+            background: #222224;
+            height: @overview-height;
+
+            &:last-child {
+                display: none;
+            }
+        }
+
+        .splitter_bar {
+            background: #782e22;
+            border: 1px solid var(--color-border-highlight);
+            & > .splitter_handle {
+                border-left: 1px solid var(--color-border-highlight) !important;
+                border-right: 1px solid var(--color-border-highlight) !important;
+            }
+        }
+    }
+
+    .footer-panel {
+        position: absolute;
+        height: 45px;
+        border-radius: 0 0 15px 15px;
+        background: url(/ui/denim075.png) repeat;
+        padding: 5px;
+
+        bottom: -45px;
+        right: 10px;
+
+        display: flex;
+        align-items: center;
+
+        .bar {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-evenly;
+            
+            .action {
+                margin: 0 5px;
+                color: black;
+                padding: 0.25rem;
+                background: whitesmoke;
+                border-radius: 0.25rem;
+                font-size: 18px;
+                height: 30px;
+                width: 30px;
+                text-align: center;
+            }
+        }
+    }
+
+    .top-panel {
+        position: absolute;
+        border-radius: 15px 15px 0 0;
+        background: url(/ui/denim075.png) repeat;
+        
+        right: 10px;
+        width: 172px;
+        bottom: @overview-height;
+        padding: 5px 5px 0.5rem 5px;
+
+        .header {
+            align-self: center;
+            color: whitesmoke;
+            font-style: italic;
+            text-align: center;
+            font-size: 18px;
+            line-height: 20px;
+            margin-left: 2px;
+            flex: 1;
+        }
+
+        hr {
+            border: none;
+            border-top: 2px solid var(--color-border-dark-secondary);
+            border-bottom: 2px solid var(--color-border-dark-highlight);
+        }
+
+        .conditions, .effects {
+            .condition, .effect {
+                display: flex;
+                flex-direction: row;
+
+                margin-top: 2px;
+                //border-top: 2px solid #222224;
+                padding-top: 2px;
+
+                .icon {
+                    height: 32px;
+                    width: 32px;
+                    object-fit: cover;
+                    border: unset;
+                    background: #222224;
+                }
+                .name {
+                    flex: 0 0 auto;
+                    align-self: center;
+                    color: whitesmoke;
+                    margin-left: 5px;
+                }
+            }
+        }
+
+        .party-overview {
+
+            .party-header {
+                display: flex;
+                flex-direction: row;
+                margin-bottom: 5px;
+                img {
+                    border: unset;
+                    width: 48px;
+                    height: 48px;
+                    background: white;
+                    box-shadow: inset 0 0 5px #222224;
+                    object-fit: contain;
+                }
+            }
+
+
+            .party-pokemon {
+                display: grid;
+                grid-template-columns: 52px 52px 52px;
+                grid-auto-flow: row;
+                grid-auto-rows: 48px;
+                gap: 3px;
+
+                .pokemon {
+                    background: white;
+                    box-shadow: inset 0 0 5px #222224;
+                    border-radius: 5px;
+                    position: relative;
+                    &:after {
+                        position: absolute;
+                        width: 4px;
+                        height: var(--health-percent);//attr(data-height px, 0);
+                        background: black;
+                        top: 0;
+                        left: 0;
+                        content: "";
+                    }
+                    img {
+                        filter: drop-shadow(1px 1px 2px #222224);
+                        border: none;
+                        border-radius: 5px;
+                        position: relative;
+    
+                        &.black {
+                            border-left: 4px solid black;
+                            background-color: #00000065;
+                        }
+                        &.darkred {
+                            border-left: 4px solid #8b0000;
+                            background-color: #8b000065;
+                        }
+                        &.red {
+                            border-left: 4px solid red;
+                            background-color: #ff000065;
+                        }
+                        &.orange {
+                            border-left: 4px solid orange;
+                            background-color: #ffa50065;
+                        }
+                        &.green {
+                            border-left: 4px solid lime;
+                            background-color: #00ff0065;
+                        }
+                        &.lime {
+                            border-left: 4px solid green;
+                            background-color: #00800065;
+                        }
+                    }
                 }
             }
         }
@@ -4699,3 +5115,234 @@ a.content-link {
         }
     }
 }
+
+/*!
+ * jQuery Enhanced Splitter Plugin
+ * LESS / CSS File
+ * Version 1.2.3
+ *
+ * https://github.com/hiltonjanfield/jquery.enhsplitter
+ *
+ * All classes to begin with 'splitter'.
+ * Standard container/object classes use _ separator (.splitter_container, .splitter_panel, etc.)
+ * Modifier/option classes use - separator (.splitter-vertical, .splitter-handle-dots, etc.)
+ *
+ * Do not make changes to the CSS file; edit the LESS file and compile.
+ */
+ .splitter_container {
+    position: relative;
+    overflow: hidden;
+    /* Using !important to ensure random, generalized styles do not interfere with the layout. */
+    padding: 0 !important;
+    height: 100%;
+  }
+  .splitter_container > .splitter_panel {
+    position: absolute;
+    overflow: auto;
+    padding: 0;
+    margin: 0;
+  }
+  .splitter_container > .splitter_panel > :not(.splitter_container) {
+    overflow: auto;
+    height: 100%;
+  }
+  .splitter_container.splitter-horizontal > .splitter_panel {
+    left: 0;
+    width: 100%;
+  }
+  .splitter_container.splitter-horizontal > .splitter_panel:first-child {
+    /* Top panel */
+    top: 0;
+  }
+  .splitter_container.splitter-horizontal > .splitter_panel ~ .splitter_panel {
+    /* Bottom panel */
+    bottom: 0;
+  }
+  .splitter_container.splitter-vertical > .splitter_panel {
+    top: 0;
+    height: 100%;
+  }
+  .splitter_container.splitter-vertical > .splitter_panel:first-child {
+    /* Left panel */
+    left: 0;
+  }
+  .splitter_container.splitter-vertical > .splitter_panel ~ .splitter_panel {
+    /* Right panel */
+    right: 0;
+  }
+  .splitter_container.splitter-fixed > .splitter_bar {
+    cursor: default;
+  }
+  .splitter_container.splitter-handle-disabled > .splitter_bar > .splitter_handle {
+    cursor: inherit;
+  }
+  .splitter_bar {
+    background-color: #c0c0c0;
+    position: absolute;
+    padding: 0 !important;
+    box-sizing: border-box;
+  }
+  .splitter_bar > .splitter_handle {
+    cursor: pointer;
+    background-color: #999999;
+    position: relative;
+    margin: auto;
+    z-index: 1000;
+    box-sizing: border-box;
+  }
+  .splitter_bar > .splitter_handle:hover {
+    background-color: #666666;
+    border-color: #666666;
+  }
+  .splitter_bar > .splitter_handle:active {
+    background-color: #000000;
+    border-color: #000000;
+  }
+  .splitter_bar.splitter-invisible {
+    background: none !important;
+    border: none !important;
+    box-shadow: none !important;
+  }
+  .splitter_bar.splitter-invisible .splitter_handle,
+  .splitter_bar.splitter-handle-none .splitter_handle {
+    display: none;
+  }
+  .splitter-vertical > .splitter_bar {
+    border-left: 1px solid #eeeeee;
+    border-right: 1px solid #666666;
+    cursor: ew-resize;
+    z-index: 900;
+    width: 7px;
+    height: 100%;
+  }
+  .splitter-vertical > .splitter_bar > .splitter_handle {
+    top: 50%;
+    margin-top: -25px;
+    height: 50px;
+  }
+  .splitter-vertical > .splitter_bar.splitter-handle-default > .splitter_handle,
+  .splitter-vertical > .splitter_bar.splitter-handle-stripes > .splitter_handle {
+    width: 3px;
+    border-left: 1px solid #999999;
+    border-right: 1px solid #999999;
+    background-color: transparent;
+  }
+  .splitter-vertical > .splitter_bar.splitter-handle-default > .splitter_handle:hover,
+  .splitter-vertical > .splitter_bar.splitter-handle-stripes > .splitter_handle:hover {
+    border-color: #666666;
+  }
+  .splitter-vertical > .splitter_bar.splitter-handle-default > .splitter_handle:active,
+  .splitter-vertical > .splitter_bar.splitter-handle-stripes > .splitter_handle:active {
+    border-color: #000000;
+  }
+  .splitter-vertical > .splitter_bar.splitter-handle-bar > .splitter_handle {
+    width: 3px;
+  }
+  .splitter-vertical > .splitter_bar.splitter-handle-block > .splitter_handle {
+    width: 5px;
+  }
+  .splitter-vertical > .splitter_bar.splitter-handle-dots > .splitter_handle {
+    margin-left: -1px;
+    background-color: transparent;
+    background-image: radial-gradient(circle 3px at 50% 10%, #666666 1.5px, transparent 2px), radial-gradient(circle 3px at 50% 30%, #666666 1.5px, transparent 2px), radial-gradient(circle 3px at 50% 50%, #666666 1.5px, transparent 2px), radial-gradient(circle 3px at 50% 70%, #666666 1.5px, transparent 2px), radial-gradient(circle 3px at 50% 90%, #666666 1.5px, transparent 2px);
+  }
+  .splitter-vertical > .splitter_bar.splitter-handle-dots > .splitter_handle:hover,
+  .splitter-vertical > .splitter_bar.splitter-handle-dots > .splitter_handle:active {
+    background-image: radial-gradient(circle 3px at 50% 10%, #000000 1.5px, transparent 2px), radial-gradient(circle 3px at 50% 30%, #000000 1.5px, transparent 2px), radial-gradient(circle 3px at 50% 50%, #000000 1.5px, transparent 2px), radial-gradient(circle 3px at 50% 70%, #000000 1.5px, transparent 2px), radial-gradient(circle 3px at 50% 90%, #000000 1.5px, transparent 2px);
+  }
+  .splitter-vertical > .splitter_bar.splitter-handle-lotsofdots > .splitter_handle {
+    height: 100px;
+    margin-top: -50px;
+    margin-left: -1px;
+    background-color: transparent;
+    background-image: radial-gradient(circle 1px at 50% 5%, #666666 1.5px, transparent 1.5px), radial-gradient(circle 1px at 50% 10%, #666666 1.5px, transparent 1.5px), radial-gradient(circle 1px at 50% 15%, #666666 1.5px, transparent 1.5px), radial-gradient(circle 1px at 50% 20%, #666666 1.5px, transparent 1.5px), radial-gradient(circle 1px at 50% 25%, #666666 1.5px, transparent 1.5px), radial-gradient(circle 1px at 50% 30%, #666666 1.5px, transparent 1.5px), radial-gradient(circle 1px at 50% 35%, #666666 1.5px, transparent 1.5px), radial-gradient(circle 1px at 50% 40%, #666666 1.5px, transparent 1.5px), radial-gradient(circle 1px at 50% 45%, #666666 1.5px, transparent 1.5px), radial-gradient(circle 1px at 50% 50%, #666666 1.5px, transparent 1.5px), radial-gradient(circle 1px at 50% 55%, #666666 1.5px, transparent 1.5px), radial-gradient(circle 1px at 50% 60%, #666666 1.5px, transparent 1.5px), radial-gradient(circle 1px at 50% 65%, #666666 1.5px, transparent 1.5px), radial-gradient(circle 1px at 50% 70%, #666666 1.5px, transparent 1.5px), radial-gradient(circle 1px at 50% 75%, #666666 1.5px, transparent 1.5px), radial-gradient(circle 1px at 50% 80%, #666666 1.5px, transparent 1.5px), radial-gradient(circle 1px at 50% 85%, #666666 1.5px, transparent 1.5px), radial-gradient(circle 1px at 50% 90%, #666666 1.5px, transparent 1.5px), radial-gradient(circle 1px at 50% 95%, #666666 1.5px, transparent 1.5px);
+  }
+  .splitter-vertical > .splitter_bar.splitter-handle-lotsofdots > .splitter_handle:hover,
+  .splitter-vertical > .splitter_bar.splitter-handle-lotsofdots > .splitter_handle:active {
+    background-color: #f0f0f0;
+  }
+  .splitter-horizontal > .splitter_bar {
+    border-top: 1px solid #eeeeee;
+    border-bottom: 1px solid #666666;
+    cursor: ns-resize;
+    z-index: 800;
+    width: 100%;
+    height: 7px;
+  }
+  .splitter-horizontal > .splitter_bar > .splitter_handle {
+    width: 50px;
+  }
+  .splitter-horizontal > .splitter_bar.splitter-handle-default > .splitter_handle,
+  .splitter-horizontal > .splitter_bar.splitter-handle-stripes > .splitter_handle {
+    height: 3px;
+    margin-top: 1px;
+    border-top: 1px solid #999999;
+    border-bottom: 1px solid #999999;
+    background-color: transparent;
+  }
+  .splitter-horizontal > .splitter_bar.splitter-handle-default > .splitter_handle:hover,
+  .splitter-horizontal > .splitter_bar.splitter-handle-stripes > .splitter_handle:hover {
+    border-color: #666666;
+  }
+  .splitter-horizontal > .splitter_bar.splitter-handle-default > .splitter_handle:active,
+  .splitter-horizontal > .splitter_bar.splitter-handle-stripes > .splitter_handle:active {
+    border-color: #000000;
+  }
+  .splitter-horizontal > .splitter_bar.splitter-handle-bar > .splitter_handle {
+    height: 3px;
+    margin-top: 1px;
+  }
+  .splitter-horizontal > .splitter_bar.splitter-handle-block > .splitter_handle {
+    height: 5px;
+    margin-top: 1px;
+  }
+  .splitter-horizontal > .splitter_bar.splitter-handle-dots > .splitter_handle {
+    height: 100%;
+    margin-top: -1px;
+    background-color: transparent;
+    background-image: radial-gradient(circle 3px at 10% 50%, #666666 1.5px, transparent 2px), radial-gradient(circle 3px at 30% 50%, #666666 1.5px, transparent 2px), radial-gradient(circle 3px at 50% 50%, #666666 1.5px, transparent 2px), radial-gradient(circle 3px at 70% 50%, #666666 1.5px, transparent 2px), radial-gradient(circle 3px at 90% 50%, #666666 1.5px, transparent 2px);
+  }
+  .splitter-horizontal > .splitter_bar.splitter-handle-dots > .splitter_handle:hover,
+  .splitter-horizontal > .splitter_bar.splitter-handle-dots > .splitter_handle:active {
+    background-image: radial-gradient(circle 3px at 10% 50%, #000000 1.5px, transparent 2px), radial-gradient(circle 3px at 30% 50%, #000000 1.5px, transparent 2px), radial-gradient(circle 3px at 50% 50%, #000000 1.5px, transparent 2px), radial-gradient(circle 3px at 70% 50%, #000000 1.5px, transparent 2px), radial-gradient(circle 3px at 90% 50%, #000000 1.5px, transparent 2px);
+  }
+  .splitter-horizontal > .splitter_bar.splitter-handle-lotsofdots > .splitter_handle {
+    height: 100%;
+    width: 100px;
+    background-color: transparent;
+    background-image: radial-gradient(circle 1px at 5% 50%, #666666 1.5px, transparent 1.5px), radial-gradient(circle 1px at 10% 50%, #666666 1.5px, transparent 1.5px), radial-gradient(circle 1px at 15% 50%, #666666 1.5px, transparent 1.5px), radial-gradient(circle 1px at 20% 50%, #666666 1.5px, transparent 1.5px), radial-gradient(circle 1px at 25% 50%, #666666 1.5px, transparent 1.5px), radial-gradient(circle 1px at 30% 50%, #666666 1.5px, transparent 1.5px), radial-gradient(circle 1px at 35% 50%, #666666 1.5px, transparent 1.5px), radial-gradient(circle 1px at 40% 50%, #666666 1.5px, transparent 1.5px), radial-gradient(circle 1px at 45% 50%, #666666 1.5px, transparent 1.5px), radial-gradient(circle 1px at 50% 50%, #666666 1.5px, transparent 1.5px), radial-gradient(circle 1px at 55% 50%, #666666 1.5px, transparent 1.5px), radial-gradient(circle 1px at 60% 50%, #666666 1.5px, transparent 1.5px), radial-gradient(circle 1px at 65% 50%, #666666 1.5px, transparent 1.5px), radial-gradient(circle 1px at 70% 50%, #666666 1.5px, transparent 1.5px), radial-gradient(circle 1px at 75% 50%, #666666 1.5px, transparent 1.5px), radial-gradient(circle 1px at 80% 50%, #666666 1.5px, transparent 1.5px), radial-gradient(circle 1px at 85% 50%, #666666 1.5px, transparent 1.5px), radial-gradient(circle 1px at 90% 50%, #666666 1.5px, transparent 1.5px), radial-gradient(circle 1px at 95% 50%, #666666 1.5px, transparent 1.5px);
+  }
+  .splitter-horizontal > .splitter_bar.splitter-handle-lotsofdots > .splitter_handle:hover,
+  .splitter-horizontal > .splitter_bar.splitter-handle-lotsofdots > .splitter_handle:active {
+    background-color: #f0f0f0;
+  }
+  .splitter_container.splitter-active > .splitter_bar {
+    z-index: 1000;
+    /* Important to keep z-index of active splitter above .splitterMask. */
+  }
+  .splitter_container.splitter-active > .splitter_bar > .splitter_handle {
+    border-color: #000000;
+    cursor: inherit;
+  }
+  .splitter_container.splitter-active > .splitter_bar.splitter-handle-bar > .splitter_handle,
+  .splitter_container.splitter-active > .splitter_bar.splitter-handle-block > .splitter_handle {
+    background-color: #000000;
+  }
+  .splitter_container.splitter-active.splitter-vertical > .splitter_bar.splitter-handle-dots > .splitter_handle {
+    background-image: radial-gradient(circle 3px at 50% 10%, #000000 1.5px, transparent 2px), radial-gradient(circle 3px at 50% 30%, #000000 1.5px, transparent 2px), radial-gradient(circle 3px at 50% 50%, #000000 1.5px, transparent 2px), radial-gradient(circle 3px at 50% 70%, #000000 1.5px, transparent 2px), radial-gradient(circle 3px at 50% 90%, #000000 1.5px, transparent 2px);
+  }
+  .splitter_container.splitter-active.splitter-horizontal > .splitter_bar.splitter-handle-dots > .splitter_handle {
+    background-image: radial-gradient(circle 3px at 10% 50%, #000000 1.5px, transparent 2px), radial-gradient(circle 3px at 30% 50%, #000000 1.5px, transparent 2px), radial-gradient(circle 3px at 50% 50%, #000000 1.5px, transparent 2px), radial-gradient(circle 3px at 70% 50%, #000000 1.5px, transparent 2px), radial-gradient(circle 3px at 90% 50%, #000000 1.5px, transparent 2px);
+  }
+  .splitter_container.splitter-active.splitter-vertical > .splitter_bar.splitter-handle-lotsofdots > .splitter_handle {
+    background-color: #f0f0f0;
+  }
+  .splitter_mask {
+    position: fixed;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 999;
+  }
+  

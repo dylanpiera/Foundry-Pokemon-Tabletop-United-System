@@ -1,11 +1,14 @@
 import { Progress } from "../../../util/progress.js";
 
 class PTUPartySheet extends FormApplication {
-    constructor({actor, ...options} = {}) {
-        if(!actor) throw new Error("PTU.PartySheet.NoActor");
+    constructor({ actor, ...options } = {}) {
+        if (!actor) throw new Error("PTU.PartySheet.NoActor");
         super(options);
-        
-        this._prepare(actor);
+
+
+        this.trainer = null;
+        this.party = null;
+        this._prepare(actor, options.strict);
     }
 
     static get defaultOptions() {
@@ -16,9 +19,9 @@ class PTUPartySheet extends FormApplication {
             height: 600,
             template: 'systems/ptu/static/templates/apps/party-sheet.hbs',
             dragDrop: [
-                {dragSelector: ".party-list .party-item.draggable", dropSelector: ".party-list.droppable"},
-                {dragSelector: undefined, dropSelector: '.party-list.droppable'},
-                {dragSelector: undefined, dropSelector: undefined}
+                { dragSelector: ".party-list .party-item.draggable", dropSelector: ".party-list.droppable" },
+                { dragSelector: undefined, dropSelector: '.party-list.droppable' },
+                { dragSelector: undefined, dropSelector: undefined }
             ],
             resizable: true,
             //tabs: [{ navSelector: ".tabs", contentSelector: ".sheet-body", initial: "description" }]
@@ -36,7 +39,7 @@ class PTUPartySheet extends FormApplication {
 
     getData() {
         const data = super.getData();
-       
+
         data.trainer = this.trainer;
         data.party = this.party;
         data.boxed = this.boxed;
@@ -45,76 +48,84 @@ class PTUPartySheet extends FormApplication {
         return data;
     }
 
-    _prepare(actor) {
-        this.#setTrainer(actor);
-        this.#loadFolders();
-        this.#loadParty();
-        this.#loadBox();
-        this.#loadAvailable();
+    _prepare(actor, strict = true) {
+        this.#setTrainer(actor, strict);
+        if(!this.trainer) return;
+        this.#loadFolders(strict);
+        if(!this.folders) return;
+        this.#loadParty(strict);
+        this.#loadBox(strict);
+        this.#loadAvailable(strict);
     }
 
-    #setTrainer(actor) {
+    #setTrainer(actor, strict) {
         // If the actor is a pokemon, we need to get the trainer
-        if(actor.type == "pokemon") {
+        if (actor.type == "pokemon") {
             // if a trainer is set, get the actor
-            if(actor.flags?.ptu?.party?.trainer) {
+            if (actor.flags?.ptu?.party?.trainer) {
                 this.trainer = game.actors.get(actor.flags.ptu.party.trainer);
 
                 return;
             }
 
             // Otherwise, try find the trainer from the user
-            if(game.user.character && game.user.character.type == "trainer") {
+            if (game.user.character && game.user.character.type == "trainer") {
                 this.trainer = game.user.character;
                 return;
             }
 
             // Otherwise, attempt to find the trainer from ownership permissions
             const pool = [];
-            for(const [owner, value] of Object.entries(actor.ownership)) {
-                if(owner == "default" || value < 3) continue;
-                
-                const user = game.users.get(owner);
-                if(!user) continue;
+            for (const [owner, value] of Object.entries(actor.ownership)) {
+                if (owner == "default" || value < 3) continue;
 
-                if(user.character && user.character.type == "character") {
+                const user = game.users.get(owner);
+                if (!user) continue;
+
+                if (user.character && user.character.type == "character") {
                     pool.push(user.character);
                 }
             }
-            if(pool.length == 1) {
+            if (pool.length == 1) {
                 this.trainer = pool[0];
                 return;
             }
 
-            ui.notifications.error("PTU.PartySheet.NoTrainer", {localize: true});
-            throw new Error("PTU.PartySheet.NoTrainer");
-        } 
+            if (strict) {
+                ui.notifications.error("PTU.PartySheet.NoTrainer", { localize: true });
+                throw new Error("PTU.PartySheet.NoTrainer");
+            }
+            return;
+        }
 
         // Otherwise the actor is our trainer
         this.trainer = actor;
         return;
     }
-    
-    #loadFolders() {
+
+    #loadFolders(strict) {
         // Get available folders from the trainer's folder
         const folder = this.trainer.folder;
-        if(!folder) {
-            ui.notifications.error("PTU.PartySheet.NoFolder", {localize: true});
-            throw new Error("PTU.PartySheet.NoFolder");
+        if (!folder) {
+            if(strict) {
+                ui.notifications.error("PTU.PartySheet.NoFolder", { localize: true });
+                throw new Error("PTU.PartySheet.NoFolder");
+            }
+            return;
         };
 
         const party = folder.children.find(folder => folder.folder.name == "Party")?.folder;
         const box = folder.children.find(folder => folder.folder.name == "Box")?.folder;
-        
+
         this.folders = {
             root: folder,
             party,
             box
         }
 
-        if(!party) {
+        if (!party) {
             // Create the party folder
-            Folder.create({name: "Party", type: "Actor", folder: folder.id})
+            Folder.create({ name: "Party", type: "Actor", folder: folder.id })
                 .then(folder => {
                     this.folders.party = folder;
                 })
@@ -127,17 +138,17 @@ class PTUPartySheet extends FormApplication {
                         !actor.flags?.ptu?.party?.boxed);
 
                     const available = folder.contents.filter(actor => actor.type == "pokemon" && !actor.flags?.ptu?.party?.trainer) ?? [];
-                    for(const mon of available) {
-                        if(mon.folder.id == partyFolder.id) continue;
+                    for (const mon of available) {
+                        if (mon.folder.id == partyFolder.id) continue;
                         await mon.update({
-                            "folder": partyFolder.id, 
-                            "flags.ptu.party.trainer": this.trainer.id, 
+                            "folder": partyFolder.id,
+                            "flags.ptu.party.trainer": this.trainer.id,
                             "flags.ptu.party.boxed": false
                         });
                     };
-                    for(const mon of party) {
-                        if(mon.folder.id == partyFolder.id) continue;
-                        await mon.update({"folder": partyFolder.id});
+                    for (const mon of party) {
+                        if (mon.folder.id == partyFolder.id) continue;
+                        await mon.update({ "folder": partyFolder.id });
                     }
 
                     this.#loadAvailable();
@@ -145,9 +156,9 @@ class PTUPartySheet extends FormApplication {
                     await this.render(true);
                 })
         }
-        if(!box) {
+        if (!box) {
             // Create the box folder
-            Folder.create({name: "Box", type: "Actor", folder: folder.id})
+            Folder.create({ name: "Box", type: "Actor", folder: folder.id })
                 .then(folder => {
                     this.folders.box = folder;
                 })
@@ -158,9 +169,9 @@ class PTUPartySheet extends FormApplication {
                         actor.type == "pokemon" &&
                         actor.flags?.ptu?.party?.trainer == this.trainer.id &&
                         actor.flags?.ptu?.party?.boxed);
-                    for(const mon of boxed) {
-                        if(mon.folder.id == box.id) continue;
-                        await mon.update({"folder": box.id});
+                    for (const mon of boxed) {
+                        if (mon.folder.id == box.id) continue;
+                        await mon.update({ "folder": box.id });
                     }
 
                     this.#loadAvailable();
@@ -173,33 +184,33 @@ class PTUPartySheet extends FormApplication {
     #loadParty() {
 
         // If the trainer has a party folder, get the pokemon from the folder
-        if(this.folders.party) {
+        if (this.folders.party) {
             const party = this.folders.party.contents.filter(actor => actor.type == "pokemon");
             this.party = party;
             return;
         }
         // Otherwise, get the pokemon from the flag
-        const party = game.actors.filter(actor => 
+        const party = game.actors.filter(actor =>
             actor.type == "pokemon" &&
             actor.flags?.ptu?.party?.trainer == this.trainer.id &&
             !actor.flags?.ptu?.party?.boxed);
-        
+
         this.party = party;
     }
 
     #loadBox() {
         // If the trainer has a box, get the pokemon from the box
-        if(this.folders.box) {
+        if (this.folders.box) {
             const boxed = this.folders.box.contents.filter(actor => actor.type == "pokemon");
             this.boxed = boxed;
             return;
         }
         // Otherwise, get the pokemon from the flag
-        const boxed = game.actors.filter(actor => 
+        const boxed = game.actors.filter(actor =>
             actor.type == "pokemon" &&
             actor.flags?.ptu?.party?.trainer == this.trainer.id &&
             actor.flags?.ptu?.party?.boxed);
-        
+
         this.boxed = boxed;
     }
 
@@ -212,8 +223,8 @@ class PTUPartySheet extends FormApplication {
     }
 
     /** @override */
-	_getHeaderButtons() {
-		let buttons = super._getHeaderButtons();
+    _getHeaderButtons() {
+        let buttons = super._getHeaderButtons();
 
         buttons.unshift({
             label: "Download Party",
@@ -222,8 +233,8 @@ class PTUPartySheet extends FormApplication {
             onclick: this.downloadParty.bind(this)
         });
 
-		return buttons;
-	}
+        return buttons;
+    }
 
     /** @override */
     activateListeners(html) {
@@ -257,29 +268,29 @@ class PTUPartySheet extends FormApplication {
         const data = JSON.parse(event.dataTransfer.getData('text/plain'));
         $(event.currentTarget)?.find('.item-list')?.removeClass("dragover");
 
-        if(data.type == "Actor" && data.uuid) {
-            if(this.handledDrop) return;
+        if (data.type == "Actor" && data.uuid) {
+            if (this.handledDrop) return;
             const actor = await fromUuid(data.uuid);
 
-            if(!actor) return;
-            if(actor.type != "pokemon") return;
+            if (!actor) return;
+            if (actor.type != "pokemon") return;
 
             // If the actor is already in the party, do nothing
-            if(actor.flags?.ptu?.party?.trainer == this.trainer.id) return;
+            if (actor.flags?.ptu?.party?.trainer == this.trainer.id) return;
 
             const { partyStatus } = event.currentTarget?.dataset ?? {};
 
             this.handledDrop = true;
             // If the drop was targeted on a specific area, add the actor to that area
-            if(partyStatus) {
-                switch(partyStatus) {
+            if (partyStatus) {
+                switch (partyStatus) {
                     case "available": {
                         const folder = this.folders.root;
-                    
-                        if(actor.folder?.id != folder.id) {
-                            await actor.update({folder: folder.id});
+
+                        if (actor.folder?.id != folder.id) {
+                            await actor.update({ folder: folder.id });
                         }
-                        if(actor.flags?.ptu?.party?.trainer) {
+                        if (actor.flags?.ptu?.party?.trainer) {
                             await actor.unsetFlag("ptu", "party");
                         }
 
@@ -289,15 +300,15 @@ class PTUPartySheet extends FormApplication {
                     }
                     case "party": {
                         let folder = this.folders.party;
-                        if(!folder) {
-                            folder = await Folder.create({name: "Party", type: "Actor", folder: this.folders.root.id});       
+                        if (!folder) {
+                            folder = await Folder.create({ name: "Party", type: "Actor", folder: this.folders.root.id });
                         }
 
-                        if(actor.folder?.id != folder.id) {
-                            await actor.update({folder: folder.id});
+                        if (actor.folder?.id != folder.id) {
+                            await actor.update({ folder: folder.id });
                         }
-                        await actor.setFlag("ptu", "party", {trainer: this.trainer.id, boxed: false});
-                        
+                        await actor.setFlag("ptu", "party", { trainer: this.trainer.id, boxed: false });
+
                         this.party.push(actor);
                         this.available = this.available.filter(a => a.uuid != actor.uuid);
                         this.handledDrop = false;
@@ -305,14 +316,14 @@ class PTUPartySheet extends FormApplication {
                     }
                     case "boxed": {
                         let folder = this.folders.box;
-                        if(!folder) {
-                            folder = await Folder.create({name: "Box", type: "Actor", folder: this.folders.root.id});       
+                        if (!folder) {
+                            folder = await Folder.create({ name: "Box", type: "Actor", folder: this.folders.root.id });
                         }
 
-                        if(actor.folder?.id != folder.id) {
-                            await actor.update({folder: folder.id});
+                        if (actor.folder?.id != folder.id) {
+                            await actor.update({ folder: folder.id });
                         }
-                        await actor.setFlag("ptu", "party", {trainer: this.trainer.id, boxed: true});
+                        await actor.setFlag("ptu", "party", { trainer: this.trainer.id, boxed: true });
 
                         this.boxed.push(actor);
                         this.available = this.available.filter(a => a.uuid != actor.uuid);
@@ -324,30 +335,30 @@ class PTUPartySheet extends FormApplication {
             }
             else {
                 // Otherwise, add the actor to the party if there is space
-                if(this.party.length < 6) {
+                if (this.party.length < 6) {
                     let folder = this.folders.party;
-                    if(!folder) {
-                        folder = await Folder.create({name: "Party", type: "Actor", folder: this.folders.root.id});       
+                    if (!folder) {
+                        folder = await Folder.create({ name: "Party", type: "Actor", folder: this.folders.root.id });
                     }
 
-                    if(actor.folder?.id != folder.id) {
-                        await actor.update({folder: folder.id});
+                    if (actor.folder?.id != folder.id) {
+                        await actor.update({ folder: folder.id });
                     }
-                    await actor.setFlag("ptu", "party", {trainer: this.trainer.id, boxed: false});
-                    
+                    await actor.setFlag("ptu", "party", { trainer: this.trainer.id, boxed: false });
+
                     this.party.push(actor);
-                    this.available = this.available.filter(a => a.uuid != actor.uuid);    
+                    this.available = this.available.filter(a => a.uuid != actor.uuid);
                 }
                 else {
                     let folder = this.folders.box;
-                    if(!folder) {
-                        folder = await Folder.create({name: "Box", type: "Actor", folder: this.folders.root.id});       
+                    if (!folder) {
+                        folder = await Folder.create({ name: "Box", type: "Actor", folder: this.folders.root.id });
                     }
 
-                    if(actor.folder?.id != folder.id) {
-                        await actor.update({folder: folder.id});
+                    if (actor.folder?.id != folder.id) {
+                        await actor.update({ folder: folder.id });
                     }
-                    await actor.setFlag("ptu", "party", {trainer: this.trainer.id, boxed: true});
+                    await actor.setFlag("ptu", "party", { trainer: this.trainer.id, boxed: true });
 
                     this.boxed.push(actor);
                     this.available = this.available.filter(a => a.uuid != actor.uuid);
@@ -359,23 +370,23 @@ class PTUPartySheet extends FormApplication {
         }
 
         // If there is no partyStatus this already ran so ignore
-        if(!event.currentTarget?.dataset?.partyStatus) return;
+        if (!event.currentTarget?.dataset?.partyStatus) return;
 
         const { uuid, type, index } = data;
         const { partyStatus } = event.currentTarget.dataset;
         const actor = await fromUuid(uuid);
 
-        if(!actor) return;
-        if(actor.type != "pokemon") return;
+        if (!actor) return;
+        if (actor.type != "pokemon") return;
 
-        switch(partyStatus) {
+        switch (partyStatus) {
             case "available": {
                 const folder = this.folders.root;
 
-                if(actor.folder?.id != folder.id) {
-                    await actor.update({folder: folder.id});
+                if (actor.folder?.id != folder.id) {
+                    await actor.update({ folder: folder.id });
                 }
-                if(actor.flags?.ptu?.party?.trainer) {
+                if (actor.flags?.ptu?.party?.trainer) {
                     await actor.unsetFlag("ptu", "party");
                 }
 
@@ -385,14 +396,14 @@ class PTUPartySheet extends FormApplication {
             }
             case "party": {
                 let folder = this.folders.party;
-                if(!folder) {
-                    folder = await Folder.create({name: "Party", type: "Actor", folder: this.folders.root.id});
+                if (!folder) {
+                    folder = await Folder.create({ name: "Party", type: "Actor", folder: this.folders.root.id });
                 }
 
-                if(actor.folder?.id != folder.id) {
-                    await actor.update({folder: folder.id});
+                if (actor.folder?.id != folder.id) {
+                    await actor.update({ folder: folder.id });
                 }
-                await actor.setFlag("ptu", "party", {trainer: this.trainer.id, boxed: false});
+                await actor.setFlag("ptu", "party", { trainer: this.trainer.id, boxed: false });
 
                 this[type].splice(index, 1);
                 this.party.push(actor);
@@ -400,14 +411,14 @@ class PTUPartySheet extends FormApplication {
             }
             case "boxed": {
                 let folder = this.folders.box;
-                if(!folder) {
-                    folder = await Folder.create({name: "Box", type: "Actor", folder: this.folders.root.id});
+                if (!folder) {
+                    folder = await Folder.create({ name: "Box", type: "Actor", folder: this.folders.root.id });
                 }
 
-                if(actor.folder?.id != folder.id) {
-                    await actor.update({folder: folder.id});
+                if (actor.folder?.id != folder.id) {
+                    await actor.update({ folder: folder.id });
                 }
-                await actor.setFlag("ptu", "party", {trainer: this.trainer.id, boxed: true});
+                await actor.setFlag("ptu", "party", { trainer: this.trainer.id, boxed: true });
 
                 this[type].splice(index, 1);
                 this.boxed.push(actor);
@@ -416,7 +427,7 @@ class PTUPartySheet extends FormApplication {
         }
     }
 
-    downloadParty() { 
+    downloadParty() {
         const data = {
             trainer: this.trainer.toCompendium(null, {}),
             party: this.party.map(p => {
@@ -448,12 +459,12 @@ class PTUPartySheet extends FormApplication {
         };
 
         const filename = ["fvtt", "ptuParty", this.trainer.name?.slugify(), randomID()].filterJoin("-");
-        saveDataToFile(JSON.stringify(data, null, 2), "text/json", `${filename}.json`);
+        saveDataTolocaFile(JSON.stringify(data, null, 2), "text/json", `${filename}.json`);
     }
 
     static async importParty() {
         const text = await (async () => {
-            if(window.showOpenFilePicker) {
+            if (window.showOpenFilePicker) {
                 const [fileHandler] = await window.showOpenFilePicker({
                     types: [
                         {
@@ -467,18 +478,18 @@ class PTUPartySheet extends FormApplication {
                     multiple: false
                 });
                 const file = await fileHandler.getFile();
-                if(!file) return;
-                if(!file.name.startsWith("fvtt-ptuParty-")) {
+                if (!file) return;
+                if (!file.name.startsWith("fvtt-ptuParty-")) {
                     ui.notifications.error("Invalid file type. Please select a PTU Party file.");
                     return;
                 }
                 return await file.text();
             }
-            
+
             const input = document.createElement('input');
             input.type = 'file';
             let resolve = undefined;
-            const promise = new Promise((r, reject) => {resolve = r;});
+            const promise = new Promise((r, reject) => { resolve = r; });
             input.onchange = function () {
                 input.files[0].arrayBuffer().then(function (arrayBuffer) {
                     const text = new TextDecoder().decode(arrayBuffer);
@@ -493,23 +504,23 @@ class PTUPartySheet extends FormApplication {
         const { trainer, party, boxed } = json;
 
         let folder = game.folders.get(trainer.folder);
-        if(!folder)  {
+        if (!folder) {
             folder = game.folders.getName(trainer.name);
-            if(folder) trainer.folder = folder.id;
+            if (folder) trainer.folder = folder.id;
         }
         // Check if folder exists; in which case this is a overwrite
-        if(folder) {
+        if (folder) {
             const existingActor = folder.contents.find(a => a.name == trainer.name);
-            if(existingActor) {
+            if (existingActor) {
                 // Prompt user to overwrite
                 const confirmed = await Dialog.confirm({
                     title: "Overwrite Party",
                     content: "It appears you're trying to import a party that already exists. Would you like to overwrite it?",
                 });
-                if(!confirmed) return;
+                if (!confirmed) return;
 
                 // Log the existing party to the console in case of an accident
-                const partySheet = new PTUPartySheet({actor: existingActor});
+                const partySheet = new PTUPartySheet({ actor: existingActor });
                 const data = {
                     trainer: partySheet.trainer,
                     party: partySheet.party,
@@ -519,10 +530,10 @@ class PTUPartySheet extends FormApplication {
 
                 // Delete existing party
                 await existingActor.delete();
-                for(const actor of partySheet.party) {
+                for (const actor of partySheet.party) {
                     await actor.delete();
                 }
-                for(const actor of partySheet.boxed) {
+                for (const actor of partySheet.boxed) {
                     await actor.delete();
                 }
             }
@@ -538,18 +549,18 @@ class PTUPartySheet extends FormApplication {
 
         // Create the new party
         const totalCount = party.length + boxed.length + 1;
-        const progress = new Progress({steps: totalCount});
+        const progress = new Progress({ steps: totalCount });
 
         progress.advance(`Importing Party: Trainer ${trainer.name}`)
         const newTrainer = await CONFIG.Actor.documentClass.create(trainer);
-        for(const actor of party) {
+        for (const actor of party) {
             progress.advance(`Importing Party: Party Pokemon ${actor.name}`)
-            if(actor.folder) {
+            if (actor.folder) {
                 let partyFolder = game.folders.get(actor.folder);
-                if(!partyFolder) {
+                if (!partyFolder) {
                     partyFolder = folder.children.find(folder => folder.folder.name == "Party")?.folder;
-                    if(!partyFolder) {
-                        partyFolder = await Folder.create({name: "Party", type: "Actor", folder: folder.id});
+                    if (!partyFolder) {
+                        partyFolder = await Folder.create({ name: "Party", type: "Actor", folder: folder.id });
                     }
                 }
                 actor.folder = partyFolder.id;
@@ -557,14 +568,14 @@ class PTUPartySheet extends FormApplication {
             }
             await CONFIG.Actor.documentClass.create(actor);
         }
-        for(const actor of boxed) {
+        for (const actor of boxed) {
             progress.advance(`Importing Party: Boxed Pokemon ${actor.name}`)
-            if(actor.folder) {
+            if (actor.folder) {
                 let boxFolder = game.folders.get(actor.folder);
-                if(!boxFolder) {
+                if (!boxFolder) {
                     boxFolder = folder.children.find(folder => folder.folder.name == "Box")?.folder;
-                    if(!boxFolder) {
-                        boxFolder = await Folder.create({name: "Box", type: "Actor", folder: folder.id});
+                    if (!boxFolder) {
+                        boxFolder = await Folder.create({ name: "Box", type: "Actor", folder: folder.id });
                     }
                 }
                 actor.folder = boxFolder.id;
@@ -573,7 +584,7 @@ class PTUPartySheet extends FormApplication {
         }
         progress.close("Importing Party: Completed!")
 
-        const partySheet = new PTUPartySheet({actor: newTrainer});
+        const partySheet = new PTUPartySheet({ actor: newTrainer });
         partySheet.render(true);
     }
 }

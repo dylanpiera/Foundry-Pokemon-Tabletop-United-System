@@ -125,7 +125,6 @@
                 <label for="system.type">{{localize "ITEM.Type"}}</label>
                 <div class="arrow-box">
                     <select data-target="system.type" class="type-select" style="background: url('{{loadTypeImageUrl item.system.type}}');" {{#if editLocked}}disabled{{/if}}>
-                        {{log this}}
                         {{#select item.system.type}}
                             {{#each types}}
                                 <option value="{{this}}">{{this}}</option>
@@ -179,6 +178,10 @@
             <div class="item-row">
                 <label for="system.effect">{{localize "ITEM.Effect"}}</label>
                 <textarea class="ml-1 mr-1" name="system.effect">{{item.system.effect}}</textarea>
+            </div>
+            <div class="item-row" style="justify-content: flex-start;">
+                <label for="flags.ptu.showInTokenPanel">{{localize "ITEM.ShowInTokenPanel"}}</label>
+                <input class="ml-1 mr-1" name="flags.ptu.showInTokenPanel" type="checkbox" {{checked item.flags.ptu.showInTokenPanel}}/>
             </div>
         </div>
         <div class="tab rules h-100" data-group="primary" data-tab="rules">

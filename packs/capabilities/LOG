@@ -1,7 +1,3 @@
-2023/09/01-14:48:49.562 8a00 Recovering log #275
-2023/09/01-14:48:49.568 8a00 Delete type=0 #275
-2023/09/01-14:48:49.568 8a00 Delete type=3 #273
-2023/09/03-17:39:55.111 6adc Level-0 table #280: started
-2023/09/03-17:39:55.111 6adc Level-0 table #280: 0 bytes OK
-2023/09/03-17:39:55.114 6adc Delete type=0 #278
-2023/09/03-17:39:55.120 6adc Manual compaction at level-0 from '!folders!ZgVptQLqTvjgGEUi' @ 72057594037927935 : 1 .. '!items!zzJWpOj40dLelBm5' @ 0 : 0; will stop at (end)
+2023/09/06-12:34:18.355 5c30 Recovering log #286
+2023/09/06-12:34:18.360 5c30 Delete type=0 #286
+2023/09/06-12:34:18.360 5c30 Delete type=3 #285

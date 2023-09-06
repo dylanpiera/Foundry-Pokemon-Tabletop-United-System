@@ -52,7 +52,8 @@
     "TypeCapabilityPlural": "Capabilities",
     "TypePokeedgePlural": "Poké Edges",
     "TypeDexentryPlural": "Dex Entries",
-    "Modifier": "Modifier"
+    "Modifier": "Modifier",
+    "ShowInTokenPanel": "Show in Token Panel"
   },
 
   "SPECIES.Height": "Height",

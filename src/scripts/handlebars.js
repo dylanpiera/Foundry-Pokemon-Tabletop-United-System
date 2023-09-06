@@ -36,6 +36,10 @@ function _registerPTUHelpers() {
           }
     })
 
+    Handlebars.registerHelper("calcHeight", function (percent) {
+        return Math.round((100 - percent) / 100 * 48);
+    });
+
     // //pokeball themed background for pokemon
     // Handlebars.registerHelper('pokeballStyles', function (pokeball) {
 

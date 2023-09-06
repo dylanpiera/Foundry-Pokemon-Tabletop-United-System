@@ -1,7 +1,3 @@
-2023/09/01-14:48:49.584 adc0 Recovering log #54
-2023/09/01-14:48:49.589 adc0 Delete type=0 #54
-2023/09/01-14:48:49.589 adc0 Delete type=3 #52
-2023/09/03-17:39:55.129 6adc Level-0 table #59: started
-2023/09/03-17:39:55.129 6adc Level-0 table #59: 0 bytes OK
-2023/09/03-17:39:55.130 6adc Delete type=0 #57
-2023/09/03-17:39:55.135 6adc Manual compaction at level-0 from '!macros!1RNSAw20k8gBHhUd' @ 72057594037927935 : 1 .. '!macros!H929lnw6f59DTuWQ' @ 0 : 0; will stop at (end)
+2023/09/06-12:34:18.379 5044 Recovering log #65
+2023/09/06-12:34:18.385 5044 Delete type=0 #65
+2023/09/06-12:34:18.385 5044 Delete type=3 #64

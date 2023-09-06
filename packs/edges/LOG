@@ -1,14 +1,3 @@
-2023/09/01-14:48:49.553 8a00 Recovering log #273
-2023/09/01-14:48:49.558 8a00 Delete type=0 #273
-2023/09/01-14:48:49.559 8a00 Delete type=3 #271
-2023/09/03-17:39:55.094 6adc Level-0 table #278: started
-2023/09/03-17:39:55.095 6adc Level-0 table #278: 808 bytes OK
-2023/09/03-17:39:55.097 6adc Delete type=0 #276
-2023/09/03-17:39:55.107 6adc Manual compaction at level-0 from '!items!0RcsE8QznKmcVYF9' @ 72057594037927935 : 1 .. '!items!zixXV4XTysXtm8vK' @ 0 : 0; will stop at '!items!sPvuHJVG5cMuoInm' @ 111 : 1
-2023/09/03-17:39:55.107 6adc Compacting 1@0 + 1@1 files
-2023/09/03-17:39:55.109 6adc Generated table #279@0: 77 keys, 28016 bytes
-2023/09/03-17:39:55.109 6adc Compacted 1@0 + 1@1 files => 28016 bytes
-2023/09/03-17:39:55.111 6adc compacted to: files[ 0 1 0 0 0 0 0 ]
-2023/09/03-17:39:55.111 6adc Delete type=2 #240
-2023/09/03-17:39:55.111 6adc Delete type=2 #278
-2023/09/03-17:39:55.114 6adc Manual compaction at level-0 from '!items!sPvuHJVG5cMuoInm' @ 111 : 1 .. '!items!zixXV4XTysXtm8vK' @ 0 : 0; will stop at (end)
+2023/09/06-12:34:18.341 5760 Recovering log #285
+2023/09/06-12:34:18.348 5760 Delete type=0 #285
+2023/09/06-12:34:18.348 5760 Delete type=3 #284

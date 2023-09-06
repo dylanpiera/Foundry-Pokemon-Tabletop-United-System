@@ -32,7 +32,7 @@ class PTUTokenDocument extends TokenDocument {
     static prepareSize(tokenDocument, actor) {
         const {width, height} = ((sizeClass) => {;
             switch (sizeClass) {
-                case "Small": return { width: 0.5, height: 0.5 };
+                case "Small": return { width: 1, height: 1 };
                 case "Medium": return { width: 1, height: 1 };
                 case "Large": return { width: 2, height: 2 };
                 case "Huge": return { width: 3, height: 3 };
@@ -43,6 +43,15 @@ class PTUTokenDocument extends TokenDocument {
 
         tokenDocument.width = width;
         tokenDocument.height = height;
+
+        //TODO: Add setting
+        if(true && tokenDocument.flags?.ptu?.autoscale !== false) {
+            const absoluteScale = actor.sizeClass === "Small" ? 0.6 : 1;
+            const mirrorX = tokenDocument.texture.scaleX < 0 ? -1 : 1;
+            const mirrorY = tokenDocument.texture.scaleY < 0 ? -1 : 1;
+            tokenDocument.texture.scaleX = absoluteScale * mirrorX;
+            tokenDocument.texture.scaleY = absoluteScale * mirrorY;
+        }
     }
 
     /** Re-render token placeable if REs have ephemerally changed any visuals of this token */

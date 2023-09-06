@@ -64,6 +64,11 @@ class PTUItemSheet extends ItemSheet {
                 }))
             )
         }
+
+        if(this.item.flags.ptu?.showInTokenPanel === undefined) {
+            if(this.item.type === "item" && this.item.roll) data.item.flags.ptu.showInTokenPanel = true;
+            if (["move", "ability", "feat"].includes(this.item.type)) data.item.flags.ptu.showInTokenPanel = true;
+        }
         
         return data;
     }

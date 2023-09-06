@@ -49,6 +49,7 @@ const GamePTU = {
     },
     onSetup() { },
     onReady() {
+        
     }
 }
 

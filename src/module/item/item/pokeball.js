@@ -61,7 +61,8 @@ class PokeballItem extends PTUItemItem {
             params.options ??= [];
 
             const target = params.target ?? game.user.targets.first();
-            if(!target) return null; // TODO: Throw error
+            if(!target?.actor) return ui.notifications.warn("PTU.Action.CaptureNoTarget", { localize: true })
+            if(target.actor.type === "character") return ui.notifications.warn("PTU.Action.CaptureWrongTarget", { localize: true })
 
             const context = await this.actor.getCheckContext({
                 item: this,
