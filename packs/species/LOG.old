@@ -1,3 +1,31 @@
-2023/09/06-10:17:46.128 47bc Recovering log #374
-2023/09/06-10:17:46.134 47bc Delete type=0 #374
-2023/09/06-10:17:46.134 47bc Delete type=3 #372
+2023/09/06-12:34:18.379 26fc Recovering log #378
+2023/09/06-12:34:18.379 26fc Level-0 table #380: started
+2023/09/06-12:34:18.381 26fc Level-0 table #380: 10213 bytes OK
+2023/09/06-12:34:18.388 26fc Delete type=0 #378
+2023/09/06-12:34:18.388 26fc Delete type=3 #377
+2023/09/06-13:04:49.033 2514 Compacting 1@0 + 2@1 files
+2023/09/06-13:04:49.110 2514 Generated table #382@0: 509 keys, 2117254 bytes
+2023/09/06-13:04:49.154 2514 Generated table #383@0: 515 keys, 2119603 bytes
+2023/09/06-13:04:49.154 2514 Compacted 1@0 + 2@1 files => 4236857 bytes
+2023/09/06-13:04:49.155 2514 compacted to: files[ 0 5 0 0 0 0 0 ]
+2023/09/07-21:04:43.194 2514 Level-0 table #385: started
+2023/09/07-21:04:43.203 2514 Level-0 table #385: 696646 bytes OK
+2023/09/07-21:04:43.204 2514 Delete type=2 #365
+2023/09/07-21:04:43.204 2514 Delete type=2 #376
+2023/09/07-21:04:43.205 2514 Delete type=2 #380
+2023/09/07-21:04:43.205 2514 Delete type=0 #381
+2023/09/07-21:04:43.207 2514 Manual compaction at level-0 from '!folders!CMymFngAhNsaPlS5' @ 72057594037927935 : 1 .. '!items!zyXhWVwTmu553jFn' @ 0 : 0; will stop at '!items!zSkBKwzQzN1aLa0P' @ 14154 : 1
+2023/09/07-21:04:43.207 2514 Compacting 1@0 + 5@1 files
+2023/09/07-21:04:43.230 2514 Generated table #386@0: 508 keys, 2118281 bytes
+2023/09/07-21:04:43.252 2514 Generated table #387@0: 509 keys, 2118980 bytes
+2023/09/07-21:04:43.274 2514 Generated table #388@0: 511 keys, 2120088 bytes
+2023/09/07-21:04:43.292 2514 Generated table #389@0: 240 keys, 990394 bytes
+2023/09/07-21:04:43.292 2514 Compacted 1@0 + 5@1 files => 7347743 bytes
+2023/09/07-21:04:43.293 2514 compacted to: files[ 0 4 0 0 0 0 0 ]
+2023/09/07-21:04:43.294 2514 Delete type=2 #343
+2023/09/07-21:04:43.294 2514 Delete type=2 #366
+2023/09/07-21:04:43.294 2514 Delete type=2 #367
+2023/09/07-21:04:43.295 2514 Delete type=2 #382
+2023/09/07-21:04:43.295 2514 Delete type=2 #383
+2023/09/07-21:04:43.295 2514 Delete type=2 #385
+2023/09/07-21:04:43.308 2514 Manual compaction at level-0 from '!items!zSkBKwzQzN1aLa0P' @ 14154 : 1 .. '!items!zyXhWVwTmu553jFn' @ 0 : 0; will stop at (end)

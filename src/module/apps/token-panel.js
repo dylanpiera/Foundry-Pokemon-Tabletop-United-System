@@ -32,7 +32,7 @@ export class TokenPanel extends Application {
 
         const attacks = [];
         const struggles = [];
-        for (const attack of actor.attacks.contents.sort((a, b) => a.item.sort - b.item.sort)) {
+        for (const [id, attack] of actor.attacks.entries()) {
             if (attack.item.getFlag("ptu", "showInTokenPanel") === false) continue;
             const data = {
                 name: attack.label,
@@ -40,7 +40,7 @@ export class TokenPanel extends Application {
                 db: attack.item?.system.damageBase > 0 ? attack.item.system.damageBase : null,
                 ac: attack.item?.system.ac > 0 ? attack.item.system.ac : null,
                 frequency: attack.item?.system.frequency ?? "At-Will",
-                id: attack.item.id,
+                id,
                 rollable: !!attack.roll,
                 effect: attack.item?.system.effect ?? "",
             };
@@ -297,6 +297,12 @@ export class TokenPanel extends Application {
                 })
             });
         }
+
+        $html.find(".action[title], .condition[title], .effect[title]").tooltipster({
+            theme: `tooltipster-shadow ball-themes ${this.actor?.sheet?.ballStyle}`,
+			position: 'top',
+            maxWidth: 500,
+		});
     }
 
     #getPartyInfo() {

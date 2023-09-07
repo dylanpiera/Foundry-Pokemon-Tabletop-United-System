@@ -47,7 +47,7 @@ class PTUActor extends Actor {
     }
 
     get identified() {
-        return true;
+        return this.flags.ptu?.identified !== false;
     }
 
     get sizeClass() {

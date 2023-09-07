@@ -27,7 +27,7 @@
             </div>
             <div class="conditions">
                 {{#each conditions as |condition|}}
-                    <div class="condition" data-actor-id="{{condition.parent.id}}" data-item-id="{{condition.id}}">
+                    <div class="condition" data-actor-id="{{condition.parent.id}}" data-item-id="{{condition.id}}" {{#if condition.system.effect}}title="{{condition.system.effect}}"{{/if}}>
                         <img class="icon" src="{{condition.img}}" alt="{{condition.name}}">
                         <span class="name">{{condition.name}}</span>
                     </div>
@@ -43,7 +43,7 @@
             </div>
             <div class="effects">
                 {{#each effects as |effect|}}
-                    <div class="effect" data-actor-id="{{effect.parent.id}}" data-item-id="{{effect.id}}">
+                    <div class="effect" data-actor-id="{{effect.parent.id}}" data-item-id="{{effect.id}}" {{#if effect.system.effect}}title="{{effect.system.effect}}"{{/if}}>
                         <img class="icon" src="{{effect.img}}" alt="{{effect.name}}">
                         <span class="name">{{effect.name}}</span>
                     </div>
@@ -138,7 +138,7 @@
                     {{#if (gt struggles.length 0)}}
                         <div class="struggles-actions">
                             {{#each struggles as |struggle|}}
-                            <div class="action rollable" data-id="{{struggle.id}}" title="{{struggle.effect}}">
+                            <div class="action rollable" data-id="{{struggle.id}}">
                                 <div class="icon">
                                     <img class="icon" src="{{struggle.img}}" alt="{{struggle.name}}">
                                     <img class="dice" src="/icons/svg/d20.svg" title="Roll {{struggle.name}}">

@@ -74,6 +74,20 @@ class PTUItemSheet extends ItemSheet {
     }
 
     /** @override */
+    _getHeaderButtons() {
+        const buttons = super._getHeaderButtons();
+
+		buttons.unshift({
+			label: "Send to Chat",
+			class: ".to-chat",
+			icon: "fas fa-comment",
+			onclick: () => this.object.sendToChat?.()
+		});
+
+        return buttons;
+    }
+
+    /** @override */
     activateListeners(html) {
         super.activateListeners(html);
 

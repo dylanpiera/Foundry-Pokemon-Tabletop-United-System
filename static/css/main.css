@@ -544,6 +544,7 @@
   flex-direction: row;
   margin-top: 2px;
   padding-top: 2px;
+  overflow: hidden;
 }
 .token-panel .top-panel .conditions .condition .icon,
 .token-panel .top-panel .effects .condition .icon,
@@ -563,6 +564,7 @@
   align-self: center;
   color: whitesmoke;
   margin-left: 5px;
+  font-size: 12px;
 }
 .token-panel .top-panel .party-overview .party-header {
   display: flex;
