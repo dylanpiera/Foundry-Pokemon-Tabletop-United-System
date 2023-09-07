@@ -42,7 +42,7 @@ class PTUEffect extends BaseEffectPTU {
 
     /** @override */
     prepareRuleElements(options) {
-        const autoExpireEffects = game.settings.get("ptu", "autoExpireEffects");
+        const autoExpireEffects = game.settings.get("ptu", "automation.autoExpireEffects");
         if(autoExpireEffects && this.isExpired && this.actor?.items.has(this.id)) {
             for(const rule of this.system.rules) rule.ignored = true;
         }

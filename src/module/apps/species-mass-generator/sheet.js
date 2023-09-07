@@ -140,7 +140,7 @@ export class PTUSpeciesMassGenerator extends FormApplication {
         let folder = data.folder;
         const monsToGenerate = [];
 
-        const shinyChance = game.settings.get("ptu", "defaultDexDragInShinyChance") > 1 ? game.settings.get("ptu", "defaultDexDragInShinyChance") / 100 : game.settings.get("ptu", "defaultDexDragInShinyChance");
+        const shinyChance = game.settings.get("ptu", "generation.defaultDexDragInShinyChance") > 1 ? game.settings.get("ptu", "generation.defaultDexDragInShinyChance") / 100 : game.settings.get("ptu", "generation.defaultDexDragInShinyChance");
 
         if (species) {
             for (let i = 0; i < amount; i++) {

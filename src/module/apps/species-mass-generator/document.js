@@ -25,8 +25,8 @@ export class SpeciesGeneratorData {
             updated: false,
         }
         this.level = {
-            min: game.settings.get("ptu", "defaultDexDragInLevelMin") ?? 0,
-            max: game.settings.get("ptu", "defaultDexDragInLevelMax") ?? 0
+            min: game.settings.get("ptu", "generation.defaultDexDragInLevelMin") ?? 0,
+            max: game.settings.get("ptu", "generation.defaultDexDragInLevelMax") ?? 0
         }
         this.helpText = {
             species: undefined,

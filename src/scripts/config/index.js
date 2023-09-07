@@ -62,8 +62,6 @@ const data = {
   levelProgression,
   typeEffectiveness,
   natureData,
-  pokemonData,
-  customSpeciesData: [],
   sheetThemes: {
     styles: pokeballStyles,
     shapes: pokeballShapes,

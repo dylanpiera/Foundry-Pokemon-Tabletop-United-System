@@ -72,16 +72,6 @@ export const Init = {
             registerSettings();
             registerTemplates();
 
-            if (game.settings.get("ptu", "insurgenceData")) {
-                Array.prototype.push.apply(PTUCONFIG.data.pokemonData, insurgenceData);
-            }
-            if (game.settings.get("ptu", "sageData")) {
-                Array.prototype.push.apply(PTUCONFIG.data.pokemonData, sageData);
-            }
-            if (game.settings.get("ptu", "uraniumData")) {
-                Array.prototype.push.apply(PTUCONFIG.data.pokemonData, uraniumData);
-            }
-
             // Register Constants
             CONST = {
                 ...CONST,

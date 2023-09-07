@@ -432,11 +432,11 @@
                                         disabled=true}}
                                 </div>
                                 <div class="skill {{key}} fb-20 align-self-center bgcolor center-text rollable center-self"
-                                    data-roll="{{#if (is true (getGameSetting "ignoreVirtuosoLimit"))}}{{skill.value.total}}{{else}}{{#if (bigger skill.value.total 6)}}6{{else}}{{skill.value.total}}{{/if}}{{/if}}d6{{#if skill.modifier.total}}+{{skill.modifier.total}}{{/if}}"
+                                    data-roll="{{#if (bigger skill.value.total 6)}}6{{else}}{{skill.value.total}}{{/if}}d6{{#if skill.modifier.total}}+{{skill.modifier.total}}{{/if}}"
                                     data-skill="{{key}}">
                                     <i class="fas fa-dice-d20"></i>
                                     <label for="system.skills.{{key}}.value"
-                                    class="resource-label">{{#if (is true (getGameSetting "ignoreVirtuosoLimit"))}}{{skill.value.total}}{{else}}{{#if (bigger skill.value.total 6)}}6{{else}}{{skill.value.total}}{{/if}}{{/if}}d6{{#if skill.modifier.total}}+{{skill.modifier.total}}{{/if}}</label>
+                                    class="resource-label">{{#if (bigger skill.value.total 6)}}6{{else}}{{skill.value.total}}{{/if}}d6{{#if skill.modifier.total}}+{{skill.modifier.total}}{{/if}}</label>
                                 </div>
                             </div>
                             {{/each}}
@@ -730,7 +730,7 @@
                         <!-- Edges-->
                         <div class="swsh-box w-100 mb-2">
                             <!-- Tutor Points -->
-                                {{#if (is "true" (getGameSetting "useTutorPoints"))}}
+                                {{#if (is "true" (getGameSetting "variant.useTutorPoints"))}}
                                     <div class="swsh-header ball-themes {{ballStyle}} highlight pt-2 pb-2 justify-content-center">
                                         <b class="m-auto">{{localize "PTU.TutorPoints"}}</b>
                                     </div>

@@ -6,9 +6,9 @@ class PTUSpecies extends PTUItem {
         return sluggify(this.name);
     }
 
-    getImagePath({ gender = game.i18n.localize("PTU.Male"), shiny = false, extension = game.settings.get("ptu", "defaultPokemonImageExtension"), suffix = "" }={}) {
-        const path = game.settings.get("ptu", "defaultPokemonImageDirectory");
-        const useName = game.settings.get("ptu", "defaultPokemonImageSlugTypeName");
+    getImagePath({ gender = game.i18n.localize("PTU.Male"), shiny = false, extension = game.settings.get("ptu", "generation.defaultImageExtension"), suffix = "" }={}) {
+        const path = game.settings.get("ptu", "generation.defaultImageDirectory");
+        const useName = game.settings.get("ptu", "automation.defaultPokemonImageNameType");
         const femaleTag = gender.toLowerCase() == "female" ? "f" : "";
         const shinyTag = shiny ? "s" : "";
 

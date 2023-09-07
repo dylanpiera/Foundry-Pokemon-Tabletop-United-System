@@ -25,7 +25,7 @@ class PTUPokemonActor extends PTUActor {
     }
 
     get allowedItemTypes() {
-        return ["species", "pokeedge", "move", "ability", "item", "capability", "effect", "condition"]
+        return ["species", "pokeedge", "move", "ability", "capability", "effect", "condition"]
     }
 
     get nature() {
@@ -98,8 +98,7 @@ class PTUPokemonActor extends PTUActor {
         const system = this.system;
 
         if (!this.species) {
-            this.oldPrepareData();
-            return;
+            return ui?.notifications?.warn?.(`Unable to prepare derived data for ${this.name} as it has no species item.`);
         }
 
         const speciesSystem = this.species.system;
@@ -202,7 +201,7 @@ class PTUPokemonActor extends PTUActor {
 
         system.capabilities = this._calcCapabilities();
 
-        system.egggroup = (speciesSystem?.breeding?.eggGroups ?? []).join(' & ');
+        system.egggroup = (speciesSystem?.breeding?.eggGroups || []).join?.(' & ') ?? [];
 
         // Calculate Skill Ranks
         for (const [key, skill] of Object.entries(speciesSystem?.skills ?? {})) {
@@ -221,113 +220,6 @@ class PTUPokemonActor extends PTUActor {
 
         // Shedinja will always be a special case.
         if (this.species.slug === "shedinja") {
-            system.health.max = 1;
-            system.health.tick = 1;
-        }
-    }
-
-    oldPrepareData() {
-        const system = this.system;
-
-        const speciesData = game.ptu.species.get(system.species);
-        if (!speciesData) return;
-
-        // Prepare system data
-        system.isCustomSpecies = speciesData?.isCustomSpecies ?? false;
-
-        // Prepare data with Mods
-        for (let [key, mod] of Object.entries(system.modifiers)) {
-            // Skip these modifiers
-            if (["hardened", "flinch_count", "immuneToEffectDamage", "typeOverwrite"].includes(key)) continue;
-
-            // If the modifier is an object, it has subkeys that need to be calculated
-            if (mod[Object.keys(mod)[0]]?.value !== undefined) {
-                for (let [subkey, value] of Object.entries(mod)) {
-                    system.modifiers[key][subkey]["total"] = (value["value"] ?? 0) + (value["mod"] ?? 0);
-                }
-                continue;
-            }
-
-            // Otherwise, just calculate the total
-            system.modifiers[key]["total"] = (mod["value"] ?? 0) + (mod["mod"] ?? 0);
-        }
-
-        // Calculate Level related data
-        system.level.current = calculateLevel(system.level.exp);
-
-        system.levelUpPoints = system.level.current + system.modifiers.statPoints.total + 10;
-
-        system.level.expTillNextLevel = (system.level.current < 100) ? CONFIG.PTU.data.levelProgression[system.level.current + 1] : CONFIG.PTU.data.levelProgression[100];
-        system.level.percent = Math.round(((system.level.exp - CONFIG.PTU.data.levelProgression[system.level.current]) / (system.level.expTillNextLevel - CONFIG.PTU.data.levelProgression[system.level.current])) * 100);
-
-        // Calculate Stats related data
-        if (this.flags?.ptu?.is_poisoned) {
-            system.stats.spdef.stage.mod -= 2;
-        }
-
-        system.stats = calcBaseStats(system.stats, speciesData, system.nature.value, system.modifiers.baseStats);
-
-        const leftoverLevelUpPoints = system.levelUpPoints - Object.values(system.stats).reduce((a, v) => v.levelUp + a, 0);
-        const actualLevel = Math.max(1, system.level.current - Math.max(0, Math.clamped(0, leftoverLevelUpPoints, leftoverLevelUpPoints - system.modifiers.statPoints.total ?? 0)));
-
-        const result = true ?
-            calculatePTStatTotal(system.levelUpPoints, actualLevel, system.stats, { twistedPower: this.items.find(x => x.name.toLowerCase().replace("[playtest]") == "twisted power") != null }, system.nature.value, false) :
-            calculateOldStatTotal(system.levelUpPoints, system.stats, { twistedPower: this.items.find(x => x.name.toLowerCase().replace("[playtest]") == "twisted power") != null });
-        system.stats = result.stats;
-        system.levelUpPoints = result.levelUpPoints;
-
-        const types = [];
-        if (system.modifiers?.typeOverwrite) {
-            const splitTypes = system.modifiers?.typeOverwrite?.split('/');
-            for (const type of splitTypes) {
-                if (CONFIG.PTU.data.typeEffectiveness[Handlebars.helpers.capitalizeFirst(type.toLowerCase())]) types.push(type);
-            }
-        }
-        if (types.length == 0 && speciesData?.Type) types.push(...speciesData.Type);
-        system.typing = types.length > 0 ? types : speciesData?.Type;
-
-        system.health.total = 10 + system.level.current + (system.stats.hp.total * 3);
-        system.health.max = system.health.injuries > 0 ? Math.trunc(system.health.total * (1 - ((system.modifiers.hardened ? Math.min(system.health.injuries, 5) : system.health.injuries) / 10))) : system.health.total;
-        if (system.health.value === null) system.health.value = system.health.max;
-
-        system.health.percent = Math.round((system.health.value / system.health.max) * 100);
-
-        system.health.tick = Math.floor(system.health.total / 10);
-
-        system.initiative = { value: system.stats.spd.total + system.modifiers.initiative.total };
-        if (this.flags?.ptu?.is_paralyzed) system.initiative.value = Math.floor(system.initiative.value * 0.5);
-        if (system.modifiers.flinch_count?.value > 0) {
-            system.initiative.value -= (system.modifiers.flinch_count.value * 5);
-        }
-        Hooks.call("updateInitiative", this);
-
-        system.tp.max = (system.level.current > 0 ? Math.floor(system.level.current / 5) : 0) + 1;
-        system.tp.pep.value = this.items.filter(x => x.type == "pokeedge" && x.system.origin?.toLowerCase() != "pusher").length;
-        system.tp.pep.max = system.level.current > 0 ? Math.floor(system.level.current / 10) + 1 : 1;
-
-        system.evasion = calculateEvasions(system, this.flags?.ptu, this.items);
-
-        system.capabilities = calculatePokemonCapabilities(speciesData, this.items.values(), (system.stats.spd.stage.value + system.stats.spd.stage.mod), Number(system.modifiers.capabilities?.total ?? 0), this.flags?.ptu);
-
-        if (speciesData) system.egggroup = speciesData["Breeding Information"]["Egg Group"].join(" & ");
-
-        //TODO: Add skill background
-        system.skills = calculateSkills(system.skills, speciesData, system.background, system.modifiers.skillBonus.total);
-
-        // Calc skill rank
-        for (let [key, skill] of Object.entries(system.skills)) {
-            skill["value"]["total"] = skill["value"]["value"] + skill["value"]["mod"];
-            skill["modifier"]["total"] = skill["modifier"]["value"] + skill["modifier"]["mod"];
-            skill["rank"] = PTUSkills.getRankSlug(skill["value"]["total"]);
-        }
-
-        // Calc Type Effectiveness
-        system.effectiveness = getEffectiveness(this);
-
-        /* The Corner of Exceptions */
-
-        // Shedinja will always be a special case.
-        if (system.species.toLowerCase() === "shedinja") {
             system.health.max = 1;
             system.health.tick = 1;
         }
@@ -414,7 +306,7 @@ class PTUPokemonActor extends PTUActor {
 
     /** @override */
     async _preUpdate(changed, options, userId) {
-        if (!game.settings.get("ptu", "levelUpScreen") || (changed.system?.level?.exp ?? null) === null || changed.system.level.exp === this.system.level.exp)
+        if (!game.settings.get("ptu", "automation.levelUpScreen") || (changed.system?.level?.exp ?? null) === null || changed.system.level.exp === this.system.level.exp)
             return super._preUpdate(changed, options, userId);
 
         const newLevel = calculateLevel(changed.system.level.exp, this.system.level.current);

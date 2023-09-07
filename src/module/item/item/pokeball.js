@@ -74,7 +74,7 @@ class PokeballItem extends PTUItemItem {
                 category: "Status"
             });
 
-            if (game.settings.get("ptu", "failAttackIfOutOfRange") && typeof context.target?.distance === "number") {
+            if (game.settings.get("ptu", "automation.failAttackIfOutOfRange") && typeof context.target?.distance === "number") {
                 if (context.target.distance > this.range) {
                     ui.notifications.warn("PTU.Action.AttackOutOfRange", { localize: true });
                     return null;

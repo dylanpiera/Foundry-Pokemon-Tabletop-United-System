@@ -115,7 +115,18 @@ function _registerPTUHelpers() {
         return (move.damageBase.toString().match(/^[0-9]+$/) != null) ? move.stab ? parseInt(move.damageBase) + 2 : move.damageBase : move.damageBase;
     });
 
-    Handlebars.registerHelper("moveDbToDice", _calcMoveDb);
+    Handlebars.registerHelper("moveDbToDice", (item, actor) => {
+        const dbNumber = Number(item.system.damageBase ?? item);
+        if(isNaN(dbNumber)) return "Not a valid DB";
+
+        const realDb = Math.clamped(dbNumber, 0, 28);
+        const dbString = CONFIG.PTU.data.dbData[realDb];
+
+        if(!actor) return dbString;
+        const bonus = item.system.category === "Physical" ? actor.system.stats.atk.total + (actor.system.modifiers.damageBonus?.physical?.total ?? 0) : actor.system.stats.spatk.total + (actor.system.modifiers.damageBonus?.special?.total ?? 0);
+
+        return dbString + " + " + bonus;
+    });
 
     //     Handlebars.registerHelper("calcAc", function (move) {
     //         return -parseInt(move.ac) + parseInt(move.acBonus);

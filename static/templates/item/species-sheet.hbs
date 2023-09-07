@@ -158,6 +158,10 @@
                         <label for="system.breeding.eggGroups">{{localize "SPECIES.EggGroups"}}</label>
                         <input class="ml-1 mr-1" name="system.breeding.eggGroups" type="text" value="{{item.system.breeding.eggGroups}}" placeholder="{{localize "SPECIES.EggGroups"}}"/>
                     </div>
+                    <div class="item-row">
+                        <label for="system.breeding.genderRatio">{{localize "SPECIES.GenderRatio"}}</label>
+                        <input class="ml-1 mr-1" name="system.breeding.genderRatio" type="number" value="{{item.system.breeding.genderRatio}}" placeholder="{{localize "SPECIES.GenderRatio"}}"/>
+                    </div>
                 </div>
                 <div class="fb-48 p-1 d-flex flex-column">
                     {{#each item.system.capabilities as |value key|}}

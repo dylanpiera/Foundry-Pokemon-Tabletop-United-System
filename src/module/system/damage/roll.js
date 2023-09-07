@@ -87,7 +87,7 @@ class DamageRoll extends Roll {
             persistenceFormula: this.options.persistenceFormula ?? options.persistenceFormula ?? null,
         }
 
-        if (chatData.crit.show === false && game.settings.get("ptu", "alwaysShowCrits") === true) {
+        if (chatData.crit.show === false && game.settings.get("ptu", "metagame.alwaysShowCrits") === true) {
             chatData.crit.show = true;
         }
 

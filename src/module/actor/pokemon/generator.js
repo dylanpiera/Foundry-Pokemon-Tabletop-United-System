@@ -14,11 +14,11 @@ export class PokemonGenerator {
     async prepare(
         { minLevel, maxLevel, shinyChance, statRandomness, preventEvolution, saveDefault } =
             {
-                minLevel: Number(game.settings.get("ptu", "defaultDexDragInLevelMin")),
-                maxLevel: Number(game.settings.get("ptu", "defaultDexDragInLevelMax")),
-                shinyChance: Number(game.settings.get("ptu", "defaultDexDragInShinyChance")),
-                statRandomness: Number(game.settings.get("ptu", "defaultDexDragInStatRandomness")),
-                preventEvolution: game.settings.get("ptu", "defaultDexDragInPreventEvolution"),
+                minLevel: Number(game.settings.get("ptu", "generation.defaultDexDragInLevelMin")),
+                maxLevel: Number(game.settings.get("ptu", "generation.defaultDexDragInLevelMax")),
+                shinyChance: Number(game.settings.get("ptu", "generation.defaultDexDragInShinyChance")),
+                statRandomness: Number(game.settings.get("ptu", "generation.defaultDexDragInStatRandomness")),
+                preventEvolution: game.settings.get("ptu", "generation.defaultDexDragInPreventEvolution"),
                 saveDefault: false
             }) {
         if (!this.level) {
@@ -327,7 +327,7 @@ export class PokemonGenerator {
         }
     }
 
-    static async getImage(species, { gender = game.i18n.localize("PTU.Male"), shiny = false, extension = game.settings.get("ptu", "defaultPokemonImageExtension"), suffix = "" } = {}) {
+    static async getImage(species, { gender = game.i18n.localize("PTU.Male"), shiny = false, extension = game.settings.get("ptu", "generation.defaultImageExtension"), suffix = "" } = {}) {
         // Check for default
         let path = species.getImagePath({ gender, shiny, extension, suffix });
         let result = await fetch(path)

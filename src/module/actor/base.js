@@ -92,7 +92,7 @@ class PTUActor extends Actor {
                 effectiveness[key] = (effectiveness[key] ?? 1) * value;
             }
         }
-        if (!game.settings.get("ptu", "uraniumData")) {
+        if (!game.settings.get("ptu", "homebrew.nuclearType")) {
             delete effectiveness["Nuclear"];
         }
 
@@ -937,7 +937,7 @@ class PTUActor extends Actor {
             }
             if (contexts.length == 0) contexts.push(await getContext(null));
 
-            if (!selectors.includes("self-attack") && game.settings.get("ptu", "failAttackIfOutOfRange")) {
+            if (!selectors.includes("self-attack") && game.settings.get("ptu", "automation.failAttackIfOutOfRange")) {
                 for (const context of contexts) {
                     if (typeof context.target?.distance !== "number") continue;
 

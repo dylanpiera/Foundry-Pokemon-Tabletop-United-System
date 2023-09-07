@@ -61,6 +61,7 @@
   "SPECIES.SizeClass": "Size Class",
   "SPECIES.WeightClass": "Weight Class",
   "SPECIES.EggGroups": "Egg Groups",
+  "SPECIES.GenderRatio": "Gender Ratio",
   "SPECIES.Habitats": "Habitats",
   "SPECIES.Diet": "Diet",
 
@@ -666,7 +667,104 @@
       "SkillMod": "Skill Mod",
       "SkillDice": "Skill Rank"
     },
-    "Configure": "Configuring {name}"
+    "Configure": "Configuring {name}",
+
+    "Settings": {
+      "ResetChanges": "Reset Changes",
+      "Variant": {
+        "Name": "Variant Rules",
+        "Label": "Toggle Variant Rules",
+        "Hint": "Enable and configure variant rules like 'Use Dex EXP' for the system.",
+        "UseTutorPoints": {
+          "Name": "Use Tutor Points for Pokémon",
+          "Hint": "Otherwise use the suggested changes in the 'GM Advice and Suggested Houserules' (see: https://pastebin.com/iDt2Mj0d)"
+        },
+        "UseDexExp": {
+          "Name": "Use Dex Exp for Trainers",
+          "Hint": "Whether the system should check how many pokemon are marked as 'Caught' in a Trainer's dex, and add that to their dex experience total."
+        }
+      },
+      "Automation": {
+        "Name": "Automation",
+        "Label": "Toggle Automation",
+        "Hint": "Enable and configure automation rules like 'Remove Expired Effects' for the system.",
+        "DexPermissions": {
+          "Name": "Pokédex Permissions",
+          "Hint": "The required permission for a player to be able to see a Pokédex entry"
+        },
+        "LevelUpScreen": {
+          "Name": "Show Level-Up Window",
+          "Hint": "Allow the level-up window to appear whenever a Pokémon levels up."
+        },
+        "RemoveExpiredEffects": {
+          "Name": "Remove Expired Effects",
+          "Hint": "Remove expired effects from actors."
+        },
+        "AutoExpireEffects": {
+          "Name": "Auto-Expire Effects",
+          "Hint": "Automatically expire effects when their duration is up."
+        },
+        "FailAttackIfOutOfRange": {
+          "Name": "Fail Attack if Out of Range",
+          "Hint": "Automatically fail an attack if the target is out of range."
+        }
+      },
+      "Generation": {
+        "Name": "Generation",
+        "Label": "Toggle Generation",
+        "Hint": "Enable and configure generation rules like 'Default Image Directory' for the system.",
+        "DefaultImageDirectory": {
+          "Name": "Default Image Directory",
+          "Hint": "The default directory to look for images in when generating a Pokémon."
+        },
+        "DefaultImageExtension": {
+          "Name": "Default Image Extension",
+          "Hint": "The default extension to use when looking for images for generating a Pokémon."
+        },
+        "DefaultPokemonImageNameType": {
+          "Name": "Pokemon Image Name Type",
+          "Hint": "Whether the images are based on name (checked) or dex number (unchecked)"
+        },
+        "DefaultDexDragInLevelMin": {
+          "Name": "Default Minimum Species Drag-In Level",
+          "Hint": "The default minimum level for a Pokémon dragged into a scene from a species item"
+        },
+        "DefaultDexDragInLevelMax": {
+          "Name": "Default Maximum Species Drag-In Level",
+          "Hint": "The default maximum level for a Pokémon dragged into a scene from a species item"
+        },
+        "DefaultDexDragInShinyChance": {
+          "Name": "Default Species Drag-In Shiny Chance (%)",
+          "Hint": "The default shiny chance for a Pokémon dragged into a scene from a species item"
+        },
+        "DefaultDexDragInStatRandomness": {
+          "Name": "Default Species Drag-In Stat Randomness (%)",
+          "Hint": "The default stat randomness for a Pokémon dragged into a scene from a species item"
+        },
+        "DefaultDexDragInPreventEvolution": {
+          "Name": "Default Species Drag-In Prevent Evolution",
+          "Hint": "Whether a Pokémon's evolution should be prevented during Species Drag-In Generation."
+        }
+      },
+      "Metagame": {
+        "Name": "Metagame",
+        "Label": "Limit Metagame information",
+        "Hint": "Limit what kinds of metagame information is available to players.",
+        "AlwaysShowCrits": {
+          "Name": "Always Show Crits",
+          "Hint": "Always show crits in the chat even if no crit was rolled."
+        }
+      },
+      "Homebrew": {
+        "Name": "Homebrew",
+        "Label": "Manage Homebrew",
+        "Hint": "Manage your homebrew related settings.",
+        "NuclearType": {
+          "Name": "Enable Nuclear Type",
+          "Hint": "Adds Pokémon Uranium's Nuclear Type to the game based on DataNinja's Homebrew Compilation's Uranium Data."
+        }
+      }
+    }
   },
 
   "physical-evasion": "Physical Evasion",

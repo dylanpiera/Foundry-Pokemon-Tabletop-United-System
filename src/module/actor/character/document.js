@@ -30,7 +30,7 @@ class PTUTrainerActor extends PTUActor {
             system.skills[novice].value.mod += 1;
         }
 
-        system.level.dexexp = game.settings.get("ptu", "useDexExp") == true ? (this.system.dex?.owned?.length || 0) : 0;
+        system.level.dexexp = game.settings.get("ptu", "variant.useDexExp") == true ? (this.system.dex?.owned?.length || 0) : 0;
         system.level.current =
             Math.clamped(
                 1,
@@ -153,13 +153,6 @@ class PTUTrainerActor extends PTUActor {
         system.ap.max = 5 + Math.floor(system.level.current / 5);
 
         system.initiative = { value: system.stats.spd.total + system.modifiers.initiative.total };
-        if (this.flags?.ptu?.is_paralyzed) {
-            if (game.settings.get("ptu", "errata")) system.initiative.value = Math.floor(system.initiative.value * 0.5);
-        }
-        if (system.modifiers.flinch_count?.value > 0) {
-            system.initiative.value -= (system.modifiers.flinch_count.value * 5);
-        }
-        Hooks.call("updateInitiative", this);
     }
 
     /** @override */

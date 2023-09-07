@@ -95,10 +95,10 @@ class RollOptionRuleElement extends RuleElementPTU {
     async afterRoll({domains, rollOptions}) {
         const option = this.#resolveOption();
         if(!this.ignored && this.removeAfterRoll && this.value && this.actor.items.has(this.item.id) && domains.includes(this.domain) && rollOptions.has(option)) {
-            if(game.settings.get("ptu", "removeExpiredEffects")) {
+            if(game.settings.get("ptu", "automation.removeExpiredEffects")) {
                 return await this.item.delete();
             }
-            if(game.settings.get("ptu", "autoExpireEffects")) {
+            if(game.settings.get("ptu", "automation.autoExpireEffects")) {
                 return await this.item.update({"system.duration.value": -1, "system.expired": true});
             }
         }

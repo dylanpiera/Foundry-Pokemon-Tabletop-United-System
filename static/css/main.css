@@ -985,6 +985,7 @@ a.content-link img {
   gap: 5px;
   display: flex;
   justify-content: center;
+  margin-top: 0.25rem;
 }
 .chat-message.message .message-buttons button {
   border: none;

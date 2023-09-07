@@ -26,7 +26,7 @@ class PTUSpeciesSheet extends PTUItemSheet {
             // "full" : "entry";
             if(game.user.isGM) return "full";
 
-            const permission = game.settings.get("ptu", "dex-permission");
+            const permission = game.settings.get("ptu", "automation.dexPermission");
             switch(permission) {
                 case 1: throw new Error("Players may not open species sheets");
                 case 2: return "entry";
