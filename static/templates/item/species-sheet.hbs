@@ -79,7 +79,7 @@
                                 {{#each item.system.types as |type|}}
                                     <li class="item pb-1 arrow-box">
                                         {{#select type}}
-                                            <select name="system.type.{{@index}}" class="type-select" style="background: url('{{loadTypeImageUrl type}}')">
+                                            <select name="system.type.{{@index}}" class="type-select" style="background: url('{{loadTypeImageBar type}}')">
                                                 {{#each ../types}}
                                                     <option value="{{this}}">{{this}}</option>
                                                 {{/each}}
@@ -89,7 +89,7 @@
                                     {{#if (and @last (not type "Untyped"))}}
                                         <li class="item pb-1 arrow-box optional">
                                             {{#select "Untyped"}}
-                                                <select name="system.type.{{inc @index}}" class="type-select" style="background: url('{{loadTypeImageUrl "Untyped"}}')">
+                                                <select name="system.type.{{inc @index}}" class="type-select" style="background: url('{{loadTypeImageBar "Untyped"}}')">
                                                     {{#each ../types}}
                                                         <option value="{{this}}">{{this}}</option>
                                                     {{/each}}

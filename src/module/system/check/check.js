@@ -230,7 +230,7 @@ class PTUCheck {
                 type.classList.add("type-img");
 
                 const typeImg = document.createElement("img");
-                typeImg.src = `/systems/ptu/static/css/images/types2/${item.system.type}IC.png`;
+                typeImg.src = CONFIG.PTU.data.typeEffectiveness[item.system.type].images.bar;
                 type.append(typeImg);
 
                 const category = document.createElement("div");

@@ -671,6 +671,23 @@
 
     "Settings": {
       "ResetChanges": "Reset Changes",
+      "AddType": {
+        "ExistsLabel": "Edit Type",
+        "Label": "Add Type",
+        "Hint": "Please provide the name & icon for the new type.",
+        "Name": {
+          "Name": "Type Name",
+          "Hint": "The name of the type."
+        },
+        "IconImg": {
+          "Name": "Type Icon",
+          "Hint": "The icon to use for the type."
+        },
+        "BarImg": {
+          "Name": "Type Bar Image",
+          "Hint": "The bar image to use for the type when displaying in Chat."
+        }
+      },
       "Variant": {
         "Name": "Variant Rules",
         "Label": "Toggle Variant Rules",
@@ -762,6 +779,25 @@
         "NuclearType": {
           "Name": "Enable Nuclear Type",
           "Hint": "Adds Pokémon Uranium's Nuclear Type to the game based on DataNinja's Homebrew Compilation's Uranium Data."
+        }
+      },
+      "Type": {
+        "Name": "Custom Type Editor",
+        "Label": "Custom Type Editor",
+        "Hint": "Modify type effectiveness and add new types to the system",
+        "TypeEffectiveness": {
+          "Name": "Type Effectiveness",
+          "Hint": "The effectiveness of a type against another type"
+        },
+        "Delete": {
+          "Title": "Delete type",
+          "Label": "Delete",
+          "Content": "Are you sure you want to delete this type?"
+        },
+        "Submit": "Submit",
+        "Reset": {
+          "Title": "Reset Type Effectiveness",
+          "Content": "Are you sure you want to reset the type effectiveness to the default values?"
         }
       }
     }

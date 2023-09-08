@@ -112,7 +112,7 @@ class PTUItem extends Item {
         source.img ||= `/systems/ptu/static/css/images/icons/${source.type}_icon.png`
         if (source.img == "icons/svg/item-bag.svg" || source.img == "icons/svg/mystery-man.svg") {
             if (source.type == "move") {
-                source.img = `/systems/ptu/static/css/images/types2/${source.system.type.capitalize()}IC_Icon.png`;
+                source.img = CONFIG.PTU.data.typeEffectiveness[source.system.type.titleCase()].images.icon;
             }
             else {
                 source.img = `/systems/ptu/static/css/images/icons/${source.type}_icon.png`;
@@ -339,7 +339,7 @@ class PTUItem extends Item {
                 type.classList.add("type-img");
 
                 const typeImg = document.createElement("img");
-                typeImg.src = `/systems/ptu/static/css/images/types2/${this.system.type}IC.png`;
+                typeImg.src = CONFIG.PTU.data.typeEffectiveness[this.system.type].images.bar;
                 type.append(typeImg);
 
                 const category = document.createElement("div");

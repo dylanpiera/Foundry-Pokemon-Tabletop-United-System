@@ -7,6 +7,7 @@ import { AutomationSettings } from "./automation.js";
 import { GenerationSettings } from "./generation.js";
 import { HomebrewSettings } from "./homebrew.js";
 import { MetagameSettings } from "./metagame.js";
+import { TypeSettings } from "./types.js";
 import { VariantSettings } from "./variant.js";
 
 export function registerSettings() {
@@ -70,6 +71,16 @@ export function registerSettings() {
         restricted: true
     });
     HomebrewSettings.registerSettings();
+
+    game.settings.registerMenu("ptu", "type", {
+        name: "PTU.Settings.Type.Name",
+        label: "PTU.Settings.Type.Label",
+        hint: "PTU.Settings.Type.Hint",
+        icon: "fas fa-shield-alt",
+        type: TypeSettings,
+        restricted: true
+    })
+    TypeSettings.registerSettings();
 
     game.settings.register("ptu", "gameLanguage", {
         name: "Localization",
@@ -392,7 +403,7 @@ export function registerSettings() {
     //     default: "Clear",
     //     
     // });
-    
+
     game.settings.register("ptu", "customItemIconDirectory", {
         name: "Custom Item Icons Directory",
         hint: "The directory where the user can upload item image files to be used for custom items. Must end with a /",

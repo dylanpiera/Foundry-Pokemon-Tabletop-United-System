@@ -46,6 +46,8 @@ const GamePTU = {
         }
 
         game.ptu = mergeObject(game.ptu ?? {}, initData)
+
+        CONFIG.PTU.data.typeEffectiveness = game.settings.get("ptu", "type.typeEffectiveness") ?? CONFIG.PTU.data.typeEffectiveness;
     },
     onSetup() { },
     onReady() {

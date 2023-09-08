@@ -86,7 +86,7 @@ class PTUActor extends Actor {
         let i = 0;
         const effectiveness = {};
         for (const type of this.types) {
-            const iwr = duplicate(CONFIG.PTU.data.typeEffectiveness[type]);
+            const iwr = duplicate(CONFIG.PTU.data.typeEffectiveness[type]?.effectiveness ?? {});
 
             for (const [key, value] of Object.entries(iwr)) {
                 effectiveness[key] = (effectiveness[key] ?? 1) * value;
@@ -756,7 +756,7 @@ class PTUActor extends Actor {
                     const moveData = {
                         name: `Struggle (${type})`,
                         type: "move",
-                        img: `/systems/ptu/static/css/images/types2/${type}IC_Icon.png`,
+                        img: CONFIG.PTU.data.typeEffectiveness[type].images.icon,
                         system: {
                             ac: strugglePlus ? 3 : 4,
                             damageBase: strugglePlus ? 5 : 4,
@@ -804,7 +804,7 @@ class PTUActor extends Actor {
                         new Item.implementation({
                             name: `Struggle (Normal)`,
                             type: "move",
-                            img: `/systems/ptu/static/css/images/types2/NormalIC_Icon.png`,
+                            img: CONFIG.PTU.data.typeEffectiveness.Normal.images.icon,
                             system: {
                                 ac: strugglePlus ? 3 : 4,
                                 damageBase: strugglePlus ? 5 : 4,

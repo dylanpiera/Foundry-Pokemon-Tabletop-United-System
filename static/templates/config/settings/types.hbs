@@ -1,0 +1,38 @@
+<form autocomplete="off" onsubmit="event.preventDefault();">
+    <p class="instructions">Double click a type to edit its settings, left click on an effectiveness to increase it, right click an effectiveness to decrease it.</p>
+
+    <div class="type-grid" style="--grid-columns: {{inc types.length}};">
+        <div class="type" style="background: #222224;">
+
+        </div>
+        {{#each types as |type|}}
+            <div class="type" data-defensive="{{type}}" data-type="{{type}}">
+                <img src="{{lookup (lookup (lookup @root/typeEffectiveness type) "images") "icon"}}" />
+            </div>
+        {{/each}} 
+
+        {{#each typeEffectiveness as |types key|}}
+            <div class="type" data-offensive="{{key}}" data-type="{{key}}">
+                <img src="{{types.images.icon}}" />
+            </div>
+            {{#each types.effectiveness as |type key2|}}
+                {{#with (lookup (lookup (lookup @root/typeEffectiveness key2) "effectiveness") key) as |value|}}
+                    <div class="type" data-offensive="{{key}}" data-defensive="{{key2}}" data-modifier="{{value}}">
+                        <span>{{value}}</span>
+                    </div>
+                {{/with}}
+            {{/each}}
+        {{/each}}
+    </div>
+    <div class="form-group buttons">
+        <button type="submit">
+            <i class="far fa-save"></i> {{localize "SETTINGS.Save"}}
+        </button>
+        <button type="add">
+            <i class="fas fa-plus"></i> {{localize "PTU.Settings.AddType.Label"}}
+        </button>
+        <button type="reset" name="reset">
+            <i class="fas fa-undo"></i> {{localize "PTU.Settings.ResetChanges"}}
+        </button>
+    </div>
+</form>

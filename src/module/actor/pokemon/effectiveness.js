@@ -2,7 +2,7 @@
 
 function _getTypeEffectiveness(targetType) {
     if (targetType == "null") targetType = "Untyped";
-    return duplicate(CONFIG.PTU.data.typeEffectiveness[targetType])
+    return duplicate(CONFIG.PTU.data.typeEffectiveness[targetType]?.effectiveness ?? CONFIG.PTU.data.typeEffectiveness["Untyped"].effectiveness)
 }
 
 function getEffectiveness(data) {

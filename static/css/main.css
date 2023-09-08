@@ -631,6 +631,52 @@
   border-left: 4px solid green;
   background-color: #00800065;
 }
+.ptu-settings-menu .type-grid {
+  display: grid;
+  grid-template-columns: repeat(var(--grid-columns), 40px);
+  grid-auto-flow: row;
+  grid-auto-rows: 40px;
+  overflow: auto;
+}
+.ptu-settings-menu .type-grid .type {
+  overflow: hidden;
+  border: 1px solid #222224;
+  display: flex;
+  background: whitesmoke;
+  font-size: 15px;
+  text-align: center;
+}
+.ptu-settings-menu .type-grid .type img {
+  border: unset;
+  border-radius: 0;
+  object-fit: fill;
+  flex: 1;
+}
+.ptu-settings-menu .type-grid .type span {
+  align-self: center;
+  margin: auto;
+}
+.ptu-settings-menu .type-grid .type[data-modifier="0"] {
+  background-color: #222224aa;
+  color: whitesmoke;
+}
+.ptu-settings-menu .type-grid .type[data-modifier="0.5"] {
+  background-color: #ff8888;
+}
+.ptu-settings-menu .type-grid .type[data-modifier="2"] {
+  background-color: #88ff88aa;
+}
+.ptu-settings-menu .type-grid .type:hover {
+  box-shadow: inset 0 0 10px #222224;
+}
+.ptu-settings-menu .type-grid .type.highlight-x {
+  border-top: 3px solid #222224;
+  border-bottom: 3px solid #222224;
+}
+.ptu-settings-menu .type-grid .type.highlight-y {
+  border-left: 3px solid #222224;
+  border-right: 3px solid #222224;
+}
 #migration-summary > .window-content > h3 {
   margin: auto;
 }

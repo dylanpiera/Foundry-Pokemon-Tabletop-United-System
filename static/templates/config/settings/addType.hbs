@@ -1,0 +1,26 @@
+<form autocomplete="off" onsubmit="event.preventDefault();">
+    <p class="instructions">{{localize "PTU.Settings.AddType.Hint"}}</p>
+    <div class="form-group">
+        <label for="name">{{localize "PTU.Settings.AddType.Name.Name"}}</label>
+        <div class="form-fields">
+            <input type="text" name="name" value="{{name}}" {{#if exists}}disabled{{/if}}/>
+        </div>
+        <p class="notes">{{localize "PTU.Settings.AddType.Name.Hint"}}</p>
+    </div>
+    <div class="form-group">
+        <label for="iconImg">{{localize "PTU.Settings.AddType.IconImg.Name"}}</label>
+        <div class="form-fields">
+            {{filePicker target="iconImg" type="image" currentPath=iconImg}}
+            <input type="text" name="iconImg" value="{{iconImg}}" />
+        </div>
+        <p class="notes">{{localize "PTU.Settings.AddType.IconImg.Hint"}}</p>
+    </div>
+    <div class="form-group">
+        <label for="barImg">{{localize "PTU.Settings.AddType.BarImg.Name"}}</label>
+        <div class="form-fields">
+            {{filePicker target="barImg" type="image" currentPath=barImg}}
+            <input type="text" name="barImg" value="{{barImg}}" />
+        </div>
+        <p class="notes">{{localize "PTU.Settings.AddType.BarImg.Hint"}}</p>
+    </div>
+</form>

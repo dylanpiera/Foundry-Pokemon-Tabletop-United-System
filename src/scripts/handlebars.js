@@ -206,30 +206,17 @@ function _registerPTUHelpers() {
         for (let type of types) {
             if (type == "null") type = "Untyped";
             if (CONFIG.PTU.data.typeEffectiveness[type]) {
-                html += `<img class="type-image" src="/systems/ptu/static/css/images/types2/${type}IC.png">`;
+                html += `<img class="type-image" src="${CONFIG.PTU.data.typeEffectiveness[type].images.bar}">`;
             }
         }
         return html;
     });
 
-    //     Handlebars.registerHelper("loadTypeImage", function (type) {
-    //         if (isTypeDefaultType(type)) {
-    //             return `<img src="/systems/ptu/css/images/types/${type}IC.webp">`;
-    //         } else {
-    //             const path = findCustomTypeImagePath(type);
-    //             return `<img src="${path}">`;
-    //         }
-    //     });
-
-    //TODO: Rework this
-    Handlebars.registerHelper("loadTypeImageUrl", function (type) {
-        return `/systems/ptu/css/images/types2/${type}IC.png`;
-
-        if (isTypeDefaultType(type) || type == "Special" || type == "Physical" || type == "Status") {
-            return `/systems/ptu/css/images/types2/${type}IC.webp`;
-        } else {
-            return findCustomTypeImagePath(type);
-        }
+    Handlebars.registerHelper("loadTypeImageBar", function (type) {
+        return CONFIG.PTU.data.typeEffectiveness[type]?.images.bar ?? CONFIG.PTU.data.typeEffectiveness["Untyped"].images.bar;
+    });
+    Handlebars.registerHelper("loadTypeImageIcon", function (type) {
+        return CONFIG.PTU.data.typeEffectiveness[type]?.images.icon ?? CONFIG.PTU.data.typeEffectiveness["Untyped"].images.icon;
     });
 
     Handlebars.registerHelper("typeSelect", function (selectedType) {
