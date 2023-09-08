@@ -8,7 +8,7 @@ class PTUSpecies extends PTUItem {
 
     getImagePath({ gender = game.i18n.localize("PTU.Male"), shiny = false, extension = game.settings.get("ptu", "generation.defaultImageExtension"), suffix = "" }={}) {
         const path = game.settings.get("ptu", "generation.defaultImageDirectory");
-        const useName = game.settings.get("ptu", "automation.defaultPokemonImageNameType");
+        const useName = game.settings.get("ptu", "generation.defaultPokemonImageNameType");
         const femaleTag = gender.toLowerCase() == "female" ? "f" : "";
         const shinyTag = shiny ? "s" : "";
 
