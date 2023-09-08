@@ -7,7 +7,7 @@ import { sluggify } from "../../../util/misc.js";
 class PTUTrainerActor extends PTUActor {
 
     get allowedItemTypes() {
-        return ["feat", "edge", "move", "ability", "item", "capability", "effect", "condition", "dexentry"]
+        return ["feat", "edge", "move", "contestmove", "ability", "item", "capability", "effect", "condition", "dexentry"]
     }
 
     /** @override */
@@ -153,6 +153,35 @@ class PTUTrainerActor extends PTUActor {
         system.ap.max = 5 + Math.floor(system.level.current / 5);
 
         system.initiative = { value: system.stats.spd.total + system.modifiers.initiative.total };
+
+        // Contests
+        // This is to force the order of the stats to be the same as the order in the sheet
+        system.contests.stats = {
+            cool: system.contests.stats.cool,
+            tough: system.contests.stats.tough,
+            beauty: system.contests.stats.beauty,
+            smart: system.contests.stats.smart,
+            cute: system.contests.stats.cute
+        }
+        for(const stat of Object.keys(system.contests.stats)) {
+            const combatStat = (() => {
+                switch(stat) {
+                    case "cool": return "atk";
+                    case "tough": return "def";
+                    case "beauty": return "spatk";
+                    case "smart": return "spdef";
+                    case "cute": return "spd";
+                }
+            })();
+            system.contests.stats[stat].stats.value = Math.min(Math.floor(system.stats[combatStat].total / 10), 3);
+            system.contests.stats[stat].stats.mod ??= 0;
+            system.contests.stats[stat].stats.total = Math.min(system.contests.stats[stat].stats.value + system.contests.stats[stat].stats.mod, 3);
+
+            system.contests.stats[stat].dice = system.contests.stats[stat].stats.total + system.contests.voltage.value;
+        }
+
+        system.contests.appeal.mod ??= 0;
+        system.contests.appeal.total = system.contests.appeal.value + system.contests.appeal.mod;
     }
 
     /** @override */

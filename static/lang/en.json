@@ -14,6 +14,8 @@
   "TYPES.Item.effect": "Effect",
   "TYPES.Item.effectPlural": "Effects",
   "TYPES.Item.conditionPlural": "Conditions",
+  "TYPES.Item.contestmove": "Contest Move",
+  "TYPES.Item.contestmovePlural": "Contest Moves",
   "ITEM": {
     "AddButton": "Add",
     "AddRulesButton": "New Rule Element",
@@ -52,8 +54,10 @@
     "TypeCapabilityPlural": "Capabilities",
     "TypePokeedgePlural": "Poké Edges",
     "TypeDexentryPlural": "Dex Entries",
+    "TypeContestMovesPlural": "Contest Moves",
     "Modifier": "Modifier",
-    "ShowInTokenPanel": "Show in Token Panel"
+    "ShowInTokenPanel": "Show in Token Panel",
+    "Dice": "Base Dice"
   },
 
   "SPECIES.Height": "Height",
@@ -804,6 +808,16 @@
           "Content": "Are you sure you want to reset the type effectiveness to the default values?"
         }
       }
+    },
+    "Contests": {
+      "Dice": "Dice",
+      "Type": "Contest Type",
+      "Stats": "From Stats",
+      "Reserve": "Reserve Dice",
+      "Poffins": "From Poffins",
+      "Voltage": "Voltage",
+      "DiceTotal": "Dice Total",
+      "Appeal": "Appeal"
     }
   },
 

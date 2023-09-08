@@ -1797,6 +1797,42 @@ a.content-link {
                         flex: 0 0 50px;
                     }
                 }
+
+                .contests {
+                    .contest-dice-grid {
+                        display: grid;
+                        grid-template-columns: repeat(3, 1fr);
+                        grid-template-rows: repeat(6, 33px);
+                        padding: 0;
+
+                        .item {
+                            display: flex;
+                            text-align: center;
+                            justify-content: center;
+                            align-items: center;
+                            padding: 1px;
+                            
+                            &.header-item {
+                                font-weight: bold;
+                            }
+
+                            .mod-input {
+                                flex: 0 0 auto;
+                                max-width: 80px;
+                            }
+                        }
+                    }
+                    .mod-input {
+                        flex: 0 0 25%;
+                        text-align: center;
+
+                        &:before {
+                            padding: 0 5px 0 0;
+                            bottom: unset;
+                            top: 0;
+                        }
+                    }
+                }
             }
         }
 

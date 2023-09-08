@@ -356,6 +356,79 @@
         }
       },
       "shared": {
+        "contests": {
+          "voltage": {
+            "value": 0,
+            "max": 5
+          },
+          "appeal": {
+            "value": 0,
+            "mod": 0
+          },
+          "type": "cool",
+          "stats": {
+            "cool": {
+              "dice": 0,
+              "stats": {
+                "value": 0,
+                "mod": 0
+              },
+              "poffins": {
+                "value": 0,
+                "mod": 0
+              },
+              "reserves": 0
+            },
+            "tough": {
+              "dice": 0,
+              "stats": {
+                "value": 0,
+                "mod": 0
+              },
+              "poffins": {
+                "value": 0,
+                "mod": 0
+              },
+              "reserves": 0
+            },
+            "beauty": {
+              "dice": 0,
+              "stats": {
+                "value": 0,
+                "mod": 0
+              },
+              "poffins": {
+                "value": 0,
+                "mod": 0
+              },
+              "reserves": 0
+            },
+            "smart": {
+              "dice": 0,
+              "stats": {
+                "value": 0,
+                "mod": 0
+              },
+              "poffins": {
+                "value": 0,
+                "mod": 0
+              },
+              "reserves": 0
+            },
+            "cute": {
+              "dice": 0,
+              "stats": {
+                "value": 0,
+                "mod": 0
+              },
+              "poffins": {
+                "value": 0,
+                "mod": 0
+              },
+              "reserves": 0
+            }
+          }
+        },
         "foodBuff": "",
         "notes": "",
         "tempHp": {
@@ -492,6 +565,7 @@
       "edge",
       "ability",
       "move",
+      "contestmove",
       "item",
       "capability",
       "pokeedge",
@@ -602,6 +676,12 @@
       "stab": false,
       "damageBonus": 0,
       "isStruggle": false
+    },
+    "contestmove": {
+      "templates": ["base"],
+      "type": "Cool",
+      "frequency": "",
+      "dice": 0
     },
     "capability": {
       "templates": ["base"]

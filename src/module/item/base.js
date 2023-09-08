@@ -114,6 +114,9 @@ class PTUItem extends Item {
             if (source.type == "move") {
                 source.img = CONFIG.PTU.data.typeEffectiveness[source.system.type.titleCase()].images.icon;
             }
+            else if (source.type =="contestmove") {
+                source.img = `/systems/ptu/static/css/images/types2/${source.system.type}IC_Icon.png`;
+            }
             else {
                 source.img = `/systems/ptu/static/css/images/icons/${source.type}_icon.png`;
             }

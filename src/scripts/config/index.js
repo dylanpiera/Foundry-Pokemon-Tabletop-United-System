@@ -36,6 +36,8 @@ import { PTUCombatTrackerConfig } from '../../module/combat/config.js';
 import { PTUCombatTracker } from '../../module/combat/tracker.js';
 import { PTUTokenDocument } from '../../module/canvas/token/document.js';
 import { PTUUser } from '../../module/user.js';
+import { PTUContestMove } from '../../module/item/contestmove/document.js';
+import { PTUContestMoveSheet } from '../../module/item/contestmove/sheet.js';
 
 const data = {
   skills: {
@@ -202,6 +204,7 @@ export const PTUCONFIG = {
       edge: PTUEdge,
       ability: PTUItem,
       move: PTUMove,
+      contestmove: PTUContestMove,
       item: PTUItemItem,
       pokeball: PokeballItem,
       capability: PTUItem,
@@ -217,6 +220,7 @@ export const PTUCONFIG = {
       edge: PTUEdgeSheet,
       feat: PTUFeatSheet,
       move: PTUMoveSheet,
+      contestmove: PTUContestMoveSheet,
       effect: PTUEffectSheet,
       species: PTUSpeciesSheet,
     }

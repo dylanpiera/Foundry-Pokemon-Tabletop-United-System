@@ -90,6 +90,7 @@ export class PTUPokemonSheet extends PTUActorSheet {
 		const edges = [];
 		const effects = [];
 		const conditions = this.actor.conditions;
+		const contestmoves = [];
 
 		// Iterate through items, allocating to containers
 		// let totalWeight = 0;
@@ -109,6 +110,9 @@ export class PTUPokemonSheet extends PTUActorSheet {
 				case 'effect':
 					effects.push(i);
 					break;
+				case 'contestmove':
+					contestmoves.push(i);
+					break;
 			}
 		}
 
@@ -118,6 +122,7 @@ export class PTUPokemonSheet extends PTUActorSheet {
 		sheetData.edges = edges;
 		sheetData.effects = effects;
 		sheetData.conditions = conditions;
+		sheetData.contestmoves = contestmoves;
 
 		sheetData.actions = (() => {
 			const moves = [];

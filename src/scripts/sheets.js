@@ -6,6 +6,7 @@ function registerSheets() {
     Items.unregisterSheet("core", ItemSheet);
     Items.registerSheet("ptu", CONFIG.PTU.Item.sheetClasses.item, { types: ["item", "ability", "capability", "pokeedge", "dexentry", "condition", "reference"], makeDefault: true });
     Items.registerSheet("ptu", CONFIG.PTU.Item.sheetClasses.move, { types: ["move"], makeDefault: true });
+    Items.registerSheet("ptu", CONFIG.PTU.Item.sheetClasses.contestmove, { types: ["contestmove"], makeDefault: true });
     Items.registerSheet("ptu", CONFIG.PTU.Item.sheetClasses.edge, { types: ["edge"], makeDefault: true });
     Items.registerSheet("ptu", CONFIG.PTU.Item.sheetClasses.feat, { types: ["feat"], makeDefault: true });
     Items.registerSheet("ptu", CONFIG.PTU.Item.sheetClasses.effect, { types: ["effect"], makeDefault: true });

@@ -118,6 +118,7 @@ export class PTUCharacterSheet extends PTUActorSheet {
 		const capabilities = [];
 		const effects = [];
 		const conditions = this.actor.conditions;
+		const contestmoves = [];
 
 		// Iterate through items, allocating to containers
 		// let totalWeight = 0;
@@ -140,7 +141,7 @@ export class PTUCharacterSheet extends PTUActorSheet {
 				case 'ability': abilities.push(item); break;
 				case 'capability': capabilities.push(item); break;
 				case 'effect': effects.push(item); break;
-
+				case 'contestmove': contestmoves.push(item); break;
 			}
 		}
 
@@ -157,6 +158,7 @@ export class PTUCharacterSheet extends PTUActorSheet {
 		sheetData.capabilities = capabilities;
 		sheetData.effects = effects;
 		sheetData.conditions = conditions;
+		sheetData.contestmoves = contestmoves;
 		
 		sheetData.actions = (() => {
 			const moves = [];
@@ -309,10 +311,20 @@ export class PTUCharacterSheet extends PTUActorSheet {
 		html.find('.item-delete').click(this._onItemDelete.bind(this));
 
 		html.find('.ap-range').change((e) => {
+			e.preventDefault();
 			const value = parseInt(e.currentTarget.value);
 			if (isNaN(value)) return;
 			this.actor.update({
 				"system.ap.value": value
+			});
+		});
+
+		html.find('.voltage-range').change((e) => {
+			e.preventDefault();
+			const value = parseInt(e.currentTarget.value);
+			if (isNaN(value)) return;
+			this.actor.update({
+				"system.contests.voltage.value": value
 			});
 		});
 	}

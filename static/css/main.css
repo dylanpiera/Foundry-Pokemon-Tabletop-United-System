@@ -1535,6 +1535,35 @@ a.content-link img {
 .ptu.sheet.gen8.actor.compact main.sheet-body .tp-box input {
   flex: 0 0 50px;
 }
+.ptu.sheet.gen8.actor.compact main.sheet-body .contests .contest-dice-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(6, 33px);
+  padding: 0;
+}
+.ptu.sheet.gen8.actor.compact main.sheet-body .contests .contest-dice-grid .item {
+  display: flex;
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+  padding: 1px;
+}
+.ptu.sheet.gen8.actor.compact main.sheet-body .contests .contest-dice-grid .item.header-item {
+  font-weight: bold;
+}
+.ptu.sheet.gen8.actor.compact main.sheet-body .contests .contest-dice-grid .item .mod-input {
+  flex: 0 0 auto;
+  max-width: 80px;
+}
+.ptu.sheet.gen8.actor.compact main.sheet-body .contests .mod-input {
+  flex: 0 0 25%;
+  text-align: center;
+}
+.ptu.sheet.gen8.actor.compact main.sheet-body .contests .mod-input:before {
+  padding: 0 5px 0 0;
+  bottom: unset;
+  top: 0;
+}
 .ptu.sheet.gen8.actor section {
   padding: unset;
 }

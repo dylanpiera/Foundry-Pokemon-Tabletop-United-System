@@ -25,7 +25,7 @@ class PTUPokemonActor extends PTUActor {
     }
 
     get allowedItemTypes() {
-        return ["species", "pokeedge", "move", "ability", "capability", "effect", "condition"]
+        return ["species", "pokeedge", "move", "contestmove", "ability", "capability", "effect", "condition"]
     }
 
     get nature() {
@@ -39,6 +39,10 @@ class PTUPokemonActor extends PTUActor {
     /** @override */
     get sizeClass() {
         return this.species?.system?.size?.sizeClass ?? "Medium";
+    }
+
+    get trainer() {
+        return game.actors.get(this.flags.ptu.party?.trainer) ?? null;
     }
 
     /** @override */
@@ -98,7 +102,7 @@ class PTUPokemonActor extends PTUActor {
         const system = this.system;
 
         if (!this.species) {
-            return ui?.notifications?.warn?.(`Unable to prepare derived data for ${this.name} as it has no species item.`);
+            return console.warn(`Unable to prepare derived data for ${this.name} as it has no species item.`);
         }
 
         const speciesSystem = this.species.system;
@@ -215,6 +219,41 @@ class PTUPokemonActor extends PTUActor {
 
         // Calc Type Effectiveness
         system.effectiveness = getEffectiveness(this);
+
+        // Contests
+        // This is to force the order of the stats to be the same as the order in the sheet
+        system.contests.stats = {
+            cool: system.contests.stats.cool,
+            tough: system.contests.stats.tough,
+            beauty: system.contests.stats.beauty,
+            smart: system.contests.stats.smart,
+            cute: system.contests.stats.cute
+        }
+        system.contests.voltage.value = this.trainer?.system?.contests?.voltage?.value ?? 0;
+        for(const stat of Object.keys(system.contests.stats)) {
+            const combatStat = (() => {
+                switch(stat) {
+                    case "cool": return "atk";
+                    case "tough": return "def";
+                    case "beauty": return "spatk";
+                    case "smart": return "spdef";
+                    case "cute": return "spd";
+                }
+            })();
+            system.contests.stats[stat].stats.value = Math.min(Math.floor(system.stats[combatStat].total / 10), 3);
+            system.contests.stats[stat].stats.mod ??= 0;
+            system.contests.stats[stat].stats.total = Math.min(system.contests.stats[stat].stats.value + system.contests.stats[stat].stats.mod, 3);
+
+            system.contests.stats[stat].poffins.mod ??= 0;
+            system.contests.stats[stat].poffins.total = system.contests.stats[stat].poffins.value + system.contests.stats[stat].poffins.mod;
+
+            system.contests.stats[stat].dice = system.contests.stats[stat].stats.total + system.contests.stats[stat].poffins.total + (system.contests.voltage.value ?? 0);
+        }
+
+        system.contests.appeal = this.trainer?.system?.contests?.appeal ?? {};
+        system.contests.appeal.value ??= 0;
+        system.contests.appeal.mod ??= 0;
+        system.contests.appeal.total = system.contests.appeal.value + system.contests.appeal.mod;
 
         /* The Corner of Exceptions */
 
