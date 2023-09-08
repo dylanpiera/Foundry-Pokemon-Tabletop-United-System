@@ -376,15 +376,6 @@ export function registerSettings() {
     //     
     // });
 
-    //     game.settings.register("PTUMoveMaster", "useAlternateChatStyling", {
-    //         name: "Player Setting: Styles the chat to have (what I think is) a more readable font, compact size, and low-contrast look.",
-    //         hint: "Disable this if you are having compatibility issues with the chat pane styling, or if you just don't like it.",
-    //         scope: "client",
-    //         config: true,
-    //         type: Boolean,
-    //         default: true
-    //     });
-
     // game.settings.register("ptu", "currentWeather", {
     //     name: "Current Weather",
     //     hint: "This is usually set via internal scripts, but it's exposed here if you need to change it manually.",
@@ -401,85 +392,7 @@ export function registerSettings() {
     //     default: "Clear",
     //     
     // });
-
-    //     // game.settings.register("PTUMoveMaster", "useErrataConditions", {
-    //     // 	name: "GM Setting: This determines whether to use the original condition rules, or the errata'd versions.",
-    //     // 	hint: "",
-    //     // 	scope: "world",
-    //     // 	config: true,
-    //     // 	type: String,
-    //     // 	choices: {
-    //     // 	  "Original": "Use the original condition effects.",
-    //     // 	  "Errata": "Use the errata'd condition effects."
-    //     // 	},
-    //     // 	default: "Original"
-    //     // });
-
-    //     game.settings.register("PTUMoveMaster", "autoSkipTurns", {
-    //         name: "GM Setting: Auto-skip turns when no actions possible, due to failing certain saves or being fainted.",
-    //         hint: "Disable this if you are a coward. (Or if you want to manually advance turns all the time)",
-    //         scope: "world",
-    //         config: true,
-    //         type: Boolean,
-    //         default: true
-    //     });
-
-    //     game.settings.register("PTUMoveMaster", "hideConfettiButton", {
-    //         name: "Player Setting: Hides the Confetti button.",
-    //         hint: "Disable this if you have a reason to manually trigger confetti blasts.",
-    //         scope: "client",
-    //         config: true,
-    //         type: Boolean,
-    //         default: true
-    //     });
-
-    //     game.settings.register("PTUMoveMaster", "enforcePokeballRangeLimits", {
-    //         name: "GM Setting: Enforce Pokeball Range Limits.",
-    //         hint: "While enabled, this will prevent throwing out owned pokemon, throwing pokeballs to capture, and recalling owned pokemon, if the trainer is on the field but too far away.",
-    //         scope: "world",
-    //         config: true,
-    //         type: Boolean,
-    //         default: true
-    //     });
-
-    //     game.settings.register("PTUMoveMaster", "PokedexRangeLimit", {
-    //         name: "GM Setting: Custom Pokedex Range Limit",
-    //         hint: "By default, Pokedexes have a scan range of 10 m, but GMs can set a custom value here. A value of 0 will be treated as unlimited range.",
-    //         scope: "world",
-    //         config: true,
-    //         type: String,
-    //         default: "10"
-    //     });
-
-    //     game.settings.register("PTUMoveMaster", "CustomPokeballAC", {
-    //         name: "GM Setting: Custom Pokeball Throw AC",
-    //         hint: "By default, Pokeball throws have a base AC of 6, but GMs can set a custom value here.",
-    //         scope: "world",
-    //         config: true,
-    //         type: String,
-    //         default: "6"
-    //     });
-
-    //     game.settings.register("PTUMoveMaster", "AthleticsReducesPokeballAC", {
-    //         name: "GM Setting: Athletics Rank Reduces Pokeball Throw AC",
-    //         hint: "Enable this to turn on a homebrew option to reduce Pokeball Throw AC by the thrower's Athletics Rank (to a minimum of AC 2).",
-    //         scope: "world",
-    //         config: true,
-    //         type: Boolean,
-    //         default: false
-    //     });
-
-
-    // game.settings.register("ptu", "trackBrokenPokeballs", {
-    //     name: "GM Setting: Track Broken Pokeballs.",
-    //     hint: "The trainer edge 'Poke Ball Repair' allows for re-using balls that break upon failing to capture a Pokemon, so Move Master will automatically created a broken version of balls in the thrower's inventory when a Pokemon breaks free. If you have no use for tracking this, you can disable it here.",
-    //     scope: "world",
-    //     config: true,
-    //     type: Boolean,
-    //     default: true,
-    //     
-    // });
-
+    
     game.settings.register("ptu", "customItemIconDirectory", {
         name: "Custom Item Icons Directory",
         hint: "The directory where the user can upload item image files to be used for custom items. Must end with a /",
