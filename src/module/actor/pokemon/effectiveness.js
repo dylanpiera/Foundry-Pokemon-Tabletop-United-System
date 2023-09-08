@@ -23,6 +23,9 @@ function getEffectiveness(data) {
     if (!game.settings.get("ptu", "homebrew.nuclearType")) {
         delete typeCalc["Nuclear"];
     }
+    if (!game.settings.get("ptu", "homebrew.shadowType")) {
+        delete typeCalc["Shadow"];
+    }
 
     let abilities = {
         //"Desert Weather": { active: false, execute: function (typeCalc) { if (game.settings.get("ptu", "currentWeather") == "Sunny") { typeCalc["Fire"] *= 0.5 } return typeCalc; } },
@@ -153,8 +156,14 @@ function getEffectiveness(data) {
                 continue;
             }
             if (value > 1) {
-                effectivenesses.Weakness.push({ [typeKey]: value > 2 ? Math.log2(value) : value == 2 ? 1.5 : value });
-                effectivenesses.All.push([typeKey, value > 2 ? Math.log2(value) : value == 2 ? 1.5 : value])
+                if (typeKey === "Shadow") {
+                    effectivenesses.Weakness.push({ [typeKey]: 1.5 });
+                    effectivenesses.All.push([typeKey, 1.5])
+                }
+                else {
+                    effectivenesses.Weakness.push({ [typeKey]: value > 2 ? Math.log2(value) : value == 2 ? 1.5 : value });
+                    effectivenesses.All.push([typeKey, value > 2 ? Math.log2(value) : value == 2 ? 1.5 : value])
+                } 
                 continue;
             }
         }

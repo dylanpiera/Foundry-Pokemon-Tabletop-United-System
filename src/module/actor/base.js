@@ -95,6 +95,12 @@ class PTUActor extends Actor {
         if (!game.settings.get("ptu", "homebrew.nuclearType")) {
             delete effectiveness["Nuclear"];
         }
+        if (!game.settings.get("ptu", "homebrew.shadowType")) {
+            delete effectiveness["Shadow"];
+        }
+        else {
+            if(effectiveness["Shadow"] > 2) effectiveness["Shadow"] = 2;
+        }
 
         const effectivenessMod = this.system.modifiers?.resistanceSteps?.total ?? 0;
         for (const [type, value] of Object.entries(effectiveness)) {

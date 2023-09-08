@@ -41,10 +41,15 @@ export class TypeSettings extends PTUSettingsMenu {
         const typeEffectiveness = duplicate(this.cache["types"]);
         delete typeEffectiveness.Untyped;
 
+        let typeLength = Object.keys(typeEffectiveness).length + 1;
+        if(!game.settings.get("ptu", "homebrew.nuclearType") && typeEffectiveness["Nuclear"]) typeLength--;
+        if(!game.settings.get("ptu", "homebrew.shadowType") && typeEffectiveness["Shadow"]) typeLength--;
+
         return {
             ...data,
             typeEffectiveness,
-            types: Object.keys(this.cache["types"].Untyped.effectiveness)
+            types: Object.keys(this.cache["types"].Untyped.effectiveness),
+            typeLength
         }
     }
 

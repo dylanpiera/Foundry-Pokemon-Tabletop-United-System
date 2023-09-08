@@ -779,6 +779,10 @@
         "NuclearType": {
           "Name": "Enable Nuclear Type",
           "Hint": "Adds Pokémon Uranium's Nuclear Type to the game based on DataNinja's Homebrew Compilation's Uranium Data."
+        },
+        "ShadowType": {
+          "Name": "Enable Shadow Type",
+          "Hint": "Adds Pokémon Colosseum's Shadow Type to the game based on PTR Ruleset's Shadow Type."
         }
       },
       "Type": {

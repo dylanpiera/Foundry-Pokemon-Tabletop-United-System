@@ -8,6 +8,13 @@ const HomebrewSettingsConfig = {
         default: false,
         requiresReload: true
     },
+    "shadowType": {
+        name: "PTU.Settings.Homebrew.ShadowType.Name",
+        hint: "PTU.Settings.Homebrew.ShadowType.Hint",
+        type: Boolean,
+        default: false,
+        requiresReload: true
+    }
 }
 
 export class HomebrewSettings extends PTUSettingsMenu {

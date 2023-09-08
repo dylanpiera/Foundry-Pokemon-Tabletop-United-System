@@ -23,7 +23,8 @@ const typeEffectiveness = {
             "Dragon":1,
             "Dark":1,
             "Fairy":1,
-            "Nuclear":2
+            "Nuclear":2,
+            "Shadow": 2
         }
     },
     "Fighting":{
@@ -50,7 +51,8 @@ const typeEffectiveness = {
             "Dragon":1,
             "Dark":0.5,
             "Fairy":2,
-            "Nuclear":2
+            "Nuclear":2,
+            "Shadow": 2
         }
     },
     "Flying":{
@@ -77,7 +79,8 @@ const typeEffectiveness = {
             "Dragon":1,
             "Dark":1,
             "Fairy":1,
-            "Nuclear":2
+            "Nuclear":2,
+            "Shadow": 2
         }
     },
     "Poison":{
@@ -104,7 +107,8 @@ const typeEffectiveness = {
             "Dragon":1,
             "Dark":1,
             "Fairy":0.5,
-            "Nuclear":2
+            "Nuclear":2,
+            "Shadow": 2
         }
     },
     "Ground":{
@@ -131,7 +135,8 @@ const typeEffectiveness = {
             "Dragon":1,
             "Dark":1,
             "Fairy":1,
-            "Nuclear":2
+            "Nuclear":2,
+            "Shadow": 2
         }
     },
     "Rock":{
@@ -158,7 +163,8 @@ const typeEffectiveness = {
             "Dragon":1,
             "Dark":1,
             "Fairy":1,
-            "Nuclear":2
+            "Nuclear":2,
+            "Shadow": 2
         }
     },
     "Bug":{
@@ -185,7 +191,8 @@ const typeEffectiveness = {
             "Dragon":1,
             "Dark":1,
             "Fairy":1,
-            "Nuclear":2
+            "Nuclear":2,
+            "Shadow": 2
         }
     },
     "Ghost":{
@@ -212,7 +219,8 @@ const typeEffectiveness = {
             "Dragon":1,
             "Dark":2,
             "Fairy":1,
-            "Nuclear":2
+            "Nuclear":2,
+            "Shadow": 2
         }
     },
     "Steel":{
@@ -239,7 +247,8 @@ const typeEffectiveness = {
             "Dragon":0.5,
             "Dark":1,
             "Fairy":0.5,
-            "Nuclear":0.5
+            "Nuclear":0.5,
+            "Shadow": 2
         }
     },
     "Fire":{
@@ -266,7 +275,8 @@ const typeEffectiveness = {
             "Dragon":1,
             "Dark":1,
             "Fairy":0.5,
-            "Nuclear":2
+            "Nuclear":2,
+            "Shadow": 2
         }
     },
     "Water":{
@@ -293,7 +303,8 @@ const typeEffectiveness = {
             "Dragon":1,
             "Dark":1,
             "Fairy":1,
-            "Nuclear":2
+            "Nuclear":2,
+            "Shadow": 2
         }
     },
     "Grass":{
@@ -320,7 +331,8 @@ const typeEffectiveness = {
             "Dragon":1,
             "Dark":1,
             "Fairy":1,
-            "Nuclear":2
+            "Nuclear":2,
+            "Shadow": 2
         }
     },
     "Electric":{
@@ -347,7 +359,8 @@ const typeEffectiveness = {
             "Dragon":1,
             "Dark":1,
             "Fairy":1,
-            "Nuclear":2
+            "Nuclear":2,
+            "Shadow": 2
         }
     },
     "Psychic":{
@@ -374,7 +387,8 @@ const typeEffectiveness = {
             "Dragon":1,
             "Dark":2,
             "Fairy":1,
-            "Nuclear":2
+            "Nuclear":2,
+            "Shadow": 2
         }
     },
     "Ice":{
@@ -401,7 +415,8 @@ const typeEffectiveness = {
             "Dragon":1,
             "Dark":1,
             "Fairy":1,
-            "Nuclear":2
+            "Nuclear":2,
+            "Shadow": 2
         }
     },
     "Dragon":{
@@ -428,7 +443,8 @@ const typeEffectiveness = {
             "Dragon":2,
             "Dark":1,
             "Fairy":2,
-            "Nuclear":2
+            "Nuclear":2,
+            "Shadow": 2
         }
     },
     "Dark":{
@@ -455,7 +471,8 @@ const typeEffectiveness = {
             "Dragon":1,
             "Dark":0.5,
             "Fairy":2,
-            "Nuclear":2
+            "Nuclear":2,
+            "Shadow": 2
         }
     },
     "Fairy":{
@@ -482,7 +499,8 @@ const typeEffectiveness = {
             "Dragon":0,
             "Dark":0.5,
             "Fairy":1,
-            "Nuclear":2
+            "Nuclear":2,
+            "Shadow": 2
         }
     },
     "Nuclear":{
@@ -509,7 +527,36 @@ const typeEffectiveness = {
             "Dragon":2,
             "Dark":2,
             "Fairy":2,
-            "Nuclear":0.5
+            "Nuclear":0.5,
+            "Shadow": 2
+        }
+    },
+    "Shadow":{
+        "images":{
+            "bar":"systems/ptu/static/css/images/types2/ShadowIC.png",
+            "icon":"systems/ptu/static/css/images/types2/ShadowIC_Icon.png"
+        },
+        "effectiveness":{
+            "Normal":1,
+            "Fighting":1,
+            "Flying":1,
+            "Poison":1,
+            "Ground":1,
+            "Rock":1,
+            "Bug":1,
+            "Ghost":1,
+            "Steel":1,
+            "Fire":1,
+            "Water":1,
+            "Grass":1,
+            "Electric":1,
+            "Psychic":1,
+            "Ice":1,
+            "Dragon":1,
+            "Dark":1,
+            "Fairy":1,
+            "Nuclear":1,
+            "Shadow":0.5
         }
     },
     "Untyped":{
@@ -536,7 +583,8 @@ const typeEffectiveness = {
             "Dragon":1,
             "Dark":1,
             "Fairy":1,
-            "Nuclear":1
+            "Nuclear":1,
+            "Shadow":1
         }
     }
 }
