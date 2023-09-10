@@ -48,7 +48,7 @@ class PTUTrainerActor extends PTUActor {
             //         .map(([key, value]) => ([key, value.value.total]))
             // ),
             level: { current: system.level.current },
-            health: { current: system.health.value },
+            health: { current: system.health.value, temp: system.tempHp},
             skills: {}
         }
     }
@@ -191,6 +191,8 @@ class PTUTrainerActor extends PTUActor {
 
         system.contests.appeal.mod ??= 0;
         system.contests.appeal.total = system.contests.appeal.value + system.contests.appeal.mod;
+
+        this.attributes.health.max = system.health.max;
     }
 
     /** @override */

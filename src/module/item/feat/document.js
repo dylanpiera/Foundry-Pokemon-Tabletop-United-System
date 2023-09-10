@@ -22,10 +22,10 @@ class PTUFeat extends PTUItem {
 
         // If the item has a class check if we have a class item for it
         if(this.system.class) {
-            const classItem = this.actor?.items.find((item) => item.isClass && item.name === this.system.class);
+            const classItem = this.actor?.items.find((item) => item.isClass && item.slug === sluggify(this.system.class));
             if(classItem) {
                 this._source.flags.ptu.grantedBy = {id: classItem._id, onDelete: "detach"};
-                await classItem.update({"flags.ptu.itemGrants": {[this._id]: {id: this._id, onDelete: "detach"}}});
+                await classItem.update({"flags.ptu.itemGrants": {[this._source._id]: {id: this._source._id, onDelete: "detach"}}});
             }
         }
     }

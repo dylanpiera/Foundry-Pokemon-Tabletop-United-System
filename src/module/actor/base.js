@@ -431,9 +431,11 @@ class PTUActor extends Actor {
         }
 
         const { finalDamage, additionalApplications } = typeof damage === "number"
-            ? { finalDamage: Math.max((currentDamage - damageAbsorbedByDefense - damageAbsorbedByReduction), 1), additionalApplications: [] }
+            ? skipIWR || flatDamage
+                ? { finalDamage: currentDamage, additionalApplications: [] }
+                : { finalDamage: Math.max((currentDamage - damageAbsorbedByDefense - damageAbsorbedByReduction), 1), additionalApplications: [] }
             : skipIWR || flatDamage
-                ? { finalDamage: Math.max((currentDamage - damageAbsorbedByDefense - damageAbsorbedByReduction), 1), additionalApplications: [] }
+                ? { finalDamage: currentDamage, additionalApplications: [] }
                 : this.applyIWR({ actor: this, damage: {...damage, reduced: currentDamage - damageAbsorbedByDefense - damageAbsorbedByReduction}, item, effectiveness, rollOptions });
 
         applications.push(...additionalApplications);
@@ -443,9 +445,23 @@ class PTUActor extends Actor {
 
         const preUpdateSource = this.toObject();
 
+        let bossStatement = null;
         // Do updates
         if (hpDamage !== 0 || hpUpdate.tempHpIncreased !== 0) {
-            const updated = await this.update(hpUpdate.updates);
+            if(this.system.boss?.is && hpUpdate.updates["system.health.value"] <= 0) {
+                const {bars} = this.system.boss;
+
+                if(bars > 0) {
+                    const newBars = Math.max(bars - 1, 0);
+                    hpUpdate.updates["system.boss.bars"] = newBars;
+                    hpUpdate.updates["system.health.value"] = this.system.health.max;
+                    //TODO: Apply Injuries
+                    await this.update(hpUpdate.updates);
+                    bossStatement = game.i18n.format("PTU.ApplyDamage.BossBarBroken", { actor: this.name, bars: newBars });
+                }
+                else await this.update(hpUpdate.updates);
+            }
+            else await this.update(hpUpdate.updates);
 
             //TODO: Auto Fainting
         }
@@ -463,7 +479,7 @@ class PTUActor extends Actor {
             ? game.i18n.format("PTU.ApplyDamage.GainedTempHp", { actor: this.name, hpDamage: hpUpdate.tempHpIncreased })
             : null;
 
-        const statements = [hpStatement, tempHpStatement].filter(s => s).join("<br>");
+        const statements = [hpStatement, tempHpStatement, bossStatement].filter(s => s).join("<br>");
         const canUndoDamage = !!hpDamage
 
         const content = await renderTemplate("systems/ptu/static/templates/chat/damage/damage-taken.hbs", {
@@ -1398,7 +1414,7 @@ class PTUActor extends Actor {
         )
         if (isDamage && token) {
             const damage = isDelta ? -1 * value : hitPoints.value - value;
-            return this.applyDamage({ damage, token });
+            return this.applyDamage({ damage, token, skipIWR: true});
         }
         return super.modifyTokenAttribute(attribute, value, isDelta, isBar);
 

@@ -135,7 +135,7 @@ class PTUPokemonActor extends PTUActor {
         // Set attributes which are underrived data
         this.attributes = {
             level: {current: system.level.current, tillNext: system.level.expTillNextLevel, percent: system.level.percent},
-            health: { current: system.health.value },
+            health: { current: system.health.value, temp: system.tempHp },
             skills: {},
         }
     }
@@ -299,6 +299,8 @@ class PTUPokemonActor extends PTUActor {
         system.contests.appeal.value ??= 0;
         system.contests.appeal.mod ??= 0;
         system.contests.appeal.total = system.contests.appeal.value + system.contests.appeal.mod;
+
+        this.attributes.health.max = system.health.max;
 
         /* The Corner of Exceptions */
 

@@ -170,6 +170,7 @@ class PTUItem extends Item {
                 }
                 return new CONFIG.Item.documentClass(source, { parent: actor })
             });
+            if(!context.keepId) context.keepId = true;
 
             // If any item we plan to add will add new items, add those too
             // When this occurs, keepId is switched on.

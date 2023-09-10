@@ -9,6 +9,7 @@ import { TemporarySpeciesRuleElement } from "./rule-element/temp-species.js";
 import { TokenNameRuleElement } from "./rule-element/token-name.js";
 import { TokenLightRuleElement } from "./rule-element/token-light.js";
 import { TypeOverwriteRuleElement } from "./rule-element/type-overwrite.js";
+import { TempHPRuleElement } from "./rule-element/temp-hp.js";
 
 class RuleElements {
     static builtin = {
@@ -21,7 +22,8 @@ class RuleElements {
         "TokenName": TokenNameRuleElement,
         "TokenLight": TokenLightRuleElement,
         "TemporarySpecies": TemporarySpeciesRuleElement,
-        "TypeOverwrite": TypeOverwriteRuleElement
+        "TypeOverwrite": TypeOverwriteRuleElement,
+        "TempHP": TempHPRuleElement
     }
 
     static custom = {}

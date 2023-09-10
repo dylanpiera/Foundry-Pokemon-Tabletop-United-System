@@ -25,6 +25,11 @@ class PTUActorSheet extends ActorSheet {
     _onConfigureActor() {
         new ActorConfig(this.actor).render(true);
     }
+
+    /** Emulate a sheet item drop from the canvas */
+    async emulateItemDrop(data) {
+        return this._onDropItem({ preventDefault: () => {} }, data);
+    }
 }
 
 export { PTUActorSheet }

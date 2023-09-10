@@ -1,0 +1,15 @@
+2023/09/10-12:49:12.585 6ccc Recovering log #4
+2023/09/10-12:49:12.590 6ccc Delete type=0 #4
+2023/09/10-12:49:12.590 6ccc Delete type=3 #2
+2023/09/10-15:55:40.245 6b60 Level-0 table #9: started
+2023/09/10-15:55:40.253 6b60 Level-0 table #9: 15037 bytes OK
+2023/09/10-15:55:40.258 6b60 Delete type=0 #7
+2023/09/10-15:55:40.258 6b60 Manual compaction at level-0 from '!folders!DIBPjL86EbMDaAMi' @ 72057594037927935 : 1 .. '!items!zW8DWXGrCPQAtxWZ' @ 0 : 0; will stop at (end)
+2023/09/10-15:55:40.258 6b60 Manual compaction at level-1 from '!folders!DIBPjL86EbMDaAMi' @ 72057594037927935 : 1 .. '!items!zW8DWXGrCPQAtxWZ' @ 0 : 0; will stop at '!items!zW8DWXGrCPQAtxWZ' @ 140 : 1
+2023/09/10-15:55:40.258 6b60 Compacting 1@1 + 1@2 files
+2023/09/10-15:55:40.266 6b60 Generated table #10@1: 42 keys, 11242 bytes
+2023/09/10-15:55:40.267 6b60 Compacted 1@1 + 1@2 files => 11242 bytes
+2023/09/10-15:55:40.273 6b60 compacted to: files[ 0 0 1 0 0 0 0 ]
+2023/09/10-15:55:40.273 6b60 Delete type=2 #5
+2023/09/10-15:55:40.273 6b60 Delete type=2 #9
+2023/09/10-15:55:40.273 6b60 Manual compaction at level-1 from '!items!zW8DWXGrCPQAtxWZ' @ 140 : 1 .. '!items!zW8DWXGrCPQAtxWZ' @ 0 : 0; will stop at (end)

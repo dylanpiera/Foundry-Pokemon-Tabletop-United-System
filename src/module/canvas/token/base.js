@@ -2,6 +2,87 @@ import { BaseEffectPTU } from '../../item/effect-types/base.js';
 import { measureDistanceCuboid } from '../helpers.js';
 
 class PTUToken extends Token {
+
+    /** @override _drawBar(k) to also draw PTR variants of normal resource bars (such as temp health) */
+    _drawBar(number, bar, data) {
+        if (!canvas.dimensions) return;
+
+        const actor = this.document.actor;
+
+        if (!(data.attribute.includes("health") && actor?.attributes.health)) {
+            return super._drawBar(number, bar, data);
+        }
+
+        const { current, max, temp } = actor.attributes.health ?? {};
+        const healthPercent = Math.clamped(current, 0, max) / max;
+
+        // Compute the color based on health percentage, this formula is the one core foundry uses
+        const black = 0x000000;
+        const color = number
+            ? PIXI.utils.rgb2hex([0.5 * healthPercent, 0.7 * healthPercent, 0.5 + healthPercent / 2])
+            : PIXI.utils.rgb2hex([1 - healthPercent / 2, healthPercent, 0]);
+        const bossBarColor = PIXI.utils.rgb2hex([0, 1, 0]);
+
+        // Bar size logic stolen from core
+        let h = Math.max(canvas.dimensions.size / 12, 8);
+        const bs = Math.clamped(h / 8, 1, 2);
+        if (this.document.height >= 2) h *= 1.6; // Enlarge the bar for large tokens
+
+        const { is, turns, bars } = actor.system.boss ?? {};
+        const bossBars = is ? Math.max(turns - 1, bars) : 0;
+        const brokenBars = is ? Math.clamped(bossBars - bars, 0, bossBars) : 0;
+
+        const numBars = (temp?.value > 0 ? 2 : 1) + bossBars + 1;
+        const barHeight = h / numBars;
+        const offset = 0;
+
+        const smallBarWidth = this.w * 0.9;
+        const smallWidthOffset = (this.w - smallBarWidth) / 2;
+
+        bar.clear();
+
+        // Draw background
+        // bar.lineStyle(0).beginFill(black, 0.5).drawRoundedRect(0, 0, this.w, h, 3);
+
+        // Set border style for temp hp and health bar
+        bar.lineStyle(bs / 2, black, 1.0);
+
+        // Draw temp hp
+        if (temp?.value > 0) {
+            const tempColor = 0x66ccff;
+            const tempPercent = Math.clamped(temp.value, 0, (temp.max < temp.value ? temp.value : temp.max)) / (temp.max < temp.value ? temp.value : temp.max);
+            const tempWidth = tempPercent * smallBarWidth - 2 * (bs - 1);
+            bar.lineStyle(0).beginFill(black, 0.5).drawRoundedRect(smallWidthOffset, 0, smallBarWidth, barHeight, 3);
+            bar.beginFill(tempColor, 1.0).drawRoundedRect(smallWidthOffset, 0, tempWidth, barHeight, 2);
+            bar.beginFill(black, 0).lineStyle(bs, black, 1.0).drawRoundedRect(smallWidthOffset, 0, smallBarWidth, barHeight, 3);
+        }
+
+        // Draw boss bars
+        if (bossBars > 0) {
+            const baseBossBarY = (temp?.value > 0 ? 1 : 0) * barHeight + (offset * (temp?.value > 0 ? 1 : 0));
+            bar.lineStyle(0).beginFill(black, 0.5).drawRoundedRect(smallWidthOffset, baseBossBarY, smallBarWidth, barHeight, 3);
+            for (let i = 0; i < bossBars; i++) {
+                const bossBarY = ((i + (temp?.value > 0 ? 1 : 0)) * barHeight) + (offset * (temp?.value > 0 ? 1 : 0));
+
+                if (i < brokenBars) {
+                    bar.beginFill(bossBarColor, 1).drawRoundedRect(smallWidthOffset, bossBarY, 0, barHeight, 2);
+                } else {
+                    bar.beginFill(bossBarColor, 1).drawRoundedRect(smallWidthOffset, bossBarY, smallBarWidth, barHeight, 2);
+                }
+                bar.beginFill(black, 0).lineStyle(bs, black, 1.0).drawRoundedRect(smallWidthOffset, bossBarY, smallBarWidth, barHeight, 3);
+            }
+        }
+
+        // Draw the health bar
+        const healthBarY = ((numBars - 2) * barHeight) + (offset * (numBars - 2));
+        bar.lineStyle(0).beginFill(black, 0.5).drawRoundedRect(0, healthBarY, this.w, barHeight * 2, 3);
+        bar.beginFill(color, 1.0).drawRoundedRect(0, healthBarY, healthPercent * this.w, barHeight * 2, 2);
+        bar.beginFill(black, 0).lineStyle(bs, black, 1.0).drawRoundedRect(0, healthBarY, this.w, barHeight * 2, 3);
+
+        // Set position
+        bar.position.set(0, number === 0 ? this.h - h : 0);
+    }
+
     /** @override */
     async drawEffects() {
         // await super.drawEffects();
@@ -87,7 +168,7 @@ class PTUToken extends Token {
             const offsetX = sizeOffset * tokenTileFactorX * (gridSize * 1.1);
             const offsetY = sizeOffset * tokenTileFactorY * (gridSize * 1.1);
             const initialRotation = (0.5 + (1 / max) * Math.PI) * Math.PI;
-            const { x, y } = polar_to_cartesian({x: offsetX, y: offsetY}, (ratio + 0) * 2 * Math.PI + initialRotation);
+            const { x, y } = polar_to_cartesian({ x: offsetX, y: offsetY }, (ratio + 0) * 2 * Math.PI + initialRotation);
             //const { x, y } = polar_to_cartesian_square(offset, (ratio + 0) * 2 * Math.PI + initialRotation, gridSize * tokenTileFactor);
             // debugger;
             effectIcon.position.x = x / 2 + (gridSize * tokenTileFactorX) / 2;
@@ -96,18 +177,18 @@ class PTUToken extends Token {
 
         // Nudge icons to be on the token ring or slightly outside
         function sizeToOffset(size) {
-            if(size <= 0.5) return 1.0;
-            if(size > 0.5 && size <= 1) return 1.3;
-            if(size > 1) return 0.925;
+            if (size <= 0.5) return 1.0;
+            if (size > 0.5 && size <= 1) return 1.3;
+            if (size > 1) return 0.925;
             return 1;
         }
 
         function sizeToIconScale(size) {
-            if(size <= 0.5) return 1;
-            if(size > 0.5 && size <= 1) return 1.4;
-            if(size > 1 && size <= 2) return 1.8;
-            if(size > 2 && size <= 3) return 2.2;
-            if(size > 3) return 2.6;
+            if (size <= 0.5) return 1;
+            if (size > 0.5 && size <= 1) return 1.4;
+            if (size > 1 && size <= 2) return 1.8;
+            if (size > 2 && size <= 3) return 2.2;
+            if (size > 3) return 2.6;
             return 1;
         }
 
@@ -153,7 +234,7 @@ class PTUToken extends Token {
             });
         }
     }
-    
+
     /** @override */
     _refreshNameplate() {
         if (!this.actor?.identified) {
@@ -260,7 +341,7 @@ class PTUToken extends Token {
 
     /** @override */
     _onControl(options = {}) {
-        if(game.ready) game.ptu.tokenPanel.refresh(true);
+        if (game.ready) game.ptu.tokenPanel.refresh(true);
         super._onControl(options);
     }
 

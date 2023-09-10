@@ -16,6 +16,10 @@
   "TYPES.Item.conditionPlural": "Conditions",
   "TYPES.Item.contestmove": "Contest Move",
   "TYPES.Item.contestmovePlural": "Contest Moves",
+  "TYPES.Item.species": "Species",
+  "TYPES.Item.condition": "Condition",
+  "TYPES.Item.reference": "Reference",
+  "TYPES.Item.spiritaction": "Spirit Action",
   "ITEM": {
     "AddButton": "Add",
     "AddRulesButton": "New Rule Element",
@@ -123,7 +127,8 @@
     "TokenName": "Token Name",
     "TokenLight": "Token Light",
     "TemporarySpecies": "Temporary Species",
-    "TypeOverwrite": "Type Overwrite"
+    "TypeOverwrite": "Type Overwrite",
+    "TempHP": "Temporary HP"
   },
   "PTU": {
     "Title": "Pokémon Tabletop United",
@@ -246,6 +251,7 @@
     "BossSettings": "Boss Settings",
     "BossIs": "Is boss?",
     "BossTurns": "Turns",
+    "BossBars": "Reserve HP Bars",
 
     "SkillLabel": "Skill",
     "SkillMod": "Mod",
@@ -593,7 +599,8 @@
       "GainedTempHp": "<actor>{actor}</actor> gains {hpDamage} temporary hit points.",
       "TakesNoDamage": "<actor>{actor}</actor> takes no damage.",
       "TheTarget": "The target",
-      "Revert": "Undo Damage"
+      "Revert": "Undo Damage",
+      "BossBarBroken": "<actor>{actor}</actor>'s boss bar is broken! ({bars} left)" 
     },
     "InitiativeRoll": "{name}'s Initiative Roll",
     "SaveCheck": "{name}'s {save} Save",
@@ -833,6 +840,13 @@
       "Spirit": "Spirit",
       "Weary": "Weary",
       "Effects": "Passive Effects"
+    },
+    "Broadcast": {
+      "TempHP": {
+        "PluralNew": "{actor} now has {newQuantity} temporary hit points {wasAt} from {item}.",
+        "SingleNew": "{actor} now has {newQuantity} temporary hit point {wasAt} from {item}.",
+        "WasAt": "(was at {oldQuantity})"
+      }
     }
   },
 
@@ -852,9 +866,5 @@
   "power": "Power",
   "naturewalk": "Naturewalk",
   "weightClass": "Weight Class",
-  "throwingRange": "Throwing Range",
-  "species": "Species",
-  "condition": "Condition",
-  "reference": "Reference",
-  "spiritaction": "Spirit Action"
+  "throwingRange": "Throwing Range"
 }

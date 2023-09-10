@@ -23,6 +23,10 @@ class ActorInitiative {
             }))
         }
 
+        modifiers.push(
+            ...extractModifiers(actor.synthetics, ["initiative"], { injectables: {actor}, test: actor.getRollOptions("initiative") })
+        )
+
         const statistic = new StatisticModifier("initiative", modifiers, ["initiative"]);
         this.check = new CheckModifier("initiative", statistic, [], ["initiative"]);
 
