@@ -732,6 +732,12 @@
             }
         }
     }
+    .form-group {
+        label {
+            flex: 0 1 auto;
+            padding-right: 1rem;
+        }
+    }
 }
 
 #migration-summary > .window-content {
@@ -1830,6 +1836,48 @@ a.content-link {
                             padding: 0 5px 0 0;
                             bottom: unset;
                             top: 0;
+                        }
+                    }
+                }
+
+                .spirit {
+                    .spirit-grid {
+                        display: grid;
+                        grid-template-columns: 45px auto;
+                        grid-auto-rows: auto;
+
+                        .item-header {
+                            border: 1px solid #222224;
+                            word-break: break-word;
+                            display: flex;
+                            padding: 4px;
+                            &.header {
+                                justify-content: center;
+                                align-items: center;
+                            }
+                        }
+
+                        .item {
+                            border: 1px solid #222224;
+                            word-break: break-word;
+                            display: flex;
+                            padding: 4px;
+
+                            color: #22222488;
+                            &.active {
+                                color: #222224;
+                                background: #22222422;
+                            }
+                            i {
+                                font-size: 12px;
+                                align-self: center;
+                                color: #222224cc;
+                            }
+
+                            &.header {
+                                justify-content: center;
+                                align-items: center;
+                            }
                         }
                     }
                 }
@@ -3269,6 +3317,10 @@ a.content-link {
                     }
                 }
 
+                .overview .move-effect {
+                    overflow-y: auto;
+                }
+
                 .move-effect {
                     background-color: white;
                     box-shadow:
@@ -3279,6 +3331,8 @@ a.content-link {
                     height: 100%;
                     flex-grow: 1;
                     padding: 0.25rem;
+
+                    white-space: pre-line;
 
                     textarea {
                         width: 100%;

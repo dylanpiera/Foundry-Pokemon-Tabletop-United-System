@@ -25,7 +25,7 @@ class PTUPokemonActor extends PTUActor {
     }
 
     get allowedItemTypes() {
-        return ["species", "pokeedge", "move", "contestmove", "ability", "capability", "effect", "condition"]
+        return ["species", "pokeedge", "move", "contestmove", "ability", "capability", "effect", "condition", "spiritaction"]
     }
 
     get nature() {
@@ -74,6 +74,51 @@ class PTUPokemonActor extends PTUActor {
         for (const skill of Object.values(this.system.background.decreased)) {
             if (!system.skills[skill]) continue;
             system.skills[skill]["value"]["mod"] -= 1;
+        }
+
+        if(game.settings.get("ptu", "variant.spiritPlaytest")) {
+            switch(system.spirit.value) {
+                case 5:
+                case 4:
+                case 3: {
+                    system.modifiers.acBonus.mod += 1;
+                    system.modifiers.evasion.physical.mod += 1;
+                    system.modifiers.evasion.special.mod += 1;
+                    system.modifiers.evasion.speed.mod += 1;
+                    system.modifiers.critRange.mod += 1;
+                    system.modifiers.saveChecks.mod += 2;
+                    system.modifiers.skillBonus.mod += 2;
+                    break;
+                }
+                case 2: {
+                    system.modifiers.saveChecks.mod += 2;
+                    system.modifiers.skillBonus.mod += 2;
+                    break;
+                }
+                case 1: {
+                    system.modifiers.skillBonus.mod += 2;
+                    break;
+                }
+                case -1: {
+                    system.modifiers.skillBonus.mod -= 2;
+                    break;
+                }
+                case -2: {
+                    system.modifiers.saveChecks.mod -= 2;
+                    system.modifiers.skillBonus.mod -= 2;
+                    break;
+                }
+                case -3: {
+                    system.modifiers.acBonus.mod -= 1;
+                    system.modifiers.evasion.physical.mod -= 1;
+                    system.modifiers.evasion.special.mod -= 1;
+                    system.modifiers.evasion.speed.mod -= 1;
+                    system.modifiers.critRange.mod -= 1;
+                    system.modifiers.saveChecks.mod -= 2;
+                    system.modifiers.skillBonus.mod -= 2;
+                    break;
+                }
+            }
         }
 
         system.level.current = calculateLevel(system.level.exp);
@@ -335,6 +380,66 @@ class PTUPokemonActor extends PTUActor {
                 if (!changes["system"]["skills"][value]['value']) changes["system"]["skills"][value]['value'] = {}
                 if (!changes["system"]["skills"][value]['value']['mod']) changes["system"]["skills"][value]['value']['mod'] = {}
                 changes["system"]["skills"][value]['value']['mod'][randomID()] = { mode: 'add', value: -1, source: "Skill Background" };
+            }
+        }
+        if(game.settings.get("ptu", "variant.spiritPlaytest")) {
+            if(!changes["system"]["modifiers"]) changes["system"]["modifiers"] = {}
+            if(!changes["system"]["modifiers"]["acBonus"]) changes["system"]["modifiers"]["acBonus"] = {}
+            if(!changes["system"]["modifiers"]["acBonus"]["mod"]) changes["system"]["modifiers"]["acBonus"]["mod"] = {}
+            if(!changes["system"]["modifiers"]["evasion"]) changes["system"]["modifiers"]["evasion"] = {}
+            if(!changes["system"]["modifiers"]["evasion"]["physical"]) changes["system"]["modifiers"]["evasion"]["physical"] = {}
+            if(!changes["system"]["modifiers"]["evasion"]["physical"]["mod"]) changes["system"]["modifiers"]["evasion"]["physical"]["mod"] = {}
+            if(!changes["system"]["modifiers"]["evasion"]["special"]) changes["system"]["modifiers"]["evasion"]["special"] = {}
+            if(!changes["system"]["modifiers"]["evasion"]["special"]["mod"]) changes["system"]["modifiers"]["evasion"]["special"]["mod"] = {}
+            if(!changes["system"]["modifiers"]["evasion"]["speed"]) changes["system"]["modifiers"]["evasion"]["speed"] = {}
+            if(!changes["system"]["modifiers"]["evasion"]["speed"]["mod"]) changes["system"]["modifiers"]["evasion"]["speed"]["mod"] = {}
+            if(!changes["system"]["modifiers"]["critRange"]) changes["system"]["modifiers"]["critRange"] = {}
+            if(!changes["system"]["modifiers"]["critRange"]["mod"]) changes["system"]["modifiers"]["critRange"]["mod"] = {}
+            if(!changes["system"]["modifiers"]["saveChecks"]) changes["system"]["modifiers"]["saveChecks"] = {}
+            if(!changes["system"]["modifiers"]["saveChecks"]["mod"]) changes["system"]["modifiers"]["saveChecks"]["mod"] = {}
+            if(!changes["system"]["modifiers"]["skillBonus"]) changes["system"]["modifiers"]["skillBonus"] = {}
+            if(!changes["system"]["modifiers"]["skillBonus"]["mod"]) changes["system"]["modifiers"]["skillBonus"]["mod"] = {}
+            switch(this.system.spirit.value) {
+                case 5:
+                case 4:
+                case 3: {
+                    changes["system"]["modifiers"]["acBonus"]["mod"][randomID()] = { mode: 'add', value: 1, source: "Spirit" };
+                    changes["system"]["modifiers"]["evasion"]["physical"]["mod"][randomID()] = { mode: 'add', value: 1, source: "Spirit" };
+                    changes["system"]["modifiers"]["evasion"]["special"]["mod"][randomID()] = { mode: 'add', value: 1, source: "Spirit" };
+                    changes["system"]["modifiers"]["evasion"]["speed"]["mod"][randomID()] = { mode: 'add', value: 1, source: "Spirit" };
+                    changes["system"]["modifiers"]["critRange"]["mod"][randomID()] = { mode: 'add', value: 1, source: "Spirit" };
+                    changes["system"]["modifiers"]["saveChecks"]["mod"][randomID()] = { mode: 'add', value: 2, source: "Spirit" };
+                    changes["system"]["modifiers"]["skillBonus"]["mod"][randomID()] = { mode: 'add', value: 2, source: "Spirit" };
+                    break;
+                }
+                case 2: {
+                    changes["system"]["modifiers"]["saveChecks"]["mod"][randomID()] = { mode: 'add', value: 2, source: "Spirit" };
+                    changes["system"]["modifiers"]["skillBonus"]["mod"][randomID()] = { mode: 'add', value: 2, source: "Spirit" };
+                    break;
+                }
+                case 1: {
+                    changes["system"]["modifiers"]["skillBonus"]["mod"][randomID()] = { mode: 'add', value: 2, source: "Spirit" };
+                    break;
+                }
+                case -1: {
+                    changes["system"]["modifiers"]["skillBonus"]["mod"][randomID()] = { mode: 'add', value: -2, source: "Spirit" };
+                    break;
+                }
+                case -2: {
+                    changes["system"]["modifiers"]["saveChecks"]["mod"][randomID()] = { mode: 'add', value: -2, source: "Spirit" };
+                    changes["system"]["modifiers"]["skillBonus"]["mod"][randomID()] = { mode: 'add', value: -2, source: "Spirit" };
+                    break;
+                }
+                case -3: {
+                    changes["system"]["modifiers"]["acBonus"]["mod"][randomID()] = { mode: 'add', value: -1, source: "Spirit" };
+                    changes["system"]["modifiers"]["evasion"]["physical"]["mod"][randomID()] = { mode: 'add', value: -1, source: "Spirit" };
+                    changes["system"]["modifiers"]["evasion"]["special"]["mod"][randomID()] = { mode: 'add', value: -1, source: "Spirit" };
+                    changes["system"]["modifiers"]["evasion"]["speed"]["mod"][randomID()] = { mode: 'add', value: -1, source: "Spirit" };
+                    changes["system"]["modifiers"]["critRange"]["mod"][randomID()] = { mode: 'add', value: -1, source: "Spirit" };
+                    changes["system"]["modifiers"]["saveChecks"]["mod"][randomID()] = { mode: 'add', value: -2, source: "Spirit" };
+                    changes["system"]["modifiers"]["skillBonus"]["mod"][randomID()] = { mode: 'add', value: -2, source: "Spirit" };
+                    break;
+                }
             }
         }
         this.system.changes = mergeObject(

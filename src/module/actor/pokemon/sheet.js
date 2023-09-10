@@ -66,7 +66,7 @@ export class PTUPokemonSheet extends PTUActorSheet {
 			buttons.unshift({
 				label: "Party",
 				class: "part-screen",
-				icon: "fas fa-user-group",
+				icon: "fas fa-users",
 				onclick: () => new PTUPartySheet({actor: this.actor}).render(true) 
 			});
 		}
@@ -91,6 +91,7 @@ export class PTUPokemonSheet extends PTUActorSheet {
 		const effects = [];
 		const conditions = this.actor.conditions;
 		const contestmoves = [];
+		const spiritactions = [];
 
 		// Iterate through items, allocating to containers
 		// let totalWeight = 0;
@@ -113,6 +114,9 @@ export class PTUPokemonSheet extends PTUActorSheet {
 				case 'contestmove':
 					contestmoves.push(i);
 					break;
+				case 'spiritaction':
+					spiritactions.push(i);
+					break;
 			}
 		}
 
@@ -123,6 +127,7 @@ export class PTUPokemonSheet extends PTUActorSheet {
 		sheetData.effects = effects;
 		sheetData.conditions = conditions;
 		sheetData.contestmoves = contestmoves;
+		sheetData.spiritactions = spiritactions;
 
 		sheetData.actions = (() => {
 			const moves = [];

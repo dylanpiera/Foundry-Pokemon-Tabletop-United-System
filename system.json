@@ -7,7 +7,7 @@
     "verified": "11.308",
     "maximum": 11
   },
-  "version": "4.0.0.alpha.32",
+  "version": "4.0.0.alpha.33",
   "templateVersion": 2,
   "authors": [
     {
@@ -130,6 +130,12 @@
       "label": "references",
       "type": "Item",
       "name": "references",
+      "system": "ptu"
+    },
+    {
+      "label": "spirit actions",
+      "type": "Item",
+      "name": "spirit-actions",
       "system": "ptu"
     }
   ],

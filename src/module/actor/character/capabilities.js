@@ -105,22 +105,22 @@ function calculateTrainerCapabilities(trainerSkills, items, speedCombatStages, i
     }
 
     let capabilities = {
-        "Overland": Math.max(2, calcOverlandSpeed() + 3) + mods["Overland"],
-        "Throwing Range": trainerSkills.athletics.value.total + 4 + mods["Throwing Range"],
-        "High Jump": calcHighJump() + mods["High Jump"],
-        "Long Jump": calcLongJump() + mods["Long Jump"],
-        "Power": calcPower() + 4 + mods["Power"]
+        "overland": Math.max(2, calcOverlandSpeed() + 3) + mods["Overland"],
+        "throwingRange": trainerSkills.athletics.value.total + 4 + mods["Throwing Range"],
+        "highJump": calcHighJump() + mods["High Jump"],
+        "longJump": calcLongJump() + mods["Long Jump"],
+        "power": calcPower() + 4 + mods["Power"]
     }
 
     let spcsChanges = speedCombatStages > 0 ? Math.floor(speedCombatStages / 2) : speedCombatStages < 0 ? Math.ceil(speedCombatStages / 2) : 0;
     if (spcsChanges > 0 || spcsChanges < 0) {
-        if (capabilities["Overland"] > 0) { 
-            capabilities["Overland"] = Math.max(capabilities["Overland"] + spcsChanges, capabilities["Overland"] > 1 ? 2 : 1)
-            if(isSlowed) capabilities["Overland"] = Math.max(1, Math.floor(capabilities["Overland"] * 0.5));
+        if (capabilities["overland"] > 0) { 
+            capabilities["overland"] = Math.max(capabilities["overland"] + spcsChanges, capabilities["overland"] > 1 ? 2 : 1)
+            if(isSlowed) capabilities["overland"] = Math.max(1, Math.floor(capabilities["overland"] * 0.5));
         }
     }
 
-    capabilities["Swim"] = (mods["Deep Diver"] ? capabilities["Overland"] : Math.trunc(capabilities["Overland"] / 2)) + mods["Swim"]
+    capabilities["swim"] = (mods["Deep Diver"] ? capabilities["overland"] : Math.trunc(capabilities["overland"] / 2)) + mods["Swim"]
 
     return capabilities;
 }

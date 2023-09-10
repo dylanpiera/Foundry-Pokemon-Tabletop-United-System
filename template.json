@@ -435,6 +435,11 @@
           "value": null,
           "max": null
         },
+        "spirit": {
+          "min": -3,
+          "value": 0,
+          "max": 3
+        },
         "schema": {
           "version": null,
           "lastMigration": null
@@ -533,6 +538,7 @@
       "owner": "0",
       "shiny": false,
       "loyalty": 3,
+      "friendship": 2,
       "pokeball": "",
       "boss": {
         "is": false,
@@ -573,7 +579,8 @@
       "effect",
       "species",
       "condition",
-      "reference"
+      "reference",
+      "spiritaction"
     ],
     "templates": {
       "base": {
@@ -846,6 +853,12 @@
     },
     "reference": {
       "templates": ["base"]
+    },
+    "spiritaction": {
+      "templates": ["base"],
+      "cost": 0,
+      "trigger": "",
+      "active": false
     }
   }
 }

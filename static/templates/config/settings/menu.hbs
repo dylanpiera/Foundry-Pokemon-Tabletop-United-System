@@ -14,7 +14,7 @@
                         {{/select}}
                     </select>
                 {{else if setting.isCheckbox}}
-                    <input type="checkbox" name="{{setting.key}}" {{checked setting.value}} />
+                    <input type="checkbox" name="{{setting.key}}" {{checked setting.value}} {{#if (and (is setting.key "useDexExp") (getGameSetting "variant.trainerRevamp"))}}disabled{{/if}}/>
                 {{else if setting.isNumber}}
                     <input type="number" name="{{setting.key}}" value="{{setting.value}}" />
                 {{else if setting.isText}}

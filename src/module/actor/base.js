@@ -232,6 +232,8 @@ class PTUActor extends Actor {
             this.system.attacks = this.prepareMoves();
         }
 
+        this.system.spirit.weary = this.system.spirit.value >= 0 ? 0 : Math.abs(this.system.spirit.value);
+
         this.initiative = new ActorInitiative(this);
     }
 
@@ -334,6 +336,19 @@ class PTUActor extends Actor {
         }
 
         return super.updateDocuments(updates, context); 
+    }
+
+    /** @override */
+    async _preUpdate(changed, options, user) {
+        if(changed?.system?.spirit?.value !== undefined) {
+            changed.system.spirit.value = Math.clamped(
+                changed.system.spirit.value,
+                this.system.spirit.min ?? this.system.spirit.min,
+                changed.system.spirit.max ?? this.system.spirit.max
+            );
+        }
+
+        await super._preUpdate(changed, options, user);
     }
 
     getContextualClone(rollOptions, ephemeralEffects = []) {

@@ -10,7 +10,8 @@
         <nav class="tabs" data-group="primary">
             <a class="item tooltip ball-themes {{ballStyle}}" title="Stats" data-tab="stats"><i class="fas fa-bars-progress"></i></a>
             <a class="item tooltip ball-themes {{ballStyle}}" title="Moves" data-tab="moves"><i class="fas fa-burst"></i></a>
-            <a class="item tooltip ball-themes {{ballStyle}}" title="Contests" data-tab="contests"><i class="fas fa-medal"></i></a>
+            <a class="item tooltip ball-themes {{ballStyle}}" title="Contests" data-tab="contests"><i class="fas fa-award"></i></a>
+            {{#if (getGameSetting "variant.spiritPlaytest")}}<a class="item tooltip ball-themes {{ballStyle}}" title="Friendship & Spirit" data-tab="spirit"><i class="fas fa-user-friends"></i></a>{{/if}}
             <a class="item tooltip ball-themes {{ballStyle}}" title="Combat" data-tab="combat"><i class="fas fa-hand-fist"></i></a>
             <a class="item tooltip ball-themes {{ballStyle}}" title="Capabilities" data-tab="capability"><i class="fas fa-transporter"></i></a>
             <a class="item tooltip ball-themes {{ballStyle}}" title="Extra" data-tab="extra"><i class="fas fa-gear"></i></a>
@@ -460,6 +461,77 @@
             </div>
         </div>
 
+        {{#if (getGameSetting "variant.spiritPlaytest")}}
+        <!-- Spirit Tab -->
+        <div class="tab details spirit h-100" data-group="primary" data-tab="spirit">
+            <!-- Moves -->
+            <div class="d-flex flex-row justify-content-between h-100 w-100">
+                <div class="fb-55">
+                    <!-- Moves -->
+                    <div class="swsh-box w-100">
+                        <div class="swsh-body w-100" style="display: block;">
+                            {{> "systems/ptu/static/templates/partials/item-display-partial.hbs" title=(localize
+                            "ITEM.TypeSpiritActionPlural") type="spiritaction" items=spiritactions ballStyle=ballStyle}}
+                        </div>
+                    </div>
+                </div>
+                <div class="fb-40">
+                    <div class="swsh-box mb-2 w-100">
+                        <div class="swsh-header ball-themes {{ballStyle}} highlight pt-2 pb-2 center-text justify-content-center">
+                            <b>{{localize "PTU.Spirit.Friendship"}}</b>
+                        </div>
+                        <div class="swsh-body d-flex align-items-center justify-content-center pt-1 pb-1">
+                            <input class="fb-40" style="flex-grow: 0;text-align: center;" type="number" value="{{actor.system.friendship}}" {{#unless (isGm)}}disabled{{/unless}}/>
+                        </div>
+                    </div>
+                    <div class="swsh-box mb-2 w-100">
+                        <div class="swsh-header ball-themes {{ballStyle}} highlight pt-2 pb-2 center-text justify-content-between">
+                            <div class="fb-48">
+                                <b>{{localize "PTU.Spirit.Spirit"}}</b>
+                            </div>
+                            <div class="fb-48">
+                                <b>{{localize "PTU.Spirit.Weary"}}</b>
+                            </div>
+                        </div>
+                        <div class="swsh-body d-flex align-items-center justify-content-between pt-1 pb-1 center-text">
+                            <div class="fb-48">
+                                <input type="number" name="system.spirit.value" value="{{actor.system.spirit.value}}" min="{{actor.system.spirit.min}}" max="{{actor.system.spirit.max}}" step="1"/>
+                            </div>
+                            <div class="fb-48">
+                                <input type="number" value="{{actor.system.spirit.weary}}" disabled/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="swsh-box mb-2 w-100">
+                        <div class="swsh-header ball-themes {{ballStyle}} highlight pt-2 pb-2 center-text justify-content-center">
+                            <b>{{localize "PTU.Spirit.Effects"}}</b>
+                        </div>
+                        <div class="swsh-body d-flex align-items-center justify-content-center pt-1 pb-1">
+                            <div class="spirit-grid">
+                                <div class="item-header header"><b>Spirit</b></div>
+                                <div class="item-header"><b>Effect</b></div>
+                                <div class="item header {{#if (gte actor.system.spirit.value 3)}}active{{/if}}">3</div>
+                                <div class="item {{#if (gte actor.system.spirit.value 3)}}active{{/if}}">+1 Bonus to Accuracy, Evasion and Critical Rate, +2 to Save Checks and Skill Checks.</div>
+                                <div class="item header {{#if (is actor.system.spirit.value 2)}}active{{/if}}">2</div>
+                                <div class="item {{#if (is actor.system.spirit.value 2)}}active{{/if}}">+2 to Save Checks and Skill Checks.</div>
+                                <div class="item header {{#if (is actor.system.spirit.value 1)}}active{{/if}}">1</div>
+                                <div class="item {{#if (is actor.system.spirit.value 1)}}active{{/if}}">+2 to Skill Checks.</div>
+                                <div class="item header {{#if (is actor.system.spirit.value 0)}}active{{/if}}">0</div>
+                                <div class="item {{#if (is actor.system.spirit.value 0)}}active{{/if}}"><i>No effect</i></div>
+                                <div class="item header {{#if (is actor.system.spirit.value -1)}}active{{/if}}">-1</div>
+                                <div class="item {{#if (is actor.system.spirit.value -1)}}active{{/if}}">-2 to Skill Checks.</div>
+                                <div class="item header {{#if (is actor.system.spirit.value -2)}}active{{/if}}">-2</div>
+                                <div class="item {{#if (is actor.system.spirit.value -2)}}active{{/if}}">-2 to Save Checks and Skill Checks.</div>
+                                <div class="item header {{#if (is actor.system.spirit.value -3)}}active{{/if}}">-3</div>
+                                <div class="item {{#if (is actor.system.spirit.value -3)}}active{{/if}}">-1 to Accuracy, Evasion and Critical Rate, -2 to Save Checks and Skill Checks.</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {{/if}}
+
         <!-- Capabilities Tab -->
         <div class="tab details capability" data-group="primary" data-tab="capability">
             <div class="d-flex flex-row justify-content-between h-100 w-100">
@@ -878,7 +950,7 @@
                         <!-- Edges-->
                         <div class="swsh-box w-100 mb-2">
                             <!-- Tutor Points -->
-                            {{#if (is "true" (getGameSetting "variant.useTutorPoints"))}}
+                            {{#if (is true (getGameSetting "variant.useTutorPoints"))}}
                             <div
                                 class="swsh-header ball-themes {{ballStyle}} highlight pt-2 pb-2 justify-content-center">
                                 <b class="m-auto">{{localize "PTU.TutorPoints"}}</b>

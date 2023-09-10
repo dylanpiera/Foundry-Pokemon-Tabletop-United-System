@@ -213,7 +213,8 @@ export const PTUCONFIG = {
       effect: PTUEffect,
       species: PTUSpecies,
       condition: PTUCondition,
-      reference: PTUItem
+      reference: PTUItem,
+      spiritaction: PTUItem
     },
     sheetClasses: {
       item: PTUItemSheet,

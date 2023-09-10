@@ -33,12 +33,12 @@ class PTUTrainerActor extends PTUActor {
         system.level.dexexp = game.settings.get("ptu", "variant.useDexExp") == true ? (this.system.dex?.owned?.length || 0) : 0;
         system.level.current =
             Math.clamped(
-                1,
                 1
-                    + Number(system.level.milestones)
-                    + Math.trunc(Number(system.level.miscexp) / 10)
-                    + Math.trunc(Number(system.level.dexexp) / 10),
-                50
+                + Number(system.level.milestones)
+                + Math.trunc(Number(system.level.miscexp) / 10)
+                + Math.trunc(Number(system.level.dexexp) / 10),
+                1,
+                (game.settings.get("ptu", "variant.trainerRevamp") ? 25 : 50)
             );
 
         // Set attributes which are underrived data
@@ -81,7 +81,7 @@ class PTUTrainerActor extends PTUActor {
             skill["value"]["total"] = skill["value"]["value"] + skill["value"]["mod"];
             skill["rank"] = PTUSkills.getRankSlug(skill["value"]["total"]);
             skill["modifier"]["total"] = skill["modifier"]["value"] + skill["modifier"]["mod"] + (system.modifiers.skillBonus?.total ?? 0);
-            this.attributes.skills[key] = PTUSkills.calculate({actor: this, context: {skill: key, options: []}});
+            this.attributes.skills[key] = PTUSkills.calculate({ actor: this, context: { skill: key, options: [] } });
         }
 
         // Prepare flat modifiers
@@ -103,7 +103,7 @@ class PTUTrainerActor extends PTUActor {
 
         // Use Data
 
-        system.levelUpPoints = system.level.current + system.modifiers.statPoints.total + 9;
+        system.levelUpPoints = (game.settings.get("ptu", "variant.trainerRevamp") ? (system.level.current * 2) : system.level.current) + system.modifiers.statPoints.total + 9;
         if (this.flags?.ptu?.is_poisoned) {
             system.stats.spdef.stage.mod -= 2;
         }
@@ -125,12 +125,12 @@ class PTUTrainerActor extends PTUActor {
         system.stats.spd.value = system.modifiers.baseStats.spd.total + system.stats.spd.base;
 
         var result = true ?
-            calculatePTStatTotal(system.levelUpPoints, actualLevel, system.stats, { twistedPower: this.items.find(x => x.name.toLowerCase().replace("[playtest]") == "twisted power") != null }, system.nature?.value, true) :
+            calculatePTStatTotal(system.levelUpPoints, (game.settings.get("ptu", "variant.trainerRevamp") ? actualLevel + actualLevel : actualLevel), system.stats, { twistedPower: this.items.find(x => x.name.toLowerCase().replace("[playtest]") == "twisted power") != null }, system.nature?.value, true) :
             calculateOldStatTotal(system.levelUpPoints, system.stats, { twistedPower: this.items.find(x => x.name.toLowerCase().replace("[playtest]") == "twisted power") != null });
         system.stats = result.stats;
         system.levelUpPoints = result.levelUpPoints;
 
-        system.health.total = 10 + (system.level.current * 2) + (system.stats.hp.total * 3);
+        system.health.total = 10 + (system.level.current * (game.settings.get("ptu", "variant.trainerRevamp") ? 4 : 2)) + (system.stats.hp.total * 3);
         system.health.max = system.health.injuries > 0 ? Math.trunc(system.health.total * (1 - ((system.modifiers.hardened ? Math.min(system.health.injuries, 5) : system.health.injuries) / 10))) : system.health.total;
 
         system.health.percent = Math.round((system.health.value / system.health.max) * 100);
@@ -142,12 +142,21 @@ class PTUTrainerActor extends PTUActor {
 
         system.feats = {
             total: this.items.filter(x => x.type == "feat" && !x.system.free).length,
-            max: 4 + Math.ceil(system.level.current / 2)
+            max: 4 + (game.settings.get("ptu", "variant.trainerRevamp") ? system.level.current : Math.ceil(system.level.current / 2))
         }
 
         system.edges = {
             total: this.items.filter(x => x.type == "edge" && !x.system.free).length,
-            max: 4 + Math.floor(system.level.current / 2) + (system.level.current >= 2 ? 1 : 0) + (system.level.current >= 6 ? 1 : 0) + (system.level.current >= 12 ? 1 : 0)
+            max: 4
+                + (game.settings.get("ptu", "variant.trainerRevamp") ? system.level.current : Math.floor(system.level.current / 2))
+                + (system.level.current >= 2 ? 1 : 0)
+                + (system.level.current >= 6 ? 1 : 0)
+                + (system.level.current >= 12 ? 1 : 0)
+                + (game.settings.get("ptu", "variant.trainerRevamp") ? (system.level.current >= 5 ? 1 : 0) : 0)
+                + (game.settings.get("ptu", "variant.trainerRevamp") ? (system.level.current >= 10 ? 1 : 0) : 0)
+                + (game.settings.get("ptu", "variant.trainerRevamp") ? (system.level.current >= 15 ? 1 : 0) : 0)
+                + (game.settings.get("ptu", "variant.trainerRevamp") ? (system.level.current >= 20 ? 1 : 0) : 0)
+                + (game.settings.get("ptu", "variant.trainerRevamp") ? (system.level.current >= 25 ? 1 : 0) : 0)
         }
 
         system.ap.max = 5 + Math.floor(system.level.current / 5);
@@ -163,9 +172,9 @@ class PTUTrainerActor extends PTUActor {
             smart: system.contests.stats.smart,
             cute: system.contests.stats.cute
         }
-        for(const stat of Object.keys(system.contests.stats)) {
+        for (const stat of Object.keys(system.contests.stats)) {
             const combatStat = (() => {
-                switch(stat) {
+                switch (stat) {
                     case "cool": return "atk";
                     case "tough": return "def";
                     case "beauty": return "spatk";

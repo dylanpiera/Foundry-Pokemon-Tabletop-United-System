@@ -55,6 +55,7 @@
     "TypePokeedgePlural": "Poké Edges",
     "TypeDexentryPlural": "Dex Entries",
     "TypeContestMovesPlural": "Contest Moves",
+    "TypeSpiritActionPlural": "Spirit Actions",
     "Modifier": "Modifier",
     "ShowInTokenPanel": "Show in Token Panel",
     "Dice": "Base Dice"
@@ -703,6 +704,14 @@
         "UseDexExp": {
           "Name": "Use Dex Exp for Trainers",
           "Hint": "Whether the system should check how many pokemon are marked as 'Caught' in a Trainer's dex, and add that to their dex experience total."
+        },
+        "TrainerRevamp": {
+          "Name": "Use Trainer Revamp (max lvl 25)",
+          "Hint": "Use DataNinja's alt. Trainer Revamp ruleset, disables Dex Exp. (see: https://shorturl.at/oCDWY)"
+        },
+        "SpiritPlaytest": {
+          "Name": "Enable Friendship & Spirit [Playtest]",
+          "Hint": "Enable the Friendship & Spirit Playtest ruleset. For more info see https://ptufvtt.com/en/crockpot/spirit-and-friendship"
         }
       },
       "Automation": {
@@ -818,6 +827,12 @@
       "Voltage": "Voltage",
       "DiceTotal": "Dice Total",
       "Appeal": "Appeal"
+    },
+    "Spirit": {
+      "Friendship": "Friendship",
+      "Spirit": "Spirit",
+      "Weary": "Weary",
+      "Effects": "Passive Effects"
     }
   },
 
@@ -836,5 +851,10 @@
   "longJump": "Long Jump",
   "power": "Power",
   "naturewalk": "Naturewalk",
-  "weightClass": "Weight Class"
+  "weightClass": "Weight Class",
+  "throwingRange": "Throwing Range",
+  "species": "Species",
+  "condition": "Condition",
+  "reference": "Reference",
+  "spiritaction": "Spirit Action"
 }

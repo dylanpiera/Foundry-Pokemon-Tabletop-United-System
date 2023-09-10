@@ -74,7 +74,7 @@ export class PTUCharacterSheet extends PTUActorSheet {
 			buttons.unshift({
 				label: "Party",
 				class: "party-screen",
-				icon: "fas fa-user-group",
+				icon: "fas fa-users",
 				onclick: () => new PTUPartySheet({actor: this.actor}).render(true) 
 			});
 			buttons.unshift({
