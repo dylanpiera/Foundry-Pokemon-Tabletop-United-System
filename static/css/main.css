@@ -755,6 +755,9 @@ a.content-link img {
   border: #000 solid 1px;
   box-shadow: 0 0 4px 1px #000;
 }
+.chat-message.message .statements:has(a.content-link) {
+  line-height: 23px;
+}
 .chat-message.message:not(.attack-roll, .attack-selector) .flavor-text {
   z-index: 10;
 }
@@ -962,6 +965,10 @@ a.content-link img {
 .chat-message.message .dice-shadow .item-to-chat span.small {
   font-size: 12px;
   font-style: italic;
+}
+.chat-message.message .use {
+  flex: 0 0 50%;
+  margin: 0.5rem;
 }
 .chat-message.message .attack-roll,
 .chat-message.message .attack-selector {
@@ -2603,6 +2610,10 @@ a.content-link img {
 }
 .sheet.item section form.item-sheet .sheet-body .details .item-row input[type="checkbox"] {
   flex: 0 0 20px;
+}
+.sheet.item section form.item-sheet .sheet-body .details .item-row span {
+  flex: 1 0 0;
+  padding: 0.25rem 0;
 }
 .sheet.item section form.item-sheet .sheet-body .details .item-row textarea {
   resize: none;

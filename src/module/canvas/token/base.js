@@ -59,11 +59,11 @@ class PTUToken extends Token {
 
         // Draw boss bars
         if (bossBars > 0) {
-            const baseBossBarY = (temp?.value > 0 ? 1 : 0) * barHeight + (offset * (temp?.value > 0 ? 1 : 0));
-            bar.lineStyle(0).beginFill(black, 0.5).drawRoundedRect(smallWidthOffset, baseBossBarY, smallBarWidth, barHeight, 3);
+            // const baseBossBarY = (temp?.value > 0 ? 1 : 0) * barHeight + (offset * (temp?.value > 0 ? 1 : 0));
             for (let i = 0; i < bossBars; i++) {
                 const bossBarY = ((i + (temp?.value > 0 ? 1 : 0)) * barHeight) + (offset * (temp?.value > 0 ? 1 : 0));
-
+                
+                bar.lineStyle(0).beginFill(black, 0.5).drawRoundedRect(smallWidthOffset, bossBarY, smallBarWidth, barHeight, 3);
                 if (i < brokenBars) {
                     bar.beginFill(bossBarColor, 1).drawRoundedRect(smallWidthOffset, bossBarY, 0, barHeight, 2);
                 } else {

@@ -4,7 +4,7 @@ import { PTUActorSheet } from "../sheet.js";
 import { ItemSummaryRenderer } from "../sheet/item-summary.js";
 
 export class PTUPokemonSheet extends PTUActorSheet {
-    /** @override */
+	/** @override */
 	static get defaultOptions() {
 		const options = mergeObject(super.defaultOptions, {
 			classes: ['ptu', 'sheet', 'actor', 'gen8'],
@@ -17,11 +17,11 @@ export class PTUPokemonSheet extends PTUActorSheet {
 				initial: 'stats'
 			}],
 			submitOnClose: true,
-      		submitOnChange: true,
+			submitOnChange: true,
 		});
 
 		// If compact style is enabled
-		if(true) {
+		if (true) {
 			options.classes.push('compact');
 			options.template = 'systems/ptu/static/templates/actor/pokemon-sheet-compact.hbs';
 			options.width = 900;
@@ -32,26 +32,26 @@ export class PTUPokemonSheet extends PTUActorSheet {
 	}
 
 	get ballStyle() {
-		if(this.actor.flags.ptu.theme) return this.actor.flags.ptu.theme;
-        if(this.actor.system.pokeball) {
-            const ball = this.actor.system.pokeball.toLowerCase().replace('ball', '').trim();
-            if(ball == "basic" || ball == "poke" ) return "default";
-            return ball;
-        }
+		if (this.actor.flags.ptu.theme) return this.actor.flags.ptu.theme;
+		if (this.actor.system.pokeball) {
+			const ball = this.actor.system.pokeball.toLowerCase().replace('ball', '').trim();
+			if (ball == "basic" || ball == "poke") return "default";
+			return ball;
+		}
 		return "default";
 	}
 
-    /** @override */
-	getData() {
-		const data = super.getData();
+	/** @override */
+	async getData() {
+		const data = await super.getData();
 		data.dtypes = ['String', 'Number', 'Boolean'];
 
-        // Prepare items.
+		// Prepare items.
 		if (this.actor.type == 'pokemon') {
-			this._prepareCharacterItems(data);
+			await this._prepareCharacterItems(data);
 		}
 
-        data['natures'] = CONFIG.PTU.data.natureData;
+		data['natures'] = CONFIG.PTU.data.natureData;
 
 		data["ballStyle"] = this.ballStyle;
 
@@ -67,21 +67,21 @@ export class PTUPokemonSheet extends PTUActorSheet {
 				label: "Party",
 				class: "part-screen",
 				icon: "fas fa-users",
-				onclick: () => new PTUPartySheet({actor: this.actor}).render(true) 
+				onclick: () => new PTUPartySheet({ actor: this.actor }).render(true)
 			});
 		}
 
 		return buttons;
 	}
 
-    /**
+	/**
 	 * Organize and classify Items for Character sheets.
 	 *
 	 * @param {Object} actorData The actor to prepare.
 	 *
 	 * @return {undefined}
 	 */
-	_prepareCharacterItems(sheetData) {
+	async _prepareCharacterItems(sheetData) {
 		sheetData['skills'] = this.actor.system.skills
 
 		// Initialize containers.
@@ -129,28 +129,32 @@ export class PTUPokemonSheet extends PTUActorSheet {
 		sheetData.contestmoves = contestmoves;
 		sheetData.spiritactions = spiritactions;
 
-		sheetData.actions = (() => {
+		sheetData.actions = await (async () => {
 			const moves = [];
 			const struggles = [];
+			const effects = {};
 
-			for(const statistic of this.actor.attacks) {
-				if(statistic.item.system.isStruggle) struggles.push(statistic.item);
+			for (const statistic of this.actor.attacks) {
+				if (statistic.item.system.isStruggle) struggles.push(statistic.item);
 				else moves.push(statistic.item);
+
+				const effect = statistic.item.system.effect + (statistic.item.effectReference ? "<br/></br>" + statistic.item.effectReference : "");
+				//effects[statistic.item.id] = await TextEditor.enrichHTML(effect, {async: true});
 			}
 
 			return {
-				moves, struggles
+				moves, struggles, effects
 			}
 		})();
 
 		return sheetData;
 	}
 
-    /** @override */
+	/** @override */
 	activateListeners(html) {
 		super.activateListeners(html);
 
-        this._itemSummaryRenderer = new ItemSummaryRenderer(this);
+		this._itemSummaryRenderer = new ItemSummaryRenderer(this);
 		this._itemSummaryRenderer.activateListeners(html);
 
 		$(html).find('nav .tooltip').tooltipster({
@@ -167,10 +171,10 @@ export class PTUPokemonSheet extends PTUActorSheet {
 			await CONFIG.PTU.util.Enricher.enrichContentLinks(element);
 		});
 
-		for(const element of $(html).find(".mod-input")) {
+		for (const element of $(html).find(".mod-input")) {
 			const $html = $(element)
 			const $children = $html.find('.mod-tooltip');
-			if($children.length > 0) {
+			if ($children.length > 0) {
 				$html.tooltipster({
 					theme: `tooltipster-shadow ball-themes ${this.ballStyle}`,
 					position: $children.data('position') || 'bottom',
@@ -179,8 +183,8 @@ export class PTUPokemonSheet extends PTUActorSheet {
 					interactive: true,
 					functionReady: async (_instance, helper) => {
 						const html = $(helper.tooltip).find('.linked-item');
-						if(html.length > 0) {
-							for(const element of html)
+						if (html.length > 0) {
+							for (const element of html)
 								await CONFIG.PTU.util.Enricher.enrichContentLinks(element);
 						}
 					}
@@ -191,26 +195,28 @@ export class PTUPokemonSheet extends PTUActorSheet {
 		// Everything below here is only needed if the sheet is editable
 		if (!this.options.editable) return;
 
-        html.find('.rollable.skill').click(this._onSkillRoll.bind(this));
+		html.find('.rollable.skill').click(this._onSkillRoll.bind(this));
 		html.find('.rollable.move').click(async (event) => {
 			const attackId = $(event.currentTarget).closest("li.item").data("item-id");
 			const attack = this.actor.attacks.get(attackId);
-			if(!attack) return;
+			if (!attack) return;
 
-			await attack.roll?.({event, callback: async (rolls, targets, msg, event) => {
-				if(!game.settings.get("ptu", "autoRollDamage")) return;
+			await attack.roll?.({
+				event, callback: async (rolls, targets, msg, event) => {
+					if (!game.settings.get("ptu", "autoRollDamage")) return;
 
-				const params = {
-					event,
-					options: msg.context.options ?? [],
-					actor: msg.actor,
-					targets: msg.targets
+					const params = {
+						event,
+						options: msg.context.options ?? [],
+						actor: msg.actor,
+						targets: msg.targets
+					}
+					const result = await attack.damage?.(params);
+					if (result === null) {
+						return await msg.update({ "flags.ptu.resolved": false })
+					}
 				}
-				const result = await attack.damage?.(params);
-				if(result === null) {
-					return await msg.update({"flags.ptu.resolved": false})
-				}
-			}});
+			});
 		});
 		html.find('.rollable.save').click(this._onSaveRoll.bind(this));
 
@@ -231,7 +237,7 @@ export class PTUPokemonSheet extends PTUActorSheet {
 		});
 
 		html.find('.item-delete').click(this._onItemDelete.bind(this));
-    }
+	}
 
 	/**
 	 * Handle creating a new Owned Item for the actor using initial data defined in the HTML dataset
@@ -256,12 +262,12 @@ export class PTUPokemonSheet extends PTUActorSheet {
 		// Remove the type from the dataset since it's in the itemData.type prop.
 		delete itemData.system['type'];
 
-		if(itemData.type === "ActiveEffect") {
+		if (itemData.type === "ActiveEffect") {
 			throw new Error("ActiveEffects are not supported in PTU");
 		}
 
 		// Finally, create the item!
-		console.debug("Created new item",itemData);
+		console.debug("Created new item", itemData);
 		return this.actor.createEmbeddedDocuments("Item", [itemData]);
 	}
 
@@ -274,33 +280,33 @@ export class PTUPokemonSheet extends PTUActorSheet {
 		const li = $(event.currentTarget).parents('.item');
 		const itemId = li.data('itemId');
 		const item = this.actor.items.get(itemId);
-		if(!item) throw new Error(`Item ${itemId} not found`);
+		if (!item) throw new Error(`Item ${itemId} not found`);
 
 		const deleteItem = async () => {
 			await item.delete();
 			li.slideUp(200, () => this.render(false));
 		}
-		if(event?.shiftKey) {
+		if (event?.shiftKey) {
 			return deleteItem();
 		}
 
-		
+
 		const granter = this.actor.items.get(item.flags.ptu?.grantedBy?.id ?? "");
-		if(granter) {
+		if (granter) {
 			const parentGrant = Object.values(granter?.flags.ptu?.itemGrants ?? {}).find((g) => g.id === item.id);
 
-			if(parentGrant?.onDelete === "restrict") {
+			if (parentGrant?.onDelete === "restrict") {
 				return Dialog.prompt({
 					title: game.i18n.localize("DIALOG.DeleteItem.Title"),
-					content: game.i18n.format("DIALOG.DeleteItem.Restricted", {name: item.name, parentName: granter.name}),
+					content: game.i18n.format("DIALOG.DeleteItem.Restricted", { name: item.name, parentName: granter.name }),
 				})
 			}
 		}
-		
+
 
 		new Dialog({
 			title: game.i18n.localize("DIALOG.DeleteItem.Title"),
-			content: game.i18n.format("DIALOG.DeleteItem.Content", {name: item.name}),
+			content: game.i18n.format("DIALOG.DeleteItem.Content", { name: item.name }),
 			buttons: {
 				yes: {
 					icon: '<i class="fas fa-check"></i>',
@@ -316,7 +322,7 @@ export class PTUPokemonSheet extends PTUActorSheet {
 		}).render(true);
 	}
 
-    /**
+	/**
 	 * Handle clickable rolls.
 	 * @param {Event} event   The originating click event
 	 * @private
@@ -329,16 +335,16 @@ export class PTUPokemonSheet extends PTUActorSheet {
 
 	async _onSaveRoll(event) {
 		event.preventDefault();
-		if(event.screenX == 0 && event.screenY == 0) return;
+		if (event.screenX == 0 && event.screenY == 0) return;
 
 		const statistic = new Statistic(this.actor, {
 			slug: "save-check",
-			label: game.i18n.format("PTU.SaveCheck", { name: this.actor.name, save: ""}),
+			label: game.i18n.format("PTU.SaveCheck", { name: this.actor.name, save: "" }),
 			check: { type: "save-check", domains: ["save-check"], modifiers: [] },
 			//dc: { modifiers: [], domains: ["save-dc"] },
 			domains: []
 		});
-		return await statistic.roll({skipDialog: false})
+		return await statistic.roll({ skipDialog: false })
 	}
 
 	#onMoveRoll(event) {
@@ -347,17 +353,17 @@ export class PTUPokemonSheet extends PTUActorSheet {
 		const li = $(event.currentTarget).parents('.item');
 		const itemId = li.data('itemId');
 		const item = this.actor.items.get(itemId);
-		if(!item) throw new Error(`Item ${itemId} not found`);
-		if(item.type !== "move") throw new Error(`Item ${itemId} is not a move`);
+		if (!item) throw new Error(`Item ${itemId} not found`);
+		if (item.type !== "move") throw new Error(`Item ${itemId} is not a move`);
 
-		return this._onMoveRoll(item, {event});
+		return this._onMoveRoll(item, { event });
 	}
 
-	async _onMoveRoll(move, {event} = {}) {
-		if(!move) return;
-		if(move.type !== "move") throw new Error(`Item ${itemId} is not a move`);
+	async _onMoveRoll(move, { event } = {}) {
+		if (!move) return;
+		if (move.type !== "move") throw new Error(`Item ${itemId} is not a move`);
 
-		if(event?.ctrlKey) {
+		if (event?.ctrlKey) {
 			return move?.sendToChat?.();
 		}
 
@@ -369,8 +375,8 @@ export class PTUPokemonSheet extends PTUActorSheet {
 					content: `<input type="text" name="accuracy-modifier" value="0"></input>`,
 					yes: async (html) => {
 						const bonusTxt = html.find('input[name="accuracy-modifier"]').val()
-				
-						const bonus = !isNaN(Number(bonusTxt)) ? Number(bonusTxt) : parseInt((await (new Roll(bonusTxt)).roll({async:true})).total);
+
+						const bonus = !isNaN(Number(bonusTxt)) ? Number(bonusTxt) : parseInt((await (new Roll(bonusTxt)).roll({ async: true })).total);
 						if (!isNaN(bonus)) {
 							return resolve(bonus);
 						}
@@ -378,7 +384,7 @@ export class PTUPokemonSheet extends PTUActorSheet {
 					}
 				});
 			});
-			if(extra) {
+			if (extra) {
 				bonus.push({
 					value: extra,
 					label: `with ${extra} accuracy modifier`
@@ -386,10 +392,10 @@ export class PTUPokemonSheet extends PTUActorSheet {
 			}
 		}
 
-		if(event?.altKey) {
+		if (event?.altKey) {
 			//TODO: Implement using AP for pokemon; currently there is no link between trainer & pokemon
 		}
 
-		return move.execute({bonus});
+		return move.execute({ bonus });
 	}
 }

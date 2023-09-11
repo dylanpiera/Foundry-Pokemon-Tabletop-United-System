@@ -505,7 +505,8 @@
       "Apply": "Apply Damage",
       "CaptureRoll": "Capture Roll",
       "CaptureNoTarget": "You need to target a Pokémon to capture",
-      "CaptureWrongTarget": "You need to target a Pokémon to capture"
+      "CaptureWrongTarget": "You need to target a Pokémon to capture",
+      "Use": "Apply Effect" 
     },
 
     "Traits": {
@@ -546,7 +547,8 @@
     },
     "Notifications": {
       "CannotApplyOnMiss": "You can't apply damage on a target that isn't hit.",
-      "InvalidRoll": "Something went wrong while applying damage"
+      "InvalidRoll": "Something went wrong while applying damage",
+      "NoEffect": "It appears this move doesn't have any special effect."
     },
     "UI": {
       "ShiftModifyDamageTitle": "Adjust the rolled damage/healing",
@@ -846,7 +848,8 @@
         "PluralNew": "{actor} now has {newQuantity} temporary hit points {wasAt} from {item}.",
         "SingleNew": "{actor} now has {newQuantity} temporary hit point {wasAt} from {item}.",
         "WasAt": "(was at {oldQuantity})"
-      }
+      },
+      "ApplyEffect": "<actor>{source}</actor> applied {effect} to <actor>{actor}</actor>"
     }
   },
 

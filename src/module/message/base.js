@@ -199,7 +199,19 @@ class ChatMessagePTU extends ChatMessage {
             }
         }
 
+        this.activateListeners($html);
+
         return $html;
+    }
+
+    activateListeners($html) {
+        $html.find("button.use").on("click", async event => {
+            event.preventDefault();
+            const item = await fromUuid(this.flags.ptu.origin.item);
+            if (!item) return;
+
+            await item?.use();
+        });
     }
 }
 

@@ -147,7 +147,7 @@ function calculateStatTotal({ level, actorStats, nature, isTrainer, twistedPower
     for (const [key, value] of Object.entries(stats)) {
         const sub = value["total"] + value["mod"].value + value["mod"].mod;
         
-        if(key != "hp") value["stage"].total = (value["stage"]?.value ?? 0) + (value["stage"]?.mod ?? 0);
+        if(key != "hp") value["stage"].total = Math.clamped((value["stage"]?.value ?? 0) + (value["stage"]?.mod ?? 0), -6, 6);
         if (value["stage"]?.total > 0) {
             value["total"] = Math.floor(sub * (value["stage"].total) * 0.2 + sub);
         }

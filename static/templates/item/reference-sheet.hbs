@@ -36,13 +36,17 @@
                 </div>
             </div>
             <div class="move-row" style="flex-grow: 1">
-                <div class="move-effect">{{{itemEffect}}}</div>
+                <div class="move-effect">{{{itemEffect}}}{{#if referenceEffect}}<br><br>{{{referenceEffect}}}{{/if}}</div>
             </div>
         </div>
         <div class="tab details h-100" data-group="primary" data-tab="details">
             <div class="item-row">
                 <label for="system.origin">{{localize "ITEM.Origin"}}</label>
                 <input class="ml-1 mr-1" name="system.origin" type="text" value="{{item.system.origin}}" placeholder="{{localize "ITEM.Origin"}}"/>
+            </div>
+            <div class="item-row">
+                <label for="system.referenceEffect">{{localize "ITEM.Origin"}}</label>
+                <span class="ml-1 mr-1">{{#if referenceEffect}}{{{referenceEffect}}}{{else}}None{{/if}}</span>
             </div>
             <div class="item-row">
                 <label for="system.effect">{{localize "ITEM.Effect"}}</label>

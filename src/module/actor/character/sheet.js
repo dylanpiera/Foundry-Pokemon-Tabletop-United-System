@@ -6,7 +6,7 @@ import { PTUDexSheet } from "../../apps/dex/sheet.js";
 import { PTUActorSheet } from "../sheet.js";
 
 export class PTUCharacterSheet extends PTUActorSheet {
-    
+
 	/** @override */
 	static get defaultOptions() {
 		const options = mergeObject(super.defaultOptions, {
@@ -20,11 +20,11 @@ export class PTUCharacterSheet extends PTUActorSheet {
 				initial: 'stats'
 			}],
 			submitOnClose: true,
-      		submitOnChange: true,
+			submitOnChange: true,
 		});
 
 		// If compact style is enabled
-		if(true) {
+		if (true) {
 			options.classes.push('compact');
 			options.template = 'systems/ptu/static/templates/actor/trainer-sheet-compact.hbs';
 			options.width = 900;
@@ -41,22 +41,22 @@ export class PTUCharacterSheet extends PTUActorSheet {
 	/* -------------------------------------------- */
 
 	/** @override */
-	getData() {
-		const data = super.getData();
+	async getData() {
+		const data = await super.getData();
 		data.dtypes = ['String', 'Number', 'Boolean'];
 
 		// Prepare items.
 		if (this.actor.type == 'character') {
-            // TODO: make this pure
-			this._prepareCharacterItems(data);
+			// TODO: make this pure
+			await this._prepareCharacterItems(data);
 		}
-        // TODO: merge this into _prepareCharacterItems
+		// TODO: merge this into _prepareCharacterItems
 		data['totalWealth'] = this.actor.itemTypes.item.reduce((total, item) => total + (!isNaN(Number(item.system.cost)) ? Number(item.system.cost) * (Number(item.system.quantity) ?? 0) : 0), Number(this.actor.system.money));
 
 		data["ballStyle"] = this.ballStyle;
 
 		// Setup Item Columns
-		if(this.actor.getFlag("ptu", "itemColumns") === undefined) {
+		if (this.actor.getFlag("ptu", "itemColumns") === undefined) {
 			const columns = { one: ["Key", "Medical", "Misc"], two: ["Pokemon Items", "PokeBalls", "TMs", "Money"], available: ["Equipment", "Food"] };
 			this.actor.setFlag("ptu", "itemColumns", columns)
 			data.columns = columns;
@@ -75,13 +75,13 @@ export class PTUCharacterSheet extends PTUActorSheet {
 				label: "Party",
 				class: "party-screen",
 				icon: "fas fa-users",
-				onclick: () => new PTUPartySheet({actor: this.actor}).render(true) 
+				onclick: () => new PTUPartySheet({ actor: this.actor }).render(true)
 			});
 			buttons.unshift({
 				label: "Dex",
 				class: "dex-screen",
 				icon: "fas fa-tablet-alt",
-				onclick: () => new PTUDexSheet(this.actor, this.ballStyle).render(true) 
+				onclick: () => new PTUDexSheet(this.actor, this.ballStyle).render(true)
 			});
 		}
 
@@ -95,7 +95,7 @@ export class PTUCharacterSheet extends PTUActorSheet {
 	 *
 	 * @return {undefined}
 	 */
-	_prepareCharacterItems(sheetData) {
+	async _prepareCharacterItems(sheetData) {
 		sheetData['skills'] = this.actor.system.skills
 
 		const actor = sheetData.actor;
@@ -159,18 +159,22 @@ export class PTUCharacterSheet extends PTUActorSheet {
 		sheetData.effects = effects;
 		sheetData.conditions = conditions;
 		sheetData.contestmoves = contestmoves;
-		
-		sheetData.actions = (() => {
+
+		sheetData.actions = await (async () => {
 			const moves = [];
 			const struggles = [];
+			const effects = {}
 
-			for(const statistic of this.actor.attacks) {
-				if(statistic.item.system.isStruggle) struggles.push(statistic.item);
+			for (const statistic of this.actor.attacks) {
+				if (statistic.item.system.isStruggle) struggles.push(statistic.item);
 				else moves.push(statistic.item);
+
+				const effect = statistic.item.system.effect + (statistic.item.effectReference ? "<br/></br>" + statistic.item.effectReference : "");
+				//effects[statistic.item.id] = await TextEditor.enrichHTML(effect, {async: true});
 			}
 
 			return {
-				moves, struggles
+				moves, struggles, effects
 			}
 		})();
 
@@ -196,10 +200,10 @@ export class PTUCharacterSheet extends PTUActorSheet {
 			position: 'top'
 		});
 
-		for(const element of $(html).find(".mod-input")) {
+		for (const element of $(html).find(".mod-input")) {
 			const $html = $(element)
 			const $children = $html.find('.mod-tooltip');
-			if($children.length > 0) {
+			if ($children.length > 0) {
 				$html.tooltipster({
 					theme: `tooltipster-shadow ball-themes ${this.ballStyle}`,
 					position: $children.data('position') || 'bottom',
@@ -208,8 +212,8 @@ export class PTUCharacterSheet extends PTUActorSheet {
 					interactive: true,
 					functionReady: async (_instance, helper) => {
 						const html = $(helper.tooltip).find('.linked-item');
-						if(html.length > 0) {
-							for(const element of html)
+						if (html.length > 0) {
+							for (const element of html)
 								await CONFIG.PTU.util.Enricher.enrichContentLinks(element);
 						}
 					}
@@ -230,22 +234,24 @@ export class PTUCharacterSheet extends PTUActorSheet {
 		html.find('.rollable.move').click(async (event) => {
 			const attackId = $(event.currentTarget).closest("li.item").data("item-id");
 			const attack = this.actor.attacks.get(attackId);
-			if(!attack) return;
+			if (!attack) return;
 
-			await attack.roll?.({event, callback: async (rolls, targets, msg, event) => {
-				if(!game.settings.get("ptu", "autoRollDamage")) return;
+			await attack.roll?.({
+				event, callback: async (rolls, targets, msg, event) => {
+					if (!game.settings.get("ptu", "autoRollDamage")) return;
 
-				const params = {
-					event,
-					options: msg.context.options ?? [],
-					actor: msg.actor,
-					targets: msg.targets
+					const params = {
+						event,
+						options: msg.context.options ?? [],
+						actor: msg.actor,
+						targets: msg.targets
+					}
+					const result = await attack.damage?.(params);
+					if (result === null) {
+						return await msg.update({ "flags.ptu.resolved": false })
+					}
 				}
-				const result = await attack.damage?.(params);
-				if(result === null) {
-					return await msg.update({"flags.ptu.resolved": false})
-				}
-			}});
+			});
 		});
 		html.find('.rollable.save').click(this._onSaveRoll.bind(this));
 
@@ -253,7 +259,7 @@ export class PTUCharacterSheet extends PTUActorSheet {
 			event.preventDefault();
 			const itemId = $(event.currentTarget).closest("li.item").data("item-id");
 			const item = this.actor.items.get(itemId);
-			if(!item) return;
+			if (!item) return;
 
 			return item.roll?.(event);
 		})
@@ -262,12 +268,12 @@ export class PTUCharacterSheet extends PTUActorSheet {
 		html.find('.item-create').click(this._onItemCreate.bind(this));
 
 		html.find('.collapse-sub-items').click(async (ev) => {
-			if(this.transitioning) return;
+			if (this.transitioning) return;
 			const target = $(ev.currentTarget).parent(".item-controls").parent(".item-info").siblings(".nested-items")[0];
 			const icon = $(ev.target)[0]
 			const showItems = !target.classList.contains("show");
 
-			if(showItems) {
+			if (showItems) {
 				target.classList.remove("hide");
 				target.classList.add("show");
 				icon.classList.remove("fa-plus-square");
@@ -295,9 +301,9 @@ export class PTUCharacterSheet extends PTUActorSheet {
 		html.find(".item-quantity input[type='number']").change((ev) => {
 			const value = Number(ev.currentTarget.value);
 			const id = ev.currentTarget.dataset.itemId;
-			if(value > 0 && id) {
+			if (value > 0 && id) {
 				const item = this.actor.items.get(id);
-				item?.update({"system.quantity": value});
+				item?.update({ "system.quantity": value });
 			}
 		});
 
@@ -357,43 +363,43 @@ export class PTUCharacterSheet extends PTUActorSheet {
 		if (!this.actor.isOwner) return false;
 
 		const item = await Item.implementation.fromDropData(data);
-    	const itemData = item.toObject();
+		const itemData = item.toObject();
 
 		const category = $(event.target).closest(".color-wrapper").data("category");
 
 		const dropTarget = event.target?.closest("[data-item-id]");
-		if(item.category === "feat" && dropTarget) {
+		if (item.category === "feat" && dropTarget) {
 			const target = this.actor.items.get(dropTarget.dataset.itemId);
 			const source = this.actor.items.get(itemData._id);
-			if(!source?.isGranted && target?.isClass && itemData.system.class != target.name) {
-				await source?.update({"system.class": target.name})
+			if (!source?.isGranted && target?.isClass && itemData.system.class != target.name) {
+				await source?.update({ "system.class": target.name })
 			}
-			else if(!source?.isGranted && !target?.isClass && itemData.system.class) {
-				await source?.update({"system.class": null})
+			else if (!source?.isGranted && !target?.isClass && itemData.system.class) {
+				await source?.update({ "system.class": null })
 			}
 		}
-		if(item.type === "item" && dropTarget) {
+		if (item.type === "item" && dropTarget) {
 			let target = this.actor.items.get(dropTarget.dataset.itemId);
-			if(target?.isContainer === false && target.grantedBy?.id) {
+			if (target?.isContainer === false && target.grantedBy?.id) {
 				const parent = this.actor.items.get(target.grantedBy.id);
-				if(parent?.isContainer) {
+				if (parent?.isContainer) {
 					target = parent;
 				}
 			}
-				
+
 			const source = this.actor.items.get(itemData._id);
-			if(!source?.isGranted && target?.isContainer && source?.flags?.ptu?.grantedBy?.id != target.id) {
-				await source?.update({"flags.ptu.grantedBy": {id: target.id, onDelete: "detach"}})
+			if (!source?.isGranted && target?.isContainer && source?.flags?.ptu?.grantedBy?.id != target.id) {
+				await source?.update({ "flags.ptu.grantedBy": { id: target.id, onDelete: "detach" } })
 			}
-			else if(source?.flags?.ptu?.grantedBy?.id && !target?.isContainer) {
-				await source?.update({"flags.ptu.-=grantedBy": null})
+			else if (source?.flags?.ptu?.grantedBy?.id && !target?.isContainer) {
+				await source?.update({ "flags.ptu.-=grantedBy": null })
 			}
 		}
 
 		// Handle item sorting within the same Actor
-		if ( this.actor.uuid === item.parent?.uuid ) {
-			if(category && item.type === "item" && item.system.category != category) {
-				await item.update({"system.category": category});
+		if (this.actor.uuid === item.parent?.uuid) {
+			if (category && item.type === "item" && item.system.category != category) {
+				await item.update({ "system.category": category });
 			}
 
 			return this._onSortItem(event, itemData);
@@ -403,12 +409,12 @@ export class PTUCharacterSheet extends PTUActorSheet {
 		const existingItem = this.actor.items.getName(item.name);
 		if (existingItem && existingItem.id != item.id && existingItem.system.quantity) {
 			const quantity = duplicate(existingItem.system.quantity);
-			await existingItem.update({"system.quantity": Number(quantity) + (item.system.quantity > 0 ? Number(item.system.quantity) : 1)});
+			await existingItem.update({ "system.quantity": Number(quantity) + (item.system.quantity > 0 ? Number(item.system.quantity) : 1) });
 			return false;
 		}
 
-		if(category) {
-			if(itemData.type == "item" && itemData.system.category != category) {
+		if (category) {
+			if (itemData.type == "item" && itemData.system.category != category) {
 				itemData.system.category = category;
 			}
 		}
@@ -440,12 +446,12 @@ export class PTUCharacterSheet extends PTUActorSheet {
 		// Remove the type from the dataset since it's in the itemData.type prop.
 		delete itemData.system['type'];
 
-		if(itemData.type === "ActiveEffect") {
+		if (itemData.type === "ActiveEffect") {
 			throw new Error("ActiveEffects are not supported in PTU");
 		}
 
 		// Finally, create the item!
-		console.debug("Created new item",itemData);
+		console.debug("Created new item", itemData);
 		return this.actor.createEmbeddedDocuments("Item", [itemData]);
 	}
 
@@ -458,35 +464,35 @@ export class PTUCharacterSheet extends PTUActorSheet {
 		const li = $(event.currentTarget).parents('.item');
 		const itemId = li.data('itemId');
 		const item = this.actor.items.get(itemId);
-		if(!item) throw new Error(`Item ${itemId} not found`);
+		if (!item) throw new Error(`Item ${itemId} not found`);
 
 		const deleteItem = async () => {
 			await item.delete();
 			li.slideUp(200, () => this.render(false));
 		}
-		if(event?.shiftKey) {
+		if (event?.shiftKey) {
 			return deleteItem();
 		}
 
 		const granter = this.actor.items.get(item.flags.ptu?.grantedBy?.id ?? "");
-		if(granter) {
+		if (granter) {
 			const parentGrant = Object.values(granter?.flags.ptu?.itemGrants ?? {}).find((g) => g.id === item.id);
 
-			if(parentGrant?.onDelete === "restrict") {
+			if (parentGrant?.onDelete === "restrict") {
 				return Dialog.prompt({
 					title: game.i18n.localize("DIALOG.DeleteItem.Title"),
-					content: game.i18n.format("DIALOG.DeleteItem.Restricted", {name: item.name, parentName: granter.name}),
+					content: game.i18n.format("DIALOG.DeleteItem.Restricted", { name: item.name, parentName: granter.name }),
 				})
 			}
 		}
 
-		if(item.flags.ptu?.itemGrants) {
-			for(const grant of Object.values(item.flags.ptu.itemGrants)) {
+		if (item.flags.ptu?.itemGrants) {
+			for (const grant of Object.values(item.flags.ptu.itemGrants)) {
 				const grantee = this.actor.items.get(grant.id);
-				if(grantee && grantee.flags.ptu.grantedBy.onDelete === "restrict") {
+				if (grantee && grantee.flags.ptu.grantedBy.onDelete === "restrict") {
 					return Dialog.prompt({
 						title: game.i18n.localize("DIALOG.DeleteItem.Title"),
-						content: game.i18n.format("DIALOG.DeleteItem.Restricted", {name: item.name, parentName: grantee.name}),
+						content: game.i18n.format("DIALOG.DeleteItem.Restricted", { name: item.name, parentName: grantee.name }),
 					})
 				}
 			}
@@ -494,7 +500,7 @@ export class PTUCharacterSheet extends PTUActorSheet {
 
 		new Dialog({
 			title: game.i18n.localize("DIALOG.DeleteItem.Title"),
-			content: game.i18n.format("DIALOG.DeleteItem.Content", {name: item.name}),
+			content: game.i18n.format("DIALOG.DeleteItem.Content", { name: item.name }),
 			buttons: {
 				yes: {
 					icon: '<i class="fas fa-check"></i>',
@@ -510,7 +516,7 @@ export class PTUCharacterSheet extends PTUActorSheet {
 		}).render(true);
 	}
 
-    /**
+	/**
 	 * Handle clickable rolls.
 	 * @param {Event} event   The originating click event
 	 * @private
@@ -523,16 +529,16 @@ export class PTUCharacterSheet extends PTUActorSheet {
 
 	async _onSaveRoll(event) {
 		event.preventDefault();
-		if(event.screenX == 0 && event.screenY == 0) return;
+		if (event.screenX == 0 && event.screenY == 0) return;
 
 		const statistic = new Statistic(this.actor, {
 			slug: "save-check",
-			label: game.i18n.format("PTU.SaveCheck", { name: this.actor.name, save: ""}),
+			label: game.i18n.format("PTU.SaveCheck", { name: this.actor.name, save: "" }),
 			check: { type: "save-check", domains: ["save-check"], modifiers: [] },
 			//dc: { modifiers: [], domains: ["save-dc"] },
 			domains: []
 		});
-		return await statistic.roll({skipDialog: false})
+		return await statistic.roll({ skipDialog: false })
 	}
 
 	#onMoveRoll(event) {
@@ -541,17 +547,17 @@ export class PTUCharacterSheet extends PTUActorSheet {
 		const li = $(event.currentTarget).parents('.item');
 		const itemId = li.data('itemId');
 		const item = this.actor.items.get(itemId);
-		if(!item) throw new Error(`Item ${itemId} not found`);
-		if(item.type !== "move") throw new Error(`Item ${itemId} is not a move`);
+		if (!item) throw new Error(`Item ${itemId} not found`);
+		if (item.type !== "move") throw new Error(`Item ${itemId} is not a move`);
 
-		return this._onMoveRoll(item, {event});
+		return this._onMoveRoll(item, { event });
 	}
 
-	async _onMoveRoll(move, {event} = {}) {
-		if(!move) return;
-		if(move.type !== "move") throw new Error(`Item ${itemId} is not a move`);
+	async _onMoveRoll(move, { event } = {}) {
+		if (!move) return;
+		if (move.type !== "move") throw new Error(`Item ${itemId} is not a move`);
 
-		if(event?.ctrlKey) {
+		if (event?.ctrlKey) {
 			return move?.sendToChat?.();
 		}
 
@@ -563,8 +569,8 @@ export class PTUCharacterSheet extends PTUActorSheet {
 					content: `<input type="text" name="accuracy-modifier" value="0"></input>`,
 					yes: async (html) => {
 						const bonusTxt = html.find('input[name="accuracy-modifier"]').val()
-				
-						const bonus = !isNaN(Number(bonusTxt)) ? Number(bonusTxt) : parseInt((await (new Roll(bonusTxt)).roll({async:true})).total);
+
+						const bonus = !isNaN(Number(bonusTxt)) ? Number(bonusTxt) : parseInt((await (new Roll(bonusTxt)).roll({ async: true })).total);
 						if (!isNaN(bonus)) {
 							return resolve(bonus);
 						}
@@ -572,7 +578,7 @@ export class PTUCharacterSheet extends PTUActorSheet {
 					}
 				});
 			});
-			if(extra) {
+			if (extra) {
 				bonus.push({
 					value: extra,
 					label: `with ${extra} accuracy modifier`
@@ -580,11 +586,11 @@ export class PTUCharacterSheet extends PTUActorSheet {
 			}
 		}
 
-		if(event?.altKey) {
+		if (event?.altKey) {
 			//TODO: Implement using AP for pokemon; currently there is no link between trainer & pokemon
 		}
 
-		return move.execute({bonus});
+		return move.execute({ bonus });
 	}
 
 }

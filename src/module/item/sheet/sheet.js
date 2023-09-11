@@ -9,7 +9,8 @@ class PTUItemSheet extends ItemSheet {
             classes: ["ptu", "sheet", "item"],
             width: 650,
             height: 510,
-            tabs: [{ navSelector: ".tabs", contentSelector: ".sheet-body", initial: "overview" }]
+            tabs: [{ navSelector: ".tabs", contentSelector: ".sheet-body", initial: "overview" }],
+            dragDrop: [{ dragSelector: null, dropSelector: null }]
         });
     }
 
@@ -26,6 +27,7 @@ class PTUItemSheet extends ItemSheet {
 
         this.object._updateIcon({update: true});
 
+        data.referenceEffect = this.item.referenceEffect ? await TextEditor.enrichHTML(`@UUID[${duplicate(this.item.referenceEffect)}]`, {async: true}) : null;
         data.itemEffect = this.item.system.effect ? await TextEditor.enrichHTML(duplicate(this.item.system.effect), {async: true}) : this.item.system.effect;
 
         const rules = this.item.toObject().system.rules ?? [];
@@ -71,6 +73,17 @@ class PTUItemSheet extends ItemSheet {
         }
         
         return data;
+    }
+
+    async _onDrop(event) {
+        const data = JSON.parse(event.dataTransfer.getData('text/plain'));
+
+        if(data.type === "Item" && data.uuid) {
+            const item = await fromUuid(data.uuid);
+            if(!["effect", "condition".includes(item.type)]) return;
+
+            this.object.update({"system.referenceEffect": item.uuid});
+        }
     }
 
     /** @override */

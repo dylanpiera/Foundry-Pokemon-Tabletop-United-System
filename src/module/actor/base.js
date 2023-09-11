@@ -54,6 +54,11 @@ class PTUActor extends Actor {
         return "Medium;"
     }
 
+    get isPrivate() {
+        // TODO : make this a meta knowledge setting
+        return !(this.permission >= CONST.DOCUMENT_PERMISSION_LEVELS.OBSERVER);
+    }
+
     get types() {
         return this.synthetics.typeOverride.typing 
             || this.system.typing
@@ -457,7 +462,7 @@ class PTUActor extends Actor {
                     hpUpdate.updates["system.health.value"] = this.system.health.max;
                     //TODO: Apply Injuries
                     await this.update(hpUpdate.updates);
-                    bossStatement = game.i18n.format("PTU.ApplyDamage.BossBarBroken", { actor: this.name, bars: newBars });
+                    bossStatement = game.i18n.format("PTU.ApplyDamage.BossBarBroken", { actor: this.link, bars: newBars });
                 }
                 else await this.update(hpUpdate.updates);
             }
@@ -470,20 +475,21 @@ class PTUActor extends Actor {
         const hpStatement = (() => {
             if (hpDamage == 0) {
                 if (hpUpdate.tempHpIncreased > 0) return null;
-                return game.i18n.format("PTU.ApplyDamage.TakesNoDamage", { actor: this.name });
+                return game.i18n.format("PTU.ApplyDamage.TakesNoDamage", { actor: this.link });
             }
 
-            return hpDamage < 0 ? game.i18n.format("PTU.ApplyDamage.HealedForN", { actor: this.name, hpDamage: Math.abs(hpDamage) }) : game.i18n.format("PTU.ApplyDamage.DamagedForN", { actor: this.name, hpDamage });
+            return hpDamage < 0 ? game.i18n.format("PTU.ApplyDamage.HealedForN", { actor: this.link, hpDamage: Math.abs(hpDamage) }) : game.i18n.format("PTU.ApplyDamage.DamagedForN", { actor: this.link, hpDamage });
         })();
         const tempHpStatement = hpUpdate.tempHpIncreased > 0
-            ? game.i18n.format("PTU.ApplyDamage.GainedTempHp", { actor: this.name, hpDamage: hpUpdate.tempHpIncreased })
+            ? game.i18n.format("PTU.ApplyDamage.GainedTempHp", { actor: this.link, hpDamage: hpUpdate.tempHpIncreased })
             : null;
 
         const statements = [hpStatement, tempHpStatement, bossStatement].filter(s => s).join("<br>");
+        const enrichedHtml = await TextEditor.enrichHTML(statements, {async: true})
         const canUndoDamage = !!hpDamage
 
         const content = await renderTemplate("systems/ptu/static/templates/chat/damage/damage-taken.hbs", {
-            statements,
+            statements: enrichedHtml,
             iwr: {
                 applications,
                 visibility: this.hasPlayerOwner ? "all" : "gm"
@@ -881,7 +887,7 @@ class PTUActor extends Actor {
                 }]
             });
 
-            if (this.types.includes(move.system.type)) {
+            if (move.system.category !== "Status" && this.types.includes(move.system.type)) {
                 const db = isNaN(Number(move.system.damageBase)) ? 0 : Number(move.system.damageBase);
                 clone = move.clone({ "system.damageBase": db + 2 }, { keepId: true });
             }

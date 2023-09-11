@@ -7,13 +7,14 @@
                 <div class="dice-total">
                     <span class="num-total">{{@root/total}}</span>
                     <span>≤</span>
-                    <span>{{target.dc.value}}</span>
+                    <span>{{#unless target.isPrivate}}{{target.dc.value}}{{else}}?{{/unless}}</span>
                 </div>
                 <div class="img-row">
                     <img src="{{@root/self.img}}"/>
                     <span >{{target.name}}'s {{localize target.dc.slug}}</span>
                     <img src="{{target.img}}"/>
                 </div>
+                {{#unless target.isPrivate}}
                 <div class="d-flex flex-row justify-content-center">
                     <span class="type-img">
                         {{#switch (lookup @root/outcome target._id)}}
@@ -35,19 +36,22 @@
                         {{/switch}}
                     </span>
                 </div>
+                {{/unless}}
             {{/each}}
         </div>
-        <div class="flavor-text footer">
-            <div class="header-bar mt-1">
-                <h4 class="action sub-action">DC Calculation</h4>
+        {{#unless containsPrivate}}
+            <div class="flavor-text footer">
+                <div class="header-bar mt-1">
+                    <h4 class="action sub-action">DC Calculation</h4>
+                </div>
+                <div class="header-bar tags m-0 mb-1">
+                    {{#each captureModifier._modifiers as |mod|}}
+                        <div class="tag tag-transparent">
+                            <span>{{mod.label}} {{#if (gte mod.modifier 0)}}+{{/if}}{{mod.modifier}}</span>
+                        </div>
+                    {{/each}}
+                </div>
             </div>
-            <div class="header-bar tags m-0 mb-1">
-                {{#each captureModifier._modifiers as |mod|}}
-                    <div class="tag tag-transparent">
-                        <span>{{mod.label}} {{#if (gte mod.modifier 0)}}+{{/if}}{{mod.modifier}}</span>
-                    </div>
-                {{/each}}
-            </div>
-        </div>
+        {{/unless}}
     </div>
 </div>

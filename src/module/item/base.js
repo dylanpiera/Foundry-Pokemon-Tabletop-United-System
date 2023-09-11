@@ -44,6 +44,18 @@ class PTUItem extends Item {
         return false;
     }
 
+    get usable() {
+        return false;
+    }
+
+    get range() {
+        return this.system.range?.split(",").map(r => r.trim()) ?? [];
+    }
+
+    get referenceEffect() {
+        return this.system.referenceEffect ?? null;
+    }
+
     /** @override */
     prepareBaseData() {
         this.flags.ptu = mergeObject({ rulesSelections: {} }, this.flags.ptu ?? {});
@@ -322,6 +334,10 @@ class PTUItem extends Item {
         ui.notifications.info(`PTU | Item ${this.name} updated from compendium`);
     }
 
+    async use(options = {}) {
+
+    }
+
     async sendToChat() {
         const tags = await (async () => {
             const tags = [];
@@ -379,13 +395,16 @@ class PTUItem extends Item {
                 .join("");
         })();
 
+        const referenceEffect = this.referenceEffect ? await TextEditor.enrichHTML(`@UUID[${duplicate(this.referenceEffect)}]`, {async: true}) : null;
+
         const chatData = {
             user: game.user._id,
             item: this,
-            tags
+            tags,
+            referenceEffect
         }
 
-        ChatMessage.create({content: await renderTemplate(`/systems/ptu/static/templates/chat/chat-items.hbs`, chatData), flavor})
+        ChatMessage.create({content: await renderTemplate(`/systems/ptu/static/templates/chat/chat-items.hbs`, chatData), flavor, flags: {ptu: {origin: {item: this.uuid}}}})
     }
 }
 

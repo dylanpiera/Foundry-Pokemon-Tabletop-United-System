@@ -12,6 +12,8 @@ class PTUMoveSheet extends PTUItemSheet {
         const data = await super.getData();
         
         data.types = Object.keys(CONFIG.PTU.data.typeEffectiveness)
+        if(!game.settings.get("ptu", "homebrew.nuclearType")) data.types = data.types.filter(type => type != "Nuclear");
+        if(!game.settings.get("ptu", "homebrew.shadowType")) data.types = data.types.filter(type => type != "Shadow");
 
         return data;
     }

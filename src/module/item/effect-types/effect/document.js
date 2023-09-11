@@ -64,6 +64,25 @@ class PTUEffect extends BaseEffectPTU {
         return await this.update({"system.badge.value": duplicate(this.system.badge.value)-1});
     }
 
+    async apply(targets, source = null) {
+        const results = [];
+        for(const target of targets) {
+            const actor = 
+                typeof target === "string" ? await fromUuid(target)
+                : target instanceof CONFIG.Token.objectClass ? target.actor
+                : target instanceof CONFIG.PTU.Actor.documentClass ? target 
+                : target.actor && target.actor instanceof CONFIG.PTU.Actor.documentClass ? target.actor : null;
+            if(!actor) continue;
+            
+            const effectData = this.toObject();
+            if(source) effectData.system.origin = source?.uuid ?? source;
+
+            const effect = await actor.createEmbeddedDocuments("Item", [effectData]);
+            results.push(...effect);
+        }
+        return results;
+    }
+
     /** @override */
     async _preCreate( data, options, user ) {
         const badge = data.system?.badge;

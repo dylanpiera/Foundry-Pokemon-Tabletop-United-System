@@ -16,6 +16,7 @@ class CheckRoll extends Roll {
         if(!this._evaluated) await this.evaluate({async: true});
 
         const { isPrivate, flavor, template } = options;
+        let containsPrivate = isPrivate ?? this.options.isPrivate ?? false;
 
         const actor = this.options?.origin?.actor ? await fromUuid(this.options.origin.actor) : null;
         const item = this.options?.origin?.item ? await fromUuid(this.options.origin.item) : null;
@@ -27,12 +28,15 @@ class CheckRoll extends Roll {
             const targets = [];
             for(const target of data) {
                 if(typeof target?.actor === "object") {
-                    targets.push({...(target.actor ?? {}), dc: target.dc});
+                    const actor = game.actors.get(target.actor._id) ?? null;
+                    targets.push({...target.actor, dc: target.dc, isPrivate: actor?.isPrivate});
+                    if(actor?.isPrivate) containsPrivate = true;
                     continue;
                 }
                 const actor = await fromUuid(target.actor ?? "");
                 if(!actor) continue;
-                targets.push({...actor, dc: target.dc});
+                targets.push({...actor, dc: target.dc, isPrivate: actor.isPrivate});
+                if(actor.isPrivate) containsPrivate = true;
             }
             return targets;
         })();
@@ -45,9 +49,10 @@ class CheckRoll extends Roll {
             item,
             self: actor,
             targets,
-            outcome: this.options.outcome ?? options.outcome ?? null,
+            outcome: isPrivate ? null : this.options.outcome ?? options.outcome ?? null,
             ...options,
             type: this.options.type ?? options.type ?? null,
+            containsPrivate,
         }
 
 

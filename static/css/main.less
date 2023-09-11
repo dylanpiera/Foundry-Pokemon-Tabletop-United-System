@@ -839,6 +839,10 @@ a.content-link {
         box-shadow: 0 0 4px 1px #000;
     }
 
+    .statements:has(a.content-link) {
+        line-height: 23px;
+    }
+
     &:not(.attack-roll, .attack-selector) {
         .flavor-text {
             z-index: 10;
@@ -1081,6 +1085,11 @@ a.content-link {
                 }
             }
         }
+
+    }
+    .use {
+        flex: 0 0 50%;
+        margin: 0.5rem;
     }
 
     .attack-roll, .attack-selector {
@@ -3046,6 +3055,10 @@ a.content-link {
                             &[type="checkbox"] {
                                 flex: 0 0 20px;
                             }
+                        }
+                        span {
+                            flex: 1 0 0;
+                            padding: 0.25rem 0;
                         }
 
                         textarea {

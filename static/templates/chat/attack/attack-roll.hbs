@@ -7,13 +7,14 @@
                 <div class="dice-total">
                     <span class="num-total">{{@root/total}}</span>
                     <span>vs.</span>
-                    <span>{{target.dc.value}}</span>
+                    <span>{{#unless target.isPrivate}}{{target.dc.value}}{{else}}?{{/unless}}</span>
                 </div>
                 <div class="img-row">
                     <img src="{{@root/self.img}}"/>
                     <span >{{target.name}}'s {{localize target.dc.slug}}</span>
                     <img src="{{target.img}}"/>
                 </div>
+                {{#unless target.isPrivate}}
                 <div class="d-flex flex-row justify-content-center">
                     <span class="type-img">
                         {{#switch (lookup @root/outcome target._id)}}
@@ -35,6 +36,7 @@
                         {{/switch}}
                     </span>
                 </div>
+                {{/unless}}
             {{/each}}
             {{#unless (gt targets.length 0)}}
                 <div class="dice-total">

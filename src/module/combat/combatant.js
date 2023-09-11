@@ -104,7 +104,13 @@ class PTUCombatant extends Combatant {
         const paralyzed = actor.conditions.active.find(c => c.slug == "paralysis");
         if (paralyzed) await PTUCondition.HandleParalyzed(actor, paralyzed);
 
-        await this.update({ "flags.ptu.roundOfLastTurn": encounter.round });
+        if(this.isBoss) {
+            await this.bossTurns.mainTurn.update({ "flags.ptu.roundOfLastTurn": encounter.round });
+        }
+        else {
+            await this.update({ "flags.ptu.roundOfLastTurn": encounter.round });
+        }
+
         if (Object.keys(actorUpdates).length) {
             await actor.update(actorUpdates);
         }
@@ -122,7 +128,13 @@ class PTUCombatant extends Combatant {
             await condition.onTurnEnd?.({ token: this.token });
         }
 
-        await this.update({ "flags.ptu.roundOfLastTurnEnd": round });
+        if(this.isBoss) {
+            await this.bossTurns.mainTurn.update({ "flags.ptu.roundOfLastTurnEnd": round });
+        }
+        else {
+            await this.update({ "flags.ptu.roundOfLastTurnEnd": round });
+        }
+        
         Hooks.callAll("ptu.endTurn", this, encounter, game.user.id);
     }
 

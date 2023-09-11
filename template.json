@@ -545,7 +545,6 @@
         "turns": 1,
         "bars": 1
       },
-
       "training": {
         "agility": {
           "trained": false,
@@ -593,7 +592,8 @@
         "schema": {
           "version": null,
           "lastMigration": null
-        }
+        },
+        "referenceEffect": ""
       },
       "interactions": {
         "sheerForce": false,

@@ -187,7 +187,7 @@ class PTUCheck {
                 }
 
                 if (result === 1 && !isInfinity) return [false, "crit-miss"];
-                if (result > 20 - critModifier) {
+                if (result >= 20 - critModifier) {
                     // If target is immune to crit; return hit
                     if (target.options.has("target:immune:crit")) return [true, "blocked-crit"];
 

@@ -1,4 +1,4 @@
-<div class="dice-shadow d-flex">
+<div class="dice-shadow d-flex flex-column">
     {{#if item.system.effect}}
         <div class="item-to-chat effect">
             <span>{{item.system.effect}}</span>
@@ -8,7 +8,18 @@
             <span class="small">No effect was provided</span>
         </div>
     {{/if}}
+    {{#if referenceEffect}}
+        <div class="item-to-chat">
+            {{{referenceEffect}}}
+        </div>
+    {{/if}}
+    {{#if item.usable}}
+        <div class="d-flex justify-content-center align-items-center">
+            <button class="use">Use</button>
+        </div>
+    {{/if}}
 </div>
+
 {{#unless (is tags.length 0)}}
     <div class="dice-shadow">
         <div class="flavor-text footer">
