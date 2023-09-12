@@ -631,6 +631,14 @@
   border-left: 4px solid green;
   background-color: #00800065;
 }
+.dialog .dialog-content form.capture-success select[name="trainer"] {
+  background: var(--trainer-img);
+  background-repeat: no-repeat;
+  background-position: left;
+  background-size: contain;
+  padding-left: 40px;
+  height: 40px;
+}
 .ptu-settings-menu .type-grid {
   display: grid;
   grid-template-columns: repeat(var(--grid-columns), 40px);
@@ -933,6 +941,10 @@ a.content-link img {
 .chat-message.message .flavor-text.footer .buttons .damage {
   flex-basis: 50%;
 }
+.chat-message.message .flavor-text.footer .buttons .apply-capture {
+  flex-basis: 50%;
+  background: #fffff0;
+}
 .chat-message.message .flavor-text:has(.item-to-chat) {
   padding: 0.25rem;
 }
@@ -1184,6 +1196,7 @@ a.content-link img {
 }
 .chat-message.message .damage-taken .buttons {
   flex: 0 0 auto;
+  align-self: end;
   margin-left: auto;
 }
 .chat-message.message .damage-taken .buttons button {

@@ -1,4 +1,5 @@
 import { CheckModifier, PTUModifier, StatisticModifier } from "../../actor/modifiers.js";
+import { PTUPartySheet } from "../../apps/party/sheet.js";
 import { extractModifiers, extractRollSubstitutions } from "../../rules/helpers.js";
 import { PTUCheck } from "../../system/check/check.js";
 import { PTUItemItem } from "./document.js";
@@ -263,6 +264,26 @@ class PokeballItem extends PTUItemItem {
                         modifier: injuries * 5
                     }));
                 }
+
+                // Stage mods
+                // For each combat stage in a stat below 0 add +2 to the capture DC
+                // For each combat stage in a stat above 0 add -2 to the capture DC
+                for(const stat of Object.values(target.actor.system.stats)) {
+                    if(stat.stage?.total < 0) {
+                        DCModifiers.push(new PTUModifier({
+                            slug: stat.slug,
+                            label: `${stat.label} Stage Modifier`,
+                            modifier: Math.abs(Number(stat.stage.total)) * 2
+                        }));
+                    }
+                    else if (stat.stage?.total > 0) {
+                        DCModifiers.push(new PTUModifier({
+                            slug: stat.slug,
+                            label: `${stat.label} Stage Modifier`,
+                            modifier: Number(stat.stage.total) * -2
+                        }));
+                    }
+                }
             }
 
             DCModifiers.push(
@@ -360,11 +381,95 @@ class PokeballItem extends PTUItemItem {
 
     async rollCapture(event, args) {
         const target = await fromUuid(args[1]?.[0]?.token ?? "")?.object;
-        return this.action.capture({ event, target, callback: (...args) => this.handleCapture(args) });
+        return this.action.capture({ event, target, /*callback: (...args) => this.applyCapture(args)*/ });
     }
 
-    async handleCapture(args) {
-        console.log(args);
+    async applyCapture(args) {
+        const trainers = game.users.contents.map(c => c.character).filter(c => c?.type === "character");
+        // If the trainer is not in the list, add them to the front
+        if(!trainers.includes(this.actor)) trainers.unshift(this.actor);
+        // If the current trainer is in the list, add them to the front
+        else trainers.unshift(trainers.splice(trainers.indexOf(this.actor), 1)[0]);
+
+        const dialog = new Dialog({
+            title: game.i18n.localize("PTU.Dialog.CaptureSuccess.Title"),
+            content: await renderTemplate("systems/ptu/static/templates/apps/capture-success.hbs", {
+                trainers,
+                location: game.settings.get("ptu", "captureDefaultPartyState") || "party"
+            }),
+            buttons: {
+                submit: {
+                    icon: '<i class="fas fa-check"></i>',
+                    label: game.i18n.localize("PTU.Dialog.CaptureSuccess.Submit"),
+                    callback: async ($html, event) => {
+                        const formData = $html.find("select").map((_, select) => ({ name: select.name, value: select.value })).get().reduce((obj, { name, value }) => {
+                            obj[name] = value;
+                            return obj;
+                        }, {});
+                        
+                        const trainer = game.actors.get(formData.trainer);
+                        if(!trainer) return ui.notifications.error("PTU.Dialog.CaptureSuccess.TrainerNotFound", { localize: true });
+
+                        const party = new PTUPartySheet({actor: trainer});
+
+                        const location = formData.location;
+                        if(!["party", "box", "available"].includes(location)) return ui.notifications.error("PTU.Dialog.CaptureSuccess.LocationNotFound", { localize: true });
+
+                        const pokemon = await fromUuid(args.targets[0].actor);
+                        if(!pokemon) return ui.notifications.error("PTU.Dialog.CaptureSuccess.PokemonNotFound", { localize: true });
+
+                        const user = game.users.find(u => u.character?.id === trainer.id);
+
+                        const pokemonUpdateData = {
+                            "_id": pokemon.id,
+                            "ownership": {
+                                default: game.settings.get("ptu", "transferOwnershipDefaultValue") || CONST.DOCUMENT_OWNERSHIP_LEVELS.NONE,
+                                [user.id]: CONST.DOCUMENT_OWNERSHIP_LEVELS.OWNER
+                            },
+                            "system.pokeball": this.name
+                        }
+                        if(location !== "available") {
+                            pokemonUpdateData["flags.ptu.party"] = {
+                                trainer: trainer.id,
+                                boxed: location === "box",
+                            }
+                            pokemonUpdateData["folder"] = party.folders?.[location]?.id ?? trainer.folder.id;
+                        }
+                        else {
+                            pokemonUpdateData["folder"] = party.folders?.root?.id ?? trainer.folder.id;
+                        }
+
+                        const trainerUpdateData = {
+                            "_id": trainer.id,
+                            "system.dex": {
+                                "seen": trainer.system.dex.seen.filter(s => s !== pokemon.species.slug),
+                                "owned": [...trainer.system.dex.owned.filter(s => s !== pokemon.species.slug), pokemon.species.slug]
+                            }
+                        }
+
+                        await Actor.updateDocuments([pokemonUpdateData, trainerUpdateData]);
+                        await ChatMessage.create({
+                            content: `<span class="statements">${await TextEditor.enrichHTML(game.i18n.format("PTU.Dialog.CaptureSuccess.ChatMessage", { pokemon: pokemon.link, trainer: trainer.link, location: (party.folders?.[location === "available" ? "root" : location]?.link ?? location) }), {async: true})}</span>`,
+                            speaker: ChatMessage.getSpeaker({ actor: trainer }),
+                        })
+                    }
+                },
+                cancel: {
+                    icon: '<i class="fas fa-times"></i>',
+                    label: game.i18n.localize("PTU.Dialog.CaptureSuccess.Cancel"),
+                }
+            },
+            render: html => {
+                const trainerSelect = $(html).find("select[name='trainer']");
+                trainerSelect.on("change", (event) => {
+                    const styleValue = event.target.options[event.target.selectedIndex].dataset.style;
+                    event.target.style.setProperty('--trainer-img', styleValue);
+                });
+                trainerSelect.trigger("change");
+            },
+            default: "submit",
+        });
+        dialog.render(true);
     }
 }
 

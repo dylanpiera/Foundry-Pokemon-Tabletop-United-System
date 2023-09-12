@@ -51,6 +51,11 @@
                         </div>
                     {{/each}}
                 </div>
+                {{#if (isGm)}}
+                    <div class="buttons">
+                        <button class="button apply-capture" title="Apply Capture">Apply Capture</button>
+                    </div>
+                {{/if}}
             </div>
         {{/unless}}
     </div>

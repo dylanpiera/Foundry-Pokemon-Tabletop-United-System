@@ -678,6 +678,21 @@
     }
 }
 
+.dialog {
+    .dialog-content {
+        form.capture-success {
+            select[name="trainer"] {
+                background: var(--trainer-img);
+                background-repeat: no-repeat;
+                background-position: left;
+                background-size: contain;
+                padding-left: 40px;
+                height: 40px;
+            }
+        }
+    }
+}
+
 .ptu-settings-menu {
     .type-grid {
         display: grid;
@@ -1044,6 +1059,11 @@ a.content-link {
                 .damage {
                     flex-basis: 50%;
                 }
+
+                .apply-capture {
+                    flex-basis: 50%;
+                    background: rgb(255, 255, 240);
+                }
             }
         }
 
@@ -1321,6 +1341,7 @@ a.content-link {
 
         .buttons {
             flex: 0 0 auto;
+            align-self: end;
             button {
                 width: 22px;
                 height: 22px;

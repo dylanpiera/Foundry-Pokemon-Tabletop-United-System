@@ -114,6 +114,35 @@ export function registerSettings() {
         default: true
     });
 
+    game.settings.register("ptu", "transferOwnershipDefaultValue", {
+        name: "Transfer Ownership Preference",
+        hint: "After ownership of a mon is transfered, would you like for it to also set default permissions for other players?",
+        scope: "world",
+        config: true,
+        type: Number,
+        choices: {
+            [CONST.DOCUMENT_OWNERSHIP_LEVELS.NONE]: "None",
+            [CONST.DOCUMENT_OWNERSHIP_LEVELS.LIMITED]: "Limited",
+            [CONST.DOCUMENT_OWNERSHIP_LEVELS.OBSERVER]: "Observer",
+            [CONST.DOCUMENT_OWNERSHIP_LEVELS.OWNER]: "Owner"
+        },
+        default: CONST.DOCUMENT_OWNERSHIP_LEVELS.NONE,
+    })
+
+    game.settings.register("ptu", "captureDefaultPartyState", {
+        name: "Capture Default Party State",
+        hint: "When a pokemon is captured, should it be added to the party?",
+        scope: "world",
+        config: true,
+        type: String,
+        choices: {
+            "party": "Party",
+            "box": "Box",
+            "available": "Available"
+        },
+        default: "available"
+    });
+
     game.settings.register("ptu", "worldSystemVersion", {
         name: "World System Version",
         scope: "world",
@@ -354,22 +383,6 @@ export function registerSettings() {
     //     default: true
     // });
     //#endregion
-
-    // game.settings.register("ptu", "transferOwnershipDefaultValue", {
-    //     name: "Transfer Ownership Preference",
-    //     hint: "After ownership of a mon is transfered, would you like for it to also set default permissions for other players?",
-    //     scope: "world",
-    //     config: true,
-    //     type: Number,
-    //     choices: {
-    //         0: "None",
-    //         1: "Limited",
-    //         2: "Observer",
-    //         3: "Owner"
-    //     },
-    //     default: 0,
-    //     
-    // })
 
     // Move Master Settings
 

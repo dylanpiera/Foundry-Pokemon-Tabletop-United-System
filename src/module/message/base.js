@@ -212,6 +212,14 @@ class ChatMessagePTU extends ChatMessage {
 
             await item?.use();
         });
+        $html.find("button.apply-capture").on("click", async event => {
+            event.preventDefault();
+            event.stopPropagation();
+            const item = await fromUuid(this.flags.ptu.origin.uuid);
+            if (!item) return;
+
+            await item?.applyCapture(this.flags.ptu.context);
+        });
     }
 }
 

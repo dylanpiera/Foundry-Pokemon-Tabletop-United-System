@@ -38,6 +38,12 @@ const AutomationSettingsConfig = {
         hint: "PTU.Settings.Automation.FailAttackIfOutOfRange.Hint",
         type: Boolean,
         default: true
+    },
+    "failAttackIfNoTarget": {
+        name: "PTU.Settings.Automation.FailAttackIfNoTarget.Name",
+        hint: "PTU.Settings.Automation.FailAttackIfNoTarget.Hint",
+        type: Boolean,
+        default: false
     }
 }
 

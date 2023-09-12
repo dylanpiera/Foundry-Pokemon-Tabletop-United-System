@@ -28,6 +28,7 @@
     "DexEntrySeen": "Seen",
     "DexEntryOwned": "Owned",
     "Origin": "Origin",
+    "ReferenceEffect": "Linked Effect",
     "Prerequisites": "Prerequisites",
     "Tags": "Tags",
     "Frequency": "Frequency",
@@ -408,6 +409,7 @@
     "Genderless": "Genderless",
     "Male": "Male",
     "Female": "Female",
+    "BossBarTooltip": "The Reserve boss bars is intended to be the amount of Boss Turns - 1",
 
     "LevelUpForm": {
       "Stats": "Stats",
@@ -506,7 +508,8 @@
       "CaptureRoll": "Capture Roll",
       "CaptureNoTarget": "You need to target a Pokémon to capture",
       "CaptureWrongTarget": "You need to target a Pokémon to capture",
-      "Use": "Apply Effect" 
+      "Use": "Apply Effect",
+      "NoTarget": "You need to target an actor before using a move"
     },
 
     "Traits": {
@@ -602,7 +605,10 @@
       "TakesNoDamage": "<actor>{actor}</actor> takes no damage.",
       "TheTarget": "The target",
       "Revert": "Undo Damage",
-      "BossBarBroken": "<actor>{actor}</actor>'s boss bar is broken! ({bars} left)" 
+      "BossBarBroken": "<actor>{actor}</actor>'s Boss HP Bar is broken! ({bars} left)",
+      "MassiveDamageInjury": "<actor>{actor}</actor> gained 1 injury from taking Massive Damage.",
+      "HpThresholdInjury": "<actor>{actor}</actor> gained 1 injury from reaching {percentage}% HP.",
+      "BossHalfBarInjury": "<actor>{actor}</actor> gained 1 injury from having lost half of its Boss HP Bars!."
     },
     "InitiativeRoll": "{name}'s Initiative Roll",
     "SaveCheck": "{name}'s {save} Save",
@@ -746,6 +752,10 @@
         "FailAttackIfOutOfRange": {
           "Name": "Fail Attack if Out of Range",
           "Hint": "Automatically fail an attack if the target is out of range."
+        },
+        "FailAttackIfNoTarget": {
+          "Name": "Fail Attack if No Target",
+          "Hint": "Automatically fail an attack if no actor is targeted."
         }
       },
       "Generation": {
@@ -850,6 +860,29 @@
         "WasAt": "(was at {oldQuantity})"
       },
       "ApplyEffect": "<actor>{source}</actor> applied {effect} to <actor>{actor}</actor>"
+    },
+    "Dialog": {
+      "CaptureSuccess": {
+        "Title": "Capture Success",
+        "Hint": "To which trainer's party should the Pokemon be added?",
+        "Trainer": {
+          "Name": "Trainer",
+          "Hint": "The trainer to add the Pokemon to"
+        },
+        "PartyChoice": {
+          "Name": "Party Location",
+          "Hint": "Where in the Party should the Pokemon be added?",
+          "Party": "Party",
+          "Box": "Box",
+          "Available": "Available"
+        },
+        "Submit": "Submit",
+        "Cancel": "Cancel",
+        "TrainerNotFound": "An invalid trainer was selected, please try again.",
+        "LocationNotFound": "An invalid location was selected, please try again.",
+        "PokemonNotFound": "Unable to find the Pokemon, did you delete it?",
+        "ChatMessage": "{trainer} Caught {pokemon}! They have been added to {location}."
+      }
     }
   },
 

@@ -167,6 +167,12 @@ export class PTUPokemonSheet extends PTUActorSheet {
 			position: 'top'
 		});
 
+		$(html).find('input[name="system.boss.bars"]').tooltipster({
+			theme: `tooltipster-shadow ball-themes ${this.ballStyle}`,
+			position: 'bottom',
+			content: game.i18n.localize("PTU.BossBarTooltip")
+		});
+
 		$(html).find('.species.linked-item').each(async (i, element) => {
 			await CONFIG.PTU.util.Enricher.enrichContentLinks(element);
 		});

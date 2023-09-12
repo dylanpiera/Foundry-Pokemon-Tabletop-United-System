@@ -60,7 +60,7 @@ class PTUActor extends Actor {
     }
 
     get types() {
-        return this.synthetics.typeOverride.typing 
+        return this.synthetics.typeOverride.typing
             || this.system.typing
             || (this.system.modifiers.typeOverwrite
                 ? Array.isArray(this.system.modifiers.typeOverwrite)
@@ -104,7 +104,7 @@ class PTUActor extends Actor {
             delete effectiveness["Shadow"];
         }
         else {
-            if(effectiveness["Shadow"] > 2) effectiveness["Shadow"] = 2;
+            if (effectiveness["Shadow"] > 2) effectiveness["Shadow"] = 2;
         }
 
         const effectivenessMod = this.system.modifiers?.resistanceSteps?.total ?? 0;
@@ -201,7 +201,7 @@ class PTUActor extends Actor {
             const thisTokenIsControlled = canvas.tokens.controlled.some(
                 t => t.document === this.parent || (t.document.actorLink && t.actor === this)
             )
-            if(game.user.character === this || thisTokenIsControlled) {
+            if (game.user.character === this || thisTokenIsControlled) {
                 game.ptu.tokenPanel.refresh();
             }
         }
@@ -228,7 +228,7 @@ class PTUActor extends Actor {
         this.prepareSynthetics();
 
         // Extra Rolloptions
-        if(!this.types.includes("Untyped")) delete this.flags.ptu.rollOptions.all["self:types:untyped"]
+        if (!this.types.includes("Untyped")) delete this.flags.ptu.rollOptions.all["self:types:untyped"]
         for (const type of this.types) {
             this.flags.ptu.rollOptions.all["self:types:" + type.toLowerCase()] = true;
         }
@@ -246,7 +246,7 @@ class PTUActor extends Actor {
     prepareEmbeddedDocuments() {
         super.prepareEmbeddedDocuments();
 
-        for(const effect of [this.itemTypes.effect, this.itemTypes.condition].flat()) {
+        for (const effect of [this.itemTypes.effect, this.itemTypes.condition].flat()) {
             game.ptu.effectTracker.register(effect);
         }
 
@@ -336,16 +336,16 @@ class PTUActor extends Actor {
 
     /** @override */
     static async updateDocuments(updates, context) {
-        for(const changed of updates) {
-            await processPreUpdateActorHooks(changed, {pack: context.pack ?? null})
+        for (const changed of updates) {
+            await processPreUpdateActorHooks(changed, { pack: context.pack ?? null })
         }
 
-        return super.updateDocuments(updates, context); 
+        return super.updateDocuments(updates, context);
     }
 
     /** @override */
     async _preUpdate(changed, options, user) {
-        if(changed?.system?.spirit?.value !== undefined) {
+        if (changed?.system?.spirit?.value !== undefined) {
             changed.system.spirit.value = Math.clamped(
                 changed.system.spirit.value,
                 this.system.spirit.min ?? this.system.spirit.min,
@@ -441,7 +441,7 @@ class PTUActor extends Actor {
                 : { finalDamage: Math.max((currentDamage - damageAbsorbedByDefense - damageAbsorbedByReduction), 1), additionalApplications: [] }
             : skipIWR || flatDamage
                 ? { finalDamage: currentDamage, additionalApplications: [] }
-                : this.applyIWR({ actor: this, damage: {...damage, reduced: currentDamage - damageAbsorbedByDefense - damageAbsorbedByReduction}, item, effectiveness, rollOptions });
+                : this.applyIWR({ actor: this, damage: { ...damage, reduced: currentDamage - damageAbsorbedByDefense - damageAbsorbedByReduction }, item, effectiveness, rollOptions });
 
         applications.push(...additionalApplications);
 
@@ -450,13 +450,58 @@ class PTUActor extends Actor {
 
         const preUpdateSource = this.toObject();
 
+        const { injuries, injuryStatements } = (() => {
+            let injuries = 0;
+            const injuryStatements = [];
+
+            const { health } = this.system;
+            // If damage is more than 50% of total health
+            if (hpDamage >= Math.floor(health.total / 2)) {
+                injuries++;
+                injuryStatements.push(game.i18n.format("PTU.ApplyDamage.MassiveDamageInjury", { actor: this.link }));
+            }
+
+            if (this.system.boss?.is) {
+                if(hpUpdate.updates["system.health.value"] <= 0) {
+                    const { bars, turns } = this.system.boss;
+                    const halfBars = Math.floor(turns/2);
+                    if(bars >= halfBars && (bars-1) < halfBars) {
+                        injuries++;
+                        injuryStatements.push(game.i18n.format("PTU.ApplyDamage.BossHalfBarInjury", { actor: this.link }));
+                    }
+                }
+            }
+            else {
+                // Every time a mon reaches a health threshhold, which is at 50%, 0%, -50%, -100%, etc.
+                // one Injury should be added to the count.
+                const currentPercentage = Math.floor((health.value / health.total) * 100);
+                const newPercentage = Math.floor(((health.value - hpDamage) / health.total) * 100);
+
+                for (let i = 50; true; i -= 50) {
+                    if (i > currentPercentage) continue;
+
+                    if (currentPercentage > i && i >= newPercentage) {
+                        injuries++;
+                        injuryStatements.push(game.i18n.format("PTU.ApplyDamage.HpThresholdInjury", { actor: this.link, percentage: i }));
+                    }
+                    else break;
+                }
+            }
+            return { injuries, injuryStatements }
+        })();
+
+        // If injuries should be applied, add them to hpUpdates
+        if(injuries > 0) {
+            hpUpdate.updates["system.health.injuries"] = (isNaN(Number(preUpdateSource.system.health.injuries)) ? 0 : Number(preUpdateSource.system.health.injuries)) + injuries;
+        }
+
         let bossStatement = null;
         // Do updates
         if (hpDamage !== 0 || hpUpdate.tempHpIncreased !== 0) {
-            if(this.system.boss?.is && hpUpdate.updates["system.health.value"] <= 0) {
-                const {bars} = this.system.boss;
+            if (this.system.boss?.is && hpUpdate.updates["system.health.value"] <= 0) {
+                const { bars } = this.system.boss;
 
-                if(bars > 0) {
+                if (bars > 0) {
                     const newBars = Math.max(bars - 1, 0);
                     hpUpdate.updates["system.boss.bars"] = newBars;
                     hpUpdate.updates["system.health.value"] = this.system.health.max;
@@ -484,8 +529,8 @@ class PTUActor extends Actor {
             ? game.i18n.format("PTU.ApplyDamage.GainedTempHp", { actor: this.link, hpDamage: hpUpdate.tempHpIncreased })
             : null;
 
-        const statements = [hpStatement, tempHpStatement, bossStatement].filter(s => s).join("<br>");
-        const enrichedHtml = await TextEditor.enrichHTML(statements, {async: true})
+        const statements = [hpStatement, tempHpStatement, bossStatement, ...injuryStatements].filter(s => s).join("<br>");
+        const enrichedHtml = await TextEditor.enrichHTML(statements, { async: true })
         const canUndoDamage = !!hpDamage
 
         const content = await renderTemplate("systems/ptu/static/templates/chat/damage/damage-taken.hbs", {
@@ -762,7 +807,7 @@ class PTUActor extends Actor {
 
     /** @override */
     _onDelete(options, userId) {
-        for(const effect of [this.itemTypes.effect, this.itemTypes.condition].flat()) {
+        for (const effect of [this.itemTypes.effect, this.itemTypes.condition].flat()) {
             game.ptu.effectTracker.unregister(effect);
         }
         super._onDelete(options, userId);
@@ -901,7 +946,7 @@ class PTUActor extends Actor {
 
             moves.push(clone);
         }
-        this.flags.ptu.disabledOptions.sort((a,b) => b.sort - a.sort);
+        this.flags.ptu.disabledOptions.sort((a, b) => b.sort - a.sort);
 
         return new Collection(
             [...moves, ...struggles]
@@ -962,6 +1007,10 @@ class PTUActor extends Actor {
             params.options ??= [];
 
             const targets = params.targets ?? [...game.user.targets];
+            if (game.settings.get("ptu", "automation.failAttackIfNoTarget") && targets.length == 0) {
+                ui.notifications.warn("PTU.Action.NoTarget", { localize: true });
+                return null;
+            }
             const contexts = []
 
             const getContext = async (target) => {
@@ -999,28 +1048,28 @@ class PTUActor extends Actor {
 
             const conditionOptions = this.getFilteredRollOptions("condition");
             let isConfused = false;
-            for(const condition of conditionOptions) {
-                if(condition === "condition:frozen") {
+            for (const condition of conditionOptions) {
+                if (condition === "condition:frozen") {
                     ui.notifications.warn("PTU.Action.MoveWhileFrozen", { localize: true });
                     return null;
                 }
-                if(condition === "condition:sleep") {
+                if (condition === "condition:sleep") {
                     ui.notifications.warn("PTU.Action.MoveWhileSleeping", { localize: true });
                     return null;
                 }
-                if(condition === "condition:rage" && selectors.includes("status-attack")) {
+                if (condition === "condition:rage" && selectors.includes("status-attack")) {
                     ui.notifications.warn("PTU.Action.StatusAttackWhileRaging", { localize: true });
                     return null;
                 }
-                if(condition === "condition:disabled" && rollOptions.includes(`condition:disabled:${move.slug}`)) {
+                if (condition === "condition:disabled" && rollOptions.includes(`condition:disabled:${move.slug}`)) {
                     ui.notifications.warn("PTU.Action.DisabledMove", { localize: true });
                     return null;
                 }
-                if(condition === "condition:suppressed" && !selectors.includes(`at-will-attack`)) {
+                if (condition === "condition:suppressed" && !selectors.includes(`at-will-attack`)) {
                     ui.notifications.warn("PTU.Action.SuppressedMove", { localize: true });
                     return null;
                 }
-                if(condition === "condition:confused") {
+                if (condition === "condition:confused") {
                     isConfused = true;
                 }
             }
@@ -1056,7 +1105,7 @@ class PTUActor extends Actor {
             if (params.getFormula) context.skipDialog = true;
 
             modifiers.push(
-                ...extractModifiers(this.synthetics, selectors, { injectables: move, test: context.options})
+                ...extractModifiers(this.synthetics, selectors, { injectables: move, test: context.options })
             )
 
             for (const rule of this.rules.filter(r => !r.ignored)) {
@@ -1078,7 +1127,7 @@ class PTUActor extends Actor {
                 params.callback
             );
 
-            if(isConfused) await PTUCondition.HandleConfusion(move, this);
+            if (isConfused) await PTUCondition.HandleConfusion(move, this);
 
             for (const context of contexts) {
                 for (const rule of this.rules.filter(r => !r.ignored))
@@ -1175,7 +1224,7 @@ class PTUActor extends Actor {
 
             if (!category) return null;
 
-            if(context.options.has("target:condition:vulnerable")) {
+            if (context.options.has("target:condition:vulnerable")) {
                 return {
                     slug: "vulnerable",
                     value: 0,
@@ -1420,7 +1469,7 @@ class PTUActor extends Actor {
         )
         if (isDamage && token) {
             const damage = isDelta ? -1 * value : hitPoints.value - value;
-            return this.applyDamage({ damage, token, skipIWR: true});
+            return this.applyDamage({ damage, token, skipIWR: true });
         }
         return super.modifyTokenAttribute(attribute, value, isDelta, isBar);
 
