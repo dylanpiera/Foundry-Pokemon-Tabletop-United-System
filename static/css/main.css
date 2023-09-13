@@ -110,6 +110,14 @@
   overflow-y: hidden;
   overflow-x: auto;
 }
+.token-panel .main-panel .movement {
+  display: flex;
+  flex-direction: column;
+  color: whitesmoke;
+}
+.token-panel .main-panel .movement .movementcard {
+  padding: 5px;
+}
 .token-panel .main-panel .name-tag,
 .token-panel .main-panel .header-toggle {
   writing-mode: vertical-rl;

@@ -256,9 +256,13 @@
                 <div class="divider"></div>
             {{/if}}
             {{#if show.movement}}
-                {{#each movement as |move|}}
-                    <i class="{{move.icon}}" title="{{move.name}}"></i> {{move.value}}
-                {{/each}}
+                <div class="movement">
+                    {{#each movement as |move|}}
+                        <div class="movementcard">
+                            <i class="{{move.icon}}" title="{{move.name}}"></i> {{move.value}}
+                        </div>
+                    {{/each}}
+                </div>
                 <div class="divider"></div>
             {{/if}}
         </div>
@@ -281,7 +285,7 @@
                     <i class="fas fa-backpack" title="Items"></i>
                 </div>
             {{/if}}
-            <div class="action {{# is show.movement}}active{{else}}inactive{{/if}}" data-target="movement">
+            <div class="action {{#if show.movement}}active{{else}}inactive{{/if}}" data-target="movement">
                 <i class="fas fa-walking" title="Movement"></i>
             </div>
         </div>
