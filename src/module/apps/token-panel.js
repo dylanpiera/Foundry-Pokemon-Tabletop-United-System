@@ -83,6 +83,18 @@ export class TokenPanel extends Application {
             })
         }
 
+        let movement = [];
+        movement.push(
+            {name: "Overland", value: actor.system.capabilities?.overland ?? 0, icon: "fas fa-shoe-prints"},
+            {name: "Swim", value: actor.system.capabilities?.swim ?? 0, icon: "fas fa-swimmer"},
+            {name: "Burrow", value: actor.system.capabilities?.burrow ?? 0, icon: "fas fa-mountain"},
+            {name: "Levitate", value: actor.system.capabilities?.levitate ?? 0, icon: "fas fa-feather"},
+            {name: "Sky", value: actor.system.capabilities?.sky ?? 0, icon: "fab fa-fly"},
+            {name: "Teleporter", value: actor.system.capabilities?.teleporter ?? 0, icon: "fas fa-people-arrows"}
+        );
+
+        movement = movement.filter(item => item.value !== 0);
+
         let heldItem = null;
         if(this.actor.system.heldItem && this.actor.system.heldItem != "None") {
             const item = await game.ptu.item.get(this.actor.system.heldItem, "item");
@@ -107,7 +119,8 @@ export class TokenPanel extends Application {
             effects: actor.itemTypes.effect || [],
             feats,
             abilities,
-            heldItem
+            heldItem,
+            movement
         }
     }
 

@@ -57,8 +57,13 @@
         </div>
         <div class="avatar">
             <img src="{{actor.img}}" alt="{{actor.name}}">
-            <div class="action-bar">
-                <div class="action">
+            <div class="action-bar movement">
+                {{#each movement as |move|}}
+                    <div class="movement-card">
+                        <i class="{{move.icon}}" title="{{move.name}}"></i> {{move.value}}
+                    </div>
+                {{/each}}
+                {{!-- <div class="action">
                     <i class="fas fa-play" title="Standard Action"></i>
                 </div>
                 <div class="action">
@@ -66,7 +71,7 @@
                 </div>
                 <div class="action">
                     <i class="fas fa-asterisk" title="Swift Action"></i>
-                </div>
+                </div> --}}
             </div>
         </div>
         {{#if (and (not actor.type "character") heldItem)}}

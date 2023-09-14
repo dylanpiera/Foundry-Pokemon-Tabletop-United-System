@@ -94,9 +94,6 @@
   border-radius: 5px 0 0 5px;
   overflow: hidden;
 }
-.token-panel .main-panel .action-bar {
-  display: none !important;
-}
 .token-panel .main-panel .items-body {
   min-width: 182px;
   max-height: 150px;
@@ -168,6 +165,17 @@
   border: 1px solid #222224aa;
   background: #222224aa;
   color: #ffffffcd;
+}
+.token-panel .main-panel .avatar .action-bar .movement-card {
+  border: 1px solid #222224aa;
+  background: #222224aa;
+  color: #ffffffcd;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  width: 40px;
+  height: 25px;
+  margin: 3px 0;
 }
 .token-panel .main-panel .misc-menu {
   display: flex;
