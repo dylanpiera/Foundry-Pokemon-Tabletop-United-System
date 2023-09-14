@@ -46,6 +46,7 @@ class PTUSkills {
             const selectors = [...baseDomains];
             if (skill) {
                 selectors.push('skill-check');
+                selectors.push(`skill-${skill}`);
             }
             return selectors;
         })();

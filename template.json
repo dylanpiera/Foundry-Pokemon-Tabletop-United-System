@@ -99,7 +99,8 @@
               "mod": 0,
               "keys": []
             }
-          }
+          },
+          "capabilities": {}
         }
       },
       "skills": {

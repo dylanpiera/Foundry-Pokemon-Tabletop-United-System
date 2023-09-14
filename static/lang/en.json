@@ -83,6 +83,7 @@
   "SPECIES.HighJump": "High Jump",
   "SPECIES.LongJump": "Long Jump",
   "SPECIES.Power": "Power",
+  "SPECIES.Teleporter": "Teleporter",
   "SPECIES.Naturewalk": "Naturewalk",
   "SPECIES.Other": "Other Capabilities",
   "SPECIES.AbilitiesBasic": "Basic Abilities",
@@ -487,6 +488,7 @@
       "MoveWhileSleeping": "You can't use moves while sleeping",
       "StatusAttackWhileRaging": "You cannot use a Status Move while Raging",
       "DisabledMove": "This move is disabled",
+      "CannotAttack": "You cannot attack",
       "SuppressedMove": "While suppressed you can only use at-will moves",
       "ConfusionFail": "{name} hurt itself in its confusion! and takes {damage} damage.",
       "Paralyzed": {
@@ -899,6 +901,7 @@
   "burrow": "Burrow",
   "highJump": "High Jump",
   "longJump": "Long Jump",
+  "teleporter": "Teleporter",
   "power": "Power",
   "naturewalk": "Naturewalk",
   "weightClass": "Weight Class",

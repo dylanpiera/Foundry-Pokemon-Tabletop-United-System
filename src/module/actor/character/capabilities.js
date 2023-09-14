@@ -1,4 +1,4 @@
-function calculateTrainerCapabilities(trainerSkills, items, speedCombatStages, isSlowed = false) {
+function calculateTrainerCapabilities(trainerSkills, items, speedCombatStages, modifiers, isSlowed = false) {
     let mods = {
         "Traveler": false,
         "Deep Diver": false,
@@ -49,19 +49,6 @@ function calculateTrainerCapabilities(trainerSkills, items, speedCombatStages, i
         /* Edges */
         if (item.name == "Traveler" && item.type == "edge") {
             mods["Traveler"] = true;
-            continue;
-        }
-        if (item.name == "Acrobat" && item.type == "edge") {
-            mods["High Jump"] += 1;
-            mods["Long Jump"] += 1;
-            continue;
-        }
-        if (item.name == "Swimmer" && item.type == "edge") {
-            mods["Swim"] += 2;
-            continue;
-        }
-        if (item.name == "Power Boost" && item.type == "edge") {
-            mods["Power"] += 2;
             continue;
         }
 
@@ -121,6 +108,13 @@ function calculateTrainerCapabilities(trainerSkills, items, speedCombatStages, i
     }
 
     capabilities["swim"] = (mods["Deep Diver"] ? capabilities["overland"] : Math.trunc(capabilities["overland"] / 2)) + mods["Swim"]
+
+    for(const key of Object.keys(capabilities)) {
+        capabilities[key] = Math.max(1, capabilities[key] + (modifiers[key] ?? 0));
+    }
+    for(const key of Object.keys(modifiers)) {
+        if(capabilities[key] === undefined) capabilities[key] = modifiers[key];
+    }
 
     return capabilities;
 }

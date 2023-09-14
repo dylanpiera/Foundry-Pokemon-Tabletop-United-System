@@ -162,7 +162,7 @@ class PTUCondition extends BaseEffectPTU {
                 check: { type: "save-check", domains: ["save-check"], modifiers: saveModifiers },
                 dc: { modifiers: dcModifiers, domains: ["save-dc"] },
                 domains: []
-            });
+            }, {extraRollOptions: ["condition:save:"+this.slug]});
 
             const target = this.actor.getActiveTokens().shift();
             const targets = target ? [{

@@ -8,14 +8,17 @@ class PTUTokenDocument extends TokenDocument {
         super.prepareDerivedData();
         if(!(this.actor && this.scene)) return;
 
+        let changedScale = false;
+
         const { tokenOverrides } = this.actor.synthetics;
         this.name = tokenOverrides.name || this.name;
         
         if(tokenOverrides.texture) {
-            this.texture.src = tokenOverrides.texture.src;
+            this.texture.src = tokenOverrides.texture.src || this.texture.src;
             if("scaleX" in tokenOverrides.texture) {
                 this.texture.scaleX = tokenOverrides.texture.scaleX;
                 this.texture.scaleY = tokenOverrides.texture.scaleY;
+                changedScale = true;
             }
             this.texture.tint = tokenOverrides.texture.tint || this.texture.tint;
         }
@@ -26,10 +29,10 @@ class PTUTokenDocument extends TokenDocument {
             this.light = new foundry.data.LightData(tokenOverrides.light, {parent: this});
         }
 
-        PTUTokenDocument.prepareSize(this, this.actor);
+        PTUTokenDocument.prepareSize(this, this.actor, changedScale);
     }
 
-    static prepareSize(tokenDocument, actor) {
+    static prepareSize(tokenDocument, actor, overriden = false) {
         const {width, height} = ((sizeClass) => {;
             switch (sizeClass) {
                 case "Small": return { width: 1, height: 1 };
@@ -45,7 +48,7 @@ class PTUTokenDocument extends TokenDocument {
         tokenDocument.height = height;
 
         //TODO: Add setting
-        if(true && tokenDocument.flags?.ptu?.autoscale !== false) {
+        if(true && !overriden && tokenDocument.flags?.ptu?.autoscale !== false) {
             const absoluteScale = actor.sizeClass === "Small" ? 0.6 : 1;
             const mirrorX = tokenDocument.texture.scaleX < 0 ? -1 : 1;
             const mirrorY = tokenDocument.texture.scaleY < 0 ? -1 : 1;

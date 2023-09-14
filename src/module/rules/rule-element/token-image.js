@@ -28,11 +28,13 @@ export class TokenImageRuleElement extends RuleElementPTU {
     afterPrepareData() {
         let src = this.value;
         if (!this.#srcIsValid(src)) src = this.resolveValue(this.value);
-        if (!this.#srcIsValid(src)) return this.failValidation("Missing or invalid value field");
 
         if (!this.test()) return;
 
-        const texture = { src };
+        const texture = {};
+        if (this.#srcIsValid(src)) {
+            texture.src = src;
+        }
         if (this.scale) {
             texture.scaleX = this.scale;
             texture.scaleY = this.scale;
@@ -51,7 +53,7 @@ export class TokenImageRuleElement extends RuleElementPTU {
 
     #srcIsValid(src) {
         if (typeof src !== "string") return false;
-        const extension = /(?<=\.)[a-z0-9]{3,4}$/i.exec(src)?.at(0);
+        const extension = /(?<=\.)([a-z0-9]{3,4})(\?[a-zA-Z0-9]+)?$/i.exec(src)?.at(1);
         return !!extension && (extension in CONST.IMAGE_FILE_EXTENSIONS || extension in CONST.VIDEO_FILE_EXTENSIONS);
     }
 }

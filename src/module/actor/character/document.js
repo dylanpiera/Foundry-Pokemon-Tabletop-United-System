@@ -63,7 +63,7 @@ class PTUTrainerActor extends PTUActor {
         // Prepare data with Mods
         for (let [key, mod] of Object.entries(system.modifiers)) {
             // Skip these modifiers
-            if (["hardened", "flinch_count", "immuneToEffectDamage", "typeOverwrite"].includes(key)) continue;
+            if (["hardened", "flinch_count", "immuneToEffectDamage", "typeOverwrite", "capabilities"].includes(key)) continue;
 
             // If the modifier is an object, it has subkeys that need to be calculated
             if (mod[Object.keys(mod)[0]]?.value !== undefined) {
@@ -138,7 +138,7 @@ class PTUTrainerActor extends PTUActor {
         system.health.tick = Math.floor(system.health.total / 10);
 
         system.evasion = calculateEvasions(system, this.flags?.ptu, this.items);
-        system.capabilities = calculateTrainerCapabilities(system.skills, this.items, (system.stats.spd.stage.value + system.stats.spd.stage.mod), this.rollOptions.conditions?.["slowed"]);
+        system.capabilities = calculateTrainerCapabilities(system.skills, this.items, (system.stats.spd.stage.value + system.stats.spd.stage.mod), system.modifiers.capabilities, this.rollOptions.conditions?.["slowed"]);
 
         system.feats = {
             total: this.items.filter(x => x.type == "feat" && !x.system.free).length,

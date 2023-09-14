@@ -459,7 +459,7 @@ class PTUPartySheet extends FormApplication {
         };
 
         const filename = ["fvtt", "ptuParty", this.trainer.name?.slugify(), randomID()].filterJoin("-");
-        saveDataTolocaFile(JSON.stringify(data, null, 2), "text/json", `${filename}.json`);
+        saveDataToFile(JSON.stringify(data, null, 2), "text/json", `${filename}.json`);
     }
 
     static async importParty() {

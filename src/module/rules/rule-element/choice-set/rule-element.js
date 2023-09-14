@@ -135,7 +135,7 @@ class ChoiceSetRuleElement extends RuleElementPTU {
 
     async inflateChoices() {
         const choices = Array.isArray(this.choices)
-            ? this.choices
+            ? this.choices.map(c => ({...c, value: this.resolveInjectedProperties(c.value)})).filter(c => c.value !== 'undefined')
             : typeof this.choices === "string"
             ? this.#choicesFromPath(this.choices)
             : [];

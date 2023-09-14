@@ -277,6 +277,8 @@ class RuleElementPTU extends foundry.abstract.DataModel {
             return value;
         }
         if(typeof value === "string") {
+            value = value.trim();
+            if(value.indexOf("{") === 0 && value.lastIndexOf("}") === value.length - 1) return this.resolveInjectedProperties(value);
             value = this.resolveInjectedProperties(value);
         }
 

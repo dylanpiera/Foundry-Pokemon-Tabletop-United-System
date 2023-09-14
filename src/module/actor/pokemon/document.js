@@ -155,7 +155,7 @@ class PTUPokemonActor extends PTUActor {
         // Prepare data with Mods
         for (let [key, mod] of Object.entries(system.modifiers)) {
             // Skip these modifiers
-            if (["hardened", "flinch_count", "immuneToEffectDamage", "typeOverwrite"].includes(key)) continue;
+            if (["hardened", "flinch_count", "immuneToEffectDamage", "typeOverwrite", "tp", "capabilities"].includes(key)) continue;
 
             // If the modifier is an object, it has subkeys that need to be calculated
             if (mod[Object.keys(mod)[0]]?.value !== undefined) {
@@ -242,7 +242,7 @@ class PTUPokemonActor extends PTUActor {
         }
         Hooks.call("updateInitiative", this);
 
-        system.tp.max = (system.level.current > 0 ? Math.floor(system.level.current / 5) : 0) + 1;
+        system.tp.max = (system.level.current > 0 ? Math.floor(system.level.current / 5) : 0) + 1 + (system.modifiers.tp ?? 0);
         system.tp.pep.value = this.items.filter(x => x.type == "pokeedge" && x.system.origin?.toLowerCase() != "pusher").length;
         system.tp.pep.max = system.level.current > 0 ? Math.floor(system.level.current / 10) + 1 : 1;
 
@@ -356,7 +356,12 @@ class PTUPokemonActor extends PTUActor {
             if (capabilities[key] > 0) {
                 capabilities[key] = Math.max(capabilities[key] + spdCsChanges + capabilityMod, capabilities[key] > 1 ? 2 : 1)
                 if (this.rollOptions.conditions?.["slowed"]) capabilities[key] = Math.max(1, Math.floor(capabilities[key] * 0.5));
+                capabilities[key] = Math.max(1, capabilities[key] + (this.system.modifiers.capabilities?.[key] ?? 0));
             }
+        }
+
+        for(const key of Object.keys(this.system.modifiers.capabilities)) {
+            if(capabilities[key] === undefined) capabilities[key] = this.system.modifiers.capabilities[key];
         }
 
         return capabilities;

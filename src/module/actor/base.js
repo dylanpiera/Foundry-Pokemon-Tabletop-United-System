@@ -193,6 +193,8 @@ class PTUActor extends Actor {
 
         this.prepareDerivedData();
 
+        this.initiative = new ActorInitiative(this);
+
         // Set origins
         this._setDefaultChanges();
 
@@ -238,8 +240,6 @@ class PTUActor extends Actor {
         }
 
         this.system.spirit.weary = this.system.spirit.value >= 0 ? 0 : Math.abs(this.system.spirit.value);
-
-        this.initiative = new ActorInitiative(this);
     }
 
     /** @override */
@@ -1044,6 +1044,11 @@ class PTUActor extends Actor {
                         return null;
                     }
                 }
+            }
+
+            if(rollOptions.includes("condition:cannot-attack")) {
+                ui.notifications.warn("PTU.Action.CannotAttack", { localize: true });
+                return null;
             }
 
             const conditionOptions = this.getFilteredRollOptions("condition");
