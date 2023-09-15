@@ -42,20 +42,20 @@
             "value": 0,
             "mod": 0
           },
-          "critRange" : {
+          "critRange": {
             "value": 0,
             "mod": 0
           },
-          "evasion" : {
-            "physical" : {
+          "evasion": {
+            "physical": {
               "value": 0,
               "mod": 0
             },
-            "special" : {
+            "special": {
               "value": 0,
               "mod": 0
             },
-            "speed" : {
+            "speed": {
               "value": 0,
               "mod": 0
             }
@@ -99,7 +99,8 @@
               "mod": 0,
               "keys": []
             }
-          }
+          },
+          "capabilities": {}
         }
       },
       "skills": {
@@ -235,7 +236,7 @@
               "mod": 0
             },
             "type": "spirit"
-          }, 
+          },
           "guile": {
             "value": {
               "value": 2,
@@ -314,53 +315,135 @@
         "stats": {
           "hp": {
             "value": 10,
-            "mod": {"value": 0, "mod": 0},
+            "mod": { "value": 0, "mod": 0 },
             "levelUp": 0,
             "label": "Hit Points"
           },
           "atk": {
             "value": 5,
-            "mod": {"value": 0, "mod": 0},
-            "stage": {"value": 0, "mod": 0},
+            "mod": { "value": 0, "mod": 0 },
+            "stage": { "value": 0, "mod": 0 },
             "levelUp": 0,
             "label": "Attack"
           },
           "def": {
             "value": 5,
-            "mod": {"value": 0, "mod": 0},
-            "stage": {"value": 0, "mod": 0},
+            "mod": { "value": 0, "mod": 0 },
+            "stage": { "value": 0, "mod": 0 },
             "levelUp": 0,
             "label": "Defense"
           },
           "spatk": {
             "value": 5,
-            "mod": {"value": 0, "mod": 0},
-            "stage": {"value": 0, "mod": 0},
+            "mod": { "value": 0, "mod": 0 },
+            "stage": { "value": 0, "mod": 0 },
             "levelUp": 0,
             "label": "Special Attack"
           },
           "spdef": {
             "value": 5,
-            "mod": {"value": 0, "mod": 0},
-            "stage": {"value": 0, "mod": 0},
+            "mod": { "value": 0, "mod": 0 },
+            "stage": { "value": 0, "mod": 0 },
             "levelUp": 0,
             "label": "Special Defense"
           },
           "spd": {
             "value": 5,
-            "mod": {"value": 0, "mod": 0},
-            "stage": {"value": 0, "mod": 0},
+            "mod": { "value": 0, "mod": 0 },
+            "stage": { "value": 0, "mod": 0 },
             "levelUp": 0,
             "label": "Speed"
           }
         }
       },
       "shared": {
+        "contests": {
+          "voltage": {
+            "value": 0,
+            "max": 5
+          },
+          "appeal": {
+            "value": 0,
+            "mod": 0
+          },
+          "type": "cool",
+          "stats": {
+            "cool": {
+              "dice": 0,
+              "stats": {
+                "value": 0,
+                "mod": 0
+              },
+              "poffins": {
+                "value": 0,
+                "mod": 0
+              },
+              "reserves": 0
+            },
+            "tough": {
+              "dice": 0,
+              "stats": {
+                "value": 0,
+                "mod": 0
+              },
+              "poffins": {
+                "value": 0,
+                "mod": 0
+              },
+              "reserves": 0
+            },
+            "beauty": {
+              "dice": 0,
+              "stats": {
+                "value": 0,
+                "mod": 0
+              },
+              "poffins": {
+                "value": 0,
+                "mod": 0
+              },
+              "reserves": 0
+            },
+            "smart": {
+              "dice": 0,
+              "stats": {
+                "value": 0,
+                "mod": 0
+              },
+              "poffins": {
+                "value": 0,
+                "mod": 0
+              },
+              "reserves": 0
+            },
+            "cute": {
+              "dice": 0,
+              "stats": {
+                "value": 0,
+                "mod": 0
+              },
+              "poffins": {
+                "value": 0,
+                "mod": 0
+              },
+              "reserves": 0
+            }
+          }
+        },
         "foodBuff": "",
         "notes": "",
         "tempHp": {
           "value": null,
           "max": null
+        },
+        "spirit": {
+          "min": -3,
+          "value": 0,
+          "max": 3
+        },
+        "schema": {
+          "version": null,
+          "lastMigration": null
         }
       }
     },
@@ -407,10 +490,15 @@
         },
         "novice": "",
         "adept": ""
+      },
+
+      "dex": {
+        "seen": [],
+        "owned": []
       }
     },
     "pokemon": {
-      "templates": ["stats", "skills", "modifiers","shared"],
+      "templates": ["stats", "skills", "modifiers", "shared"],
 
       "species": "",
       "nickname": "",
@@ -421,11 +509,11 @@
 
       "tp": {
         "value": 0,
-        "pep" : {}
+        "pep": {}
       },
 
       "heldItem": "None",
-           
+
       "level": {
         "exp": 40
       },
@@ -451,12 +539,13 @@
       "owner": "0",
       "shiny": false,
       "loyalty": 3,
+      "friendship": 2,
       "pokeball": "",
       "boss": {
         "is": false,
-        "turns": 1
+        "turns": 1,
+        "bars": 1
       },
-
       "training": {
         "agility": {
           "trained": false,
@@ -478,14 +567,34 @@
     }
   },
   "Item": {
-    "types": ["feat", "edge", "ability", "move", "item", "capability", "pokeedge","dexentry"],
+    "types": [
+      "feat",
+      "edge",
+      "ability",
+      "move",
+      "contestmove",
+      "item",
+      "capability",
+      "pokeedge",
+      "dexentry",
+      "effect",
+      "species",
+      "condition",
+      "reference",
+      "spiritaction"
+    ],
     "templates": {
       "base": {
-        "name": "",
         "origin": "",
         "effect": "",
         "snippet": "",
-        "useCount": 0
+        "rules": [],
+        "slug": null,
+        "schema": {
+          "version": null,
+          "lastMigration": null
+        },
+        "referenceEffect": ""
       },
       "interactions": {
         "sheerForce": false,
@@ -496,9 +605,6 @@
         "megaLauncher": false,
         "punkRock": false,
         "strongJaw": false
-      },
-      "automation": {
-        "automation": []
       }
     },
     "dexentry": {
@@ -507,12 +613,13 @@
       "owned": false
     },
     "feat": {
-      "templates": ["base", "automation"],
+      "templates": ["base"],
       "prerequisites": "",
       "frequency": "At Will - Standard Action",
       "tags": "",
       "notes": "",
-      "free": false
+      "free": false,
+      "class": ""
     },
     "edge": {
       "templates": ["base"],
@@ -520,13 +627,54 @@
       "notes": "",
       "free": false
     },
+    "effect": {
+      "templates": ["base"],
+      "level": {
+        "value": 1
+      },
+      "duration": {
+        "value": -1,
+        "unit": "unlimited",
+        "expiry": "turn-start"
+      },
+      "start": {
+        "value": 0,
+        "initiative": null
+      },
+      "target": null,
+      "tokenIcon": {
+        "show": true
+      },
+      "badge": null,
+      "context": null
+    },
+    "condition": {
+      "templates": ["base"],
+      "duration": {
+        "value": -1,
+        "unit": "unlimited",
+        "expiry": "turn-start"
+      },
+      "value": {
+        "isValued": false,
+        "value": 0,
+        "autoIncrement": false
+      },
+      "references": {
+        "children": [],
+        "overrides": [],
+        "overriddenBy": []
+      },
+      "overrides": [],
+      "persistent": null
+    },
     "ability": {
-      "templates": ["base", "automation"],
+      "templates": ["base"],
       "frequency": "",
       "tier": ""
     },
     "move": {
-      "templates": ["base", "interactions", "automation"],
+      "templates": ["base", "interactions"],
       "type": "Untyped",
       "category": "",
       "damageBase": "",
@@ -538,6 +686,12 @@
       "damageBonus": 0,
       "isStruggle": false
     },
+    "contestmove": {
+      "templates": ["base"],
+      "type": "Cool",
+      "frequency": "",
+      "dice": 0
+    },
     "capability": {
       "templates": ["base"]
     },
@@ -547,11 +701,166 @@
       "cost": 0
     },
     "item": {
-      "templates": ["base", "automation"],
+      "templates": ["base"],
       "quantity": 1,
       "category": "",
       "cost": 0,
-      "consumable": 0
+      "consumable": 0,
+      "subtype": "",
+      "container": false
+    },
+    "species": {
+      "schema": {
+        "version": null,
+        "lastMigration": null
+      },
+      "dexentry": "",
+      "number": -1,
+      "form": "",
+      "stats": {
+        "hp": 0,
+        "atk": 0,
+        "def": 0,
+        "spatk": 0,
+        "spdef": 0,
+        "spd": 0
+      },
+      "types": ["Untyped"],
+      "abilities": {
+        "basic": [],
+        "advanced": [],
+        "high": []
+      },
+      "evolutions": [],
+      "size": {
+        "height": 0,
+        "weight": 0,
+        "sizeClass": "",
+        "weightClass": 0
+      },
+      "breeding": {
+        "genderRatio": 0.0,
+        "eggGroups": [],
+        "hatchRate": 0
+      },
+      "diet": [],
+      "habitats": [],
+      "capabilities": {
+        "overland": 0,
+        "sky": 0,
+        "swim": 0,
+        "levitate": 0,
+        "burrow": 0,
+        "highJump": 0,
+        "longJump": 0,
+        "power": 0,
+        "naturewalk": [],
+        "other": []
+      },
+      "moves": {
+        "level": [],
+        "machine": [],
+        "egg": [],
+        "tutor": []
+      },
+      "skills": {
+        "acrobatics": {
+          "value": 2,
+          "modifier": 0,
+          "type": "body"
+        },
+        "athletics": {
+          "value": 2,
+          "modifier": 0,
+          "type": "body"
+        },
+        "charm": {
+          "value": 2,
+          "modifier": 0,
+          "type": "spirit"
+        },
+        "combat": {
+          "value": 2,
+          "modifier": 0,
+          "type": "body"
+        },
+        "command": {
+          "value": 2,
+          "modifier": 0,
+          "type": "spirit"
+        },
+        "generalEd": {
+          "value": 1,
+          "modifier": 0,
+          "type": "mind"
+        },
+        "medicineEd": {
+          "value": 1,
+          "modifier": 0,
+          "type": "mind"
+        },
+        "occultEd": {
+          "value": 1,
+          "modifier": 0,
+          "type": "mind"
+        },
+        "pokemonEd": {
+          "value": 1,
+          "modifier": 0,
+          "type": "mind"
+        },
+        "techEd": {
+          "value": 1,
+          "modifier": 0,
+          "type": "mind"
+        },
+        "focus": {
+          "value": 2,
+          "modifier": 0,
+          "type": "spirit"
+        },
+        "guile": {
+          "value": 2,
+          "modifier": 0,
+          "type": "mind"
+        },
+        "intimidate": {
+          "value": 2,
+          "modifier": 0,
+          "type": "body"
+        },
+        "intuition": {
+          "value": 2,
+          "modifier": 0,
+          "type": "spirit"
+        },
+        "perception": {
+          "value": 2,
+          "modifier": 0,
+          "type": "mind"
+        },
+        "stealth": {
+          "value": 2,
+          "modifier": 0,
+          "type": "body"
+        },
+        "survival": {
+          "value": 2,
+          "modifier": 0,
+          "type": "body"
+        }
+      },
+      "slug": "",
+      "rules": []
+    },
+    "reference": {
+      "templates": ["base"]
+    },
+    "spiritaction": {
+      "templates": ["base"],
+      "cost": 0,
+      "trigger": "",
+      "active": false
     }
   }
 }

@@ -1,0 +1,69 @@
+<form class="{{cssClass}} container-fluid" autocomplete="off">
+    <div class="d-flex flex-column w-100 h-100">
+        {{#if trainer}}
+            <div class="d-flex flex-column mb-2 trainer">
+                <h3>Trainer</h3>
+                <div class="d-flex flex-row party-list">
+                    <div class="party-item">
+                        <img src="{{trainer.img}}" alt="{{trainer.name}}" title="{{trainer.name}}" />
+                        <label>{{trainer.name}}</label>
+                    </div>
+                </div>
+            </div>
+        {{/if}}
+        <div class="d-flex flex-column mb-2">
+            <h3>Party</h3>
+            <div class="d-flex flex-row party-list droppable" data-party-status="party">
+                {{#each party}}
+                    <div class="party-item draggable" data-actor-uuid="{{uuid}}" data-party-status="party" data-actor-index="{{@index}}">
+                        <img src="{{img}}" alt="{{name}}" title="{{name}}" />
+                        <label>{{name}}</label>
+                    </div>
+                {{/each}}
+                {{#unless party}}
+                    <div class="party-item empty">
+                        <div class="item-name">
+                            <small><i>Drop actors here</i></small>
+                        </div>
+                    </div>
+                {{/unless}}
+            </div>
+        </div>
+        <div class="d-flex flex-column mb-2">
+            <h3>Boxed</h3>
+            <div class="d-flex flex-row party-list droppable" data-party-status="boxed">
+                {{#each boxed}}
+                    <div class="party-item draggable" data-actor-uuid="{{uuid}}" data-party-status="boxed" data-actor-index="{{@index}}">
+                        <img src="{{img}}" alt="{{name}}" title="{{name}}" />
+                        <label>{{name}}</label>
+                    </div>
+                {{/each}}
+                {{#unless boxed}}
+                    <div class="party-item empty">
+                        <div class="item-name">
+                            <small><i>Drop actors here</i></small>
+                        </div>
+                    </div>
+                {{/unless}}
+            </div>
+        </div>
+        <div class="d-flex flex-column mb-2">
+            <h3>Available</h3>
+            <div class="d-flex flex-row party-list droppable" data-party-status="available">
+                {{#each available}}
+                    <div class="party-item draggable" data-actor-uuid="{{uuid}}" data-party-status="available" data-actor-index="{{@index}}">
+                        <img src="{{img}}" alt="{{name}}" title="{{name}}" />
+                        <label>{{name}}</label>
+                    </div>
+                {{/each}}
+                {{#unless available}}
+                    <div class="party-item empty">
+                        <div class="item-name">
+                            <small><i>Drop actors here</i></small>
+                        </div>
+                    </div>
+                {{/unless}}
+            </div>
+        </div>
+    </div>
+</form>

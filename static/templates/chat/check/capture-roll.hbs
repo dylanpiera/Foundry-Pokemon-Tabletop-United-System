@@ -1,0 +1,62 @@
+<div class="dice-shadow">
+    <div class="dice-roll attack-roll attack">
+        <div class="dice-result">
+            <div class="dice-formula">{{formula}}</div>
+            {{{tooltip}}}
+            {{#each targets as |target|}}
+                <div class="dice-total">
+                    <span class="num-total">{{@root/total}}</span>
+                    <span>≤</span>
+                    <span>{{#unless target.isPrivate}}{{target.dc.value}}{{else}}?{{/unless}}</span>
+                </div>
+                <div class="img-row">
+                    <img src="{{@root/self.img}}"/>
+                    <span >{{target.name}}'s {{localize target.dc.slug}}</span>
+                    <img src="{{target.img}}"/>
+                </div>
+                {{#unless target.isPrivate}}
+                <div class="d-flex flex-row justify-content-center">
+                    <span class="type-img">
+                        {{#switch (lookup @root/outcome target._id)}}
+                            {{#case "hit"}}
+                                <img src="/systems/ptu/images/icons/HitIcon.png">
+                            {{/case}}
+                            {{#case "crit-hit"}}
+                                <img src="/systems/ptu/images/icons/CriticalHit.png">
+                            {{/case}}
+                            {{#case "blocked-crit"}}
+                                <img class="blocked tooltip" title="{{localize "PTU.CriticalImmunityLabel"}}" src="/systems/ptu/images/icons/HitIcon.png">
+                            {{/case}}
+                            {{#case "crit-miss"}}
+                                <img src="/systems/ptu/images/icons/CriticalMiss.png">
+                            {{/case}}
+                            {{#case "miss"}}
+                                <img src="/systems/ptu/images/icons/MissIcon.png">
+                            {{/case}}
+                        {{/switch}}
+                    </span>
+                </div>
+                {{/unless}}
+            {{/each}}
+        </div>
+        {{#unless containsPrivate}}
+            <div class="flavor-text footer">
+                <div class="header-bar mt-1">
+                    <h4 class="action sub-action">DC Calculation</h4>
+                </div>
+                <div class="header-bar tags m-0 mb-1">
+                    {{#each captureModifier._modifiers as |mod|}}
+                        <div class="tag tag-transparent">
+                            <span>{{mod.label}} {{#if (gte mod.modifier 0)}}+{{/if}}{{mod.modifier}}</span>
+                        </div>
+                    {{/each}}
+                </div>
+                {{#if (isGm)}}
+                    <div class="buttons">
+                        <button class="button apply-capture" title="Apply Capture">Apply Capture</button>
+                    </div>
+                {{/if}}
+            </div>
+        {{/unless}}
+    </div>
+</div>
