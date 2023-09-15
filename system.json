@@ -7,7 +7,7 @@
     "verified": "11.308",
     "maximum": 11
   },
-  "version": "4.0.0.alpha.38",
+  "version": "4.0.0.alpha.39",
   "templateVersion": 2,
   "authors": [
     {
@@ -146,8 +146,8 @@
       "path": "static/lang/en.json"
     }
   ],
-  "url": "https://github.com/pokemon-tabletop-reunited/Foundry-Pokemon-Tabletop-United-System",  
-  "manifest": "https://github.com/pokemon-tabletop-reunited/Foundry-Pokemon-Tabletop-United-System/raw/development/system.json",
-  "changelog": "https://github.com/pokemon-tabletop-reunited/Foundry-Pokemon-Tabletop-United-System/raw/development/changelog.md",
-  "download": "https://github.com/pokemon-tabletop-reunited/Foundry-Pokemon-Tabletop-United-System/archive/development.zip"
+  "url": "https://github.com/dylanpiera/Foundry-Pokemon-Tabletop-United-System",  
+  "manifest": "https://github.com/dylanpiera/Foundry-Pokemon-Tabletop-United-System/raw/development/system.json",
+  "changelog": "https://github.com/dylanpiera/Foundry-Pokemon-Tabletop-United-System/raw/development/changelog.md",
+  "download": "https://github.com/dylanpiera/Foundry-Pokemon-Tabletop-United-System/archive/development.zip"
 }
