@@ -50,7 +50,7 @@ class PTUMove extends PTUItem {
             const results = [];
             const effect = await fromUuid(this.referenceEffect);
             if(this.range.includes("Self")) {
-                const result = await effect.apply(this.actor, this.actor);
+                const result = await effect.apply([this.actor], this.actor);
                 if(result) results.push(...result);
             }
             else {
