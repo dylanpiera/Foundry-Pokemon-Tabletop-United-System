@@ -7,3 +7,4 @@ export { Migration106SpeciesFieldToSpeciesItem} from './106-species-field-to-spe
 export { Migration107ActiveEffectsToEffectItem} from './107-active-effects-to-effect-item.js';
 export { Migration108SpritesFix} from './108-sprites-fix.js';
 export { Migration109PokeballFix} from './109-pokeball-fix.js';
+export { Migration110ActorLink} from './110-actor-link.js';

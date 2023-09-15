@@ -55,6 +55,11 @@ async function processPreUpdateActorHooks(changed,{ pack }){
     const actor = pack ? await game.packs.get(pack)?.getDocument(actorId) : game.actors.get(actorId);
     if (!(actor instanceof CONFIG.PTU.Actor.documentClass)) return;
 
+    if(actor.prototypeToken.actorLink !== true) {
+        changed.prototypeToken ??= {};
+        changed.prototypeToken.actorLink = true;
+    }
+
     // Run preUpdateActor rule element callbacks
     const rules = actor.rules.filter((r) => !!r.preUpdateActor);
     if (rules.length === 0) return;

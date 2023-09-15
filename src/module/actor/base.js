@@ -325,6 +325,17 @@ class PTUActor extends Actor {
     }
 
     /** @override */
+    static async createDocuments(data = [], context = {}) {
+        for(const actorData of data) {
+            if(actorData.prototypeToken?.actorLink !== true) {
+                actorData.prototypeToken ??= {};
+                actorData.prototypeToken.actorLink = true;
+            }
+        }
+        return super.createDocuments(data, context);
+    }
+
+    /** @override */
     async createEmbeddedDocuments(embeddedName, data = [], context = {}) {
         if (embeddedName === "ActiveEffect") {
             console.warn("PTU | Active Effects are disabled.");

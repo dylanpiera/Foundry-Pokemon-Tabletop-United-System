@@ -5,6 +5,8 @@ import { DropCanvasData } from "./drop-canvas-data.js";
 import { ItemPilesHooks } from "./item-piles-compatibility.js";
 import { Ready } from "./ready.js";
 import { DeleteToken } from "./tokenDocumentDeleted.js";
+import { RenderTokenConfig } from "./render-token-config.js";
+import { GetSceneControlButtons } from "./get-scene-control-buttons.js";
 
 export const PtuHooks = {
     listen() {
@@ -16,7 +18,9 @@ export const PtuHooks = {
             DropCanvasData,
             ItemPilesHooks,
             Ready,
-            DeleteToken
+            DeleteToken,
+            RenderTokenConfig,
+            GetSceneControlButtons
         ]
         for(const listener of listeners) listener.listen();
     }

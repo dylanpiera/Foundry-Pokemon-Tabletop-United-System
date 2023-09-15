@@ -11,7 +11,7 @@ class MigrationRunnerBase {
     /** @type {MigrationBase[]} */
     migrations = []
 
-    static LATEST_SCHEMA_VERSION = 0.109;
+    static LATEST_SCHEMA_VERSION = 0.110;
     static MINIMUM_SAFE_VERSION = 0.100;
     static RECOMMENDED_SAFE_VERSION = 0.101;
 
