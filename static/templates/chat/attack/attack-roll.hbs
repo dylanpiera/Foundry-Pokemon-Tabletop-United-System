@@ -1,0 +1,80 @@
+<div class="dice-shadow">
+    <div class="dice-roll attack-roll attack">
+        <div class="dice-result">
+            <div class="dice-formula">{{formula}}</div>
+            {{{tooltip}}}
+            {{#each targets as |target|}}
+                <div class="dice-total">
+                    <span class="num-total">{{@root/total}}</span>
+                    <span>vs.</span>
+                    <span>{{#unless target.isPrivate}}{{target.dc.value}}{{else}}?{{/unless}}</span>
+                </div>
+                <div class="img-row">
+                    <img src="{{@root/self.img}}"/>
+                    <span >{{target.name}}'s {{localize target.dc.slug}}</span>
+                    <img src="{{target.img}}"/>
+                </div>
+                {{#unless target.isPrivate}}
+                <div class="d-flex flex-row justify-content-center">
+                    <span class="type-img">
+                        {{#switch (lookup @root/outcome target._id)}}
+                            {{#case "hit"}}
+                                <img src="/systems/ptu/images/icons/HitIcon.png">
+                            {{/case}}
+                            {{#case "crit-hit"}}
+                                <img src="/systems/ptu/images/icons/CriticalHit.png">
+                            {{/case}}
+                            {{#case "blocked-crit"}}
+                                <img class="blocked tooltip" title="{{localize "PTU.CriticalImmunityLabel"}}" src="/systems/ptu/images/icons/HitIcon.png">
+                            {{/case}}
+                            {{#case "crit-miss"}}
+                                <img src="/systems/ptu/images/icons/CriticalMiss.png">
+                            {{/case}}
+                            {{#case "miss"}}
+                                <img src="/systems/ptu/images/icons/MissIcon.png">
+                            {{/case}}
+                        {{/switch}}
+                    </span>
+                </div>
+                {{/unless}}
+            {{/each}}
+            {{#unless (gt targets.length 0)}}
+                <div class="dice-total">
+                    <span class="num-total">{{@root/total}}</span>
+                </div>
+            {{/unless}}
+        </div>
+        <div class="flavor-text footer">
+            {{#if item.system.effect}}
+                <div class="effect">
+                    <span>{{item.system.effect}}</span>
+                </div>
+            {{/if}}
+            <div class="tags">
+                {{#each tags as |tag|}}
+                    {{#unless (is tag.slug "effect")}}
+                    {{#if (is tag.slug "range")}}
+                        {{#each (split tag.value ",") as | range |}}
+                            {{#if (helpText range)}}
+                                <div class="tag tooltip ball-themes gradient default range" title="{{helpText range}}">
+                                    <span>{{#if (isNumber range)}}Range {{/if}}{{range}}</span>
+                                </div>
+                            {{else}}
+                                <div class="tag ball-themes gradient default range">
+                                    <span>{{range}}</span>
+                                </div>
+                            {{/if}}
+                        {{/each}}
+                    {{else}}
+                        {{#if (helpText tag.value)}}
+                            <div class="tag tooltip ball-themes gradient default {{tag.slug}}" title="{{helpText tag.value}}"><span>{{#if (is tag.slug "frequency")}}{{tag.value}}{{else}}{{tag.label}}{{/if}}</span></div>
+                        {{else}}
+                            <div class="tag {{#if (is tag.slug "effect")}}tooltip{{/if}} ball-themes gradient default {{tag.slug}}" {{#if (is tag.slug "effect")}}title="{{tag.value}}"{{/if}}><span>{{#if (is tag.slug "frequency")}}{{tag.value}}{{else}}{{tag.label}}{{/if}}</span></div>
+                        {{/if}}
+                    {{/if}}
+                    {{/unless}}
+                {{/each}}
+            </div>
+        </div>
+    </div>
+</div>

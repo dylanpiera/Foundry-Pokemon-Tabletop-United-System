@@ -1,0 +1,75 @@
+{{#if options.troubleshoot}}
+    <h3>{{localize "PTU.Migrations.Summary.Troubleshoot.Hint" version=systemVersion}}</h3>
+{{else}}
+    <h3>{{localize "PTU.Migrations.Finished" version=systemVersion}}</h3>
+{{/if}}
+<div class="dialog-content">
+    <table>
+        <thead>
+            <tr>
+                <th>{{localize "PTU.Migrations.Summary.Documents"}}</th>
+                <th>{{localize "PTU.Migrations.Summary.Migrated"}} / {{localize "PTU.Migrations.Summary.Total"}}</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>{{localize "PTU.Actor.Plural"}}</td>
+                <td><span class="docs-successful">{{actors.successful}}</span> / {{actors.total}}</td>
+                <td>
+                    {{#if (eq actors.successful actors.total)}}
+                        <i class="fas fa-check"></i>
+                    {{else}}
+                        <i class="fas fa-times"></i>
+                    {{/if}}
+                </td>
+            </tr>
+            <tr>
+                <td>{{localize "PTU.Item.Plural"}}</td>
+                <td><span class="docs-successful">{{items.successful}}</span> / {{items.total}}</td>
+                <td>
+                    {{#if (eq items.successful items.total)}}
+                        <i class="fas fa-check"></i>
+                    {{else}}
+                        <i class="fas fa-times"></i>
+                    {{/if}}
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+{{#if helpResources}}
+    <p class="help-resources">{{{helpResourcesText}}}</p>
+    <div class="troubleshooting">
+        <table>
+            <thead>
+                <tr>
+                    <th>{{localize "PTU.Migrations.Summary.Troubleshoot.Type"}}</th>
+                    <th>{{localize "PTU.Migrations.Summary.Troubleshoot.Name"}}</th>
+                    <th>{{localize "PTU.Migrations.Summary.Troubleshoot.Uuid"}}</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each actors.failures}}
+                    <tr>
+                        <td>{{localize "PTU.Actor.Singular"}}</td>
+                        <td>{{this.name}}</td>
+                        <td>{{this.uuid}}</td>
+                    </tr>
+                {{/each}}
+                {{#each items.failures}}
+                    <tr>
+                        <td>{{localize "PTU.Item.Singular"}}</td>
+                        <td>{{this.name}}</td>
+                        <td>{{this.uuid}}</td>
+                    </tr>
+                {{/each}}
+            </tbody>
+        </table>
+    </div>
+{{/if}}
+<div class="dialog-buttons">
+    <button type="button" data-action="close">{{localize "PTU.OK"}}</button>
+    {{#if canRemigrate}}<button type="button" data-action="remigrate" {{disabled helpResources}}>{{localize "PTU.Migrations.Summary.Remigrate"}}</button>{{/if}}
+</div>

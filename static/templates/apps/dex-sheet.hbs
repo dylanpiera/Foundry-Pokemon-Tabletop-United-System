@@ -1,0 +1,71 @@
+<form class="{{cssClass}} d-flex flex-column container-fluid" autocomplete="off">
+    <div class="header d-flex flex-row justify-content-center swsh-box">
+        <div class="fb-48 d-flex flex-row">
+            <div class="fb-40 swsh-header d-flex flex-column">
+                <div class="header-label"><span>Search</span></div>
+                <div class="header-label"><span>Hide Unknown</span></div>
+                <div class="header-label"><span>Hide Seen</span></div>
+                <div class="header-label"><span>Hide Owned</span></div>
+            </div>
+            <div class="fb-60 swsh-body d-flex flex-column">
+                <div class="header-item">
+                    <input type="text" class="form-control" placeholder="Search" name="search" value="{{search}}"/>
+                </div>
+                <div class="header-item">
+                    <input type="checkbox" class="form-check-input" name="hideUnknown" id="hide-unknown" {{checked hideUnknown}}/>
+                </div>
+                <div class="header-item">
+                    <input type="checkbox" class="form-check-input" name="hideSeen" id="hide-seen" {{checked hideSeen}}/>
+                </div>
+                <div class="header-item">
+                    <input type="checkbox" class="form-check-input" name="hideOwned" id="hide-owned" {{checked hideOwned}}/>
+                </div>
+            </div>
+        </div>
+        <div class="fb-48 help-text">
+            <span class="help-text mb-1">You can left click a Pokemon to mark it from Unknown to Seen, or Seen to Owned</span>
+            <span class="help-text">You can right click a Pokemon to mark it from Owned to Seen, or Seen to Unknown</span>
+        </div>
+    {{!-- <div class="header d-flex flex-row justify-content-center swsh-box"> --}}
+        {{!-- <div class="swsh-header d-flex justify-content-evenly flex-row center-text pt-1 pb-1 m-0">
+            <div class="header-label" style="width: 30%;">Search</div>
+            <div class="header-label">Hide Unknown</div>
+            <div class="header-label">Hide Seen</div>
+            <div class="header-label">Hide Owned</div>
+        </div>
+        <div class="swsh-body d-flex justify-content-evenly flex-row center-text">
+            <div class="header-item" style="width: 30%;">
+                <input type="text" class="form-control" placeholder="Search" name="search" value="{{search}}"/>
+            </div>
+            <div class="header-item">
+                <input type="checkbox" class="form-check-input" name="hideUnknown" id="hide-unknown" {{checked hideUnknown}}/>
+            </div>
+            <div class="header-item">
+                <input type="checkbox" class="form-check-input" name="hideSeen" id="hide-seen" {{checked hideSeen}}/>
+            </div>
+            <div class="header-item">
+                <input type="checkbox" class="form-check-input" name="hideOwned" id="hide-owned" {{checked hideOwned}}/>
+            </div>
+        </div> --}}
+    </div>
+    {{#if dex.selected.length}}
+        <div class="dex-grid">
+            {{#each dex.selected}}
+                <div class="dex-item{{#if this.seen}} seen{{/if}}{{#if this.owned}} owned{{/if}}" data-id="{{this.id}}">
+                    <span class="dex-item-img"><img src="{{this.img}}"/></span>
+                    <div class="dex-item-name">{{#if (or this.seen this.owned)}}{{this.name}}{{else}}???{{/if}}</div>
+                </div>
+            {{/each}}
+        </div>
+    {{else}}
+        <div class="d-flex justify-content-center h-100">
+            <div class="help-text" style="align-self: center;">
+                {{#if search}}
+                    <span class="help-text">No results found for "{{search}}"</span>
+                {{else}}
+                <span class="help-text">Loading dex...</span>
+                {{/if}}
+            </div>
+        </div>
+    {{/if}}
+</form>
