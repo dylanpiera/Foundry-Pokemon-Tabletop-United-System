@@ -13,6 +13,7 @@ export class TemporarySpeciesRuleElement extends RuleElementPTU {
         if(!species && typeof uuid === "string") {
             this.uuid = uuid;
             this.species = fromUuidSync(uuid);
+            if(!this.species.system && uuid.startsWith("Compendium.")) fromUuid(uuid).then(actor => this.species = actor);
         }
     }
 

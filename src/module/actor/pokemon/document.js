@@ -151,6 +151,11 @@ class PTUPokemonActor extends PTUActor {
         }
 
         const speciesSystem = this.species.system;
+        if(!speciesSystem) {
+            if(this.species.uuid) this.reloadOnReady = true;
+            return console.warn(`Unable to prepare derived data for ${this.name} as its species has no system data, this is most likely caused due to having a temporary species set on reload. If so you may ignore this message.`);
+        }
+
 
         // Prepare data with Mods
         for (let [key, mod] of Object.entries(system.modifiers)) {
