@@ -13,7 +13,8 @@ const HomebrewSettingsConfig = {
         hint: "PTU.Settings.Homebrew.ShadowType.Hint",
         type: Boolean,
         default: false,
-        requiresReload: true
+        requiresReload: true,
+        hide: true,
     }
 }
 

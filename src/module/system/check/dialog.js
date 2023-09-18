@@ -101,8 +101,7 @@ export class CheckModifiersDialog extends Application {
             if (errors.length > 0) {
                 ui.notifications.error(errors.join(" "));
             } else {
-                const {type, category} = this.context.item.system;
-                this.check.push(new PTUModifier({label: name, modifier: value, type, category}));
+                this.check.push(new PTUModifier({label: name, modifier: value}));
                 this.render();
             }
         });

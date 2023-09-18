@@ -301,7 +301,7 @@ export class PokemonGenerator {
     }
 
     prepareShinyness(shinyChance) {
-        if (shinyChance > 1) shinyChance *= 0.01;
+        if (shinyChance >= 1) shinyChance *= 0.01;
 
         if (shinyChance == 0) return this.shiny = false;
         return this.shiny = Math.random() < shinyChance;

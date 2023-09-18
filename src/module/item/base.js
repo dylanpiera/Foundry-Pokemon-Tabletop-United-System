@@ -56,6 +56,10 @@ class PTUItem extends Item {
         return this.system.referenceEffect ?? null;
     }
 
+    get schemaVersion() {
+        return Number(this.system.schema?.version) || null;
+    }
+
     /** @override */
     prepareBaseData() {
         this.flags.ptu = mergeObject({ rulesSelections: {} }, this.flags.ptu ?? {});
@@ -126,7 +130,7 @@ class PTUItem extends Item {
             if (source.type == "move") {
                 source.img = CONFIG.PTU.data.typeEffectiveness[source.system.type.titleCase()].images.icon;
             }
-            else if (source.type =="contestmove") {
+            else if (source.type == "contestmove") {
                 source.img = `/systems/ptu/static/css/images/types2/${source.system.type}IC_Icon.png`;
             }
             else {
@@ -155,64 +159,54 @@ class PTUItem extends Item {
         if (!actor) return super.createDocuments(sources, context);
 
         const validTypes = actor.allowedItemTypes;
+        const items = [];
+        const outputSources = [];
+
         for (const source of sources) {
             if (!validTypes.includes(source.type)) {
                 ui.notifications.error(`PTU | ${source.type.capitalize()}s cannot be added to ${actor.name}`);
                 return [];
             }
+
+            if (!(context.keepId || context.keepEmbeddedIds)) {
+                source._id = randomID();
+            }
+
+            const item = new CONFIG.Item.documentClass(source, { parent: actor });
+            
+            if (item.type === "condition") {
+                const existing = actor.itemTypes.condition.find(c => c.slug === sluggify(item.name));
+                if (existing) {
+                    if (existing.system.value.isValued) existing.increase();
+                    continue;
+                }
+            }
+            items.push(item);
+            outputSources.push(item._source);
         }
 
-        const items = await (async () => {
-            /** Internal function to recursively get all simple granted items */
-            async function getSimpleGrants(item) {
-                const granted = (await item.createGrantedItems?.({ size: context.parent?.size })) ?? [];
-                if (!granted.length) return [];
-                const reparented = granted.map(
-                    (i) =>
-                    (i.parent
-                        ? i
-                        : new CONFIG.Item.documentClass(i._source, { parent: actor }))
-                );
-                return [...reparented, ...(await Promise.all(reparented.map(getSimpleGrants))).flat()];
-            }
+        if (!context.keepId) context.keepId = true;
 
-            const items = sources.map((source) => {
-                if (!(context.keepId || context.keepEmbeddedIds)) {
-                    source._id = randomID();
-                }
-                return new CONFIG.Item.documentClass(source, { parent: actor })
-            });
-            if(!context.keepId) context.keepId = true;
+        const getSimpleGrants = async (item) => {
+            const granted = (await item.createGrantedItems?.({ size: context.parent?.size })) ?? [];
+            if (!granted.length) return [];
+            const reparented = granted.map(
+                (i) =>
+                (i.parent
+                    ? i
+                    : new CONFIG.Item.documentClass(i._source, { parent: actor }))
+            );
+            return [...reparented, ...(await Promise.all(reparented.map(getSimpleGrants))).flat()];
+        };
 
-            // If any item we plan to add will add new items, add those too
-            // When this occurs, keepId is switched on.
-            for (const item of [...items]) {
-                const grants = await getSimpleGrants(item);
-                if (grants.length) {
-                    context.keepId = true;
-                    items.push(...grants);
-                }
-            }
+        const promiseOutput = await Promise.all(items.map(async item => {
+            const grants = await getSimpleGrants(item);
+            if (grants.length) return grants;
+            return [];
+        }))
+        items.push(...promiseOutput.flat());
 
-            return items;
-        })();
-
-        const outputSources = items.map((i) => i._source).filter(s => {
-            if (!s) return false;
-            if (s.type !== "condition") return true;
-
-            const existing = actor.itemTypes.condition.find(c => c.slug === sluggify(s.name));
-            if (existing) {
-                if (existing.system.value.isValued) existing.increase();
-                return false;
-            }
-            return true;
-        });
-
-        // Process item preCreate rules for all items that are going to be added
-        // This may add additional items (such as via GrantItem)
         for (const item of items) {
-            // Pre-load this item's self: roll options for predication by preCreate rule elements
             item.prepareActorData?.();
 
             const itemSource = (() => {
@@ -224,11 +218,12 @@ class PTUItem extends Item {
                 }
                 return item._source
             })();
+
             const rules = item.prepareRuleElements();
-            for (const rule of rules) {
-                const ruleSource = itemSource.system.rules[rules.indexOf(rule)];
-                await rule.preCreate?.({ itemSource, ruleSource, pendingItems: outputSources, context });
-            }
+            for (let i = 0; i < rules.length; i++) {
+                const ruleSource = itemSource.system.rules[i];
+                await rules[i].preCreate?.({ itemSource, ruleSource, pendingItems: outputSources, context });
+              }
         }
 
         return super.createDocuments(outputSources, context);
@@ -341,15 +336,15 @@ class PTUItem extends Item {
     async sendToChat() {
         const tags = await (async () => {
             const tags = [];
-            if(this.system.frequency) tags.push({slug: "frequency", label: game.i18n.localize("PTU.Tags.Frequency"), value: this.system.frequency });
-            if(this.system.range) tags.push({slug: "range", label: game.i18n.localize("PTU.Tags.Range"), value: this.system.range });
-            if(this.system.damageBase) tags.push({slug: "db", label: game.i18n.localize("PTU.Tags.DB"), value: this.system.damageBase+" DB" });
+            if (this.system.frequency) tags.push({ slug: "frequency", label: game.i18n.localize("PTU.Tags.Frequency"), value: this.system.frequency });
+            if (this.system.range) tags.push({ slug: "range", label: game.i18n.localize("PTU.Tags.Range"), value: this.system.range });
+            if (this.system.damageBase) tags.push({ slug: "db", label: game.i18n.localize("PTU.Tags.DB"), value: this.system.damageBase + " DB" });
             return tags;
         })();
 
         const flavor = await (async () => {
             const typeAndCategoryHeader = (() => {
-                if(this.type !== "move") return null;
+                if (this.type !== "move") return null;
 
                 const header = document.createElement("div");
                 header.classList.add("header-bar");
@@ -375,7 +370,7 @@ class PTUItem extends Item {
 
             const header = document.createElement("div");
             header.classList.add("header-bar");
-            if(this.img) {
+            if (this.img) {
                 header.append((() => {
                     const img = document.createElement("img");
                     img.classList.add("item-img", "item-icon");
@@ -395,7 +390,7 @@ class PTUItem extends Item {
                 .join("");
         })();
 
-        const referenceEffect = this.referenceEffect ? await TextEditor.enrichHTML(`@UUID[${duplicate(this.referenceEffect)}]`, {async: true}) : null;
+        const referenceEffect = this.referenceEffect ? await TextEditor.enrichHTML(`@UUID[${duplicate(this.referenceEffect)}]`, { async: true }) : null;
 
         const chatData = {
             user: game.user._id,
@@ -404,7 +399,7 @@ class PTUItem extends Item {
             referenceEffect
         }
 
-        ChatMessage.create({content: await renderTemplate(`/systems/ptu/static/templates/chat/chat-items.hbs`, chatData), flavor, flags: {ptu: {origin: {item: this.uuid}}}})
+        ChatMessage.create({ content: await renderTemplate(`/systems/ptu/static/templates/chat/chat-items.hbs`, chatData), flavor, flags: { ptu: { origin: { item: this.uuid } } } })
     }
 }
 

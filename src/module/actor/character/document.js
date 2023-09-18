@@ -35,8 +35,7 @@ class PTUTrainerActor extends PTUActor {
             Math.clamped(
                 1
                 + Number(system.level.milestones)
-                + Math.trunc(Number(system.level.miscexp) / 10)
-                + Math.trunc(Number(system.level.dexexp) / 10),
+                + Math.trunc((Number(system.level.miscexp) / 10) + (Number(system.level.dexexp) / 10)),
                 1,
                 (game.settings.get("ptu", "variant.trainerRevamp") ? 25 : 50)
             );
