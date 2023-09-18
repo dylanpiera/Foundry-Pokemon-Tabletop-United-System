@@ -53,6 +53,8 @@ export const Init = {
             CONFIG.ui.chat = PTUCONFIG.ui.chatlog.documentClass;
             CONFIG.ChatMessage.documentClass = PTUCONFIG.ChatMessage.documentClass;
 
+            // Define other custom UI classes
+            CONFIG.ui.hotbar = PTUCONFIG.ui.hotbar.documentClass;
 
             // Insert templates into DOM tree so Applications can render into
             if (document.querySelector("#ui-top") !== null) {

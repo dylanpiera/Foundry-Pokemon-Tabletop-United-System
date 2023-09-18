@@ -38,6 +38,7 @@ import { PTUTokenDocument } from '../../module/canvas/token/document.js';
 import { PTUUser } from '../../module/user.js';
 import { PTUContestMove } from '../../module/item/contestmove/document.js';
 import { PTUContestMoveSheet } from '../../module/item/contestmove/sheet.js';
+import { PTUHotBar } from '../../module/apps/hotbar.js';
 
 const data = {
   skills: {
@@ -127,6 +128,9 @@ const ui = {
   },
   chatlog: {
     documentClass: PTUChatLog
+  },
+  hotbar: {
+    documentClass: PTUHotBar
   }
 }
 
