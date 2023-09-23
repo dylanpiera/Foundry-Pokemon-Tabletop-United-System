@@ -218,6 +218,7 @@ class PTUActor extends Actor {
             rollOptions: {
                 all: {
                     [`self:type:${this.type}`]: true,
+                    [`self:id:${this.id}`]: true,
                 }
             },
             disabledOptions: []
@@ -1575,7 +1576,7 @@ class PTUActor extends Actor {
                         2: {
                             source: "Level",
                             mode: "add",
-                            value: this.system.level.current,
+                            value: (this.type === "character" && game.settings.get("ptu", "variant.trainerRevamp") ? (this.system.level.current + this.system.level.current) : this.system.level.current),
                         },
                         3: {
                             source: "HP Stat",

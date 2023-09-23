@@ -35,8 +35,7 @@ class PTUTrainerActor extends PTUActor {
             Math.clamped(
                 1
                 + Number(system.level.milestones)
-                + Math.trunc(Number(system.level.miscexp) / 10)
-                + Math.trunc(Number(system.level.dexexp) / 10),
+                + Math.trunc((Number(system.level.miscexp) / 10) + (Number(system.level.dexexp) / 10)),
                 1,
                 (game.settings.get("ptu", "variant.trainerRevamp") ? 25 : 50)
             );
@@ -48,7 +47,7 @@ class PTUTrainerActor extends PTUActor {
             //         .map(([key, value]) => ([key, value.value.total]))
             // ),
             level: { current: system.level.current },
-            health: { current: system.health.value, temp: system.tempHp},
+            health: { current: system.health.value, temp: system.tempHp },
             skills: {}
         }
     }
@@ -124,9 +123,7 @@ class PTUTrainerActor extends PTUActor {
         system.stats.spd.base = 5
         system.stats.spd.value = system.modifiers.baseStats.spd.total + system.stats.spd.base;
 
-        var result = true ?
-            calculatePTStatTotal(system.levelUpPoints, (game.settings.get("ptu", "variant.trainerRevamp") ? actualLevel + actualLevel : actualLevel), system.stats, { twistedPower: this.items.find(x => x.name.toLowerCase().replace("[playtest]") == "twisted power") != null }, system.nature?.value, true) :
-            calculateOldStatTotal(system.levelUpPoints, system.stats, { twistedPower: this.items.find(x => x.name.toLowerCase().replace("[playtest]") == "twisted power") != null });
+        var result = calculatePTStatTotal(system.levelUpPoints, (game.settings.get("ptu", "variant.trainerRevamp") ? actualLevel + actualLevel : actualLevel), system.stats, { twistedPower: this.rollOptions.all["self:ability:twisted-power"], hybridArmor: this.rollOptions.all["self:ability:hybrid-armor"], }, system.nature?.value, true);
         system.stats = result.stats;
         system.levelUpPoints = result.levelUpPoints;
 

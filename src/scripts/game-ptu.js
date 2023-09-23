@@ -51,7 +51,9 @@ const GamePTU = {
     },
     onSetup() { },
     onReady() {
-        
+        // Reset pokemon that have reloadOnReady marked as true
+        // This is due to having a temporary species override
+        game.actors.filter(a => a.type === "pokemon" && a.reloadOnReady).forEach(a => a.reset())
     }
 }
 

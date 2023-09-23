@@ -91,7 +91,7 @@ function dev(stats) {
     return standardDeviation;
 }
 
-function calculateStatTotal({ level, actorStats, nature, isTrainer, twistedPower }) {
+function calculateStatTotal({ level, actorStats, nature, isTrainer, twistedPower, hybridArmor}) {
     const stats = duplicate(actorStats);
     const levelDivisionConstant = isTrainer ? 25 : 50;
     const longShortStatDict = {
@@ -139,8 +139,15 @@ function calculateStatTotal({ level, actorStats, nature, isTrainer, twistedPower
         const atkTotal = duplicate(stats.atk.total);
         const spatkTotal = duplicate(stats.spatk.total);
 
-        stats.atk.total += Math.floor(spatkTotal / 2);
-        stats.spatk.total += Math.floor(atkTotal / 2);
+        stats.atk.total += Math.floor(spatkTotal / 3);
+        stats.spatk.total += Math.floor(atkTotal / 3);
+    }
+    if(hybridArmor) {
+        const defTotal = duplicate(stats.def.total);
+        const spdefTotal = duplicate(stats.spdef.total);
+
+        stats.def.total += Math.floor(spdefTotal / 3);
+        stats.spdef.total += Math.floor(defTotal / 3);
     }
 
     //apply mods and stages last
@@ -149,7 +156,7 @@ function calculateStatTotal({ level, actorStats, nature, isTrainer, twistedPower
         
         if(key != "hp") value["stage"].total = Math.clamped((value["stage"]?.value ?? 0) + (value["stage"]?.mod ?? 0), -6, 6);
         if (value["stage"]?.total > 0) {
-            value["total"] = Math.floor(sub * (value["stage"].total) * 0.2 + sub);
+            value["total"] = Math.floor(sub * (value["stage"].total) * 0.1 + sub);
         }
         else {
             if (key == "hp") {
@@ -168,7 +175,7 @@ function calculateStatTotal({ level, actorStats, nature, isTrainer, twistedPower
 
 }
 
-function calculatePTStatTotal(levelUpPoints, level, stats, { twistedPower, ignoreStages }, nature, isTrainer) {
+function calculatePTStatTotal(levelUpPoints, level, stats, { twistedPower, ignoreStages, hybridArmor }, nature, isTrainer) {
 
     const factor = 0.5
     const levelDivisionConstant = isTrainer ? 25 : 50;
@@ -218,9 +225,16 @@ function calculatePTStatTotal(levelUpPoints, level, stats, { twistedPower, ignor
         let atkTotal = stats.atk.total;
         let spatkTotal = stats.spatk.total;
         //if(Math.abs(atkTotal - spatkTotal) <= 5 ) {
-        stats.atk.total += Math.floor(spatkTotal / 2);
-        stats.spatk.total += Math.floor(atkTotal / 2);
+        stats.atk.total += Math.floor(spatkTotal / 3);
+        stats.spatk.total += Math.floor(atkTotal / 3);
         //}
+    }
+    if(hybridArmor) {
+        let defTotal = stats.def.total;
+        let spdefTotal = stats.spdef.total;
+
+        stats.def.total += Math.floor(spdefTotal / 3);
+        stats.spdef.total += Math.floor(defTotal / 3);
     }
 
     //apply mods and stages last

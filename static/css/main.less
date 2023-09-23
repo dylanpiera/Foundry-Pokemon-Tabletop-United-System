@@ -3843,6 +3843,42 @@ a.content-link {
     }
 }
 
+.sheet.token-sheet {
+    .form-fields select {
+        max-width: 278px;
+    }
+    
+    input[type="range"]:disabled {
+        background-color: initial;
+        color: rgb(197,197,197);
+
+        &::-webkit-slider-runnable-track {
+            background: rgba(0, 0, 0, 0.1);
+            border: rgba(0, 0, 0, 0.1);
+            box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.1), 0px 0px 1px rgba(0, 0, 0, 0.1);
+            cursor: default;
+        }
+        &::-moz-range-track {
+            background: rgba(0, 0, 0, 0.1);
+            border: rgba(0, 0, 0, 0.1);
+            box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.1), 0px 0px 1px rgba(0, 0, 0, 0.1);
+            cursor: default;
+        }
+        &::-webkit-slider-thumb {
+            background: var(--color-text-light-1);
+            border: var(--color-text-light-1);
+            box-shadow: 1px 1px 1px var(--color-text-light-1), 0px 0px 1px var(--color-text-light-1);
+            cursor: default;
+        }
+        &::-moz-range-thumb {
+            background: var(--color-text-light-1);
+            border: var(--color-text-light-1);
+            box-shadow: 1px 1px 1px var(--color-text-light-1), 0px 0px 1px var(--color-text-light-1);
+            cursor: default;
+        }
+    }
+}
+
 .app.choice-set-prompt {
     min-width: 250px;
 

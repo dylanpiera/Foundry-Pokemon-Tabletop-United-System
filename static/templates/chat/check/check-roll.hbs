@@ -12,7 +12,7 @@
                     </div>
                     <div class="img-row">
                         <img src="{{@root/self.img}}"/>
-                        <span >{{target.name}}'s {{localize target.dc.slug}}</span>
+                        <span>{{#if target.isPrivate}}???{{else}}{{target.name}}{{/if}}'s {{localize target.dc.slug}}</span>
                         <img src="{{target.img}}"/>
                     </div>
                     {{#unless target.isPrivate}}

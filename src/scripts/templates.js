@@ -10,6 +10,9 @@ function registerTemplates() {
         "systems/ptu/static/templates/partials/rules/rule-partial.hbs",
         "systems/ptu/static/templates/partials/species-item-partial.hbs",
 
+        // Token Sheet partials
+        "systems/ptu/static/templates/config/token/appearance-partial.hbs",
+        "systems/ptu/static/templates/config/token/identity-partial.hbs",
 
         // Charactermancer Partials
         // "systems/ptu/templates/partials/charactermancer-evolution-partial.hbs",
