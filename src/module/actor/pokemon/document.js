@@ -209,6 +209,7 @@ class PTUPokemonActor extends PTUActor {
             nature: system.nature.value,
             isTrainer: false,
             twistedPower: this.rollOptions.all["self:ability:twisted-power"],
+            hybridArmor: this.rollOptions.all["self:ability:hybrid-armor"],
         })
 
         system.stats = result.stats;

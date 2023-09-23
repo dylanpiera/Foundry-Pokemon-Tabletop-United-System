@@ -885,6 +885,16 @@
         "PokemonNotFound": "Unable to find the Pokemon, did you delete it?",
         "ChatMessage": "{trainer} Caught {pokemon}! They have been added to {location}."
       }
+    },
+    "Token": {
+      "Size": {
+        "Dimensions": "Dimensions",
+        "Label": "Size",
+        "LinkToActorSize": {
+          "Link": "Link to Actor Size",
+          "Unlink": "Unlink from Actor Size"
+        }
+      }
     }
   },
 

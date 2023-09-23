@@ -3248,6 +3248,37 @@ a.content-link img {
 .sheet.dex .window-content {
   background: #D1FED4;
 }
+.sheet.token-sheet .form-fields select {
+  max-width: 278px;
+}
+.sheet.token-sheet input[type="range"]:disabled {
+  background-color: initial;
+  color: #c5c5c5;
+}
+.sheet.token-sheet input[type="range"]:disabled::-webkit-slider-runnable-track {
+  background: rgba(0, 0, 0, 0.1);
+  border: rgba(0, 0, 0, 0.1);
+  box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.1), 0px 0px 1px rgba(0, 0, 0, 0.1);
+  cursor: default;
+}
+.sheet.token-sheet input[type="range"]:disabled::-moz-range-track {
+  background: rgba(0, 0, 0, 0.1);
+  border: rgba(0, 0, 0, 0.1);
+  box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.1), 0px 0px 1px rgba(0, 0, 0, 0.1);
+  cursor: default;
+}
+.sheet.token-sheet input[type="range"]:disabled::-webkit-slider-thumb {
+  background: var(--color-text-light-1);
+  border: var(--color-text-light-1);
+  box-shadow: 1px 1px 1px var(--color-text-light-1), 0px 0px 1px var(--color-text-light-1);
+  cursor: default;
+}
+.sheet.token-sheet input[type="range"]:disabled::-moz-range-thumb {
+  background: var(--color-text-light-1);
+  border: var(--color-text-light-1);
+  box-shadow: 1px 1px 1px var(--color-text-light-1), 0px 0px 1px var(--color-text-light-1);
+  cursor: default;
+}
 .app.choice-set-prompt {
   min-width: 250px;
 }

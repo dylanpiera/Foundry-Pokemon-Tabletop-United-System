@@ -39,6 +39,7 @@ import { PTUUser } from '../../module/user.js';
 import { PTUContestMove } from '../../module/item/contestmove/document.js';
 import { PTUContestMoveSheet } from '../../module/item/contestmove/sheet.js';
 import { PTUHotBar } from '../../module/apps/hotbar.js';
+import { PTUTokenConfig } from '../../module/canvas/token/sheet.js';
 
 const data = {
   skills: {
@@ -193,7 +194,8 @@ export const PTUCONFIG = {
   },
   Token: {
     objectClass: PTUToken,
-    documentClass: PTUTokenDocument
+    documentClass: PTUTokenDocument,
+    sheetClass: PTUTokenConfig
   },
   combat,
   combatant: {

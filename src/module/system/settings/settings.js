@@ -114,6 +114,15 @@ export function registerSettings() {
         default: true
     });
 
+    game.settings.register("ptu", "tokens.autoscale", {
+        name: "Scale Tokens According to Size",
+        hint: "If enabled, tokens will be scaled to 1.0 or (if belonging to a small creature) 0.6",
+        scope: "world",
+        config: true,
+        type: Boolean,
+        default: true
+    });
+
     game.settings.register("ptu", "transferOwnershipDefaultValue", {
         name: "Transfer Ownership Preference",
         hint: "After ownership of a mon is transfered, would you like for it to also set default permissions for other players?",

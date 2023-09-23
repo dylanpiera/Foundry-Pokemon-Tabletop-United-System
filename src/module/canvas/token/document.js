@@ -4,6 +4,35 @@ class PTUTokenDocument extends TokenDocument {
     }
 
     /** @override */
+    _initialize() {
+        this.auras = new Map();
+        this._source.flags.ptu ??= {};
+        this._source.flags.ptu.linkToActorSize ??= true;
+        this._source.flags.ptu.autoscale ??= this._source.flags.ptu.linkToActorSize
+            ? this._source.flags.ptu.autoscale ?? game.settings.get("ptu", "tokens.autoscale")
+            : false;
+
+        super._initialize();
+    }
+
+    /** @override */
+    prepareBaseData() {
+        super.prepareBaseData();
+
+        this.auras.clear();
+
+        if (!this.actor || !this.isEmbedded) return;
+
+        // Dimensions and scale
+        const linkToActorSize = this.flags.ptu?.linkToActorSize ?? true;
+
+        const autoscaleDefault = game.settings.get("ptu", "tokens.autoscale");
+        // Autoscaling is a secondary feature of linking to actor size
+        const autoscale = linkToActorSize ? this.flags.ptu.autoscale ?? autoscaleDefault : false;
+        this.flags.ptu = mergeObject(this.flags.ptu ?? {}, { linkToActorSize, autoscale });
+    }
+
+    /** @override */
     prepareDerivedData() {
         super.prepareDerivedData();
         if(!(this.actor && this.scene)) return;
@@ -33,6 +62,8 @@ class PTUTokenDocument extends TokenDocument {
     }
 
     static prepareSize(tokenDocument, actor, overriden = false) {
+        if(!(actor && tokenDocument.flags.ptu.linkToActorSize)) return;
+        
         const {width, height} = ((sizeClass) => {;
             switch (sizeClass) {
                 case "Small": return { width: 1, height: 1 };
@@ -47,8 +78,7 @@ class PTUTokenDocument extends TokenDocument {
         tokenDocument.width = width;
         tokenDocument.height = height;
 
-        //TODO: Add setting
-        if(true && !overriden && tokenDocument.flags?.ptu?.autoscale !== false) {
+        if(game.settings.get("ptu", "tokens.autoscale") && !overriden && tokenDocument.flags?.ptu?.autoscale !== false) {
             const absoluteScale = actor.sizeClass === "Small" ? 0.6 : 1;
             const mirrorX = tokenDocument.texture.scaleX < 0 ? -1 : 1;
             const mirrorY = tokenDocument.texture.scaleY < 0 ? -1 : 1;

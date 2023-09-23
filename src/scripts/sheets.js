@@ -12,7 +12,7 @@ function registerSheets() {
     Items.registerSheet("ptu", CONFIG.PTU.Item.sheetClasses.effect, { types: ["effect"], makeDefault: true });
     Items.registerSheet("ptu", CONFIG.PTU.Item.sheetClasses.species, { types: ["species"], makeDefault: true });
 
-    // DocumentSheetConfig.registerSheet(ActiveEffect, "core", PTUActiveEffectConfig, { makeDefault: true })
+    DocumentSheetConfig.registerSheet(CONFIG.PTU.Token.documentClass, "ptu", CONFIG.PTU.Token.sheetClass, { makeDefault: true });
 }
 
 export { registerSheets }

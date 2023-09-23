@@ -384,10 +384,6 @@ function _registerBasicHelpers() {
         return value !== undefined;
     });
 
-    Handlebars.registerHelper("key", function (obj) {
-        return Object.keys(obj)[0];
-    });
-
     Handlebars.registerHelper("is", function (a, b) { return a == b });
     Handlebars.registerHelper("bigger", function (a, b) { return a > b });
     Handlebars.registerHelper("biggerOrEqual", function (a, b) { return a >= b });
