@@ -19,6 +19,9 @@
                     {{else if setting.isNumber}}
                         <input type="number" name="{{setting.key}}" value="{{setting.value}}" />
                     {{else if setting.isText}}
+                        {{#if setting.filepicker}}
+                            {{filePicker target=setting.key type="folder" currentPath=setting.value}}
+                        {{/if}}
                         <input type="text" name="{{setting.key}}" value="{{setting.value}}" />
                     {{/if}}
                 </div>

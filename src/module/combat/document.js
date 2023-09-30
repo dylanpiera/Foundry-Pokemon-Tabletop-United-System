@@ -1,4 +1,19 @@
 class PTUCombat extends Combat {
+    get expBudget() {
+        let budget = 0;
+        for(const combatant of this.combatants) {
+            const token = combatant.token;
+            const actor = combatant.actor;
+            if(!actor || !token) continue;
+            if(actor.hasPlayerOwner) continue;
+            if(token.disposition >= 0) continue;
+
+            const level = actor.attributes.level.current;
+            budget += actor.type === "character" ? level + level : level;
+        }
+        return budget;
+    }
+
     /** @override */
     _sortCombatants(a, b) {
         const { leagueBattle } = game.settings.get("core", PTUCombat.CONFIG_SETTING);
@@ -146,9 +161,9 @@ class PTUCombat extends Combat {
         // Determine the next turn number
         let next = null;
         for (let [i, t] of this.turns.entries()) {
-            if (i <= turn) continue;
-            if (this.settings.skipDefeated && t.isDefeated) continue;
+            if (i == turn) continue;
             if (t.hasActed) continue;
+            if (this.settings.skipDefeated && t.isDefeated) continue;
             next = i;
             break;
         }
@@ -176,8 +191,9 @@ class PTUCombat extends Combat {
         const [newRound, newTurn] = [changed.round, changed.turn];
         const isRoundChange = typeof newRound === "number";
         const isTurnChange = typeof newTurn === "number";
+        const isNewTurnUnacted = isTurnChange && this.turns[newTurn]?.hasActed === false;
         const isNextRound = isRoundChange && (previous.round === null || newRound > previous.round);
-        const isNextTurn = isTurnChange && (previous.turn === null || newTurn > previous.turn);
+        const isNextTurn = isTurnChange && (previous.turn === null || newTurn > previous.turn || isNewTurnUnacted);
 
         // End early if no change
         if (!(isRoundChange || isTurnChange)) return;

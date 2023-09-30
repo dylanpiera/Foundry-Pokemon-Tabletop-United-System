@@ -97,6 +97,7 @@ class PTUMoveDamage {
         modifiers.push(
             ...extractModifiers(actor.synthetics, domains, { injectables: move, test: options})
         )
+        
         damageBaseModifiers.push(
             ...extractModifiers(actor.synthetics, ["damage-base"], { injectables: move, test: options})
         )

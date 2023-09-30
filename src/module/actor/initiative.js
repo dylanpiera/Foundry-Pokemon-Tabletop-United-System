@@ -23,10 +23,6 @@ class ActorInitiative {
             }))
         }
 
-        modifiers.push(
-            ...extractModifiers(actor.synthetics, ["initiative"], { injectables: {actor}, test: actor.getRollOptions("initiative") })
-        )
-
         const statistic = new StatisticModifier("initiative", modifiers, ["initiative"]);
         this.check = new CheckModifier("initiative", statistic, [], ["initiative"]);
 
@@ -37,6 +33,14 @@ class ActorInitiative {
                 modifier: this.check.totalModifier * -0.5
             }));
         }
+    }
+
+    get totalModifier() {
+        return this.createCheck().totalModifier;
+    }
+
+    createCheck(options = ["initiative"]) {
+        return new CheckModifier("initiative", this.check, extractModifiers(this.#actor.synthetics, ["initiative"], { injectables: {actor: this.#actor}, test: this.#actor.getRollOptions("initiative") }), options);
     }
 
     async roll(args = {}) {
@@ -59,7 +63,7 @@ class ActorInitiative {
             skipDialog: true
         }
 
-        const roll = await PTUCheck.roll(this.check, context);
+        const roll = await PTUCheck.roll(this.createCheck(context.options), context);
         if (!roll) {
             // Render combat sidebar in case a combatant was created but the roll was not completed
             game.combats.render(false);

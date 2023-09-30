@@ -639,6 +639,11 @@
   border-left: 4px solid green;
   background-color: #00800065;
 }
+.encounter-budget .exp-budget {
+  font-size: 14px;
+  padding: 0;
+  margin: 0;
+}
 .dialog .dialog-content form.capture-success select[name="trainer"] {
   background: var(--trainer-img);
   background-repeat: no-repeat;
@@ -2079,6 +2084,7 @@ a.content-link img {
   flex-wrap: wrap;
   gap: 5px;
   padding-left: 5px;
+  align-self: center;
 }
 .ptu.sheet.gen8.actor .item-list .item .item-info .item-tags .tag,
 .ptu.sheet.gen8.dex .item-list .item .item-info .item-tags .tag {
@@ -2111,11 +2117,17 @@ a.content-link img {
   padding-left: 3px;
   padding-right: 3px;
 }
+.ptu.sheet.gen8.actor .item-list .item.item-item .item-name,
+.ptu.sheet.gen8.dex .item-list .item.item-item .item-name {
+  max-width: 50%;
+}
 .ptu.sheet.gen8.actor .item-list .item .item-name,
 .ptu.sheet.gen8.dex .item-list .item .item-name {
   flex: 0 1 auto;
   margin-left: 5px;
   align-self: center;
+  max-width: 60%;
+  word-break: break-word;
 }
 .ptu.sheet.gen8.actor .item-list .item .item-name h4,
 .ptu.sheet.gen8.dex .item-list .item .item-name h4 {
@@ -2132,6 +2144,7 @@ a.content-link img {
   text-align: center;
   font-size: 12px;
   margin: 0 0.25rem;
+  align-self: center;
 }
 .ptu.sheet.gen8.actor .item-list .item .item-quantity input[type="number"],
 .ptu.sheet.gen8.dex .item-list .item .item-quantity input[type="number"] {
@@ -2562,6 +2575,9 @@ a.content-link img {
   border-top-left-radius: 0;
   border-bottom-left-radius: 0;
   margin: 0;
+  flex: 1;
+}
+.sheet.item section form.item-sheet .sheet-body .rules .rules-list .rule-element .rule-body .attached-input select {
   flex: 1;
 }
 .sheet.item section form.item-sheet .sheet-body .rules .rules-list .rule-element .rule-body .spaced-fields {

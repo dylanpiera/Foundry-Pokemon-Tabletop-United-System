@@ -3,10 +3,10 @@ import { tagify } from '../../../../util/tags.js';
 import { isBracketedValue } from '../../../rules/rule-element/base.js';
 import { RuleElementForm } from './base.js'
 
-class FlatModifierForm extends RuleElementForm {
+class AELikeForm extends RuleElementForm {
     /** @override */
     get template() {
-        return "systems/ptu/static/templates/item/rules/flat-modifier.hbs";
+        return "systems/ptu/static/templates/item/rules/ae-like.hbs";
     }
 
     /** @override */
@@ -24,7 +24,6 @@ class FlatModifierForm extends RuleElementForm {
         return {
             ...data,
             predicationIsMultiple: Array.isArray(this.rule.predicate),
-            selectorIsArray: Array.isArray(this.rule.selectors),
             value: {
                 mode: valueMode,
                 data: this.rule.value,
@@ -35,22 +34,11 @@ class FlatModifierForm extends RuleElementForm {
     /** @override */
     activateListeners(html) {
         const $html = $(html);
-        const selectorElement = $html.find(".selectors-list")[0];
-        if (selectorElement) {
-            tagify(selectorElement);
-        }
 
         const predicateElement = $html.find(".predicate-list")[0];
         if (predicateElement) {
             tagify(predicateElement);
         }
-
-        // Add events for toggle buttons
-        html.querySelector("[data-action=toggle-selector]")?.addEventListener("click", () => {
-            const selector = this.rule.selectors;
-            const newValue = Array.isArray(selector) ? selector.at(0) ?? "" : [selector ?? ""].filter((s) => !!s);
-            this.updateItem({ selectors: newValue });
-        });
 
         // Add events for toggle buttons
         html.querySelector("[data-action=toggle-predicate]")?.addEventListener("click", () => {
@@ -109,9 +97,6 @@ class FlatModifierForm extends RuleElementForm {
             formData.value = this.coerceNumber(formData.value ?? "");
         }
 
-        if(Array.isArray(formData.selectors)) {
-            formData.selectors = formData.selectors.map(s => s.value).filter(s => !!s)
-        }
         if(Array.isArray(formData.predicate) && formData.predicate.every(p => !!p.value)) {
             formData.predicate = formData.predicate.map(s => s.value).filter(s => !!s)
         }
@@ -125,4 +110,4 @@ class FlatModifierForm extends RuleElementForm {
     }
 }
 
-export { FlatModifierForm };
+export { AELikeForm };

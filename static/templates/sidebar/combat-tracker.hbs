@@ -20,6 +20,11 @@
                 <i class="fas fa-trash"></i>
             </a>
         </nav>
+            {{#if expBudget}}
+            <div class="encounter-budget flexrow {{#if hasCombat}}combat{{/if}}">
+                <h4 class="encounter exp-budget">{{localize "PTU.ExpBudget"}} {{expBudget}} EXP</h4>
+            </div>
+            {{/if}}
         {{/if}}
 
         <div class="encounter-controls flexrow {{#if hasCombat}}combat{{/if}}">

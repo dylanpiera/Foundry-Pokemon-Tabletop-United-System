@@ -135,7 +135,7 @@ class PTUPokemonActor extends PTUActor {
         // Set attributes which are underrived data
         this.attributes = {
             level: {current: system.level.current, tillNext: system.level.expTillNextLevel, percent: system.level.percent},
-            health: { current: system.health.value, temp: system.tempHp },
+            health: { current: system.health.value, temp: system.tempHp, injuries: system.health.injuries },
             skills: {},
         }
     }

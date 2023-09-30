@@ -675,7 +675,25 @@
         "Value": "Value",
         "Domain": "Domain",
         "Option": "Option",
-        "UUID": "UUID"
+        "UUID": "UUID",
+        "Modes": {
+          "Label": "Mode",
+          "Add": "Add",
+          "Subtract": "Subtract",
+          "Remove": "Remove",
+          "Multiply": "Multiply",
+          "Downgrade": "Downgrade",
+          "Upgrade": "Upgrade",
+          "Override": "Override"
+        },
+        "Phases": {
+          "Label": "Phase",
+          "ApplyAEs": "Default",
+          "BeforeDerived": "Before Derived",
+          "AfterDerived": "After Derived",
+          "BeforeRoll": "Before Roll"
+        },
+        "Path": "Path"
       },
       "GrantItem": {
         "AllowDuplicate": "Allow Duplicates",
@@ -895,7 +913,8 @@
           "Unlink": "Unlink from Actor Size"
         }
       }
-    }
+    },
+    "ExpBudget": "EXP Reward:"
   },
 
   "physical-evasion": "Physical Evasion",

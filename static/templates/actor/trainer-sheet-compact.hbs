@@ -965,6 +965,37 @@
                         </div>
                     </div>
 
+                    {{#if (isGm)}}
+                    <!-- Boss Settings -->
+                    <div class="swsh-box mb-2 w-100">
+                        <div
+                            class="swsh-header ball-themes {{ballStyle}} highlight pt-2 pb-2 center-text justify-content-evenly align-items-center">
+                            <div class="fb-33">
+                                <label for="system.boss.is"><b>{{localize "PTU.BossIs"}}</b></label>
+                            </div>
+                            <div class="fb-33">
+                                <label for="system.boss.turns"><b>{{localize "PTU.BossTurns"}}</b></label>
+                            </div>
+                            <div class="fb-33">
+                                <label for="system.boss.bars"><b>{{localize "PTU.BossBars"}}</b></label>
+                            </div>
+                        </div>
+                        <div class="swsh-body mt-1 mb-1 justify-content-evenly">
+                            <div class="fb-33 center-text">
+                                <input name="system.boss.is" type="checkbox" {{checked actor.system.boss.is}} />
+                            </div>
+                            <div class="fb-33 center-text">
+                                <input name="system.boss.turns" type="number" data-dtype="Number"
+                                    value="{{actor.system.boss.turns}}" />
+                            </div>
+                            <div class="fb-33 center-text">
+                                <input name="system.boss.bars" type="number" data-dtype="Number"
+                                    value="{{actor.system.boss.bars}}" />
+                            </div>
+                        </div>
+                    </div>
+                    {{/if}}
+
                     <!-- Skill Background -->
                     <div class="swsh-box mb-2 w-100">
                         <div class="swsh-header ball-themes {{ballStyle}} highlight pt-2 center-text justify-content-center">

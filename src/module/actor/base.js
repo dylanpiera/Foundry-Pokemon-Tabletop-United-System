@@ -791,18 +791,18 @@ class PTUActor extends Actor {
 
     #updateInitiative() {
         const initBase = Math.floor(this.combatant.initiative);
-        if (initBase === this.initiative.check.totalModifier) {
+        if (initBase === this.initiative.totalModifier) {
             this.debouncedUpdate();
         }
         else {
-            const updates = [{ id: this.combatant.id, value: this.initiative.check.totalModifier + (this.combatant.initiative - initBase) }];
+            const updates = [{ id: this.combatant.id, value: this.initiative.totalModifier + (this.combatant.initiative - initBase) }];
             if (this.combatant.isPrimaryBossCombatant) {
                 const { otherTurns } = this.combatant.bossTurns;
 
                 // For each other turn, add an initiative value that is 5 less than the previous
                 // If the value is less than 0, instead start adding 5 more than the previous, restarting from 5 + base value
                 for (let i = 1; i <= otherTurns.length; i++) {
-                    const base = this.initiative.check.totalModifier + (this.combatant.initiative - initBase);
+                    const base = this.initiative.totalModifier + (this.combatant.initiative - initBase);
                     const init = base - (5 * i);
                     const actualInit = init >= 0 ? init : base + -5 * (Math.ceil(init / 5) - 1)
                     updates.push({ id: otherTurns[i - 1].id, value: actualInit });
@@ -849,10 +849,15 @@ class PTUActor extends Actor {
         const struggles = includeStruggles ? (() => {
             const types = Object.keys(CONFIG.PTU.data.typeEffectiveness)
 
+            const strugglePlusRollOption = this.rollOptions.struggle ? Object.keys(this.rollOptions.struggle).find(o => o.startsWith("skill:")) : false;
+
             const struggles = types.reduce((arr, type) => {
                 if (this.rollOptions.struggle?.[`${type.toLocaleLowerCase(game.i18n.lang)}`]) {
                     const rule = this.rules.find(r => !r.ignored && r.key == "RollOption" && r.domain == "struggle" && r.option == type.toLocaleLowerCase(game.i18n.lang));
-                    const strugglePlus = this.system.skills?.combat?.value?.total > 4;
+                    const strugglePlus = (() => {
+                        if(strugglePlusRollOption) return this.system.skills?.[strugglePlusRollOption.replace("skill:", "")]?.value?.total > 4;
+                        return this.system.skills?.combat?.value?.total > 4;
+                    })();
                     const moveData = {
                         name: `Struggle (${type})`,
                         type: "move",
@@ -899,7 +904,10 @@ class PTUActor extends Actor {
                     )
                 }
                 else if (type == "Normal") {
-                    const strugglePlus = this.system.skills?.combat?.value?.total > 4;
+                    const strugglePlus = (() => {
+                        if(strugglePlusRollOption) return this.system.skills?.[strugglePlusRollOption.replace("skill:", "")]?.value?.total > 4;
+                        return this.system.skills?.combat?.value?.total > 4;
+                    })();
                     arr.push(
                         new Item.implementation({
                             name: `Struggle (Normal)`,

@@ -82,12 +82,12 @@ class PTUCombatant extends Combatant {
             const actor = game.actors.get(actorId ?? "");
             const turns = actor?.system?.boss?.is ? actor.system.boss.turns : 1;
             return Array.from({ length: turns }, (_, index) => (
-                { 
-                    actorId, 
-                    hidden, 
-                    sceneId, 
+                {
+                    actorId,
+                    hidden,
+                    sceneId,
                     tokenId,
-                    ...(index === 0 && turns > 1 ? {flags: { ptu: { isPrimaryBossCombatant: true } }} : {})
+                    ...(index === 0 && turns > 1 ? { flags: { ptu: { isPrimaryBossCombatant: true } } } : {})
                 }));
         });
         return super.createDocuments(realData, context);
@@ -104,7 +104,7 @@ class PTUCombatant extends Combatant {
         const paralyzed = actor.conditions.active.find(c => c.slug == "paralysis");
         if (paralyzed) await PTUCondition.HandleParalyzed(actor, paralyzed);
 
-        if(this.isBoss) {
+        if (this.isBoss) {
             await this.bossTurns.mainTurn.update({ "flags.ptu.roundOfLastTurn": encounter.round });
         }
         else {
@@ -124,17 +124,14 @@ class PTUCombatant extends Combatant {
         if (!encounter || !actor) return;
 
         const activeConditions = actor.conditions.active;
-        for (const condition of activeConditions) {
-            await condition.onTurnEnd?.({ token: this.token });
+        if (!this.isBoss || (this.isPrimaryBossCombatant && !this.hasActed)) {
+            for (const condition of activeConditions) {
+                await condition.onTurnEnd?.({ token: this.token });
+            }
         }
 
-        if(this.isBoss) {
-            await this.bossTurns.mainTurn.update({ "flags.ptu.roundOfLastTurnEnd": round });
-        }
-        else {
-            await this.update({ "flags.ptu.roundOfLastTurnEnd": round });
-        }
-        
+        await this.update({ "flags.ptu.roundOfLastTurnEnd": round });
+
         Hooks.callAll("ptu.endTurn", this, encounter, game.user.id);
     }
 
@@ -186,7 +183,7 @@ class PTUCombatant extends Combatant {
         await this.token?.update({ hidden: to });
     }
 
-    async toggleActed({multi = false} = {}) {
+    async toggleActed({ multi = false } = {}) {
         const currentRound = this.combat.current.round;
         const previousRound = currentRound - 1;
 
