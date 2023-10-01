@@ -1,10 +1,386 @@
-import { AttackRoll } from "./attack/attack-roll.js";
-import { CaptureRoll } from "./capture-roll.js";
-import { CheckModifiersDialog } from "./dialog.js";
-import { CheckDiceModifiersDialog } from "./diceDialog.js";
-import { InitiativeRoll } from "./initiative-roll.js";
+import { AttackRoll } from "./rolls/attack-roll.js";
+import { CaptureRoll } from "./rolls/capture-roll.js";
+import { CheckModifiersDialog } from "./dialogs/dialog.js";
+import { CheckDiceModifiersDialog } from "./dialogs/diceDialog.js";
+import { InitiativeRoll } from "./rolls/initiative-roll.js";
 import { CheckRoll } from "./roll.js";
+import { PTUToken } from "../../canvas/token/index.js";
+import { CheckDialog } from "./dialogs/dialog.js";
+import { PTUTokenDocument } from "../../canvas/token/document.js";
+import { CheckModifier } from "../../actor/modifiers.js";
 
+class PTUDiceCheck {
+    /** @type {PTUToken[]} */
+    _tokenTargets = [];
+    /** @type {Map<string, TargetContext>} */
+    _contexts = new Map();
+
+    /** @type {CheckSource} */
+    _source;
+
+    /**
+     * @param {Object} source
+     * @param {PTUActor} source.actor
+     * @param {PTUItem} source.item
+     * @param {PTUTokenDocument} source.token
+     * @param {Set<string>} source.options
+     * @param {PTUToken[]} targets
+     * @param {string[]} selectors
+     * @param {Event?} event
+     */
+    constructor({ source, targets, selectors, event }) {
+        this._tokenTargets = targets;
+        this._source = {
+            actor: source.actor,
+            item: source.item,
+            token: source.token ?? canvas.tokens.controlled.find(t => t.actor === source.actor) ?? source.actor.getActiveTokens().shift() ?? null,
+            options: source.options instanceof Set ? source.options : new Set(source.options),
+        }
+        /** @type {string[]} */
+        this.selectors = selectors;
+
+        /** @type {Set<string>} */
+        this.conditionOptions = new Set(...(source.actor.getFilteredRollOptions("condition") ?? []));
+
+        /** @type {Event?} */
+        this.event = event;
+    }
+
+    /** @type {TargetContext[]} */
+    get contexts() {
+        return this._contexts.contents;
+    }
+
+    get actor() {
+        return this._source.actor;
+    }
+    get token() {
+        return this._source.token;
+    }
+    get item() {
+        return this._source.item;
+    }
+    get options() {
+        return this._source.options;
+    }
+
+    get rollCls() {
+        return CheckRoll;
+    }
+
+    /* -------------------------------------------- */
+    /* Preperation                                  */
+    /* -------------------------------------------- */
+
+    /**
+     * Prepares all contexts for the check
+     * @returns {Promise<PTUDiceCheck>}
+     */
+    async prepareContexts(attackStatistic = null) {
+        this._contexts = new Collection();
+        this.targetOptions = new Set(this.options);
+
+        for (const target of this._tokenTargets) {
+            const context = await this.actor.getContext({
+                selfToken: this.token,
+                targetToken: target,
+                selfItem: this.item,
+                domains: this.selectors,
+                statistic: attackStatistic
+            });
+            this._contexts.set(context.actor.uuid, context);
+            this.targetOptions = new Set([...this.targetOptions, ...context.targetOptions]);
+        }
+        
+        
+        return this;
+    }
+
+    /**
+     * Prepares all modifiers for the check
+     * @returns {PTUDiceCheck}
+     */
+    prepareModifiers() {
+        /** @type {CheckModifier[]} */
+        const modifiers = []
+
+        modifiers.push(
+            ...extractModifiers(this.actor.synthetics, this.selectors, {injectables: {move: this.item}, test: this.targetOptions})
+        )
+
+        this.modifiers = modifiers;
+        return this;
+    }
+
+    /**
+     * Prepare StatisticModifiers for the check
+     * @param {string} slug The slug of the statistic to prepare
+     * @returns {PTUDiceCheck}
+     */
+    prepareStatistic(slug) {
+        this.statistic = CheckModifier.create({
+            slug: slug ?? this.item.name,
+            modifiers: this.modifiers,
+            rollOptions: this.targetOptions,
+        })
+        return this;
+    }
+
+    /* -------------------------------------------- */
+    /* Execution                                    */
+    /* -------------------------------------------- */
+
+    /**
+     * Any code that should be executed before the roll is made
+     */
+    async beforeRoll() {
+        for(const rule of this.actor.rules.filter(r => !r.ignored)) {
+            await rule.beforeRollAsync?.(this);
+        }
+    }
+
+    /**
+     * @param {Object} context
+     * @param {number} context.diceSize
+     * @param {boolean} context.isReroll
+     * @param {Object} context.attack
+     * @param {DcCollection} context.dcs
+     * @param {string} context.title
+     * @param {CheckCallback} callback
+     * @returns 
+     */
+    async execute(context = { isReroll: false, dcs: { base: null, targets: [] }, title, type: "check" }, callback) {
+        const { diceSize, isReroll, attack, dcs, title, type } = context;
+        const { skipDialog } = eventToRollParams(this.event);
+
+        const rollMode = this.options.has("secret") ? (game.user.isGM ? "gmroll" : "blindroll") : "roll";
+
+        const dialogContext = await (async () => {
+            if (skipDialog) return {
+                rollMode,
+                fortuneType: null,
+                statistic: this.statistic
+            };
+
+            return await CheckDialog.DisplayDialog({
+                title,
+                rollMode,
+                statistic: this.statistic,
+            });
+        })();
+        if (!dialogContext) return null;
+
+        const dice = `1d${diceSize}`;
+
+        const options = {
+            origin: {
+                actor: this.actor.uuid,
+                item: this.item?.uuid,
+            },
+            rollerId: game.userId,
+            isReroll,
+            totalModifiers: this.statistic.totalModifiers,
+            domains: this.selectors,
+            targets: this.contexts.map(context => ({
+                actor: context.actor.uuid,
+                token: context.token.uuid,
+                dc: dcs.targets.get(context.actor.uuid),
+            })),
+            dcs,
+            outcomes: {}
+        }
+        if (attack) options.attack = attack;
+
+        const isInfinity = this.statistic.totalModifier === Infinity;
+        const totalModifiersPart = this.statistic.totalModifier?.signedString() ?? "";
+        options.modifierPart = totalModifiersPart;
+
+        const roll = new this.rollCls(`${dice}${isInfinity ? "" : totalModifiersPart}`, {}, options);
+        const rollResult = await roll.evaluate({ async: true });
+
+        const result =
+            (rollResult.isDeterministic
+                ? rollResult.terms.find(t => t instanceof NumericTerm)
+                : rollResult.dice.find(d => d instanceof Die && d.faces === diceSize
+                ))?.total ?? 1;
+        const total = rollResult.total;
+        const targets = [];
+        if (options.dcs.targets.size > 0) {
+            for (const dcTarget of options.dcs.targets.values()) {
+                const context = this._contexts.get(dcTarget.uuid);
+                const degree = (() => {
+                    if (!context) return null;
+
+                    if (result === 1 && !isInfinity) return "crit-miss"
+                    if (dcTarget.critRange.includes(result)) return "crit-hit";
+                    if (isInfinity || total >= dcTarget.value) return "hit";
+                    return "miss";
+                })();
+                if (degree !== null) {
+                    options.outcomes[dcTarget.uuid] = degree;
+
+                    targets.push({
+                        actor: context.actor.uuid,
+                        token: context.token.uuid,
+                        dc: dcTarget.value,
+                        outcome: degree,
+                    })
+                }
+            }
+        }
+        else {
+            const degree = (() => {
+                if (result === 1 && !isInfinity) return "crit-miss"
+                if (options.dcs.baseCritRange.includes(result)) return "crit-hit";
+                if (isInfinity || total >= options.dcs.base) return "hit";
+            })();
+            if (degree !== null) {
+                options.outcomes.base = degree;
+
+                targets.push({
+                    actor: this.actor.uuid,
+                    token: this.token.uuid,
+                    dc: options.dcs.base,
+                    outcome: degree,
+                })
+            }
+        }
+
+        const flags = {
+            core: {
+                canPopout: true
+            },
+            ptu: {
+                context: {
+                    actor: this.actor?.id ?? null,
+                    token: this.token?.id ?? null,
+                    domains: this.selectors ?? [],
+                    targets,
+                    options: Array.from(this.options).sort(),
+                    rollMode: dialogContext.rollMode,
+                    rollTwice: !!dialogContext.fortuneType ?? false,
+                    title,
+                    type,
+                    skipDialog,
+                    isReroll
+                },
+                modifierName: this.statistic.slug,
+                modifiers: this.statistic.modifiers.map(m => m.toObject()),
+                origin: options.origin,
+                resolved: targets.length > 0 ? game.settings.get("ptu", "autoRollDamage") : false
+            }
+        }
+        if (attack) flags.ptu.attack = attack;
+
+        const message = await this.createMessage(roll, rollMode, flags);
+
+        if (callback) {
+            const msg = message instanceof ChatMessage ? message : new ChatMessage(message);
+            const evt = !!this.event && this.event instanceof Event ? this.event : this.event?.originalEvent ?? null;
+            await callback(roll.rolls, targets, msg, evt);
+        }
+
+        this.roll = roll;
+
+        return {
+            roll,
+            targets,
+        }
+    }
+
+    /**
+     * Any code that should be executed after the roll is made
+     */
+    async afterRoll() {
+        for(const rule of this.actor.rules.filter(r => !r.ignored)) {
+            await rule.afterRollAsync?.(this, this.roll);
+        }
+    }
+
+    /**
+     * Creates a chat message for the check
+     * @param {Roll} roll 
+     * @param {string} rollMode 
+     * @param {Object} flags 
+     * @returns {ChatMessage}
+     */
+    async createMessage(roll, rollMode, flags) {
+        const flavor = this.createFlavor({title: flags.ptu.title})
+            .flat()
+            .map(e => (typeof e === "string" ? e : e.outerHTML))
+            .join("");
+
+        flags.ptu.unsafe = flavor;
+
+        const speaker = ChatMessage.getSpeaker({ actor: this.actor, token: this.token });
+        return roll.toMessage({
+            speaker,
+            flavor,
+            flags
+        }, {
+            rollMode,
+            create: true
+        })
+    }
+
+    /**
+     * Creates the flavor for the check
+     * @param {Object} context
+     * @param {string[]} context.extraTags
+     * @param {boolean} context.inverse to be used for Skill Checks to reverse order of modifiers & extra tags
+     * @param {string} context.title
+     * @returns 
+     */
+    createFlavor(context = { extraTags: [], inverse: false, title }) {
+        const { extraTags, inverse } = context;
+        const header = document.createElement("div");
+        header.classList.add("header-bar");
+        header.append((() => {
+            const h3 = document.createElement("h3");
+            h3.classList.add("action");
+            h3.innerHTML = context.title || this.item?.name;
+            return h3;
+        })());
+
+        const tags = (() => {
+            const toTagElement = (tag, cssClass = null) => {
+                const span = document.createElement("span");
+                span.classList.add("tag");
+                if (cssClass) span.classList.add(`tag-${cssClass}`);
+
+                span.innerText = tag.label;
+
+                if (tag.name) span.dataset.slug = tag.name;
+                if (tag.description) span.dataset.description = tag.description;
+
+                return span;
+            }
+
+            const modifiers = this.statistic.modifiers
+                .filter(m => m.enabled)
+                .map(m => {
+                    const sign = m.modifier < 0 ? "" : "+";
+                    const label = `${m.label} ${sign}${m.modifier}`;
+                    return toTagElement({ label, name: m.slug }, "transparent");
+                })
+            const tagsFromOptions = extraTags.map(t => toTagElement(game.i18n.localize(t), "transparent"));
+            if (modifiers.length + tagsFromOptions.length === 0) return [];
+
+            const modifiersAndExtras = document.createElement("div");
+            modifiersAndExtras.classList.add("header-bar");
+            modifiersAndExtras.classList.add("tags");
+            if (inverse) modifiersAndExtras.append(...tagsFromOptions, ...modifiers);
+            else modifiersAndExtras.append(...modifiers, ...tagsFromOptions);
+            return [modifiersAndExtras];
+        })();
+
+        return [header, tags]
+    }
+}
+
+/**
+ * @deprecated Use PTUDiceCheck instead
+ */
 class PTUCheck {
     static async roll(check, context, event, callback, diceStatistic = null) {
         if (event) mergeObject(context, eventToRollParams(event));
@@ -419,9 +795,69 @@ function eventToRollParams(event) {
 }
 
 function isRelevantEvent(event) {
-    return !!event && "crtlKey" in event && "metaKey" in event && "shiftKey" in event;
+    return (!!event) && ("ctrlKey" in event) && ("shiftKey" in event);
 }
 
-export { PTUCheck, eventToRollParams }
+/**
+ * @typedef {Object} CheckContext
+ * @property {PTUActor} actor The actor that is the origin of the check
+ * @property {PTUItem} item The item that is the origin of the check
+ * @property {PTUTokenDocument} token The token that is the origin of the check
+ * @property {string[]} domains Domains related tot his check for fetching actor roll options
+ * @property {Set<string>} options Roll options for this check
+ * @property {Object[]} substitutions
+ * @property {string} type
+ * @property {TargetObject[]} targets
+ */
 
-globalThis.PTUCheck = PTUCheck;
+/**
+ * @typedef {Object} TargetObject
+ * @property {PTUActor} actor The actor that is the target of the check
+ * @property {PTUTokenDocument} token The token that is the target of the check
+ * @property {Object} dc The difficulty class of the check against this target
+ * @property {number} dc.value The difficulty class of the check against this target
+ * @property {string} dc.slug The slug of the difficulty class of the check against this target
+ * @property {number} distance The distance between the origin and the target
+ * @property {Set<string>} options Roll options for this check against this target
+ */
+
+/** 
+ * @typedef {Object} CheckSource
+ * @property {PTUActor} actor
+ * @property {PTUItem} item
+ * @property {PTUTokenDocument} token
+ * @property {Set<string>} options
+ */
+
+/**
+ * @callback CheckCallback
+ * @param {Object} rolls
+ * @param {TargetObjects[]} targets
+ * @param {Object} msg
+ * @param {Event} event
+ */
+
+/**
+ * @typedef {Object} TargetContext
+ * @property {PTUActor} actor The actor that is the target of the check
+ * @property {PTUTokenDocument} token The token that is the target of the check
+ * @property {number} distance The distance between the origin and the target
+ * @property {Set<string>} options Roll options for this check against this target
+ */
+
+/**
+ * @typedef {Object} DcCollection
+ * @property {number} base The base difficulty class of the check
+ * @property {number[]} baseCritRange The critical range of the check against the base difficulty class
+ * @property {Map<string, TargetDC>} targets The difficulty class of the check against each target
+ */
+
+/**
+ * @typedef {Object} TargetDC
+ * @property {string} slug The slug of the difficulty class of the check against this target
+ * @property {Object} uuid the UUID of the actor that is the target of the check
+ * @property {number} value The difficulty class of the check against this target
+ * @property {number[]} critRange The critical range of the check against this target
+ */
+
+export { PTUDiceCheck, PTUCheck, eventToRollParams }

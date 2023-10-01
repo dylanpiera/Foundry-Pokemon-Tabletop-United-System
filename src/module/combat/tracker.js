@@ -19,6 +19,7 @@ class PTUCombatTracker extends CombatTracker {
             }
             return turn;
         });
+        data.expBudget = data.combat?.expBudget;
         return data;
     }
 

@@ -2,7 +2,8 @@ import { sluggify } from "../../util/misc.js";
 import { PTUCondition } from "../item/index.js";
 import { ChatMessagePTU } from "../message/base.js";
 import { extractRollSubstitutions, extractEphemeralEffects, extractModifiers, processPreUpdateActorHooks } from "../rules/helpers.js";
-import { PTUCheck, eventToRollParams } from "../system/check/check.js";
+import { PTUAttackCheck } from "../system/check/attack.js";
+import { eventToRollParams } from "../system/check/check.js";
 import { PTUDamage } from "../system/damage/damage.js";
 import { PTUMoveDamage } from "../system/damage/move.js";
 import { ActorConditions } from "./conditions.js";
@@ -327,8 +328,8 @@ class PTUActor extends Actor {
 
     /** @override */
     static async createDocuments(data = [], context = {}) {
-        for(const actorData of data) {
-            if(actorData.prototypeToken?.actorLink !== true) {
+        for (const actorData of data) {
+            if (actorData.prototypeToken?.actorLink !== true) {
                 actorData.prototypeToken ??= {};
                 actorData.prototypeToken.actorLink = true;
             }
@@ -474,10 +475,10 @@ class PTUActor extends Actor {
             }
 
             if (this.system.boss?.is) {
-                if(hpUpdate.updates["system.health.value"] <= 0) {
+                if (hpUpdate.updates["system.health.value"] <= 0) {
                     const { bars, turns } = this.system.boss;
-                    const halfBars = Math.floor(turns/2);
-                    if(bars >= halfBars && (bars-1) < halfBars) {
+                    const halfBars = Math.floor(turns / 2);
+                    if (bars >= halfBars && (bars - 1) < halfBars) {
                         injuries++;
                         injuryStatements.push(game.i18n.format("PTU.ApplyDamage.BossHalfBarInjury", { actor: this.link }));
                     }
@@ -503,7 +504,7 @@ class PTUActor extends Actor {
         })();
 
         // If injuries should be applied, add them to hpUpdates
-        if(injuries > 0) {
+        if (injuries > 0) {
             hpUpdate.updates["system.health.injuries"] = (isNaN(Number(preUpdateSource.system.health.injuries)) ? 0 : Number(preUpdateSource.system.health.injuries)) + injuries;
         }
 
@@ -791,18 +792,18 @@ class PTUActor extends Actor {
 
     #updateInitiative() {
         const initBase = Math.floor(this.combatant.initiative);
-        if (initBase === this.initiative.check.totalModifier) {
+        if (initBase === this.initiative.totalModifier) {
             this.debouncedUpdate();
         }
         else {
-            const updates = [{ id: this.combatant.id, value: this.initiative.check.totalModifier + (this.combatant.initiative - initBase) }];
+            const updates = [{ id: this.combatant.id, value: this.initiative.totalModifier + (this.combatant.initiative - initBase) }];
             if (this.combatant.isPrimaryBossCombatant) {
                 const { otherTurns } = this.combatant.bossTurns;
 
                 // For each other turn, add an initiative value that is 5 less than the previous
                 // If the value is less than 0, instead start adding 5 more than the previous, restarting from 5 + base value
                 for (let i = 1; i <= otherTurns.length; i++) {
-                    const base = this.initiative.check.totalModifier + (this.combatant.initiative - initBase);
+                    const base = this.initiative.totalModifier + (this.combatant.initiative - initBase);
                     const init = base - (5 * i);
                     const actualInit = init >= 0 ? init : base + -5 * (Math.ceil(init / 5) - 1)
                     updates.push({ id: otherTurns[i - 1].id, value: actualInit });
@@ -849,10 +850,15 @@ class PTUActor extends Actor {
         const struggles = includeStruggles ? (() => {
             const types = Object.keys(CONFIG.PTU.data.typeEffectiveness)
 
+            const strugglePlusRollOption = this.rollOptions.struggle ? Object.keys(this.rollOptions.struggle).find(o => o.startsWith("skill:")) : false;
+
             const struggles = types.reduce((arr, type) => {
                 if (this.rollOptions.struggle?.[`${type.toLocaleLowerCase(game.i18n.lang)}`]) {
                     const rule = this.rules.find(r => !r.ignored && r.key == "RollOption" && r.domain == "struggle" && r.option == type.toLocaleLowerCase(game.i18n.lang));
-                    const strugglePlus = this.system.skills?.combat?.value?.total > 4;
+                    const strugglePlus = (() => {
+                        if (strugglePlusRollOption) return this.system.skills?.[strugglePlusRollOption.replace("skill:", "")]?.value?.total > 4;
+                        return this.system.skills?.combat?.value?.total > 4;
+                    })();
                     const moveData = {
                         name: `Struggle (${type})`,
                         type: "move",
@@ -899,7 +905,10 @@ class PTUActor extends Actor {
                     )
                 }
                 else if (type == "Normal") {
-                    const strugglePlus = this.system.skills?.combat?.value?.total > 4;
+                    const strugglePlus = (() => {
+                        if (strugglePlusRollOption) return this.system.skills?.[strugglePlusRollOption.replace("skill:", "")]?.value?.total > 4;
+                        return this.system.skills?.combat?.value?.total > 4;
+                    })();
                     arr.push(
                         new Item.implementation({
                             name: `Struggle (Normal)`,
@@ -1016,143 +1025,20 @@ class PTUActor extends Actor {
         if (!move.rollable) return action
 
         action.roll = async (params = {}) => {
-            params.options ??= [];
-
-            const targets = params.targets ?? [...game.user.targets];
-            if (game.settings.get("ptu", "automation.failAttackIfNoTarget") && targets.length == 0) {
-                ui.notifications.warn("PTU.Action.NoTarget", { localize: true });
-                return null;
-            }
-            const contexts = []
-
-            const getContext = async (target) => {
-                return await this.getCheckContext({
+            const check = new PTUAttackCheck({
+                source: {
+                    actor: this,
                     item: move,
-                    domains: selectors,
-                    statistic: action,
-                    target: { token: target },
-                    options: new Set([...rollOptions, ...params.options, ...action.options]),
-                    viewOnly: params.getFormula ?? false
-                });
-            }
+                    token: params.token ?? null,
+                    options: rollOptions
+                },
+                targets: params.targets ?? [...game.user.targets],
+                selectors,
+                event: params.event,
+            })
 
-            for (const target of targets) {
-                contexts.push(await getContext(target));
-            }
-            if (contexts.length == 0) contexts.push(await getContext(null));
-
-            if (!selectors.includes("self-attack") && game.settings.get("ptu", "automation.failAttackIfOutOfRange")) {
-                for (const context of contexts) {
-                    if (typeof context.target?.distance !== "number") continue;
-
-                    const range = (() => {
-                        if (selectors.includes("ranged-attack")) return context.self.item.system.range.match(/\d+/)?.[0] ?? 1;
-                        return 1;
-                    })();
-
-                    if (context.target.distance > range) {
-
-                        ui.notifications.warn("PTU.Action.AttackOutOfRange", { localize: true });
-                        return null;
-                    }
-                }
-            }
-
-            if(rollOptions.includes("condition:cannot-attack")) {
-                ui.notifications.warn("PTU.Action.CannotAttack", { localize: true });
-                return null;
-            }
-
-            const conditionOptions = this.getFilteredRollOptions("condition");
-            let isConfused = false;
-            for (const condition of conditionOptions) {
-                if (condition === "condition:frozen") {
-                    ui.notifications.warn("PTU.Action.MoveWhileFrozen", { localize: true });
-                    return null;
-                }
-                if (condition === "condition:sleep") {
-                    ui.notifications.warn("PTU.Action.MoveWhileSleeping", { localize: true });
-                    return null;
-                }
-                if (condition === "condition:rage" && selectors.includes("status-attack")) {
-                    ui.notifications.warn("PTU.Action.StatusAttackWhileRaging", { localize: true });
-                    return null;
-                }
-                if (condition === "condition:disabled" && rollOptions.includes(`condition:disabled:${move.slug}`)) {
-                    ui.notifications.warn("PTU.Action.DisabledMove", { localize: true });
-                    return null;
-                }
-                if (condition === "condition:suppressed" && !selectors.includes(`at-will-attack`)) {
-                    ui.notifications.warn("PTU.Action.SuppressedMove", { localize: true });
-                    return null;
-                }
-                if (condition === "condition:confused") {
-                    isConfused = true;
-                }
-            }
-
-            const modifiers = [];
-            modifiers.push(new PTUModifier({
-                slug: "accuracy-check",
-                label: "Accuracy Check",
-                type: move.system.type,
-                category: move.system.category,
-                modifier: isNaN(Number(move.system.ac)) ? Infinity : -Number(move.system.ac)
-            }));
-
-            if (this.system.modifiers.acBonus.total != 0) {
-                modifiers.push(new PTUModifier({
-                    slug: "accuracy-bonus",
-                    label: "Accuracy Bonus",
-                    type: move.system.type,
-                    category: move.system.category,
-                    modifier: this.system.modifiers.acBonus.total
-                }));
-            }
-
-            const context = {
-                type: "attack-roll",
-                actor: contexts[0].self.actor,
-                token: contexts[0].self.token,
-                targets: contexts.map(c => ({ dc: params.dc ?? c.dc, ...c.target, options: c.options })),
-                item: contexts[0].self.item,
-                domains: selectors,
-                options: contexts.length > 1 ? contexts[0].options.filter(o => !o.startsWith("target")) : contexts[0].options,
-            }
-            if (params.getFormula) context.skipDialog = true;
-
-            modifiers.push(
-                ...extractModifiers(this.synthetics, selectors, { injectables: move, test: context.options })
-            )
-
-            for (const rule of this.rules.filter(r => !r.ignored)) {
-                rule.beforeRoll?.(selectors, context);
-            }
-
-            context.substitutions = extractRollSubstitutions(this.synthetics.rollSubstitutions, selectors, context.options);
-
-
-            const roll = await PTUCheck.roll(
-                new CheckModifier(
-                    game.i18n.format("PTU.Action.AttackRoll", { move: move.name }),
-                    action,
-                    modifiers,
-                    context.options
-                ),
-                context,
-                params.event,
-                params.callback
-            );
-
-            if (isConfused) await PTUCondition.HandleConfusion(move, this);
-
-            for (const context of contexts) {
-                for (const rule of this.rules.filter(r => !r.ignored))
-                    await rule.afterRoll?.(selectors, context.options, roll);
-            }
-
-            return roll;
-        }
+            return await check.executeAttack(params.callback, action);
+        };
 
         action.damage = async (params = {}) => {
             const domains = selectors.map(s => s.replace("attack", "damage"));
@@ -1231,6 +1117,111 @@ class PTUActor extends Actor {
     /* Rolls                                        */
     /* -------------------------------------------- */
 
+    /**
+     * @typedef {Object} TargetContext
+     * @property {PTUActor} actor The actor that is the target of the check
+     * @property {PTUTokenDocument} token The token that is the target of the check
+     * @property {number} distance The distance between the origin and the target
+     * @property {Set<string>} options Roll options for this check against this target
+     * @property {boolean} viewOnly Whether this check is only for viewing the formula
+     */
+
+    /**
+     * @returns {Promise<TargetContext>}
+     */
+    async getContext({ selfToken, targetToken, domains, selfItem, statistic, viewOnly = false }) {
+        const selfOptions = this.getRollOptions(domains ?? []);
+        // TODO: Add Self Ephermeral Effects
+
+        const selfActor =
+            viewOnly || !targetToken?.actor
+                ? this
+                : this.getContextualClone(
+                    [...selfOptions, ...targetToken.actor.getSelfRollOptions("target")],
+                    []
+                );
+
+        const originItem = (() => {
+            // 1. No clone, so use the item passed
+            if (selfActor === this) return selfItem ?? null;
+
+            // 2. Try get item from statistic
+            if (
+                statistic &&
+                "item" in statistic &&
+                statistic.item.type == "move"
+            ) {
+                return statistic.item;
+            }
+
+            // 3. Try get item from clone
+            const itemClone = selfActor.items.get(selfItem?.id ?? "");
+            if (itemClone) return itemClone;
+
+            // 4. Give up :(
+            return selfItem ?? null;
+        })();
+
+        const itemOptions = originItem?.getRollOptions("item") ?? [];
+
+        const getTargetRollOptions = (actor) => {
+            const targetOptions = actor?.getSelfRollOptions("target") ?? [];
+            if (targetToken) {
+                targetOptions.push("target");
+                const mark = this.synthetics.targetMarks?.get(targetToken.document.uuid);
+                if (mark) targetOptions.push(`target:mark:${mark}`);
+            }
+            targetOptions.push(...(actor?.getFilteredRollOptions("condition").map(o => `target:${o}`) ?? []));
+            return targetOptions;
+        }
+
+        const targetRollOptions = getTargetRollOptions(targetToken?.actor ?? null);
+
+        const options = {}
+        if (itemOptions.includes("move:target:underground") && targetRollOptions.includes("target:location:underground")) {
+            options["ignore-Z"] = true;
+        }
+        if (itemOptions.includes("move:target:underwater") && targetRollOptions.includes("target:location:underwater")) {
+            options["ignore-Z"] = true;
+        }
+        if (itemOptions.includes("move:target:sky") && targetRollOptions.includes("target:location:sky")) {
+            options["ignore+Z"] = true;
+        }
+
+        const distance = selfToken && targetToken ? selfToken.distanceTo(targetToken, options) : null;
+        const [originDistance, targetDistance] =
+            typeof distance === "number"
+                ? [`origin:distance:${distance}`, `target:distance:${distance}`]
+                : [null, null];
+
+        // TODO: Add Target Ephermeral Effects
+
+        const targetActor = (targetToken?.actor)?.getContextualClone(
+            [
+                ...selfActor.getSelfRollOptions("origin"),
+                ...itemOptions,
+                ...(originDistance ? [originDistance] : []),
+            ],
+            []
+        ) ?? null;
+
+        const targetOptions = new Set(targetActor ? getTargetRollOptions(targetActor) : targetRollOptions);
+        const rollOptions = new Set([
+            ...selfOptions,
+            ...itemOptions,
+            ...targetOptions,
+            ...(targetDistance ? [targetDistance] : []),
+        ])
+
+        return {
+            options: rollOptions,
+            actor: targetActor,
+            token: targetToken.document,
+            distance,
+            targetOptions
+        }
+    }
+
     async getCheckContext(params) {
         const context = await this.getRollContext(params);
         const targetActor = context.target?.actor;
@@ -1247,7 +1238,7 @@ class PTUActor extends Actor {
                     value: 0,
                 }
             }
-            const stuck = (context.options.has("target:condition:stuck") && !context.options.has("target:pokemon:type:ghost"));
+            const stuck = (context.options.has("target:condition:stuck") && !context.options.has("target:types:ghost"));
 
             switch (category) {
                 case "Status": return targetActor?.system?.evasion?.speed !== undefined ? {

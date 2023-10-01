@@ -1,7 +1,7 @@
 import { isObject } from '../../../../util/misc.js';
 import { tagify } from '../../../../util/tags.js';
 import { isBracketedValue } from '../../../rules/rule-element/base.js';
-import { RuleElementForm } from './index.js'
+import { RuleElementForm } from './base.js'
 
 class FlatModifierForm extends RuleElementForm {
     /** @override */

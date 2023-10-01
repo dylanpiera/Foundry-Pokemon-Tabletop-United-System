@@ -65,6 +65,7 @@ export const Init = {
                 uiTop?.insertAdjacentElement("afterend", template);
             }
 
+            CONFIG.ui.items.prototype._onDragStart = _onDragStart;
 
             // Register stuff with the Foundry client
             registerSheets();
@@ -91,3 +92,16 @@ export const Init = {
         });
     }
 }
+
+/** @override */
+function _onDragStart(event) {
+    if ( ui.context ) ui.context.close({animate: false});
+    const li = event.currentTarget.closest(".directory-item");
+    const item = game.items.get(li.dataset.entryId);
+    if ( !item ) return;
+    const dragData = {
+        type: item.documentName,
+        data: item.toObject()
+    }
+    event.dataTransfer.setData("text/plain", JSON.stringify(dragData));
+  }

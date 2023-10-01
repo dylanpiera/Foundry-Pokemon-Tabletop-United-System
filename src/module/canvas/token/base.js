@@ -13,7 +13,7 @@ class PTUToken extends Token {
             return super._drawBar(number, bar, data);
         }
 
-        const { current, max, temp } = actor.attributes.health ?? {};
+        const { current, max, temp, injuries } = actor.attributes.health ?? {};
         const healthPercent = Math.clamped(current, 0, max) / max;
 
         // Compute the color based on health percentage, this formula is the one core foundry uses
@@ -22,6 +22,7 @@ class PTUToken extends Token {
             ? PIXI.utils.rgb2hex([0.5 * healthPercent, 0.7 * healthPercent, 0.5 + healthPercent / 2])
             : PIXI.utils.rgb2hex([1 - healthPercent / 2, healthPercent, 0]);
         const bossBarColor = PIXI.utils.rgb2hex([0, 1, 0]);
+        const injuryColor = 0x8b0000;
 
         // Bar size logic stolen from core
         let h = Math.max(canvas.dimensions.size / 12, 8);
@@ -73,10 +74,19 @@ class PTUToken extends Token {
             }
         }
 
+        // Detirmine the width of the health bar due to injuries
+        const injuryPercent = Math.clamped(injuries, 0, 10) / 10;
+        const injuryWidth = injuryPercent * this.w;
+        const healthWidth = (this.w - injuryWidth) * healthPercent;
+
         // Draw the health bar
         const healthBarY = ((numBars - 2) * barHeight) + (offset * (numBars - 2));
         bar.lineStyle(0).beginFill(black, 0.5).drawRoundedRect(0, healthBarY, this.w, barHeight * 2, 3);
-        bar.beginFill(color, 1.0).drawRoundedRect(0, healthBarY, healthPercent * this.w, barHeight * 2, 2);
+        bar.beginFill(color, 1.0).drawRoundedRect(0, healthBarY, healthWidth, barHeight * 2, 2);
+        if(injuryPercent > 0) {
+            bar.beginFill(injuryColor, 1.0).drawRoundedRect(this.w - (injuryWidth) + (injuryPercent < 1 ? 1 : 0), healthBarY, (injuryWidth) - (injuryPercent < 1 ? 1 : 0), barHeight * 2, 2);
+            if(injuryPercent < 1)  bar.beginFill(black, 1.0).lineStyle(bs, black, 1.0).drawRect(this.w-(injuryWidth), healthBarY+1, 1, barHeight * 2 - 2);
+        }
         bar.beginFill(black, 0).lineStyle(bs, black, 1.0).drawRoundedRect(0, healthBarY, this.w, barHeight * 2, 3);
 
         // Set position

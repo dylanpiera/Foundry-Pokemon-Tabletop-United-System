@@ -127,6 +127,7 @@ function settingsToSheetData(settings, cache, prefix = "") {
             isCheckbox: setting.type === Boolean,
             isText: setting.type === String,
             isNumber: setting.type === Number,
+            filepicker: setting.type === String && setting.filePicker,
         }
 
         return result;

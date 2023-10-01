@@ -47,7 +47,7 @@ class PTUTrainerActor extends PTUActor {
             //         .map(([key, value]) => ([key, value.value.total]))
             // ),
             level: { current: system.level.current },
-            health: { current: system.health.value, temp: system.tempHp },
+            health: { current: system.health.value, temp: system.tempHp, injuries: system.health.injuries },
             skills: {}
         }
     }

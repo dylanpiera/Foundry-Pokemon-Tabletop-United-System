@@ -689,6 +689,13 @@
     }
 }
 
+.encounter-budget .exp-budget {
+    font-size: 14px;
+    padding: 0;
+    margin: 0;
+    // color: #aaaaaa;
+}
+
 .dialog {
     .dialog-content {
         form.capture-success {
@@ -2432,6 +2439,7 @@ a.content-link {
                         flex-wrap: wrap;
                         gap: 5px;
                         padding-left: 5px;
+                        align-self: center;
 
                         .tag {
                             height: 20px;
@@ -2466,10 +2474,18 @@ a.content-link {
                     }
                 }
 
+                &.item-item {
+                    .item-name {
+                        max-width: 50%;
+                    }
+                }
+
                 .item-name {
                     flex: 0 1 auto;
                     margin-left: 5px;
                     align-self: center;
+                    max-width: 60%;
+                    word-break: break-word;
 
                     h4 {
                         cursor: pointer;
@@ -2486,6 +2502,7 @@ a.content-link {
                     text-align: center;
                     font-size: 12px;
                     margin: 0 0.25rem;
+                    align-self: center;
 
                     input[type="number"] {
                         -moz-appearance: auto;
@@ -2996,6 +3013,9 @@ a.content-link {
                                         border-top-left-radius: 0;
                                         border-bottom-left-radius: 0;
                                         margin: 0;
+                                        flex: 1;
+                                    }
+                                    select {
                                         flex: 1;
                                     }
                                 }
