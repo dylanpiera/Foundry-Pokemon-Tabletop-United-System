@@ -921,6 +921,13 @@
         "LocationNotFound": "An invalid location was selected, please try again.",
         "PokemonNotFound": "Unable to find the Pokemon, did you delete it?",
         "ChatMessage": "{trainer} Caught {pokemon}! They have been added to {location}."
+      },
+      "ContestedCheck": {
+        "Title": "{name}'s Contested {skill} Check",
+        "Hint": "Select the skill to roll",
+        "Skill": "Skill to roll",
+        "Submit": "Submit",
+        "Cancel": "Cancel"
       }
     },
     "Token": {

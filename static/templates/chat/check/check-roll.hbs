@@ -18,23 +18,43 @@
                     {{#unless target.isPrivate}}
                     <div class="d-flex flex-row justify-content-center">
                         <span class="type-img">
-                            {{#switch (lookup @root/outcome target._id)}}
-                                {{#case "hit"}}
-                                    <img src="/systems/ptu/images/icons/HitIcon.png">
-                                {{/case}}
-                                {{#case "crit-hit"}}
-                                    <img src="/systems/ptu/images/icons/CriticalHit.png">
-                                {{/case}}
-                                {{#case "blocked-crit"}}
-                                    <img class="blocked tooltip" title="{{localize "PTU.CriticalImmunityLabel"}}" src="/systems/ptu/images/icons/HitIcon.png">
-                                {{/case}}
-                                {{#case "crit-miss"}}
-                                    <img src="/systems/ptu/images/icons/CriticalMiss.png">
-                                {{/case}}
-                                {{#case "miss"}}
-                                    <img src="/systems/ptu/images/icons/MissIcon.png">
-                                {{/case}}
-                            {{/switch}}
+                            {{#if @root/outcomes}}
+                                {{#switch (lookup @root/outcomes target.uuid)}}
+                                    {{#case "hit"}}
+                                        <img src="/systems/ptu/images/icons/HitIcon.png">
+                                    {{/case}}
+                                    {{#case "crit-hit"}}
+                                        <img src="/systems/ptu/images/icons/CriticalHit.png">
+                                    {{/case}}
+                                    {{#case "blocked-crit"}}
+                                        <img class="blocked tooltip" title="{{localize "PTU.CriticalImmunityLabel"}}" src="/systems/ptu/images/icons/HitIcon.png">
+                                    {{/case}}
+                                    {{#case "crit-miss"}}
+                                        <img src="/systems/ptu/images/icons/CriticalMiss.png">
+                                    {{/case}}
+                                    {{#case "miss"}}
+                                        <img src="/systems/ptu/images/icons/MissIcon.png">
+                                    {{/case}}
+                                {{/switch}}
+                            {{else}}
+                                {{#switch (lookup @root/outcome target._id)}}
+                                    {{#case "hit"}}
+                                        <img src="/systems/ptu/images/icons/HitIcon.png">
+                                    {{/case}}
+                                    {{#case "crit-hit"}}
+                                        <img src="/systems/ptu/images/icons/CriticalHit.png">
+                                    {{/case}}
+                                    {{#case "blocked-crit"}}
+                                        <img class="blocked tooltip" title="{{localize "PTU.CriticalImmunityLabel"}}" src="/systems/ptu/images/icons/HitIcon.png">
+                                    {{/case}}
+                                    {{#case "crit-miss"}}
+                                        <img src="/systems/ptu/images/icons/CriticalMiss.png">
+                                    {{/case}}
+                                    {{#case "miss"}}
+                                        <img src="/systems/ptu/images/icons/MissIcon.png">
+                                    {{/case}}
+                                {{/switch}}
+                            {{/if}}
                         </span>
                     </div>
                     {{/unless}}
@@ -45,5 +65,12 @@
                 </div>
             {{/if}}
         </div>
+        {{#if contestedCheck}}
+            <div class="flavor-text footer">
+                <div class="buttons">
+                    <button class="button contested-check" title="Contested-Check">Contested Check</button>
+                </div>
+            </div>
+        {{/if}}
     </div>
 </div>

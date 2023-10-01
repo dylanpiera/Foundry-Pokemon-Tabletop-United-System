@@ -29,13 +29,13 @@ class CheckRoll extends Roll {
             for(const target of data) {
                 if(typeof target?.actor === "object") {
                     const actor = game.actors.get(target.actor._id) ?? null;
-                    targets.push({...target.actor, dc: target.dc, isPrivate: actor?.isPrivate});
+                    targets.push({...(target.actor.toObject?.() ?? target.actor), dc: target.dc, isPrivate: actor?.isPrivate});
                     if(actor?.isPrivate) containsPrivate = true;
                     continue;
                 }
                 const actor = await fromUuid(target.actor ?? "");
                 if(!actor) continue;
-                targets.push({...actor, dc: target.dc, isPrivate: actor.isPrivate});
+                targets.push({...(actor.toObject?.() ?? actor), uuid: target.actor, dc: target.dc, isPrivate: actor.isPrivate});
                 if(actor.isPrivate) containsPrivate = true;
             }
             return targets;
@@ -49,12 +49,20 @@ class CheckRoll extends Roll {
             item,
             self: actor,
             targets,
+            outcomes: isPrivate ? null : this.options.outcomes ?? options.outcomes ?? null,
             outcome: isPrivate ? null : this.options.outcome ?? options.outcome ?? null,
             ...options,
             type: this.options.type ?? options.type ?? null,
             containsPrivate,
-        }
+            contestedCheck: (() => {
+                if(Object.keys(this.options.outcomes ?? options.outcomes ?? {}).length > 0) return false;
 
+                if(this.options.type !== "skill-check") return false;
+                if(game.user.isGM && targets.length > 0) return true;
+                if(targets.some(target => game.actors.get(target._id)?.isOwner ?? false)) return true;
+                return false;
+            })()
+        }
 
         return renderTemplate(template ?? this.template, chatData);
     }

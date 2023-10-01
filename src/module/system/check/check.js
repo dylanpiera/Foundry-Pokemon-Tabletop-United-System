@@ -281,7 +281,7 @@ class PTUDiceCheck {
         if (callback) {
             const msg = message instanceof ChatMessage ? message : new ChatMessage(message);
             const evt = !!this.event && this.event instanceof Event ? this.event : this.event?.originalEvent ?? null;
-            await callback(roll.rolls, targets, msg, evt);
+            await callback([roll], targets, msg, evt);
         }
 
         this.roll = roll;

@@ -220,6 +220,89 @@ class ChatMessagePTU extends ChatMessage {
 
             await item?.applyCapture(this.flags.ptu.context);
         });
+        $html.find("button.contested-check").on("click", async event => {
+            event.preventDefault();
+            event.stopPropagation();
+
+            const total = this.rolls[0]?.total;
+            const target = this.targets.find(t => t.actor.isOwner);
+            if (!target || total === undefined || total === null) return;
+
+            const {actor, token} = this.flags.ptu.origin;
+            const tokenDocument = await fromUuid(token);
+
+            const skill = this.context.skill;
+
+            const dialog = new Dialog({
+                title: game.i18n.format("PTU.Dialog.ContestedCheck.Title", {name: target.actor.name, skill: game.i18n.localize(`PTU.Skills.${skill}`)}),
+                content: await renderTemplate("systems/ptu/static/templates/apps/contested-check.hbs", {
+                    skill,
+                    skills: Object.keys(target.actor.system.skills).sort()
+                }),
+                buttons: {
+                    submit: {
+                        icon: '<i class="fas fa-check"></i>',
+                        label: game.i18n.localize("PTU.Dialog.ContestedCheck.Submit"),
+                        callback: async ($html, event) => {
+                            const formData = $html.find("select").map((_, select) => ({ name: select.name, value: select.value })).get().reduce((obj, { name, value }) => {
+                                obj[name] = value;
+                                return obj;
+                            }, {});
+
+                            const contestedSkill = target.actor.attributes.skills[formData.skill];
+                            if(!contestedSkill) return;
+                            
+                            await contestedSkill.roll({
+                                event,
+                                targets: [tokenDocument.object],
+                                dc: {
+                                    slug: game.i18n.format("PTU.Check.SkillCheck", { skill: game.i18n.localize(`PTU.Skills.${skill}`) }),
+                                    value: total,
+                                    uuids: {
+                                        actor: actor,
+                                        token: token
+                                    }
+                                },
+                                callback: async (rolls, targets, msg, event) => {
+                                    const contestedTotal = rolls[0]?.total;
+                                    if(contestedTotal === undefined || contestedTotal === null) return;
+
+                                    const outcome = total > contestedTotal ? "hit" : "miss";
+
+                                    this.rolls[0].options.outcomes = {
+                                        [target.actor.uuid]: outcome
+                                    };
+                                    this.rolls[0].options.targets = [
+                                        {
+                                            actor: target.actor.uuid,
+                                            token: target.token.uuid,
+                                            outcome: outcome,
+                                            dc: {
+                                                slug: game.i18n.format("PTU.Check.SkillCheck", { skill: game.i18n.localize(`PTU.Skills.${formData.skill}`) }),
+                                                value: contestedTotal,
+                                            }
+                                        }
+                                    ]
+
+                                    await this.update({
+                                        "flags.ptu.context.outcomes": {
+                                            [target.actor.uuid]: outcome
+                                        },
+                                        "rolls": [JSON.stringify(this.rolls[0])]
+                                    })
+                                }
+                            })
+                        }
+                    },
+                    cancel: {
+                        icon: '<i class="fas fa-times"></i>',
+                        label: game.i18n.localize("PTU.Dialog.ContestedCheck.Cancel"),
+                    }
+                },
+                default: "submit"
+            })
+            dialog.render(true);
+        });
     }
 }
 

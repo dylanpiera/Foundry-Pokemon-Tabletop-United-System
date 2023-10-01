@@ -8,9 +8,10 @@ import { CheckRoll } from "./roll.js";
 class PTUSkillCheck extends PTUDiceCheck {
 
     /** @override */
-    constructor({ source, targets, selectors, event, action }) {
+    constructor({ source, targets, selectors, event, action, dc }) {
         super({ source, targets, selectors, event });
         this.action = action;
+        this.dc = dc;
     }
 
     get rollCls() {
@@ -47,9 +48,9 @@ class PTUSkillCheck extends PTUDiceCheck {
             }),
         ]
 
-        for(const modifier of this.modifiers) {
-            if(modifier instanceof StatisticModifier) modifiers.push(modifier);
-            if(modifier instanceof PTUDiceModifier) diceModifiers.push(modifier);
+        for (const modifier of this.modifiers) {
+            if (modifier instanceof StatisticModifier) modifiers.push(modifier);
+            if (modifier instanceof PTUDiceModifier) diceModifiers.push(modifier);
         }
 
         this.modifiers = modifiers;
@@ -83,8 +84,8 @@ class PTUSkillCheck extends PTUDiceCheck {
     */
     async execute(callback, isReroll = false) {
         const title = this.action.label;
-        const {skipDialog } = eventToRollParams(this.event);;
-        
+        const { skipDialog } = eventToRollParams(this.event);;
+
         const rollMode = this.options.has("secret") ? (game.user.isGM ? "gmroll" : "blindroll") : "roll";
 
         const dialogContext = await (async () => {
@@ -125,6 +126,7 @@ class PTUSkillCheck extends PTUDiceCheck {
             origin: {
                 actor: this.actor.uuid,
                 item: this.item?.uuid,
+                token: this.token?.document?.uuid,
             },
             rollerId: game.userId,
             isReroll,
@@ -133,7 +135,15 @@ class PTUSkillCheck extends PTUDiceCheck {
             targets: this.contexts.map(context => ({
                 actor: context.actor.uuid,
                 token: context.token.uuid,
-            }))
+                dc: this.dc ? {
+                    value: this.dc.value,
+                    slug: this.dc.slug
+                } : null
+            })),
+            type: "skill-check",
+            skill: this.skill,
+            dc: this.dc,
+            outcomes: {}
         }
 
         const isInfinity = this.statistic.totalModifier === Infinity;
@@ -144,13 +154,24 @@ class PTUSkillCheck extends PTUDiceCheck {
         const rollResult = await roll.evaluate({ async: true });
 
         const targets = []
-
-        for (const context of this.contexts) {
-            const target = {
-                actor: context.actor.uuid,
-                token: context.token.uuid,
+        if (options.dc) {
+            const degree = rollResult.total >= options.dc.value ? "hit" : "miss"
+            targets.push({
+                actor: options.dc.uuids.actor,
+                token: options.dc.uuids.token,
+                dc: options.dc.value,
+                outcome: degree
+            })
+            options.outcomes[options.dc.uuids.actor] = degree;
+        }
+        else {
+            for (const context of this.contexts) {
+                const target = {
+                    actor: context.actor.uuid,
+                    token: context.token.uuid,
+                }
+                targets.push(target);
             }
-            targets.push(target);
         }
 
         const flags = {
@@ -169,7 +190,8 @@ class PTUSkillCheck extends PTUDiceCheck {
                     title,
                     type: "skill-check",
                     skipDialog,
-                    isReroll
+                    isReroll,
+                    skill: this.skill
                 },
                 modifierName: this.statistic.slug,
                 modifiers: this.statistic.modifiers.map(m => m.toObject()),
@@ -183,7 +205,7 @@ class PTUSkillCheck extends PTUDiceCheck {
         if (callback) {
             const msg = message instanceof ChatMessage ? message : new ChatMessage(message);
             const evt = !!this.event && this.event instanceof Event ? this.event : this.event?.originalEvent ?? null;
-            await callback(roll.rolls, targets, msg, evt);
+            await callback([roll], targets, msg, evt);
         }
 
         this.roll = roll;

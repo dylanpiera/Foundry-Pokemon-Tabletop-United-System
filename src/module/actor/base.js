@@ -1148,7 +1148,8 @@ class PTUActor extends Actor {
                 targets: params.targets ?? [...game.user.targets],
                 selectors,
                 event: params.event,
-                action
+                action,
+                dc: params.dc ?? null
             })
 
             return await check.executeCheck(params.callback, action);

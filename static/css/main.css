@@ -80,10 +80,10 @@
   background: linear-gradient(45deg, #fcffd9, #f9ffa1);
 }
 .dice-checks.dialog section .check-modifiers-content.attack {
-  background: linear-gradient(45deg, #ecdbdb, #ffdfdf);
+  background: linear-gradient(45deg, #d8d8f1, #c2cdff);
 }
 .dice-checks.dialog section .check-modifiers-content.damage {
-  background: linear-gradient(45deg, #d8d8f1, #c2cdff);
+  background: linear-gradient(45deg, #ecdbdb, #ffdfdf);
 }
 .dice-checks.dialog section .check-modifiers-content.skill {
   background: linear-gradient(45deg, #c3eaec, #b7ffdb);
@@ -972,7 +972,8 @@ a.content-link img {
 .chat-message.message .flavor-text.footer .buttons .damage {
   flex-basis: 50%;
 }
-.chat-message.message .flavor-text.footer .buttons .apply-capture {
+.chat-message.message .flavor-text.footer .buttons .apply-capture,
+.chat-message.message .flavor-text.footer .buttons .contested-check {
   flex-basis: 50%;
   background: #fffff0;
 }
