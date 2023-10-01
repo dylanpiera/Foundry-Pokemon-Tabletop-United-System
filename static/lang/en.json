@@ -133,6 +133,25 @@
     "TempHP": "Temporary HP"
   },
   "PTU": {
+    "Skills": {
+      "acrobatics": "Acrobatics",
+      "athletics": "Athletics",
+      "charm": "Charm",
+      "command": "Command",
+      "focus": "Focus",
+      "guile": "Guile",
+      "intimidate": "Intimidate",
+      "intuition": "Intuition",
+      "perception": "Perception",
+      "stealth": "Stealth",
+      "survival": "Survival",
+      "combat": "Combat",
+      "generalEd": "General Education",
+      "medicineEd": "Medicine Education",
+      "occultEd": "Occult Education",
+      "pokemonEd": "Pokémon Education",
+      "techEd": "Technology Education"
+    },
     "Title": "Pokémon Tabletop United",
 
     "TabsSkills": "Skills",

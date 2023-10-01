@@ -4,6 +4,7 @@ import { ChatMessagePTU } from "../message/base.js";
 import { extractRollSubstitutions, extractEphemeralEffects, extractModifiers, processPreUpdateActorHooks } from "../rules/helpers.js";
 import { PTUAttackCheck } from "../system/check/attack.js";
 import { eventToRollParams } from "../system/check/check.js";
+import { PTUSkillCheck } from "../system/check/skill.js";
 import { PTUDamage } from "../system/damage/damage.js";
 import { PTUMoveDamage } from "../system/damage/move.js";
 import { ActorConditions } from "./conditions.js";
@@ -1109,6 +1110,49 @@ class PTUActor extends Actor {
                 return PTUDamage.roll(damage, damageContext, params.event, params.callback);
             }
         };
+
+        return action;
+    }
+
+    prepareSkill(skill) {
+        const selectors = [
+            "all", 
+            "check", 
+            "skill-check", 
+            `skill-${skill}`
+        ]
+
+        const options = this.getRollOptions(selectors);
+        const statistic = new StatisticModifier(skill, []);
+
+        const action = mergeObject(statistic, {
+            label: game.i18n.format("PTU.Check.SkillCheck", { skill: game.i18n.localize(`PTU.Skills.${skill}`) }),
+            domains: selectors,
+            type: "skill",
+            options,
+            skill
+        });
+
+        action.breakdown = () => action.modifiers
+            .filter(m => m.enabled)
+            .map(m => `${m.label}: ${m.signedValue}`)
+            .join(", ");
+
+        action.roll = async (params = {}) => {
+            const check = new PTUSkillCheck({
+                source: {
+                    actor: this,
+                    token: params.token ?? null,
+                    options
+                },
+                targets: params.targets ?? [...game.user.targets],
+                selectors,
+                event: params.event,
+                action
+            })
+
+            return await check.executeCheck(params.callback, action);
+        }
 
         return action;
     }

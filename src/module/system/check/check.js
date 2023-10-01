@@ -76,7 +76,7 @@ class PTUDiceCheck {
      * Prepares all contexts for the check
      * @returns {Promise<PTUDiceCheck>}
      */
-    async prepareContexts(attackStatistic = null) {
+    async prepareContexts(statistic = null) {
         this._contexts = new Collection();
         this.targetOptions = new Set(this.options);
 
@@ -86,14 +86,17 @@ class PTUDiceCheck {
                 targetToken: target,
                 selfItem: this.item,
                 domains: this.selectors,
-                statistic: attackStatistic
+                statistic
             });
             this._contexts.set(context.actor.uuid, context);
             this.targetOptions = new Set([...this.targetOptions, ...context.targetOptions]);
         }
         
-        
         return this;
+    }
+
+    pushOptions(options) {
+        this.targetOptions = new Set([...this.targetOptions, ...options]);
     }
 
     /**
@@ -105,7 +108,7 @@ class PTUDiceCheck {
         const modifiers = []
 
         modifiers.push(
-            ...extractModifiers(this.actor.synthetics, this.selectors, {injectables: {move: this.item}, test: this.targetOptions})
+            ...extractModifiers(this.actor.synthetics, this.selectors, {injectables: {move: this.item, item: this.item, actor: this.actor}, test: this.targetOptions})
         )
 
         this.modifiers = modifiers;
@@ -166,6 +169,7 @@ class PTUDiceCheck {
                 title,
                 rollMode,
                 statistic: this.statistic,
+                type
             });
         })();
         if (!dialogContext) return null;
@@ -179,7 +183,7 @@ class PTUDiceCheck {
             },
             rollerId: game.userId,
             isReroll,
-            totalModifiers: this.statistic.totalModifiers,
+            totalModifiers: this.statistic.totalModifier,
             domains: this.selectors,
             targets: this.contexts.map(context => ({
                 actor: context.actor.uuid,
@@ -304,8 +308,8 @@ class PTUDiceCheck {
      * @param {Object} flags 
      * @returns {ChatMessage}
      */
-    async createMessage(roll, rollMode, flags) {
-        const flavor = this.createFlavor({title: flags.ptu.title})
+    async createMessage(roll, rollMode, flags, extraTags = [], inverse = false) {
+        const flavor = this.createFlavor({title: flags.ptu.title, extraTags, inverse})
             .flat()
             .map(e => (typeof e === "string" ? e : e.outerHTML))
             .join("");
@@ -363,7 +367,7 @@ class PTUDiceCheck {
                     const label = `${m.label} ${sign}${m.modifier}`;
                     return toTagElement({ label, name: m.slug }, "transparent");
                 })
-            const tagsFromOptions = extraTags.map(t => toTagElement(game.i18n.localize(t), "transparent"));
+            const tagsFromOptions = extraTags.map(t => toTagElement({label: game.i18n.localize(t)}, "transparent"));
             if (modifiers.length + tagsFromOptions.length === 0) return [];
 
             const modifiersAndExtras = document.createElement("div");

@@ -70,6 +70,24 @@
 #token-hud .status-effects .effect-control:hover {
   filter: drop-shadow(0 0 5px #232323aa) drop-shadow(0 0 2px #ababab77);
 }
+.dice-checks.dialog section {
+  padding: 0;
+}
+.dice-checks.dialog section .check-modifiers-content {
+  padding: 8px;
+}
+.dice-checks.dialog section .check-modifiers-content.check {
+  background: linear-gradient(45deg, #fcffd9, #f9ffa1);
+}
+.dice-checks.dialog section .check-modifiers-content.attack {
+  background: linear-gradient(45deg, #ecdbdb, #ffdfdf);
+}
+.dice-checks.dialog section .check-modifiers-content.damage {
+  background: linear-gradient(45deg, #d8d8f1, #c2cdff);
+}
+.dice-checks.dialog section .check-modifiers-content.skill {
+  background: linear-gradient(45deg, #c3eaec, #b7ffdb);
+}
 .token-panel {
   pointer-events: initial;
   position: absolute;

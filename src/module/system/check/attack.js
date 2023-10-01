@@ -1,5 +1,5 @@
 import { sluggify } from "../../../util/misc.js";
-import { CheckModifier, PTUModifier, StatisticModifier } from "../../actor/modifiers.js";
+import { PTUModifier, StatisticModifier } from "../../actor/modifiers.js";
 import { PTUCondition } from "../../item/index.js";
 import { PTUDiceCheck } from "./check.js";
 import { AttackRoll } from "./rolls/attack-roll.js";
@@ -116,7 +116,7 @@ class PTUAttackCheck extends PTUDiceCheck {
             const critRange = Array.fromRange(1 + Math.max(critMod, 0), 20 - Math.max(critMod, 0));
 
             /** @type {TargetContext[]} */
-            const contexts = this._contexts.size > 0 ? this._contexts : [{ actor: this.actor}]
+            const contexts = this._contexts.size > 0 ? this._contexts : [{ actor: this.actor, options: this.options, token: this.token}]
 
             for (const context of contexts) {
                 const target = {
@@ -168,7 +168,8 @@ class PTUAttackCheck extends PTUDiceCheck {
             isReroll,
             attack,
             title,
-            dcs
+            dcs,
+            type: "attack"
         },
             callback
         );

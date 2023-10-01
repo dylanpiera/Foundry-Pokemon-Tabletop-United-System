@@ -12,20 +12,21 @@ export class CheckDialog extends Application {
      * @param {StatisticModifier} context.statistic
      * @returns {Promise<{fortuneType: String, rollMode: String, statistic: StatisticModifier}>}
      */
-    static async DisplayDialog({title, fortuneType, rollMode, statistic}) {
+    static async DisplayDialog({title, fortuneType, rollMode, statistic, type}) {
         return new Promise((resolve) => {
             const dialog = new CheckDialog({
                 resolve,
                 title,
                 fortuneType, 
                 rollMode,
-                statistic
+                statistic,
+                type
             });
             dialog.render(true);
         });
     }
 
-    constructor({resolve, title, fortuneType, rollMode, statistic}) {
+    constructor({resolve, title, fortuneType, rollMode, statistic, type}) {
         super({title});
 
         this.resolve = resolve;
@@ -33,6 +34,16 @@ export class CheckDialog extends Application {
         this.rollMode = rollMode;
         this.check = statistic;
         this.substitutions = [];
+
+        this.extraClasses = (() => {
+            switch(type) {
+                case "attack": return ["attack"];
+                case "damage": return ["damage"];
+                case "check": return ["check"];
+                case "skill": return ["skill"];
+                default: return [];
+            }
+        })();
     }
     
     static get defaultOptions() {
@@ -65,6 +76,7 @@ export class CheckDialog extends Application {
             fortune,
             none,
             misfortune,
+            extraClasses: this.extraClasses.join(" ")
         };
     }
 
