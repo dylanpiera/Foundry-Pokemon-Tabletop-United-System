@@ -53,7 +53,7 @@ class PTUAttackCheck extends PTUDiceCheck {
         ]
 
         if (this.actor.system.modifiers.acBonus.total != 0) {
-            modifiers.push(new CheckModifier({
+            modifiers.push(new PTUModifier({
                 slug: "accuracy-bonus",
                 label: "Accuracy Bonus",
                 modifier: this.actor.system.modifiers.acBonus.total
