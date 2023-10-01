@@ -18,7 +18,6 @@ class PTUToken extends Token {
 
         // Compute the color based on health percentage, this formula is the one core foundry uses
         const black = 0x000000;
-        const white = 0xffffff;
         const color = number
             ? PIXI.utils.rgb2hex([0.5 * healthPercent, 0.7 * healthPercent, 0.5 + healthPercent / 2])
             : PIXI.utils.rgb2hex([1 - healthPercent / 2, healthPercent, 0]);

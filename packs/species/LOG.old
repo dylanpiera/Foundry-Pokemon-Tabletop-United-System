@@ -1,4 +1,24 @@
-2023/09/28-15:57:05.402404 7fc5cdf98640 Recovering log #551
-2023/09/28-15:57:05.403731 7fc5cdf98640 Delete type=3 #549
-2023/09/28-15:57:05.403776 7fc5cdf98640 Delete type=0 #551
-2023/09/28-15:57:05.403803 7fc5cdf98640 Delete type=3 #545
+2023/09/28-15:58:20.582440 7f0349ffb640 Recovering log #553
+2023/09/28-15:58:20.583869 7f0349ffb640 Delete type=0 #553
+2023/09/28-15:58:20.583908 7f0349ffb640 Delete type=3 #552
+2023/10/01-14:08:05.352834 7f00abfff640 Level-0 table #557: started
+2023/10/01-14:08:05.418307 7f00abfff640 Level-0 table #557: 4887070 bytes OK
+2023/10/01-14:08:05.419042 7f00abfff640 Delete type=0 #555
+2023/10/01-14:16:30.774808 7f00abfff640 Level-0 table #559: started
+2023/10/01-14:16:30.775526 7f00abfff640 Level-0 table #559: 22679 bytes OK
+2023/10/01-14:16:30.775937 7f00abfff640 Delete type=0 #556
+2023/10/01-14:16:30.776562 7f00abfff640 Manual compaction at level-0 from '!folders!CMymFngAhNsaPlS5' @ 72057594037927935 : 1 .. '!items!zyXhWVwTmu553jFn' @ 0 : 0; will stop at '!items!zyXhWVwTmu553jFn' @ 17119 : 1
+2023/10/01-14:16:30.776571 7f00abfff640 Compacting 2@0 + 4@1 files
+2023/10/01-14:16:30.812781 7f00abfff640 Generated table #560@0: 509 keys, 2118767 bytes
+2023/10/01-14:16:30.847332 7f00abfff640 Generated table #561@0: 509 keys, 2117634 bytes
+2023/10/01-14:16:30.881378 7f00abfff640 Generated table #562@0: 511 keys, 2118131 bytes
+2023/10/01-14:16:30.898478 7f00abfff640 Generated table #563@0: 254 keys, 1053134 bytes
+2023/10/01-14:16:30.898494 7f00abfff640 Compacted 2@0 + 4@1 files => 7407666 bytes
+2023/10/01-14:16:30.898814 7f00abfff640 compacted to: files[ 0 4 0 0 0 0 0 ]
+2023/10/01-14:16:30.899117 7f00abfff640 Delete type=2 #557
+2023/10/01-14:16:30.900063 7f00abfff640 Delete type=2 #500
+2023/10/01-14:16:30.900346 7f00abfff640 Delete type=2 #503
+2023/10/01-14:16:30.900568 7f00abfff640 Delete type=2 #559
+2023/10/01-14:16:30.900723 7f00abfff640 Delete type=2 #530
+2023/10/01-14:16:30.901205 7f00abfff640 Delete type=2 #501
+2023/10/01-14:16:30.904550 7f00abfff640 Manual compaction at level-0 from '!items!zyXhWVwTmu553jFn' @ 17119 : 1 .. '!items!zyXhWVwTmu553jFn' @ 0 : 0; will stop at (end)

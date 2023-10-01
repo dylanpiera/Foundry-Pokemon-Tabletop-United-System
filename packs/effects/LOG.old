@@ -1,4 +1,22 @@
-2023/09/28-15:57:05.374894 7fc5cef9a640 Recovering log #447
-2023/09/28-15:57:05.376287 7fc5cef9a640 Delete type=3 #442
-2023/09/28-15:57:05.376329 7fc5cef9a640 Delete type=0 #447
-2023/09/28-15:57:05.376357 7fc5cef9a640 Delete type=3 #445
+2023/09/28-15:58:20.552739 7f034affd640 Recovering log #449
+2023/09/28-15:58:20.554125 7f034affd640 Delete type=0 #449
+2023/09/28-15:58:20.554158 7f034affd640 Delete type=3 #448
+2023/10/01-14:16:30.764819 7f00abfff640 Level-0 table #453: started
+2023/10/01-14:16:30.765922 7f00abfff640 Level-0 table #453: 35353 bytes OK
+2023/10/01-14:16:30.766293 7f00abfff640 Delete type=0 #451
+2023/10/01-14:16:30.773125 7f00abfff640 Manual compaction at level-0 from '!folders!845I85D1jrVh7RBM' @ 72057594037927935 : 1 .. '!items!znvgEviVbL2WnCGJ' @ 0 : 0; will stop at '!items!ed6GkfPq9AmYTTnf' @ 438 : 1
+2023/10/01-14:16:30.773135 7f00abfff640 Compacting 2@0 + 0@1 files
+2023/10/01-14:16:30.774162 7f00abfff640 Generated table #454@0: 48 keys, 22053 bytes
+2023/10/01-14:16:30.774177 7f00abfff640 Compacted 2@0 + 0@1 files => 22053 bytes
+2023/10/01-14:16:30.774618 7f00abfff640 compacted to: files[ 0 1 1 0 0 0 0 ]
+2023/10/01-14:16:30.774673 7f00abfff640 Delete type=2 #440
+2023/10/01-14:16:30.774726 7f00abfff640 Delete type=2 #453
+2023/10/01-14:16:30.776007 7f00abfff640 Manual compaction at level-0 from '!items!ed6GkfPq9AmYTTnf' @ 438 : 1 .. '!items!znvgEviVbL2WnCGJ' @ 0 : 0; will stop at (end)
+2023/10/01-14:16:30.901564 7f00abfff640 Manual compaction at level-1 from '!folders!845I85D1jrVh7RBM' @ 72057594037927935 : 1 .. '!items!znvgEviVbL2WnCGJ' @ 0 : 0; will stop at '!items!znvgEviVbL2WnCGJ' @ 500 : 1
+2023/10/01-14:16:30.901575 7f00abfff640 Compacting 1@1 + 1@2 files
+2023/10/01-14:16:30.903310 7f00abfff640 Generated table #455@1: 97 keys, 52830 bytes
+2023/10/01-14:16:30.903325 7f00abfff640 Compacted 1@1 + 1@2 files => 52830 bytes
+2023/10/01-14:16:30.903823 7f00abfff640 compacted to: files[ 0 0 1 0 0 0 0 ]
+2023/10/01-14:16:30.903879 7f00abfff640 Delete type=2 #400
+2023/10/01-14:16:30.903939 7f00abfff640 Delete type=2 #454
+2023/10/01-14:16:30.904562 7f00abfff640 Manual compaction at level-1 from '!items!znvgEviVbL2WnCGJ' @ 500 : 1 .. '!items!znvgEviVbL2WnCGJ' @ 0 : 0; will stop at (end)
