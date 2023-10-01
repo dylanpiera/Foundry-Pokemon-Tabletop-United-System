@@ -32,12 +32,12 @@ export class AttackRoll extends CheckRoll {
             for(const target of data) {
                 if(typeof target?.actor === "object") {
                     const actor = game.actors.get(target.actor._id) ?? null;
-                    targets.push({...target.actor.toObject(), dc: target.dc, isPrivate: actor?.isPrivate});
+                    targets.push({...(target.actor.toObject?.() ?? target.actor), dc: target.dc, isPrivate: actor?.isPrivate});
                     continue;
                 }
                 const actor = await fromUuid(target.actor ?? "");
                 if(!actor) continue;
-                targets.push({...actor.toObject(), uuid: target.actor, dc: target.dc, isPrivate: actor.isPrivate});
+                targets.push({...(actor.toObject?.() ?? actor), uuid: target.actor, dc: target.dc, isPrivate: actor.isPrivate});
             }
             return targets;
         })();
