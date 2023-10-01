@@ -482,7 +482,7 @@
     "RollModeLabel": "Roll Mode",
 
     "Action": {
-      "AttackRoll": "Attack Roll",
+      "AttackRoll": "{move}: Attack Roll",
       "AttackOutOfRange": "The target is out of range",
       "MoveWhileFrozen": "You can't use moves while frozen",
       "MoveWhileSleeping": "You can't use moves while sleeping",

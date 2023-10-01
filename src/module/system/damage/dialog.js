@@ -1,5 +1,5 @@
 import { PTUModifier } from "../../actor/modifiers.js";
-import { CheckModifiersDialog } from "../check/dialog.js";
+import { CheckModifiersDialog } from "../check/dialogs/dialog.js";
 
 export class DamageModifiersDialog extends CheckModifiersDialog {
     constructor(check, resolve, context) {

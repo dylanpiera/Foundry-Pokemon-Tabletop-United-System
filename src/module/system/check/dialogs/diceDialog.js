@@ -1,6 +1,6 @@
-import { PTUModifier } from "../../actor/modifiers.js";
+import { PTUDiceModifier, PTUModifier } from "../../../actor/modifiers.js";
 
-export class CheckModifiersDialog extends Application {
+export class CheckDiceModifiersDialog extends Application {
     constructor(check, resolve, context) {
         super({ title: context?.title || check.slug })
 
@@ -13,7 +13,7 @@ export class CheckModifiersDialog extends Application {
     static get defaultOptions() {
         return {
             ...super.defaultOptions,
-            template: "systems/ptu/static/templates/chat/check/check-modifiers-dialog.hbs",
+            template: "systems/ptu/static/templates/chat/check/check-dice-modifiers-dialog.hbs",
             classes: ["dice-checks", "dialog"],
             popOut: true,
             width: 380,
@@ -87,13 +87,22 @@ export class CheckModifiersDialog extends Application {
         const addModifierButton = $html.find("button.add-modifier")[0];
         addModifierButton?.addEventListener("click", () => {
             const parent = addModifierButton.parentElement;
-            const value = Number(parent.querySelector(".add-modifier-value")?.value || 1);
+            const diceValue = parent.querySelector(".add-modifier-value")?.value ?? "";
+            const diceNumber = Number(diceValue.match(/^-?\d+/)?.[0]);
+            const dieSize = Number(diceValue.match(/d\d+/)?.[0]?.replace("d", ""));
             let name = String(parent.querySelector(".add-modifier-name")?.value);
             const errors = [];
-            if (Number.isNaN(value)) {
-                errors.push("Modifier value must be a number.");
-            } else if (value === 0) {
-                errors.push("Modifier value must not be zero.");
+            if (Number.isNaN(diceNumber)) {
+                errors.push("Dice amount must be a number.");
+            } 
+            else if (diceNumber === 0) {
+                errors.push("Dice amount must not be zero.");
+            }
+            if (Number.isNaN(dieSize)) {
+                errors.push("Dice size must be a number.");
+            }
+            else if (dieSize <= 0) {
+                errors.push("Dice size must be greater than zero.");
             }
             if (!name || !name.trim()) {
                 name = "Unnamed Modifier"
@@ -101,24 +110,9 @@ export class CheckModifiersDialog extends Application {
             if (errors.length > 0) {
                 ui.notifications.error(errors.join(" "));
             } else {
-                this.check.push(new PTUModifier({label: name, modifier: value}));
+                this.check.push(new PTUDiceModifier({label: name, diceNumber, dieSize}));
                 this.render();
             }
-        });
-
-        for (const rollTwice of $html.find(".fate input[type=radio]")) {
-            rollTwice.addEventListener("click", () => {
-                this.context.rollTwice = (rollTwice.value || false);
-            });
-        }
-
-        const rollModeInput = $html.find("select[name=rollmode]")[0];
-        rollModeInput?.addEventListener("change", () => {
-            const rollMode = rollModeInput.value;
-            if (!tupleHasValue(Object.values(CONST.DICE_ROLL_MODES), rollMode)) {
-                throw Error("Unexpected roll mode");
-            }
-            this.context.rollMode = rollMode;
         });
     }
 

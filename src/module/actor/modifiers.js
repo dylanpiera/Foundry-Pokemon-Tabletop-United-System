@@ -273,6 +273,14 @@ class CheckModifier extends StatisticModifier {
     constructor(slug, statistic, modifiers, rollOptions) {
         super(slug, statistic.modifiers.map(m => m.clone()).concat(modifiers), rollOptions);
     }
+
+    /**
+     * @returns {StatisticModifier} 
+     */
+    static create({slug, modifiers, rollOptions, statistic}) {
+        const mods = [...modifiers, ...(statistic?.modifiers?.map(m => m.clone()) ?? [])]
+        return new StatisticModifier(slug, mods, rollOptions);
+    }
 }
 
 /**

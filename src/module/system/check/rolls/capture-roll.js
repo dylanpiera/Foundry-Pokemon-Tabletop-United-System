@@ -1,4 +1,4 @@
-import { CheckRoll } from "./roll.js";
+import { CheckRoll } from "../roll.js";
 
 class CaptureRoll extends CheckRoll {
     /** @override */

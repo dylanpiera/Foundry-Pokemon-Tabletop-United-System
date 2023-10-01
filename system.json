@@ -4,10 +4,10 @@
   "description": "A re-imagining of the Pokemon Tabletop United TTRPG System now made with FoundryVTT as a central pilar.",
   "compatibility": {
     "minimum": 11,
-    "verified": "11.308",
+    "verified": "11.309",
     "maximum": 11
   },
-  "version": "4.0.0.beta.4",
+  "version": "4.0.0.beta.5",
   "templateVersion": 2,
   "authors": [
     {

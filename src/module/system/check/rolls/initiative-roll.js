@@ -1,4 +1,4 @@
-import { CheckRoll } from "./roll.js";
+import { CheckRoll } from "../roll.js";
 
 class InitiativeRoll extends CheckRoll {
     constructor(formula, data, options) {
