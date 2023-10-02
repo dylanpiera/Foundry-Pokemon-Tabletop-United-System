@@ -1,9 +1,6 @@
 import { PTUActor, PTUSkills } from "../index.js";
-import { calcBaseStats, calculateEvasions, calculatePTStatTotal, calculateOldStatTotal, calculateStatTotal } from "../helpers.js";
-import { calculatePokemonCapabilities } from "./capabilities.js";
-import { getEffectiveness } from "./effectiveness.js";
+import { calculateStatTotal } from "../helpers.js";
 import { calculateLevel } from "./level.js";
-import { calculateSkills } from "./skills.js";
 import { LevelUpForm } from "../../apps/level-up-form/sheet.js";
 import { sluggify } from "../../../util/misc.js";
 import { PokemonGenerator } from "./generator.js";
@@ -267,9 +264,6 @@ class PTUPokemonActor extends PTUActor {
             system.skills[key]["rank"] = PTUSkills.getRankSlug(system.skills[key]["value"]["total"]);
             this.attributes.skills[key] = this.prepareSkill(key);// PTUSkills.calculate({actor: this, context: {skill: key, options: []}})
         }
-
-        // Calc Type Effectiveness
-        system.effectiveness = getEffectiveness(this);
 
         // Contests
         // This is to force the order of the stats to be the same as the order in the sheet

@@ -38,7 +38,7 @@ export class CheckDialog extends Application {
         this.extraClasses = (() => {
             switch(type) {
                 case "attack": return ["attack"];
-                case "damage": return ["damage"];
+                case "damage-roll": return ["damage"];
                 case "check": return ["check"];
                 case "skill": return ["skill"];
                 default: return [];

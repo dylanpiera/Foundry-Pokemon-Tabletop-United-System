@@ -123,6 +123,14 @@ class PTUAttackCheck extends PTUDiceCheck {
                     uuid: context.actor.uuid,
                     critRange
                 }
+
+                if(context.options.has("target:condition:vulnerable")) {
+                    target.slug = "vulnerable";
+                    target.value = 0;
+                    targets.set(context.actor.uuid, target);
+                    continue;
+                }
+
                 const stuck = (context.options.has("target:condition:stuck") && !context.options.has("target:types:ghost"));
                 switch (this.item?.system.category) {
                     case "Status": {

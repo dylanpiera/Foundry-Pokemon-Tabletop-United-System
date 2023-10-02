@@ -3,7 +3,7 @@ import { CaptureRoll } from "./rolls/capture-roll.js";
 import { CheckModifiersDialog } from "./dialogs/dialog.js";
 import { CheckDiceModifiersDialog } from "./dialogs/diceDialog.js";
 import { InitiativeRoll } from "./rolls/initiative-roll.js";
-import { CheckRoll } from "./roll.js";
+import { CheckRoll } from "./rolls/roll.js";
 import { PTUToken } from "../../canvas/token/index.js";
 import { CheckDialog } from "./dialogs/dialog.js";
 import { PTUTokenDocument } from "../../canvas/token/document.js";
@@ -27,8 +27,9 @@ class PTUDiceCheck {
      * @param {PTUToken[]} targets
      * @param {string[]} selectors
      * @param {Event?} event
+     * @param {typeof CheckRoll} rollCls
      */
-    constructor({ source, targets, selectors, event }) {
+    constructor({ source, targets, selectors, event, rollCls }) {
         this._tokenTargets = targets;
         this._source = {
             actor: source.actor,
@@ -40,10 +41,15 @@ class PTUDiceCheck {
         this.selectors = selectors;
 
         /** @type {Set<string>} */
-        this.conditionOptions = new Set(...(source.actor.getFilteredRollOptions("condition") ?? []));
+        this.conditionOptions = new Set([...(source.actor.getFilteredRollOptions("condition") ?? [])]);
 
         /** @type {Event?} */
         this.event = event;
+
+        this._rollCls = rollCls ?? CheckRoll;
+
+        /** @type {Set<string>} */
+        this.targetOptions = new Set();
     }
 
     /** @type {TargetContext[]} */
@@ -65,7 +71,7 @@ class PTUDiceCheck {
     }
 
     get rollCls() {
-        return CheckRoll;
+        return this._rollCls;
     }
 
     /* -------------------------------------------- */
@@ -153,10 +159,11 @@ class PTUDiceCheck {
      * @returns 
      */
     async execute(context = { isReroll: false, dcs: { base: null, targets: [] }, title, type: "check" }, callback) {
-        const { diceSize, isReroll, attack, dcs, title, type } = context;
-        const { skipDialog } = eventToRollParams(this.event);
+        const { diceSize, isReroll, attack, dcs, title, type, rollModeArg, skipDialogArg } = context;
+        
+        const skipDialog  = skipDialogArg ?? eventToRollParams(this.event).skipDialog;
 
-        const rollMode = this.options.has("secret") ? (game.user.isGM ? "gmroll" : "blindroll") : "roll";
+        const rollMode = rollModeArg ?? this.options.has("secret") ? (game.user.isGM ? "gmroll" : "blindroll") : "roll";
 
         const dialogContext = await (async () => {
             if (skipDialog) return {
@@ -188,7 +195,7 @@ class PTUDiceCheck {
             targets: this.contexts.map(context => ({
                 actor: context.actor.uuid,
                 token: context.token.uuid,
-                dc: dcs.targets.get(context.actor.uuid),
+                dc: dcs?.targets.get(context.actor.uuid),
             })),
             dcs,
             outcomes: {}
@@ -209,7 +216,7 @@ class PTUDiceCheck {
                 ))?.total ?? 1;
         const total = rollResult.total;
         const targets = [];
-        if (options.dcs.targets.size > 0) {
+        if (options.dcs?.targets.size > 0) {
             for (const dcTarget of options.dcs.targets.values()) {
                 const context = this._contexts.get(dcTarget.uuid);
                 const degree = (() => {
@@ -234,9 +241,11 @@ class PTUDiceCheck {
         }
         else {
             const degree = (() => {
+                if (type === "initiative") return null;
                 if (result === 1 && !isInfinity) return "crit-miss"
-                if (options.dcs.baseCritRange.includes(result)) return "crit-hit";
-                if (isInfinity || total >= options.dcs.base) return "hit";
+                if (options.dcs?.baseCritRange.includes(result)) return "crit-hit";
+                if (isInfinity || total >= options.dcs?.base) return "hit";
+                return null;
             })();
             if (degree !== null) {
                 options.outcomes.base = degree;
@@ -284,10 +293,10 @@ class PTUDiceCheck {
             await callback([roll], targets, msg, evt);
         }
 
-        this.roll = roll;
+        this.rolls = [roll];
 
         return {
-            roll,
+            rolls: this.rolls,
             targets,
         }
     }
@@ -297,7 +306,7 @@ class PTUDiceCheck {
      */
     async afterRoll() {
         for(const rule of this.actor.rules.filter(r => !r.ignored)) {
-            await rule.afterRollAsync?.(this, this.roll);
+            await rule.afterRollAsync?.(this, this.rolls);
         }
     }
 
@@ -308,8 +317,8 @@ class PTUDiceCheck {
      * @param {Object} flags 
      * @returns {ChatMessage}
      */
-    async createMessage(roll, rollMode, flags, extraTags = [], inverse = false) {
-        const flavor = this.createFlavor({title: flags.ptu.title, extraTags, inverse})
+    async createMessage(roll, rollMode, flags, extraTags = [], inverse = false, critRoll = null) {
+        const flavor = this.createFlavor({title: flags.ptu.title ?? flags.ptu.context.title, extraTags, inverse})
             .flat()
             .map(e => (typeof e === "string" ? e : e.outerHTML))
             .join("");
@@ -323,7 +332,8 @@ class PTUDiceCheck {
             flags
         }, {
             rollMode,
-            create: true
+            create: true,
+            critRoll
         })
     }
 

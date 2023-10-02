@@ -151,6 +151,15 @@ export function registerSettings() {
         },
         default: "available"
     });
+    
+    game.settings.register("ptu", "devMode", {
+        name: "Development Mode",
+        hint: "Enables certain behavior that is undesirable for normal play, but useful for development.",
+        scope: "world",
+        config: true,
+        type: Boolean,
+        requiresReload: true
+    });
 
     game.settings.register("ptu", "worldSystemVersion", {
         name: "World System Version",
@@ -168,6 +177,7 @@ export function registerSettings() {
         default: MigrationRunner.MINIMUM_SAFE_VERSION,
         type: Number,
     });
+
 
     // // game.settings.register("ptu", "nonOwnerCanSeeTabs", {
     // //     name: "Non-owners can see Sheet Tabs",

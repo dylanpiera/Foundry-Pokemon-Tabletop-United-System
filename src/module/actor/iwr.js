@@ -1,12 +1,12 @@
 import { PTUPredicate } from "../system/index.js";
 
 class IWRData {
-    constructor({type, value, source, isDefensive = false}) {
+    constructor({type, value, source, predicate = [], isDefensive = false}) {
         this.type = type?.toLocaleLowerCase(game.i18n.locale);
         this.value = value;
         this.source = source ?? null;
         this.isDefensive = isDefensive;
-        this.predicate = new PTUPredicate(this.describe(this.type))
+        this.predicate = new PTUPredicate([...this.describe(this.type), ...predicate])
     }
 
     get label() {
@@ -49,6 +49,11 @@ class ImmunityData extends IWRData {
     constructor({type, source}) {
         super({type, value: 0, source})
     }
+
+    /** @overwrite */
+    describe(iwrType) {
+        return [...super.describe(iwrType), {"not": `self:immunity-blocked:${iwrType}`}];
+    }
 }
 
 class WeaknessData extends IWRData {
@@ -60,3 +65,9 @@ class ResistanceData extends IWRData {
 }
 
 export { IWRData, ImmunityData, WeaknessData, ResistanceData }
+
+globalThis.IWR = {
+    ImmunityData,
+    WeaknessData,
+    ResistanceData
+}

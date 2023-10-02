@@ -3,7 +3,7 @@ import { PTUDiceModifier, PTUModifier, StatisticDiceModifier, StatisticModifier 
 import { PTUDiceCheck, eventToRollParams } from "./check.js";
 import { CheckDialog } from "./dialogs/dialog.js";
 import { DiceCheckDialog } from "./dialogs/diceDialog.js";
-import { CheckRoll } from "./roll.js";
+import { CheckRoll } from "./rolls/roll.js";
 
 class PTUSkillCheck extends PTUDiceCheck {
 
@@ -46,12 +46,12 @@ class PTUSkillCheck extends PTUDiceCheck {
                 label: game.i18n.format("PTU.Check.SkillMod", { skill: this.skillLabel }),
                 modifier: this.actor.system.skills[this.skill]?.modifier?.total ?? 0
             }),
+            ...this.modifiers
         ]
 
-        for (const modifier of this.modifiers) {
-            if (modifier instanceof StatisticModifier) modifiers.push(modifier);
-            if (modifier instanceof PTUDiceModifier) diceModifiers.push(modifier);
-        }
+        diceModifiers.push(
+            ...extractModifiers(this.actor.synthetics, ["all", "skill-check-dice", `skill-${this.skill}-dice`], {injectables: {move: this.item, item: this.item, actor: this.actor}, test: this.targetOptions})
+        )
 
         this.modifiers = modifiers;
         this.diceModifiers = diceModifiers;
@@ -208,10 +208,10 @@ class PTUSkillCheck extends PTUDiceCheck {
             await callback([roll], targets, msg, evt);
         }
 
-        this.roll = roll;
+        this.rolls = [roll];
 
         return {
-            roll,
+            rolls: this.rolls,
             targets,
         }
     }

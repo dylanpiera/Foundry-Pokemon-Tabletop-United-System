@@ -1,3 +1,4 @@
+import { PTUModifier } from "../../actor/modifiers.js";
 import { ResolvableValueField } from "../../system/schema-data-fields.js";
 import { RuleElementPTU } from "./base.js";
 
@@ -69,6 +70,32 @@ class AELikeRuleElement extends RuleElementPTU {
     beforeRoll(_domains, rollOptions) {
         if (!this.ignored && this.phase == "beforeRoll") {
             this.apply(rollOptions);
+        }
+    }
+
+    /** 
+     * @override 
+     * @param {PTUDiceCheck} check
+     * */
+    async beforeRollAsync(check) {
+        if(this.ignored || this.phase !== "beforeRoll") return;
+
+        if(!this.test(check.targetOptions)) return;
+
+        if(check.selectors.includes(this.path)) {
+            const current = check.statistic.totalModifier;
+            const change = this.resolveValue(this.value);
+            const newValue = this.getNewValue(current, change);
+            if(this.ignored) return;
+
+            check.statistic.push(new PTUModifier({
+                label: this.label,
+                modifier: newValue - current
+            }))
+            return check;
+        }
+        else {
+            return this.apply(check.targetOptions);
         }
     }
 

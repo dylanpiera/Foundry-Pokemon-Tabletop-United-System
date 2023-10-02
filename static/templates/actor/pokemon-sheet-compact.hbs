@@ -670,20 +670,20 @@
                                 class="swsh-body mt-1 mb-1 flexrow g-1 p-0 w-100 align-items-center justify-content-center">
                                 {{{loadTypeImages actor.system.typing}}}
                             </div>
-                            {{#if (gt actor.system.effectiveness.Weakness.length 0) }}
+                            {{#if (gt effectiveness.weaknesses.length 0) }}
                             <div
                                 class="swsh-header ball-themes {{ballStyle}} highlight pt-2 pb-2 center-text justify-content-center">
                                 <b>{{localize "PTU.TypingWeaknesses"}}</b>
                             </div>
                             <div
                                 class="swsh-body mt-1 mb-1 flexrow g-5 w-100 align-items-center justify-content-between">
-                                {{#each actor.system.effectiveness.Weakness as |effectiveness|}}
-                                {{#each effectiveness as |value type|}}
+                                {{#each effectiveness.weaknesses as |effectiveness|}}
+                                {{!-- {{#each effectiveness as |value type|}} --}}
                                 <div class="type-image-effectiveness">
-                                    {{{loadTypeImages type}}}
-                                    <span class="ml-1">x{{value}}</span>
+                                    {{{loadTypeImages effectiveness.type}}}
+                                    <span class="ml-1">x{{effectiveness.value}}</span>
                                 </div>
-                                {{/each}}
+                                {{!-- {{/each}} --}}
                                 {{/each}}
                             </div>
                             {{/if}}
@@ -704,37 +704,37 @@
                                 {{/each}}
                             </div>
                             {{/if}} --}}
-                            {{#if (gt actor.system.effectiveness.Resistant.length 0) }}
+                            {{#if (gt effectiveness.resistances.length 0) }}
                             <div
                                 class="swsh-header ball-themes {{ballStyle}} highlight pt-2 pb-2 center-text justify-content-center">
                                 <b>{{localize "PTU.TypingResistances"}}</b>
                             </div>
                             <div
                                 class="swsh-body mt-1 mb-1 flexrow g-5 w-100 align-items-center justify-content-between">
-                                {{#each actor.system.effectiveness.Resistant as |effectiveness|}}
-                                {{#each effectiveness as |value type|}}
+                                {{#each effectiveness.resistances as |effectiveness|}}
+                                {{!-- {{#each effectiveness as |value type|}} --}}
                                 <div class="type-image-effectiveness">
-                                    {{{loadTypeImages type}}}
-                                    <span class="ml-1">x{{value}}</span>
+                                    {{{loadTypeImages effectiveness.type}}}
+                                    <span class="ml-1">x{{effectiveness.value}}</span>
                                 </div>
-                                {{/each}}
+                                {{!-- {{/each}} --}}
                                 {{/each}}
                             </div>
                             {{/if}}
-                            {{#if (gt actor.system.effectiveness.Immune.length 0) }}
+                            {{#if (gt effectiveness.immunities.length 0) }}
                             <div
                                 class="swsh-header ball-themes {{ballStyle}} highlight pt-2 pb-2 center-text justify-content-center">
                                 <b>{{localize "PTU.TypingImmunities"}}</b>
                             </div>
                             <div
                                 class="swsh-body mt-1 mb-1 flexrow g-5 w-100 align-items-center justify-content-between">
-                                {{#each actor.system.effectiveness.Immune as |effectiveness|}}
-                                {{#each effectiveness as |value type|}}
+                                {{#each effectiveness.immunities as |effectiveness|}}
+                                {{!-- {{#each effectiveness as |value type|}} --}}
                                 <div class="type-image-effectiveness">
-                                    {{{loadTypeImages type}}}
-                                    <span class="ml-1">x{{value}}</span>
+                                    {{{loadTypeImages effectiveness.type}}}
+                                    <span class="ml-1">x{{effectiveness.value}}</span>
                                 </div>
-                                {{/each}}
+                                {{!-- {{/each}} --}}
                                 {{/each}}
                             </div>
                             {{/if}}

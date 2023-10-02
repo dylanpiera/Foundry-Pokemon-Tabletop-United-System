@@ -130,7 +130,9 @@
     "TokenLight": "Token Light",
     "TemporarySpecies": "Temporary Species",
     "TypeOverwrite": "Type Overwrite",
-    "TempHP": "Temporary HP"
+    "TempHP": "Temporary HP",
+    "Effectiveness": "Effectiveness",
+    "EphemeralEffect": "Ephemeral Effect"
   },
   "PTU": {
     "Skills": {
@@ -695,6 +697,10 @@
         "Domain": "Domain",
         "Option": "Option",
         "UUID": "UUID",
+        "Type": "Type",
+        "Target": "Target",
+        "Origin": "Origin",
+        "Affects": "Affects",
         "Modes": {
           "Label": "Mode",
           "Add": "Add",
