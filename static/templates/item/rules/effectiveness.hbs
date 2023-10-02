@@ -1,0 +1,27 @@
+<div class="form-group">
+    <label class="short">{{localize "PTU.RuleEditor.General.Type"}}</label>
+    <div class="attached-input">
+        <input type="text" name="system.rules.{{index}}.type" value="{{rule.type}}"/>
+    </div>
+</div>
+
+<div class="form-group">
+    <label class="short">{{localize "PTU.RuleEditor.General.Value"}}</label>
+    <div class="attached-input">
+        <input type="number" name="system.rules.{{index}}.value" value="{{rule.value}}"/>
+    </div>
+</div>
+
+<div class="form-group">
+    <label class="short">{{localize "PTU.RuleEditor.General.Predicate"}}</label>
+    <div class="attached-input">
+        <button type="button" class="attachment" data-action="toggle-predicate">
+            {{#if predicationIsMultiple}}Multiple{{else}}Complex{{/if}}
+        </button>
+        {{#if predicationIsMultiple}}
+            <input type="text" class="ptu-tagify predicate-list" name="system.rules.{{index}}.predicate" value="{{json rule.predicate}}" data-dtype="JSON"/>
+        {{else}}
+            <input type="text" name="system.rules.{{index}}.predicate" value="{{json rule.predicate}}" />
+        {{/if}}
+    </div>
+</div>

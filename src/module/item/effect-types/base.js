@@ -160,3 +160,4 @@ class BaseEffectPTU extends PTUItem {
 }
 
 export { BaseEffectPTU }
+globalThis.BaseEffectPTU = BaseEffectPTU;

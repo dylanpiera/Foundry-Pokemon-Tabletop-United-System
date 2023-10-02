@@ -130,9 +130,30 @@
     "TokenLight": "Token Light",
     "TemporarySpecies": "Temporary Species",
     "TypeOverwrite": "Type Overwrite",
-    "TempHP": "Temporary HP"
+    "TempHP": "Temporary HP",
+    "Effectiveness": "Effectiveness",
+    "EphemeralEffect": "Ephemeral Effect"
   },
   "PTU": {
+    "Skills": {
+      "acrobatics": "Acrobatics",
+      "athletics": "Athletics",
+      "charm": "Charm",
+      "command": "Command",
+      "focus": "Focus",
+      "guile": "Guile",
+      "intimidate": "Intimidate",
+      "intuition": "Intuition",
+      "perception": "Perception",
+      "stealth": "Stealth",
+      "survival": "Survival",
+      "combat": "Combat",
+      "generalEd": "General Education",
+      "medicineEd": "Medicine Education",
+      "occultEd": "Occult Education",
+      "pokemonEd": "Pokémon Education",
+      "techEd": "Technology Education"
+    },
     "Title": "Pokémon Tabletop United",
 
     "TabsSkills": "Skills",
@@ -676,6 +697,10 @@
         "Domain": "Domain",
         "Option": "Option",
         "UUID": "UUID",
+        "Type": "Type",
+        "Target": "Target",
+        "Origin": "Origin",
+        "Affects": "Affects",
         "Modes": {
           "Label": "Mode",
           "Add": "Add",
@@ -902,6 +927,13 @@
         "LocationNotFound": "An invalid location was selected, please try again.",
         "PokemonNotFound": "Unable to find the Pokemon, did you delete it?",
         "ChatMessage": "{trainer} Caught {pokemon}! They have been added to {location}."
+      },
+      "ContestedCheck": {
+        "Title": "{name}'s Contested {skill} Check",
+        "Hint": "Select the skill to roll",
+        "Skill": "Skill to roll",
+        "Submit": "Submit",
+        "Cancel": "Cancel"
       }
     },
     "Token": {

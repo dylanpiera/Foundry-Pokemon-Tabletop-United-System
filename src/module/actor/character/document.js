@@ -80,7 +80,7 @@ class PTUTrainerActor extends PTUActor {
             skill["value"]["total"] = skill["value"]["value"] + skill["value"]["mod"];
             skill["rank"] = PTUSkills.getRankSlug(skill["value"]["total"]);
             skill["modifier"]["total"] = skill["modifier"]["value"] + skill["modifier"]["mod"] + (system.modifiers.skillBonus?.total ?? 0);
-            this.attributes.skills[key] = PTUSkills.calculate({ actor: this, context: { skill: key, options: [] } });
+            this.attributes.skills[key] = this.prepareSkill(key);//PTUSkills.calculate({ actor: this, context: { skill: key, options: [] } });
         }
 
         // Prepare flat modifiers

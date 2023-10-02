@@ -83,6 +83,29 @@
     }
 }
 
+.dice-checks.dialog {
+    section {
+        padding: 0;
+        
+        .check-modifiers-content {
+            padding: 8px;
+
+            &.check {
+                background: linear-gradient(45deg, #fcffd9, #f9ffa1);
+            }
+            &.attack {
+                background: linear-gradient(45deg, #d8d8f1, #c2cdff);
+            }
+            &.damage {
+                background: linear-gradient(45deg, #ecdbdb, #ffdfdf);
+            }
+            &.skill {
+                background: linear-gradient(45deg, #c3eaec, #b7ffdb);
+            }
+        }
+    }
+}
+
 .token-panel {
     pointer-events: initial;
     position: absolute;
@@ -1078,7 +1101,7 @@ a.content-link {
                     flex-basis: 50%;
                 }
 
-                .apply-capture {
+                .apply-capture, .contested-check {
                     flex-basis: 50%;
                     background: rgb(255, 255, 240);
                 }
@@ -3051,7 +3074,7 @@ a.content-link {
                                     }
                                 }
                         
-                                &[data-key="GrantItem"] {
+                                &[data-key="GrantItem"], &[data-key="EphemeralEffect"] {
                                     a.granted {
                                         display: flex;
                                         flex: 0 0 auto;

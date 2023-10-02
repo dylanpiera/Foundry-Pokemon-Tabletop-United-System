@@ -55,12 +55,12 @@ class DamageRoll extends Roll {
             for (const target of data) {
                 if (typeof target?.actor === "object") {
                     const actor = game.actors.get(target.actor._id) ?? null;
-                    targets.push({...target.actor, dc: target.dc, isPrivate: actor?.isPrivate});
+                    targets.push({...(target.actor.toObject?.() ?? target.actor), dc: target.dc, isPrivate: actor?.isPrivate});
                     continue;
                 }
                 const actor = await fromUuid(target.actor ?? "");
                 if (!actor) continue;
-                targets.push({ ...actor, dc: target.dc, isPrivate: actor.isPrivate });
+                targets.push({ ...(actor.toObject?.() ?? actor), dc: target.dc, isPrivate: actor.isPrivate });
             }
             return targets;
         })();

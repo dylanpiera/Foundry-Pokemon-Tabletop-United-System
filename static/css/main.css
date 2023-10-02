@@ -70,6 +70,24 @@
 #token-hud .status-effects .effect-control:hover {
   filter: drop-shadow(0 0 5px #232323aa) drop-shadow(0 0 2px #ababab77);
 }
+.dice-checks.dialog section {
+  padding: 0;
+}
+.dice-checks.dialog section .check-modifiers-content {
+  padding: 8px;
+}
+.dice-checks.dialog section .check-modifiers-content.check {
+  background: linear-gradient(45deg, #fcffd9, #f9ffa1);
+}
+.dice-checks.dialog section .check-modifiers-content.attack {
+  background: linear-gradient(45deg, #d8d8f1, #c2cdff);
+}
+.dice-checks.dialog section .check-modifiers-content.damage {
+  background: linear-gradient(45deg, #ecdbdb, #ffdfdf);
+}
+.dice-checks.dialog section .check-modifiers-content.skill {
+  background: linear-gradient(45deg, #c3eaec, #b7ffdb);
+}
 .token-panel {
   pointer-events: initial;
   position: absolute;
@@ -954,7 +972,8 @@ a.content-link img {
 .chat-message.message .flavor-text.footer .buttons .damage {
   flex-basis: 50%;
 }
-.chat-message.message .flavor-text.footer .buttons .apply-capture {
+.chat-message.message .flavor-text.footer .buttons .apply-capture,
+.chat-message.message .flavor-text.footer .buttons .contested-check {
   flex-basis: 50%;
   background: #fffff0;
 }
@@ -2603,14 +2622,16 @@ a.content-link img {
 .sheet.item section form.item-sheet .sheet-body .rules .rules-list .rule-element .rule-body[data-key="FlatModifier"] .type-input {
   flex: 0;
 }
-.sheet.item section form.item-sheet .sheet-body .rules .rules-list .rule-element .rule-body[data-key="GrantItem"] a.granted {
+.sheet.item section form.item-sheet .sheet-body .rules .rules-list .rule-element .rule-body[data-key="GrantItem"] a.granted,
+.sheet.item section form.item-sheet .sheet-body .rules .rules-list .rule-element .rule-body[data-key="EphemeralEffect"] a.granted {
   display: flex;
   flex: 0 0 auto;
   flex-direction: row;
   align-items: center;
   gap: 3px;
 }
-.sheet.item section form.item-sheet .sheet-body .rules .rules-list .rule-element .rule-body[data-key="GrantItem"] a.granted img {
+.sheet.item section form.item-sheet .sheet-body .rules .rules-list .rule-element .rule-body[data-key="GrantItem"] a.granted img,
+.sheet.item section form.item-sheet .sheet-body .rules .rules-list .rule-element .rule-body[data-key="EphemeralEffect"] a.granted img {
   width: 16px;
   height: 16px;
 }

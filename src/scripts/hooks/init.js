@@ -65,8 +65,6 @@ export const Init = {
                 uiTop?.insertAdjacentElement("afterend", template);
             }
 
-            CONFIG.ui.items.prototype._onDragStart = _onDragStart;
-
             // Register stuff with the Foundry client
             registerSheets();
             // registerFonts();
@@ -74,6 +72,8 @@ export const Init = {
             // registerKeybindings();
             registerSettings();
             registerTemplates();
+
+            if(game.settings.get("ptu", "devMode")) CONFIG.ui.items.prototype._onDragStart = _onDragStart;
 
             // Register Constants
             CONST = {

@@ -1,15 +1,17 @@
 import { sluggify } from "../../util/misc.js";
-import { PTUCondition } from "../item/index.js";
+import { PTUCombatant } from "../combat/combatant.js";
 import { ChatMessagePTU } from "../message/base.js";
-import { extractRollSubstitutions, extractEphemeralEffects, extractModifiers, processPreUpdateActorHooks } from "../rules/helpers.js";
+import { extractEphemeralEffects, processPreUpdateActorHooks } from "../rules/helpers.js";
 import { PTUAttackCheck } from "../system/check/attack.js";
-import { eventToRollParams } from "../system/check/check.js";
+import { PTUDiceCheck, eventToRollParams } from "../system/check/check.js";
+import { PTUDamageCheck } from "../system/check/damage.js";
+import { InitiativeRoll } from "../system/check/rolls/initiative-roll.js";
+import { PTUSkillCheck } from "../system/check/skill.js";
 import { PTUDamage } from "../system/damage/damage.js";
 import { PTUMoveDamage } from "../system/damage/move.js";
 import { ActorConditions } from "./conditions.js";
-import { ActorInitiative } from "./initiative.js";
-import { ImmunityData, ResistanceData, WeaknessData } from "./iwr.js";
-import { CheckModifier, PTUModifier, StatisticModifier } from "./modifiers.js";
+import { IWRData, ImmunityData, ResistanceData, WeaknessData } from "./iwr.js";
+import { PTUModifier, StatisticModifier } from "./modifiers.js";
 
 /** @typedef {import('../../module/rules/rule-element/base').RuleElementPTU} RuleElementPTU */
 
@@ -82,7 +84,52 @@ class PTUActor extends Actor {
     }
 
     get iwr() {
-        if (this._iwr) return this._iwr;
+        const iwr = this._iwr ?? this.prepareIwr();
+
+        /** @type {IWRData[]} */
+        const effectiveness = this.synthetics.effectiveness.flatMap(d => d({ injectables: { acor: this }, test: this.getRollOptions(["all", "initiative"]) }) ?? []).reduce((acc, curr) => {
+            acc.set(`${curr.type}:${curr.source}`, curr);
+            return acc;
+        }, new Map());
+
+        const resistances = [...iwr.resistances];
+        const weaknesses = [...iwr.weaknesses];
+        const immunities = [...iwr.immunities];
+        const all = { ...iwr.all };
+
+        for (const effect of effectiveness.values()) {
+            if (effect instanceof ImmunityData) {
+                immunities.push(effect);
+                all[effect.type] = 0;
+            }
+            if (effect instanceof WeaknessData) {
+                weaknesses.push(effect);
+                all[effect.type] = (all[effect.type] ?? 1) * effect.value;
+            }
+            if (effect instanceof ResistanceData) {
+                resistances.push(effect);
+                all[effect.type] = (all[effect.type] ?? 1) * effect.value;
+            }
+        }
+
+        const IWR = {
+            resistances,
+            weaknesses,
+            immunities,
+            all,
+            getRealValue(type) {
+                const realType = type.toLocaleLowerCase(game.i18n.locale);
+                const value = all[realType] ?? 1;
+
+                if (value > 1) return value > 2 ? Math.log2(value) : value == 2 ? 1.5 : value
+                return value;
+            }
+        }
+
+        return IWR;
+    }
+
+    prepareIwr() {
         const results = {
             immunities: [],
             weaknesses: [],
@@ -91,6 +138,7 @@ class PTUActor extends Actor {
         }
         let i = 0;
         const effectiveness = {};
+
         for (const type of this.types) {
             const iwr = duplicate(CONFIG.PTU.data.typeEffectiveness[type]?.effectiveness ?? {});
 
@@ -109,7 +157,8 @@ class PTUActor extends Actor {
         }
 
         const effectivenessMod = this.system.modifiers?.resistanceSteps?.total ?? 0;
-        for (const [type, value] of Object.entries(effectiveness)) {
+        for (const [key, value] of Object.entries(effectiveness)) {
+            const type = key.toLocaleLowerCase(game.i18n.locale)
             if (effectivenessMod) effectiveness[type] *= effectivenessMod;
 
             if (value == 0) {
@@ -176,6 +225,7 @@ class PTUActor extends Actor {
             tokenOverrides: {},
             speciesOverride: {},
             typeOverride: {},
+            effectiveness: []
         }
 
         super._initialize();
@@ -194,7 +244,7 @@ class PTUActor extends Actor {
 
         this.prepareDerivedData();
 
-        this.initiative = new ActorInitiative(this);
+        this.initiative = this.prepareInitiative();//new ActorInitiative(this);
 
         // Set origins
         this._setDefaultChanges();
@@ -790,20 +840,22 @@ class PTUActor extends Actor {
         if (game.combat && this.combatant) this.#updateInitiative();
     }
 
-    #updateInitiative() {
+    async #updateInitiative() {
         const initBase = Math.floor(this.combatant.initiative);
-        if (initBase === this.initiative.totalModifier) {
+        /** @type {PTUDiceCheck} */
+        const initiative = await this.initiative.prepareRoll();
+        if (initBase === initiative.statistic.totalModifier) {
             this.debouncedUpdate();
         }
         else {
-            const updates = [{ id: this.combatant.id, value: this.initiative.totalModifier + (this.combatant.initiative - initBase) }];
+            const updates = [{ id: this.combatant.id, value: initiative.statistic.totalModifier + (this.combatant.initiative - initBase) }];
             if (this.combatant.isPrimaryBossCombatant) {
                 const { otherTurns } = this.combatant.bossTurns;
 
                 // For each other turn, add an initiative value that is 5 less than the previous
                 // If the value is less than 0, instead start adding 5 more than the previous, restarting from 5 + base value
                 for (let i = 1; i <= otherTurns.length; i++) {
-                    const base = this.initiative.totalModifier + (this.combatant.initiative - initBase);
+                    const base = initiative.statistic.totalModifier + (this.combatant.initiative - initBase);
                     const init = base - (5 * i);
                     const actualInit = init >= 0 ? init : base + -5 * (Math.ceil(init / 5) - 1)
                     updates.push({ id: otherTurns[i - 1].id, value: actualInit });
@@ -1042,7 +1094,6 @@ class PTUActor extends Actor {
 
         action.damage = async (params = {}) => {
             const domains = selectors.map(s => s.replace("attack", "damage"));
-            params.options ??= [];
 
             const preTargets = params.targets?.length > 0 ? params.targets : [...game.user.targets];
             const targets = [];
@@ -1058,6 +1109,21 @@ class PTUActor extends Actor {
                     outcomes = null;
                 }
             }
+
+            const check = new PTUDamageCheck({
+                source: {
+                    actor: this,
+                    item: move,
+                    token: params.token ?? null,
+                    options: params.options ?? []
+                },
+                targets,
+                outcomes,
+                selectors: domains,
+                event: params.event,
+            })
+
+            return await check.executeDamage(params.callback, action);
 
             const contexts = []
 
@@ -1113,6 +1179,158 @@ class PTUActor extends Actor {
         return action;
     }
 
+    prepareSkill(skill) {
+        const selectors = [
+            "all",
+            "check",
+            "skill-check",
+            `skill-${skill}`
+        ]
+
+        const options = [...this.getRollOptions(selectors), `skill:${skill}`, `skill:${this.system.skills[skill].rank.toLocaleLowerCase(game.i18n.lang)}`];
+        const statistic = new StatisticModifier(skill, []);
+
+        const action = mergeObject(statistic, {
+            label: game.i18n.format("PTU.Check.SkillCheck", { skill: game.i18n.localize(`PTU.Skills.${skill}`) }),
+            domains: selectors,
+            type: "skill",
+            options,
+            skill
+        });
+
+        action.breakdown = () => action.modifiers
+            .filter(m => m.enabled)
+            .map(m => `${m.label}: ${m.signedValue}`)
+            .join(", ");
+
+        action.roll = async (params = {}) => {
+            const check = new PTUSkillCheck({
+                source: {
+                    actor: this,
+                    token: params.token ?? null,
+                    options
+                },
+                targets: params.targets ?? [...game.user.targets],
+                selectors,
+                event: params.event,
+                action,
+                dc: params.dc ?? null
+            })
+
+            return await check.executeCheck(params.callback, action);
+        }
+
+        return action;
+    }
+
+    prepareInitiative() {
+        const selectors = ["initiative", "all"];
+        const options = this.getRollOptions(selectors);
+
+        const statistic = new StatisticModifier("initiative", []);
+
+        const action = mergeObject(statistic, {
+            label: game.i18n.localize("PTU.Check.Initiative"),
+            domains: selectors,
+            type: "initiative",
+            options
+        });
+
+        action.breakdown = () => action.modifiers
+            .filter(m => m.enabled)
+            .map(m => `${m.label}: ${m.signedValue}`)
+            .join(", ");
+
+        action.prepareRoll = async (params = {}) => {
+            const selfTokens = this.getActiveTokens(true, false)
+
+            const check = new PTUDiceCheck(
+                {
+                    source: {
+                        actor: this,
+                        token: params.token ?? selfTokens,
+                        options
+                    },
+                    targets: [],
+                    selectors,
+                    event: params.event,
+                    rollCls: InitiativeRoll
+                },
+                action
+            )
+            await check.prepareContexts(action);
+
+            check.prepareModifiers();
+            check.modifiers = [
+                new PTUModifier({
+                    slug: "speed-stat",
+                    label: "Speed Stat",
+                    modifier: this.system.stats.spd.total
+                }),
+                ...check.modifiers,
+            ]
+            if (this.system.modifiers.initiative.total !== 0) {
+                check.modifiers.push(new PTUModifier({
+                    slug: "initiative-modifier",
+                    label: "Initiative Modifier",
+                    modifier: this.system.modifiers.initiative.total,
+                }))
+            }
+
+            check.prepareStatistic("initiative")
+
+            if (check.conditionOptions.has("condition:paralysis")) {
+                check.statistic.push(new PTUModifier({
+                    slug: "paralysis",
+                    label: "Paralysis",
+                    modifier: -Math.ceil(Math.abs(check.statistic.totalModifier * 0.5))
+                }))
+            }
+
+            await check.beforeRoll()
+
+            return check;
+        }
+
+        action.roll = async (params = {}) => {
+            const combatant = await PTUCombatant.fromActor(this, false);
+            if (!combatant) return;
+
+            if (combatant.hidden) {
+                params.rollMode = CONST.DICE_ROLL_MODES.PRIVATE;
+            }
+
+            /** @type {PTUDiceCheck} */
+            const check = await action.prepareRoll(params);
+
+            const result = await check.execute({
+                diceSize: 20,
+                rollModeArg: params.rollMode ?? null,
+                isReroll: false,
+                title: game.i18n.format("PTU.InitiativeRoll", { name: combatant.actor.name }),
+                skipDialogArg: true,
+                type: "initiative"
+            });
+            await check.afterRoll();
+
+            if (!result) {
+                // Render combat sidebar in case a combatant was created but the roll was not completed
+                game.combats.render(false);
+                return null;
+            }
+
+            // Update the tracker unless requested not to
+            const updateTracker = params.updateTracker ?? true;
+            if (updateTracker) {
+                await combatant.combat.setInitiative(combatant.id, result.roll.total);
+            }
+
+            return { combatant, roll: result.roll };
+        }
+
+        return action;
+    }
+
     /* -------------------------------------------- */
     /* Rolls                                        */
     /* -------------------------------------------- */
@@ -1131,14 +1349,22 @@ class PTUActor extends Actor {
      */
     async getContext({ selfToken, targetToken, domains, selfItem, statistic, viewOnly = false }) {
         const selfOptions = this.getRollOptions(domains ?? []);
-        // TODO: Add Self Ephermeral Effects
+
+        const originalEphemeralEffects = await extractEphemeralEffects({
+            affects: "origin",
+            origin: this,
+            target: targetToken?.actor ?? null,
+            item: selfItem ?? null,
+            domains,
+            options: [...selfOptions, ...(selfItem?.getRollOptions("item") ?? [])]
+        });
 
         const selfActor =
             viewOnly || !targetToken?.actor
                 ? this
                 : this.getContextualClone(
                     [...selfOptions, ...targetToken.actor.getSelfRollOptions("target")],
-                    []
+                    originalEphemeralEffects
                 );
 
         const originItem = (() => {
@@ -1194,7 +1420,14 @@ class PTUActor extends Actor {
                 ? [`origin:distance:${distance}`, `target:distance:${distance}`]
                 : [null, null];
 
-        // TODO: Add Target Ephermeral Effects
+        const targetEphemeralEffects = await extractEphemeralEffects({
+            affects: "target",
+            origin: selfActor,
+            target: targetToken?.actor ?? null,
+            item: selfItem,
+            domains,
+            options: [...selfOptions, ...itemOptions, ...targetRollOptions]
+        });
 
         const targetActor = (targetToken?.actor)?.getContextualClone(
             [
@@ -1202,7 +1435,7 @@ class PTUActor extends Actor {
                 ...itemOptions,
                 ...(originDistance ? [originDistance] : []),
             ],
-            []
+            targetEphemeralEffects
         ) ?? null;
 
         const targetOptions = new Set(targetActor ? getTargetRollOptions(targetActor) : targetRollOptions);

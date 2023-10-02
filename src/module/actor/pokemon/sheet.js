@@ -55,6 +55,27 @@ export class PTUPokemonSheet extends PTUActorSheet {
 
 		data["ballStyle"] = this.ballStyle;
 
+		const IWR = this.actor.iwr;
+		data.effectiveness = {
+			weaknesses: [],
+			resistances: [],
+			immunities: []
+		}
+		for(const [type, value] of Object.entries(IWR.all)) {
+			if(value === 0) {
+				data.effectiveness.immunities.push({type: type.capitalize(), value: IWR.getRealValue(type)});
+				continue;
+			}
+			if(value > 1) {
+				data.effectiveness.weaknesses.push({type: type.capitalize(), value: IWR.getRealValue(type)});
+				continue;
+			}
+			if(value < 1) {
+				data.effectiveness.resistances.push({type: type.capitalize(), value: IWR.getRealValue(type)});
+				continue;
+			}
+		}
+
 		return data;
 	}
 

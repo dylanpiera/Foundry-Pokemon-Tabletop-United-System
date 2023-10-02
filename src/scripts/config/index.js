@@ -22,7 +22,7 @@ import { PTUSpeciesMassGenerator } from '../../module/apps/species-mass-generato
 import { LevelUpForm } from '../../module/apps/level-up-form/sheet.js';
 import { LevelUpData } from '../../module/apps/level-up-form/document.js';
 import { AttackRoll } from '../../module/system/check/rolls/attack-roll.js';
-import { CheckRoll } from '../../module/system/check/roll.js';
+import { CheckRoll } from '../../module/system/check/rolls/roll.js';
 import { PTUChatLog } from '../../module/apps/sidebar/chatlog.js';
 import { ChatMessagePTU, PTUChatMessageProxy } from '../../module/message/base.js';
 import { DamageRoll } from '../../module/system/damage/roll.js';
