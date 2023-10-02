@@ -216,7 +216,7 @@ class RuleElementPTU extends foundry.abstract.DataModel {
      * @param source string that should be parsed
      * @return the looked up value on the specific object
      */
-    resolveInjectedProperties(source) {
+    resolveInjectedProperties(source, {actor, item} = this) {
         // If the source is null, a number or a string without any injected properties, return it as-is
         if (source === null || typeof source === "number" || (typeof source === "string" && !source.includes("{"))) {
             return source;
@@ -224,13 +224,13 @@ class RuleElementPTU extends foundry.abstract.DataModel {
 
         // If the source is an array, resolve each element
         if (Array.isArray(source)) {
-            return source.map((element) => this.resolveInjectedProperties(element));
+            return source.map((element) => this.resolveInjectedProperties(element, {actor, item}));
         }
 
         // If the source is an object, resolve each value
         if (typeof source === "object") {
             for(const [key, value] of Object.entries(source)) {
-                source[key] = this.resolveInjectedProperties(value);
+                source[key] = this.resolveInjectedProperties(value, {actor, item});
             }
         }
 
@@ -238,7 +238,7 @@ class RuleElementPTU extends foundry.abstract.DataModel {
         if(typeof source === "string") {
             const regex = /{(actor|item|rule)\|(.*)}/g;
             function replaceFunc(_match, key, prop) {
-                const data = key === "rule" ? this.data : key === "actor" || key === "item" ? this[key] : this.item;
+                const data = key === "rule" ? this.data : key === "actor" ? actor : key === "item" ? item : this.item;
 
                 const property = prop.replace(regex, replaceFunc.bind(this));
 
@@ -270,7 +270,7 @@ class RuleElementPTU extends foundry.abstract.DataModel {
      * @param defaultValue if no value is found, use that one
      * @return the evaluated value
      */
-    resolveValue(valueData, defaultValue = 0, {evaluate = true} = {}) {
+    resolveValue(valueData, defaultValue = 0, {evaluate = true, injectables = {actor: this.actor, item: this.item}} = {}) {
         let value = valueData ?? defaultValue ?? null;
 
         if(["number", "boolean"].includes(typeof value) || value === null) {
@@ -278,8 +278,8 @@ class RuleElementPTU extends foundry.abstract.DataModel {
         }
         if(typeof value === "string") {
             value = value.trim();
-            if(value.indexOf("{") === 0 && value.lastIndexOf("}") === value.length - 1) return this.resolveInjectedProperties(value);
-            value = this.resolveInjectedProperties(value);
+            if(value.indexOf("{") === 0 && value.lastIndexOf("}") === value.length - 1) return this.resolveInjectedProperties(value, injectables);
+            value = this.resolveInjectedProperties(value, injectables);
         }
 
         if(isBracketedValue(valueData)) {
@@ -333,7 +333,7 @@ class RuleElementPTU extends foundry.abstract.DataModel {
         return value instanceof Object && defaultValue instanceof Object 
             ? mergeObject(defaultValue, value, {inplace: false})
             : typeof value === "string" && evaluate
-            ? saferEval(Roll.replaceFormulaData(value, {actor: this.actor, item: this.item}))
+            ? saferEval(Roll.replaceFormulaData(value, {actor: this.actor, item: this.item, ...injectables}))
             : value;
     }
 

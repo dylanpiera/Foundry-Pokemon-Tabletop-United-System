@@ -46,7 +46,7 @@ class FlatModifierRuleElement extends RuleElementPTU {
                     slug,
                     label: this.reducedLabel,
                     modifier: finalValue,
-                    predicate: this.resolveInjectedProperties(this.predicate),
+                    predicate: this.resolveInjectedProperties(this.predicate, options.injectables),
                     item: this.item,
                     force: this.force,
                     source: this.item.uuid,
