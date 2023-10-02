@@ -284,6 +284,7 @@ class PTUDiceCheck {
             }
         }
         if (attack) flags.ptu.attack = attack;
+        if (type === "initiative") flags.core.initiativeRoll = true;
 
         const message = await this.createMessage(roll, rollMode, flags);
 

@@ -1322,10 +1322,10 @@ class PTUActor extends Actor {
             // Update the tracker unless requested not to
             const updateTracker = params.updateTracker ?? true;
             if (updateTracker) {
-                await combatant.combat.setInitiative(combatant.id, result.roll.total);
+                await combatant.combat.setInitiative(combatant.id, result.rolls.at(0).total);
             }
 
-            return { combatant, roll: result.roll };
+            return { combatant, roll: result.rolls.at(0) };
         }
 
         return action;
