@@ -1,0 +1,17 @@
+<li class="item flexrow" data-entry-uuid="{{entry.uuid}}" data-type="Item">
+    <div class="image">
+        <img class="" src="{{entry.img}}" title="{{entry.name}}" width="40" height="40" loading="lazy"/>
+    </div>
+    <div class="name">
+        <a class="item-link">{{entry.name}}</a>
+    </div>
+    <div class="tags">
+        {{#each entry.prerequisites as |entry|}}
+            {{#if entry.tier}}
+                <span class="tag skill-{{toLowerCase entry.tier}}" title="{{entry.label}}">{{entry.label}}</span>
+            {{else}}
+                <span class="tag" title="{{entry.label}}">{{entry.label}}</span>
+            {{/if}}
+        {{/each}}
+    </div>
+</li>

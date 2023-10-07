@@ -20,21 +20,21 @@ class EphemeralEffectForm extends RuleElementForm {
             granted, 
             allowDuplicate: !!this.rule.allowDuplicate ?? true,
             selectorIsArray: Array.isArray(this.rule.selectors),
-            predicationIsMultiple: Array.isArray(this.rule.predicate)
+            predicationIsMultiple: Array.isArray(this.rule.predicate) && this.rule.predicate.every(p => typeof p === "string")
         };
     }
 
     /** @override */
     async activateListeners(html) {
-        const selectorElement = $(html).find(".selectors-list")[0];
-        if (selectorElement) {
-            tagify(selectorElement);
-        }
+        // const selectorElement = $(html).find(".selectors-list")[0];
+        // if (selectorElement) {
+        //     tagify(selectorElement);
+        // }
 
-        const predicateElement = $(html).find(".predicate-list")[0];
-        if (predicateElement) {
-            tagify(predicateElement);
-        }
+        // const predicateElement = $(html).find(".predicate-list")[0];
+        // if (predicateElement) {
+        //     tagify(predicateElement);
+        // }
 
         // Add events for toggle buttons
         html.querySelector("[data-action=toggle-selector]")?.addEventListener("click", () => {

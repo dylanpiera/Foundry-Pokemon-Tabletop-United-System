@@ -1,0 +1,93 @@
+<div class="content-box">
+    <nav data-group="primary">
+        <a data-tab="landing-page" style="display:none"></a>
+        <a data-tab="abilities" class="{{#if (is tab "abilities")}}active{{/if}}">{{localize "PTU.CompendiumBrowser.Tabs.Abilities"}}</a>
+        {{!-- <a data-tab="capabilities" class="{{#if (is tab "capabilities")}}active{{/if}}">{{localize "PTU.CompendiumBrowser.Tabs.Capabilities"}}</a> --}}
+        <a data-tab="edges" class="{{#if (is tab "edges")}}active{{/if}}">{{localize "PTU.CompendiumBrowser.Tabs.Edges"}}</a>
+        {{!-- <a data-tab="effects {{#if (is tab "effects")}}active{{/if}}">{{localize "PTU.CompendiumBrowser.Tabs.Effects"}}</a> --}}
+        <a data-tab="feats" class="{{#if (is tab "feats")}}active{{/if}}">{{localize "PTU.CompendiumBrowser.Tabs.Feats"}}</a>
+        <a data-tab="items" class="{{#if (is tab "items")}}active{{/if}}">{{localize "PTU.CompendiumBrowser.Tabs.Items"}}</a>
+        <a data-tab="moves" class="{{#if (is tab "moves")}}active{{/if}}">{{localize "PTU.CompendiumBrowser.Tabs.Moves"}}</a>
+        <a data-tab="pokeEdges" class="{{#if (is tab "pokeEdges")}}active{{/if}}">{{localize "PTU.CompendiumBrowser.Tabs.PokeEdges"}}</a>
+        <a data-tab="species" class="{{#if (is tab "species")}}active{{/if}}">{{localize "PTU.CompendiumBrowser.Tabs.Species"}}</a>
+        {{#if user.isGM}}
+            <a data-tab="settings" class="{{#if (is tab "settings")}}active{{/if}}">{{localize "PTU.CompendiumBrowser.Tabs.Settings"}}</a>
+        {{/if}}
+    </nav>
+    <section class="content">
+        <div class="tab" data-group="primary" data-tab="landing-page">
+            <div style='text-align:center; padding: 2em;'>{{localize "PTU.CompendiumBrowser.Hint"}}</div>
+        </div>
+
+        {{#with abilities}}
+            <div class="tab browser" data-group="primary" data-tab="abilities">
+                <div class="content-grid"> 
+                    {{> "systems/ptu/static/templates/apps/compendium-browser/filters.hbs"}}
+                    <ul class="item-list result-list"></ul>
+                </div>
+            </div>
+        {{/with}}
+
+        {{#with edges}}
+            <div class="tab browser" data-group="primary" data-tab="edges">
+                <div class="content-grid"> 
+                    {{> "systems/ptu/static/templates/apps/compendium-browser/filters.hbs"}}
+                    <ul class="item-list result-list"></ul>
+                </div>
+            </div>
+        {{/with}}
+
+        {{#with feats}}
+            <div class="tab browser" data-group="primary" data-tab="feats">
+                <div class="content-grid"> 
+                    {{> "systems/ptu/static/templates/apps/compendium-browser/filters.hbs"}}
+                    <ul class="item-list result-list"></ul>
+                </div>
+            </div>
+        {{/with}}
+
+        {{#with items}}
+            <div class="tab browser" data-group="primary" data-tab="items">
+                <div class="content-grid"> 
+                    {{> "systems/ptu/static/templates/apps/compendium-browser/filters.hbs"}}
+                    <ul class="item-list result-list"></ul>
+                </div>
+            </div>
+        {{/with}}
+
+        {{#with moves}}
+            <div class="tab browser" data-group="primary" data-tab="moves">
+                <div class="content-grid"> 
+                    {{> "systems/ptu/static/templates/apps/compendium-browser/filters.hbs"}}
+                    <ul class="item-list result-list"></ul>
+                </div>
+            </div>
+        {{/with}}
+
+        {{#with pokeEdges}}
+            <div class="tab browser" data-group="primary" data-tab="pokeEdges">
+                <div class="content-grid"> 
+                    {{> "systems/ptu/static/templates/apps/compendium-browser/filters.hbs"}}
+                    <ul class="item-list result-list"></ul>
+                </div>
+            </div>
+        {{/with}}
+
+        {{#with species}}
+            <div class="tab browser" data-group="primary" data-tab="species">
+                <div class="content-grid"> 
+                    {{> "systems/ptu/static/templates/apps/compendium-browser/filters.hbs"}}
+                    <ul class="item-list result-list"></ul>
+                </div>
+            </div>
+        {{/with}}
+
+        {{#if user.isGM}}
+            {{#with settings}}
+                <div class="tab settings" data-group="primary" data-tab="settings">
+                    {{> "systems/ptu/static/templates/apps/compendium-browser/browser-settings.hbs"}}
+                </div>
+            {{/with}}
+        {{/if}}
+    </section>
+</div>

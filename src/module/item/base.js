@@ -60,6 +60,10 @@ class PTUItem extends Item {
         return Number(this.system.schema?.version) || null;
     }
 
+    get isClass() {
+        return this.img.includes("class");
+    }
+
     /** @override */
     prepareBaseData() {
         this.flags.ptu = mergeObject({ rulesSelections: {} }, this.flags.ptu ?? {});

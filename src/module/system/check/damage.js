@@ -274,12 +274,12 @@ class PTUDamageCheck extends PTUDiceCheck {
             }
         }
 
-        const message = await this.createMessage(roll, rollMode, flags, [], false, critRoll);
+        const message = await this.createMessage({roll, rollMode, flags, inverse: false, critRoll, type});
 
         if (callback) {
             const msg = message instanceof ChatMessage ? message : new ChatMessage(message);
             const evt = !!this.event && this.event instanceof Event ? this.event : this.event?.originalEvent ?? null;
-            await callback([roll, critRoll].filter(r => r), targets, msg, evt);
+            await callback([roll, critRoll].filter(r => r), options.targets, msg, evt);
         }
 
         this.rolls = [roll];

@@ -1,4 +1,5 @@
 import { PokemonGenerator } from "../module/actor/pokemon/generator.js"
+import { CompendiumBrowser } from "../module/apps/compendium-browser/index.js"
 import { MigrationSummary } from "../module/apps/migration-summary.js"
 import { TokenPanel } from "../module/apps/token-panel.js"
 import { StatusEffects } from "../module/canvas/status-effect.js"
@@ -51,6 +52,8 @@ const GamePTU = {
     },
     onSetup() { },
     onReady() {
+        game.ptu.compendiumBrowser = new CompendiumBrowser();
+
         // Reset pokemon that have reloadOnReady marked as true
         // This is due to having a temporary species override
         game.actors.filter(a => a.type === "pokemon" && a.reloadOnReady).forEach(a => a.reset())

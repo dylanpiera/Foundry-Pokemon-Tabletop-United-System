@@ -286,7 +286,7 @@ class PTUDiceCheck {
         if (attack) flags.ptu.attack = attack;
         if (type === "initiative") flags.core.initiativeRoll = true;
 
-        const message = await this.createMessage(roll, rollMode, flags);
+        const message = await this.createMessage({roll, rollMode, flags, type});
 
         if (callback) {
             const msg = message instanceof ChatMessage ? message : new ChatMessage(message);
@@ -318,8 +318,8 @@ class PTUDiceCheck {
      * @param {Object} flags 
      * @returns {ChatMessage}
      */
-    async createMessage(roll, rollMode, flags, extraTags = [], inverse = false, critRoll = null) {
-        const flavor = this.createFlavor({title: flags.ptu.title ?? flags.ptu.context.title, extraTags, inverse})
+    async createMessage({roll, rollMode, flags, extraTags = [], inverse = false, critRoll = null, type}) {
+        const flavor = this.createFlavor({title: flags.ptu.title ?? flags.ptu.context.title, extraTags, inverse, type})
             .flat()
             .map(e => (typeof e === "string" ? e : e.outerHTML))
             .join("");
@@ -346,14 +346,23 @@ class PTUDiceCheck {
      * @param {string} context.title
      * @returns 
      */
-    createFlavor(context = { extraTags: [], inverse: false, title }) {
-        const { extraTags, inverse } = context;
+    createFlavor(context = { extraTags: [], inverse: false, title, type }) {
+        const { extraTags, inverse, type } = context;
         const header = document.createElement("div");
-        header.classList.add("header-bar");
+        header.classList.add("header-bar", "title-bar");
+        const isAttackOrDamageRoll = ["damage-roll", "attack-roll"].includes(type)
+        if(isAttackOrDamageRoll) {
+            header.append((() => {
+                const h4 = document.createElement("h4");
+                h4.classList.add("roll-type", type);
+                h4.innerText = game.i18n.localize(`PTU.Action.${type}`);
+                return h4;
+            })());
+        }
         header.append((() => {
             const h3 = document.createElement("h3");
             h3.classList.add("action");
-            h3.innerHTML = context.title || this.item?.name;
+            h3.innerHTML = isAttackOrDamageRoll ? this.item.name : ( context.title || this.item?.name);
             return h3;
         })());
 

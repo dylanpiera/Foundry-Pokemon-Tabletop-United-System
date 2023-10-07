@@ -261,6 +261,7 @@
     "DamageReduction": "Damage Reduction",
     "Physical": "Physical",
     "Special": "Special",
+    "Status": "Status",
     "EvasionShort": "Eva",
     "EvasionPhysicalShort": "Phys",
     "EvasionSpecialShort": "Spec",
@@ -503,7 +504,10 @@
     "RollModeLabel": "Roll Mode",
 
     "Action": {
-      "AttackRoll": "{move}: Attack Roll",
+      "AttackRoll": "Accuracy Check: {move}",
+      "DamageRoll": "Damage Roll: {move}",
+      "damage-roll": "Damage Roll",
+      "attack-roll": "Accuracy Check",
       "AttackOutOfRange": "The target is out of range",
       "MoveWhileFrozen": "You can't use moves while frozen",
       "MoveWhileSleeping": "You can't use moves while sleeping",
@@ -524,7 +528,6 @@
         "Fail": "{name} is paralyzed and cannot move!",
         "Success": "{name} is paralyzed but managed to move anyway!"
       },
-      "DamageRoll": "Damage: {move}",
       "DamageSelector": "Damage Selector",
       "Damage": "Damage",
       "Apply": "Apply Damage",
@@ -946,7 +949,51 @@
         }
       }
     },
-    "ExpBudget": "EXP Reward:"
+    "ExpBudget": "EXP Reward:",
+    "CompendiumBrowser": {
+      "ProgressBar": {
+        "LoadingComplete": "Loading complete",
+        "LoadingPack": "Loading {pack}"
+      },
+      "Tabs": {
+        "Abilities": "Abilities",
+        "Capabilities": "Capabilities",
+        "Edges": "Edges",
+        "Effects": "Effects",
+        "Feats": "Features",
+        "Items": "Items",
+        "Moves": "Moves",
+        "PokeEdges": "Poke Edges",
+        "Species": "Species",
+        "Settings": "Settings"
+      },
+      "PackNotLoaded": "Compendium \"{pack}\" could not be loaded.",
+      "Title": "Compendium Browser",
+      "Hint": "Please select a tab to continue...",
+      "CompendiumPacks": "Compendium Browser Packs",
+      "FilterOptions": {
+        "Source": "Source",
+        "Name": "Name",
+        "Class": "Class",
+        "Cost": "Cost",
+        "ItemType": "Item Type",
+        "MoveType": "Type",
+        "Category": "Category",
+        "DamageBase": "Damage Base",
+        "Number": "Dex Number",
+        "HasForm": "Has Form"
+      },
+      "Search": {
+        "Placeholder": "Your query...",
+        "Title": "Search"
+      },
+      "Filter": {
+        "SortBy": "Sort By",
+        "ClearFilters": "Clear Filters",
+        "AndLabel": "All of above",
+        "OrLabel": "Any of above"
+      }
+    }
   },
 
   "physical-evasion": "Physical Evasion",

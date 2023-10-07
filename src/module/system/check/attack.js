@@ -177,7 +177,7 @@ class PTUAttackCheck extends PTUDiceCheck {
             attack,
             title,
             dcs,
-            type: "attack"
+            type: "attack-roll"
         },
             callback
         );
@@ -191,7 +191,7 @@ class PTUAttackCheck extends PTUDiceCheck {
 
     /** @override */
     createFlavor({ extraTags = [], inverse = false, title }) {
-        const base = super.createFlavor({ extraTags, inverse, title });
+        const base = super.createFlavor({ extraTags, inverse, title, type: "attack-roll" });
 
         const typeAndCategoryHeader = (() => {
             const header = document.createElement("div");
@@ -299,15 +299,15 @@ class PTUAttackCheck extends PTUDiceCheck {
             ui.notifications.warn("PTU.Action.MoveWhileSleeping", { localize: true });
             return false;
         }
-        if (this.conditionOptions.has("condition:rage") && selectors.includes("status-attack")) {
+        if (this.conditionOptions.has("condition:rage") && this.selectors.includes("status-attack")) {
             ui.notifications.warn("PTU.Action.StatusAttackWhileRaging", { localize: true });
             return false;
         }
-        if (this.conditionOptions.has("condition:disabled") && rollOptions.includes(`condition:disabled:${move.slug}`)) {
+        if (this.conditionOptions.has("condition:disabled") && this.options.includes(`condition:disabled:${move.slug}`)) {
             ui.notifications.warn("PTU.Action.DisabledMove", { localize: true });
             return false;
         }
-        if (this.conditionOptions.has("condition:suppressed") && !selectors.includes(`at-will-attack`)) {
+        if (this.conditionOptions.has("condition:suppressed") && !this.selectors.includes(`at-will-attack`)) {
             ui.notifications.warn("PTU.Action.SuppressedMove", { localize: true });
             return false;
         }

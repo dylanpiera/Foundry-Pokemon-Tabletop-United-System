@@ -1,3 +1,7 @@
+.compendium-sidebar.directory .directory-footer {
+  flex: 0 0 30px;
+  display: flex;
+}
 #token-hud .status-effects {
   padding: 5px;
   grid-template-columns: repeat(5, 1fr);
@@ -69,6 +73,344 @@
 #token-hud .status-effects .effect-control.active,
 #token-hud .status-effects .effect-control:hover {
   filter: drop-shadow(0 0 5px #232323aa) drop-shadow(0 0 2px #ababab77);
+}
+.tagify {
+  --tag-inset-shadow-size: 5em !important;
+  --tags-border-color: #AED3A2 !important;
+  --tags-hover-border-color: #82bc51 !important;
+  --tags-focus-border-color: #82bc51 !important;
+  --tag-bg: #AED3A2 !important;
+  --tag-hover: #82bc51 !important;
+}
+.tagify[disabled] > .tagify__input {
+  display: none;
+}
+#compendium-browser section.window-content {
+  background: linear-gradient(45deg, #ECDBEB, #DFFFFE);
+  padding: unset;
+  overflow: hidden;
+}
+#compendium-browser section.window-content .content-box {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+#compendium-browser section.window-content .content-box nav {
+  width: 100%;
+  display: flex;
+  flex: 0 0 45px;
+  flex-direction: row;
+  justify-content: space-evenly;
+  align-items: center;
+  background: #C42835;
+}
+#compendium-browser section.window-content .content-box nav a {
+  color: #222224;
+  background: whitesmoke;
+  font-size: 14px;
+  font-weight: bold;
+  text-decoration: none;
+  padding: 0.5rem 1rem;
+  border-radius: 5px;
+  transition: all 0.2s ease-in-out;
+  width: 90px;
+  display: flex;
+  justify-content: center;
+  text-wrap: nowrap;
+}
+#compendium-browser section.window-content .content-box nav a:hover,
+#compendium-browser section.window-content .content-box nav a:active,
+#compendium-browser section.window-content .content-box nav a.active {
+  background: #ff6a77 !important;
+}
+#compendium-browser section.window-content .content-box section.content {
+  height: calc(100% - 50px);
+}
+#compendium-browser section.window-content .content-box section.content .tab.active {
+  height: 100%;
+}
+#compendium-browser section.window-content .content-box section.content .tab.active .compendium-browser-settings {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+#compendium-browser section.window-content .content-box section.content .tab.active .compendium-browser-settings form {
+  display: flex;
+  height: 88%;
+  flex-direction: column;
+  margin-bottom: 10px;
+}
+#compendium-browser section.window-content .content-box section.content .tab.active .compendium-browser-settings button.save-settings {
+  margin-top: auto;
+}
+#compendium-browser section.window-content .content-box section.content .tab.active .compendium-browser-settings .settings-container {
+  overflow-y: auto;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+}
+#compendium-browser section.window-content .content-box section.content .tab.active .compendium-browser-settings .settings-container .setting-section {
+  width: 365px;
+  margin-right: 1em;
+  border: 1px solid #bbb;
+  border-radius: 5px;
+  margin-top: 5px;
+  padding: 2px;
+}
+#compendium-browser section.window-content .content-box section.content .tab.active .compendium-browser-settings .settings-container .setting-section h3 {
+  margin: 0;
+  cursor: pointer;
+}
+#compendium-browser section.window-content .content-box section.content .tab.active .compendium-browser-settings .settings-container .setting-section dl {
+  margin: 5px 0;
+}
+#compendium-browser section.window-content .content-box section.content .tab.active .compendium-browser-settings .settings-container .setting-section dl label {
+  display: flex;
+}
+#compendium-browser section.window-content .content-box section.content .tab.active .compendium-browser-settings .settings-container .setting-section dl label dt {
+  flex: 0 0 30px;
+}
+#compendium-browser section.window-content .content-box section.content .tab.active .compendium-browser-settings .settings-container .setting-section dl label dd {
+  flex: 1;
+}
+#compendium-browser section.window-content .content-box section.content .tab.active .content-grid {
+  display: grid;
+  grid-template-columns: 320px auto;
+  min-height: 100px;
+  height: 100%;
+}
+#compendium-browser section.window-content .content-box section.content .tab.active .content-grid .control-area {
+  grid-column-start: 1;
+  position: sticky;
+  display: block;
+  min-width: 320px;
+  width: 320px;
+  padding-left: 0.5rem;
+  overflow: auto;
+}
+#compendium-browser section.window-content .content-box section.content .tab.active .content-grid .control-area .sortcontainer,
+#compendium-browser section.window-content .content-box section.content .tab.active .content-grid .control-area .filtercontainer {
+  border: 1px solid #bbb;
+  border-radius: 5px;
+  margin-top: 5px;
+  padding: 2px;
+}
+#compendium-browser section.window-content .content-box section.content .tab.active .content-grid .control-area input {
+  width: 100%;
+}
+#compendium-browser section.window-content .content-box section.content .tab.active .content-grid .control-area dl {
+  margin: 5px 0;
+}
+#compendium-browser section.window-content .content-box section.content .tab.active .content-grid .control-area dl dt {
+  display: inline-block;
+  padding-left: 5px;
+}
+#compendium-browser section.window-content .content-box section.content .tab.active .content-grid .control-area dl dd {
+  display: inline-block;
+  padding-left: 5px;
+  margin: 3px 0;
+  text-transform: capitalize;
+}
+#compendium-browser section.window-content .content-box section.content .tab.active .content-grid .control-area dl.type,
+#compendium-browser section.window-content .content-box section.content .tab.active .content-grid .control-area dl.types,
+#compendium-browser section.window-content .content-box section.content .tab.active .content-grid .control-area dl.category,
+#compendium-browser section.window-content .content-box section.content .tab.active .content-grid .control-area dl.sort {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+#compendium-browser section.window-content .content-box section.content .tab.active .content-grid .control-area dl.type dd,
+#compendium-browser section.window-content .content-box section.content .tab.active .content-grid .control-area dl.types dd,
+#compendium-browser section.window-content .content-box section.content .tab.active .content-grid .control-area dl.category dd,
+#compendium-browser section.window-content .content-box section.content .tab.active .content-grid .control-area dl.sort dd {
+  padding-left: 0;
+  margin: 0;
+  flex: 0 0 auto;
+}
+#compendium-browser section.window-content .content-box section.content .tab.active .content-grid .control-area dl.type dd select,
+#compendium-browser section.window-content .content-box section.content .tab.active .content-grid .control-area dl.types dd select,
+#compendium-browser section.window-content .content-box section.content .tab.active .content-grid .control-area dl.category dd select,
+#compendium-browser section.window-content .content-box section.content .tab.active .content-grid .control-area dl.sort dd select {
+  width: 150px;
+}
+#compendium-browser section.window-content .content-box section.content .tab.active .content-grid .control-area dl.type dd select.order,
+#compendium-browser section.window-content .content-box section.content .tab.active .content-grid .control-area dl.types dd select.order,
+#compendium-browser section.window-content .content-box section.content .tab.active .content-grid .control-area dl.category dd select.order,
+#compendium-browser section.window-content .content-box section.content .tab.active .content-grid .control-area dl.sort dd select.order {
+  width: 131px;
+}
+#compendium-browser section.window-content .content-box section.content .tab.active .content-grid .control-area .filtercontainer .title {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  height: 22px;
+}
+#compendium-browser section.window-content .content-box section.content .tab.active .content-grid .control-area .filtercontainer .title h3 {
+  border-bottom: unset;
+  margin: 0;
+  cursor: pointer;
+}
+#compendium-browser section.window-content .content-box section.content .tab.active .content-grid .control-area .filtercontainer .title button {
+  width: fit-content;
+  line-height: 22px;
+}
+#compendium-browser section.window-content .content-box section.content .tab.active .content-grid .control-area .filtercontainer tags {
+  width: 100%;
+}
+#compendium-browser section.window-content .content-box section.content .tab.active .content-grid .control-area .filtercontainer .filter-conjunction {
+  display: flex;
+  flex-direction: row;
+  justify-content: start;
+  margin-top: 0.25rem;
+}
+#compendium-browser section.window-content .content-box section.content .tab.active .content-grid .control-area .filtercontainer .filter-conjunction label {
+  flex: 0 0 110px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+#compendium-browser section.window-content .content-box section.content .tab.active .content-grid .control-area .filtercontainer .filter-conjunction label input {
+  flex: 0 0 20px;
+  top: auto;
+}
+#compendium-browser section.window-content .content-box section.content .tab.active .content-grid .control-area .filtercontainer .filter-conjunction label span {
+  flex: 1;
+}
+#compendium-browser section.window-content .content-box section.content .tab.active .content-grid .control-area .filtercontainer label {
+  font-size: 14px;
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  gap: 5px;
+}
+#compendium-browser section.window-content .content-box section.content .tab.active .content-grid .control-area .filtercontainer label dt {
+  width: 10%;
+}
+#compendium-browser section.window-content .content-box section.content .tab.active .content-grid .control-area .filtercontainer label dd {
+  width: 82%;
+  align-self: center;
+}
+#compendium-browser section.window-content .content-box section.content .tab.active .content-grid .control-area .clear-filters {
+  margin-bottom: 5px;
+}
+#compendium-browser section.window-content .content-box section.content .tab.active .content-grid ul.item-list {
+  grid-column-start: 2;
+  overflow: visible scroll;
+  padding: 0;
+  margin: 0;
+  margin-left: 0.5rem;
+}
+#compendium-browser section.window-content .content-box section.content .tab.active .content-grid ul.item-list li.item {
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  height: 40px;
+  margin: 1px 0;
+  flex-wrap: nowrap;
+  overflow: hidden;
+}
+#compendium-browser section.window-content .content-box section.content .tab.active .content-grid ul.item-list li.item:nth-child(odd) {
+  background-color: rgba(0, 0, 0, 0.07);
+}
+#compendium-browser section.window-content .content-box section.content .tab.active .content-grid ul.item-list li.item .db {
+  flex: 0 0 40px;
+  margin-right: 5px;
+}
+#compendium-browser section.window-content .content-box section.content .tab.active .content-grid ul.item-list li.item .db .tag {
+  display: flex;
+  align-items: center;
+}
+#compendium-browser section.window-content .content-box section.content .tab.active .content-grid ul.item-list li.item .db .tag span {
+  flex: 1;
+  text-align: center;
+}
+#compendium-browser section.window-content .content-box section.content .tab.active .content-grid ul.item-list li.item .cost {
+  flex: 0 0 auto;
+}
+#compendium-browser section.window-content .content-box section.content .tab.active .content-grid ul.item-list li.item .cost .tag {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+#compendium-browser section.window-content .content-box section.content .tab.active .content-grid ul.item-list li.item .cost .dollar-svg {
+  width: 10px;
+  height: 17px;
+  margin: 0 5px;
+  border: unset;
+}
+#compendium-browser section.window-content .content-box section.content .tab.active .content-grid ul.item-list li.item .image {
+  flex: 0 0 40px;
+}
+#compendium-browser section.window-content .content-box section.content .tab.active .content-grid ul.item-list li.item .image img {
+  border: unset;
+  margin-top: 4px;
+  object-fit: scale-down;
+}
+#compendium-browser section.window-content .content-box section.content .tab.active .content-grid ul.item-list li.item .name {
+  margin-left: 5px;
+  min-width: 150px;
+}
+#compendium-browser section.window-content .content-box section.content .tab.active .content-grid ul.item-list li.item .tags {
+  flex: 0 1 auto;
+  padding: 0 5px;
+  display: flex;
+  flex-direction: row;
+  gap: 3px;
+  overflow: hidden;
+}
+#compendium-browser section.window-content .content-box section.content .tab.active .content-grid ul.item-list li.item .tags .tag {
+  font-size: 13px;
+  padding: 3px 3px;
+  background-color: #ff6a77;
+  color: whitesmoke;
+  border-radius: 2px;
+  border: 1px inset #ff6a77;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+#compendium-browser section.window-content .content-box section.content .tab.active .content-grid ul.item-list li.item .tags .tag.class {
+  color: #FFE471;
+  background-color: #2E3337;
+  border-color: #FFE471;
+  flex: 1 0 auto;
+}
+#compendium-browser section.window-content .content-box section.content .tab.active .content-grid ul.item-list li.item .tags .tag.feat {
+  background-color: #D5B896;
+  border-color: #D5B896;
+}
+#compendium-browser section.window-content .content-box section.content .tab.active .content-grid ul.item-list li.item .tags .tag.skill-pathetic {
+  background-color: #cfe2f3;
+  border-color: #cfe2f3;
+}
+#compendium-browser section.window-content .content-box section.content .tab.active .content-grid ul.item-list li.item .tags .tag.skill-untrained {
+  background-color: #9fc5e8;
+  border-color: #9fc5e8;
+}
+#compendium-browser section.window-content .content-box section.content .tab.active .content-grid ul.item-list li.item .tags .tag.skill-novice {
+  background-color: #6fa8dc;
+  border-color: #6fa8dc;
+}
+#compendium-browser section.window-content .content-box section.content .tab.active .content-grid ul.item-list li.item .tags .tag.skill-adept {
+  background-color: #3d85c6;
+  border-color: #3d85c6;
+}
+#compendium-browser section.window-content .content-box section.content .tab.active .content-grid ul.item-list li.item .tags .tag.skill-expert {
+  background-color: #0b5394;
+  border-color: #0b5394;
+}
+#compendium-browser section.window-content .content-box section.content .tab.active .content-grid ul.item-list li.item .tags .tag.skill-master {
+  background-color: #073763;
+  border-color: #073763;
+}
+#compendium-browser section.window-content .content-box section.content .tab.active .content-grid ul.item-list li.item .tags .tag.skill-virtuoso {
+  background-color: #e9be25;
+  border-color: #e9be25;
+}
+#compendium-browser section.window-content .content-box section.content .tab.active .content-grid ul.item-list li.item .tags .tag.skill-invalid {
+  background-color: #ff0f0faa;
+  border-color: #ff0f0faa;
 }
 .dice-checks.dialog section {
   padding: 0;
@@ -827,6 +1169,30 @@ a.content-link img {
   max-width: 100%;
   overflow: hidden;
   position: relative;
+}
+.chat-message.message .flavor-text .header-bar.title-bar {
+  flex-direction: column;
+  align-items: center;
+}
+.chat-message.message .flavor-text .header-bar.title-bar .roll-type {
+  padding: 0.25rem;
+  margin: 0.25rem 0;
+  width: 50%;
+  background-color: #111113;
+  border-radius: 5px;
+  font-size: 14px;
+  font-weight: bold;
+}
+.chat-message.message .flavor-text .header-bar.title-bar .roll-type.attack-roll {
+  background: linear-gradient(45deg, #d8d8f1, #c2cdff);
+  color: black;
+}
+.chat-message.message .flavor-text .header-bar.title-bar .roll-type.damage-roll {
+  background: linear-gradient(45deg, #ecdbdb, #ffdfdf);
+  color: black;
+}
+.chat-message.message .flavor-text .header-bar.title-bar .action {
+  padding: 0.25rem 0;
 }
 .chat-message.message .flavor-text .header-bar:has(.item-icon) .action {
   text-align: left;
@@ -2669,7 +3035,11 @@ a.content-link img {
 .sheet.item section form.item-sheet .sheet-body .details .item-row input[type="checkbox"] {
   flex: 0 0 20px;
 }
-.sheet.item section form.item-sheet .sheet-body .details .item-row span {
+.sheet.item section form.item-sheet .sheet-body .details .item-row tags {
+  flex: 1 0 0;
+  margin: 0 0.25rem;
+}
+.sheet.item section form.item-sheet .sheet-body .details .item-row span.effect {
   flex: 1 0 0;
   padding: 0.25rem 0;
 }
@@ -2904,6 +3274,13 @@ a.content-link img {
 .sheet.item section form.item-sheet .sheet-body .move-info .move-info-row .move-info-col .move-other-info > span input {
   border: unset;
   text-overflow: ellipsis;
+}
+.sheet.item section form.item-sheet .sheet-body .move-info .move-info-row .move-info-col .move-other-info > span tags {
+  flex: 1 0 0;
+  margin-left: 0.5rem;
+}
+.sheet.item section form.item-sheet .sheet-body .move-info .move-info-row .move-info-col .move-other-info > span tags.tagify[disabled] > .tagify__tag > div::before {
+  animation: unset;
 }
 .sheet.item section form.item-sheet .sheet-body .overview .move-effect {
   overflow-y: auto;

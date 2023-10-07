@@ -1,0 +1,134 @@
+<div class="compendium-browser-settings">
+    <form autocomplete="off">
+        <h2 class="m-2">{{localize "PTU.CompendiumBrowser.CompendiumPacks"}}</h2>
+        <div class="settings-container">
+            <div class="setting-section">
+                <h3>{{localize "PTU.CompendiumBrowser.Tabs.Abilities"}}</h3>
+                <dl>
+                    {{#each settings.abilities as |conf pack|}}
+                        <label><dt><input type="checkbox" name="{{pack}}" {{checked conf.load}}></dt><dd>{{conf.name}}</dd></label>
+                    {{/each}}
+                </dl>
+            </div>
+
+            {{!-- <div class="setting-section">
+                <h3>{{localize "PTU.CompendiumBrowser.Tabs.Capabilities"}}</h3>
+                <dl>
+                    {{#each settings.capabilities as |conf pack|}}
+                        <label><dt><input type="checkbox" name="capabilities-{{pack}}" {{checked conf.load}}></dt><dd>{{conf.name}}</dd></label>
+                    {{/each}}
+                </dl>
+            </div> --}}
+
+            <div class="setting-section">
+                <h3>{{localize "PTU.CompendiumBrowser.Tabs.Edges"}}</h3>
+                <dl>
+                    {{#each settings.edges as |conf pack|}}
+                        <label><dt><input type="checkbox" name="{{pack}}" {{checked conf.load}}></dt><dd>{{conf.name}}</dd></label>
+                    {{/each}}
+                </dl>
+            </div>
+
+            {{!-- <div class="setting-section">
+                <h3>{{localize "PTU.CompendiumBrowser.Tabs.Effects"}}</h3>
+                <dl>
+                    {{#each settings.effects as |conf pack|}}
+                        <label><dt><input type="checkbox" name="effects-{{pack}}" {{checked conf.load}}></dt><dd>{{conf.name}}</dd></label>
+                    {{/each}}
+                </dl>
+            </div> --}}
+
+            <div class="setting-section">
+                <h3>{{localize "PTU.CompendiumBrowser.Tabs.Feats"}}</h3>
+                <dl>
+                    {{#each settings.feats as |conf pack|}}
+                        <label><dt><input type="checkbox" name="{{pack}}" {{checked conf.load}}></dt><dd>{{conf.name}}</dd></label>
+                    {{/each}}
+                </dl>
+            </div>
+
+            <div class="setting-section">
+                <h3>{{localize "PTU.CompendiumBrowser.Tabs.Items"}}</h3>
+                <dl>
+                    {{#each settings.items as |conf pack|}}
+                        <label><dt><input type="checkbox" name="{{pack}}" {{checked conf.load}}></dt><dd>{{conf.name}}</dd></label>
+                    {{/each}}
+                </dl>
+            </div>
+
+            <div class="setting-section">
+                <h3>{{localize "PTU.CompendiumBrowser.Tabs.Moves"}}</h3>
+                <dl>
+                    {{#each settings.moves as |conf pack|}}
+                        <label><dt><input type="checkbox" name="{{pack}}" {{checked conf.load}}></dt><dd>{{conf.name}}</dd></label>
+                    {{/each}}
+                </dl>
+            </div>
+
+            <div class="setting-section">
+                <h3>{{localize "PTU.CompendiumBrowser.Tabs.PokeEdges"}}</h3>
+                <dl>
+                    {{#each settings.pokeEdges as |conf pack|}}
+                        <label><dt><input type="checkbox" name="{{pack}}" {{checked conf.load}}></dt><dd>{{conf.name}}</dd></label>
+                    {{/each}}
+                </dl>
+            </div>
+
+            <div class="setting-section">
+                <h3>{{localize "PTU.CompendiumBrowser.Tabs.Species"}}</h3>
+                <dl>
+                    {{#each settings.species as |conf pack|}}
+                        <label><dt><input type="checkbox" name="{{pack}}" {{checked conf.load}}></dt><dd>{{conf.name}}</dd></label>
+                    {{/each}}
+                </dl>
+            </div>
+
+            {{!-- <h2>{{localize "PTU.SETTINGS.CompendiumBrowserSources.Name"}}</h2>
+            <p>
+                {{localize "PTU.SETTINGS.CompendiumBrowserSources.Hint"}}
+            </p>
+
+            <div class="setting-section single-column">
+                <h3>{{localize "PTU.SETTINGS.Settings"}}</h3>
+                <dl>
+                    <label>
+                        <dt><input type="checkbox" name="show-empty-sources" {{checked sources.showEmptySources}}></dt>
+                        <dd>{{localize "PTU.SETTINGS.CompendiumBrowserSources.ShowEmptySources"}}</dd>
+                    </label>
+                </dl>
+
+                <dl>
+                    <label>
+                        <dt><input type="checkbox" name="show-unknown-sources" {{checked sources.showUnknownSources}}></dt>
+                        <dd>{{localize "PTU.SETTINGS.CompendiumBrowserSources.ShowUnknownSources"}}</dd>
+                    </label>
+                </dl>
+
+                <dl>
+                    <label>
+                        <dt><input type="checkbox" name="ignore-as-gm" {{checked sources.ignoreAsGM}}></dt>
+                        <dd>{{localize "PTU.SETTINGS.CompendiumBrowserSources.IgnoreAsGM"}}</dd>
+                    </label>
+                </dl>
+
+                <button type="button" data-action="settings-sources-delete">{{localize "PTU.SETTINGS.CompendiumBrowserSources.DeleteAllTitle"}}</button>
+            </div>   --}}
+
+            {{!-- <div class="setting-section single-column">
+                <h3>{{localize "PTU.SETTINGS.CompendiumBrowserSources.SourcesListHeader"}}</h3>
+                <dl>
+                    <dt><input type="checkbox" data-action="setting-sources-toggle-visible" /></dt>
+                    <dd><input type="text" data-element="setting-sources-search" /></dd>
+                    {{#each sources.sources}}
+                        <label data-element="setting-source" data-name="{{this.name}}">
+                            <dt><input type="checkbox" name="source-{{@key}}" {{checked this.load}}></dt>
+                            <dd>{{this.name}}</dd>
+                        </label>
+                    {{/each}}
+                <dl>
+            </div> --}}
+        </div>
+
+    </form>
+        <button type="button" class="save-settings">{{localize "SETTINGS.Save"}}</button>
+</div>

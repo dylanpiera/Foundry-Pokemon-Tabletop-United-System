@@ -200,7 +200,7 @@ class PTUSkillCheck extends PTUDiceCheck {
             }
         }
 
-        const message = await this.createMessage(roll, rollMode, flags, diceDialogContext.statistic.tags, true);
+        const message = await this.createMessage({roll, rollMode, flags, extraTags: diceDialogContext.statistic.tags, inverse: true});
 
         if (callback) {
             const msg = message instanceof ChatMessage ? message : new ChatMessage(message);
