@@ -161,6 +161,34 @@ export function registerSettings() {
         requiresReload: true
     });
 
+    game.settings.register("ptu", "compendiumBrowserPacks", {
+        name: "Compendium Browser Packs",
+        hint: "Settings to exclude packs from loading.",
+        scope: "world",
+        config: false,
+        default: {},
+        type: Object,
+        onChange: () => game.ptu.compendiumBrowser.initCompendiumList()
+    });
+
+    game.settings.register("ptu", "compendiumBrowserSources", {
+        name: "Included Sources",
+        hint: "Settings to display only entries with specified sources in the compendium browser.",
+        scope: "world",
+        config: false,
+        default: {
+            ignoreAsGM: true,
+            showEmptySources: true,
+            showUnknownSources: true,
+            sources: {}
+        },
+        type: Object,
+        onChange: () => {
+            game.ptu.compendiumBrowser.packLoader.reset();
+            game.ptu.compendiumBrowser.initCompendiumList();
+        }
+    });
+
     game.settings.register("ptu", "worldSystemVersion", {
         name: "World System Version",
         scope: "world",

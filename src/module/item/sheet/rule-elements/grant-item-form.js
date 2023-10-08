@@ -19,16 +19,16 @@ class GrantItemForm extends RuleElementForm {
             ...data, 
             granted, 
             allowDuplicate: !!this.rule.allowDuplicate ?? true,
-            predicationIsMultiple: Array.isArray(this.rule.predicate)
+            predicationIsMultiple: Array.isArray(this.rule.predicate) && this.rule.predicate.every(p => typeof p === "string")
         };
     }
 
     /** @override */
     async activateListeners(html) {
-        const predicateElement = $(html).find(".predicate-list")[0];
-        if (predicateElement) {
-            tagify(predicateElement);
-        }
+        // const predicateElement = $(html).find(".predicate-list")[0];
+        // if (predicateElement) {
+        //     tagify(predicateElement);
+        // }
 
         // Add events for toggle buttons
         html.querySelector("[data-action=toggle-predicate]")?.addEventListener("click", () => {

@@ -14,6 +14,9 @@ function registerTemplates() {
         "systems/ptu/static/templates/config/token/appearance-partial.hbs",
         "systems/ptu/static/templates/config/token/identity-partial.hbs",
 
+        "systems/ptu/static/templates/apps/compendium-browser/filters.hbs",
+        "systems/ptu/static/templates/apps/compendium-browser/browser-settings.hbs",
+
         // Charactermancer Partials
         // "systems/ptu/templates/partials/charactermancer-evolution-partial.hbs",
         // "/systems/ptu/templates/partials/charactermancer/stat-block-partial.hbs"

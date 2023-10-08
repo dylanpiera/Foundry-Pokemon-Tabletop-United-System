@@ -357,6 +357,7 @@
         }
       },
       "shared": {
+        "alliance": "default",
         "contests": {
           "voltage": {
             "value": 0,
@@ -594,7 +595,10 @@
           "version": null,
           "lastMigration": null
         },
-        "referenceEffect": ""
+        "referenceEffect": "",
+        "source": {
+          "value": "Homebrew"
+        }
       },
       "interactions": {
         "sheerForce": false,
@@ -614,7 +618,7 @@
     },
     "feat": {
       "templates": ["base"],
-      "prerequisites": "",
+      "prerequisites": [],
       "frequency": "At Will - Standard Action",
       "tags": "",
       "notes": "",
@@ -623,7 +627,7 @@
     },
     "edge": {
       "templates": ["base"],
-      "prerequisites": "",
+      "prerequisites": [],
       "notes": "",
       "free": false
     },
@@ -697,7 +701,7 @@
     },
     "pokeedge": {
       "templates": ["base"],
-      "prerequisites": "",
+      "prerequisites": [],
       "cost": 0
     },
     "item": {

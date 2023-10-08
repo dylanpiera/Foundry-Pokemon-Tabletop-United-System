@@ -1,5 +1,5 @@
 import { sluggify } from "../../../util/misc.js";
-import { PTUModifier, StatisticModifier } from "../../actor/modifiers.js";
+import { CheckModifier, PTUModifier, StatisticModifier } from "../../actor/modifiers.js";
 import { PTUCondition } from "../../item/index.js";
 import { PTUDiceCheck } from "./check.js";
 import { AttackRoll } from "./rolls/attack-roll.js";
@@ -116,49 +116,87 @@ class PTUAttackCheck extends PTUDiceCheck {
             const critRange = Array.fromRange(1 + Math.max(critMod, 0), 20 - Math.max(critMod, 0));
 
             /** @type {TargetContext[]} */
-            const contexts = this._contexts.size > 0 ? this._contexts : [{ actor: this.actor, options: this.options, token: this.token}]
+            const contexts = this._contexts.size > 0 ? this._contexts : [{ actor: this.actor, options: this.options, token: this.token }]
 
             for (const context of contexts) {
                 const target = {
                     uuid: context.actor.uuid,
-                    critRange
+                    critRange,
+                    slug: "Evasion",
+                    statistic: CheckModifier.create({
+                        slug: "evasion",
+                        modifiers: [],
+                        rollOptions: context.options,
+                    }),
+                    get value() {
+                        return target.statistic.totalModifier;
+                    }
                 }
 
-                if(context.options.has("target:condition:vulnerable")) {
-                    target.slug = "vulnerable";
-                    target.value = 0;
-                    targets.set(context.actor.uuid, target);
-                    continue;
+                if (context.options.has("target:condition:vulnerable")) {
+                    target.statistic.push(new PTUModifier({
+                        slug: "vulnerable",
+                        label: "Vulnerable",
+                        modifier: 0
+                    }));
+                }
+                else {
+                    const stuck = (context.options.has("target:condition:stuck") && !context.options.has("target:types:ghost"));
+                    switch (this.item?.system.category) {
+                        case "Status": {
+                            target.statistic.push(new PTUModifier({
+                                slug: "speed-evasion",
+                                label: "Speed Evasion",
+                                modifier: stuck ? 0 : (context.actor.system.evasion.speed ?? 0)
+                            }));
+                        }
+                        case "Physical": {
+                            const { physical, speed } = context.actor.system.evasion;
+                            if (stuck ? true : physical > speed) {
+                                target.statistic.push(new PTUModifier({
+                                    slug: "physical-evasion",
+                                    label: "Physical Evasion",
+                                    modifier: physical
+                                }));
+                            }
+                            else {
+                                target.statistic.push(new PTUModifier({
+                                    slug: "speed-evasion",
+                                    label: "Speed Evasion",
+                                    modifier: speed
+                                }));
+                            }
+                        }
+                        case "Special": {
+                            const { special, speed } = context.actor.system.evasion;
+                            if (stuck ? true : special > speed) {
+                                target.statistic.push(new PTUModifier({
+                                    slug: "special-evasion",
+                                    label: "Special Evasion",
+                                    modifier: special
+                                }));
+                            }
+                            else {
+                                target.statistic.push(new PTUModifier({
+                                    slug: "speed-evasion",
+                                    label: "Speed Evasion",
+                                    modifier: speed
+                                }));
+                            }
+                        }
+                    }
                 }
 
-                const stuck = (context.options.has("target:condition:stuck") && !context.options.has("target:types:ghost"));
-                switch (this.item?.system.category) {
-                    case "Status": {
-                        target.slug = "speed-evasion";
-                        target.value = stuck ? 0 : (context.actor.system.evasion.speed ?? 0);
-                    }
-                    case "Physical": {
-                        const {physical, speed} = context.actor.system.evasion;
-                        if(stuck ? true : physical > speed) {
-                            target.slug = "physical-evasion";
-                            target.value = physical;
-                        }
-                        else {
-                            target.slug = "speed-evasion";
-                            target.value = speed;
-                        }
-                    }
-                    case "Special": {
-                        const {special, speed} = context.actor.system.evasion;
-                        if(stuck ? true : special > speed) {
-                            target.slug = "special-evasion";
-                            target.value = special;
-                        }
-                        else {
-                            target.slug = "speed-evasion";
-                            target.value = speed;
-                        }
-                    }
+                for(const modifier of extractModifiers(context.actor.synthetics, ["evasion"], { test: context.options })) {
+                    target.statistic.push(modifier);
+                }
+
+                if (context.options.has("target:flanked")) {
+                    target.statistic.push(new PTUModifier({
+                        slug: "flanked",
+                        label: "Flanked",
+                        modifier: -2
+                    }));
                 }
 
                 targets.set(context.actor.uuid, target);
@@ -177,7 +215,7 @@ class PTUAttackCheck extends PTUDiceCheck {
             attack,
             title,
             dcs,
-            type: "attack"
+            type: "attack-roll"
         },
             callback
         );
@@ -185,13 +223,13 @@ class PTUAttackCheck extends PTUDiceCheck {
 
     /** @override */
     async afterRoll() {
-        if(this.conditionOptions.has("condition:confused")) await PTUCondition.HandleConfusion(this.item, this.actor);
+        if (this.conditionOptions.has("condition:confused")) await PTUCondition.HandleConfusion(this.item, this.actor);
         await super.afterRoll();
     }
 
     /** @override */
     createFlavor({ extraTags = [], inverse = false, title }) {
-        const base = super.createFlavor({ extraTags, inverse, title });
+        const base = super.createFlavor({ extraTags, inverse, title, type: "attack-roll" });
 
         const typeAndCategoryHeader = (() => {
             const header = document.createElement("div");
@@ -227,9 +265,9 @@ class PTUAttackCheck extends PTUDiceCheck {
      */
     async executeAttack(callback = null, attackStatistic = null) {
         await this.prepareContexts(attackStatistic);
-        if(!this.attackNoTargets()) return null;
-        if(!this.attackOutOfRange()) return null;
-        if(!this.attackDisabled()) return null;
+        if (!this.attackNoTargets()) return null;
+        if (!this.attackOutOfRange()) return null;
+        if (!this.attackDisabled()) return null;
 
         this.prepareModifiers();
         this.prepareStatistic();
@@ -299,15 +337,15 @@ class PTUAttackCheck extends PTUDiceCheck {
             ui.notifications.warn("PTU.Action.MoveWhileSleeping", { localize: true });
             return false;
         }
-        if (this.conditionOptions.has("condition:rage") && selectors.includes("status-attack")) {
+        if (this.conditionOptions.has("condition:rage") && this.selectors.includes("status-attack")) {
             ui.notifications.warn("PTU.Action.StatusAttackWhileRaging", { localize: true });
             return false;
         }
-        if (this.conditionOptions.has("condition:disabled") && rollOptions.includes(`condition:disabled:${move.slug}`)) {
+        if (this.conditionOptions.has("condition:disabled") && this.options.includes(`condition:disabled:${move.slug}`)) {
             ui.notifications.warn("PTU.Action.DisabledMove", { localize: true });
             return false;
         }
-        if (this.conditionOptions.has("condition:suppressed") && !selectors.includes(`at-will-attack`)) {
+        if (this.conditionOptions.has("condition:suppressed") && !this.selectors.includes(`at-will-attack`)) {
             ui.notifications.warn("PTU.Action.SuppressedMove", { localize: true });
             return false;
         }

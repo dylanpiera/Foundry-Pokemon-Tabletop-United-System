@@ -1,4 +1,5 @@
-import { sortStringRecord } from "../../../util/misc.js";
+import { sluggify, sortStringRecord } from "../../../util/misc.js";
+import { tagify } from "../../../util/tags.js";
 import { RuleElements } from "../../rules/index.js";
 import { RULE_ELEMENT_FORMS, RuleElementForm } from "./rule-elements/index.js";
 
@@ -104,6 +105,10 @@ class PTUItemSheet extends ItemSheet {
     activateListeners(html) {
         super.activateListeners(html);
 
+        for(const taggifyElement of html.find(".ptu-tagify")) {
+            tagify(taggifyElement);
+        }
+
         html.find('select[data-action=select-rule-element]').on('change', (event) => {
             this.selectedRuleElementType = event.target.value;
         });
@@ -148,6 +153,25 @@ class PTUItemSheet extends ItemSheet {
                 ui.notifications.info(game.i18n.format("PTU.ClipboardNotification", {clipText}));
             }
         })
+
+        const slugInput = html.find("input[name='system.slug']")[0];
+        if(slugInput) {
+            slugInput.addEventListener("change", () => {
+                slugInput.value = sluggify(slugInput.value);
+            });
+            html.find("a[data-action='regenerate-slug']").click(() => {
+                if(this._submitting) return;
+
+                slugInput.value = sluggify(this.item.name);
+                const event = new Event("change");
+                slugInput.dispatchEvent(event);
+            });
+            if(!slugInput.value) {
+                slugInput.value = sluggify(this.item.name);
+                const event = new Event("change");
+                slugInput.dispatchEvent(event);
+            }
+        }
     }
 
     /** 
@@ -166,6 +190,10 @@ class PTUItemSheet extends ItemSheet {
     /** @override */
     async _updateObject(event, formData) {
         const expanded = expandObject(formData);
+
+        if(Array.isArray(expanded.system.prerequisites)) {
+            expanded.system.prerequisites = expanded.system.prerequisites.map(s => s.value).filter(s => !!s)
+        }
 
         if(expanded.system?.rules) {
             const rules = this.item.toObject().system.rules ?? [];

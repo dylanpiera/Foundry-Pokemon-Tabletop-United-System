@@ -110,10 +110,12 @@ function calculateTrainerCapabilities(trainerSkills, items, speedCombatStages, m
     capabilities["swim"] = (mods["Deep Diver"] ? capabilities["overland"] : Math.trunc(capabilities["overland"] / 2)) + mods["Swim"]
 
     for(const key of Object.keys(capabilities)) {
-        capabilities[key] = Math.max(1, capabilities[key] + (modifiers[key] ?? 0));
+        const allBonus = (key == "highJump" || key == "longJump" || key == "power" || key == "throwingRange") ? 0 : Number(modifiers["all"] ?? 0)
+        capabilities[key] = Math.max(1, capabilities[key] + (modifiers[key] ?? 0) + allBonus);
     }
     for(const key of Object.keys(modifiers)) {
-        if(capabilities[key] === undefined) capabilities[key] = modifiers[key];
+        if(key === "all") continue;
+        if(capabilities[key] == 0) capabilities[key] = modifiers[key] + Number(modifiers["all"] ?? 0);
     }
 
     return capabilities;

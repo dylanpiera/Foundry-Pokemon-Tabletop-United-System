@@ -24,7 +24,7 @@ class DamageMessagePTU extends ChatMessagePTU {
     }
 
     async _renderNoneTargetDamage($html) {
-        if(this.flags?.ptu?.context?.damageApplied === true) return $html;
+        if (this.flags?.ptu?.context?.damageApplied === true) return $html;
 
         const $last = $html.find(".dice-roll").last();
         const $parent = $last.parent();
@@ -204,14 +204,27 @@ async function applyDamageFromMessage({ message, targets, mode = "full", addend 
             totalCritImmune: (multiplier * roll.critImmuneTotal) + addend,
         }
 
-        const ephemeralEffects = await extractEphemeralEffects({
-            affects: "target",
-            origin: message.actor,
-            target: token.actor,
-            item: message.item,
-            domains: ["damage-received"],
-            options: messageRollOptions
-        })
+        const ephemeralEffects = [
+            ...await extractEphemeralEffects({
+                affects: "target",
+                origin: message.actor,
+                target: token.actor,
+                item: message.item,
+                domains: ["damage-received"],
+                options: messageRollOptions
+            }),
+            // Ephemeral Effects on the target that it wishes to apply to itself
+            // F.e. Type Brace
+            ...await extractEphemeralEffects({
+                affects: "origin",
+                origin: message.actor,
+                target: token.actor,
+                item: message.item,
+                domains: ["damage-received"],
+                options: messageRollOptions
+            })
+        ];
+
 
         const contextClone = token.actor.getContextualClone(originRollOptions, ephemeralEffects);
         const applicationRollOptions = new Set([
@@ -285,4 +298,4 @@ async function shiftAdjustDamage(message, targets, mode) {
     }).render(true);
 }
 
-export { DamageMessagePTU, applyDamageFromMessage}
+export { DamageMessagePTU, applyDamageFromMessage }

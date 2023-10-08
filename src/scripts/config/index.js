@@ -40,6 +40,7 @@ import { PTUContestMove } from '../../module/item/contestmove/document.js';
 import { PTUContestMoveSheet } from '../../module/item/contestmove/sheet.js';
 import { PTUHotBar } from '../../module/apps/hotbar.js';
 import { PTUTokenConfig } from '../../module/canvas/token/sheet.js';
+import { PackLoader } from '../../module/apps/compendium-browser/index.js';
 
 const data = {
   skills: {
@@ -73,7 +74,8 @@ const data = {
   },
   dbData,
   helpText,
-  tmData
+  tmData,
+  alliances: ["party", "opposition", "neutral"],
 }
 
 const ui = {

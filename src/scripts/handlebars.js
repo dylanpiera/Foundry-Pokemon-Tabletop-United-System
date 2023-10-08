@@ -16,24 +16,24 @@ function _registerPTUHelpers() {
     Handlebars.registerHelper("shortFrequency", function (frequency) {
         switch (frequency.toLowerCase()) {
             case "at-will":
-              return "At-Will";
+                return "At-Will";
             case "eot":
-              return "EOT";
+                return "EOT";
             case "scene":
-              return "1x Scene";
+                return "1x Scene";
             case "scene x2":
-              return "2x S";
+                return "2x S";
             case "scene x3":
-              return "3x S";
+                return "3x S";
             case "daily":
-              return "1x D";
+                return "1x D";
             case "daily x2":
-              return "2x D";
+                return "2x D";
             case "daily x3":
-              return "3x D";
+                return "3x D";
             default:
-              return frequency;
-          }
+                return frequency;
+        }
     })
 
     Handlebars.registerHelper("calcHeight", function (percent) {
@@ -117,12 +117,12 @@ function _registerPTUHelpers() {
 
     Handlebars.registerHelper("moveDbToDice", (item, actor) => {
         const dbNumber = Number(item.system.damageBase ?? item);
-        if(isNaN(dbNumber)) return "Not a valid DB";
+        if (isNaN(dbNumber)) return "Not a valid DB";
 
         const realDb = Math.clamped(dbNumber, 0, 28);
         const dbString = CONFIG.PTU.data.dbData[realDb];
 
-        if(!actor) return dbString;
+        if (!actor) return dbString;
         const bonus = item.system.category === "Physical" ? actor.system.stats.atk.total + (actor.system.modifiers.damageBonus?.physical?.total ?? 0) : actor.system.stats.spatk.total + (actor.system.modifiers.damageBonus?.special?.total ?? 0);
 
         return dbString + " + " + bonus;
@@ -389,7 +389,7 @@ function _registerBasicHelpers() {
     Handlebars.registerHelper("biggerOrEqual", function (a, b) { return a >= b });
     Handlebars.registerHelper("and", function (a, b) { return a && b });
     Handlebars.registerHelper("or", function (a, b) { return a || b });
-    Handlebars.registerHelper("not", function (a, b) { return a != b });
+    Handlebars.registerHelper("not", function (a, b = false) { return a != b });
     Handlebars.registerHelper("divide", (value1, value2) => Number(value1) / Number(value2));
     Handlebars.registerHelper("multiply", (value1, value2) => Number(value1) * Number(value2));
     Handlebars.registerHelper("floor", (value) => Math.floor(Number(value)));

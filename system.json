@@ -7,7 +7,7 @@
     "verified": "11.311",
     "maximum": 11
   },
-  "version": "4.0.0.beta.10",
+  "version": "4.0.0.beta.11",
   "templateVersion": 2,
   "authors": [
     {
@@ -35,7 +35,8 @@
   "scripts": [
     "static/js/tooltipster.js",
     "static/js/tagify",
-    "static/js/tagify.polyfills.min.js"
+    "static/js/tagify.polyfills.min.js",
+    "static/js/minisearch.index.min.js"
   ],
   "flags": {
     "hotReload": {
@@ -44,21 +45,21 @@
   },
   "packs": [
     {
-      "label": "abilities",
+      "label": "PTR Abilities",
       "type": "Item",
       "name": "abilities",
       "path": "packs/abilities.db",
       "system": "ptu"
     },
     {
-      "label": "moves",
+      "label": "PTR Moves",
       "type": "Item",
       "name": "moves",
       "path": "packs/moves.db",
       "system": "ptu"
     },
     {
-      "label": "feats",
+      "label": "PTR Feats",
       "type": "Item",
       "name": "feats",
       "path": "packs/feats.db",
@@ -72,68 +73,68 @@
       "system": "ptu"
     },
     {
-      "label": "edges",
+      "label": "PTR Edges",
       "type": "Item",
       "name": "edges",
       "path": "packs/edges.db",
       "system": "ptu"
     },
     {
-      "label": "items",
+      "label": "PTR Items",
       "type": "Item",
       "name": "items",
       "path": "packs/items.db",
       "system": "ptu"
     },
     {
-      "label": "capabilities",
+      "label": "PTR Capabilities",
       "type": "Item",
       "name": "capabilities",
       "path": "packs/capabilities.db",
       "system": "ptu"
     },
     {
-      "label": "poke edges",
+      "label": "PTR Poke Edges",
       "type": "Item",
       "name": "poke-edges",
       "path": "packs/poke-edges.db",
       "system": "ptu"
     },
     {
-      "label": "habitats",
+      "label": "PTR Habitats",
       "type": "RollTable",
       "name": "habitats",
       "path": "packs/habitats.db",
       "system": "ptu"
     },
     {
-      "label": "effects",
+      "label": "PTR Effects",
       "type": "Item",
       "name": "effects",
       "path": "packs/effects.db",
       "system": "ptu"
     },
     {
-      "label": "species",
+      "label": "PTR Species",
       "type": "Item",
       "name": "species",
       "path": "packs/species.db",
       "system": "ptu"
     }, 
     {
-      "label": "macros",
+      "label": "PTR Macros",
       "type": "Macro",
       "name": "macros",
       "system": "ptu"
     },
     {
-      "label": "references",
+      "label": "PTR References",
       "type": "Item",
       "name": "references",
       "system": "ptu"
     },
     {
-      "label": "spirit actions",
+      "label": "PTR Spirit Actions",
       "type": "Item",
       "name": "spirit-actions",
       "system": "ptu"

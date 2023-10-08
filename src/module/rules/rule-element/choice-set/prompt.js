@@ -83,13 +83,12 @@ export class ChoiceSetPrompt extends Application {
 
     async resolveSelection() {
         const firstChoice = this.choices.at(0);
-        if(!this.containsUUIDs && firstChoice && this.choices.length === 1) {
+        if(firstChoice && this.choices.length === 1) {
             return (this.selection = firstChoice);
         }
 
-        if(this.choices.length === 0 && !this.containsUUIDs) {
-            await this.close({force: true});
-            return null;
+        if(this.choices.length === 0) {
+            return this.selection = null;
         }
 
         this.choices = this.getChoices();

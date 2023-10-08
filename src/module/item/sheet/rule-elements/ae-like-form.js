@@ -23,7 +23,7 @@ class AELikeForm extends RuleElementForm {
 
         return {
             ...data,
-            predicationIsMultiple: Array.isArray(this.rule.predicate),
+            predicationIsMultiple: Array.isArray(this.rule.predicate) && this.rule.predicate.every(p => typeof p === "string"),
             value: {
                 mode: valueMode,
                 data: this.rule.value,
@@ -35,10 +35,10 @@ class AELikeForm extends RuleElementForm {
     activateListeners(html) {
         const $html = $(html);
 
-        const predicateElement = $html.find(".predicate-list")[0];
-        if (predicateElement) {
-            tagify(predicateElement);
-        }
+        // const predicateElement = $html.find(".predicate-list")[0];
+        // if (predicateElement) {
+        //     tagify(predicateElement);
+        // }
 
         // Add events for toggle buttons
         html.querySelector("[data-action=toggle-predicate]")?.addEventListener("click", () => {

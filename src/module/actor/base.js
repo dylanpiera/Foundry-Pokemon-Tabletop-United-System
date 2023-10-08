@@ -57,6 +57,10 @@ class PTUActor extends Actor {
         return "Medium;"
     }
 
+    get alliance() {
+        return this.system.alliance;
+    }
+
     get isPrivate() {
         // TODO : make this a meta knowledge setting
         return !(this.permission >= CONST.DOCUMENT_PERMISSION_LEVELS.OBSERVER);
@@ -276,6 +280,12 @@ class PTUActor extends Actor {
         });
 
         this.system.changes = this.system.changes ?? {};
+
+        this.system.alliance = ["party", "opposition", null].includes(this.system.alliance)
+            ? this.system.alliance
+            : this.hasPlayerOwner
+            ? "party"
+            : "opposition";
     }
 
     prepareDerivedData() {
@@ -338,6 +348,14 @@ class PTUActor extends Actor {
                 console.error(`PTU | Failed to execute onBeforePrepareData on rule element ${rule}.`, error);
             }
         }
+    }
+
+    isAllyOf(actor) {
+        return this.alliance !== null && this !== actor && this.alliance === actor.alliance;
+    }
+
+    isEnemyOf(actor) {
+        return this.alliance !== null && actor.alliance !== null && this.alliance !== actor.alliance;
     }
 
     /**
@@ -1414,6 +1432,11 @@ class PTUActor extends Actor {
             options["ignore+Z"] = true;
         }
 
+        const isFlanked = targetToken.isFlanked();
+        if (isFlanked && !targetRollOptions.includes("target:immune:flanked")) {
+            targetRollOptions.push("target:flanked");
+        }
+
         const distance = selfToken && targetToken ? selfToken.distanceTo(targetToken, options) : null;
         const [originDistance, targetDistance] =
             typeof distance === "number"
@@ -1439,6 +1462,10 @@ class PTUActor extends Actor {
         ) ?? null;
 
         const targetOptions = new Set(targetActor ? getTargetRollOptions(targetActor) : targetRollOptions);
+
+        if(targetOptions.has("target:immune:flanked")) targetOptions.delete("target:flanked");
+        else if(isFlanked) targetOptions.add("target:flanked");
+
         const rollOptions = new Set([
             ...selfOptions,
             ...itemOptions,

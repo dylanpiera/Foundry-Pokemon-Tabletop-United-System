@@ -23,7 +23,7 @@ class FlatModifierForm extends RuleElementForm {
 
         return {
             ...data,
-            predicationIsMultiple: Array.isArray(this.rule.predicate),
+            predicationIsMultiple: Array.isArray(this.rule.predicate) && this.rule.predicate.every(p => typeof p === "string"),
             selectorIsArray: Array.isArray(this.rule.selectors),
             value: {
                 mode: valueMode,
@@ -35,15 +35,15 @@ class FlatModifierForm extends RuleElementForm {
     /** @override */
     activateListeners(html) {
         const $html = $(html);
-        const selectorElement = $html.find(".selectors-list")[0];
-        if (selectorElement) {
-            tagify(selectorElement);
-        }
+        // const selectorElement = $html.find(".selectors-list")[0];
+        // if (selectorElement) {
+        //     tagify(selectorElement);
+        // }
 
-        const predicateElement = $html.find(".predicate-list")[0];
-        if (predicateElement) {
-            tagify(predicateElement);
-        }
+        // const predicateElement = $html.find(".predicate-list")[0];
+        // if (predicateElement) {
+        //     tagify(predicateElement);
+        // }
 
         // Add events for toggle buttons
         html.querySelector("[data-action=toggle-selector]")?.addEventListener("click", () => {

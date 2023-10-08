@@ -30,6 +30,13 @@ class PTUTokenDocument extends TokenDocument {
         // Autoscaling is a secondary feature of linking to actor size
         const autoscale = linkToActorSize ? this.flags.ptu.autoscale ?? autoscaleDefault : false;
         this.flags.ptu = mergeObject(this.flags.ptu ?? {}, { linkToActorSize, autoscale });
+
+        this.disposition = this.actor.alliance
+            ? {
+                party: CONST.TOKEN_DISPOSITIONS.FRIENDLY,
+                opposition: CONST.TOKEN_DISPOSITIONS.HOSTILE,
+            }[this.actor.alliance]
+            : CONST.TOKEN_DISPOSITIONS.NEUTRAL;
     }
 
     /** @override */
@@ -104,6 +111,10 @@ class PTUTokenDocument extends TokenDocument {
             if(this.combatant?.parent.active) ui.combat.render();
         })
         this.object.drawBars();
+    }
+
+    isFlanked() {
+        return this.object?.isFlanked() ?? null;
     }
 }
 
