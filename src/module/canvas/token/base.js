@@ -63,7 +63,7 @@ class PTUToken extends Token {
             // const baseBossBarY = (temp?.value > 0 ? 1 : 0) * barHeight + (offset * (temp?.value > 0 ? 1 : 0));
             for (let i = 0; i < bossBars; i++) {
                 const bossBarY = ((i + (temp?.value > 0 ? 1 : 0)) * barHeight) + (offset * (temp?.value > 0 ? 1 : 0));
-                
+
                 bar.lineStyle(0).beginFill(black, 0.5).drawRoundedRect(smallWidthOffset, bossBarY, smallBarWidth, barHeight, 3);
                 if (i < brokenBars) {
                     bar.beginFill(bossBarColor, 1).drawRoundedRect(smallWidthOffset, bossBarY, 0, barHeight, 2);
@@ -83,9 +83,9 @@ class PTUToken extends Token {
         const healthBarY = ((numBars - 2) * barHeight) + (offset * (numBars - 2));
         bar.lineStyle(0).beginFill(black, 0.5).drawRoundedRect(0, healthBarY, this.w, barHeight * 2, 3);
         bar.beginFill(color, 1.0).drawRoundedRect(0, healthBarY, healthWidth, barHeight * 2, 2);
-        if(injuryPercent > 0) {
+        if (injuryPercent > 0) {
             bar.beginFill(injuryColor, 1.0).drawRoundedRect(this.w - (injuryWidth) + (injuryPercent < 1 ? 1 : 0), healthBarY, (injuryWidth) - (injuryPercent < 1 ? 1 : 0), barHeight * 2, 2);
-            if(injuryPercent < 1)  bar.beginFill(black, 1.0).lineStyle(bs, black, 1.0).drawRect(this.w-(injuryWidth), healthBarY+1, 1, barHeight * 2 - 2);
+            if (injuryPercent < 1) bar.beginFill(black, 1.0).lineStyle(bs, black, 1.0).drawRect(this.w - (injuryWidth), healthBarY + 1, 1, barHeight * 2 - 2);
         }
         bar.beginFill(black, 0).lineStyle(bs, black, 1.0).drawRoundedRect(0, healthBarY, this.w, barHeight * 2, 3);
 
@@ -343,6 +343,78 @@ class PTUToken extends Token {
             token: this,
             target,
         }, options);
+    }
+
+    isFlanked() {
+        const flankingTokens = canvas.tokens.placeables.filter(t => t !== this && t.canFlank(this));
+        if (flankingTokens.length <= 1) return false;
+
+        function roundToNearest(value, numbers) {
+            const differences = numbers.map(num => Math.abs(num - value));
+            const minDifference = Math.min(...differences);
+            const index = differences.indexOf(minDifference);
+            return numbers[index];
+        }
+
+        const flankerRequirement = (() => {
+            switch (roundToNearest(this.document.width * this.document.height, [1, 4, 9, 16, 25])) {
+                case 1:
+                    return 2;
+                case 4:
+                    return 3;
+                case 9:
+                    return 4;
+                case 16:
+                    return 5;
+                case 25:
+                    return 6;
+                default:
+                    return 2;
+            }
+        })()
+
+        const flankersFlanking = flankingTokens.reduce((acc, flanker) => {
+            const otherFlankers = flankingTokens.filter(t => t !== flanker);
+            const sizeFlankCount = (() => {
+                switch(roundToNearest(flanker.document.width * flanker.document.height, [1, 4, 9, 16, 25])) {
+                    case 1:
+                        return 1;
+                    case 4:
+                        return 2;
+                    case 9:
+                        return 3;
+                    case 16:
+                        return 4;
+                    case 25:
+                        return 5;
+                    default:
+                        return 1;
+                }
+            })();
+
+            let flankedByCount = sizeFlankCount // Flanked by self
+            for (const otherFlanker of otherFlankers) {
+                if (flanker.distanceTo(otherFlanker) < 2) continue;
+                flankedByCount++;
+            }
+            return {
+                ...acc,
+                [flanker.id]: flankedByCount > sizeFlankCount ? flankedByCount : 0
+            };
+        }, {});
+
+        console.log(Object.entries(flankersFlanking).map(([id, count]) => `${canvas.tokens.get(id).name}: ${count}`));
+        const flankedByCount = Object.values(flankersFlanking).reduce((acc, count) => Math.max(acc, count), 0);
+
+        return flankedByCount >= flankerRequirement;
+    }
+
+    canFlank(flankee) {
+        if (this === flankee) return false; //TODO: Add setting to also disable
+
+        if (!this.actor.isEnemyOf(flankee.actor)) return false;
+
+        return this.distanceTo(flankee) <= 1;
     }
 
     /* -------------------------------------------- */

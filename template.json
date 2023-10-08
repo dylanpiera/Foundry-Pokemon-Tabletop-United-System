@@ -357,6 +357,7 @@
         }
       },
       "shared": {
+        "alliance": "default",
         "contests": {
           "voltage": {
             "value": 0,

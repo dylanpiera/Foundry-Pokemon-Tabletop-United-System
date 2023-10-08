@@ -675,6 +675,10 @@
         "Theme": {
           "Label": "Theme",
           "Hint": "if empty will default to your pokeball (if a pokemon) or 'default', if theme cannot be found the parchment theme will be used."
+        },
+        "Alliance": {
+          "Label": "Alliance",
+          "Hint": "The alliance of the actor."
         }
       }
     },
@@ -993,6 +997,12 @@
         "AndLabel": "All of above",
         "OrLabel": "Any of above"
       }
+    },
+    "Alliance": {
+      "Default": "Ownership Default ({alliance})",
+      "Neutral": "Neutral",
+      "Opposition": "Opposition",
+      "Party": "Party"
     }
   },
 
@@ -1013,5 +1023,9 @@
   "power": "Power",
   "naturewalk": "Naturewalk",
   "weightClass": "Weight Class",
-  "throwingRange": "Throwing Range"
+  "throwingRange": "Throwing Range",
+
+  "party": "Party",
+  "neutral": "Neutral",
+  "opposition": "Opposition"
 }

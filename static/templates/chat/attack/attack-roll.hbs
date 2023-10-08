@@ -15,6 +15,19 @@
                     <img src="{{target.img}}"/>
                 </div>
                 {{#unless target.isPrivate}}
+                {{#if (and target.dc.statistic (gt target.dc.statistic._modifiers.length 0))}}
+                    <div class="flavor-text footer">
+                        <div class="header-bar tags m-0 p-1">
+                            {{#each target.dc.statistic._modifiers as |mod|}}
+                                {{#if mod.enabled}}
+                                    <div class="tag tag-transparent">
+                                        <span>{{mod.label}} {{#if (gte mod.modifier 0)}}+{{/if}}{{mod.modifier}}</span>
+                                    </div>
+                                {{/if}}
+                            {{/each}}
+                        </div>
+                    </div>
+                {{/if}}
                 <div class="d-flex flex-row justify-content-center">
                     <span class="type-img">
                         {{#if @root/outcome}}

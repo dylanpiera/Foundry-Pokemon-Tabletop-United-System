@@ -74,7 +74,8 @@ const data = {
   },
   dbData,
   helpText,
-  tmData
+  tmData,
+  alliances: ["party", "opposition", "neutral"],
 }
 
 const ui = {

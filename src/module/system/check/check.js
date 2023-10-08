@@ -235,6 +235,7 @@ class PTUDiceCheck {
                         token: context.token.uuid,
                         dc: dcTarget.value,
                         outcome: degree,
+                        modifiers: context.modifiers,
                     })
                 }
             }
