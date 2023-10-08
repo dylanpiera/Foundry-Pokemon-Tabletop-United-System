@@ -346,6 +346,7 @@ class PTUToken extends Token {
     }
 
     isFlanked() {
+        if (!game.settings.get("ptu", "automation.flankingDetection")) return false;
         const flankingTokens = canvas.tokens.placeables.filter(t => t !== this && t.canFlank(this));
         if (flankingTokens.length <= 1) return false;
 
@@ -410,7 +411,7 @@ class PTUToken extends Token {
     }
 
     canFlank(flankee) {
-        if (this === flankee) return false; //TODO: Add setting to also disable
+        if (this === flankee || !game.settings.get("ptu", "automation.flankingDetection")) return false;
 
         if (!this.actor.isEnemyOf(flankee.actor)) return false;
 

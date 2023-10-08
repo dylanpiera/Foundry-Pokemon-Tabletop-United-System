@@ -44,6 +44,12 @@ const AutomationSettingsConfig = {
         hint: "PTU.Settings.Automation.FailAttackIfNoTarget.Hint",
         type: Boolean,
         default: false
+    },
+    "flankingDetection": {
+        name: "PTU.Settings.Automation.flankingDetection.Name",
+        hint: "PTU.Settings.Automation.flankingDetection.Hint",
+        type: Boolean,
+        default: true
     }
 }
 

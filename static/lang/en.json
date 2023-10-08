@@ -808,6 +808,10 @@
         "FailAttackIfNoTarget": {
           "Name": "Fail Attack if No Target",
           "Hint": "Automatically fail an attack if no actor is targeted."
+        },
+        "flankingDetection": {
+          "Name": "Flanking Detection",
+          "Hint": "Automatically apply flanking for attacks."
         }
       },
       "Generation": {
