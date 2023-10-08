@@ -16,11 +16,16 @@
             </div>
         </div>
     {{/if}}
+    <div class="item source">
+        <label>Source</label>
+        <input class="ml-1 mr-1" type="text" name="system.source.value" value="{{item.system.source.value}}"/>
+        <div class="item-controls"></div>
+    </div>
     <div class="item slug">
         <label for="system.slug">Slug</label>
         <input class="ml-1 mr-1" name="system.slug" type="text" value="{{item.system.slug}}"/>
         <div class="item-controls">
-            <a class="item-control sluggify" title="(Re)generate Slug"><i class="fas fa-sync-alt"></i></a>
+            <a class="item-control sluggify" data-action="regenerate-slug" title="(Re)generate Slug"><i class="fas fa-sync-alt"></i></a>
         </div>
     </div>
 </div>
