@@ -350,9 +350,9 @@ class PTUPokemonActor extends PTUActor {
 
         const speedCombatStages = this.system.stats.spd.stage.value + this.system.stats.spd.stage.mod;
         const spdCsChanges = speedCombatStages > 0 ? Math.floor(speedCombatStages / 2) : speedCombatStages < 0 ? Math.ceil(speedCombatStages / 2) : 0;
-        const capabilityMod = Number(this.system.modifiers.capabilities?.total ?? 0);
+        const capabilityMod = Number(this.system.modifiers.capabilities.all ?? 0);
         for (const key of Object.keys(capabilities)) {
-            if (key == "High Jump" || key == "Long Jump" || key == "Power" || key == "Weight Class" || key == "Naturewalk" || key == "Other") continue;
+            if (key == "highJump" || key == "longJump" || key == "power" || key == "weightClass" || key == "naturewalk" || key == "other") continue;
             if (capabilities[key] > 0) {
                 capabilities[key] = Math.max(capabilities[key] + spdCsChanges + capabilityMod, capabilities[key] > 1 ? 2 : 1)
                 if (this.rollOptions.conditions?.["slowed"]) capabilities[key] = Math.max(1, Math.floor(capabilities[key] * 0.5));
@@ -361,7 +361,8 @@ class PTUPokemonActor extends PTUActor {
         }
 
         for(const key of Object.keys(this.system.modifiers.capabilities)) {
-            if(capabilities[key] === undefined) capabilities[key] = this.system.modifiers.capabilities[key];
+            if(key == "all") continue;
+            if(capabilities[key] == 0) capabilities[key] = this.system.modifiers.capabilities[key] + capabilityMod;
         }
 
         return capabilities;
