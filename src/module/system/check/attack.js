@@ -149,6 +149,7 @@ class PTUAttackCheck extends PTUDiceCheck {
                                 label: "Speed Evasion",
                                 modifier: stuck ? 0 : (context.actor.system.evasion.speed ?? 0)
                             }));
+                            break;
                         }
                         case "Physical": {
                             const { physical, speed } = context.actor.system.evasion;
@@ -166,6 +167,7 @@ class PTUAttackCheck extends PTUDiceCheck {
                                     modifier: speed
                                 }));
                             }
+                            break;
                         }
                         case "Special": {
                             const { special, speed } = context.actor.system.evasion;
@@ -183,6 +185,7 @@ class PTUAttackCheck extends PTUDiceCheck {
                                     modifier: speed
                                 }));
                             }
+                            break;
                         }
                     }
                 }

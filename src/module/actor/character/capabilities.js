@@ -115,7 +115,7 @@ function calculateTrainerCapabilities(trainerSkills, items, speedCombatStages, m
     }
     for(const key of Object.keys(modifiers)) {
         if(key === "all") continue;
-        if(capabilities[key] == 0) capabilities[key] = modifiers[key] + Number(modifiers["all"] ?? 0);
+        if(capabilities[key] === 0 || capabilities[key] === undefined) capabilities[key] = modifiers[key] + Number(modifiers["all"] ?? 0);
     }
 
     return capabilities;
