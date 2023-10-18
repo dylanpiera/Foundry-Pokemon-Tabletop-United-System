@@ -25,6 +25,10 @@ class PTUCombatant extends Combatant {
         return !!this.actor?.system?.boss?.is;
     }
 
+    get isDefeated() {
+        return this.defeated || this.actor?.conditions.active.some(c => c.slug === "fainted") || this.token?.document?.overlayEffect === "systems/ptu/static/images/conditions/Fainted.svg";
+    }
+
     get isPrimaryBossCombatant() {
         if (!this.isBoss) return false;
 
@@ -160,7 +164,16 @@ class PTUCombatant extends Combatant {
         }
 
         await this.combat.updateEmbeddedDocuments("Combatant", updates);
-        await this.token?.object?.toggleEffect("icons/svg/skull.svg", { overlay: true, active: to });
+        
+        if(to) {
+            await this.actor?.createEmbeddedDocuments("Item", await PTUCondition.FromEffects([{ id: "fainted" }]));
+        }
+        else {
+            const faintedCondition = this.actor?.conditions.active.find(c => c.slug === "fainted");
+            if(faintedCondition) await faintedCondition.delete();
+        }
+        
+        //await this.token?.object?.toggleEffect("systems/ptu/static/images/conditions/Fainted.svg", { overlay: true, active: to });
 
         if (this.isDefeated && this.token?.object?.isTargeted) this.token.object.setTarget(false, { releaseOthers: false });
     }

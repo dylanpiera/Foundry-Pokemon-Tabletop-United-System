@@ -809,9 +809,17 @@
           "Name": "Fail Attack if No Target",
           "Hint": "Automatically fail an attack if no actor is targeted."
         },
-        "flankingDetection": {
+        "FlankingDetection": {
           "Name": "Flanking Detection",
           "Hint": "Automatically apply flanking for attacks."
+        },
+        "AutoFaint": {
+          "Name": "Auto-Faint",
+          "Hint": "Automatically adds the fainted condition to a Pokémon when it reaches 0 HP."
+        },
+        "AutoFaintRecovery": {
+          "Name": "Auto-Faint Recovery",
+          "Hint": "Automatically remove the fainted condition from a Pokémon when it is healed above 0 HP."
         }
       },
       "Generation": {

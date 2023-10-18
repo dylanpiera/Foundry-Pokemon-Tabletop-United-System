@@ -46,8 +46,20 @@ const AutomationSettingsConfig = {
         default: false
     },
     "flankingDetection": {
-        name: "PTU.Settings.Automation.flankingDetection.Name",
-        hint: "PTU.Settings.Automation.flankingDetection.Hint",
+        name: "PTU.Settings.Automation.FlankingDetection.Name",
+        hint: "PTU.Settings.Automation.FlankingDetection.Hint",
+        type: Boolean,
+        default: true
+    },
+    "autoFaint": {
+        name: "PTU.Settings.Automation.AutoFaint.Name",
+        hint: "PTU.Settings.Automation.AutoFaint.Hint",
+        type: Boolean,
+        default: true
+    },
+    "autoFaintRecovery": {
+        name: "PTU.Settings.Automation.AutoFaintRecovery.Name",
+        hint: "PTU.Settings.Automation.AutoFaintRecovery.Hint",
         type: Boolean,
         default: true
     }

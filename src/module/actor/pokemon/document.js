@@ -190,11 +190,6 @@ class PTUPokemonActor extends PTUActor {
 
         // Calculate Level related data
         system.levelUpPoints = system.level.current + system.modifiers.statPoints.total + 10;
-        // Calculate Stats related data
-        if (this.flags?.ptu?.is_poisoned) {
-            system.stats.spdef.stage.mod -= 2;
-        }
-
         system.stats = this._calcBaseStats();
 
         const leftoverLevelUpPoints = system.levelUpPoints - Object.values(system.stats).reduce((a, v) => v.levelUp + a, 0);
@@ -317,6 +312,20 @@ class PTUPokemonActor extends PTUActor {
         const speciesStats = this.species?.system?.stats;
         for (const stat of Object.keys(stats)) {
             stats[stat].base = speciesStats?.[stat] ?? 1;
+        }
+
+        if(this.rollOptions.all["pokeedge:hybrid-attacker"]) {
+            const equalized = Math.ceil((stats.atk.base + stats.spatk.base) / 2);
+            stats.atk.base = equalized;
+            stats.spatk.base = equalized;
+        }
+        if(this.rollOptions.all["pokeedge:hybrid-defender"]) {
+            const equalized = Math.ceil((stats.def.base + stats.spdef.base) / 2);
+            stats.def.base = equalized;
+            stats.spdef.base = equalized;
+        }
+
+        for (const stat of Object.keys(stats)) {
             stats[stat].value = stats[stat].base + this.system.modifiers?.baseStats?.[stat]?.total ?? 0;
         }
 

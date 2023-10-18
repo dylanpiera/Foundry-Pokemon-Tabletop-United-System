@@ -72,26 +72,86 @@ function calculateOldStatTotal(levelUpPoints, stats, { twistedPower, ignoreStage
     };
 }
 
-// Calculate the sigma modifier - standard deviation of the array of stats
+// // Calculate the sigma modifier - standard deviation of the array of stats
+// function dev(stats) {
+//     const values = Object.values(stats).map(({ levelUp }) => levelUp);
+//     const mean = values.reduce((total, value) => total + value, 0) / values.length;
+//     const { sum, squaredDiffs } = values.reduce(
+//         (accumulator, value) => {
+//             const { sum, squaredDiffs } = accumulator;
+//             const diff = value - mean
+//             return {
+//                 sum: sum + value,
+//                 squaredDiffs: squaredDiffs + diff * diff,
+//             };
+//         }, { sum: 0, squaredDiffs: 0 }
+//     );
+//     const variance = squaredDiffs / values.length;
+//     const standardDeviation = Math.sqrt(variance);
+//     return standardDeviation;
+// }
+
+// Lowest only count for a certain % of the total
 function dev(stats) {
     const values = Object.values(stats).map(({ levelUp }) => levelUp);
     const mean = values.reduce((total, value) => total + value, 0) / values.length;
-    const { sum, squaredDiffs } = values.reduce(
+    const { sum, squaredDiffs, differences } = values.reduce(
         (accumulator, value) => {
-            const { sum, squaredDiffs } = accumulator;
+            const { sum, squaredDiffs, differences } = accumulator;
             const diff = value - mean
             return {
                 sum: sum + value,
                 squaredDiffs: squaredDiffs + diff * diff,
+                differences: [...differences, diff].sort((a, b) => a - b),
             };
-        }, { sum: 0, squaredDiffs: 0 }
+        }, { sum: 0, squaredDiffs: 0, differences: [] }
     );
-    const variance = squaredDiffs / values.length;
+
+    const lowest = differences[0]; // counts only as 10%
+    const secondLowest = differences[1]; // counts as 60%
+
+    const variance = (squaredDiffs - (lowest * lowest * 0.9) - (secondLowest * secondLowest * 0.4)) / (values.length - 0.1 - 0.60);
     const standardDeviation = Math.sqrt(variance);
     return standardDeviation;
 }
 
-function calculateStatTotal({ level, actorStats, nature, isTrainer, twistedPower, hybridArmor}) {
+// function dev(stats) {
+//     const { value: valueTotal, levelUp: levelUpTotal } = Object.values(stats).reduce((total, { levelUp, value }) => {
+//         total.levelUp += levelUp;
+//         total.value += value;
+//         return total;
+//     }, { levelUp: 0, value: 0 });
+
+//     const ratios = Object.entries(stats).reduce((acc, [key, { levelUp, value }]) => {
+//         acc[key] = {
+//             'levelUp': levelUp / (levelUpTotal || 1) * 100,
+//             'value': value / (valueTotal || 1) * 100
+//         }
+//         return acc;
+//     }, {});
+
+//     const result = Object.values(ratios).reduce(
+//         (accumulator, { levelUp, value }) => {
+//             const { sum, squaredDiffs, lowest } = accumulator;
+//             const diff = levelUp - value;
+//             return {
+//                 sum: sum + value,
+//                 squaredDiffs: squaredDiffs + diff * diff,
+//                 lowest: Math.min(lowest, diff),
+//             };
+//         },
+//         { sum: 0, squaredDiffs: 0, lowest: Infinity }
+//     )
+
+//     const variance = (result.squaredDiffs - (result.lowest * result.lowest)) / (Object.keys(ratios).length - 1);
+
+//     const standardDeviation = Math.sqrt(variance) * 1.2;
+
+//     return standardDeviation;
+// }
+globalThis.dev = dev;
+
+function calculateStatTotal({ level, actorStats, nature, isTrainer, twistedPower, hybridArmor }) {
     const stats = duplicate(actorStats);
     const levelDivisionConstant = isTrainer ? 25 : 50;
     const longShortStatDict = {
@@ -142,7 +202,7 @@ function calculateStatTotal({ level, actorStats, nature, isTrainer, twistedPower
         stats.atk.total += Math.floor(spatkTotal / 3);
         stats.spatk.total += Math.floor(atkTotal / 3);
     }
-    if(hybridArmor) {
+    if (hybridArmor) {
         const defTotal = duplicate(stats.def.total);
         const spdefTotal = duplicate(stats.spdef.total);
 
@@ -150,21 +210,38 @@ function calculateStatTotal({ level, actorStats, nature, isTrainer, twistedPower
         stats.spdef.total += Math.floor(defTotal / 3);
     }
 
+    const playtestStats = true;
+
+    if (playtestStats) {
+        // The Fox Factor
+        for (const [key, value] of Object.entries(stats)) {
+            value["total"] += Math.round(value["levelUp"] * 0.3);
+        }
+    }
+
     //apply mods and stages last
     for (const [key, value] of Object.entries(stats)) {
         const sub = value["total"] + value["mod"].value + value["mod"].mod;
-        
-        if(key != "hp") value["stage"].total = Math.clamped((value["stage"]?.value ?? 0) + (value["stage"]?.mod ?? 0), -6, 6);
+
+        if (key != "hp") value["stage"].total = Math.clamped((value["stage"]?.value ?? 0) + (value["stage"]?.mod ?? 0), -6, 6);
         if (value["stage"]?.total > 0) {
-            value["total"] = Math.floor(sub * (value["stage"].total) * 0.1 + sub);
+            if (playtestStats) {
+                value["total"] = Math.floor(sub * value["stage"].total * (0.275 * Math.log10(130 - (isTrainer ? level * 2 : level)) - 0.325) + sub)
+            }
+            else {
+                value["total"] = Math.floor(sub * (value["stage"].total) * 0.1 + sub);
+            }
         }
-        else {
-            if (key == "hp") {
-                value["total"] = sub;
+        else if (value["stage"]?.total < 0) {
+            if (playtestStats) {
+                value["total"] = Math.ceil(sub * (value["stage"].total) * 0.15 + sub);
             }
             else {
                 value["total"] = Math.ceil(sub * (value["stage"].total) * 0.1 + sub);
             }
+        }
+        else {
+            value["total"] = sub;
         }
     }
 
@@ -229,7 +306,7 @@ function calculatePTStatTotal(levelUpPoints, level, stats, { twistedPower, ignor
         stats.spatk.total += Math.floor(atkTotal / 3);
         //}
     }
-    if(hybridArmor) {
+    if (hybridArmor) {
         let defTotal = stats.def.total;
         let spdefTotal = stats.spdef.total;
 
@@ -287,4 +364,4 @@ function calculateEvasions(data, ptuFlags, actor_items) {
     return evasion;
 }
 
-export { calcBaseStats, calculateStatTotal, calculateOldStatTotal, calculatePTStatTotal, calculateEvasions}
+export { calcBaseStats, calculateStatTotal, calculateOldStatTotal, calculatePTStatTotal, calculateEvasions }
