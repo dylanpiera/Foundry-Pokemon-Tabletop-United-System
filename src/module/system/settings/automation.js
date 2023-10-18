@@ -1,20 +1,6 @@
 import { PTUSettingsMenu } from "./base.js";
 
 const AutomationSettingsConfig = {
-    "dexPermissions": {
-        name: "PTU.Settings.Automation.DexPermissions.Name",
-        hint: "PTU.Settings.Automation.DexPermissions.Hint",
-        type: Number,
-        choices: {
-            1: "Disable Pokédex",
-            2: "Dexentry description only (Basic description and details only)",
-            3: "Full details on owned Tokens",
-            4: "Full details on owned Mons (checks trainer's dex tab)",
-            5: "GM Prompt",
-            6: "Always Full Details",
-        },
-        default: 1
-    },
     "levelUpScreen": {
         name: "PTU.Settings.Automation.LevelUpScreen.Name",
         hint: "PTU.Settings.Automation.LevelUpScreen.Hint",

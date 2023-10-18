@@ -794,7 +794,10 @@ class PTUActor extends Actor {
         })();
 
         const adjustment = applications.filter(a => a.adjustment).reduce((sum, a) => sum + a.adjustment, 0);
-        const finalDamage = Math.max(reduced + adjustment, 0);
+        const finalDamage = (() => {
+            if(applications.length === 1 && applications[0].category === "immunity" && applications[0].adjustment === -reduced) return 0;
+            return Math.max(reduced + adjustment, 1);
+        })(); 
 
         return { finalDamage, additionalApplications: applications };
     }

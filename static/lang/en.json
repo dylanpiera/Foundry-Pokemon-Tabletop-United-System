@@ -778,17 +778,17 @@
         },
         "SpiritPlaytest": {
           "Name": "Enable Friendship & Spirit [Playtest]",
-          "Hint": "Enable the Friendship & Spirit Playtest ruleset. For more info see https://ptufvtt.com/en/crockpot/spirit-and-friendship"
+          "Hint": "Enable the Friendship & Spirit Playtest ruleset. For more info see https://ptufvtt.com/Rules/Playtests/Spirit-Friendship"
+        },
+        "ImprovedStatsRework": {
+          "Name": "Enable Improved Stats Rework",
+          "Hint": "Enable the Improved Stats Rework ruleset. For more info see https://ptufvtt.com/en/Rules/Playing-The-Game/Stats#new-playtest"
         }
       },
       "Automation": {
         "Name": "Automation",
         "Label": "Toggle Automation",
         "Hint": "Enable and configure automation rules like 'Remove Expired Effects' for the system.",
-        "DexPermissions": {
-          "Name": "Pokédex Permissions",
-          "Hint": "The required permission for a player to be able to see a Pokédex entry"
-        },
         "LevelUpScreen": {
           "Name": "Show Level-Up Window",
           "Hint": "Allow the level-up window to appear whenever a Pokémon levels up."
@@ -863,9 +863,17 @@
         "Name": "Metagame",
         "Label": "Limit Metagame information",
         "Hint": "Limit what kinds of metagame information is available to players.",
+        "DexPermissions": {
+          "Name": "Pokédex Permissions",
+          "Hint": "The required permission for a player to be able to see a Pokédex entry"
+        },
         "AlwaysShowCrits": {
           "Name": "Always Show Crits",
           "Hint": "Always show crits in the chat even if no crit was rolled."
+        },
+        "AllowPlayersToEditSpecies": {
+          "Name": "Allow Players to Edit Species",
+          "Hint": "Allow players to edit the species of their Pokémon."
         }
       },
       "Homebrew": {

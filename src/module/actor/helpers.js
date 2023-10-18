@@ -210,7 +210,7 @@ function calculateStatTotal({ level, actorStats, nature, isTrainer, twistedPower
         stats.spdef.total += Math.floor(defTotal / 3);
     }
 
-    const playtestStats = true;
+    const playtestStats = game.settings.get("ptu", "variant.improvedStatsRework");
 
     if (playtestStats) {
         // The Fox Factor
