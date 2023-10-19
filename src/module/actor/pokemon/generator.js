@@ -76,7 +76,7 @@ export class PokemonGenerator {
             }
         }
 
-        const foundryDefaultSettings = game.settings.get("core", "defaultToken") ?? {};
+        const foundryDefaultSettings = {...game.settings.get("core", "defaultToken")} ?? {};
 
         const prototypeToken = mergeObject(foundryDefaultSettings, {
             width: this.size.width,

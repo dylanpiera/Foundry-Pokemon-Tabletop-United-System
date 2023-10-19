@@ -203,7 +203,7 @@ class PTUCombat extends Combat {
                 const previousCombatant = this.combatants.get(previous.combatantId ?? "");
                 // Only the primary updater of the previous actor can end their turn
                 if (game.user === previousCombatant?.actor?.primaryUpdater) {
-                    const alreadyWent = previousCombatant.roundOfLastTurnEnd === previous.round || previousCombatant.bossTurns?.mainTurn.roundOfLastTurnEnd === previous.round;
+                    const alreadyWent = previousCombatant.roundOfLastTurnEnd === previous.round //|| previousCombatant.bossTurns?.mainTurn.roundOfLastTurnEnd === previous.round;
                     if (typeof previous.round === "number" && !alreadyWent) {
                         await previousCombatant.endTurn({ round: previous.round });
                     }

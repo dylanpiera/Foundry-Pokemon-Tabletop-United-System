@@ -132,7 +132,14 @@ class PTUDamageCheck extends PTUDiceCheck {
             ...extractModifiers(this.actor.synthetics, this.selectors, { injectables: { move: this.item, item: this.item, actor: this.actor }, test: this.targetOptions })
         )
         damageBaseModifiers.push(
-            ...extractModifiers(this.actor.synthetics, ["damage-base"], { injectables: { move: this.item, item: this.item, actor: this.actor }, test: this.targetOptions })
+            ...extractModifiers(this.actor.synthetics, [
+                "damage-base",
+                `${this.item.id}-damage-base`,
+                `${this.item.slug}-damage-base`,
+                `${sluggify(this.item.system.category)}-damage-base`,
+                `${sluggify(this.item.system.type)}-damage-base`,
+                `${sluggify(this.item.system.frequency)}-damage-base`
+            ], { injectables: { move: this.item, item: this.item, actor: this.actor }, test: this.targetOptions })
         )
 
         this.modifiers = modifiers;

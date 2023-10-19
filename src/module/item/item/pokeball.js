@@ -161,11 +161,12 @@ class PokeballItem extends PTUItemItem {
             const DCModifiers = [];
             // Capture DC mods
             {
+                const levelMod = (-(target.actor.system?.level?.current ?? 0) * 2);
                 // Level mods
                 DCModifiers.push(new PTUModifier({
                     slug: "level-modifier",
                     label: "Level Modifier",
-                    modifier: (-(target.actor.system?.level?.current ?? 0) * 2)
+                    modifier: game.settings.get("ptu", "variant.trainerRevamp") ? levelMod * 2 : levelMod
                 }));
 
                 // HP mods

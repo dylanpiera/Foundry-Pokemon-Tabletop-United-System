@@ -108,7 +108,7 @@ class PTUTrainerActor extends PTUActor {
         const actualLevel = Math.max(1, system.level.current - Math.max(0, Math.clamped(0, leftoverLevelUpPoints, leftoverLevelUpPoints - system.modifiers.statPoints.total ?? 0)));
 
         const result = calculateStatTotal({
-            level: actualLevel,
+            level: game.settings.get("ptu", "variant.trainerRevamp") ? actualLevel * 2 : actualLevel,
             actorStats: system.stats,
             nature: null,
             isTrainer: true,
@@ -117,7 +117,7 @@ class PTUTrainerActor extends PTUActor {
         })
 
         system.stats = result.stats;
-        system.levelUpPoints = system.levelUpPoints - result.levelUpPoints;
+        system.levelUpPoints = system.levelUpPoints - result.pointsSpend;
 
         system.health.total = 10 + (system.level.current * (game.settings.get("ptu", "variant.trainerRevamp") ? 4 : 2)) + (system.stats.hp.total * 3);
         system.health.max = system.health.injuries > 0 ? Math.trunc(system.health.total * (1 - ((system.modifiers.hardened ? Math.min(system.health.injuries, 5) : system.health.injuries) / 10))) : system.health.total;
@@ -188,7 +188,7 @@ class PTUTrainerActor extends PTUActor {
         const stats = duplicate(this.system.stats);
 
         for (const stat of Object.keys(stats)) {
-            if(stat === "hp") stats[stat].base = 10;
+            if (stat === "hp") stats[stat].base = 10;
             else stats[stat].base = 5;
 
             stats[stat].value = stats[stat].base + this.system.modifiers?.baseStats?.[stat]?.total ?? 0;
