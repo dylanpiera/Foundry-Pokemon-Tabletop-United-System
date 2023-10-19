@@ -1,5 +1,6 @@
 import { sluggify } from "../../util/misc.js";
 import { PTUCombatant } from "../combat/combatant.js";
+import { PTUCondition } from "../item/index.js";
 import { ChatMessagePTU } from "../message/base.js";
 import { extractEphemeralEffects, processPreUpdateActorHooks } from "../rules/helpers.js";
 import { PTUAttackCheck } from "../system/check/attack.js";
@@ -793,7 +794,10 @@ class PTUActor extends Actor {
         })();
 
         const adjustment = applications.filter(a => a.adjustment).reduce((sum, a) => sum + a.adjustment, 0);
-        const finalDamage = Math.max(reduced + adjustment, 0);
+        const finalDamage = (() => {
+            if(applications.length === 1 && applications[0].category === "immunity" && applications[0].adjustment === -reduced) return 0;
+            return Math.max(reduced + adjustment, 1);
+        })(); 
 
         return { finalDamage, additionalApplications: applications };
     }
@@ -837,7 +841,21 @@ class PTUActor extends Actor {
     /** @override */
     _onUpdate(data, options, userId) {
         super._onUpdate(data, options, userId);
-        if (game.combat && this.combatant) this.#updateInitiative();
+
+        if(data.system?.health?.value !== undefined) {
+            if(data.system.health.value <= 0 && game.settings.get("ptu", "automation.autoFaint")) {
+                const fainted = this.conditions.bySlug("fainted");
+                if(fainted.length === 0) PTUCondition.FromEffects([{id: "fainted"}]).then(items => this.createEmbeddedDocuments("Item", items));
+            }
+            else if (data.system.health.value > 0 && game.settings.get("ptu", "automation.autoFaintRecovery")) {
+                const fainted = this.conditions.bySlug("fainted");
+                if(fainted.length > 0) fainted.forEach(f => f.delete());
+            }
+        }
+
+        if (game.combat && this.combatant) {
+            this.#updateInitiative();
+        }
     }
 
     /** @override */
@@ -1023,11 +1041,12 @@ class PTUActor extends Actor {
                 }]
             });
 
-            if (move.system.category !== "Status" && this.types.includes(move.system.type)) {
-                const db = isNaN(Number(move.system.damageBase)) ? 0 : Number(move.system.damageBase);
-                clone = move.clone({ "system.damageBase": db + 2 }, { keepId: true });
-            }
-            else clone = move.clone({}, { keepId: true });
+            // if (move.system.category !== "Status" && this.types.includes(move.system.type)) {
+            //     const db = isNaN(Number(move.system.damageBase)) ? 0 : Number(move.system.damageBase);
+            //     clone = move.clone({ "system.damageBase": db + 2 }, { keepId: true });
+            // }
+            // else 
+            clone = move.clone({}, { keepId: true });
 
             for (const rule of clone.prepareRuleElements()) {
                 if (rule instanceof CONFIG.PTU.rule.elements.builtin.RollOption && !rule.ignored) {

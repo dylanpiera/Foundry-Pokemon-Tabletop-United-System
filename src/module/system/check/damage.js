@@ -1,6 +1,6 @@
 import { sluggify } from "../../../util/misc.js";
 import { PTUModifier, StatisticModifier } from "../../actor/modifiers.js";
-import { PTUCondition } from "../../item/index.js";
+import { PTUMove } from "../../item/index.js";
 import { DamageRoll } from "../damage/roll.js";
 import { PTUDiceCheck, eventToRollParams } from "./check.js";
 import { CheckDialog } from "./dialogs/dialog.js";
@@ -8,7 +8,7 @@ import { CheckDialog } from "./dialogs/dialog.js";
 class PTUDamageCheck extends PTUDiceCheck {
 
     constructor({ source, targets, selectors, event, outcomes }) {
-        super({ source, targets, selectors, event});
+        super({ source, targets, selectors, event });
 
         this.outcomes = outcomes;
     }
@@ -18,6 +18,17 @@ class PTUDamageCheck extends PTUDiceCheck {
     }
     get isRangedAttack() {
         return this._isRangedAttack ??= this.selectors.includes("ranged-damage");
+    }
+
+    get isFiveStrike() {
+        return this.item?.isFiveStrike ?? false;
+    }
+
+    /**
+     * @type {PTUMove}
+     */
+    get item() {
+        return this._source.item;
     }
 
     get rollCls() {
@@ -52,9 +63,18 @@ class PTUDamageCheck extends PTUDiceCheck {
             new PTUModifier({
                 slug: "damage-base",
                 label: "Damage Base",
-                modifier: isNaN(Number(this.item.system.damageBase)) ? 0 : Number(this.item.system.damageBase),
+                modifier: this.item.damageBase.preStab,
             })
         ]
+        if(this.item.damageBase.isStab) {
+            damageBaseModifiers.push(
+                new PTUModifier({
+                    slug: "stab",
+                    label: "STAB",
+                    modifier: this.item.damageBase.postStab - this.item.damageBase.preStab,
+                })
+            )
+        }
 
         const modifiers = []
 
@@ -151,12 +171,64 @@ class PTUDamageCheck extends PTUDiceCheck {
     async execute(context = { isReroll: false, title, type: "damage" }, callback) {
         const { isReroll, title, type } = context;
         const dice = await (async () => {
+            if (this.isFiveStrike) {
+                const baseDamageBase = this.item.damageBase.preStab;
+                if (baseDamageBase == 0) return null;
+
+                const otherModifiers = this.damageBaseModifiers.filter(m => m.slug != "damage-base");
+
+                const newBaseDb = await (async () => {
+                    const fiveStrikeRoll = await new Roll("1d8").evaluate({ async: true });
+                    switch (fiveStrikeRoll.total) {
+                        case 1: {
+                            this.fiveStrikeResult = 1;
+                            return baseDamageBase;
+                        }
+                        case 2:
+                        case 3: {
+                            this.fiveStrikeResult = 2;
+                            return baseDamageBase * 2;
+                        }
+                        case 4:
+                        case 5:
+                        case 6: {
+                            this.fiveStrikeResult = 3;
+                            return baseDamageBase * 3;
+                        }
+                        case 7: {
+                            this.fiveStrikeResult = 4;
+                            return baseDamageBase * 4;
+                        }
+                        case 8: {
+                            this.fiveStrikeResult = 5;
+                            return baseDamageBase * 5;
+                        }
+                    }
+                })();
+
+                this.damageBase = Object.values(
+                    [
+                        new PTUModifier({
+                            slug: "damage-base",
+                            label: "Damage Base",
+                            modifier: newBaseDb,
+                        }),
+                        ...otherModifiers
+                    ].reduce(
+                        (a, b) => {
+                            if (!b.ignored && !a[b.slug]) a[b.slug] = b.modifier;
+                            return a;
+                        }, {}
+                    )
+                ).reduce((a, b) => a + b, 0);
+            }
+
             const db = CONFIG.PTU.data.dbData[this.damageBase];
             if (!db) return null;
             return db;
         })();
         if (!dice) {
-            ui.notifications.error("Invalid DamageBase!"); 
+            ui.notifications.error("Invalid DamageBase!");
             return null;
         }
 
@@ -182,7 +254,7 @@ class PTUDamageCheck extends PTUDiceCheck {
         const parts = /(\d+d\d+)(.*)/.exec(dice);
         const diceString = parts[1];
         const diceModifier = parts[2].split(/(?=[+-])/).map(m => m.replaceAll(' ', '').trim()).filter(m => m.length > 0).map(m => Number(m)).reduce((a, b) => a + b, 0);
-        
+
         this.statistic.push(new PTUModifier({
             slug: "damage-base-modifier",
             label: "Damage Base Modifier",
@@ -229,12 +301,13 @@ class PTUDamageCheck extends PTUDiceCheck {
             })),
             outcomes: this.outcomes ?? {}
         }
-        if(attack) options.attack = attack;
+        if (attack) options.attack = attack;
+        if (this.fiveStrikeResult) options.fiveStrikeAmount = this.fiveStrikeResult;
 
         const totalModifiersPart = this.statistic.totalModifier?.signedString() ?? "";
         options.modifierPart = totalModifiersPart;
 
-        const roll = new this.rollCls(`${diceString}${totalModifiersPart}`,{}, options);
+        const roll = new this.rollCls(`${diceString}${totalModifiersPart}`, {}, options);
         const rollResult = await roll.evaluate({ async: true });
 
         const critDice = `${diceString}+${diceString}`;
@@ -245,7 +318,7 @@ class PTUDamageCheck extends PTUDiceCheck {
         }
 
         const hasCrit = Object.values(this.outcomes).some(o => o == "crit-hit")
-        const critRoll = new this.rollCls(`${critDice}${totalModifiersPartCrit}`, {}, {...options, crit: {hit: true, show: hasCrit, nonCritValue: rollResult.total}, fudges});
+        const critRoll = new this.rollCls(`${critDice}${totalModifiersPartCrit}`, {}, { ...options, crit: { hit: true, show: hasCrit, nonCritValue: rollResult.total }, fudges });
         const critRollResult = await critRoll.evaluate({ async: true });
 
         const flags = {
@@ -274,7 +347,9 @@ class PTUDamageCheck extends PTUDiceCheck {
             }
         }
 
-        const message = await this.createMessage({roll, rollMode, flags, inverse: false, critRoll, type});
+        const extraTags = this.fiveStrikeResult > 0 ? [`Five Strike x${this.fiveStrikeResult}`] : [];
+
+        const message = await this.createMessage({ roll, rollMode, flags, inverse: false, critRoll, type, extraTags });
 
         if (callback) {
             const msg = message instanceof ChatMessage ? message : new ChatMessage(message);
@@ -288,7 +363,7 @@ class PTUDamageCheck extends PTUDiceCheck {
             rolls: this.rolls,
             targets: options.targets,
         }
-    }   
+    }
 
     /**
      * Fully Executes the attack, including all checks and preparations

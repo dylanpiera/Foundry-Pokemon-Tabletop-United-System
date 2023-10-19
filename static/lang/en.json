@@ -778,17 +778,17 @@
         },
         "SpiritPlaytest": {
           "Name": "Enable Friendship & Spirit [Playtest]",
-          "Hint": "Enable the Friendship & Spirit Playtest ruleset. For more info see https://ptufvtt.com/en/crockpot/spirit-and-friendship"
+          "Hint": "Enable the Friendship & Spirit Playtest ruleset. For more info see https://ptufvtt.com/Rules/Playtests/Spirit-Friendship"
+        },
+        "ImprovedStatsRework": {
+          "Name": "Enable Improved Stats Rework",
+          "Hint": "Enable the Improved Stats Rework ruleset. For more info see https://ptufvtt.com/en/Rules/Playing-The-Game/Stats#new-playtest"
         }
       },
       "Automation": {
         "Name": "Automation",
         "Label": "Toggle Automation",
         "Hint": "Enable and configure automation rules like 'Remove Expired Effects' for the system.",
-        "DexPermissions": {
-          "Name": "Pokédex Permissions",
-          "Hint": "The required permission for a player to be able to see a Pokédex entry"
-        },
         "LevelUpScreen": {
           "Name": "Show Level-Up Window",
           "Hint": "Allow the level-up window to appear whenever a Pokémon levels up."
@@ -809,9 +809,17 @@
           "Name": "Fail Attack if No Target",
           "Hint": "Automatically fail an attack if no actor is targeted."
         },
-        "flankingDetection": {
+        "FlankingDetection": {
           "Name": "Flanking Detection",
           "Hint": "Automatically apply flanking for attacks."
+        },
+        "AutoFaint": {
+          "Name": "Auto-Faint",
+          "Hint": "Automatically adds the fainted condition to a Pokémon when it reaches 0 HP."
+        },
+        "AutoFaintRecovery": {
+          "Name": "Auto-Faint Recovery",
+          "Hint": "Automatically remove the fainted condition from a Pokémon when it is healed above 0 HP."
         }
       },
       "Generation": {
@@ -855,9 +863,17 @@
         "Name": "Metagame",
         "Label": "Limit Metagame information",
         "Hint": "Limit what kinds of metagame information is available to players.",
+        "DexPermissions": {
+          "Name": "Pokédex Permissions",
+          "Hint": "The required permission for a player to be able to see a Pokédex entry"
+        },
         "AlwaysShowCrits": {
           "Name": "Always Show Crits",
           "Hint": "Always show crits in the chat even if no crit was rolled."
+        },
+        "AllowPlayersToEditSpecies": {
+          "Name": "Allow Players to Edit Species",
+          "Hint": "Allow players to edit the species of their Pokémon."
         }
       },
       "Homebrew": {

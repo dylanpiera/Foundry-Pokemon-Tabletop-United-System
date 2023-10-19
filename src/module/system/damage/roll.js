@@ -86,6 +86,7 @@ class DamageRoll extends Roll {
             tags,
             crit: this.options.crit ?? options.crit ?? false,
             persistenceFormula: this.options.persistenceFormula ?? options.persistenceFormula ?? null,
+            fiveStrike: this.options.fiveStrikeAmount ?? options.fiveStrikeAmount ?? null,
         }
 
         if (chatData.crit.show === false && game.settings.get("ptu", "metagame.alwaysShowCrits") === true) {

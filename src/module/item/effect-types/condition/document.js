@@ -9,7 +9,7 @@ class PTUCondition extends BaseEffectPTU {
     /** @override */
     get badge() {
         if (this.system.persistent) {
-            return { type: "formula", value: this.system.persistent.formula };
+            return { type: "formula", value: this.system.persistent.formula, count: this.system.value.value };
         }
 
         return this.system.value.value ? { type: "counter", value: this.system.value.value } : null;
@@ -191,8 +191,13 @@ class PTUCondition extends BaseEffectPTU {
         const systemData = this.system;
         systemData.value.value = systemData.value.isValued ? Number(systemData.value.value) || 1 : null;
 
-        if (this.actor && typeof this.badge?.value === "number" && !(/ \d+$/.test(this.name))) {
-            this.name = `${this.name} ${this.badge.value}`;
+        if (this.actor && systemData.value.isValued && (this.badge?.type === "formula"|| this.badge?.type === "counter") && this.badge?.value) {
+            if(!(/ \d+$/.test(this.name))) {
+                this.name = `${this.name} ${this.badge.type === "formula" ? this.badge.count : this.badge.value}`;
+            }
+            else if(/ \d+$/.test(this.name)) {
+                this.name = this.name.replace(/ \d+$/, ` ${this.badge.type === "formula" ? this.badge.count : this.badge.value}`);
+            }
         }
 
         if (systemData.persistent) {

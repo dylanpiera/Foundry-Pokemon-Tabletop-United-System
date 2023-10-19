@@ -186,6 +186,10 @@ class StatisticModifier {
         return [...this._modifiers]
     }
 
+    modifierBySlug(slug) {
+        return this._modifiers.find(m => m.slug === slug);
+    }
+
     push(modifier) {
         if(this._modifiers.find(m => m.slug === modifier.slug) === undefined) {
             this._modifiers.push(modifier);

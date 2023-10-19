@@ -15,6 +15,13 @@ class PTUSpeciesSheet extends PTUItemSheet {
         return options;
     }
 
+    get isEditable() {
+        if(!game.settings.get("ptu", "metagame.allowPlayersToEditSpecies")) {
+            return game.user.isGM ? super.isEditable : false;
+        }
+        return super.isEditable;
+    }
+
     /** @override */
     async getData() {
         const data = await super.getData();
@@ -29,7 +36,7 @@ class PTUSpeciesSheet extends PTUItemSheet {
             // "full" : "entry";
             if(game.user.isGM) return "full";
 
-            const permission = game.settings.get("ptu", "automation.dexPermissions");
+            const permission = game.settings.get("ptu", "metagame.dexPermissions");
             switch(permission) {
                 case 1: throw new Error("Players may not open species sheets");
                 case 2: return "entry";

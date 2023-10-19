@@ -1,5 +1,5 @@
 import { PTUSkills, PTUActor } from "../index.js";
-import { calculateEvasions, calculatePTStatTotal, calculateOldStatTotal } from "../helpers.js";
+import { calculateEvasions, calculatePTStatTotal, calculateOldStatTotal, calculateStatTotal } from "../helpers.js";
 import { calculateTrainerCapabilities } from "./capabilities.js";
 import { PTUModifier } from "../modifiers.js";
 import { sluggify } from "../../../util/misc.js";
@@ -101,31 +101,23 @@ class PTUTrainerActor extends PTUActor {
         }
 
         // Use Data
-
         system.levelUpPoints = (game.settings.get("ptu", "variant.trainerRevamp") ? (system.level.current * 2) : system.level.current) + system.modifiers.statPoints.total + 9;
-        if (this.flags?.ptu?.is_poisoned) {
-            system.stats.spdef.stage.mod -= 2;
-        }
+        system.stats = this._calcBaseStats();
 
         const leftoverLevelUpPoints = system.levelUpPoints - Object.values(system.stats).reduce((a, v) => v.levelUp + a, 0);
         const actualLevel = Math.max(1, system.level.current - Math.max(0, Math.clamped(0, leftoverLevelUpPoints, leftoverLevelUpPoints - system.modifiers.statPoints.total ?? 0)));
 
-        system.stats.hp.base = 10
-        system.stats.hp.value = system.modifiers.baseStats.hp.total + system.stats.hp.base;
-        system.stats.atk.base = 5
-        system.stats.atk.value = system.modifiers.baseStats.atk.total + system.stats.atk.base;
-        system.stats.def.base = 5
-        system.stats.def.value = system.modifiers.baseStats.def.total + system.stats.def.base;
-        system.stats.spatk.base = 5
-        system.stats.spatk.value = system.modifiers.baseStats.spatk.total + system.stats.spatk.base;
-        system.stats.spdef.base = 5
-        system.stats.spdef.value = system.modifiers.baseStats.spdef.total + system.stats.spdef.base;
-        system.stats.spd.base = 5
-        system.stats.spd.value = system.modifiers.baseStats.spd.total + system.stats.spd.base;
+        const result = calculateStatTotal({
+            level: actualLevel,
+            actorStats: system.stats,
+            nature: null,
+            isTrainer: true,
+            twistedPower: this.rollOptions.all["self:ability:twisted-power"],
+            hybridArmor: this.rollOptions.all["self:ability:hybrid-armor"],
+        })
 
-        var result = calculatePTStatTotal(system.levelUpPoints, (game.settings.get("ptu", "variant.trainerRevamp") ? actualLevel + actualLevel : actualLevel), system.stats, { twistedPower: this.rollOptions.all["self:ability:twisted-power"], hybridArmor: this.rollOptions.all["self:ability:hybrid-armor"], }, system.nature?.value, true);
         system.stats = result.stats;
-        system.levelUpPoints = result.levelUpPoints;
+        system.levelUpPoints = system.levelUpPoints - result.levelUpPoints;
 
         system.health.total = 10 + (system.level.current * (game.settings.get("ptu", "variant.trainerRevamp") ? 4 : 2)) + (system.stats.hp.total * 3);
         system.health.max = system.health.injuries > 0 ? Math.trunc(system.health.total * (1 - ((system.modifiers.hardened ? Math.min(system.health.injuries, 5) : system.health.injuries) / 10))) : system.health.total;
@@ -190,6 +182,19 @@ class PTUTrainerActor extends PTUActor {
         system.contests.appeal.total = system.contests.appeal.value + system.contests.appeal.mod;
 
         this.attributes.health.max = system.health.max;
+    }
+
+    _calcBaseStats() {
+        const stats = duplicate(this.system.stats);
+
+        for (const stat of Object.keys(stats)) {
+            if(stat === "hp") stats[stat].base = 10;
+            else stats[stat].base = 5;
+
+            stats[stat].value = stats[stat].base + this.system.modifiers?.baseStats?.[stat]?.total ?? 0;
+        }
+
+        return stats;
     }
 
     /** @override */

@@ -177,9 +177,9 @@ class PTUItem extends Item {
             }
 
             const item = new CONFIG.Item.documentClass(source, { parent: actor });
-            
+
             if (item.type === "condition") {
-                const existing = actor.itemTypes.condition.find(c => c.slug === sluggify(item.name));
+                const existing = actor.itemTypes.condition.find(c => c.slug === sluggify(item.name.replaceAll(/\d/g, '')));
                 if (existing) {
                     if (existing.system.value.isValued) existing.increase();
                     continue;
@@ -227,7 +227,12 @@ class PTUItem extends Item {
             for (let i = 0; i < rules.length; i++) {
                 const ruleSource = itemSource.system.rules[i];
                 await rules[i].preCreate?.({ itemSource, ruleSource, pendingItems: outputSources, context });
-              }
+            }
+        }
+
+        if (game.combat && outputSources.some(i => i.type === "condition" && sluggify(i.name) === "fainted")) {
+            const combatant = game.combat.getCombatantByActor(actor)
+            if (combatant && !combatant.defeated) await combatant.update({ defeated: true })
         }
 
         return super.createDocuments(outputSources, context);
@@ -246,6 +251,10 @@ class PTUItem extends Item {
                 }
 
                 await processGrantDeletions(item, items);
+            }
+            if (game.combat && items.some(i => i.type === "condition" && i.slug === "fainted")) {
+                const combatant = game.combat.getCombatantByActor(actor)
+                if (combatant && combatant.defeated) await combatant.update({ defeated: false })
             }
 
             ids = Array.from(new Set(items.map((i) => i._id)).filter((id) => actor.items.has(id)));

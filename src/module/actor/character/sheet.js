@@ -21,6 +21,7 @@ export class PTUCharacterSheet extends PTUActorSheet {
 			}],
 			submitOnClose: true,
 			submitOnChange: true,
+			scrollY: [".sheet-body"]
 		});
 
 		// If compact style is enabled
@@ -174,7 +175,7 @@ export class PTUCharacterSheet extends PTUActorSheet {
 			}
 
 			return {
-				moves, struggles, effects
+				moves: moves.sort((a, b) => (a.sort ?? 0) - (b.sort ?? 0)), struggles, effects
 			}
 		})();
 

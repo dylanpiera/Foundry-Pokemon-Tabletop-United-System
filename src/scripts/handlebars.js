@@ -115,8 +115,11 @@ function _registerPTUHelpers() {
         return (move.damageBase.toString().match(/^[0-9]+$/) != null) ? move.stab ? parseInt(move.damageBase) + 2 : move.damageBase : move.damageBase;
     });
 
+    Handlebars.registerHelper("dbToDice", function (db, actor) {
+    });
+
     Handlebars.registerHelper("moveDbToDice", (item, actor) => {
-        const dbNumber = Number(item.system.damageBase ?? item);
+        const dbNumber = Number(item.damageBase.postStab ?? item);
         if (isNaN(dbNumber)) return "Not a valid DB";
 
         const realDb = Math.clamped(dbNumber, 0, 28);

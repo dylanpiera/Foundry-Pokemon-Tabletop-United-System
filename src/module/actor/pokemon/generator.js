@@ -76,15 +76,17 @@ export class PokemonGenerator {
             }
         }
 
-        const prototypeToken = {
+        const foundryDefaultSettings = game.settings.get("core", "defaultToken") ?? {};
+
+        const prototypeToken = mergeObject(foundryDefaultSettings, {
             width: this.size.width,
             height: this.size.height,
             actorLink: true,
-            displayBars: CONST.TOKEN_DISPLAY_MODES.OWNER_HOVER,
-            displayName: CONST.TOKEN_DISPLAY_MODES.OWNER,
-            bar1: { attribute: "health" },
+            displayBars: foundryDefaultSettings.displayBars ?? CONST.TOKEN_DISPLAY_MODES.OWNER_HOVER,
+            displayName: foundryDefaultSettings.displayName ?? CONST.TOKEN_DISPLAY_MODES.OWNER,
+            bar1: { attribute: foundryDefaultSettings.bar1?.attribute || "health" },
             img: this.img
-        }
+        });
 
         const actorData = {
             name: this.species.name,

@@ -63,12 +63,12 @@
                                 <span>{{item.system.category}}</span>
                             </div>
                         {{/if}}
-                        {{#if item.system.damageBase}}
-                            {{#unless (is item.system.category "Status")}}
-                                <div class="tag tooltip gradient" title="DB: {{item.system.damageBase}} ({{moveDbToDice item ../actor}})">
-                                    <span>DB: {{item.system.damageBase}}</span>
+                        {{#if item.damageBase}}
+                            {{!-- {{#unless (is item.system.category "Status")}} --}}
+                                <div class="tag tooltip gradient" title="DB: {{item.damageBase.postStab}} ({{moveDbToDice item ../actor}})">
+                                    <span>DB: {{item.damageBase.postStab}}</span>
                                 </div>
-                            {{/unless}}
+                            {{!-- {{/unless}} --}}
                         {{/if}}
                         {{#if item.system.ac}}
                             {{#unless (is item.system.ac "--")}}
