@@ -1041,11 +1041,12 @@ class PTUActor extends Actor {
                 }]
             });
 
-            if (move.system.category !== "Status" && this.types.includes(move.system.type)) {
-                const db = isNaN(Number(move.system.damageBase)) ? 0 : Number(move.system.damageBase);
-                clone = move.clone({ "system.damageBase": db + 2 }, { keepId: true });
-            }
-            else clone = move.clone({}, { keepId: true });
+            // if (move.system.category !== "Status" && this.types.includes(move.system.type)) {
+            //     const db = isNaN(Number(move.system.damageBase)) ? 0 : Number(move.system.damageBase);
+            //     clone = move.clone({ "system.damageBase": db + 2 }, { keepId: true });
+            // }
+            // else 
+            clone = move.clone({}, { keepId: true });
 
             for (const rule of clone.prepareRuleElements()) {
                 if (rule instanceof CONFIG.PTU.rule.elements.builtin.RollOption && !rule.ignored) {
