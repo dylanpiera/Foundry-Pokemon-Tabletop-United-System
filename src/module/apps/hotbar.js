@@ -26,7 +26,25 @@ class PTUHotBar extends Hotbar {
                     if (!item) return;
 
                     if (item.type === "effect" || item.type === "condition") {
-                        const command = `const item = await fromUuid("${data.uuid}");await item?.apply?.(game.user.targets.size > 0 ? [...game.user.targets] : (canvas.tokens.controlled ?? []), "${data.uuid}")`;
+                        const command = `const actors = canvas.tokens.controlled.flatMap((token) => token.actor ?? []);
+if (actors.length === 0 && game.user.character) actors.push(game.user.character);
+if (actors.length === 0) {
+    return ui.notifications.error("PTU.Notifications.ApplyEffectNoTargetSelected", { localize: true });
+}
+
+const ITEM_UUID = "${data.uuid}"; // ${item.name}
+const source = (await fromUuid(ITEM_UUID)).toObject();
+source.flags = mergeObject(source.flags ?? {}, { core: { sourceId: ITEM_UUID } });
+
+for (const actor of actors) {
+    const existing = actor.itemTypes.effect.find((e) => e.flags.core?.sourceId === ITEM_UUID);
+    if (existing) {
+        await existing.delete();
+    } else {
+        await actor.createEmbeddedDocuments("Item", [source]);
+    }
+}`
+
                         let macro = game.macros.find(m => m.name === `Apply: ${item.name}` && m.command === command);
                         if (!macro) {
                             macro = await Macro.create({
