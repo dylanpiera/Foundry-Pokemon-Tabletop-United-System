@@ -32,10 +32,13 @@ class PTUSkillCheck extends PTUDiceCheck {
     prepareModifiers() {
         super.prepareModifiers();
 
+        const skillRank = this.actor.system.skills[this.skill]?.value?.total ?? 1;
+        const diceWrtVirtuoso = this.targetOptions.has("skill:virtuoso") ? skillRank-2 : skillRank;
+
         /** @type {PTUDiceModifier[]} */
         const diceModifiers = [
             new PTUDiceModifier({
-                diceNumber: this.actor.system.skills[this.skill]?.value?.total ?? 1,
+                diceNumber: diceWrtVirtuoso,
                 dieSize: 6,
                 label: game.i18n.format("PTU.Check.SkillDice", { skill: this.skillLabel })
             })
