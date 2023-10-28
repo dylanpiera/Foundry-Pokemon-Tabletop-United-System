@@ -148,6 +148,24 @@ export class CompendiumBrowserSpeciesTab extends CompendiumBrowserTab {
         return a.localeCompare(b, game.i18n.lang);
     }
 
+    /**
+     @param multiselectFilter - the `selected` from a filter, e.g. `filterData.multiselects.types`
+     @param entrySetToCheck - the set of an entry corresponding to the filter, e.g. `entry.types`
+     @return {boolean} - True if the entry honors the filter, i.e. would be valid result
+     */
+    entryHonorsMultiselect(multiselectFilter, entrySetToCheck){
+        const selected = multiselectFilter.selected.filter(s => !s.not).map(s => s.value);
+        const notSelected = multiselectFilter.selected.filter(s => s.not).map(s => s.value);
+        if (selected.length || notSelected.length) {
+            if (notSelected.some(ns => entrySetToCheck.some(e => sluggify(e) === ns))) return false;
+            const fulfilled =
+                multiselectFilter.conjunction === "and"
+                    ? selected.every(s => entrySetToCheck.some(e => sluggify(e) === s))
+                    : selected.some(s => entrySetToCheck.some(e => sluggify(e) === s));
+            if(!fulfilled) return false;
+        }
+        return true;
+    }
     filterIndexData(entry) {
         const { checkboxes, multiselects } = this.filterData;
 
@@ -155,38 +173,9 @@ export class CompendiumBrowserSpeciesTab extends CompendiumBrowserTab {
             if(!checkboxes.source.selected.includes(entry.source)) return false;
         }
 
-        const selectedTypes = multiselects.types.selected.filter(s => !s.not).map(s => s.value);
-        const notSelectedTypes = multiselects.types.selected.filter(s => s.not).map(s => s.value);
-        if(selectedTypes.length || notSelectedTypes.length) {
-            if(notSelectedTypes.some(s => entry.types.some(t => sluggify(t) === s))) return false;
-            const fulfilled =
-                multiselects.types.conjunction === "and"
-                    ? selectedTypes.every(s => entry.types.some(t => sluggify(t) === s))
-                    : selectedTypes.some(s => entry.types.some(t => sluggify(t) === s));
-            if(!fulfilled) return false;
-        }
-
-        const selectedMoves = multiselects.moves.selected.filter(s => !s.not).map(s => s.value);
-        const notSelectedMoves = multiselects.moves.selected.filter(s => s.not).map(s => s.value);
-        if(selectedMoves.length || notSelectedMoves.length) {
-            if(notSelectedMoves.some(nsm => entry.moves.some(m => m === nsm))) return false;
-            const fulfilled =
-                multiselects.moves.conjunction === "and"
-                    ? selectedMoves.every(sm => entry.moves.some(m => m === sm))
-                    : selectedMoves.some(sm => entry.moves.some(m => m === sm));
-            if(!fulfilled) return false;
-        }
-
-        const selectedAbilities = multiselects.abilities.selected.filter(s => !s.not).map(s => s.value);
-        const notSelectedAbilities = multiselects.abilities.selected.filter(s => s.not).map(s => s.value);
-        if(selectedAbilities.length || notSelectedAbilities.length) {
-            if(notSelectedAbilities.some(ns => entry.abilities.some(a => a === ns))) return false;
-            const fulfilled =
-                multiselects.abilities.conjunction === "and"
-                    ? selectedAbilities.every(s => entry.abilities.some(a => a === s))
-                    : selectedAbilities.some(s => entry.abilities.some(a => a === s));
-            if(!fulfilled) return false;
-        }
+        if (! this.entryHonorsMultiselect(multiselects.types, entry.types)) return false;
+        if (! this.entryHonorsMultiselect(multiselects.moves, entry.moves)) return false;
+        if (! this.entryHonorsMultiselect(multiselects.abilities, entry.abilities)) return false;
 
         return true;
     }
