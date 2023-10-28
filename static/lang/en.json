@@ -1005,7 +1005,9 @@
         "Category": "Category",
         "DamageBase": "Damage Base",
         "Number": "Dex Number",
-        "HasForm": "Has Form"
+        "HasForm": "Has Form",
+        "LearnableMoves": "Learnable Moves",
+        "Abilities": "Abilities"
       },
       "Search": {
         "Placeholder": "Your query...",
