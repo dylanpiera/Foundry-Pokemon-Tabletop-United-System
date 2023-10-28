@@ -67,6 +67,6 @@ export class AttackRoll extends CheckRoll {
             tags
         }
 
-        return renderTemplate(template ?? AttackRoll.CHAT_TEMPLATE, chatData);
+        return renderTemplate(template ?? AttackRoll.CHAT_TEMPLATE, chatData).then(renderedTemplate => TextEditor.enrichHTML(renderedTemplate, { async: true }));
     }
 }
