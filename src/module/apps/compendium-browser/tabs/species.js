@@ -1,14 +1,16 @@
 import { sluggify } from "../../../../util/misc.js";
 import { CompendiumBrowserTab } from "./base.js";
+import {MOVES_COMPENDIUM_INDEX} from "./moves.js";
+import {ABILITIES_COMPENDIUM_INDEX} from "./abilities.js";
 
 export class CompendiumBrowserSpeciesTab extends CompendiumBrowserTab {
     constructor(browser) {
         super(browser);
 
         this.searchFields = ["name"]
-        this.storeFields = ["name", "uuid", "type", "source", "img", "types", "number"];
+        this.storeFields = ["name", "uuid", "type", "source", "img", "types", "number", "moves", "abilities"];
 
-        this.index = ["system.source.value", "system.types", "system.number"];
+        this.index = ["system.source.value", "system.types", "system.number", "system.moves", "system.abilities"];
 
         this.filterData = this.prepareFilterData();
     }
@@ -46,6 +48,26 @@ export class CompendiumBrowserSpeciesTab extends CompendiumBrowserTab {
 
                 const number = Number(speciesData.system.number)
 
+                const moveLearnOrigins = ["egg", "tutor", "level", "machine"]
+                // Looking at species in the compendium, even if they do not have egg moves for example,
+                // they have an empty array as its value. Let's assume this is supposed to stay this way...
+                if (moveLearnOrigins.some(o => !Array.isArray(speciesData.system.moves[o]))
+                ) {
+                    console.warn(`Species ${speciesData.name} (${speciesData._id}) has no valid move structure!`);
+                    continue;
+                }
+
+                const moves = new Set(moveLearnOrigins.map(o => speciesData.system.moves[o]).flat(1).map(m => m.slug))
+
+                const abilityRanks = ["basic", "advanced", "high"]
+                if (abilityRanks.some(o => !Array.isArray(speciesData.system.abilities[o]))
+                ) {
+                    console.warn(`Species ${speciesData.name} (${speciesData._id}) has no valid ability structure!`);
+                    continue;
+                }
+
+                const abilities = new Set(abilityRanks.map(r => speciesData.system.abilities[r]).flat(1).map(a => a.slug))
+
                 species.push({
                     name: speciesData.name,
                     type: speciesData.type,
@@ -53,7 +75,9 @@ export class CompendiumBrowserSpeciesTab extends CompendiumBrowserTab {
                     uuid: `Compendium.${pack.collection}.${speciesData._id}`,
                     source: sourceSlug,
                     types: speciesData.system.types,
-                    number: isNaN(number) ? Infinity : number
+                    number: isNaN(number) ? Infinity : number,
+                    moves: moves,
+                    abilities: abilities
                 })
             }
         }
@@ -66,8 +90,35 @@ export class CompendiumBrowserSpeciesTab extends CompendiumBrowserTab {
             this.filterData.checkboxes.source.options["ptr-core-dex"].selected = true;
             this.filterData.checkboxes.source.selected.push("ptr-core-dex");
         }
+
+        this.filterData.multiselects.moves.options = this.filterOptionsFromNameList(await this.loadForeignItemsNamesOnly("move", "moves", MOVES_COMPENDIUM_INDEX))
+        this.filterData.multiselects.abilities.options = this.filterOptionsFromNameList(await this.loadForeignItemsNamesOnly("ability", "abilities", ABILITIES_COMPENDIUM_INDEX))
     }
 
+
+    async loadForeignItemsNamesOnly(itemType, itemTabName, itemCompendiumIndex){
+        const items = [];
+        const indexFields = duplicate(itemCompendiumIndex);
+
+        for await (const {pack, index} of this.browser.packLoader.loadPacks(
+            "Item",
+            this.browser.loadedPacks(itemTabName),
+            indexFields
+        )) {
+            for (const itemData of index) {
+                if (itemData.type !== itemType) continue;
+                if (!this.hasAllIndexFields(itemData, indexFields)) continue;
+
+                items.push({
+                    name: itemData.name,
+                })
+            }
+        }
+        return items
+    }
+    filterOptionsFromNameList(names){
+        return names.map(m => ({value:sluggify(m.name), label: m.name})).sort((a,b) => (``+a.label).localeCompare(b.label))
+    }
     #getImagePath(speciesName, speciesNumber) {
         const path = game.settings.get("ptu", "generation.defaultImageDirectory");
         const useName = game.settings.get("ptu", "generation.defaultPokemonImageNameType");
@@ -104,14 +155,36 @@ export class CompendiumBrowserSpeciesTab extends CompendiumBrowserTab {
             if(!checkboxes.source.selected.includes(entry.source)) return false;
         }
 
-        const selected = multiselects.types.selected.filter(s => !s.not).map(s => s.value);
-        const notSelected = multiselects.types.selected.filter(s => s.not).map(s => s.value);
-        if(selected.length || notSelected.length) {
-            if(notSelected.some(s => entry.types.some(t => sluggify(t) === s))) return false;
-            const fulfilled = 
+        const selectedTypes = multiselects.types.selected.filter(s => !s.not).map(s => s.value);
+        const notSelectedTypes = multiselects.types.selected.filter(s => s.not).map(s => s.value);
+        if(selectedTypes.length || notSelectedTypes.length) {
+            if(notSelectedTypes.some(s => entry.types.some(t => sluggify(t) === s))) return false;
+            const fulfilled =
                 multiselects.types.conjunction === "and"
-                    ? selected.every(s => entry.types.some(t => sluggify(t) === s))
-                    : selected.some(s => entry.types.some(t => sluggify(t) === s));
+                    ? selectedTypes.every(s => entry.types.some(t => sluggify(t) === s))
+                    : selectedTypes.some(s => entry.types.some(t => sluggify(t) === s));
+            if(!fulfilled) return false;
+        }
+
+        const selectedMoves = multiselects.moves.selected.filter(s => !s.not).map(s => s.value);
+        const notSelectedMoves = multiselects.moves.selected.filter(s => s.not).map(s => s.value);
+        if(selectedMoves.length || notSelectedMoves.length) {
+            if(notSelectedMoves.some(nsm => entry.moves.some(m => m === nsm))) return false;
+            const fulfilled =
+                multiselects.moves.conjunction === "and"
+                    ? selectedMoves.every(sm => entry.moves.some(m => m === sm))
+                    : selectedMoves.some(sm => entry.moves.some(m => m === sm));
+            if(!fulfilled) return false;
+        }
+
+        const selectedAbilities = multiselects.abilities.selected.filter(s => !s.not).map(s => s.value);
+        const notSelectedAbilities = multiselects.abilities.selected.filter(s => s.not).map(s => s.value);
+        if(selectedAbilities.length || notSelectedAbilities.length) {
+            if(notSelectedAbilities.some(ns => entry.abilities.some(a => a === ns))) return false;
+            const fulfilled =
+                multiselects.abilities.conjunction === "and"
+                    ? selectedAbilities.every(s => entry.abilities.some(a => a === s))
+                    : selectedAbilities.some(s => entry.abilities.some(a => a === s));
             if(!fulfilled) return false;
         }
 
@@ -132,7 +205,19 @@ export class CompendiumBrowserSpeciesTab extends CompendiumBrowserTab {
                 types: {
                     conjunction: "and",
                     label: "PTU.CompendiumBrowser.FilterOptions.MoveType",
-                    options: Object.keys(CONFIG.PTU.data.typeEffectiveness).map(type => ({value: sluggify(type), label: type})),
+                    options: Object.keys(CONFIG.PTU.data.typeEffectiveness).map(type => ({value: sluggify(type), label: type})).sort((a,b) => (``+a.label).localeCompare(b.label)),
+                    selected: []
+                },
+                moves: {
+                    conjunction: "and",
+                    label: "PTU.CompendiumBrowser.FilterOptions.LearnableMoves",
+                    options: [],
+                    selected: []
+                },
+                abilities: {
+                    conjunction: "and",
+                    label: "PTU.CompendiumBrowser.FilterOptions.Abilities",
+                    options: [],
                     selected: []
                 },
             },
@@ -157,4 +242,4 @@ export class CompendiumBrowserSpeciesTab extends CompendiumBrowserTab {
             }
         }
     }
-} 
+}
