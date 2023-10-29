@@ -354,27 +354,51 @@ class PTUPokemonActor extends PTUActor {
 
     // TODO: Implement rules for capability changing items
     _calcCapabilities() {
-        const capabilities = duplicate(this.species?.system?.capabilities ?? {});
-        if (!capabilities) return {};
+        const movementCapabilities = ["overland", "swim", "burrow", "sky", "levitate", "teleporter"]
+        const numericNonMovementCapabilities = ["highJump", "longJump", "power", "weightClass"]
+        const stringArrayCapabilities = ["naturewalk", "other"]
+
+        const speciesCapabilities = duplicate(this.species?.system?.capabilities ?? {});
+        const finalCapabilities = {}
+        if (!speciesCapabilities) return {};
 
         const speedCombatStages = this.system.stats.spd.stage.value + this.system.stats.spd.stage.mod;
         const spdCsChanges = speedCombatStages > 0 ? Math.floor(speedCombatStages / 2) : speedCombatStages < 0 ? Math.ceil(speedCombatStages / 2) : 0;
-        const capabilityMod = Number(this.system.modifiers.capabilities.all ?? 0);
-        for (const key of Object.keys(capabilities)) {
-            if (key == "highJump" || key == "longJump" || key == "power" || key == "weightClass" || key == "naturewalk" || key == "other") continue;
-            if (capabilities[key] > 0) {
-                capabilities[key] = Math.max(capabilities[key] + spdCsChanges + capabilityMod, capabilities[key] > 1 ? 2 : 1)
-                if (this.rollOptions.conditions?.["slowed"]) capabilities[key] = Math.max(1, Math.floor(capabilities[key] * 0.5));
-                capabilities[key] = Math.max(1, capabilities[key] + (this.system.modifiers.capabilities?.[key] ?? 0));
+        const omniMovementMod = Number(this.system.modifiers.capabilities.all ?? 0);
+
+        for (const moveCap of movementCapabilities){
+            // If the species got the capability naturally or through explicit modifiers
+            if (this.system.modifiers.capabilities[moveCap] || speciesCapabilities[moveCap]){
+                const slowedMultiplier = this.rollOptions.conditions?.["slowed"] ? 0.5 : 1
+                const mod = this.system.modifiers?.capabilities[moveCap] ? this.system.modifiers?.capabilities[moveCap] : 0
+                const speciesCap = speciesCapabilities[moveCap] ? speciesCapabilities[moveCap] : 0
+                finalCapabilities[moveCap] = Math.max(1, Math.floor(slowedMultiplier * (speciesCap + spdCsChanges + omniMovementMod + mod)))
+            } else {
+                finalCapabilities[moveCap] = 0
             }
         }
 
-        for(const key of Object.keys(this.system.modifiers.capabilities)) {
-            if(key == "all") continue;
-            if(capabilities[key] == 0) capabilities[key] = this.system.modifiers.capabilities[key] + capabilityMod;
+        for (const nonMoveCap of numericNonMovementCapabilities){
+            // If the species got the capability naturally or through explicit modifiers
+            if (this.system.modifiers.capabilities[nonMoveCap] || speciesCapabilities[nonMoveCap]){
+                const mod = this.system.modifiers?.capabilities[nonMoveCap] ? this.system.modifiers?.capabilities[nonMoveCap] : 0
+                finalCapabilities[nonMoveCap] = Math.max(1, mod + speciesCapabilities[nonMoveCap])
+            }
         }
 
-        return capabilities;
+        // TODO allow to add more naturewalks to an actor.
+        for (const arrayCap of stringArrayCapabilities){
+            finalCapabilities[arrayCap] = speciesCapabilities[arrayCap]
+        }
+
+        // Add any capability to the final capabilities not yet handled
+        for (const cap of Object.keys(speciesCapabilities)){
+            if (cap in finalCapabilities) continue;
+            console.warn(`Actor ${this.uuid} had unexpected Capability ${cap} of ${speciesCapabilities[cap]}`)
+            finalCapabilities[cap] = speciesCapabilities[cap]
+        }
+
+        return finalCapabilities;
     }
 
     /** @override */
