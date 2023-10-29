@@ -302,6 +302,7 @@
     "EffectPriority": "Priority",
 
     "ActionPoints": "Action Points",
+    "MaxActionPointsShort": "Max AP",
     "LevelMilestones": "Milestones",
     "LevelDexExp": "Dex Exp",
     "LevelMiscExp": "Misc Exp",
