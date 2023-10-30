@@ -3,14 +3,19 @@ import { CompendiumBrowserTab } from "./base.js";
 import {MOVES_COMPENDIUM_INDEX} from "./moves.js";
 import {ABILITIES_COMPENDIUM_INDEX} from "./abilities.js";
 
+const FILTERABLE_CAPABILITIES= ["overland", "sky", "swim", "levitate", "burrow", "highJump", "longJump", "power"]
+
 export class CompendiumBrowserSpeciesTab extends CompendiumBrowserTab {
     constructor(browser) {
         super(browser);
 
         this.searchFields = ["name"]
-        this.storeFields = ["name", "uuid", "type", "source", "img", "types", "number", "moves", "abilities"];
+        this.storeFields = ["name", "uuid", "type", "source", "img", "types", "number", "moves", "abilities", "capabilities"]
 
-        this.index = ["system.source.value", "system.types", "system.number", "system.moves", "system.abilities"];
+        this.index = ["system.source.value", "system.types", "system.number", "system.moves", "system.abilities", "system.capabilities"];
+
+        this.capabilitesMinMax = {}
+        FILTERABLE_CAPABILITIES.forEach(cap => this.capabilitesMinMax[cap] = {"min": 100, "max": -10})
 
         this.filterData = this.prepareFilterData();
     }
@@ -68,6 +73,13 @@ export class CompendiumBrowserSpeciesTab extends CompendiumBrowserTab {
 
                 const abilities = new Set(abilityRanks.map(r => speciesData.system.abilities[r]).flat(1).map(a => a.slug))
 
+                if (! speciesData.system.capabilities?.overland){
+                    console.warn(`Species ${speciesData.name} (${speciesData._id}) seems to have no valid capabilities!`);
+                    continue;
+                }
+
+                this.trackCapabilitiesMinMax(speciesData.system.capabilities);
+
                 species.push({
                     name: speciesData.name,
                     type: speciesData.type,
@@ -77,7 +89,8 @@ export class CompendiumBrowserSpeciesTab extends CompendiumBrowserTab {
                     types: speciesData.system.types,
                     number: isNaN(number) ? Infinity : number,
                     moves: moves,
-                    abilities: abilities
+                    abilities: abilities,
+                    capabilities: speciesData.system.capabilities
                 })
             }
         }
@@ -93,9 +106,39 @@ export class CompendiumBrowserSpeciesTab extends CompendiumBrowserTab {
 
         this.filterData.multiselects.moves.options = this.filterOptionsFromNameList(await this.loadForeignItemsNamesOnly("move", "moves", MOVES_COMPENDIUM_INDEX))
         this.filterData.multiselects.abilities.options = this.filterOptionsFromNameList(await this.loadForeignItemsNamesOnly("ability", "abilities", ABILITIES_COMPENDIUM_INDEX))
+        for (const cap of FILTERABLE_CAPABILITIES){
+            this.filterData.sliders[cap].values.max = this.capabilitesMinMax[cap].max
+            this.filterData.sliders[cap].values.upperLimit = this.capabilitesMinMax[cap].max
+            this.filterData.sliders[cap].values.min = this.capabilitesMinMax[cap].min
+            this.filterData.sliders[cap].values.lowerLimit = this.capabilitesMinMax[cap].min
+            this.filterData.sliders[cap].values.step = 1
+        }
     }
 
+    /** Updates minima and maxima of all FILTERABLE_CAPABILITIES in this.capabilitesMinMax.
+     * Using this allows to set the min and max of the sliders properly after loading all
+     * species. Should be called with the species.system.capabilities of each species.
+     * @param capabilities species.system.capabilities
+     */
+    trackCapabilitiesMinMax(capabilities) {
+        if (! capabilities) return;
+        for (const cap of FILTERABLE_CAPABILITIES){
+            const capVal = capabilities[cap] ? capabilities[cap] : 0
+            this.capabilitesMinMax[cap].min = Math.min(this.capabilitesMinMax[cap].min, capVal)
+            this.capabilitesMinMax[cap].max = Math.max(this.capabilitesMinMax[cap].max, capVal)
+        }
+    }
 
+    /** Loads different Items than Species as if from their corresponding CompendiumBrowserTab. This makes it
+     * so that all the Items used as filters in the SpeciesTab honor the settings of the other Tab. As the
+     * used PackLoader caches the results, you have to ensure that the index (list of all fields that should be loaded)
+     * must contain all fields both for this tab and the original tab the Item can be browsed in.
+     *
+     * @param itemType type of item, e.g. "move"
+     * @param itemTabName name of tab the itemType is actually browsed in, e.g. "moves"
+     * @param itemCompendiumIndex array of fields from the pack to be loaded, e.g. ["img", "system.source.value", ...]
+     * @return {Object<[]>} array of objects formatted {"name": <itemName>}
+     */
     async loadForeignItemsNamesOnly(itemType, itemTabName, itemCompendiumIndex){
         const items = [];
         const indexFields = duplicate(itemCompendiumIndex);
@@ -167,7 +210,7 @@ export class CompendiumBrowserSpeciesTab extends CompendiumBrowserTab {
         return true;
     }
     filterIndexData(entry) {
-        const { checkboxes, multiselects } = this.filterData;
+        const { checkboxes, multiselects, sliders } = this.filterData;
 
         if(checkboxes.source.selected.length) {
             if(!checkboxes.source.selected.includes(entry.source)) return false;
@@ -176,6 +219,13 @@ export class CompendiumBrowserSpeciesTab extends CompendiumBrowserTab {
         if (! this.entryHonorsMultiselect(multiselects.types, entry.types)) return false;
         if (! this.entryHonorsMultiselect(multiselects.moves, entry.moves)) return false;
         if (! this.entryHonorsMultiselect(multiselects.abilities, entry.abilities)) return false;
+
+        for (const cap of FILTERABLE_CAPABILITIES){
+            const capVal = entry.capabilities[cap] ? entry.capabilities[cap] : 0
+            if (sliders[cap].values.min > capVal || capVal > sliders[cap].values.max) {
+                return false;
+            }
+        }
 
         return true;
     }
@@ -208,6 +258,54 @@ export class CompendiumBrowserSpeciesTab extends CompendiumBrowserTab {
                     label: "PTU.CompendiumBrowser.FilterOptions.Abilities",
                     options: [],
                     selected: []
+                },
+            },
+            sliders: {
+                overland: {
+                    isExpanded: false,
+                        label: "overland",
+                        values: {
+                        lowerLimit: 0,
+                        upperLimit: 20,
+                        min: 0,
+                        max: 20,
+                        step: 1,
+                    },
+                },
+                sky: {
+                    isExpanded: false,
+                    label: "sky",
+                    values: {},
+                },
+                swim: {
+                    isExpanded: false,
+                    label: "swim",
+                    values: {},
+                },
+                levitate: {
+                    isExpanded: false,
+                    label: "levitate",
+                    values: {},
+                },
+                burrow: {
+                    isExpanded: false,
+                    label: "burrow",
+                    values: {},
+                },
+                highJump: {
+                    isExpanded: false,
+                    label: "highJump",
+                    values: {},
+                },
+                longJump: {
+                    isExpanded: false,
+                    label: "longJump",
+                    values: {},
+                },
+                power: {
+                    isExpanded: false,
+                    label: "power",
+                    values: {},
                 },
             },
             // selects: {
