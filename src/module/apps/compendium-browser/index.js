@@ -1,7 +1,7 @@
 import { sluggify } from "../../../util/misc.js";
 import { Progress } from "../../../util/progress.js";
 import * as browserTabs from "./tabs/index.js";
-
+import noUiSlider from "../../../../static/js/nouislider.mjs"
 class PackLoader {
 
     /**
@@ -688,54 +688,54 @@ class CompendiumBrowser extends Application {
                 }
             }
 
-            // if (filterType === "sliders") {
-            //     // Slider filters
-            //     const sliders = currentTab.filterData.sliders;
-            //     if (!sliders) continue;
+            if (filterType === "sliders") {
+                // Slider filters
+                const sliders = currentTab.filterData.sliders;
+                if (!sliders) continue;
 
-            //     if (objectHasKey(sliders, filterName)) {
-            //         const sliderElement = container.querySelector(`div.slider-${filterName}`);
-            //         if (!sliderElement) continue;
-            //         const data = sliders[filterName];
+                if (objectHasKey(sliders, filterName)) {
+                    const sliderElement = container.querySelector(`div.slider-${filterName}`);
+                    if (!sliderElement) continue;
+                    const data = sliders[filterName];
 
-            //         const slider = noUiSlider.create(sliderElement, {
-            //             range: {
-            //                 min: data.values.lowerLimit,
-            //                 max: data.values.upperLimit,
-            //             },
-            //             start: [data.values.min, data.values.max],
-            //             tooltips: {
-            //                 to(value:) {
-            //                     return Math.floor(value).toString();
-            //                 },
-            //             },
-            //             connect: [false, true, false],
-            //             behaviour: "snap",
-            //             step: data.values.step,
-            //         });
+                    const slider = noUiSlider.create(sliderElement, {
+                        range: {
+                            min: data.values.lowerLimit,
+                            max: data.values.upperLimit,
+                        },
+                        start: [data.values.min, data.values.max],
+                        tooltips: {
+                            to(value) {
+                                return Math.floor(value).toString();
+                            },
+                        },
+                        connect: [false, true, false],
+                        behaviour: "snap",
+                        step: data.values.step,
+                    });
 
-            //         slider.on("change", (values) => {
-            //             const [min, max] = values.map((value) => Number(value));
-            //             data.values.min = min;
-            //             data.values.max = max;
+                    slider.on("change", (values) => {
+                        const [min, max] = values.map((value) => Number(value));
+                        data.values.min = min;
+                        data.values.max = max;
 
-            //             const $minLabel = $html.find(`label.${name}-min-label`);
-            //             const $maxLabel = $html.find(`label.${name}-max-label`);
-            //             $minLabel.text(min);
-            //             $maxLabel.text(max);
+                        const $minLabel = $html.find(`label.${name}-min-label`);
+                        const $maxLabel = $html.find(`label.${name}-max-label`);
+                        $minLabel.text(min);
+                        $maxLabel.text(max);
 
-            //             this.#clearScrollLimit(true);
-            //         });
+                        this.#clearScrollLimit(true);
+                    });
 
-            //         // Set styling
-            //         sliderElement.querySelectorAll(".noUi-handle").forEach((element) => {
-            //             element.classList.add("handle");
-            //         });
-            //         sliderElement.querySelectorAll(".noUi-connect").forEach((element) => {
-            //             element.classList.add("range_selected");
-            //         });
-            //     }
-            // }
+                    // Set styling
+                    sliderElement.querySelectorAll(".noUi-handle").forEach((element) => {
+                        element.classList.add("handle");
+                    });
+                    sliderElement.querySelectorAll(".noUi-connect").forEach((element) => {
+                        element.classList.add("range_selected");
+                    });
+                }
+            }
         }
 
         const list = html.querySelector(".tab.active ul.item-list");

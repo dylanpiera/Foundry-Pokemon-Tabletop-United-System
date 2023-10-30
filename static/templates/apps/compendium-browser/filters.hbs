@@ -94,7 +94,7 @@
                     <button type="button" data-action="clear-filter" {{#if (not slider.isExpanded true)}}style="display: none;"{{/if}}>{{localize "PTU.CompendiumBrowser.Filter.ClearFilters"}}</button>
                 {{/if}}
             </div>
-            <div class="slidercontainer-flex" {{#if (not slider.isExpanded true)}}style="display: none;"{{/if}}>
+            <div class="slidercontainer-flex">
                 <label id="{{name}}-min-label">{{slider.values.min}}</label>
                 <div class="slider-{{name}}"></div>
                 <label id="{{name}}-max-label">{{slider.values.max}}</label>
