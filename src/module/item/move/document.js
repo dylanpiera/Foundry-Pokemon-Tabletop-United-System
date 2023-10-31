@@ -45,7 +45,7 @@ class PTUMove extends PTUItem {
             postStab: 0,
             isStab: false,
         }
-        result.postStab = result.preStab + (this.actor?.types.includes(this.system.type) && !this.system.isStruggle ? 2 : 0);
+        result.postStab = result.preStab + (!this.system.isStruggle && this.actor?.types.includes(this.system.type) ? 2 : 0);
         result.isStab = result.preStab !== result.postStab;
         return result;
     }
