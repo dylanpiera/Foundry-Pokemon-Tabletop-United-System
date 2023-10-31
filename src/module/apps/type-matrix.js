@@ -1,62 +1,66 @@
-import {TypeSettings} from "../system/settings/types.js";
-
-class TypeMatrix extends TypeSettings {
-    static namespace = "typeMatrix";
-    constructor(object, options) {
+class TypeMatrix extends FormApplication {
+    constructor(object, options) { 
         super(object, options);
         this.cache = {};
     }
 
-    static registerSettings(){
-    }
-    static get settings(){
-        return {};
-    }
-
-    static get SETTINGS() {
-        return Object.keys(TypeSettingsConfig);
-    }
     static get defaultOptions() {
         const options = super.defaultOptions;
+        options.classes.push("ptu-settings-menu");
 
         return mergeObject(options, {
-            width: 777,
-            height: 807,
-            resizable: true,
-            title: "PTU.TypeMatrix.title",
+            title: "PTU.TypeMatrix.Title",
+            template: "systems/ptu/static/templates/config/settings/types.hbs",
             id: "type-matrix",
+            width: "auto",
+            height: "auto",
+            resizable: true,
             submitOnChange: false,
             closeOnSubmit: false,
         });
     }
 
     async getData() {
-        const data = mergeObject((await super.getData()));
+        const data = await super.getData();
+
+        if (this.cache["types"] === undefined) {
+            const types = game.settings.get("ptu", "type.typeEffectiveness") || this.constructor.settings.typeEffectiveness.default;
+            this.cache["types"] = types;
+        }
+
+        const typeEffectiveness = duplicate(this.cache["types"]);
+        delete typeEffectiveness.Untyped;
+
+        let typeLength = Object.keys(typeEffectiveness).length + 1;
+        if(!game.settings.get("ptu", "homebrew.nuclearType") && typeEffectiveness["Nuclear"]) typeLength--;
+        if(!game.settings.get("ptu", "homebrew.shadowType") && typeEffectiveness["Shadow"]) typeLength--;
 
         return {
             ...data,
+            typeEffectiveness,
+            types: Object.keys(this.cache["types"].Untyped.effectiveness),
+            typeLength,
             readOnly: true
         }
     }
 
     activateListeners($html) {
-        super.activateListeners($html);
-        $html.find(".type").on("click", "**");
-        $html.find(".type").on("contextmenu", "**");
-        $html.find("button[type='add']").on("click", "**");
-        $html.find(".type[data-type]").on("dblclick", "**");
+        $html.find(".type").on("mouseover", event => {
+            const { offensive, defensive } = event.currentTarget.dataset;
+            if (!offensive || !defensive) return;
 
-    }
+            $html.find(`.type[data-offensive="${offensive}"]`).addClass("highlight-x");
+            $html.find(`.type[data-defensive="${defensive}"]`).addClass("highlight-y");
+        });
 
-    async _onReset(event) {
-        throw new Error("The readOnly viewer should not be able to call _onReset().");
-    }
-    async _updateObject(event, data) {
-        throw new Error("The readOnly viewer should not be able to call _updateObject().");
-    }
-    async createTypeDialog(typeData, exists = false) {
-        throw new Error("The readOnly viewer should not be able to call createTypeDialog().");
+        $html.find(".type").on("mouseout", event => {
+            const { offensive, defensive } = event.currentTarget.dataset;
+            if (!offensive || !defensive) return;
+
+            $html.find(`.type[data-offensive="${offensive}"]`).removeClass("highlight-x");
+            $html.find(`.type[data-defensive="${defensive}"]`).removeClass("highlight-y");
+        });
     }
 }
 
-export {TypeMatrix}
+export { TypeMatrix }

@@ -975,7 +975,7 @@
     },
     "ExpBudget": "EXP Reward:",
     "TypeMatrix": {
-      "title": "Type Chart"
+      "Title": "Type Chart"
     },
     "CompendiumBrowser": {
       "ProgressBar": {
