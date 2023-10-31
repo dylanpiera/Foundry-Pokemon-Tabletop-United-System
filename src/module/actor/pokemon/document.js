@@ -354,27 +354,31 @@ class PTUPokemonActor extends PTUActor {
 
     // TODO: Implement rules for capability changing items
     _calcCapabilities() {
-        const movementCapabilities = ["overland", "swim", "burrow", "sky", "levitate", "teleporter"]
-        const numericNonMovementCapabilities = ["highJump", "longJump", "power", "weightClass"]
-        const stringArrayCapabilities = ["naturewalk", "other"]
+        const numericNonMovementCapabilities = CONFIG.PTU.Capabilities.numericNonMovement
+        const stringArrayCapabilities = CONFIG.PTU.Capabilities.stringArray
 
         const speciesCapabilities = duplicate(this.species?.system?.capabilities ?? {});
         const finalCapabilities = {}
         if (!speciesCapabilities) return {};
 
+        // Anything that is not a part of numericNonMovementCapabilities or stringArrayCapabilities is considered
+        // movement, without explicitly listing them hardcoded.
+        const capsFromSpeciesOrModifiers = [].concat(Object.keys(this.system.modifiers.capabilities), Object.keys(speciesCapabilities))
+        const movementCapabilities = capsFromSpeciesOrModifiers.filter(cap => !stringArrayCapabilities.includes(cap) || !numericNonMovementCapabilities.includes(cap))
+
         const speedCombatStages = this.system.stats.spd.stage.value + this.system.stats.spd.stage.mod;
         const spdCsChanges = speedCombatStages > 0 ? Math.floor(speedCombatStages / 2) : speedCombatStages < 0 ? Math.ceil(speedCombatStages / 2) : 0;
-        const omniMovementMod = Number(this.system.modifiers.capabilities.all ?? 0);
+        const omniMovementMod = Number(this.system.modifiers.capabilities.all) || 0;
+        const slowedMultiplier = this.rollOptions.conditions?.["slowed"] ? 0.5 : 1
 
         for (const moveCap of movementCapabilities){
             // If the species got the capability naturally or through explicit modifiers
             if (this.system.modifiers.capabilities[moveCap] || speciesCapabilities[moveCap]){
-                const slowedMultiplier = this.rollOptions.conditions?.["slowed"] ? 0.5 : 1
                 const mod = this.system.modifiers?.capabilities[moveCap] ? this.system.modifiers?.capabilities[moveCap] : 0
                 const speciesCap = speciesCapabilities[moveCap] ? speciesCapabilities[moveCap] : 0
                 finalCapabilities[moveCap] = Math.max(1, Math.floor(slowedMultiplier * (speciesCap + spdCsChanges + omniMovementMod + mod)))
             } else {
-                finalCapabilities[moveCap] = 0
+                delete finalCapabilities[moveCap];
             }
         }
 

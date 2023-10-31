@@ -268,5 +268,9 @@ export const PTUCONFIG = {
   },
   User: {
     documentClass: PTUUser
+  },
+  Capabilities: {
+    numericNonMovement: ["highJump", "longJump", "power", "weightClass"],
+    stringArray: ["naturewalk", "other"],
   }
 }
