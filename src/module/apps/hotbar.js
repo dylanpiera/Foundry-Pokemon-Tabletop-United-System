@@ -26,22 +26,23 @@ class PTUHotBar extends Hotbar {
                     if (!item) return;
 
                     if (item.type === "effect" || item.type === "condition") {
-                        const command = `const actors = canvas.tokens.controlled.flatMap((token) => token.actor ?? []);
+                        const command = `const actors = game.user.targets.size > 0 ? [...game.user.targets] : (canvas.tokens.controlled ?? []);
 if (actors.length === 0 && game.user.character) actors.push(game.user.character);
 if (actors.length === 0) {
     return ui.notifications.error("PTU.Notifications.ApplyEffectNoTargetSelected", { localize: true });
 }
 
-const ITEM_UUID = "${data.uuid}"; // ${item.name}
-const source = (await fromUuid(ITEM_UUID)).toObject();
-source.flags = mergeObject(source.flags ?? {}, { core: { sourceId: ITEM_UUID } });
+const itemUuid = "${data.uuid}"; // ${item.name}
+const item = (await fromUuid(itemUuid)).toObject();
+if (! item) return ui.notifications.error("PTU.Notifications.UuidHasNoItem", { localize: true });
+item.flags = mergeObject(item.flags ?? {}, { core: { sourceId: itemUuid } });
 
 for (const actor of actors) {
-    const existing = actor.itemTypes.effect.find((e) => e.flags.core?.sourceId === ITEM_UUID);
+    const existing = actor.itemTypes.effect.find((e) => e.flags.core?.sourceId === itemUuid);
     if (existing) {
         await existing.delete();
     } else {
-        await actor.createEmbeddedDocuments("Item", [source]);
+        await item.apply(actor, "${data.uuid}")
     }
 }`
 

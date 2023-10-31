@@ -578,7 +578,8 @@
       "CannotApplyOnMiss": "You can't apply damage on a target that isn't hit.",
       "InvalidRoll": "Something went wrong while applying damage",
       "NoEffect": "It appears this move doesn't have any special effect.",
-      "ApplyEffectNoTargetSelected": "Select at least one Token."
+      "ApplyEffectNoTargetSelected": "Select at least one Token.",
+      "UuidHasNoItem": "There exists not Item with that Uuid."
     },
     "UI": {
       "ShiftModifyDamageTitle": "Adjust the rolled damage/healing",
