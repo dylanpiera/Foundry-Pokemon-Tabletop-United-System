@@ -1,3 +1,4 @@
+import { isObject } from "../../../util/misc.js";
 import { RuleElementPTU } from "./base.js";
 
 export class TokenLightRuleElement extends RuleElementPTU {

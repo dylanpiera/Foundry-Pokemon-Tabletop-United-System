@@ -306,6 +306,8 @@
     "LevelDexExp": "Dex Exp",
     "LevelMiscExp": "Misc Exp",
 
+    "LevelCap": "Level Cap",
+
     "Money": "Money",
     "ItemCategories": "Item Categories",
     "HeldItem": "Held Item",

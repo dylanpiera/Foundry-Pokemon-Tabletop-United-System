@@ -108,7 +108,7 @@ export function registerSettings() {
     game.settings.register("ptu", "autoRollDamage", {
         name: "Auto roll damage",
         hint: "Automatically roll damage when a move is used.",
-        scope: "world",
+        scope: "client",
         config: true,
         type: Boolean,
         default: true

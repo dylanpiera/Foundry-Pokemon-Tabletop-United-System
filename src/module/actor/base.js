@@ -586,7 +586,10 @@ class PTUActor extends Actor {
                 if (bars > 0) {
                     const newBars = Math.max(bars - 1, 0);
                     hpUpdate.updates["system.boss.bars"] = newBars;
-                    hpUpdate.updates["system.health.value"] = this.system.health.max;
+                    hpUpdate.updates["system.health.value"] = 
+                        (injuries > this.system.health.injuries)
+                        ? Math.trunc(this.system.health.total * (1 - ((this.system.modifiers.hardened ? Math.min(this.system.health.injuries, 5) : this.system.health.injuries) / 10)))
+                        : this.system.health.max;
                     //TODO: Apply Injuries
                     await this.update(hpUpdate.updates);
                     bossStatement = game.i18n.format("PTU.ApplyDamage.BossBarBroken", { actor: this.link, bars: newBars });
@@ -938,13 +941,15 @@ class PTUActor extends Actor {
         const struggles = includeStruggles ? (() => {
             const types = Object.keys(CONFIG.PTU.data.typeEffectiveness)
 
-            const strugglePlusRollOption = this.rollOptions.struggle ? Object.keys(this.rollOptions.struggle).find(o => o.startsWith("skill:")) : false;
+            const strugglePlusRollOptions = this.rollOptions.struggle ? Object.keys(this.rollOptions.struggle).filter(o => o.startsWith("skill:")) : [];
 
             const struggles = types.reduce((arr, type) => {
                 if (this.rollOptions.struggle?.[`${type.toLocaleLowerCase(game.i18n.lang)}`]) {
                     const rule = this.rules.find(r => !r.ignored && r.key == "RollOption" && r.domain == "struggle" && r.option == type.toLocaleLowerCase(game.i18n.lang));
                     const strugglePlus = (() => {
-                        if (strugglePlusRollOption) return this.system.skills?.[strugglePlusRollOption.replace("skill:", "")]?.value?.total > 4;
+                        for(const skill of strugglePlusRollOptions) {
+                            if(this.system.skills?.[skill.replace("skill:", "")]?.value?.total > 4) return true;
+                        }
                         return this.system.skills?.combat?.value?.total > 4;
                     })();
                     const moveData = {
@@ -994,7 +999,9 @@ class PTUActor extends Actor {
                 }
                 else if (type == "Normal") {
                     const strugglePlus = (() => {
-                        if (strugglePlusRollOption) return this.system.skills?.[strugglePlusRollOption.replace("skill:", "")]?.value?.total > 4;
+                        for(const skill of strugglePlusRollOptions) {
+                            if(this.system.skills?.[skill.replace("skill:", "")]?.value?.total > 4) return true;
+                        }
                         return this.system.skills?.combat?.value?.total > 4;
                     })();
                     arr.push(
