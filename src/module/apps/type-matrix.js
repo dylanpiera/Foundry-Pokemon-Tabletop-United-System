@@ -23,7 +23,7 @@ class TypeMatrix extends TypeSettings {
             width: 777,
             height: 807,
             resizable: true,
-            title: "Type Matrix",
+            title: "PTU.TypeMatrix.title",
             id: "type-matrix",
             submitOnChange: false,
             closeOnSubmit: false,

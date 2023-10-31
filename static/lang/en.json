@@ -974,6 +974,9 @@
       }
     },
     "ExpBudget": "EXP Reward:",
+    "TypeMatrix": {
+      "title": "Type Chart"
+    },
     "CompendiumBrowser": {
       "ProgressBar": {
         "LoadingComplete": "Loading complete",
