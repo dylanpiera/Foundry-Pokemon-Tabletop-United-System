@@ -148,7 +148,7 @@ class PTUTrainerActor extends PTUActor {
                 + (game.settings.get("ptu", "variant.trainerRevamp") ? (system.level.current >= 25 ? 1 : 0) : 0)
         }
 
-        system.ap.max = 5 + Math.floor(system.level.current / (game.settings.get("ptu", "variant.trainerRevamp") ? 2.5 : 5)) + (system.modifiers?.maxAp?.total ? system.modifiers?.maxAp?.total  : 0);
+        system.ap.max = 5 + Math.floor(system.level.current / (game.settings.get("ptu", "variant.trainerRevamp") ? 2.5 : 5)) + (system.modifiers?.maxAp?.total ?? 0);
 
         system.initiative = { value: system.stats.spd.total + system.modifiers.initiative.total };
 
