@@ -482,8 +482,7 @@
       "ap": {
         "current": 5,
         "bound": 0,
-        "drained": 0,
-        "temp": 0
+        "drained": 0
       },
 
       "item_categories": {},

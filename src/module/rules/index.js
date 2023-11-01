@@ -12,6 +12,7 @@ import { TypeOverwriteRuleElement } from "./rule-element/type-overwrite.js";
 import { TempHPRuleElement } from "./rule-element/temp-hp.js";
 import { EffectivenessRuleElement } from "./rule-element/effectiveness.js";
 import { EphemeralEffectRuleElement } from "./rule-element/ephemeral-effect.js";
+import { ActionPointsRuleElement } from "./rule-element/ap.js";
 
 class RuleElements {
     static builtin = {
@@ -27,7 +28,8 @@ class RuleElements {
         "TypeOverwrite": TypeOverwriteRuleElement,
         "TempHP": TempHPRuleElement,
         "Effectiveness": EffectivenessRuleElement,
-        "EphemeralEffect": EphemeralEffectRuleElement
+        "EphemeralEffect": EphemeralEffectRuleElement,
+        "ActionPointSomethinggggg": ActionPointsRuleElement
     }
 
     static custom = {}
