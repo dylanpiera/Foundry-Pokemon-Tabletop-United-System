@@ -36,42 +36,42 @@
                         </div>
                         <div class="swsh-body p-0">
                             {{#each actor.system.skills as |skill key|}}
-                                <div class="d-flex flex-row {{key}} align-items-center w-100">
-                                    <div class="skill {{key}} fb-25 bgcolor key type--{{skill.type}} align-self-center">
-                                        <label for="system.skills.{{key}}.label" class="resource-label">{{skill.label}}</label>
-                                    </div>
-                                    <div class="skill {{key}} fb-15 pl-1 pr-1 center-text center-self">
-                                        {{> "systems/ptu/static/templates/partials/mod-field.hbs"
-                                                path=(concat "system.skills." key ".value.value")
-                                                value=skill.value.value
-                                                dtype="Number"
-                                                mod=skill.value.mod
-                                                total=skill.value.total
-                                                modOrigins=(getProperty ../actor.origins (concat "system.skills." key ".value.mod"))
-                                                flipped=(gt 8 @index)}}
-                                    </div>
-                                    <div
-                                            class="skill {{key}} fb-25 align-self-center bgcolor skill--{{skill.rank}} center-text center-self">
-                                        <label for="system.skills.{{key}}.rank" class="resource-label">{{localize (concat "PTU.Skill" skill.rank)}}</label>
-                                    </div>
-                                    <div class="skill {{key}} fb-15 pl-1 center-text center-self">
-                                        {{> "systems/ptu/static/templates/partials/mod-field.hbs"
-                                                path=(concat "system.skills." key ".modifier.value")
-                                                value=skill.modifier.value
-                                                dtype="Number"
-                                                mod=skill.modifier.mod
-                                                total=skill.modifier.total
-                                                modOrigins=(getProperty ../actor.origins (concat "system.skills." key ".modifier.mod") )
-                                                flipped=(gt 8 @index)}}
-                                    </div>
-                                    <div class="skill {{key}} fb-20 align-self-center bgcolor center-text rollable center-self"
-                                         data-roll="{{#if (bigger skill.value.total 6)}}6{{else}}{{skill.value.total}}{{/if}}d6{{#if skill.modifier.total}}+{{skill.modifier.total}}{{/if}}"
-                                         data-skill="{{key}}">
-                                        <i class="fas fa-dice-d20"></i>
-                                        <label for="system.skills.{{key}}.value"
-                                               class="resource-label">{{#if (bigger skill.value.total 6)}}6{{else}}{{skill.value.total}}{{/if}}d6{{#if skill.modifier.total}}+{{skill.modifier.total}}{{/if}}</label>
-                                    </div>
+                            <div class="d-flex flex-row {{key}} align-items-center w-100">
+                                <div class="skill {{key}} fb-25 bgcolor key type--{{skill.type}} align-self-center">
+                                    <label for="system.skills.{{key}}.label" class="resource-label">{{skill.label}}</label>
                                 </div>
+                                <div class="skill {{key}} fb-15 pl-1 pr-1 center-text center-self">
+                                    {{> "systems/ptu/static/templates/partials/mod-field.hbs"
+                                        path=(concat "system.skills." key ".value.value")
+                                        value=skill.value.value
+                                        dtype="Number"
+                                        mod=skill.value.mod
+                                        total=skill.value.total
+                                        modOrigins=(getProperty ../actor.origins (concat "system.skills." key ".value.mod"))
+                                        flipped=(gt 8 @index)}}
+                                </div>
+                                <div
+                                    class="skill {{key}} fb-25 align-self-center bgcolor skill--{{skill.rank}} center-text center-self">
+                                    <label for="system.skills.{{key}}.rank" class="resource-label">{{localize (concat "PTU.Skill" skill.rank)}}</label>
+                                </div>
+                                <div class="skill {{key}} fb-15 pl-1 center-text center-self">
+                                    {{> "systems/ptu/static/templates/partials/mod-field.hbs"
+                                        path=(concat "system.skills." key ".modifier.value")
+                                        value=skill.modifier.value
+                                        dtype="Number"
+                                        mod=skill.modifier.mod
+                                        total=skill.modifier.total
+                                        modOrigins=(getProperty ../actor.origins (concat "system.skills." key ".modifier.mod") )
+                                        flipped=(gt 8 @index)}}
+                                </div>
+                                <div class="skill {{key}} fb-20 align-self-center bgcolor center-text rollable center-self"
+                                    data-roll="{{#if (bigger skill.value.total 6)}}6{{else}}{{skill.value.total}}{{/if}}d6{{#if skill.modifier.total}}+{{skill.modifier.total}}{{/if}}"
+                                    data-skill="{{key}}">
+                                    <i class="fas fa-dice-d20"></i>
+                                    <label for="system.skills.{{key}}.value"
+                                    class="resource-label">{{#if (bigger skill.value.total 6)}}6{{else}}{{skill.value.total}}{{/if}}d6{{#if skill.modifier.total}}+{{skill.modifier.total}}{{/if}}</label>
+                                </div>
+                            </div>
                             {{/each}}
 
                         </div>
