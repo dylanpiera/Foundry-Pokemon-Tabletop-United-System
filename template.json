@@ -34,9 +34,15 @@
             "value": 0,
             "mod": 0
           },
-          "maxAp": {
-            "value": 0,
-            "mod": 0
+          "ap": {
+            "bound": {
+              "value": 0,
+              "mod": 0
+            },
+            "drained": {
+              "value": 0,
+              "mod": 0
+            }
           },
           "initiative": {
             "value": 0,
@@ -472,8 +478,12 @@
         "injuries": 0,
         "max": 0
       },
+
       "ap": {
-        "value": 5
+        "current": 5,
+        "bound": 0,
+        "drained": 0,
+        "temp": 0
       },
 
       "item_categories": {},
