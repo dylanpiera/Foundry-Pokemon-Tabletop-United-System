@@ -196,7 +196,7 @@ export class CompendiumBrowserSpeciesTab extends CompendiumBrowserTab {
      @param entrySetToCheck - the set of an entry corresponding to the filter, e.g. `entry.types`
      @return {boolean} - True if the entry honors the filter, i.e. would be valid result
      */
-    entryHonorsMultiselect(multiselectFilter, entrySetToCheck){
+    isEntryHonoringMultiselect(multiselectFilter, entrySetToCheck){
         const selected = multiselectFilter.selected.filter(s => !s.not).map(s => s.value);
         const notSelected = multiselectFilter.selected.filter(s => s.not).map(s => s.value);
         if (selected.length || notSelected.length) {
@@ -216,9 +216,9 @@ export class CompendiumBrowserSpeciesTab extends CompendiumBrowserTab {
             if(!checkboxes.source.selected.includes(entry.source)) return false;
         }
 
-        if (! this.entryHonorsMultiselect(multiselects.types, entry.types)) return false;
-        if (! this.entryHonorsMultiselect(multiselects.moves, entry.moves)) return false;
-        if (! this.entryHonorsMultiselect(multiselects.abilities, entry.abilities)) return false;
+        if (! this.isEntryHonoringMultiselect(multiselects.types, entry.types)) return false;
+        if (! this.isEntryHonoringMultiselect(multiselects.moves, entry.moves)) return false;
+        if (! this.isEntryHonoringMultiselect(multiselects.abilities, entry.abilities)) return false;
 
         for (const cap of FILTERABLE_CAPABILITIES){
             const capVal = entry.capabilities[cap] ? entry.capabilities[cap] : 0
