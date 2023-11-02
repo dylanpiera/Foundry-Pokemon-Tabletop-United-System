@@ -1,8 +1,6 @@
 import { sluggify } from "../../../../util/misc.js";
 import { CompendiumBrowserTab } from "./base.js";
 
-export const ABILITIES_COMPENDIUM_INDEX= ["img", "system.source.value"];
-
 export class CompendiumBrowserAbilitiesTab extends CompendiumBrowserTab {
     constructor(browser) {
         super(browser);
@@ -10,7 +8,7 @@ export class CompendiumBrowserAbilitiesTab extends CompendiumBrowserTab {
         this.searchFields = ["name"]
         this.storeFields = ["name", "uuid", "type", "source", "img"];
 
-        this.index = duplicate(ABILITIES_COMPENDIUM_INDEX);
+        this.index = ["img", "system.source.value"];
 
         this.filterData = this.prepareFilterData();
     }

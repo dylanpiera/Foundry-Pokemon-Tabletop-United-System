@@ -1,7 +1,5 @@
 import { sluggify } from "../../../../util/misc.js";
 import { CompendiumBrowserTab } from "./base.js";
-import {MOVES_COMPENDIUM_INDEX} from "./moves.js";
-import {ABILITIES_COMPENDIUM_INDEX} from "./abilities.js";
 
 const FILTERABLE_CAPABILITIES= ["overland", "sky", "swim", "levitate", "burrow", "highJump", "longJump", "power"]
 
@@ -33,6 +31,9 @@ export class CompendiumBrowserSpeciesTab extends CompendiumBrowserTab {
         const indexFields = duplicate(this.index);
         const sources = new Set();
 
+        const allMoveSlugsSeen = new Set()
+        const allAbilitySlugsSeen = new Set()
+
         for await (const { pack, index } of this.browser.packLoader.loadPacks(
             "Item",
             this.browser.loadedPacks(this.tabName),
@@ -62,7 +63,11 @@ export class CompendiumBrowserSpeciesTab extends CompendiumBrowserTab {
                     continue;
                 }
 
-                const moves = new Set(moveLearnOrigins.map(o => speciesData.system.moves[o]).flat(1).map(m => m.slug))
+                const moves = new Set(moveLearnOrigins.map(o => speciesData.system.moves[o]).flat(1).map(m => {
+                    // The slugs of Natural Tutor moves contain a "-n", we will simplify that for the filter.
+                    return m.slug.substring(m.slug.length-2) === "-n" ? m.slug.substring(0, m.slug.length-2) : m.slug
+                }))
+                moves.forEach(move => allMoveSlugsSeen.add(move))
 
                 const abilityRanks = ["basic", "advanced", "high"]
                 if (abilityRanks.some(o => !Array.isArray(speciesData.system.abilities[o]))
@@ -71,7 +76,9 @@ export class CompendiumBrowserSpeciesTab extends CompendiumBrowserTab {
                     continue;
                 }
 
-                const abilities = new Set(abilityRanks.map(r => speciesData.system.abilities[r]).flat(1).map(a => a.slug))
+                // ->                            ->                                 ->                                ->                          Arboks empty ability...
+                const abilities = new Set(abilityRanks.map(r => speciesData.system.abilities[r]).flat(1).map(a => a.slug)).filter(a => a)
+                abilities.forEach(a => allAbilitySlugsSeen.add(a))
 
                 if (! speciesData.system.capabilities?.overland){
                     console.warn(`Species ${speciesData.name} (${speciesData._id}) seems to have no valid capabilities!`);
@@ -104,8 +111,8 @@ export class CompendiumBrowserSpeciesTab extends CompendiumBrowserTab {
             this.filterData.checkboxes.source.selected.push("ptr-core-dex");
         }
 
-        this.filterData.multiselects.moves.options = this.filterOptionsFromNameList(await this.loadForeignItemsNamesOnly("move", "moves", MOVES_COMPENDIUM_INDEX))
-        this.filterData.multiselects.abilities.options = this.filterOptionsFromNameList(await this.loadForeignItemsNamesOnly("ability", "abilities", ABILITIES_COMPENDIUM_INDEX))
+        this.filterData.multiselects.moves.options = this.filterOptionsFromSlugList(allMoveSlugsSeen)
+        this.filterData.multiselects.abilities.options = this.filterOptionsFromSlugList(allAbilitySlugsSeen)
         for (const cap of FILTERABLE_CAPABILITIES){
             this.filterData.sliders[cap].values.max = this.capabilitesMinMax[cap].max
             this.filterData.sliders[cap].values.upperLimit = this.capabilitesMinMax[cap].max
@@ -129,38 +136,13 @@ export class CompendiumBrowserSpeciesTab extends CompendiumBrowserTab {
         }
     }
 
-    /** Loads different Items than Species as if from their corresponding CompendiumBrowserTab. This makes it
-     * so that all the Items used as filters in the SpeciesTab honor the settings of the other Tab. As the
-     * used PackLoader caches the results, you have to ensure that the index (list of all fields that should be loaded)
-     * must contain all fields both for this tab and the original tab the Item can be browsed in.
-     *
-     * @param itemType type of item, e.g. "move"
-     * @param itemTabName name of tab the itemType is actually browsed in, e.g. "moves"
-     * @param itemCompendiumIndex array of fields from the pack to be loaded, e.g. ["img", "system.source.value", ...]
-     * @return {Object<[]>} array of objects formatted {"name": <itemName>}
-     */
-    async loadForeignItemsNamesOnly(itemType, itemTabName, itemCompendiumIndex){
-        const items = [];
-        const indexFields = duplicate(itemCompendiumIndex);
-
-        for await (const {pack, index} of this.browser.packLoader.loadPacks(
-            "Item",
-            this.browser.loadedPacks(itemTabName),
-            indexFields
-        )) {
-            for (const itemData of index) {
-                if (itemData.type !== itemType) continue;
-                if (!this.hasAllIndexFields(itemData, indexFields)) continue;
-
-                items.push({
-                    name: itemData.name,
-                })
-            }
+    filterOptionsFromSlugList(slugs) {
+        const nameSlugPairs = []
+        for (const slug of slugs){
+            const unslugged = slug.split("-").map(p => p[0].toUpperCase() + p.substring(1)).join(" ")
+            nameSlugPairs.push({label: unslugged, value:slug})
         }
-        return items
-    }
-    filterOptionsFromNameList(names){
-        return names.map(m => ({value:sluggify(m.name), label: m.name})).sort((a,b) => (``+a.label).localeCompare(b.label))
+        return nameSlugPairs.sort((a,b) => (``+a.label).localeCompare(b.label));
     }
     #getImagePath(speciesName, speciesNumber) {
         const path = game.settings.get("ptu", "generation.defaultImageDirectory");
@@ -191,24 +173,6 @@ export class CompendiumBrowserSpeciesTab extends CompendiumBrowserTab {
         return a.localeCompare(b, game.i18n.lang);
     }
 
-    /**
-     @param multiselectFilter - the `selected` from a filter, e.g. `filterData.multiselects.types`
-     @param entrySetToCheck - the set of an entry corresponding to the filter, e.g. `entry.types`
-     @return {boolean} - True if the entry honors the filter, i.e. would be valid result
-     */
-    isEntryHonoringMultiselect(multiselectFilter, entrySetToCheck){
-        const selected = multiselectFilter.selected.filter(s => !s.not).map(s => s.value);
-        const notSelected = multiselectFilter.selected.filter(s => s.not).map(s => s.value);
-        if (selected.length || notSelected.length) {
-            if (notSelected.some(ns => entrySetToCheck.some(e => sluggify(e) === ns))) return false;
-            const fulfilled =
-                multiselectFilter.conjunction === "and"
-                    ? selected.every(s => entrySetToCheck.some(e => sluggify(e) === s))
-                    : selected.some(s => entrySetToCheck.some(e => sluggify(e) === s));
-            if(!fulfilled) return false;
-        }
-        return true;
-    }
     filterIndexData(entry) {
         const { checkboxes, multiselects, sliders } = this.filterData;
 
@@ -230,6 +194,25 @@ export class CompendiumBrowserSpeciesTab extends CompendiumBrowserTab {
         return true;
     }
 
+
+    /**
+     @param multiselectFilter - the `selected` from a filter, e.g. `filterData.multiselects.types`
+     @param entrySetToCheck - the set of an entry corresponding to the filter, e.g. `entry.types`
+     @return {boolean} - True if the entry honors the filter, i.e. would be valid result
+     */
+    isEntryHonoringMultiselect(multiselectFilter, entrySetToCheck){
+        const selected = multiselectFilter.selected.filter(s => !s.not).map(s => s.value);
+        const notSelected = multiselectFilter.selected.filter(s => s.not).map(s => s.value);
+        if (selected.length || notSelected.length) {
+            if (notSelected.some(ns => entrySetToCheck.some(e => sluggify(e) === ns))) return false;
+            const fulfilled =
+                multiselectFilter.conjunction === "and"
+                    ? selected.every(s => entrySetToCheck.some(e => sluggify(e) === s))
+                    : selected.some(s => entrySetToCheck.some(e => sluggify(e) === s));
+            if(!fulfilled) return false;
+        }
+        return true;
+    }
     prepareFilterData() {
         return {
             checkboxes: {
