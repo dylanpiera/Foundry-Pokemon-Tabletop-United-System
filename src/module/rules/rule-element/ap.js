@@ -39,30 +39,19 @@ export class ActionPointsRuleElement extends RuleElementPTU {
 
     /** @override */
     onDelete(actorUpdates) {
-        // this.actor.synthetics.apAdjustments.bound = this.actor.synthetics.apAdjustments.bound.filter(e => e.sourceUuid !== this.item.uuid)
-        // this.actor.synthetics.apAdjustments.drained = this.actor.synthetics.apAdjustments.drained.filter(e => e.sourceUuid !== this.item.uuid)
-
-
-        // const updatedActorData = mergeObject(this.actor._source, actorUpdates, {inplace: false});
-        // // Correct data
-        // const currentApBeforeDeletion = Number(getProperty(updatedActorData, "system.ap.current")) || 0;
-        // // undefined => 0
-        // const maxApBeforeDeletion = Number(getProperty(updatedActorData, "system.ap.max")) || 0;
-
-        // Correct
         const currentApBeforeDeletion = Number(this.actor.system.ap.current) || 0;
-        // Correct
         const maxApBeforeDeletion = Number(this.actor.system.ap.max) || 0;
 
-
-        const currentApAfterDeletion = Math.clamped(currentApBeforeDeletion + this.drainedValue, 0, maxApBeforeDeletion + this.drainedValue + this.boundValue);
+        // Regain previously Bound AP
+        const currentApAfterDeletion = Math.clamped(currentApBeforeDeletion + this.boundValue, 0, maxApBeforeDeletion + this.drainedValue + this.boundValue);
 
         mergeObject(actorUpdates, {
             "system.ap.current": currentApAfterDeletion
         });
     }
-    
+
+    //TODO make sure this is not used anywhere, then delete
     broadcast() {
-        throw new Error("Why is this still used?!??!???!?!?")
+        throw new Error("Tinkastrong - ActionPointsRuleElement.broadcast() - pleaseDontBeCalledAnymore")
     }
 }
