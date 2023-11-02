@@ -150,7 +150,7 @@ class PTUTrainerActor extends PTUActor {
 
         system.ap.bound = Number(this.synthetics.apAdjustments.bound.map(b => b.value).reduce((a,b)=> a+b, 0)) || 0
         system.ap.drained = Number(this.synthetics.apAdjustments.drained.map(d => d.value).reduce((a,b)=> a+b, 0)) || 0
-        system.ap.max = 5 + Math.floor(system.level.current / 5) - system.ap.bound - system.ap.drained
+        system.ap.max = this.baseMaxAp - system.ap.bound - system.ap.drained
 
         system.initiative = { value: system.stats.spd.total + system.modifiers.initiative.total };
 
@@ -184,6 +184,10 @@ class PTUTrainerActor extends PTUActor {
         system.contests.appeal.total = system.contests.appeal.value + system.contests.appeal.mod;
 
         this.attributes.health.max = system.health.max;
+    }
+
+    get baseMaxAp() {
+        return 5 + Math.floor(this.system.level.current / 5);
     }
 
     _calcBaseStats() {
@@ -227,6 +231,28 @@ class PTUTrainerActor extends PTUActor {
             if (!changes["system"]["skills"][novice]['value']['mod']) changes["system"]["skills"][novice]['value']['mod'] = {}
             changes["system"]["skills"][novice]['value']['mod'][randomID()] = { mode: 'add', value: 1, source: "Novice Background Skill" };
         }
+        changes.system.maxAp = {
+            1: {
+                source: "Level",
+                mode: "add",
+                value: this.baseMaxAp,
+            }
+        }
+        let maxApIndex = 2
+        this.synthetics.apAdjustments.bound.filter(b => Number(b.value)).forEach(b => {
+            changes.system.maxAp[maxApIndex++] = {
+                source: `${fromUuidSync(b.sourceUuid).name} (Bound)`,
+                mode: "add",
+                value: - b.value
+            }
+        })
+        this.synthetics.apAdjustments.drained.filter(b => Number(b.value)).forEach(b => {
+            changes.system.maxAp[maxApIndex++] = {
+                source: `${fromUuidSync(b.sourceUuid).name} (Drained)`,
+                mode: "add",
+                value: - b.value
+            }
+        })
         this.system.changes = mergeObject(
             this.system.changes,
             changes

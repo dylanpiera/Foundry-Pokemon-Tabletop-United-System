@@ -138,36 +138,16 @@
                                     <div class="resource-content hp-info flexrow flex-group-right hp-info pt-1 pb-1">
                                         <input type="number" name="system.ap.current input" value="{{actor.system.ap.current}}"/>
                                         <span>/</span>
-                                        <input type="number" name="system.ap.max" value="{{actor.system.ap.max}}" disabled />
-                                    </div>
-                                </div>
-                                <div class="swsh-header d-flex flex-row ball-themes {{ballStyle}} highlight pb-2 center-text justify-content-between">
-                                    <div class="fb-48">
-                                        <label for="system.modifiers.ap.bound.value"><b>we dont work</b></label>
-                                    </div>
-                                    <div class="fb-48">
-                                        <label for="system.modifiers.ap.drained.value"><b>we dont work</b></label>
-                                    </div>
-                                </div>
-
-                                <div class="swsh-body mt-1 mb-1 justify-content-between">
-                                    <div class="fb-48 center-text pl-2 pr-2">
-                                        {{> "systems/ptu/static/templates/partials/mod-field.hbs"
-                                                mod=actor.system.modifiers.ap.bound.mod
-                                                path="system.modifiers.ap.bound.value"
-                                                value=actor.system.modifiers.ap.bound.value
-                                                total=actor.system.modifiers.ap.bound.total
-                                                dtype="Number"
-                                                modOrigins=(getProperty actor.origins "system.modifiers.ap.bound.mod")}}
-                                    </div>
-                                    <div class="fb-48 center-text pl-2 pr-2">
-                                        {{> "systems/ptu/static/templates/partials/mod-field.hbs"
-                                                mod=actor.system.modifiers.ap.drained.mod
-                                                path="system.modifiers.ap.drained.value"
-                                                value=actor.system.modifiers.ap.drained.value
-                                                total=actor.system.modifiers.ap.drained.total
-                                                dtype="Number"
-                                                modOrigins=(getProperty actor.origins "system.modifiers.ap.drained.mod")}}
+                                        <div class="fb-30">
+                                            {{> "systems/ptu/static/templates/partials/mod-field.hbs"
+                                                    path="system.maxAp"
+                                                    value=actor.system.ap.max
+                                                    dtype="Number"
+                                                    mod=""
+                                                    total=actor.system.ap.max
+                                                    modOrigins=(getProperty actor.origins "system.maxAp")
+                                                    disabled=true}}
+                                        </div>
                                     </div>
                                 </div>
                             </div>

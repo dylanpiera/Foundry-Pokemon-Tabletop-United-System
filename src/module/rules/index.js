@@ -29,7 +29,7 @@ class RuleElements {
         "TempHP": TempHPRuleElement,
         "Effectiveness": EffectivenessRuleElement,
         "EphemeralEffect": EphemeralEffectRuleElement,
-        "ActionPointSomethinggggg": ActionPointsRuleElement
+        "ActionPoint": ActionPointsRuleElement
     }
 
     static custom = {}

@@ -132,7 +132,8 @@
     "TypeOverwrite": "Type Overwrite",
     "TempHP": "Temporary HP",
     "Effectiveness": "Effectiveness",
-    "EphemeralEffect": "Ephemeral Effect"
+    "EphemeralEffect": "Ephemeral Effect",
+    "ActionPoint": "Action Point"
   },
   "PTU": {
     "Skills": {
