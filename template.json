@@ -480,9 +480,7 @@
       },
 
       "ap": {
-        "current": 5,
-        "bound": 0,
-        "drained": 0
+        "current": 5
       },
 
       "item_categories": {},
