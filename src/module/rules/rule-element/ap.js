@@ -49,9 +49,4 @@ export class ActionPointsRuleElement extends RuleElementPTU {
             "system.ap.current": currentApAfterDeletion
         });
     }
-
-    //TODO make sure this is not used anywhere, then delete
-    broadcast() {
-        throw new Error("Tinkastrong - ActionPointsRuleElement.broadcast() - pleaseDontBeCalledAnymore")
-    }
 }
