@@ -34,16 +34,6 @@
             "value": 0,
             "mod": 0
           },
-          "ap": {
-            "bound": {
-              "value": 0,
-              "mod": 0
-            },
-            "drained": {
-              "value": 0,
-              "mod": 0
-            }
-          },
           "initiative": {
             "value": 0,
             "mod": 0
