@@ -1038,7 +1038,7 @@
         "Number": "Dex Number",
         "HasForm": "Has Form",
         "LearnableMoves": "Learnable Moves",
-        "Abilities": "Abilities"
+        "Abilities": "Obtainable Abilities"
       },
       "Search": {
         "Placeholder": "Your query...",
