@@ -538,8 +538,8 @@ class PTUActor extends Actor {
 
             const { health } = this.system;
 
-            const massiveDamageGate = Roll.safeEval(game.settings.get("ptu", "injuries.massiveDamageRollFormula"))
-            const maxHpInjuryGate = Roll.safeEval(game.settings.get("ptu", "injuries.hpGateRollFormula"))
+            const massiveDamageGate = Roll.safeEval(game.settings.get("ptu", "injuries.massiveDamageThresholdRollFormula"))
+            const maxHpInjuryGate = Roll.safeEval(game.settings.get("ptu", "injuries.hpInjuryGateIntervalRollFormula"))
 
             if (hpDamage >= Math.floor(health.total * massiveDamageGate)) {
                 injuries++;

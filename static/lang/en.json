@@ -760,6 +760,19 @@
           "Hint": "The bar image to use for the type when displaying in Chat."
         }
       },
+      "Injuries": {
+        "Name": "Injury Rules",
+        "Label": "Manage Injury Rules",
+        "Hint": "Set custom thresholds for when Injuries should be applied.",
+        "MassiveDamageThreshold": {
+          "Name": "Massive Damage Injury",
+          "Hint": "What fraction of max HP counts as Massive Damage for Injuries. Must not be 0. Set to 100 to disable massive Damage. Valid inputs are `0.5` (for 50% max HP), `1/3`, `3/16`, ..."
+        },
+        "HpInjuryGateInterval": {
+          "Name": "Injury HP Thresholds",
+          "Hint": "Down from max HP, every interval of fraction max HP causes an Injury. Must not be 0. Set to 100 to disable Injury Hp Threshold. Valid inputs are `0.5` (for 50% max HP), `1/3`, `3/16`, ..."
+        }
+      },
       "Variant": {
         "Name": "Variant Rules",
         "Label": "Toggle Variant Rules",
