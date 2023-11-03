@@ -27,7 +27,11 @@ class PTUMove extends PTUItem {
 
     /** @override */
     get realId() {
-        return this.system.isStruggle ? `struggle-${this.system.type.toLocaleLowerCase(game.i18n.lang)}-${this.system.category.toLocaleLowerCase(game.i18n.lang)}` : super.realId;
+        if (this.system.isStruggle){
+            return `struggle-${this.system.type.toLocaleLowerCase(game.i18n.lang)}-${this.system.category.toLocaleLowerCase(game.i18n.lang)}${this.system.isRangedStruggle?"-ranged":""}`
+        } else {
+            return super.realId
+        }
     }
 
     get isDamaging() {

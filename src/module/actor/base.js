@@ -938,86 +938,58 @@ class PTUActor extends Actor {
         const struggles = includeStruggles ? (() => {
             const types = Object.keys(CONFIG.PTU.data.typeEffectiveness)
 
+            // Get the data common between all Struggles out of the way first
             const strugglePlusRollOption = this.rollOptions.struggle ? Object.keys(this.rollOptions.struggle).find(o => o.startsWith("skill:")) : false;
-
-            const struggles = types.reduce((arr, type) => {
-                if (this.rollOptions.struggle?.[`${type.toLocaleLowerCase(game.i18n.lang)}`]) {
-                    const rule = this.rules.find(r => !r.ignored && r.key == "RollOption" && r.domain == "struggle" && r.option == type.toLocaleLowerCase(game.i18n.lang));
-                    const strugglePlus = (() => {
-                        if (strugglePlusRollOption) return this.system.skills?.[strugglePlusRollOption.replace("skill:", "")]?.value?.total > 4;
-                        return this.system.skills?.combat?.value?.total > 4;
-                    })();
-                    const moveData = {
+            const isStrugglePlus = (() => {
+                if (strugglePlusRollOption) return this.system.skills?.[strugglePlusRollOption.replace("skill:", "")]?.value?.total > 4;
+                return this.system.skills?.combat?.value?.total > 4;
+            })();
+            const constructStruggleItem = (type, category, range, ptuFlags = {}, isRangedStruggle = false) => {
+                ptuFlags = ptuFlags ? ptuFlags : {}
+                return new Item.implementation({
                         name: `Struggle (${type})`,
                         type: "move",
                         img: CONFIG.PTU.data.typeEffectiveness[type].images.icon,
                         system: {
-                            ac: strugglePlus ? 3 : 4,
-                            damageBase: strugglePlus ? 5 : 4,
+                            ac: isStrugglePlus ? 3 : 4,
+                            damageBase: isStrugglePlus ? 5 : 4,
                             stab: false,
-                            type: type,
                             frequency: "At-Will",
-                            isStruggle: true
+                            isStruggle: true,
+                            isRangedStruggle: isRangedStruggle,
+                            category: category,
+                            range: range,
+                            type: type
                         },
                         flags: {
-                            ptu: {}
+                            ptu: ptuFlags
                         }
+                    },
+                    {
+                        parent: this,
+                        temporary: true
+                    })
+            }
+            const struggles = types.reduce((arr, type) => {
+                if (this.rollOptions.struggle?.[`${type.toLocaleLowerCase(game.i18n.lang)}`]) {
+                    // If has <type>:ranged option
+                    if (this.rollOptions.struggle?.[`${type.toLocaleLowerCase(game.i18n.lang)}:ranged`]){
+                        const typeRule = this.rules.find(r => !r.ignored && r.key == "RollOption" && r.domain == "struggle" && r.option == `${type.toLocaleLowerCase(game.i18n.lang)}:ranged`);
+                        const ptuFlags = typeRule?{grantedBy:{id: typeRule.item.id, onDelete: 'detach'}} : {};
+                        arr.push(constructStruggleItem(type, "Physical", `6, 1 Target`, ptuFlags, true) )
+                        arr.push(constructStruggleItem(type, "Special", `6, 1 Target`, ptuFlags, true) )
+                    } else {
+                        const typeRule = this.rules.find(r => !r.ignored && r.key == "RollOption" && r.domain == "struggle" && r.option == type.toLocaleLowerCase(game.i18n.lang));
+                        const ptuFlags = typeRule?{grantedBy:{id: typeRule.item.id, onDelete: 'detach'}} : {};
+
+                        // Cover for telekinetic
+                        const range = type == "Normal" ? `${this.system.skills?.focus?.value?.total ?? 1}` : "Melee"
+                        arr.push(constructStruggleItem(type, "Physical", `${range}, 1 Target`, ptuFlags) )
+                        arr.push(constructStruggleItem(type, "Special", `${range}, 1 Target`, ptuFlags) )
                     }
-                    if (rule) moveData.flags.ptu.grantedBy = {
-                        id: rule.item.id,
-                        onDelete: 'detach'
-                    }
-                    arr.push(
-                        new Item.implementation(mergeObject(moveData, {
-                            system: {
-                                category: "Physical",
-                                range: type == "Normal" ? `${this.system.skills?.focus?.value?.total ?? 1}, 1 Target` : "Melee, 1 Target"
-                            },
-                        }),
-                            {
-                                parent: this,
-                                temporary: true
-                            })
-                    )
-                    arr.push(
-                        new Item.implementation(mergeObject(moveData, {
-                            system: {
-                                category: "Special",
-                                range: type == "Normal" ? `${this.system.skills?.focus?.value?.total ?? 1}, 1 Target` : "Melee, 1 Target"
-                            },
-                        }),
-                            {
-                                parent: this,
-                                temporary: true
-                            })
-                    )
                 }
                 else if (type == "Normal") {
-                    const strugglePlus = (() => {
-                        if (strugglePlusRollOption) return this.system.skills?.[strugglePlusRollOption.replace("skill:", "")]?.value?.total > 4;
-                        return this.system.skills?.combat?.value?.total > 4;
-                    })();
-                    arr.push(
-                        new Item.implementation({
-                            name: `Struggle (Normal)`,
-                            type: "move",
-                            img: CONFIG.PTU.data.typeEffectiveness.Normal.images.icon,
-                            system: {
-                                ac: strugglePlus ? 3 : 4,
-                                damageBase: strugglePlus ? 5 : 4,
-                                stab: false,
-                                type: "Normal",
-                                frequency: "At-Will",
-                                category: "Physical",
-                                range: "Melee, 1 Target",
-                                isStruggle: true
-                            },
-                        },
-                            {
-                                parent: this,
-                                temporary: true
-                            })
-                    )
+                    arr.push(constructStruggleItem("Normal", "Physical", "Melee, 1 Target"))
                 }
                 return arr;
             }, []);
