@@ -764,6 +764,7 @@
         "Name": "Injury Rules",
         "Label": "Manage Injury Rules",
         "Hint": "Set custom thresholds for when Injuries should be applied.",
+        "InvalidInput": "At least one field is not properly set.",
         "MassiveDamageThreshold": {
           "Name": "Massive Damage Injury",
           "Hint": "What fraction of max HP counts as Massive Damage for Injuries. Must not be 0. Set to 100 to disable massive Damage. Valid inputs are `0.5` (for 50% max HP), `1/3`, `3/16`, ..."

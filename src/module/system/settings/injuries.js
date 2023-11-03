@@ -54,7 +54,7 @@ export class InjuriesSettings extends PTUSettingsMenu {
             }
             if(!valid){
                 event.preventDefault();
-                ui.notifications.error("At least one field is not properly set.")
+                ui.notifications.error("PTU.Settings.Injuries.InvalidInput", {localize: true})
             }
         });
     }
