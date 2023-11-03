@@ -770,7 +770,7 @@
           "Hint": "What fraction of max HP counts as Massive Damage for Injuries. Takes decimals and fractions. Must not be 0. Set to 100 to disable massive Damage. 50% can be written as `0.5` or `1/2`."
         },
         "HpInjuryGateInterval": {
-          "Name": "Injury HP",
+          "Name": "Injury HP Interval",
           "Hint": "Down from max HP, every interval of fraction max HP causes an Injury. Takes decimals and fractions. Must not be 0. Set to 100 to disable massive Damage. 50% can be written as `0.5` or `1/2`."
         }
       },
