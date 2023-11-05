@@ -336,7 +336,7 @@ class PTUAttackCheck extends PTUDiceCheck {
             ui.notifications.warn("PTU.Action.MoveWhileFrozen", { localize: true });
             return false;
         }
-        if (this.conditionOptions.has("condition:sleep")) {
+        if (this.conditionOptions.has("condition:sleep") && !this.options.has("self:ignore:sleep")) {
             ui.notifications.warn("PTU.Action.MoveWhileSleeping", { localize: true });
             return false;
         }

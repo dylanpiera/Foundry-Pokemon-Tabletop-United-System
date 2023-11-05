@@ -369,9 +369,9 @@ class PTUPokemonActor extends PTUActor {
         const omniMovementMod = Number(this.system.modifiers.capabilities.all) || 0;
         const slowedMultiplier = this.rollOptions.conditions?.["slowed"] ? 0.5 : 1
 
-        for (const moveCap of movementCapabilities){
+        for (const moveCap of movementCapabilities) {
             // If the species got the capability naturally or through explicit modifiers
-            if (this.system.modifiers.capabilities[moveCap] || speciesCapabilities[moveCap]){
+            if (this.system.modifiers.capabilities[moveCap] || speciesCapabilities[moveCap]) {
                 const mod = this.system.modifiers?.capabilities[moveCap] ? this.system.modifiers?.capabilities[moveCap] : 0
                 const speciesCap = speciesCapabilities[moveCap] ? speciesCapabilities[moveCap] : 0
                 finalCapabilities[moveCap] = Math.max(1, Math.floor(slowedMultiplier * (speciesCap + spdCsChanges + omniMovementMod + mod)))
@@ -380,22 +380,22 @@ class PTUPokemonActor extends PTUActor {
             }
         }
 
-        for (const nonMoveCap of CONFIG.PTU.Capabilities.numericNonMovement){
+        for (const nonMoveCap of CONFIG.PTU.Capabilities.numericNonMovement) {
             // If the species got the capability naturally or through explicit modifiers
-            if (this.system.modifiers.capabilities[nonMoveCap] || speciesCapabilities[nonMoveCap]){
+            if (this.system.modifiers.capabilities[nonMoveCap] || speciesCapabilities[nonMoveCap]) {
                 const mod = this.system.modifiers?.capabilities[nonMoveCap] ? this.system.modifiers?.capabilities[nonMoveCap] : 0
                 finalCapabilities[nonMoveCap] = Math.max(1, mod + speciesCapabilities[nonMoveCap])
             }
         }
 
         // TODO allow to add more naturewalks to an actor.
-        for (const arrayCap of CONFIG.PTU.Capabilities.stringArray){
+        for (const arrayCap of CONFIG.PTU.Capabilities.stringArray) {
             finalCapabilities[arrayCap] = speciesCapabilities[arrayCap]
         }
 
         // Add any capability to the final capabilities not yet handled
-        for (const cap of Object.keys(speciesCapabilities)){
-            if (cap in finalCapabilities) continue;
+        for (const cap of Object.keys(speciesCapabilities)) {
+            if (!speciesCapabilities[cap] || cap in finalCapabilities) continue;
             console.warn(`Actor ${this.uuid} had unexpected Capability ${cap} of ${speciesCapabilities[cap]}`)
             finalCapabilities[cap] = speciesCapabilities[cap]
         }
