@@ -136,7 +136,9 @@
                                             value="{{actor.system.ap.value}}" data-dtype="Integer" min="0" max="{{actor.system.ap.max}}" step="1" />
                                     </div>
                                     <div class="resource-content hp-info flexrow flex-group-right hp-info pt-1 pb-1">
-                                        <input type="number" name="system.ap.value input" value="{{actor.system.ap.value}}"/>
+                                        <div class="fb-30">
+                                            <input type="number" name="system.ap.value input" value="{{actor.system.ap.value}}"/>
+                                        </div>
                                         <span>/</span>
                                         <div class="fb-30">
                                             {{> "systems/ptu/static/templates/partials/mod-field.hbs"
