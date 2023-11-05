@@ -75,17 +75,12 @@ class PTUMove extends PTUItem {
         }
         if (!isNaN(Number(this.system.ac))) rollOptions.all[`move:ac:${this.system.ac}`] = true;
         rollOptions.item = rollOptions.all;
-<<<<<<< HEAD
-        
+
         this.flags.ptu = mergeObject(this.flags.ptu, {rollOptions});
         this.flags.ptu.rollOptions.attack = Object.keys(this.flags.ptu.rollOptions.all).reduce((obj, key) => {
             obj[key.replace("move:", "attack:").replace("item:", "attack:")] = true;
             return obj;
         }, {});
-=======
-
-        this.flags.ptu = mergeObject(this.flags.ptu, { rollOptions });
->>>>>>> issue-491-basic-ranged-attack
     }
 
     /** @override */
