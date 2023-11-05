@@ -538,12 +538,14 @@ class PTUActor extends Actor {
             const injuryStatements = [];
 
             const { health } = this.system;
-            // If damage is more than 50% of total health
-            if (hpDamage >= Math.floor(health.total / 2)) {
+
+            const massiveDamageGatePercentage = game.settings.get("ptu", "automation.massiveDamageThresholdPercent")
+            const maxHpInjuryIntervalPercentage = game.settings.get("ptu", "automation.massiveDamageThresholdPercent")
+
+            if (hpDamage >= Math.floor(health.total * massiveDamageGatePercentage / 100)) {
                 injuries++;
                 injuryStatements.push(game.i18n.format("PTU.ApplyDamage.MassiveDamageInjury", { actor: this.link }));
             }
-
             if (this.system.boss?.is) {
                 if (hpUpdate.updates["system.health.value"] <= 0) {
                     const { bars, turns } = this.system.boss;
@@ -555,17 +557,18 @@ class PTUActor extends Actor {
                 }
             }
             else {
-                // Every time a mon reaches a health threshhold, which is at 50%, 0%, -50%, -100%, etc.
+                // Every time a mon reaches a health threshhold, which is at 100% - maxHpInjuryIntervalPercentage, 100% - 2*maxHpInjuryIntervalPercentage, ...
                 // one Injury should be added to the count.
                 const currentPercentage = Math.floor((health.value / health.total) * 100);
                 const newPercentage = Math.floor(((health.value - hpDamage) / health.total) * 100);
 
-                for (let i = 50; true; i -= 50) {
+                for (let i = 100 - maxHpInjuryIntervalPercentage; true; i -= maxHpInjuryIntervalPercentage) {
                     if (i > currentPercentage) continue;
 
                     if (currentPercentage > i && i >= newPercentage) {
                         injuries++;
-                        injuryStatements.push(game.i18n.format("PTU.ApplyDamage.HpThresholdInjury", { actor: this.link, percentage: i }));
+                        const percentageShortened = Math.floor(i*1000)/1000
+                        injuryStatements.push(game.i18n.format("PTU.ApplyDamage.HpThresholdInjury", { actor: this.link, percentage: percentageShortened }));
                     }
                     else break;
                 }
@@ -1113,7 +1116,7 @@ class PTUActor extends Actor {
 
             const preTargets = params.targets?.length > 0 ? params.targets : [...game.user.targets];
             const targets = [];
-            const outcomes = {};
+            let outcomes = {};
             if (preTargets.length > 0 && !(preTargets[0] instanceof PTUActor)) {
                 for (const target of preTargets) {
                     if (!target.token?.object) continue;
