@@ -30,12 +30,17 @@ class PTUTrainerActor extends PTUActor {
             system.skills[novice].value.mod += 1;
         }
 
-        system.level.dexexp = game.settings.get("ptu", "variant.useDexExp") == true ? (this.system.dex?.owned?.length || 0) : 0;
+        system.level.dexexp = game.settings.get("ptu", "variant.useDexExp") == true 
+            ? (this.system.dex?.owned?.length || 0) 
+            : game.settings.get("ptu", "variant.advancementRework") && game.settings.get("ptu", "variant.trainerRevamp") 
+                ? (this.system.dex?.owned?.length || 0) 
+                : 0;
+        const levelUpRequirement = game.settings.get("ptu", "variant.advancementRework") && game.settings.get("ptu", "variant.trainerRevamp") ? 20 : 10;
         system.level.current =
             Math.clamped(
                 1
                 + Number(system.level.milestones)
-                + Math.trunc((Number(system.level.miscexp) / 10) + (Number(system.level.dexexp) / 10)),
+                + Math.trunc((Number(system.level.miscexp) / levelUpRequirement) + (Number(system.level.dexexp) / levelUpRequirement)),
                 1,
                 (game.settings.get("ptu", "variant.trainerRevamp") ? 25 : 50)
             );

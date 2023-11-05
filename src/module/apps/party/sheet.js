@@ -45,6 +45,12 @@ class PTUPartySheet extends FormApplication {
         data.boxed = this.boxed;
         data.available = this.available;
 
+        const averageLevelOfMons = monArray => (monArray.reduce((a, b) => (a.attributes.level.current ?? 0) + (b.attributes.level.current ?? 0)) / monArray.length).toFixed(1);
+
+        data.partyApl = this.party?.length > 0 ? averageLevelOfMons(data.party) : undefined
+        data.boxedApl = this.boxed?.length > 0  ? averageLevelOfMons(data.boxed) : undefined
+        data.availableApl = this.available?.length > 0  ? averageLevelOfMons(data.available) : undefined
+
         return data;
     }
 
