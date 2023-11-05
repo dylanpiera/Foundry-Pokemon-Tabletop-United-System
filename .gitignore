@@ -16,3 +16,5 @@ foundry-0.8.3.js
 /packs/.gitignore
 /packs/README.md
 app/
+client
+common

@@ -59,7 +59,7 @@ class PTUMove extends PTUItem {
                 [`move:type:${sluggify(this.system.type)}`]: true,
                 [`move:category:${sluggify(this.system.category)}`]: true,
                 [`move:frequency:${sluggify(this.system.frequency)}`]: true,
-            }
+            },
         }
         
         const ranges = this.system.range?.split(",").map(r => r.trim()) ?? [];
@@ -75,6 +75,10 @@ class PTUMove extends PTUItem {
         rollOptions.item = rollOptions.all;
         
         this.flags.ptu = mergeObject(this.flags.ptu, {rollOptions});
+        this.flags.ptu.rollOptions.attack = Object.keys(this.flags.ptu.rollOptions.all).reduce((obj, key) => {
+            obj[key.replace("move:", "attack:").replace("item:", "attack:")] = true;
+            return obj;
+        }, {});
     }
 
     /** @override */

@@ -27,7 +27,7 @@ class PTUActor extends Actor {
     }
 
     get rollOptions() {
-        return this.flags.ptu?.rollOptions;
+        return this.flags.ptu?.rollOptions; 
     }
 
     get combatant() {
@@ -1073,7 +1073,7 @@ class PTUActor extends Actor {
     }
 
     prepareAttack(move) {
-        const attackRollOptions = move.getRollOptions("item");
+        const attackRollOptions = move.getRollOptions("attack");
         const modifiers = [];
 
         const selectors = [
