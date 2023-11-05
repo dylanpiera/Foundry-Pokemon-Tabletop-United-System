@@ -12,6 +12,7 @@ import { resolveInjectedProperties, resolveValue } from "../util/value-resolver.
 import { dexSync } from "./macros/dex-sync.js"
 import { pokedex } from "./macros/pokedex.js"
 import { changeRotomForm } from "./macros/rotom-form-change.js"
+import {TypeMatrix} from "../module/apps/type-matrix.js";
 
 const GamePTU = {
     onInit() {
@@ -53,6 +54,7 @@ const GamePTU = {
     onSetup() { },
     onReady() {
         game.ptu.compendiumBrowser = new CompendiumBrowser();
+        game.ptu.typeMatrix = new TypeMatrix()
 
         // Reset pokemon that have reloadOnReady marked as true
         // This is due to having a temporary species override
