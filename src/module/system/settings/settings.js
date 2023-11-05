@@ -189,6 +189,14 @@ export function registerSettings() {
         }
     });
 
+    game.settings.register("ptu", "worldNotesFolder", {
+        name: "World Notes Folder ID",
+        scope: "world",
+        config: false,
+        default: null,
+        type: String,
+    });
+
     game.settings.register("ptu", "worldSystemVersion", {
         name: "World System Version",
         scope: "world",

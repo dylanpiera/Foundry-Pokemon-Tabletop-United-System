@@ -19,6 +19,15 @@ class PTUActorSheet extends ActorSheet {
                 onclick: () => this._onConfigureActor(),
             });
         }
+
+        // Add notes button
+        buttons.unshift({
+            label: "Notes",
+            class: "open-notes",
+            icon: "fas fa-book",
+            onclick: () => this.openNotes(),
+        })
+
         return buttons;
     }
 
@@ -29,6 +38,60 @@ class PTUActorSheet extends ActorSheet {
     /** Emulate a sheet item drop from the canvas */
     async emulateItemDrop(data) {
         return this._onDropItem({ preventDefault: () => {} }, data);
+    }
+
+    async openNotes() {
+        const folder = await (async () => {
+            const folderId = game.settings.get("ptu", "worldNotesFolder");
+            if (!folderId) {
+                if(game.user.isGM) return game.ptu.macros.initializeWorldNotes();
+                else return null;
+            }
+
+            const folder = game.folders.get(folderId);
+            if (!folder) {
+                if(game.user.isGM) return game.ptu.macros.initializeWorldNotes();
+                else return null;
+            }
+
+            return folder;
+        })();
+        if(!folder) return ui.notifications.error("No folder found for world notes; Please ask your GM to login and not to delete the folder \"Actor Notes\"");
+
+        const journalEntry = await (async () => {
+            const journalId = this.actor.getFlag("ptu", "notesId");
+            if (!journalId) {
+                const journal = await JournalEntry.create({ 
+                    name: this.actor.name, 
+                    folder: folder.id,
+                    ownership: this.actor.ownership,
+                    pages: [
+                        {
+                            name: "Notes",
+                            type: "text",
+                            ownership: this.actor.ownership,
+                            text: {
+                                format: 1,
+                                content: this.actor.system.notes || ""
+                            }
+                        }
+                    ]
+                });
+                await this.actor.setFlag("ptu", "notesId", journal.id);
+                return journal;
+            }
+
+            const journal = await fromUuid(`JournalEntry.${journalId}`);
+            if (!journal) {
+                await this.actor.unsetFlag("ptu", "notesId");
+                return this.openNotes();
+            }
+
+            return journal;
+        })();
+        if(!journalEntry) return;
+
+        journalEntry.sheet.render(true);
     }
 }
 
