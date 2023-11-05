@@ -230,7 +230,8 @@ class PTUActor extends Actor {
             tokenOverrides: {},
             speciesOverride: {},
             typeOverride: {},
-            effectiveness: []
+            effectiveness: [],
+            apAdjustments: {drained: [], bound: []}
         }
 
         super._initialize();
