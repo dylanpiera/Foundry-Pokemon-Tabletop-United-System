@@ -760,20 +760,7 @@
           "Hint": "The bar image to use for the type when displaying in Chat."
         }
       },
-      "Injuries": {
-        "Name": "Injury Rules",
-        "Label": "Manage Injury Rules",
-        "Hint": "Set custom thresholds for when Injuries should be applied.",
-        "InvalidInput": "At least one field is not properly set.",
-        "MassiveDamageThreshold": {
-          "Name": "Massive Damage (%)",
-          "Hint": "The % of max HP resulting in an Injury from Massive Damage. (A huge percentage like 10000 practically disables Injuries from this source)"
-        },
-        "HpInjuryGateInterval": {
-          "Name": "Injury HP Interval (%)",
-          "Hint": "Down from 100% max HP, reaching every interval of this percentage causes an injury. E.g. 50% => 50%, 0%, -50%, ... (A huge percentage like 10000 practically disables Injuries from this source)"
-        }
-      },
+
       "Variant": {
         "Name": "Variant Rules",
         "Label": "Toggle Variant Rules",
@@ -834,6 +821,14 @@
         "AutoFaintRecovery": {
           "Name": "Auto-Faint Recovery",
           "Hint": "Automatically remove the fainted condition from a Pokémon when it is healed above 0 HP."
+        },
+        "MassiveDamageThreshold": {
+          "Name": "Massive Damage (%)",
+          "Hint": "The % of max HP resulting in an Injury from Massive Damage. (A huge percentage like 10000 practically disables Injuries from this source)"
+        },
+        "HpInjuryGateInterval": {
+          "Name": "Injury HP Interval (%)",
+          "Hint": "Down from 100% max HP, reaching every interval of this percentage causes an injury. E.g. 50% => 50%, 0%, -50%, ... (A huge percentage like 10000 practically disables Injuries from this source)"
         }
       },
       "Generation": {

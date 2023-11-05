@@ -9,7 +9,6 @@ import { HomebrewSettings } from "./homebrew.js";
 import { MetagameSettings } from "./metagame.js";
 import { TypeSettings } from "./types.js";
 import { VariantSettings } from "./variant.js";
-import { InjuriesSettings} from "./injuries.js";
 
 export function registerSettings() {
     // // game.settings.register("ptu", "errata", {
@@ -82,16 +81,6 @@ export function registerSettings() {
         restricted: true
     })
     TypeSettings.registerSettings();
-
-    game.settings.registerMenu("ptu", "injuries", {
-        name: "PTU.Settings.Injuries.Name",
-        label: "PTU.Settings.Injuries.Label",
-        hint: "PTU.Settings.Injuries.Hint",
-        icon: "fas fa-medkit",
-        type: InjuriesSettings,
-        restricted: true
-    })
-    InjuriesSettings.registerSettings();
 
     game.settings.register("ptu", "gameLanguage", {
         name: "Localization",

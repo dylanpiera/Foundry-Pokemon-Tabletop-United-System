@@ -48,6 +48,22 @@ const AutomationSettingsConfig = {
         hint: "PTU.Settings.Automation.AutoFaintRecovery.Hint",
         type: Boolean,
         default: true
+    },
+    "massiveDamageThresholdPercent":{
+        name: "PTU.Settings.Automation.MassiveDamageThreshold.Name",
+        hint: "PTU.Settings.Automation.MassiveDamageThreshold.Hint",
+        scope: "world",
+        config: true,
+        default: 50,
+        type: Number,
+    },
+    "hpInjuryGateIntervalPercent":{
+        name: "PTU.Settings.Automation.HpInjuryGateInterval.Name",
+        hint: "PTU.Settings.Automation.HpInjuryGateInterval.Hint",
+        scope: "world",
+        config: true,
+        default: 50,
+        type: Number,
     }
 }
 
