@@ -27,7 +27,7 @@ class PTUActor extends Actor {
     }
 
     get rollOptions() {
-        return this.flags.ptu?.rollOptions;
+        return this.flags.ptu?.rollOptions; 
     }
 
     get combatant() {
@@ -230,7 +230,8 @@ class PTUActor extends Actor {
             tokenOverrides: {},
             speciesOverride: {},
             typeOverride: {},
-            effectiveness: []
+            effectiveness: [],
+            apAdjustments: {drained: [], bound: []}
         }
 
         super._initialize();
@@ -285,8 +286,8 @@ class PTUActor extends Actor {
         this.system.alliance = ["party", "opposition", null].includes(this.system.alliance)
             ? this.system.alliance
             : this.hasPlayerOwner
-            ? "party"
-            : "opposition";
+                ? "party"
+                : "opposition";
     }
 
     prepareDerivedData() {
@@ -586,7 +587,10 @@ class PTUActor extends Actor {
                 if (bars > 0) {
                     const newBars = Math.max(bars - 1, 0);
                     hpUpdate.updates["system.boss.bars"] = newBars;
-                    hpUpdate.updates["system.health.value"] = this.system.health.max;
+                    hpUpdate.updates["system.health.value"] = 
+                        (injuries > this.system.health.injuries)
+                        ? Math.trunc(this.system.health.total * (1 - ((this.system.modifiers.hardened ? Math.min(this.system.health.injuries, 5) : this.system.health.injuries) / 10)))
+                        : this.system.health.max;
                     //TODO: Apply Injuries
                     await this.update(hpUpdate.updates);
                     bossStatement = game.i18n.format("PTU.ApplyDamage.BossBarBroken", { actor: this.link, bars: newBars });
@@ -795,9 +799,9 @@ class PTUActor extends Actor {
 
         const adjustment = applications.filter(a => a.adjustment).reduce((sum, a) => sum + a.adjustment, 0);
         const finalDamage = (() => {
-            if(applications.length === 1 && applications[0].category === "immunity" && applications[0].adjustment === -reduced) return 0;
+            if (applications.length === 1 && applications[0].category === "immunity" && applications[0].adjustment === -reduced) return 0;
             return Math.max(reduced + adjustment, 1);
-        })(); 
+        })();
 
         return { finalDamage, additionalApplications: applications };
     }
@@ -842,14 +846,14 @@ class PTUActor extends Actor {
     _onUpdate(data, options, userId) {
         super._onUpdate(data, options, userId);
 
-        if(data.system?.health?.value !== undefined) {
-            if(data.system.health.value <= 0 && game.settings.get("ptu", "automation.autoFaint")) {
+        if (data.system?.health?.value !== undefined) {
+            if (data.system.health.value <= 0 && game.settings.get("ptu", "automation.autoFaint")) {
                 const fainted = this.conditions.bySlug("fainted");
-                if(fainted.length === 0) PTUCondition.FromEffects([{id: "fainted"}]).then(items => this.createEmbeddedDocuments("Item", items));
+                if (fainted.length === 0) PTUCondition.FromEffects([{ id: "fainted" }]).then(items => this.createEmbeddedDocuments("Item", items));
             }
             else if (data.system.health.value > 0 && game.settings.get("ptu", "automation.autoFaintRecovery")) {
                 const fainted = this.conditions.bySlug("fainted");
-                if(fainted.length > 0) fainted.forEach(f => f.delete());
+                if (fainted.length > 0) fainted.forEach(f => f.delete());
             }
         }
 
@@ -938,87 +942,69 @@ class PTUActor extends Actor {
         const struggles = includeStruggles ? (() => {
             const types = Object.keys(CONFIG.PTU.data.typeEffectiveness)
 
-            const strugglePlusRollOption = this.rollOptions.struggle ? Object.keys(this.rollOptions.struggle).find(o => o.startsWith("skill:")) : false;
+            // Get the data common between all Struggles out of the way first
+            const strugglePlusRollOptions = this.rollOptions.struggle ? Object.keys(this.rollOptions.struggle).filter(o => o.startsWith("skill:")) : [];
+            const isStrugglePlus = (() => {
+                for(const skill of strugglePlusRollOptions) {
+                    if (this.system.skills?.[skill.replace("skill:", "")]?.value?.total > 4) return true;
+                }
+                return this.system.skills?.combat?.value?.total > 4;
+            })();
 
-            const struggles = types.reduce((arr, type) => {
-                if (this.rollOptions.struggle?.[`${type.toLocaleLowerCase(game.i18n.lang)}`]) {
-                    const rule = this.rules.find(r => !r.ignored && r.key == "RollOption" && r.domain == "struggle" && r.option == type.toLocaleLowerCase(game.i18n.lang));
-                    const strugglePlus = (() => {
-                        if (strugglePlusRollOption) return this.system.skills?.[strugglePlusRollOption.replace("skill:", "")]?.value?.total > 4;
-                        return this.system.skills?.combat?.value?.total > 4;
-                    })();
-                    const moveData = {
+            const constructStruggleItem = (type, category, range, ptuFlags, isRangedStruggle = false) => {
+                return new Item.implementation({
                         name: `Struggle (${type})`,
                         type: "move",
                         img: CONFIG.PTU.data.typeEffectiveness[type].images.icon,
                         system: {
-                            ac: strugglePlus ? 3 : 4,
-                            damageBase: strugglePlus ? 5 : 4,
+                            ac: isStrugglePlus ? 3 : 4,
+                            damageBase: isStrugglePlus ? 5 : 4,
                             stab: false,
-                            type: type,
                             frequency: "At-Will",
-                            isStruggle: true
+                            isStruggle: true,
+                            isRangedStruggle: isRangedStruggle,
+                            category: category,
+                            range: range,
+                            type: type
                         },
                         flags: {
-                            ptu: {}
+                            ptu: ptuFlags || {}
                         }
+                    },
+                    {
+                        parent: this,
+                        temporary: true
                     }
-                    if (rule) moveData.flags.ptu.grantedBy = {
-                        id: rule.item.id,
-                        onDelete: 'detach'
+                )
+            }
+
+            const struggles = types.reduce((arr, type) => {
+                const localType = type.toLocaleLowerCase(game.i18n.lang);
+
+                if (this.rollOptions.struggle?.[localType]) {
+                    // If has <type>:ranged option
+                    if (this.rollOptions.struggle?.[`${localType}:ranged`]) {
+                        const typeRule = this.rules.find(r => !r.ignored && r.key == "RollOption" && r.domain == "struggle" && r.option == `${localType}:ranged`);
+                        const ptuFlags = typeRule ? { grantedBy: { id: typeRule.item.id, onDelete: 'detach' } } : {};
+                        arr.push(constructStruggleItem(type, "Physical", `6, 1 Target`, ptuFlags, true))
+                        arr.push(constructStruggleItem(type, "Special", `6, 1 Target`, ptuFlags, true))
+                        return arr;
                     }
-                    arr.push(
-                        new Item.implementation(mergeObject(moveData, {
-                            system: {
-                                category: "Physical",
-                                range: type == "Normal" ? `${this.system.skills?.focus?.value?.total ?? 1}, 1 Target` : "Melee, 1 Target"
-                            },
-                        }),
-                            {
-                                parent: this,
-                                temporary: true
-                            })
-                    )
-                    arr.push(
-                        new Item.implementation(mergeObject(moveData, {
-                            system: {
-                                category: "Special",
-                                range: type == "Normal" ? `${this.system.skills?.focus?.value?.total ?? 1}, 1 Target` : "Melee, 1 Target"
-                            },
-                        }),
-                            {
-                                parent: this,
-                                temporary: true
-                            })
-                    )
+
+                    const typeRule = this.rules.find(r => !r.ignored && r.key == "RollOption" && r.domain == "struggle" && r.option == localType);
+                    const ptuFlags = typeRule ? { grantedBy: { id: typeRule.item.id, onDelete: 'detach' } } : {};
+
+                    // Cover for telekinetic
+                    const range = localType === "normal" ? `${this.system.skills?.focus?.value?.total ?? 1}` : "Melee"
+                    arr.push(constructStruggleItem(type, "Physical", `${range}, 1 Target`, ptuFlags))
+                    arr.push(constructStruggleItem(type, "Special", `${range}, 1 Target`, ptuFlags))
+                    return arr;
                 }
-                else if (type == "Normal") {
-                    const strugglePlus = (() => {
-                        if (strugglePlusRollOption) return this.system.skills?.[strugglePlusRollOption.replace("skill:", "")]?.value?.total > 4;
-                        return this.system.skills?.combat?.value?.total > 4;
-                    })();
-                    arr.push(
-                        new Item.implementation({
-                            name: `Struggle (Normal)`,
-                            type: "move",
-                            img: CONFIG.PTU.data.typeEffectiveness.Normal.images.icon,
-                            system: {
-                                ac: strugglePlus ? 3 : 4,
-                                damageBase: strugglePlus ? 5 : 4,
-                                stab: false,
-                                type: "Normal",
-                                frequency: "At-Will",
-                                category: "Physical",
-                                range: "Melee, 1 Target",
-                                isStruggle: true
-                            },
-                        },
-                            {
-                                parent: this,
-                                temporary: true
-                            })
-                    )
+
+                if (localType === "normal") {
+                    arr.push(constructStruggleItem(type, "Physical", "Melee, 1 Target"))
                 }
+
                 return arr;
             }, []);
 
@@ -1030,8 +1016,6 @@ class PTUActor extends Actor {
         for (const move of this.itemTypes.move) {
             if (move.system.isStruggle) continue;
 
-            let clone;
-
             this.flags.ptu.disabledOptions.push({
                 "label": move.name,
                 "value": move.slug,
@@ -1041,12 +1025,7 @@ class PTUActor extends Actor {
                 }]
             });
 
-            // if (move.system.category !== "Status" && this.types.includes(move.system.type)) {
-            //     const db = isNaN(Number(move.system.damageBase)) ? 0 : Number(move.system.damageBase);
-            //     clone = move.clone({ "system.damageBase": db + 2 }, { keepId: true });
-            // }
-            // else 
-            clone = move.clone({}, { keepId: true });
+            const clone = move.clone({}, { keepId: true });
 
             for (const rule of clone.prepareRuleElements()) {
                 if (rule instanceof CONFIG.PTU.rule.elements.builtin.RollOption && !rule.ignored) {
@@ -1066,7 +1045,7 @@ class PTUActor extends Actor {
     }
 
     prepareAttack(move) {
-        const attackRollOptions = move.getRollOptions("item");
+        const attackRollOptions = move.getRollOptions("attack");
         const modifiers = [];
 
         const selectors = [
@@ -1482,8 +1461,8 @@ class PTUActor extends Actor {
 
         const targetOptions = new Set(targetActor ? getTargetRollOptions(targetActor) : targetRollOptions);
 
-        if(targetOptions.has("target:immune:flanked")) targetOptions.delete("target:flanked");
-        else if(isFlanked) targetOptions.add("target:flanked");
+        if (targetOptions.has("target:immune:flanked")) targetOptions.delete("target:flanked");
+        else if (isFlanked) targetOptions.add("target:flanked");
 
         const rollOptions = new Set([
             ...selfOptions,

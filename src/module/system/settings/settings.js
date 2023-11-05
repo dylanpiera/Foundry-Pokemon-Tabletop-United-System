@@ -108,7 +108,7 @@ export function registerSettings() {
     game.settings.register("ptu", "autoRollDamage", {
         name: "Auto roll damage",
         hint: "Automatically roll damage when a move is used.",
-        scope: "world",
+        scope: "client",
         config: true,
         type: Boolean,
         default: true
@@ -187,6 +187,14 @@ export function registerSettings() {
             game.ptu.compendiumBrowser.packLoader.reset();
             game.ptu.compendiumBrowser.initCompendiumList();
         }
+    });
+
+    game.settings.register("ptu", "worldNotesFolder", {
+        name: "World Notes Folder ID",
+        scope: "world",
+        config: false,
+        default: null,
+        type: String,
     });
 
     game.settings.register("ptu", "worldSystemVersion", {

@@ -413,6 +413,7 @@ class PTUToken extends Token {
     canFlank(flankee) {
         if(!this.actor || !flankee.actor) return false;
         if (this === flankee || !game.settings.get("ptu", "automation.flankingDetection")) return false;
+        if(this.actor.conditions.bySlug("fainted").length > 0) return false;
 
         if (!this.actor.isEnemyOf(flankee.actor)) return false;
 

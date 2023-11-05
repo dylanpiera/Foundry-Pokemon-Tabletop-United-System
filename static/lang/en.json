@@ -132,7 +132,8 @@
     "TypeOverwrite": "Type Overwrite",
     "TempHP": "Temporary HP",
     "Effectiveness": "Effectiveness",
-    "EphemeralEffect": "Ephemeral Effect"
+    "EphemeralEffect": "Ephemeral Effect",
+    "ActionPoint": "AP Consumption"
   },
   "PTU": {
     "Skills": {
@@ -302,9 +303,12 @@
     "EffectPriority": "Priority",
 
     "ActionPoints": "Action Points",
+    "MaxActionPointsShort": "Max AP",
     "LevelMilestones": "Milestones",
     "LevelDexExp": "Dex Exp",
     "LevelMiscExp": "Misc Exp",
+
+    "LevelCap": "Level Cap",
 
     "Money": "Money",
     "ItemCategories": "Item Categories",
@@ -974,6 +978,9 @@
       }
     },
     "ExpBudget": "EXP Reward:",
+    "TypeMatrix": {
+      "Title": "Type Chart"
+    },
     "CompendiumBrowser": {
       "ProgressBar": {
         "LoadingComplete": "Loading complete",

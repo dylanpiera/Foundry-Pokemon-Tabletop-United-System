@@ -37,7 +37,7 @@ export class TokenPanel extends Application {
             const data = {
                 name: attack.label,
                 img: attack.img,
-                db: attack.item?.system.damageBase > 0 ? attack.item.system.damageBase : null,
+                db: attack.item?.damageBase ? attack.item.damageBase.postStab : null,
                 ac: attack.item?.system.ac > 0 ? attack.item.system.ac : null,
                 frequency: attack.item?.system.frequency ?? "At-Will",
                 id,

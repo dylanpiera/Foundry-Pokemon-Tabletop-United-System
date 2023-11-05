@@ -35,7 +35,7 @@ class PTUSkillCheck extends PTUDiceCheck {
         /** @type {PTUDiceModifier[]} */
         const diceModifiers = [
             new PTUDiceModifier({
-                diceNumber: this.actor.system.skills[this.skill]?.value?.total ?? 1,
+                diceNumber: Math.clamped(this.actor.system.skills[this.skill]?.value?.total ?? 1, 1, 6),
                 dieSize: 6,
                 label: game.i18n.format("PTU.Check.SkillDice", { skill: this.skillLabel })
             })

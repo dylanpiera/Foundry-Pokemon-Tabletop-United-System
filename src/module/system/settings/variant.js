@@ -33,6 +33,14 @@ const VariantSettingsConfig = {
         type: Boolean,
         default: true,
         requiresReload: true
+    },
+    "advancementRework": {
+        name: "PTU.Settings.Variant.AdvancementRework.Name",
+        hint: "PTU.Settings.Variant.AdvancementRework.Hint",
+        type: Boolean,
+        default: false,
+        requiresReload: true,
+        hide: true
     }
 }
 

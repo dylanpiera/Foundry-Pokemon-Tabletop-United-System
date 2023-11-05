@@ -478,10 +478,20 @@
                 <div class="fb-40">
                     <div class="swsh-box mb-2 w-100">
                         <div class="swsh-header ball-themes {{ballStyle}} highlight pt-2 pb-2 center-text justify-content-center">
-                            <b>{{localize "PTU.Spirit.Friendship"}}</b>
+                            <div class="fb-48">
+                                <b>{{localize "PTU.Spirit.Friendship"}}</b>
+                            </div>
+                            <div class="fb-48">
+                                <b>{{localize "PTU.LevelCap"}}</b>
+                            </div>
                         </div>
-                        <div class="swsh-body d-flex align-items-center justify-content-center pt-1 pb-1">
-                            <input class="fb-40" name="system.friendship" style="flex-grow: 0;text-align: center;" type="number" value="{{actor.system.friendship}}" {{#unless (isGm)}}disabled{{/unless}}/>
+                        <div class="swsh-body d-flex align-items-center justify-content-between pt-1 pb-1 center-text">
+                            <div class="fb-48">
+                                <input name="system.friendship" type="number" value="{{actor.system.friendship}}" {{#unless (isGm)}}disabled{{/unless}}/>
+                            </div>
+                            <div class="fb-48">
+                                <input type="number" value="{{actor.attributes.level.cap}}" disabled/>
+                            </div>
                         </div>
                     </div>
                     <div class="swsh-box mb-2 w-100">

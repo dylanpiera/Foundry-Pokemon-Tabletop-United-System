@@ -1,8 +1,8 @@
 {
     "include": [
         "src/**/*.js",
-        "app/**/*.js",
-        "app/**/*.mjs",
-        "static/js/tagify"
+        "static/js/tagify",
+        "client/**/*",
+        "common/**/*",
     ]
 }
