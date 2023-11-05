@@ -32,7 +32,6 @@ export class ActionPointsRuleElement extends RuleElementPTU {
 
     afterPrepareData() {
         if(this.ignored) return;
-        super.afterPrepareData()
         this.actor.synthetics.apAdjustments.bound.push({"value": this.boundValue, "sourceUuid": this.item.uuid})
         this.actor.synthetics.apAdjustments.drained.push({"value": this.drainedValue, "sourceUuid": this.item.uuid})
     }
