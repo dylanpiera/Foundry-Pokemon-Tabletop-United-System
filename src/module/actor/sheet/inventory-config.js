@@ -20,6 +20,16 @@ class InventoryConfigSheet extends FormApplication {
 
 		// Setup Item Columns
         data.columns = this.object.actor.getFlag("ptu", "itemColumns");
+        const categories = new Set([...data.columns.available, ...data.columns.one, ...data.columns.two]);
+        const extraCategories = new Set();
+
+        for(const item of this.object.actor.itemTypes.item) {
+            const cat = item.system.category || "Misc";
+            if(categories.has(cat)) continue;
+            extraCategories.add(cat);
+        }
+        data.columns.available = [...data.columns.available, ...extraCategories];
+
         data.ballStyle = this.object.ballStyle;
 
 		return data;
