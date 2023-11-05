@@ -45,20 +45,25 @@ class PTUPartySheet extends FormApplication {
         data.boxed = this.boxed;
         data.available = this.available;
 
-        const averageLevelOfMons = monArray => (monArray.reduce((a, b) => (a.attributes.level.current ?? 0) + (b.attributes.level.current ?? 0)) / monArray.length).toFixed(1);
+        const averageLevelOfMons = monArray => (
+            monArray.reduce(
+                (a, b) => a + (b.attributes.level.current ?? 0),
+                0
+            ) / monArray.length
+        ).toFixed(1);
 
         data.partyApl = this.party?.length > 0 ? averageLevelOfMons(data.party) : undefined
-        data.boxedApl = this.boxed?.length > 0  ? averageLevelOfMons(data.boxed) : undefined
-        data.availableApl = this.available?.length > 0  ? averageLevelOfMons(data.available) : undefined
+        data.boxedApl = this.boxed?.length > 0 ? averageLevelOfMons(data.boxed) : undefined
+        data.availableApl = this.available?.length > 0 ? averageLevelOfMons(data.available) : undefined
 
         return data;
     }
 
     _prepare(actor, strict = true) {
         this.#setTrainer(actor, strict);
-        if(!this.trainer) return;
+        if (!this.trainer) return;
         this.#loadFolders(strict);
-        if(!this.folders) return;
+        if (!this.folders) return;
         this.#loadParty(strict);
         this.#loadBox(strict);
         this.#loadAvailable(strict);
@@ -113,7 +118,7 @@ class PTUPartySheet extends FormApplication {
         // Get available folders from the trainer's folder
         const folder = this.trainer.folder;
         if (!folder) {
-            if(strict) {
+            if (strict) {
                 ui.notifications.error("PTU.PartySheet.NoFolder", { localize: true });
                 throw new Error("PTU.PartySheet.NoFolder");
             }
