@@ -36,9 +36,9 @@ No copyright or trademark infringement is intended in using Pokémon content for
 
 [foundry-shield]: https://img.shields.io/badge/Foundry-v11.314-success
 [foundry-url]: https://foundryvtt.com/
-[forks-shield]: https://img.shields.io/github/forks/dylanpiera/Foundry-Pokemon-Tabletop-United-System.svg?style=flat-square
+[forks-shield]: https://img.shields.io/github/forks/dylanpiera/Foundry-Pokemon-Tabletop-United-System.svg
 [forks-url]: https://github.com/dylanpiera/Foundry-Pokemon-Tabletop-United-System/network/members
-[stars-shield]: https://img.shields.io/github/stars/dylanpiera/Foundry-Pokemon-Tabletop-United-System.svg?style=flat-square
+[stars-shield]: https://img.shields.io/github/stars/dylanpiera/Foundry-Pokemon-Tabletop-United-System.svg
 [stars-url]: https://github.com/dylanpiera/Foundry-Pokemon-Tabletop-United-System/stargazers
-[issues-shield]: https://img.shields.io/github/issues/dylanpiera/Foundry-Pokemon-Tabletop-United-System.svg?style=flat-square
+[issues-shield]: https://img.shields.io/github/issues/dylanpiera/Foundry-Pokemon-Tabletop-United-System.svg
 [issues-url]: https://github.com/dylanpiera/Foundry-Pokemon-Tabletop-United-System/issues
