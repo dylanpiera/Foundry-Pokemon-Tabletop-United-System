@@ -354,17 +354,13 @@ class PTUPokemonActor extends PTUActor {
 
     // TODO: Implement rules for capability changing items
     _calcCapabilities() {
-        const numericNonMovementCapabilities = CONFIG.PTU.Capabilities.numericNonMovement
-        const stringArrayCapabilities = CONFIG.PTU.Capabilities.stringArray
-
         const speciesCapabilities = duplicate(this.species?.system?.capabilities ?? {});
-        const finalCapabilities = {}
         if (!speciesCapabilities) return {};
 
-        // Anything that is not a part of numericNonMovementCapabilities or stringArrayCapabilities is considered
-        // movement, without explicitly listing them hardcoded.
-        const capsFromSpeciesOrModifiers = [].concat(Object.keys(this.system.modifiers.capabilities), Object.keys(speciesCapabilities))
-        const movementCapabilities = capsFromSpeciesOrModifiers.filter(cap => !stringArrayCapabilities.includes(cap) || !numericNonMovementCapabilities.includes(cap))
+        const finalCapabilities = {}
+        // Anything that is not a part of CONFIG.PTU.Capabilities.numericNonMovement or CONFIG.PTU.Capabilities.stringArray is considered movement, without explicitly listing them hardcoded.
+        const capsFromSpeciesOrModifiers = [...Object.keys(this.system.modifiers.capabilities), ...Object.keys(speciesCapabilities)]
+        const movementCapabilities = capsFromSpeciesOrModifiers.filter(cap => !CONFIG.PTU.Capabilities.stringArray.includes(cap) || !CONFIG.PTU.Capabilities.numericNonMovement.includes(cap))
 
         const speedCombatStages = this.system.stats.spd.stage.value + this.system.stats.spd.stage.mod;
         const spdCsChanges = speedCombatStages > 0 ? Math.floor(speedCombatStages / 2) : speedCombatStages < 0 ? Math.ceil(speedCombatStages / 2) : 0;
@@ -382,7 +378,7 @@ class PTUPokemonActor extends PTUActor {
             }
         }
 
-        for (const nonMoveCap of numericNonMovementCapabilities){
+        for (const nonMoveCap of CONFIG.PTU.Capabilities.numericNonMovement){
             // If the species got the capability naturally or through explicit modifiers
             if (this.system.modifiers.capabilities[nonMoveCap] || speciesCapabilities[nonMoveCap]){
                 const mod = this.system.modifiers?.capabilities[nonMoveCap] ? this.system.modifiers?.capabilities[nonMoveCap] : 0
@@ -391,7 +387,7 @@ class PTUPokemonActor extends PTUActor {
         }
 
         // TODO allow to add more naturewalks to an actor.
-        for (const arrayCap of stringArrayCapabilities){
+        for (const arrayCap of CONFIG.PTU.Capabilities.stringArray){
             finalCapabilities[arrayCap] = speciesCapabilities[arrayCap]
         }
 
