@@ -322,7 +322,7 @@ export class PTUCharacterSheet extends PTUActorSheet {
 			const value = parseInt(e.currentTarget.value);
 			if (isNaN(value)) return;
 			this.actor.update({
-				"system.ap.current": value
+				"system.ap.value": value
 			});
 		});
 

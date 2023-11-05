@@ -133,10 +133,10 @@
                                 <div class="swsh-body justify-content-center">
                                     <div class="w-100">
                                         <input type="range" class="w-75 ap-range" 
-                                            value="{{actor.system.ap.current}}" data-dtype="Integer" min="0" max="{{actor.system.ap.max}}" step="1" />
+                                            value="{{actor.system.ap.value}}" data-dtype="Integer" min="0" max="{{actor.system.ap.max}}" step="1" />
                                     </div>
                                     <div class="resource-content hp-info flexrow flex-group-right hp-info pt-1 pb-1">
-                                        <input type="number" name="system.ap.current input" value="{{actor.system.ap.current}}"/>
+                                        <input type="number" name="system.ap.value input" value="{{actor.system.ap.value}}"/>
                                         <span>/</span>
                                         <div class="fb-30">
                                             {{> "systems/ptu/static/templates/partials/mod-field.hbs"
