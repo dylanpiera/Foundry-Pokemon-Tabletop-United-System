@@ -538,10 +538,10 @@ class PTUActor extends Actor {
 
             const { health } = this.system;
 
-            const massiveDamageGate = Roll.safeEval(game.settings.get("ptu", "injuries.massiveDamageThresholdRollFormula"))
-            const maxHpInjuryGate = Roll.safeEval(game.settings.get("ptu", "injuries.hpInjuryGateIntervalRollFormula"))
+            const massiveDamageGatePercentage = game.settings.get("ptu", "injuries.massiveDamageThresholdPercent")
+            const maxHpInjuryIntervalPercentage = game.settings.get("ptu", "injuries.massiveDamageThresholdPercent")
 
-            if (hpDamage >= Math.floor(health.total * massiveDamageGate)) {
+            if (hpDamage >= Math.floor(health.total * massiveDamageGatePercentage / 100)) {
                 injuries++;
                 injuryStatements.push(game.i18n.format("PTU.ApplyDamage.MassiveDamageInjury", { actor: this.link }));
             }
@@ -556,13 +556,12 @@ class PTUActor extends Actor {
                 }
             }
             else {
-                // Every time a mon reaches a health threshhold, which is at 100% - injuryIntervalPercentage, 100% - 2*injuryIntervalPercentage, ...
+                // Every time a mon reaches a health threshhold, which is at 100% - maxHpInjuryIntervalPercentage, 100% - 2*maxHpInjuryIntervalPercentage, ...
                 // one Injury should be added to the count.
                 const currentPercentage = Math.floor((health.value / health.total) * 100);
                 const newPercentage = Math.floor(((health.value - hpDamage) / health.total) * 100);
-                const injuryIntervalPercentage = maxHpInjuryGate * 100
 
-                for (let i = 100 - injuryIntervalPercentage; true; i -= injuryIntervalPercentage) {
+                for (let i = 100 - maxHpInjuryIntervalPercentage; true; i -= maxHpInjuryIntervalPercentage) {
                     if (i > currentPercentage) continue;
 
                     if (currentPercentage > i && i >= newPercentage) {
@@ -1138,7 +1137,7 @@ class PTUActor extends Actor {
 
             const preTargets = params.targets?.length > 0 ? params.targets : [...game.user.targets];
             const targets = [];
-            const outcomes = {};
+            let outcomes = {};
             if (preTargets.length > 0 && !(preTargets[0] instanceof PTUActor)) {
                 for (const target of preTargets) {
                     if (!target.token?.object) continue;

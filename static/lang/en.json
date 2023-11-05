@@ -766,12 +766,12 @@
         "Hint": "Set custom thresholds for when Injuries should be applied.",
         "InvalidInput": "At least one field is not properly set.",
         "MassiveDamageThreshold": {
-          "Name": "Massive Damage",
-          "Hint": "What fraction of max HP counts as Massive Damage for Injuries. Takes decimals and fractions. Must not be 0. Set to 100 to disable massive Damage. 50% can be written as `0.5` or `1/2`."
+          "Name": "Massive Damage (%)",
+          "Hint": "The % of max HP resulting in an Injury from Massive Damage. (A huge percentage like 10000 practically disables Injuries from this source)"
         },
         "HpInjuryGateInterval": {
-          "Name": "Injury HP Interval",
-          "Hint": "Down from max HP, every interval of fraction max HP causes an Injury. Takes decimals and fractions. Must not be 0. Set to 100 to disable massive Damage. 50% can be written as `0.5` or `1/2`."
+          "Name": "Injury HP Interval (%)",
+          "Hint": "Down from 100% max HP, reaching every interval of this percentage causes an injury. E.g. 50% => 50%, 0%, -50%, ... (A huge percentage like 10000 practically disables Injuries from this source)"
         }
       },
       "Variant": {
