@@ -537,12 +537,12 @@ class PTUActor extends Actor {
             let injuries = 0;
             const injuryStatements = [];
 
-            const { health } = this.system;
+            const { health, tempHp } = this.system;
 
             const massiveDamageGatePercentage = game.settings.get("ptu", "automation.massiveDamageThresholdPercent")
             const maxHpInjuryIntervalPercentage = game.settings.get("ptu", "automation.hpInjuryGateIntervalPercent")
 
-            if (hpDamage >= Math.floor(health.total * massiveDamageGatePercentage / 100)) {
+            if (hpDamage >= Math.ceil(health.total * massiveDamageGatePercentage / 100)) {
                 injuries++;
                 injuryStatements.push(game.i18n.format("PTU.ApplyDamage.MassiveDamageInjury", { actor: this.link }));
             }
@@ -559,8 +559,8 @@ class PTUActor extends Actor {
             else {
                 // Every time a mon reaches a health threshhold, which is at 100% - maxHpInjuryIntervalPercentage, 100% - 2*maxHpInjuryIntervalPercentage, ...
                 // one Injury should be added to the count.
-                const currentPercentage = Math.floor((health.value / health.total) * 100);
-                const newPercentage = Math.floor(((health.value - hpDamage) / health.total) * 100);
+                const currentPercentage = Math.ceil((health.value / health.total) * 100);
+                const newPercentage = Math.ceil((((tempHp?.value ?? 0) + health.value - hpDamage) / health.total) * 100);
 
                 for (let i = 100 - maxHpInjuryIntervalPercentage; true; i -= maxHpInjuryIntervalPercentage) {
                     if (i > currentPercentage) continue;
