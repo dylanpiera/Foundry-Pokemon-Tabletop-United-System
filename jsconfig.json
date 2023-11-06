@@ -1,0 +1,8 @@
+{
+    "include": [
+        "src/**/*.js",
+        "static/js/tagify",
+        "client/**/*",
+        "common/**/*",
+    ]
+}

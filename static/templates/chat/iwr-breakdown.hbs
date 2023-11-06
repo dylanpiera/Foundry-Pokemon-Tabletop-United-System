@@ -1,0 +1,7 @@
+<ul>
+    {{#each applications as |application|}}
+        <li>
+            {{application.type}}: {{#if application.adjustment}}{{application.adjustment}}{{else}}x{{application.modifier}}{{/if}}
+        </li>
+    {{/each}}
+</ul>

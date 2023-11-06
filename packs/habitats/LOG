@@ -1,0 +1,7 @@
+2023/11/06-12:17:57.384 6d34 Recovering log #576
+2023/11/06-12:17:57.388 6d34 Delete type=0 #576
+2023/11/06-12:17:57.388 6d34 Delete type=3 #574
+2023/11/06-12:19:30.543 6d70 Level-0 table #581: started
+2023/11/06-12:19:30.543 6d70 Level-0 table #581: 0 bytes OK
+2023/11/06-12:19:30.544 6d70 Delete type=0 #579
+2023/11/06-12:19:30.550 6d70 Manual compaction at level-0 from '!tables!0DJQye8xDvA2tYYY' @ 72057594037927935 : 1 .. '!tables.results!yedzrd0JurrPv9Me.zKvMuUG3hHYIyZQp' @ 0 : 0; will stop at (end)

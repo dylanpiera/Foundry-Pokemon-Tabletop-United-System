@@ -1,0 +1,94 @@
+<div class="form-group">
+    <label class="short">{{localize "PTU.RuleEditor.General.Modes.Label"}}</label>
+    <div class="attached-input">
+        {{#select rule.mode}}
+        <select name="system.rules.{{index}}.mode">
+            <option value="add">{{localize "PTU.RuleEditor.General.Modes.Add"}}</option>
+            <option value="subtract">{{localize "PTU.RuleEditor.General.Modes.Subtract"}}</option>
+            <option value="remove">{{localize "PTU.RuleEditor.General.Modes.Remove"}}</option>
+            <option value="multiply">{{localize "PTU.RuleEditor.General.Modes.Multiply"}}</option>
+            <option value="downgrade">{{localize "PTU.RuleEditor.General.Modes.Downgrade"}}</option>
+            <option value="upgrade">{{localize "PTU.RuleEditor.General.Modes.Upgrade"}}</option>
+            <option value="override">{{localize "PTU.RuleEditor.General.Modes.Override"}}</option>
+        </select>
+        {{/select}}
+    </div>
+</div>
+
+<div class="form-group">
+    <label class="short">{{localize "PTU.RuleEditor.General.Path"}}</label>
+    <div class="attached-input">
+        <input class="ae-like-path" type="text" name="system.rules.{{index}}.path" value="{{rule.path}}"/>
+    </div>
+</div>
+
+<div class="form-group">
+    <label class="short">{{localize "PTU.RuleEditor.General.Phases.Label"}}</label>
+    <div class="attached-input">
+        {{#select rule.phase}}
+        <select name="system.rules.{{index}}.phase">
+            <option value="applyAEs">{{localize "PTU.RuleEditor.General.Phases.ApplyAEs"}}</option>
+            <option value="beforeDerived">{{localize "PTU.RuleEditor.General.Phases.BeforeDerived"}}</option>
+            <option value="afterDerived">{{localize "PTU.RuleEditor.General.Phases.AfterDerived"}}</option>
+            <option value="beforeRoll">{{localize "PTU.RuleEditor.General.Phases.BeforeRoll"}}</option>
+        </select>
+        {{/select}}
+    </div>
+</div>
+
+<div class="form-group">
+    <label class="short">{{localize "PTU.RuleEditor.General.Value"}}</label>
+    <div class="spaced-fields details-container-flex-row">
+        {{#if (eq value.mode "primitive")}}
+            <div class="attached-input">
+                <button type="button" class="attachment" data-action="toggle-brackets">
+                    {{localize "PTU.RuleEditor.General.Primitive"}}
+                </button>
+                <input type="text" name="system.rules.{{index}}.value" value="{{rule.value}}"/>
+            </div>
+        {{else if (eq value.mode "brackets")}}
+            <div class="attached-input">
+                <button type="button" class="attachment" data-action="toggle-brackets">
+                    {{localize "PTU.RuleEditor.General.Brackets"}}
+                </button>
+                <input type="text" name="system.rules.{{index}}.value.field" value="{{rule.value.field}}" placeholder="Actor Level (Default)"/>
+            </div>
+        {{/if}}
+
+        {{#if (eq value.mode "brackets")}}
+            <a data-action="bracket-add"><i class="fas fa-fw fa-plus"></i></a>
+        {{/if}}
+    </div>
+</div>
+
+{{#if (eq value.mode "brackets")}}
+    <div class="brackets">
+        {{#each rule.value.brackets as |bracket idx|}}
+            <div class="bracket details-container-flex-row spaced-fields">
+                <label>{{localize "PTU.RuleEditor.General.Range"}}</label>
+                <div class="range">
+                    <input type="number" name="system.rules.{{@root.index}}.value.brackets.{{idx}}.start" value="{{bracket.start}}">
+                    -
+                    <input type="number" name="system.rules.{{@root.index}}.value.brackets.{{idx}}.end" value="{{bracket.end}}">
+                </div>
+                <label>{{localize "PTU.RuleEditor.General.Value"}}</label>
+                <input type="text" name="system.rules.{{@root.index}}.value.brackets.{{idx}}.value" value="{{bracket.value}}"/>
+                <a data-action="bracket-delete" data-idx="{{idx}}"><i class="fas fa-fw fa-trash"></i></a>
+            </div>
+        {{/each}}
+    </div>
+{{/if}}
+
+<div class="form-group">
+    <label class="short">{{localize "PTU.RuleEditor.General.Predicate"}}</label>
+    <div class="attached-input">
+        <button type="button" class="attachment" data-action="toggle-predicate">
+            {{#if predicationIsMultiple}}Multiple{{else}}Complex{{/if}}
+        </button>
+        {{#if predicationIsMultiple}}
+            <input type="text" class="ptu-tagify predicate-list" name="system.rules.{{index}}.predicate" value="{{json rule.predicate}}" data-dtype="JSON"/>
+        {{else}}
+            <input type="text" name="system.rules.{{index}}.predicate" value="{{json rule.predicate}}" />
+        {{/if}}
+    </div>
+</div>

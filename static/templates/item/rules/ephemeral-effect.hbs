@@ -1,0 +1,54 @@
+<div class="form-group">
+    <label class="short">{{localize "PTU.RuleEditor.General.Affects"}}</label>
+    <div class="d-flex flex-row justify-content-evenly">
+        <label class="">
+            {{localize "PTU.RuleEditor.General.Target"}}
+            <input type="radio" name="system.rules.{{index}}.affects" value="target" {{#if (is rule.affects "target")}}checked{{/if}}>
+        </label>
+        <label class="">
+            {{localize "PTU.RuleEditor.General.Origin"}}
+            <input type="radio" name="system.rules.{{index}}.affects" value="origin" {{#if (is rule.affects "origin")}}checked{{/if}}>
+        </label>
+    </div>
+</div>
+
+<div class="form-group">
+    <label class="short">{{localize "PTU.RuleEditor.General.Selectors"}}</label>
+    <div class="attached-input">
+        <button type="button" class="attachment" data-action="toggle-selector">
+            {{#if selectorIsArray}}Multiple{{else}}Single{{/if}}
+        </button>
+        {{#if selectorIsArray}}
+            <input type="text" class="ptu-tagify selectors-list" name="system.rules.{{index}}.selectors" value="{{json rule.selectors}}" data-dtype="JSON"/>
+        {{else}}
+            <input type="text" name="system.rules.{{index}}.selectors" value="{{rule.selectors}}" />
+        {{/if}}
+    </div>
+</div>
+
+<div class="form-group">
+    <label class="short">{{localize "PTU.RuleEditor.General.UUID"}}</label>
+    <div class="d-flex flex-row">
+        <input type="text" name="system.rules.{{index}}.uuid" value="{{rule.uuid}}" />
+        {{#if granted}}
+            <a class="granted content-link ml-1" data-uuid="{{granted.uuid}}">
+                <img src="{{granted.img}}"/>
+                {{granted.name}}
+            </a>
+        {{/if}}
+    </div>
+</div>
+
+<div class="form-group">
+    <label class="short">{{localize "PTU.RuleEditor.General.Predicate"}}</label>
+    <div class="attached-input">
+        <button type="button" class="attachment" data-action="toggle-predicate">
+            {{#if predicationIsMultiple}}Multiple{{else}}Complex{{/if}}
+        </button>
+        {{#if predicationIsMultiple}}
+            <input type="text" class="ptu-tagify predicate-list" name="system.rules.{{index}}.predicate" value="{{json rule.predicate}}" data-dtype="JSON"/>
+        {{else}}
+            <input type="text" name="system.rules.{{index}}.predicate" value="{{json rule.predicate}}" />
+        {{/if}}
+    </div>
+</div>

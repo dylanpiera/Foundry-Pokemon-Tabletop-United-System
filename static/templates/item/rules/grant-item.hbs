@@ -1,0 +1,40 @@
+<div class="d-flex flex-row justify-content-between">
+    <label class="fill">
+        {{localize "PTU.RuleEditor.GrantItem.AllowDuplicate"}}
+        <input type="checkbox" name="system.rules.{{index}}.allowDuplicate" {{checked allowDuplicate}}>
+    </label>
+    <label class="fill">
+        {{localize "PTU.RuleEditor.GrantItem.ReplaceSelf"}}
+        <input type="checkbox" name="system.rules.{{index}}.replaceSelf" {{checked rule.replaceSelf}}>
+    </label>
+    <label class="fill">
+        {{localize "PTU.RuleEditor.GrantItem.ReevaluateOnUpdate"}}
+        <input type="checkbox" name="system.rules.{{index}}.reevaluateOnUpdate" {{checked rule.reevaluateOnUpdate}}>
+    </label>
+</div>
+<div class="form-group">
+    <label class="short">{{localize "PTU.RuleEditor.General.UUID"}}</label>
+    <div class="d-flex flex-row">
+        <input type="text" name="system.rules.{{index}}.uuid" value="{{rule.uuid}}" />
+        {{#if granted}}
+            <a class="granted content-link ml-1" data-uuid="{{granted.uuid}}">
+                <img src="{{granted.img}}"/>
+                {{granted.name}}
+            </a>
+        {{/if}}
+    </div>
+
+</div>
+<div class="form-group">
+    <label class="short">{{localize "PTU.RuleEditor.General.Predicate"}}</label>
+    <div class="attached-input">
+        <button type="button" class="attachment" data-action="toggle-predicate">
+            {{#if predicationIsMultiple}}Multiple{{else}}Complex{{/if}}
+        </button>
+        {{#if predicationIsMultiple}}
+            <input type="text" class="ptu-tagify predicate-list" name="system.rules.{{index}}.predicate" value="{{json rule.predicate}}" data-dtype="JSON"/>
+        {{else}}
+            <input type="text" name="system.rules.{{index}}.predicate" value="{{json rule.predicate}}" />
+        {{/if}}
+    </div>
+</div>

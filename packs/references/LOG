@@ -1,0 +1,8 @@
+2023/11/06-12:17:57.442 85dc Recovering log #317
+2023/11/06-12:17:57.446 85dc Delete type=0 #317
+2023/11/06-12:17:57.447 85dc Delete type=3 #315
+2023/11/06-12:19:30.558 6d70 Level-0 table #322: started
+2023/11/06-12:19:30.558 6d70 Level-0 table #322: 0 bytes OK
+2023/11/06-12:19:30.560 6d70 Delete type=0 #320
+2023/11/06-12:19:30.562 6d70 Manual compaction at level-0 from '!items!0EVKSbyPCs2XLT8d' @ 72057594037927935 : 1 .. '!items!zFN2psnsbSBIeGrm' @ 0 : 0; will stop at (end)
+2023/11/06-12:19:30.562 6d70 Manual compaction at level-1 from '!items!0EVKSbyPCs2XLT8d' @ 72057594037927935 : 1 .. '!items!zFN2psnsbSBIeGrm' @ 0 : 0; will stop at (end)

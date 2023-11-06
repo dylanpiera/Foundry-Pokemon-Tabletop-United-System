@@ -1,0 +1,57 @@
+
+<div class="details">
+    <div class="item uuid">
+        <label>UUID</label>
+        <input class="ml-1 mr-1" type="text" value="{{item.uuid}}" disabled/>
+        <div class="item-controls">
+            <a class="item-control sluggify" title="Copy to clipboard" data-clipboard="{{item.uuid}}"><i class="fas fa-clipboard"></i></a>
+        </div>
+    </div>
+    {{#if item.sourceId}}
+        <div class="item sourceId">
+            <label>Source ID</label>
+            <input class="ml-1 mr-1" type="text" value="{{item.sourceId}}" disabled/>
+            <div class="item-controls">
+                <a class="item-control sluggify" title="Copy to clipboard" data-clipboard="{{item.sourceId}}"><i class="fas fa-clipboard"></i></a>
+            </div>
+        </div>
+    {{/if}}
+    <div class="item source">
+        <label>Source</label>
+        <input class="ml-1 mr-1" type="text" name="system.source.value" value="{{item.system.source.value}}"/>
+        <div class="item-controls"></div>
+    </div>
+    <div class="item slug">
+        <label for="system.slug">Slug</label>
+        <input class="ml-1 mr-1" name="system.slug" type="text" value="{{item.system.slug}}"/>
+        <div class="item-controls">
+            <a class="item-control sluggify" data-action="regenerate-slug" title="(Re)generate Slug"><i class="fas fa-sync-alt"></i></a>
+        </div>
+    </div>
+</div>
+<div class="rules-list">
+    {{#each rules.elements}}
+        <div class="rule-element">
+            <div class="rule-header">
+                <h3>{{localize (concat "RULES.Types." rule.key)}}</h3>
+                <div class="item-controls">
+                    <a class="item-control remove-rule-element" data-rule-index="{{index}}" title="Delete Rule"><i class="fas fa-trash"></i></a>
+                </div>
+            </div>
+            <div class="rule-body" data-key="{{rule.key}}" data-idx="{{index}}">
+                {{{template}}}
+            </div>
+        </div>
+        <hr />
+    {{/each}}
+    <div class="create-rule-element">
+        <select data-action="select-rule-element">
+            {{#select rules.selection.selected}}
+                {{#each rules.selection.types as |value key|}}
+                    <option value="{{key}}">{{localize value}}</option>
+                {{/each}}
+            {{/select}}
+        </select>
+        <a class="add-rule-element"><i class="fas fa-plus"></i> {{localize "ITEM.AddRulesButton"}}</a>
+    </div>
+</div>
