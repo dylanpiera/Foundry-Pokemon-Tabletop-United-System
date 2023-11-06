@@ -540,7 +540,7 @@ class PTUActor extends Actor {
             const { health } = this.system;
 
             const massiveDamageGatePercentage = game.settings.get("ptu", "automation.massiveDamageThresholdPercent")
-            const maxHpInjuryIntervalPercentage = game.settings.get("ptu", "automation.massiveDamageThresholdPercent")
+            const maxHpInjuryIntervalPercentage = game.settings.get("ptu", "automation.hpInjuryGateIntervalPercent")
 
             if (hpDamage >= Math.floor(health.total * massiveDamageGatePercentage / 100)) {
                 injuries++;
