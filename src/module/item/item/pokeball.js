@@ -62,8 +62,8 @@ class PokeballItem extends PTUItemItem {
             params.options ??= [];
 
             const target = params.target ?? game.user.targets.first();
-            if(!target?.actor) return ui.notifications.warn("PTU.Action.CaptureNoTarget", { localize: true })
-            if(target.actor.type === "character") return ui.notifications.warn("PTU.Action.CaptureWrongTarget", { localize: true })
+            if (!target?.actor) return ui.notifications.warn("PTU.Action.CaptureNoTarget", { localize: true })
+            if (target.actor.type === "character") return ui.notifications.warn("PTU.Action.CaptureWrongTarget", { localize: true })
 
             const context = await this.actor.getCheckContext({
                 item: this,
@@ -105,7 +105,7 @@ class PokeballItem extends PTUItemItem {
                 type: "capture-throw",
                 actor: context.self.actor,
                 token: context.self.token,
-                targets: [{...context.target, dc: params.dc ?? context.dc, options: context.options ?? []}],
+                targets: [{ ...context.target, dc: params.dc ?? context.dc, options: context.options ?? [] }],
                 item: context.self.item,
                 domains: selectors,
                 options: context.options,
@@ -146,8 +146,8 @@ class PokeballItem extends PTUItemItem {
             params.options ??= [];
 
             const target = params.target ?? game.user.targets.first();
-            if(!target?.actor) return ui.notifications.warn("PTU.Action.CaptureNoTarget", { localize: true })
-            if(target.actor.type === "character") return ui.notifications.warn("PTU.Action.CaptureWrongTarget", { localize: true })
+            if (!target?.actor) return ui.notifications.warn("PTU.Action.CaptureNoTarget", { localize: true })
+            if (target.actor.type === "character") return ui.notifications.warn("PTU.Action.CaptureWrongTarget", { localize: true })
 
             const context = await this.actor.getCheckContext({
                 item: this,
@@ -161,12 +161,11 @@ class PokeballItem extends PTUItemItem {
             const DCModifiers = [];
             // Capture DC mods
             {
-                const levelMod = (-(target.actor.system?.level?.current ?? 0) * 2);
                 // Level mods
                 DCModifiers.push(new PTUModifier({
                     slug: "level-modifier",
                     label: "Level Modifier",
-                    modifier: game.settings.get("ptu", "variant.trainerRevamp") ? levelMod * 2 : levelMod
+                    modifier: (-(target.actor.system?.level?.current ?? 0) * 2)
                 }));
 
                 // HP mods
@@ -193,19 +192,19 @@ class PokeballItem extends PTUItemItem {
                 // If 1 remaining add +5
                 // If 0 remaining add +0
                 const evolutions = target.actor.species?.system?.evolutions ?? [];
-                if(evolutions.length > 1) {
+                if (evolutions.length > 1) {
                     const currentEvolution = evolutions.find(e => e.slug == target.actor.species.slug);
                     const remaining = new Set(evolutions.filter(e => e.level > currentEvolution.level).map(x => x.level)).size;
                     const stage = (() => {
-                        const stage =new Set(evolutions.map(x => x.level)).size - remaining;
-                        switch(stage) {
+                        const stage = new Set(evolutions.map(x => x.level)).size - remaining;
+                        switch (stage) {
                             case 1: return "1st Stage";
                             case 2: return "2nd Stage";
                             case 3: return "3rd Stage";
                             default: return `${stage}th Stage`
                         }
                     })();
-                    if(remaining > 0) {
+                    if (remaining > 0) {
                         DCModifiers.push(new PTUModifier({
                             slug: "evolution-stage-modifier",
                             label: stage,
@@ -216,17 +215,17 @@ class PokeballItem extends PTUItemItem {
 
                 // Rarity mods
                 // If shiny subtract 10
-                if(target.actor.system?.shiny) {
+                if (target.actor.system?.shiny) {
                     DCModifiers.push(new PTUModifier({
                         slug: "shiny-modifier",
                         label: "Shiny Modifier",
                         modifier: -10
                     }));
                 }
-                
+
                 // If legendary subtract 30
                 // TODO: Add legendary property on pokemon actors
-                if(target.actor.legendary) {
+                if (target.actor.legendary) {
                     DCModifiers.push(new PTUModifier({
                         slug: "legendary-modifier",
                         label: "Legendary Modifier",
@@ -238,8 +237,8 @@ class PokeballItem extends PTUItemItem {
                 // For each persistent condition add +15
                 // For each other condition add +8
                 const conditions = target.actor.conditions;
-                for(const condition of conditions?.contents) {
-                    if(condition.persistent) {
+                for (const condition of conditions?.contents) {
+                    if (condition.persistent) {
                         DCModifiers.push(new PTUModifier({
                             slug: condition.slug,
                             label: `${condition.name} (persistent condition)`,
@@ -258,7 +257,7 @@ class PokeballItem extends PTUItemItem {
                 // Injury mods
                 // For each injury add +5
                 const injuries = target.actor.system.health?.injuries;
-                if(injuries) {
+                if (injuries) {
                     DCModifiers.push(new PTUModifier({
                         slug: "injury-modifier",
                         label: "Injury Modifier",
@@ -269,8 +268,8 @@ class PokeballItem extends PTUItemItem {
                 // Stage mods
                 // For each combat stage in a stat below 0 add +2 to the capture DC
                 // For each combat stage in a stat above 0 add -2 to the capture DC
-                for(const stat of Object.values(target.actor.system.stats)) {
-                    if(stat.stage?.total < 0) {
+                for (const stat of Object.values(target.actor.system.stats)) {
+                    if (stat.stage?.total < 0) {
                         DCModifiers.push(new PTUModifier({
                             slug: stat.slug,
                             label: `${stat.label} Stage Modifier`,
@@ -288,7 +287,7 @@ class PokeballItem extends PTUItemItem {
             }
 
             DCModifiers.push(
-                ...extractModifiers(target.actor.synthetics, ["capture-dc", ...selectors], { injectables: this , test: context.options})
+                ...extractModifiers(target.actor.synthetics, ["capture-dc", ...selectors], { injectables: this, test: context.options })
             )
 
             const DCCheck = new CheckModifier(
@@ -304,7 +303,7 @@ class PokeballItem extends PTUItemItem {
                 rollModifiers.push(new PTUModifier({
                     slug: "level-modifier",
                     label: "Level Modifier",
-                    modifier: -this.actor.system.level.current
+                    modifier: (game.settings.get("ptu", "variant.trainerRevamp") ? 2 : 1) * -this.actor.system.level.current
                 }));
 
                 // Item mods
@@ -323,7 +322,7 @@ class PokeballItem extends PTUItemItem {
                 type: "capture-calculation",
                 actor: context.self.actor,
                 token: context.self.token,
-                targets: [{...context.target, dc: {slug: 'capture-dc', value: 100 + DCCheck.totalModifier}, options: context.options ?? []}],
+                targets: [{ ...context.target, dc: { slug: 'capture-dc', value: 100 + DCCheck.totalModifier }, options: context.options ?? [] }],
                 item: context.self.item,
                 domains: selectors,
                 options: context.options,
@@ -354,7 +353,7 @@ class PokeballItem extends PTUItemItem {
 
             return roll;
             //DC Calculation
-            
+
             // Roll calc
             // Roll 1d100
             // on nat 100 succeed
@@ -377,7 +376,7 @@ class PokeballItem extends PTUItemItem {
     async requestGmRoll(event, args) {
         //TODO
 
-        if(true) return this.rollCapture(event, args);
+        if (true) return this.rollCapture(event, args);
     }
 
     async rollCapture(event, args) {
@@ -388,7 +387,7 @@ class PokeballItem extends PTUItemItem {
     async applyCapture(args) {
         const trainers = game.users.contents.map(c => c.character).filter(c => c?.type === "character");
         // If the trainer is not in the list, add them to the front
-        if(!trainers.includes(this.actor)) trainers.unshift(this.actor);
+        if (!trainers.includes(this.actor)) trainers.unshift(this.actor);
         // If the current trainer is in the list, add them to the front
         else trainers.unshift(trainers.splice(trainers.indexOf(this.actor), 1)[0]);
 
@@ -407,17 +406,17 @@ class PokeballItem extends PTUItemItem {
                             obj[name] = value;
                             return obj;
                         }, {});
-                        
-                        const trainer = game.actors.get(formData.trainer);
-                        if(!trainer) return ui.notifications.error("PTU.Dialog.CaptureSuccess.TrainerNotFound", { localize: true });
 
-                        const party = new PTUPartySheet({actor: trainer});
+                        const trainer = game.actors.get(formData.trainer);
+                        if (!trainer) return ui.notifications.error("PTU.Dialog.CaptureSuccess.TrainerNotFound", { localize: true });
+
+                        const party = new PTUPartySheet({ actor: trainer });
 
                         const location = formData.location;
-                        if(!["party", "box", "available"].includes(location)) return ui.notifications.error("PTU.Dialog.CaptureSuccess.LocationNotFound", { localize: true });
+                        if (!["party", "box", "available"].includes(location)) return ui.notifications.error("PTU.Dialog.CaptureSuccess.LocationNotFound", { localize: true });
 
                         const pokemon = await fromUuid(args.targets[0].actor);
-                        if(!pokemon) return ui.notifications.error("PTU.Dialog.CaptureSuccess.PokemonNotFound", { localize: true });
+                        if (!pokemon) return ui.notifications.error("PTU.Dialog.CaptureSuccess.PokemonNotFound", { localize: true });
 
                         const user = game.users.find(u => u.character?.id === trainer.id);
 
@@ -429,7 +428,7 @@ class PokeballItem extends PTUItemItem {
                             },
                             "system.pokeball": this.name
                         }
-                        if(location !== "available") {
+                        if (location !== "available") {
                             pokemonUpdateData["flags.ptu.party"] = {
                                 trainer: trainer.id,
                                 boxed: location === "box",
@@ -450,7 +449,7 @@ class PokeballItem extends PTUItemItem {
 
                         await Actor.updateDocuments([pokemonUpdateData, trainerUpdateData]);
                         await ChatMessage.create({
-                            content: `<span class="statements">${await TextEditor.enrichHTML(game.i18n.format("PTU.Dialog.CaptureSuccess.ChatMessage", { pokemon: pokemon.link, trainer: trainer.link, location: (party.folders?.[location === "available" ? "root" : location]?.link ?? location) }), {async: true})}</span>`,
+                            content: `<span class="statements">${await TextEditor.enrichHTML(game.i18n.format("PTU.Dialog.CaptureSuccess.ChatMessage", { pokemon: pokemon.link, trainer: trainer.link, location: (party.folders?.[location === "available" ? "root" : location]?.link ?? location) }), { async: true })}</span>`,
                             speaker: ChatMessage.getSpeaker({ actor: trainer }),
                         })
                     }
