@@ -22,7 +22,7 @@ class PTUPokemonActor extends PTUActor {
     }
 
     get allowedItemTypes() {
-        return ["species", "pokeedge", "move", "contestmove", "ability", "capability", "effect", "condition", "spiritaction"]
+        return ["species", "pokeedge", "move", "contestmove", "ability", "capability", "effect", "condition", "spiritaction", "item"]
     }
 
     get nature() {

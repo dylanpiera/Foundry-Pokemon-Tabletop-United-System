@@ -1432,6 +1432,9 @@ class PTUActor extends Actor {
         if (itemOptions.includes("move:target:sky") && targetRollOptions.includes("target:location:sky")) {
             options["ignore+Z"] = true;
         }
+        if (itemOptions.some(option => option.startsWith("move:range:burst"))) {
+            options["burst"] = true;
+        }
 
         const isFlanked = targetToken.isFlanked();
         if (isFlanked && !targetRollOptions.includes("target:immune:flanked")) {

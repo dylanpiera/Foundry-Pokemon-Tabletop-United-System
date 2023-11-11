@@ -63,7 +63,8 @@
     "TypeSpiritActionPlural": "Spirit Actions",
     "Modifier": "Modifier",
     "ShowInTokenPanel": "Show in Token Panel",
-    "Dice": "Base Dice"
+    "Dice": "Base Dice",
+    "Snippet": "Effect Snippet"
   },
 
   "SPECIES.Height": "Height",
@@ -155,7 +156,7 @@
       "pokemonEd": "Pokémon Education",
       "techEd": "Technology Education"
     },
-    "Title": "Pokémon Tabletop United",
+    "Title": "Pokémon Tabletop Reunited",
 
     "TabsSkills": "Skills",
     "TabsInventory": "Inventory",
@@ -236,6 +237,7 @@
     "SaveCheckAction": "Make Save",
 
     "ItemEffect": "Item Effect",
+    "HeldItems": "Held Items",
     "FoodBuff": "Food Buff",
     "HpGuidelines": "HP Guidelines",
     "16th": "1/16th",

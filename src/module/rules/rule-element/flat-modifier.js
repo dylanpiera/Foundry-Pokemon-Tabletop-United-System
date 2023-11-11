@@ -38,7 +38,7 @@ class FlatModifierRuleElement extends RuleElementPTU {
 
         for(const selector of selectors) {
             const construct = (options = {}) => {
-                if(this.ignored) return null;
+                // if(this.ignored) return null;
                 const resolvedValue = Number(this.resolveValue(this.value, 0, options)) || 0;
                 const finalValue = Math.clamped(resolvedValue, this.min ?? resolvedValue, this.max ?? resolvedValue);
 

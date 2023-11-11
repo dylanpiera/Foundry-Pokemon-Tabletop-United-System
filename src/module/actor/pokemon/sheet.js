@@ -109,6 +109,7 @@ export class PTUPokemonSheet extends PTUActorSheet {
 		// Initialize containers.
 		const abilities = [];
 		const capabilities = [];
+		const items = [];
 		const edges = [];
 		const effects = [];
 		const conditions = this.actor.conditions;
@@ -139,6 +140,9 @@ export class PTUPokemonSheet extends PTUActorSheet {
 				case 'spiritaction':
 					spiritactions.push(i);
 					break;
+				case 'item':
+					items.push(i);
+					break;
 			}
 		}
 
@@ -150,6 +154,7 @@ export class PTUPokemonSheet extends PTUActorSheet {
 		sheetData.conditions = conditions;
 		sheetData.contestmoves = contestmoves;
 		sheetData.spiritactions = spiritactions;
+		sheetData.items = items;
 
 		sheetData.actions = await (async () => {
 			const moves = [];

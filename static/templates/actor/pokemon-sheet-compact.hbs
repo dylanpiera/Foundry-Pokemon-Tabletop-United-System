@@ -749,6 +749,18 @@
                             </div>
                             {{/if}}
                         </div>
+
+                        <!-- Items -->
+                        <div class="swsh-box mb-2 w-100">
+                            <div
+                                class="swsh-header ball-themes {{ballStyle}} highlight pt-2 pb-2 center-text justify-content-center">
+                                <b>{{localize "PTU.HeldItems"}}</b>
+                            </div>
+                            <div class="swsh-body w-100" style="display: block;">
+                                {{> "systems/ptu/static/templates/partials/item-display-partial.hbs" title=(localize
+                                "ITEM.TypeItemPlural") type="item" items=items ballStyle=ballStyle}}
+                            </div>
+                        </div>
                     </div>
                 </div>
 

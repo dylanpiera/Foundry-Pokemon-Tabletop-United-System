@@ -51,9 +51,10 @@ export function sluggify(text, { camel } = { camel: null }) {
     throw new Error(`I'm pretty sure that's not a real camel: ${camel}`);
 }
 
-export async function findItemInCompendium({ type, name }) {
-    if(!type || !name) return undefined;
+export async function findItemInCompendium({ type, name, compendium }) {
+    if (!type || !name) return undefined;
     const pack = (() => {
+        if (game.packs.get(compendium)) return game.packs.get(compendium);
         switch (type) {
             case "move": return game.packs.get("ptu.moves");
             case "ability": return game.packs.get("ptu.abilities");
@@ -105,7 +106,7 @@ export function isTokenUUID(uuid) {
     return typeof uuid === "string" && /^Scene\.[A-Za-z0-9]{16}\.Token\.[A-Za-z0-9]{16}$/.test(uuid);
 }
 
-export function sortStringRecord(record){
+export function sortStringRecord(record) {
     return Object.fromEntries(
         Object.entries(record)
             .map((entry) => {
@@ -122,16 +123,16 @@ export function sortStringRecord(record){
  * @param type The type of the item required for name search
  * @param item Original item to derrive search params from
  */
-export async function getItemFromCompendium({uuid, name, type, item}) {
+export async function getItemFromCompendium({ uuid, name, type, item }) {
     let found = null;
     if (uuid) {
         found = await fromUuid(uuid);
     }
-    if(!found && name && type) {
-        found = await findItemInCompendium({name, type});
+    if (!found && name && type) {
+        found = await findItemInCompendium({ name, type });
     }
-    if(!found && item) {
-        found = await getItemFromCompendium({uuid: item.flags?.core?.sourceId, name: item.name, type: item.type});
+    if (!found && item) {
+        found = await getItemFromCompendium({ uuid: item.flags?.core?.sourceId, name: item.name, type: item.type });
     }
     return found;
 }

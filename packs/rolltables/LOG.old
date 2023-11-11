@@ -1,5 +1,5 @@
-2023/11/06-11:14:10.125577 7faaed672640 Delete type=3 #1
-2023/11/06-11:14:19.396729 7faaeac6e640 Level-0 table #5: started
-2023/11/06-11:14:19.398473 7faaeac6e640 Level-0 table #5: 68952 bytes OK
-2023/11/06-11:14:19.398936 7faaeac6e640 Delete type=0 #3
-2023/11/06-11:14:19.399080 7faaeac6e640 Manual compaction at level-0 from '!folders!KdbYHm255fVoO8XG' @ 72057594037927935 : 1 .. '!tables.results!wdOETkq5aY7M7hJg.rSBY0YfY0tm73sIu' @ 0 : 0; will stop at (end)
+2023/11/11-17:50:04.526 1f8c Recovering log #13
+2023/11/11-17:50:04.527 1f8c Recovering log #22
+2023/11/11-17:50:04.531 1f8c Delete type=0 #13
+2023/11/11-17:50:04.531 1f8c Delete type=0 #22
+2023/11/11-17:50:04.531 1f8c Delete type=3 #11
