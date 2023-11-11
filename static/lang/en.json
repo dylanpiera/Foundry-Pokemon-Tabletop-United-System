@@ -63,7 +63,8 @@
     "TypeSpiritActionPlural": "Spirit Actions",
     "Modifier": "Modifier",
     "ShowInTokenPanel": "Show in Token Panel",
-    "Dice": "Base Dice"
+    "Dice": "Base Dice",
+    "Snippet": "Effect Snippet"
   },
 
   "SPECIES.Height": "Height",
