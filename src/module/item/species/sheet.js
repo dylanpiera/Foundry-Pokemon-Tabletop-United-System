@@ -151,14 +151,15 @@ class PTUSpeciesSheet extends PTUItemSheet {
     /** @override */
     _onDragStart(event) {
         const li = event.currentTarget;
-        const { itemUuid, itemSlug, itemType, itemSubtype, itemIndex } = li.dataset;
+        const { itemUuid, itemSlug, itemType, itemSubtype, itemIndex, itemLevel } = li.dataset;
 
         event.dataTransfer.setData('text/plain', JSON.stringify({
             uuid: itemUuid,
             slug: itemSlug,
             type: itemType,
             subtype: itemSubtype,
-            index: itemIndex
+            index: itemIndex,
+            level: itemLevel
         }));
     }
 
@@ -222,7 +223,7 @@ class PTUSpeciesSheet extends PTUItemSheet {
                             this.dragMove = null;
                             return;
                         }
-                        moves.level.unshift({uuid: item.uuid, slug: item.slug, level: 1});
+                        moves.level.unshift({uuid: item.uuid, slug: item.slug, level: Number(data.level) || 1});
                     }
 
                     return this.item.update({"system.moves": moves});
@@ -294,6 +295,22 @@ class PTUSpeciesSheet extends PTUItemSheet {
             const {subtype, index} = data;
             const {itemType, itemIndex, zone, subZone} = event.currentTarget.dataset;
             let { itemSubtype } = event.currentTarget.dataset;
+
+            const localItem = this.item.system.moves[subtype][index];
+            const realItem = await fromUuid(data.uuid);
+            if(localItem?.slug != realItem?.slug) {
+                if(!realItem || realItem.type != "move") return;
+
+                const moves = this.item.system.moves;
+                if(itemSubtype == "level") {
+                    moves[itemSubtype].unshift({slug: realItem.slug, uuid: realItem.uuid, level: Number(data.level) || 1});
+                    moves[itemSubtype] = moves[itemSubtype].sort((a, b) => a.level - b.level);
+                }
+                else {
+                    moves[itemSubtype].push({slug: realItem.slug, uuid: realItem.uuid});
+                }
+                return this.item.update({"system.moves": moves});
+            }
 
             if(itemType != "move") {
                 if(zone != "move") return;
