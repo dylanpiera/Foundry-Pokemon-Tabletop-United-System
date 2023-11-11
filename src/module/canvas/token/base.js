@@ -336,7 +336,7 @@ class PTUToken extends Token {
         const selfElevation = this.document.elevation;
         const targetElevation = target.document.elevation;
         if (selfElevation === targetElevation || !this.actor || !target.actor) {
-            return measureDistanceCuboid(this.bounds, target.bounds, options);
+            return measureDistanceCuboid(this.bounds, target.bounds, {}, options);
         }
 
         return measureDistanceCuboid(this.bounds, target.bounds, {
