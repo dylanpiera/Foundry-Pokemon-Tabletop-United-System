@@ -156,7 +156,7 @@
       "pokemonEd": "Pokémon Education",
       "techEd": "Technology Education"
     },
-    "Title": "Pokémon Tabletop United",
+    "Title": "Pokémon Tabletop Reunited",
 
     "TabsSkills": "Skills",
     "TabsInventory": "Inventory",
@@ -237,6 +237,7 @@
     "SaveCheckAction": "Make Save",
 
     "ItemEffect": "Item Effect",
+    "HeldItems": "Held Items",
     "FoodBuff": "Food Buff",
     "HpGuidelines": "HP Guidelines",
     "16th": "1/16th",
