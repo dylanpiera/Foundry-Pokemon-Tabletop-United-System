@@ -107,6 +107,8 @@ class PTUCombatant extends Combatant {
         }
         const paralyzed = actor.conditions.active.find(c => c.slug == "paralysis");
         if (paralyzed) await PTUCondition.HandleParalyzed(actor, paralyzed);
+        const hyperMode = actor.conditions.active.find(c => c.slug == "hyper-mode");
+        if (hyperMode) await PTUCondition.HandleHyperMode(actor, hyperMode);
 
         if (this.isBoss) {
             await this.bossTurns.mainTurn.update({ "flags.ptu.roundOfLastTurn": encounter.round });

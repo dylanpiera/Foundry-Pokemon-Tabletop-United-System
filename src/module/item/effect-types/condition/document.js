@@ -134,10 +134,19 @@ class PTUCondition extends BaseEffectPTU {
             const { dc, type, decrease } = this.system.persistent;
 
             if (type !== "save") return;
+            // If this is shadow pokemon's save but you already have the hyper mode condition; skip
+            if (this.slug === "shadow-pokemon" && this.actor.conditions.bySlug('hyper-mode').length > 0) return;
 
             const dcModifiers = (() => {
+                if(this.slug === "shadow-pokemon") {
+                    const mods = [new PTUModifier({ slug: "dc", label: "DC", modifier: 5 })];
+                    for(let i = 1; i <= this.actor.attributes.health.injuries; i++) {
+                        mods.push(new PTUModifier({ slug: `injury-${i}`, label: `Injury ${i}`, modifier: 2 }));
+                    }
+                    return mods;
+                }
                 if (!decrease) return [new PTUModifier({ slug: "dc", label: "DC", modifier: dc })];
-                const modifier = 20 - ((this.value - 1) * 6);
+                const modifier = 20 - ((this.value - 1) * (this.slug === "hyper-mode" ? 2 : 6));
                 if (modifier <= 0) return [new PTUModifier({ slug: "dc", label: "DC", modifier: -Infinity })];
                 return [new PTUModifier({ slug: "dc", label: "DC", modifier })];
             })();
@@ -174,12 +183,27 @@ class PTUCondition extends BaseEffectPTU {
             const result = await statistic.roll({ skipDialog: true, targets });
 
             if (statistic.dc.value <= result.total) {
+                if(this.slug === "shadow-pokemon") {
+                    return;
+                }
                 await this.delete();
             }
             else {
+                if(this.slug === "shadow-pokemon") {
+                    return this.#handleHyperMode();
+                }
                 await this.increase();
             }
         }
+    }
+
+    async #handleHyperMode() {
+        const hypermode = await fromUuid('Compendium.ptu.effects.Item.NegVrXO5uxnkiyIZ');
+        await ChatMessage.create({
+            speaker: ChatMessage.getSpeaker({ actor: this.actor }),
+            content: `<p>${game.i18n.format("PTU.Action.Hypermode.Create", { name: this.actor.name })}</p>`
+        });
+        return await this.actor.createEmbeddedDocuments("Item", [hypermode.toObject()]);
     }
 
     /** @override */
@@ -347,6 +371,40 @@ class PTUCondition extends BaseEffectPTU {
             speaker: ChatMessage.getSpeaker({ actor }),
             flavor: `<div class="header-bar"><p class="action">${game.i18n.format(`PTU.Action.Paralyzed.${effective ? "Success" : "Fail"}`, { name: actor.name })}</p></div>`,
             content: `<p class="p-1">${game.i18n.localize(`PTU.Action.Paralyzed.${effective ? "Suppressed" : "Applicable"}.One`)} @UUID[${paralyzed.uuid}] ${game.i18n.localize(`PTU.Action.Paralyzed.${effective ? "Suppressed" : "Applicable"}.Two`)}</p>`,
+        })
+    }
+
+    /**
+     * @param {PTUActor} actor
+     * @param {PTUCondition} hypermode
+     */
+    static async HandleHyperMode(actor, hypermode) {
+
+        const dcModifiers = [new PTUModifier({ slug: "dc", label: "DC", modifier: 11 })]
+        const saveModifiers = [];
+
+        const statistic = new Statistic(actor, {
+            slug: "save-check",
+            label: game.i18n.format("PTU.SaveCheck", { name: actor.name, save: hypermode.name }),
+            check: { type: "save-check", domains: ["save-check"], modifiers: saveModifiers },
+            dc: { modifiers: dcModifiers, domains: ["save-dc"] },
+            domains: ["hypermode"]
+        });
+
+        const target = actor.getActiveTokens().shift();
+        const targets = target ? [{
+            actor: actor.toObject(),
+            token: target.document.toObject(),
+            dc: { value: statistic.dc.value, flat: true, slug: hypermode.slug },
+        }] : [];
+
+        const result = await statistic.roll({ skipDialog: true, targets });
+        const effective = statistic.dc.value <= result.total;
+
+        return await ChatMessage.create({
+            speaker: ChatMessage.getSpeaker({ actor }),
+            flavor: `<div class="header-bar"><p class="action">${game.i18n.format(`PTU.Action.Hypermode.${effective ? "Success" : "Fail"}`, { name: actor.name })}</p></div>`,
+            content: `<p class="p-1">${game.i18n.localize(`PTU.Action.Hypermode.${effective ? "Suppressed" : "Applicable"}.One`)} @UUID[${hypermode.uuid}] ${game.i18n.localize(`PTU.Action.Hypermode.${effective ? "Suppressed" : "Applicable"}.Two`)}</p>`,
         })
     }
 }

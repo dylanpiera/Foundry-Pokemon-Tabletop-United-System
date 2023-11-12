@@ -534,6 +534,19 @@
         "Fail": "{name} is paralyzed and cannot move!",
         "Success": "{name} is paralyzed but managed to move anyway!"
       },
+      "Hypermode": {
+        "Suppressed": {
+          "One": "The effects of",
+          "Two": "are suppressed for this round."
+        },
+        "Applicable": {
+          "One": "The effects of",
+          "Two": "are in effect this round."
+        },
+        "Fail": "{name} is raging and can only use Shadow Moves!",
+        "Success": "{name} is barely containing it's rage!",
+        "Create": "{name}'s rage is getting out of hand, they entered Hyper Mode!"
+      },
       "DamageSelector": "Damage Selector",
       "Damage": "Damage",
       "Apply": "Apply Damage",
