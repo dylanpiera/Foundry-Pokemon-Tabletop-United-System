@@ -302,7 +302,7 @@ export class PTUCharacterSheet extends PTUActorSheet {
 		html.find(".item-quantity input[type='number']").change((ev) => {
 			const value = Number(ev.currentTarget.value);
 			const id = ev.currentTarget.dataset.itemId;
-			if (value > 0 && id) {
+			if (value >= 0 && id) {
 				const item = this.actor.items.get(id);
 				item?.update({ "system.quantity": value });
 			}
