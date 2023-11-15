@@ -227,7 +227,7 @@ export class CompendiumBrowserSpeciesTab extends CompendiumBrowserTab {
                 types: {
                     conjunction: "and",
                     label: "PTU.CompendiumBrowser.FilterOptions.MoveType",
-                    options: Object.keys(CONFIG.PTU.data.typeEffectiveness).map(type => ({value: sluggify(type), label: type})).sort((a,b) => (``+a.label).localeCompare(b.label)),
+                    options: Object.keys(CONFIG.PTU.data.typeEffectiveness).map(type => ({value: sluggify(type), label: type})),
                     selected: []
                 },
                 moves: {
