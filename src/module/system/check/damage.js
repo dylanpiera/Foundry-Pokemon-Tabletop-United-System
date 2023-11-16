@@ -159,6 +159,7 @@ class PTUDamageCheck extends PTUDiceCheck {
             if (!b.ignored && !a[b.slug]) a[b.slug] = b.modifier;
             return a;
         }, {})).reduce((a, b) => a + b, 0);
+        this.damageBase = Math.max(this.damageBase, 1)
         this.targetOptions.add(`damage-base:${this.damageBase}`)
 
         return this;
