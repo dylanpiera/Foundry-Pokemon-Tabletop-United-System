@@ -27,7 +27,7 @@ export class TokenImageRuleElement extends RuleElementPTU {
     /** @override */
     afterPrepareData() {
         let src = this.value;
-        if (!this.#srcIsValid(src)) src = this.resolveValue(this.value);
+        if (!this.#srcIsValid(src)) src = this.resolveValue(this.value, 0, {evaluate: false});
 
         if (!this.test()) return;
 
@@ -53,6 +53,7 @@ export class TokenImageRuleElement extends RuleElementPTU {
 
     #srcIsValid(src) {
         if (typeof src !== "string") return false;
+        if (src.includes("{")) return false;
         const extension = /(?<=\.)([a-z0-9]{3,4})(\?[a-zA-Z0-9]+)?$/i.exec(src)?.at(1);
         return !!extension && (extension in CONST.IMAGE_FILE_EXTENSIONS || extension in CONST.VIDEO_FILE_EXTENSIONS);
     }
