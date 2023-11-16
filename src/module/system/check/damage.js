@@ -155,6 +155,11 @@ class PTUDamageCheck extends PTUDiceCheck {
     prepareStatistic() {
         super.prepareStatistic(sluggify(game.i18n.format("PTU.Action.DamageRoll", { move: this.item.name })));
 
+        if (this.damageBaseModifiers.find(m => m.label === "Damage Base")?.modifier === 0) {
+            this.damageBase = 0;
+            return this;
+        }
+
         this.damageBase = Object.values(this.damageBaseModifiers.reduce((a, b) => {
             if (!b.ignored && !a[b.slug]) a[b.slug] = b.modifier;
             return a;
