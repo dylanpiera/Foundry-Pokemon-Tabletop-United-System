@@ -386,7 +386,8 @@ class PTUDamageCheck extends PTUDiceCheck {
      */
     async executeDamage(callback = null, attackStatistic = null) {
         await this.prepareContexts(attackStatistic);
-
+        if (!Number.isNumeric(this.item?.damageBase) || this.item.damageBase < 1)
+            return
         this.prepareModifiers();
         this.prepareStatistic();
 
