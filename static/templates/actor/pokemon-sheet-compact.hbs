@@ -205,18 +205,15 @@
                                     </div>
                                 </div>
                                 <div class="swsh-header ball-themes {{ballStyle}} highlight">
-                                    <div class="d-flex w-100 mt-2 mb-2 align-items-center justify-content-between ">
+                                    <div class="d-flex w-100 mt-2 mb-2 align-items-center justify-content-center ">
                                         <div class="fb-45">
                                             <label for="system.nature.value"><b>{{localize "PTU.Nature"}}</b></label>
-                                        </div>
-                                        <div class="fb-45">
-                                            <label for="system.heldItem"><b>{{localize "TYPES.Item.item"}}</b></label>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="swsh-body">
                                     <div
-                                        class="d-flex w-100 pt-1 pb-1 align-items-center justify-content-between center-text">
+                                        class="d-flex w-100 pt-1 pb-1 align-items-center justify-content-center center-text">
                                         <div class="fb-45">
                                             {{#select actor.system.nature.value}}
                                             <select name="system.nature.value" class="w-100">
@@ -225,10 +222,6 @@
                                                 {{/each}}
                                             </select>
                                             {{/select}}
-                                        </div>
-                                        <div class="fb-45">
-                                            <input type="text" name="system.heldItem" value="{{actor.system.heldItem}}"
-                                                data-dtype="String" />
                                         </div>
                                     </div>
                                 </div>
