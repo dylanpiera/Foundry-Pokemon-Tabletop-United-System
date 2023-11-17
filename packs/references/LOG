@@ -1,23 +1,11 @@
-2023/11/17-17:20:21.564 690c Recovering log #427
-2023/11/17-17:20:21.564 690c Level-0 table #429: started
-2023/11/17-17:20:21.568 690c Level-0 table #429: 118385 bytes OK
-2023/11/17-17:20:21.571 690c Delete type=0 #427
-2023/11/17-17:20:21.571 690c Delete type=3 #426
-2023/11/17-17:20:52.866 6790 Level-0 table #432: started
-2023/11/17-17:20:52.866 6790 Level-0 table #432: 0 bytes OK
-2023/11/17-17:20:52.867 6790 Delete type=0 #430
-2023/11/17-17:20:52.976 6790 Manual compaction at level-0 from '!folders!3mspjPD8gPzP1jmO' @ 72057594037927935 : 1 .. '!items!zFN2psnsbSBIeGrm' @ 0 : 0; will stop at '!items!zFN2psnsbSBIeGrm' @ 2000 : 1
-2023/11/17-17:20:52.976 6790 Compacting 1@0 + 0@1 files
-2023/11/17-17:20:52.979 6790 Generated table #433@0: 329 keys, 118385 bytes
-2023/11/17-17:20:52.980 6790 Compacted 1@0 + 0@1 files => 118385 bytes
-2023/11/17-17:20:52.981 6790 compacted to: files[ 0 1 1 0 0 0 0 ]
-2023/11/17-17:20:52.981 6790 Delete type=2 #429
-2023/11/17-17:20:52.986 6790 Manual compaction at level-0 from '!items!zFN2psnsbSBIeGrm' @ 2000 : 1 .. '!items!zFN2psnsbSBIeGrm' @ 0 : 0; will stop at (end)
-2023/11/17-17:20:52.995 6790 Manual compaction at level-1 from '!folders!3mspjPD8gPzP1jmO' @ 72057594037927935 : 1 .. '!items!zFN2psnsbSBIeGrm' @ 0 : 0; will stop at '!items!zFN2psnsbSBIeGrm' @ 2000 : 1
-2023/11/17-17:20:52.995 6790 Compacting 1@1 + 1@2 files
-2023/11/17-17:20:53.009 6790 Generated table #434@1: 329 keys, 118385 bytes
-2023/11/17-17:20:53.009 6790 Compacted 1@1 + 1@2 files => 118385 bytes
-2023/11/17-17:20:53.012 6790 compacted to: files[ 0 0 1 0 0 0 0 ]
-2023/11/17-17:20:53.012 6790 Delete type=2 #417
-2023/11/17-17:20:53.012 6790 Delete type=2 #433
-2023/11/17-17:20:53.013 6790 Manual compaction at level-1 from '!items!zFN2psnsbSBIeGrm' @ 2000 : 1 .. '!items!zFN2psnsbSBIeGrm' @ 0 : 0; will stop at (end)
+2023/11/17-19:32:51.589 5b74 Recovering log #437
+2023/11/17-19:32:51.589 5b74 Recovering log #439
+2023/11/17-19:32:51.593 5b74 Delete type=0 #437
+2023/11/17-19:32:51.593 5b74 Delete type=0 #439
+2023/11/17-19:32:51.593 5b74 Delete type=3 #435
+2023/11/17-19:32:51.593 5b74 Delete type=3 #437
+2023/11/17-19:33:41.159 6790 Level-0 table #442: started
+2023/11/17-19:33:41.159 6790 Level-0 table #442: 0 bytes OK
+2023/11/17-19:33:41.161 6790 Delete type=0 #440
+2023/11/17-19:33:41.161 6790 Manual compaction at level-0 from '!folders!3mspjPD8gPzP1jmO' @ 72057594037927935 : 1 .. '!items!zFN2psnsbSBIeGrm' @ 0 : 0; will stop at (end)
+2023/11/17-19:33:41.162 6790 Manual compaction at level-1 from '!folders!3mspjPD8gPzP1jmO' @ 72057594037927935 : 1 .. '!items!zFN2psnsbSBIeGrm' @ 0 : 0; will stop at (end)
