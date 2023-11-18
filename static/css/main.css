@@ -85,6 +85,10 @@
 .tagify[disabled] > .tagify__input {
   display: none;
 }
+.tagify .conjunction-not .tagify__tag-text {
+  text-decoration: line-through;
+  text-decoration-color: var(--color-text-trait);
+}
 #compendium-browser section.window-content {
   background: linear-gradient(45deg, #ECDBEB, #DFFFFE);
   padding: unset;
