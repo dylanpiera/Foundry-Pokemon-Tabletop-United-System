@@ -82,20 +82,6 @@ export function registerSettings() {
     })
     TypeSettings.registerSettings();
 
-    game.settings.register("ptu", "gameLanguage", {
-        name: "Localization",
-        hint: "Changes the name of Pokemon in the system. Would you like your language here? Get in contact on how to translate!",
-        scope: "world",
-        config: true,
-        type: String,
-        default: "en",
-        choices: {
-            "en": "English",
-            "de": "German",
-        },
-        requiresReload: true
-    });
-
     game.settings.register("ptu", "skipRollDialog", {
         name: "Skip roll dialog",
         hint: "Skip the roll dialog and automatically roll the dice.",

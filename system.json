@@ -7,7 +7,7 @@
     "verified": "11.314",
     "maximum": 11
   },
-  "version": "4.0.5",
+  "version": "4.0.6",
   "templateVersion": 2,
   "authors": [
     {
@@ -151,6 +151,11 @@
       "lang": "en",
       "name": "English",
       "path": "static/lang/en.json"
+    },
+    {
+      "lang": "es",
+      "name": "Spanish",
+      "path": "static/lang/es.json"
     }
   ],
   "url": "https://github.com/dylanpiera/Foundry-Pokemon-Tabletop-United-System",  

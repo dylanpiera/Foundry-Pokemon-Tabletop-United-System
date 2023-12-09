@@ -980,7 +980,7 @@
   background-color: #00000065;
 }
 .token-panel .top-panel .party-overview .party-pokemon .pokemon img.darkred {
-  border-left: 4px solid #8b0000;
+  border-left: 4px solid #686161;
   background-color: #8b000065;
 }
 .token-panel .top-panel .party-overview .party-pokemon .pokemon img.red {
@@ -1889,30 +1889,30 @@ a.content-link img {
 .ptu.sheet.gen8.actor.compact main.sheet-body .capability .skills .type--spirit {
   background-color: #93c47daa;
 }
-.ptu.sheet.gen8.actor.compact main.sheet-body .capability .skills .skill--Pathetic {
+.ptu.sheet.gen8.actor.compact main.sheet-body .capability .skills .skill--pathetic {
   background: #cfe2f3;
 }
-.ptu.sheet.gen8.actor.compact main.sheet-body .capability .skills .skill--Untrained {
+.ptu.sheet.gen8.actor.compact main.sheet-body .capability .skills .skill--untrained {
   background: #9fc5e8;
 }
-.ptu.sheet.gen8.actor.compact main.sheet-body .capability .skills .skill--Novice {
+.ptu.sheet.gen8.actor.compact main.sheet-body .capability .skills .skill--novice {
   background: #6fa8dc;
 }
-.ptu.sheet.gen8.actor.compact main.sheet-body .capability .skills .skill--Adept {
+.ptu.sheet.gen8.actor.compact main.sheet-body .capability .skills .skill--adept {
   background: #3d85c6;
 }
-.ptu.sheet.gen8.actor.compact main.sheet-body .capability .skills .skill--Expert {
+.ptu.sheet.gen8.actor.compact main.sheet-body .capability .skills .skill--expert {
   background: #0b5394;
   color: #cfe2f3;
 }
-.ptu.sheet.gen8.actor.compact main.sheet-body .capability .skills .skill--Master {
+.ptu.sheet.gen8.actor.compact main.sheet-body .capability .skills .skill--master {
   background: #073763;
   color: #cfe2f3;
 }
-.ptu.sheet.gen8.actor.compact main.sheet-body .capability .skills .skill--Virtuoso {
+.ptu.sheet.gen8.actor.compact main.sheet-body .capability .skills .skill--virtuoso {
   background: #e9be25;
 }
-.ptu.sheet.gen8.actor.compact main.sheet-body .capability .skills .skill--Invalid {
+.ptu.sheet.gen8.actor.compact main.sheet-body .capability .skills .skill--invalid {
   background: #ff0f0faa;
 }
 .ptu.sheet.gen8.actor.compact main.sheet-body .extra .flex-row.hp,
@@ -2146,30 +2146,30 @@ a.content-link img {
 .ptu.sheet.gen8.actor main.sheet-body .stats .skills .type--spirit {
   background-color: #93c47daa;
 }
-.ptu.sheet.gen8.actor main.sheet-body .stats .skills .skill--Pathetic {
+.ptu.sheet.gen8.actor main.sheet-body .stats .skills .skill--pathetic {
   background: #cfe2f3;
 }
-.ptu.sheet.gen8.actor main.sheet-body .stats .skills .skill--Untrained {
+.ptu.sheet.gen8.actor main.sheet-body .stats .skills .skill--untrained {
   background: #9fc5e8;
 }
-.ptu.sheet.gen8.actor main.sheet-body .stats .skills .skill--Novice {
+.ptu.sheet.gen8.actor main.sheet-body .stats .skills .skill--novice {
   background: #6fa8dc;
 }
-.ptu.sheet.gen8.actor main.sheet-body .stats .skills .skill--Adept {
+.ptu.sheet.gen8.actor main.sheet-body .stats .skills .skill--adept {
   background: #3d85c6;
 }
-.ptu.sheet.gen8.actor main.sheet-body .stats .skills .skill--Expert {
+.ptu.sheet.gen8.actor main.sheet-body .stats .skills .skill--expert {
   background: #0b5394;
   color: #cfe2f3;
 }
-.ptu.sheet.gen8.actor main.sheet-body .stats .skills .skill--Master {
+.ptu.sheet.gen8.actor main.sheet-body .stats .skills .skill--master {
   background: #073763;
   color: #cfe2f3;
 }
-.ptu.sheet.gen8.actor main.sheet-body .stats .skills .skill--Virtuoso {
+.ptu.sheet.gen8.actor main.sheet-body .stats .skills .skill--virtuoso {
   background: #e9be25;
 }
-.ptu.sheet.gen8.actor main.sheet-body .stats .skills .skill--Invalid {
+.ptu.sheet.gen8.actor main.sheet-body .stats .skills .skill--invalid {
   background: #ff0f0faa;
 }
 .ptu.sheet.gen8.actor main.sheet-body .stats .skills,
@@ -2258,6 +2258,10 @@ a.content-link img {
 .ptu.sheet.gen8.dex .item-list-header .item-controls .item-control.item-create:hover {
   background: #788898cc;
   text-shadow: unset;
+}
+.ptu.sheet.gen8.actor .item-list-header .item-controls .item-control.item-create span,
+.ptu.sheet.gen8.dex .item-list-header .item-controls .item-control.item-create span {
+  white-space: nowrap;
 }
 .ptu.sheet.gen8.actor .item-list-header .item-controls .item-control.item-settings,
 .ptu.sheet.gen8.dex .item-list-header .item-controls .item-control.item-settings {
@@ -3443,6 +3447,9 @@ a.content-link img {
 .sheet.item.species .item-list-header .item-controls .item-control.item-create:hover {
   background: #788898cc;
   text-shadow: unset;
+}
+.sheet.item.species .item-list-header .item-controls .item-control.item-create span {
+  white-space: nowrap;
 }
 .sheet.item.species .item-list-header .item-controls .item-control.item-settings {
   flex: 0 0 18px;
