@@ -82,6 +82,7 @@ class PTUTrainerActor extends PTUActor {
         }
 
         for (let [key, skill] of Object.entries(system.skills)) {
+            skill["slug"] = key;
             skill["value"]["total"] = skill["value"]["value"] + skill["value"]["mod"];
             skill["rank"] = PTUSkills.getRankSlug(skill["value"]["total"]);
             skill["modifier"]["total"] = skill["modifier"]["value"] + skill["modifier"]["mod"] + (system.modifiers.skillBonus?.total ?? 0);

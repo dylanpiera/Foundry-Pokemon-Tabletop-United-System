@@ -252,6 +252,7 @@ class PTUPokemonActor extends PTUActor {
 
         // Calculate Skill Ranks
         for (const [key, skill] of Object.entries(speciesSystem?.skills ?? {})) {
+            system.skills[key].slug = key;
             system.skills[key]["value"]["value"] = skill["value"]
             system.skills[key]["value"]["total"] = skill["value"] + system.skills[key]["value"]["mod"];
             system.skills[key]["modifier"]["value"] = skill["modifier"]

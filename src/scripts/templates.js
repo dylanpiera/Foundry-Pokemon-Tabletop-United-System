@@ -1,4 +1,4 @@
-function registerTemplates() {
+export function registerTemplates() {
     return loadTemplates([
 
         // Actor Sheet Partials
@@ -22,5 +22,3 @@ function registerTemplates() {
         // "/systems/ptu/templates/partials/charactermancer/stat-block-partial.hbs"
     ]);
 };
-
-export { registerTemplates }
