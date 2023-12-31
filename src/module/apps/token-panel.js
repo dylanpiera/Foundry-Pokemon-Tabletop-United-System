@@ -83,6 +83,12 @@ export class TokenPanel extends Application {
             })
         }
 
+        const effects = [];
+        for (const effect of actor.itemTypes.effect?.sort((a, b) => a.sort - b.sort) ?? []) {
+            if (effect.getFlag("ptu", "showInTokenPanel") === false) continue;
+            effects.push(effect);
+        }
+
         let movement = [];
         movement.push(
             {name: "Overland", value: actor.system.capabilities?.overland ?? 0, icon: "fas fa-shoe-prints"},
@@ -116,7 +122,7 @@ export class TokenPanel extends Application {
             show,
             party: this.#getPartyInfo(),
             conditions: actor.itemTypes.condition || [],
-            effects: actor.itemTypes.effect || [],
+            effects,
             feats,
             abilities,
             heldItem,

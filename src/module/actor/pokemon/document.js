@@ -252,6 +252,7 @@ class PTUPokemonActor extends PTUActor {
 
         // Calculate Skill Ranks
         for (const [key, skill] of Object.entries(speciesSystem?.skills ?? {})) {
+            system.skills[key].slug = key;
             system.skills[key]["value"]["value"] = skill["value"]
             system.skills[key]["value"]["total"] = skill["value"] + system.skills[key]["value"]["mod"];
             system.skills[key]["modifier"]["value"] = skill["modifier"]
@@ -361,7 +362,7 @@ class PTUPokemonActor extends PTUActor {
 
         const finalCapabilities = {}
         // Anything that is not a part of CONFIG.PTU.Capabilities.numericNonMovement or CONFIG.PTU.Capabilities.stringArray is considered movement, without explicitly listing them hardcoded.
-        const capsFromSpeciesOrModifiers = [...Object.keys(this.system.modifiers.capabilities), ...Object.keys(speciesCapabilities)]
+        const capsFromSpeciesOrModifiers = [...Object.keys(this.system.modifiers.capabilities), ...Object.keys(speciesCapabilities)].filter(cap => cap !== "all")
         const movementCapabilities = capsFromSpeciesOrModifiers.filter(cap => !CONFIG.PTU.Capabilities.stringArray.includes(cap) || !CONFIG.PTU.Capabilities.numericNonMovement.includes(cap))
 
         const speedCombatStages = this.system.stats.spd.stage.value + this.system.stats.spd.stage.mod;

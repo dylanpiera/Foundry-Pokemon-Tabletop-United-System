@@ -139,7 +139,7 @@
                                 {{/if}}
                             {{/unless}}
                         </div>
-                        {{#if item.system.quantity}}
+                        {{#if item.system.quantity includeZero=true}}
                             <div class="item-quantity">
                                 <input class="ml-1 mr-1" data-item-id="{{item.id}}" data-binding="system.quantity" type="number" value="{{item.system.quantity}}" placeholder="{{localize "ITEM.Quantity"}}"/>
                             </div>

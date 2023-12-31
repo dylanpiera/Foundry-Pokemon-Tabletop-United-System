@@ -66,7 +66,7 @@ class PTUDamageCheck extends PTUDiceCheck {
                 modifier: this.item.damageBase.preStab,
             })
         ]
-        if(this.item.damageBase.isStab) {
+        if (this.item.damageBase.isStab) {
             damageBaseModifiers.push(
                 new PTUModifier({
                     slug: "stab",
@@ -155,10 +155,13 @@ class PTUDamageCheck extends PTUDiceCheck {
     prepareStatistic() {
         super.prepareStatistic(sluggify(game.i18n.format("PTU.Action.DamageRoll", { move: this.item.name })));
 
-        this.damageBase = Object.values(this.damageBaseModifiers.reduce((a, b) => {
-            if (!b.ignored && !a[b.slug]) a[b.slug] = b.modifier;
-            return a;
-        }, {})).reduce((a, b) => a + b, 0);
+        this.damageBase = Math.max(
+            Object.values(this.damageBaseModifiers.reduce((a, b) => {
+                if (!b.ignored && !a[b.slug]) a[b.slug] = b.modifier;
+                return a;
+            }, {})).reduce((a, b) => a + b, 0),
+            1
+        );
         this.targetOptions.add(`damage-base:${this.damageBase}`)
 
         return this;
@@ -379,19 +382,22 @@ class PTUDamageCheck extends PTUDiceCheck {
      * @returns {Promise<DamageRoll>}
      */
     async executeDamage(callback = null, attackStatistic = null) {
+        if (!Number.isNumeric(this.item?.damageBase?.preStab) || this.item.damageBase.preStab < 1) return;
+
         await this.prepareContexts(attackStatistic);
 
         this.prepareModifiers();
         this.prepareStatistic();
 
         await this.beforeRoll();
+
         const roll = await this.execute({
             isReroll: false,
             title: game.i18n.format("PTU.Action.DamageRoll", { move: this.item.name }),
             type: "damage-roll"
         }, callback);
-        await this.afterRoll();
 
+        await this.afterRoll();
         return roll;
     }
 }

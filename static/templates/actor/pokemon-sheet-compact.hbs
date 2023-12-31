@@ -205,18 +205,15 @@
                                     </div>
                                 </div>
                                 <div class="swsh-header ball-themes {{ballStyle}} highlight">
-                                    <div class="d-flex w-100 mt-2 mb-2 align-items-center justify-content-between ">
+                                    <div class="d-flex w-100 mt-2 mb-2 align-items-center justify-content-center ">
                                         <div class="fb-45">
                                             <label for="system.nature.value"><b>{{localize "PTU.Nature"}}</b></label>
-                                        </div>
-                                        <div class="fb-45">
-                                            <label for="system.heldItem"><b>{{localize "TYPES.Item.item"}}</b></label>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="swsh-body">
                                     <div
-                                        class="d-flex w-100 pt-1 pb-1 align-items-center justify-content-between center-text">
+                                        class="d-flex w-100 pt-1 pb-1 align-items-center justify-content-center center-text">
                                         <div class="fb-45">
                                             {{#select actor.system.nature.value}}
                                             <select name="system.nature.value" class="w-100">
@@ -225,10 +222,6 @@
                                                 {{/each}}
                                             </select>
                                             {{/select}}
-                                        </div>
-                                        <div class="fb-45">
-                                            <input type="text" name="system.heldItem" value="{{actor.system.heldItem}}"
-                                                data-dtype="String" />
                                         </div>
                                     </div>
                                 </div>
@@ -545,7 +538,7 @@
         <!-- Capabilities Tab -->
         <div class="tab details capability" data-group="primary" data-tab="capability">
             <div class="d-flex flex-row justify-content-between h-100 w-100">
-                <div class="fb-48">
+                <div class="fb-40">
                     <!-- Capabilities -->
                     <div class="swsh-box mb-2 w-100">
                         <div
@@ -591,23 +584,23 @@
                         </div>
                     </div>
                 </div>
-                <div class="d-flex fb-48 skills">
+                <div class="d-flex fb-58 skills">
                     <!-- Skills -->
                     <div class="swsh-box w-100 mb-2" style="height: fit-content;">
                         <div class="swsh-header d-flex flex-row center-text ball-themes {{ballStyle}} highlight"
                             style="padding:unset;">
-                            <div class="fb-25 mt-2 mb-2"><b>{{localize "PTU.SkillLabel"}}</b></div>
+                            <div class="fb-30 mt-2 mb-2"><b>{{localize "PTU.SkillLabel"}}</b></div>
                             <div class="fb-15 mt-2 mb-2"><b>{{localize "PTU.SkillValue"}}</b></div>
-                            <div class="fb-25 mt-2 mb-2"><b>{{localize "PTU.SkillRank"}}</b></div>
+                            <div class="fb-20 mt-2 mb-2"><b>{{localize "PTU.SkillRank"}}</b></div>
                             <div class="fb-15 mt-2 mb-2"><b>{{localize "PTU.SkillMod"}}</b></div>
                             <div class="fb-20 mt-2 mb-2"><b>{{localize "PTU.SkillDice"}}</b></div>
                         </div>
                         <div class="swsh-body p-0">
                             {{#each actor.system.skills as |skill key|}}
                             <div class="d-flex flex-row {{key}} align-items-center w-100">
-                                <div class="skill {{key}} fb-25 bgcolor key type--{{skill.type}} align-self-center">
+                                <div class="skill {{key}} fb-30 bgcolor key type--{{skill.type}} align-self-center">
                                     <label for="system.skills.{{key}}.label"
-                                        class="resource-label">{{skill.label}}</label>
+                                        class="resource-label">{{localize (concat "PTU.Skills." skill.slug)}}</label>
                                 </div>
                                 <div class="skill {{key}} fb-15 pl-1 pr-1 center-text center-self">
                                     {{> "systems/ptu/static/templates/partials/mod-field.hbs"
@@ -621,9 +614,8 @@
                                     disabled=true}}
                                 </div>
                                 <div
-                                    class="skill {{key}} fb-25 align-self-center bgcolor skill--{{skill.rank}} center-text center-self">
-                                    <label for="system.skills.{{key}}.rank" class="resource-label">{{localize (concat
-                                        "PTU.Skill" skill.rank)}}</label>
+                                    class="skill {{key}} fb-20 align-self-center bgcolor skill--{{skill.rank}} center-text center-self">
+                                    <label for="system.skills.{{key}}.rank" class="resource-label">{{localize (concat "PTU.Skill" (capitalize skill.rank))}}</label>
                                 </div>
                                 <div class="skill {{key}} fb-15 pl-1 center-text center-self">
                                     {{> "systems/ptu/static/templates/partials/mod-field.hbs"
