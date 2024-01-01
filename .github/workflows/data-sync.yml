@@ -1,0 +1,30 @@
+on:
+  push:
+    branches:
+    - main
+    - workflow/*
+  workflow_dispatch:
+
+jobs:
+  export-to-ptr-data:
+    name: Export to PTR-Data
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./packs
+    steps: 
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with: 
+          path: ./Data/systems/ptu
+      - name: Install Foundry CLI
+        run: npm install -g @foundryvtt/foundryvtt-cli 
+      - name: Setup Foundry CLI
+        run: |
+          fvtt configure set dataPath ./
+          fvtt configure set currentPackageType System
+          fvtt configure set currentPackageId ptu
+      - name: Export Feats Compendium
+        run: fvtt package unpack feats
+        
+        
