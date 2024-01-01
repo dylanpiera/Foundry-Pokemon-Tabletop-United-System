@@ -35,12 +35,35 @@
                         />
                     </div>
                 </div>
+                <div class="move-info ml-3">
+                    <div class="move-info-row">
+                        <div class="move-info-col">
+                            <div class="move-other-info mt-2">
+                                <span style="flex: 0 0 100%;">
+                                    KEYWORDS
+                                    <input
+                                            type="text"
+                                            class="ptu-tagify system-keywords"
+                                            name=""
+                                            value="{{json item.system.keywords}}"
+                                            data-dtype="JSON"
+                                            disabled
+                                    />
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
             <div class="move-row" style="flex-grow: 1">
                 <div class="move-effect">{{{itemEffect}}}{{#if referenceEffect}}<br><br>{{{referenceEffect}}}{{/if}}</div>
             </div>
         </div>
         <div class="tab details h-100" data-group="primary" data-tab="details">
+            <div class="item-row">
+                <label for="system.keywords">{{localize "ITEM.Keywords"}}</label>
+                <input type="text" class="ptu-tagify system-keywords" name="system.keywords" value="{{json item.system.keywords}}" data-dtype="JSON"/>
+            </div>
             <div class="item-row">
                 <label for="system.origin">{{localize "ITEM.Origin"}}</label>
                 <input class="ml-1 mr-1" name="system.origin" type="text" value="{{item.system.origin}}" placeholder="{{localize "ITEM.Origin"}}"/>

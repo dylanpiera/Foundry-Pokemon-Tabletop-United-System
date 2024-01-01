@@ -162,6 +162,10 @@
                         <label for="system.breeding.genderRatio">{{localize "SPECIES.GenderRatio"}}</label>
                         <input class="ml-1 mr-1" name="system.breeding.genderRatio" type="number" value="{{item.system.breeding.genderRatio}}" placeholder="{{localize "SPECIES.GenderRatio"}}"/>
                     </div>
+                    <div class="item-row">
+                        <label for="system.keywords">{{localize "ITEM.Keywords"}}</label>
+                        <input type="text" class="ptu-tagify system-keywords" name="system.keywords" value="{{json item.system.keywords}}" data-dtype="JSON"/>
+                    </div>
                 </div>
                 <div class="fb-48 p-1 d-flex flex-column">
                     {{#each item.system.capabilities as |value key|}}

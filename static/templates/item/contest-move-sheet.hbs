@@ -39,9 +39,20 @@
                 <div class="move-info ml-3">
                     <div class="move-info-row">
                         <div class="move-info-col">
+                                <span style="flex: 0 0 100%;">
+                                    KEYWORDS
+                                    <input
+                                            type="text"
+                                            class="ptu-tagify system-keywords"
+                                            name=""
+                                            value="{{json item.system.keywords}}"
+                                            data-dtype="JSON"
+                                            disabled
+                                    />
+                                </span>
                             <div class="move-type-row pl-1">
                                 <div class="move-type">
-                                    <div class="type-select" style="background: url('/systems/ptu/static/css/images/types2/{{capitalize item.system.type}}IC.png"></div>
+                                    <div class="type-select" style="background: url('/systems/ptu/static/css/images/types2/{{capitalize item.system.type}}IC.png')"></div>
                                 </div>
                             </div>
                             <div class="move-other-info mt-2">
@@ -73,6 +84,10 @@
             </div>
         </div>
         <div class="tab details h-100" data-group="primary" data-tab="details">
+            <div class="item-row">
+                <label for="system.keywords">{{localize "ITEM.Keywords"}}</label>
+                <input type="text" class="ptu-tagify system-keywords" name="system.keywords" value="{{json item.system.keywords}}" data-dtype="JSON"/>
+            </div>
             <div class="item-row">
                 <label for="system.type">{{localize "ITEM.Type"}}</label>
                 <div class="arrow-box">

@@ -41,6 +41,17 @@
                         <div class="move-info-col">
                             <div class="move-other-info mt-2">
                                 <span style="flex: 0 0 100%;">
+                                    KEYWORDS
+                                    <input
+                                            type="text"
+                                            class="ptu-tagify system-keywords"
+                                            name=""
+                                            value="{{json item.system.keywords}}"
+                                            data-dtype="JSON"
+                                            disabled
+                                    />
+                                </span>
+                                <span style="flex: 0 0 100%;">
                                     TRIGGER 
                                     <input
                                         class="ml-2"
@@ -80,6 +91,10 @@
             </div>
         </div>
         <div class="tab details h-100" data-group="primary" data-tab="details">
+            <div class="item-row">
+                <label for="system.keywords">{{localize "ITEM.Keywords"}}</label>
+                <input type="text" class="ptu-tagify system-keywords" name="system.keywords" value="{{json item.system.keywords}}" data-dtype="JSON"/>
+            </div>
             <div class="item-row">
                 <label for="system.trigger">{{localize "ITEM.Trigger"}}</label>
                 <input class="ml-1 mr-1" name="system.trigger" type="text" value="{{item.system.trigger}}" placeholder="{{localize "ITEM.Trigger"}}"/>
