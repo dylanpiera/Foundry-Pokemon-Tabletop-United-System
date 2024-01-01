@@ -607,7 +607,8 @@
         "referenceEffect": "",
         "source": {
           "value": "Homebrew"
-        }
+        },
+        "keywords": []
       },
       "interactions": {
         "sheerForce": false,
