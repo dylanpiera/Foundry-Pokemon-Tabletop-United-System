@@ -23,7 +23,20 @@ jobs:
           fvtt configure set currentPackageType System
           fvtt configure set currentPackageId ptu
       - name: Export Feats Compendium
-        run: fvtt package unpack feats
+        run: | 
+          fvtt package unpack abilities
+          fvtt package unpack capabilities
+          fvtt package unpack edges
+          fvtt package unpack effects
+          fvtt package unpack feats
+          fvtt package unpack habitats
+          fvtt package unpack items
+          fvtt package unpack macros
+          fvtt package unpack moves
+          fvtt package unpack poke-edges
+          fvtt package unpack references
+          fvtt package unpack species
+          fvtt package unpack spirit-actions
       - name: Upload Artifacts
         uses: actions/upload-artifact@v3
         with:
@@ -45,11 +58,13 @@ jobs:
         uses: actions/download-artifact@v3
         with: 
           name: ptr-data-jsons
-      - name: Commit Changes
+      - name: Commit & Push
         run: |
           git config --global user.email "ashe@soaringnetwork.com"
           git config --global user.name "Github Actions"
-          git commit -am "Github-Actions Data Sync"
-      - name: Push changes
-        run: git push
-    
+          if [[ `git status --porcelain` ]]; then
+            git commit -am "Github-Actions Data Sync"
+            git push
+          else
+            echo "WARNING: No changes were detected. git commit push action aborted."
+          fi
