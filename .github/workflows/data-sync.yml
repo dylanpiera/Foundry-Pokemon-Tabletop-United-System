@@ -44,7 +44,10 @@ jobs:
         with: 
           name: ptr-data-jsons
       - name: Commit Changes
-        run: git commit -am "Github-Actions Data Sync"
+        run: |
+          git config --global user.email "ashe@soaringnetwork.com"
+          git config --global user.name "Github Actions"
+          git commit -am "Github-Actions Data Sync"
       - name: Push changes
         run: git push
     
