@@ -8,7 +8,7 @@ export class CompendiumBrowserItemsTab extends CompendiumBrowserTab {
         this.searchFields = ["name"]
         this.storeFields = ["name", "uuid", "type", "source", "img", "cost", "subtype"];
 
-        this.index = ["img", "system.source.value", "system.cost", "system.subtype"];
+        this.index = ["img", "system.source.value", "system.cost", "system.subtype", "system.keywords"];
 
         this.filterData = this.prepareFilterData();
     }
@@ -25,6 +25,7 @@ export class CompendiumBrowserItemsTab extends CompendiumBrowserTab {
         const items = [];
         const indexFields = duplicate(this.index);
         const sources = new Set();
+        const keywords = new Set();
 
         for await (const { pack, index } of this.browser.packLoader.loadPacks(
             "Item",
@@ -33,11 +34,22 @@ export class CompendiumBrowserItemsTab extends CompendiumBrowserTab {
         )) {
             for (const itemData of index) {
                 if (itemData.type !== "item") continue;
-                if (!this.hasAllIndexFields(itemData, indexFields)) continue;
+                    if (!this.hasAllIndexFields(itemData, indexFields)) continue;
 
                 const source = itemData.system.source?.value ?? "";
                 const sourceSlug = sluggify(source);
                 if (source) sources.add(source);
+
+                const itemKeywordSlugs = new Set()
+                if (itemData.keywords){
+                    for (const keyword of itemData.keywords){
+                        const kw = keyword.value;
+                        const keywordSlug = sluggify(kw)
+                        keywords.add(kw)
+                        itemKeywordSlugs.add(keywordSlug)
+                    }
+                }
+
 
                 items.push({
                     name: itemData.name,
@@ -47,6 +59,7 @@ export class CompendiumBrowserItemsTab extends CompendiumBrowserTab {
                     source: sourceSlug,
                     cost: itemData.system.cost || 0,
                     subtype: itemData.system.subtype || "",
+                    keywords: Array.from(itemKeywordSlugs)
                 })
             }
         }
@@ -54,7 +67,8 @@ export class CompendiumBrowserItemsTab extends CompendiumBrowserTab {
         this.indexData = items;
 
         // Set filters if necessary
-        this.filterData.checkboxes.source.options = this.generateSourceCheckboxOptions(sources);
+        this.filterData.checkboxes.source.options = this.generateCheckboxOptions(sources);
+        this.filterData.checkboxes.keywords.options = this.generateCheckboxOptions(keywords);
     }
 
     filterIndexData(entry) {
@@ -89,6 +103,12 @@ export class CompendiumBrowserItemsTab extends CompendiumBrowserTab {
                     label: "PTU.CompendiumBrowser.FilterOptions.Source",
                     options: {},
                     selected: []
+                },
+                keywords: {
+                    isExpanded: false,
+                    label: "PTU.CompendiumBrowser.FilterOptions.Keywords",
+                    options: {},
+                    selected: ""
                 }
             },
             selects: {
@@ -97,7 +117,7 @@ export class CompendiumBrowserItemsTab extends CompendiumBrowserTab {
                     label: "PTU.CompendiumBrowser.FilterOptions.ItemType",
                     options: { pokeball: "Pokéball", tms: "TMs", berries: "Berries" },
                     selected: ""
-                },
+                }
             },
             order: {
                 by: "name",

@@ -217,7 +217,7 @@ export class CompendiumBrowserTab {
         return options;
     }
 
-    generateSourceCheckboxOptions(sources) {
+    generateCheckboxOptions(sources) {
         return [...sources].sort().reduce(
             (result,source) => ({
                 ...result,

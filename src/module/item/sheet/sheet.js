@@ -191,6 +191,10 @@ class PTUItemSheet extends ItemSheet {
             expanded.system.prerequisites = expanded.system.prerequisites.map(s => s.value).filter(s => !!s)
         }
 
+        if(Array.isArray(expanded.system.keywords)) {
+            expanded.system.keywords = expanded.system.keywords.map(s => s.value).filter(s => !!s)
+        }
+
         if(expanded.system?.rules) {
             const rules = this.item.toObject().system.rules ?? [];
 

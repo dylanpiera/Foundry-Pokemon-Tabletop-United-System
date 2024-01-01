@@ -52,7 +52,7 @@ export class CompendiumBrowserAbilitiesTab extends CompendiumBrowserTab {
         this.indexData = abilities;
 
         // Set filters if necessary
-        this.filterData.checkboxes.source.options = this.generateSourceCheckboxOptions(sources);
+        this.filterData.checkboxes.source.options = this.generateCheckboxOptions(sources);
     }
 
     filterIndexData(entry) {
