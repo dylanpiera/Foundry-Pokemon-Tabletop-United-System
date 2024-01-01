@@ -2,8 +2,7 @@ name: PTR Data Sync
 on:
   push:
     branches:
-    - main
-    - workflow/*
+    - master
   workflow_dispatch:
 
 jobs:
