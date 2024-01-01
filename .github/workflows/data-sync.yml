@@ -1,3 +1,4 @@
+name: PTR Data Sync
 on:
   push:
     branches:
@@ -9,9 +10,6 @@ jobs:
   export-to-ptr-data:
     name: Export to PTR-Data
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ./packs
     steps: 
       - name: Checkout repository
         uses: actions/checkout@v4
