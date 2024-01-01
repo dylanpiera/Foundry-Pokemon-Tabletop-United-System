@@ -7,11 +7,11 @@ on:
   workflow_dispatch:
 
 jobs:
-  export-to-ptr-data:
-    name: Export to PTR-Data
+  export-to-json:
+    name: Export to JSON
     runs-on: ubuntu-latest
     steps: 
-      - name: Checkout repository
+      - name: Checkout Repository
         uses: actions/checkout@v4
         with: 
           path: ./Data/systems/ptu
@@ -24,5 +24,26 @@ jobs:
           fvtt configure set currentPackageId ptu
       - name: Export Feats Compendium
         run: fvtt package unpack feats
-        
-        
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: ptr-data-jsons
+          path: packs/**/*.json
+          retention-days: 1
+  commit-to-ptr-data:
+    name: Commit to PTR-Data
+    runs-on: ubuntu-latest
+    steps: 
+      - name: Checkout PTR-Data Repository
+        uses: actions/checkout@v4
+        with:
+          repository: pokemon-tabletop-reunited/PTR-Data
+      - name: Load Artifacts
+        uses: actions/download-artifact@v3
+        with: 
+          name: ptr-data-jsons
+      - name: Commit Changes
+        run: git commit -am "Github-Actions Data Sync"
+      - name: Push changes
+        run: git push
+    
