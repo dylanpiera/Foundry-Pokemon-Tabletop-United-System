@@ -28,10 +28,11 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: ptr-data-jsons
-          path: packs/**/*.json
+          path: /home/runner/work/Foundry-Pokemon-Tabletop-United-System/Foundry-Pokemon-Tabletop-United-System/Data/systems/ptu/packs/**/*.json
           retention-days: 1
   commit-to-ptr-data:
     name: Commit to PTR-Data
+    needs: export-to-json
     runs-on: ubuntu-latest
     steps: 
       - name: Checkout PTR-Data Repository
