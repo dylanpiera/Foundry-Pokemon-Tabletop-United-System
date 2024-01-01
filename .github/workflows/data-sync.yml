@@ -39,6 +39,8 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: pokemon-tabletop-reunited/PTR-Data
+          ref: master
+          token: ${{ secrets.ACTIONS_GITHUB_TOKEN }}
       - name: Load Artifacts
         uses: actions/download-artifact@v3
         with: 
