@@ -38,6 +38,14 @@
             "value": 0,
             "mod": 0
           },
+          "featPoints": {
+            "value": 0,
+            "mod": 0
+          },
+          "edgePoints": {
+            "value": 0,
+            "mod": 0
+          },
           "acBonus": {
             "value": 0,
             "mod": 0

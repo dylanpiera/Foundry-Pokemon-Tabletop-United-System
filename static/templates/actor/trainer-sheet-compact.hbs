@@ -171,7 +171,7 @@
                                 </div>
                                 <div class="swsh-header ball-themes {{ballStyle}} highlight">
                                     <div class="d-flex w-100 mt-2 mb-2 align-items-center justify-content-between ">
-                                        {{#if (or (is true (getGameSetting "variant.useDexExp")) (and (getGameSetting "variant.trainerRevamp") (getGameSetting "variant.advancementRework")))}}
+                                        {{#if (is true (getGameSetting "variant.useDexExp"))}}
                                         <div class="fb-30">
                                             <label for="system.level.milestones"><b>{{localize
                                                 "PTU.LevelMilestones"}}</b></label>
@@ -198,7 +198,7 @@
                                 <div class="swsh-body">
                                     <div class="options w-100 d-flex">
                                         <div class="d-flex w-100 pt-1 pb-1 align-items-center justify-content-between center-text">
-                                            {{#if (or (is true (getGameSetting "variant.useDexExp")) (and (getGameSetting "variant.trainerRevamp") (getGameSetting "variant.advancementRework")))}}
+                                            {{#if (is true (getGameSetting "variant.useDexExp"))}}
                                             <div class="fb-30">
                                                 <input type="number" name="system.level.milestones"
                                                     value="{{actor.system.level.milestones}}" data-dtype="Number" />

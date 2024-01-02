@@ -1833,7 +1833,10 @@ class PTUActor extends Actor {
                         2: {
                             source: "Level",
                             mode: "add",
-                            value: (this.type === "character" && game.settings.get("ptu", "variant.trainerRevamp") ? (this.system.level.current + this.system.level.current) : this.system.level.current),
+                            value: (
+                                this.type === "character" && ["data-revamp", "short-track"].includes(game.settings.get("ptu", "variant.trainerAdvancement"))
+                                    ? (this.system.level.current + this.system.level.current) 
+                                    : this.system.level.current),
                         },
                         3: {
                             source: "HP Stat",
