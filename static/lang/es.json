@@ -796,6 +796,15 @@
           "Name": "Usar Reconstrucción del Entrenador (max nvl 25)",
           "Hint": "Usa las reglas alt. Trainer Revamp ruleset, desactiva Dex Exp. (ver: https://shorturl.at/oCDWY)"
         },
+        "trainerAdvancement": {
+          "Name": "Trainer Advancement Track",
+          "Hint": "The Trainer Advancement Track to use for Trainer Leveling.",
+          "Original": "PTU Original Standard Progression",
+          "DataRevamp": "DataNinja's Revamped Condensed Progression",
+          "ShortTrack": "PTR Condensed Progression",
+          "PTRUpdate": "PTR Standard Progression",
+          "LongTrack": "PTR Extended Progression"
+        },
         "SpiritPlaytest": {
           "Name": "Habilitar la Amistad y el Espíritu [Playtest]",
           "Hint": "Habilita el juego de reglas Amistad y Espíritu. Para más información https://ptufvtt.com/Rules/Playtests/Spirit-Friendship"

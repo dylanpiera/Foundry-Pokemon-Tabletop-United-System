@@ -21,9 +21,23 @@ class PTUDexSheet extends FormApplication {
         if (PTUDexSheet.speciesArtCache.size === 0) PTUDexSheet.speciesArtCache = new Map();
         if (PTUDexSheet.speciesMap.size === 0) {
             new Promise(
-                (resolve, reject) => {
-                    game.packs.get("ptu.species").getDocuments()
-                        .then(docs => resolve(docs));
+                async (resolve, reject) => {
+                    const packs = Object.entries(game.settings.get("ptu", "compendiumBrowserPacks")["species"]).reduce((acc, [id, value]) => {
+                        if(id === "ptr.species") {
+                            if(value.load === false) acc = acc.filter(id => id !== "ptr.species")
+                            return acc;
+                        }
+                        if(value?.load) acc.push(id);
+                        return acc;
+                    }, ["ptr.species"]) 
+                    if (packs.length === 0) return ui.notifications.error("Please enable at least one species compendium from the Compendium Browser settings.");
+                    const docs = [];
+                    for(const packId of packs) {
+                        const pack = game.packs.get(packId);
+                        if(!pack) continue;
+                        docs.push(...(await pack.getDocuments()));
+                    };
+                    resolve(docs);
                 }
             ).then(docs => this.speciesDocs = docs)
                 .then(docs => docs.reduce((map, s) => {

@@ -171,7 +171,7 @@
                                 </div>
                                 <div class="swsh-header ball-themes {{ballStyle}} highlight">
                                     <div class="d-flex w-100 mt-2 mb-2 align-items-center justify-content-between ">
-                                        {{#if (or (is true (getGameSetting "variant.useDexExp")) (and (getGameSetting "variant.trainerRevamp") (getGameSetting "variant.advancementRework")))}}
+                                        {{#if (is true (getGameSetting "variant.useDexExp"))}}
                                         <div class="fb-30">
                                             <label for="system.level.milestones"><b>{{localize
                                                 "PTU.LevelMilestones"}}</b></label>
@@ -198,7 +198,7 @@
                                 <div class="swsh-body">
                                     <div class="options w-100 d-flex">
                                         <div class="d-flex w-100 pt-1 pb-1 align-items-center justify-content-between center-text">
-                                            {{#if (or (is true (getGameSetting "variant.useDexExp")) (and (getGameSetting "variant.trainerRevamp") (getGameSetting "variant.advancementRework")))}}
+                                            {{#if (is true (getGameSetting "variant.useDexExp"))}}
                                             <div class="fb-30">
                                                 <input type="number" name="system.level.milestones"
                                                     value="{{actor.system.level.milestones}}" data-dtype="Number" />
@@ -327,7 +327,7 @@
 
         <!-- Combat Tab -->
         <div class="tab details combat h-100" data-group="primary" data-tab="combat">
-            <div class="d-flex flex-row justify-content-between h-100">
+            <div class="d-flex flex-row justify-content-between">
                 <!-- Left Col -->
                 <div class="fb-48">
                     <div class="d-flex flex-column h-100">
@@ -411,6 +411,88 @@
                                 </div>
                             {{/if}}
                         </div>
+
+                        <!-- Effectiveness -->
+                        {{#if (or (gt effectiveness.weaknesses.length 0) (or (gt effectiveness.resistances.length 0) (gt effectiveness.immunities.length 0)))}}
+                        <div class="swsh-box effectiveness mb-2 w-100">
+                            <div
+                                class="swsh-header ball-themes {{ballStyle}} highlight pt-2 pb-2 center-text justify-content-center">
+                                <b>{{localize "PTU.Typing"}}</b>
+                            </div>
+                            <div
+                                class="swsh-body mt-1 mb-1 flexrow g-1 p-0 w-100 align-items-center justify-content-center">
+                                {{{loadTypeImages actor.types}}}
+                            </div>
+                            {{#if (gt effectiveness.weaknesses.length 0) }}
+                            <div
+                                class="swsh-header ball-themes {{ballStyle}} highlight pt-2 pb-2 center-text justify-content-center">
+                                <b>{{localize "PTU.TypingWeaknesses"}}</b>
+                            </div>
+                            <div
+                                class="swsh-body mt-1 mb-1 flexrow g-5 w-100 align-items-center justify-content-between">
+                                {{#each effectiveness.weaknesses as |effectiveness|}}
+                                {{!-- {{#each effectiveness as |value type|}} --}}
+                                <div class="type-image-effectiveness">
+                                    {{{loadTypeImages effectiveness.type}}}
+                                    <span class="ml-1">x{{effectiveness.value}}</span>
+                                </div>
+                                {{!-- {{/each}} --}}
+                                {{/each}}
+                            </div>
+                            {{/if}}
+                            <!-- Hide regular effective moves -->
+                            {{!-- {{#if (gt actor.system.effectiveness.Normal.length 0) }}
+                            <div
+                                class="swsh-header ball-themes {{ballStyle}} highlight pt-2 pb-2 center-text justify-content-center">
+                                <b>{{localize "PTU.TypingNormal"}}</b>
+                            </div>
+                            <div class="swsh-body flexrow g-5 w-100 align-items-center">
+                                {{#each actor.system.effectiveness.Normal as |effectiveness|}}
+                                {{#each effectiveness as |value type|}}
+                                <div class="type-image-effectiveness">
+                                    {{{loadTypeImages type}}}
+                                    <span class="ml-1">x{{value}}</span>
+                                </div>
+                                {{/each}}
+                                {{/each}}
+                            </div>
+                            {{/if}} --}}
+                            {{#if (gt effectiveness.resistances.length 0) }}
+                            <div
+                                class="swsh-header ball-themes {{ballStyle}} highlight pt-2 pb-2 center-text justify-content-center">
+                                <b>{{localize "PTU.TypingResistances"}}</b>
+                            </div>
+                            <div
+                                class="swsh-body mt-1 mb-1 flexrow g-5 w-100 align-items-center justify-content-between">
+                                {{#each effectiveness.resistances as |effectiveness|}}
+                                {{!-- {{#each effectiveness as |value type|}} --}}
+                                <div class="type-image-effectiveness">
+                                    {{{loadTypeImages effectiveness.type}}}
+                                    <span class="ml-1">x{{effectiveness.value}}</span>
+                                </div>
+                                {{!-- {{/each}} --}}
+                                {{/each}}
+                            </div>
+                            {{/if}}
+                            {{#if (gt effectiveness.immunities.length 0) }}
+                            <div
+                                class="swsh-header ball-themes {{ballStyle}} highlight pt-2 pb-2 center-text justify-content-center">
+                                <b>{{localize "PTU.TypingImmunities"}}</b>
+                            </div>
+                            <div
+                                class="swsh-body mt-1 mb-1 flexrow g-5 w-100 align-items-center justify-content-between">
+                                {{#each effectiveness.immunities as |effectiveness|}}
+                                {{!-- {{#each effectiveness as |value type|}} --}}
+                                <div class="type-image-effectiveness">
+                                    {{{loadTypeImages effectiveness.type}}}
+                                    <span class="ml-1">x{{effectiveness.value}}</span>
+                                </div>
+                                {{!-- {{/each}} --}}
+                                {{/each}}
+                            </div>
+                            {{/if}}
+                        </div>
+                        {{/if}}
 
                         <!-- Capabilities -->
                         <div class="swsh-box mb-2 w-100">

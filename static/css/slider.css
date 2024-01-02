@@ -1,0 +1,49 @@
+div[class^="slider-"] {
+    height: 10px;
+    width: 80%;
+    border: 1px solid black;
+}
+div[class^="slider-"] .noUi-base {
+    background: #ddd;
+}
+div[class^="slider-"] .noUi-base .noUi-origin .noUi-handle {
+    background: none;
+    border: none;
+    box-shadow: none;
+    color: #dddddd;
+    cursor: grab;
+    font-size: 16pt;
+    height: 14px;
+    right: -7px;
+    text-shadow: 0 0 4px black;
+    top: -4px;
+    width: 14px;
+}
+div[class^="slider-"] .noUi-base .noUi-origin .noUi-handle:active {
+    cursor: grabbing;
+}
+div[class^="slider-"] .noUi-base .noUi-origin .noUi-handle.handle {
+    background: #c32835;
+    border-radius: 2px;
+    border: 1px solid black;
+    box-shadow: 1px 1px 4px black;
+}
+div[class^="slider-"] .noUi-base .noUi-origin .noUi-handle::before, div[class^="slider-"] .noUi-base .noUi-origin .noUi-handle::after {
+    background: none;
+}
+div[class^="slider-"] .noUi-base .noUi-origin .noUi-handle .noUi-touch-area {
+    cursor: pointer;
+}
+div[class^="slider-"] .noUi-base .noUi-tooltip {
+    display: none;
+}
+div[class^="slider-"] .noUi-base .noUi-active .noUi-tooltip {
+    display: block;
+    background-color: rgba(0, 0, 0, 0.9);
+    color: #dddddd;
+    line-height: 18px;
+    padding: 6px 14px;
+}
+div[class^="slider-"] .noUi-base .noUi-connect.range_selected {
+    background: rgba(255, 255, 240, 0.8);
+}

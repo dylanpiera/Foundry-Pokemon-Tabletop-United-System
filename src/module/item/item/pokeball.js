@@ -303,7 +303,7 @@ class PokeballItem extends PTUItemItem {
                 rollModifiers.push(new PTUModifier({
                     slug: "level-modifier",
                     label: "Level Modifier",
-                    modifier: (game.settings.get("ptu", "variant.trainerRevamp") ? 2 : 1) * -this.actor.system.level.current
+                    modifier: (["data-revamp", "short-track"].includes(game.settings.get("ptu", "variant.trainerAdvancement")) ? 2 : ["long-track"].includes(game.settings.get("ptu", "variant.trainerAdvancement")) ? 0.5 : 1) * -this.actor.system.level.current
                 }));
 
                 // Item mods

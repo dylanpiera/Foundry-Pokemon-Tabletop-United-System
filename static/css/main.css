@@ -2,6 +2,23 @@
   flex: 0 0 30px;
   display: flex;
 }
+.effect-popup {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.effect-popup .effect-effect {
+  white-space: pre-wrap;
+}
+.effect-popup .effect-range {
+  margin-bottom: 0.25rem;
+  text-align: center;
+  padding: 0.25rem 1rem;
+  background: #a88fff65;
+  border-radius: 5px;
+  width: fit-content;
+  align-self: center;
+}
 #token-hud .status-effects {
   padding: 5px;
   grid-template-columns: repeat(5, 1fr);
@@ -195,6 +212,14 @@
   border-radius: 5px;
   margin-top: 5px;
   padding: 2px;
+}
+#compendium-browser section.window-content .content-box section.content .tab.active .content-grid .control-area .slidercontainer-flex {
+  display: flex;
+  justify-content: space-around;
+  align-items: baseline;
+}
+#compendium-browser section.window-content .content-box section.content .tab.active .content-grid .control-area .slidercontainer-flex label {
+  width: 10px;
 }
 #compendium-browser section.window-content .content-box section.content .tab.active .content-grid .control-area input {
   width: 100%;

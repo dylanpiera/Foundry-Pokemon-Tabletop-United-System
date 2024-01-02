@@ -50,7 +50,7 @@ export class PokemonGenerator {
         if (!this.abilities) this.prepareAbilities();
         if (!this.capabilities) this.prepareCapabilities();
         if (!this.shiny) this.prepareShinyness(shinyChance);
-        if (!this.species.system.form) this.prepareForm();
+        if (!this.form) this.prepareForm();
 
         this.img = await PokemonGenerator.getImage(this.species, { gender: this.gender, shiny: this.shiny });
 
@@ -101,11 +101,12 @@ export class PokemonGenerator {
                 nature: {
                     value: this.nature
                 },
-                gender: this.gender
+                gender: this.gender,
             },
             folder: folder?.id,
             prototypeToken
         }
+        if(this.form) actorData.system.form = this.form;
 
         const species = this.species.toObject();
         species.flags.core = {
@@ -312,11 +313,13 @@ export class PokemonGenerator {
     prepareForm() {
         //unown
         const unown_types = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "!", "Qu"];
-        if (this.species.system.number === 201) return this.species.system.form = unown_types[Math.floor(Math.random() * unown_types.length)];
+        if (this.species.system.number === 201) return this.form = this.species.system.form = unown_types[Math.floor(Math.random() * unown_types.length)];
 
         //toxtricity
         const lowKeyNatures = ["lonely", "bold", "relaxed", "timid", "serious", "modest", "mild", "quiet", "bashful", "calm", "gentle", "careful"]
-        if (this.species.system.number === 849 && lowKeyNatures.includes(this.nature.toLowerCase())) return this.species.system.form = "LowKey";
+        if (this.species.system.number === 849 && lowKeyNatures.includes(this.nature.toLowerCase())) return this.form = this.species.system.form = "LowKey";
+
+        return this.form = this.species?.system?.form;
     }
 
     static isEvolutionRestricted(stage, { gender } = {}) {

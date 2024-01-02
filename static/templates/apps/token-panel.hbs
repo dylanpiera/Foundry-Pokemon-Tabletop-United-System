@@ -105,7 +105,7 @@
                         <div class="actions-actions">
                             {{#each attacks as |attack|}}
                                 <div class="action {{#if attack.rollable}}rollable{{/if}}" data-id="{{attack.id}}"
-                                    title="{{attack.effect}}">
+                                    title="<div class='effect-popup'><div class='effect-range'>{{attack.range}}</div><div class='effect-effect'>{{attack.effect}}</div></div>">
                                     <div class="icon">
                                         <img class="icon" src="{{attack.img}}" alt="{{attack.name}}">
                                         <img class="dice" src="/icons/svg/d20.svg" title="Roll {{attack.name}}">

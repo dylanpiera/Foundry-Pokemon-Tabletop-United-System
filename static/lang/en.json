@@ -796,6 +796,15 @@
           "Name": "Use Trainer Revamp (max lvl 25)",
           "Hint": "Use DataNinja's alt. Trainer Revamp ruleset, disables Dex Exp. (see: https://shorturl.at/oCDWY)"
         },
+        "trainerAdvancement": {
+          "Name": "Trainer Advancement Track",
+          "Hint": "The Trainer Advancement Track to use for Trainer Leveling.",
+          "Original": "PTU Original Standard Progression",
+          "DataRevamp": "DataNinja's Revamped Condensed Progression",
+          "ShortTrack": "PTR Condensed Progression",
+          "PTRUpdate": "PTR Standard Progression",
+          "LongTrack": "PTR Extended Progression"
+        },
         "SpiritPlaytest": {
           "Name": "Enable Friendship & Spirit [Playtest]",
           "Hint": "Enable the Friendship & Spirit Playtest ruleset. For more info see https://ptufvtt.com/Rules/Playtests/Spirit-Friendship"
@@ -1036,7 +1045,9 @@
         "Category": "Category",
         "DamageBase": "Damage Base",
         "Number": "Dex Number",
-        "HasForm": "Has Form"
+        "HasForm": "Has Form",
+        "LearnableMoves": "Learnable Moves",
+        "Abilities": "Obtainable Abilities"
       },
       "Search": {
         "Placeholder": "Your query...",

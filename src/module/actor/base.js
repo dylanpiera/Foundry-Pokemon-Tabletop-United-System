@@ -851,10 +851,12 @@ class PTUActor extends Actor {
 
         if (data.system?.health?.value !== undefined) {
             if (data.system.health.value <= 0 && game.settings.get("ptu", "automation.autoFaint")) {
+                if(this.primaryUpdater?.id !== game.user.id) return;
                 const fainted = this.conditions.bySlug("fainted");
                 if (fainted.length === 0) PTUCondition.FromEffects([{ id: "fainted" }]).then(items => this.createEmbeddedDocuments("Item", items));
             }
             else if (data.system.health.value > 0 && game.settings.get("ptu", "automation.autoFaintRecovery")) {
+                if(this.primaryUpdater?.id !== game.user.id) return;
                 const fainted = this.conditions.bySlug("fainted");
                 if (fainted.length > 0) fainted.forEach(f => f.delete());
             }
@@ -1831,7 +1833,10 @@ class PTUActor extends Actor {
                         2: {
                             source: "Level",
                             mode: "add",
-                            value: (this.type === "character" && game.settings.get("ptu", "variant.trainerRevamp") ? (this.system.level.current + this.system.level.current) : this.system.level.current),
+                            value: (
+                                this.type === "character" && ["data-revamp", "short-track"].includes(game.settings.get("ptu", "variant.trainerAdvancement"))
+                                    ? (this.system.level.current + this.system.level.current) 
+                                    : this.system.level.current),
                         },
                         3: {
                             source: "HP Stat",
