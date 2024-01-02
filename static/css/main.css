@@ -213,6 +213,14 @@
   margin-top: 5px;
   padding: 2px;
 }
+#compendium-browser section.window-content .content-box section.content .tab.active .content-grid .control-area .slidercontainer-flex {
+  display: flex;
+  justify-content: space-around;
+  align-items: baseline;
+}
+#compendium-browser section.window-content .content-box section.content .tab.active .content-grid .control-area .slidercontainer-flex label {
+  width: 10px;
+}
 #compendium-browser section.window-content .content-box section.content .tab.active .content-grid .control-area input {
   width: 100%;
 }
