@@ -187,8 +187,10 @@ class PTUItemSheet extends ItemSheet {
     async _updateObject(event, formData) {
         const expanded = expandObject(formData);
 
-        if(Array.isArray(expanded.system.prerequisites)) {
-            expanded.system.prerequisites = expanded.system.prerequisites.map(s => s.value).filter(s => !!s)
+        for (const encapsulatedField of ["prerequisites", "keywords"]){
+            if(Array.isArray(expanded.system[encapsulatedField])) {
+                expanded.system[encapsulatedField] = expanded.system[encapsulatedField].map(s => s.value).filter(s => !!s)
+            }
         }
 
         if(expanded.system?.rules) {
