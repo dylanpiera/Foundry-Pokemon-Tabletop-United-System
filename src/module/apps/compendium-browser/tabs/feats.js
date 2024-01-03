@@ -78,7 +78,7 @@ export class CompendiumBrowserFeatsTab extends CompendiumBrowserTab {
 
         // Set filters if necessary
         this.filterData.checkboxes.class.options = this.#generateCheckboxOptions([...classes].sort());
-        this.filterData.checkboxes.source.options = this.generateCheckboxOptions(sources);
+        this.filterData.checkboxes.source.options = this.generateSourceCheckboxOptions(sources);
     }
 
     #prerequisitesStringToEntries(prerequisites) {

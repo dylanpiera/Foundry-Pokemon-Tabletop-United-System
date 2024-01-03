@@ -55,7 +55,7 @@ export class CompendiumBrowserPokeEdgesTab extends CompendiumBrowserTab {
         this.indexData = abilities;
 
         // Set filters if necessary
-        this.filterData.checkboxes.source.options = this.generateCheckboxOptions(sources);
+        this.filterData.checkboxes.source.options = this.generateSourceCheckboxOptions(sources);
     }
 
     #prerequisitesStringToEntries(prerequisites) {
