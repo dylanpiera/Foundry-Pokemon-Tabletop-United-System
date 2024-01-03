@@ -7,6 +7,7 @@ import { Ready } from "./ready.js";
 import { DeleteToken } from "./tokenDocumentDeleted.js";
 import { AutocompleteInlinePropertiesSetup } from "./aip-setup.js";
 import { GetSceneControlButtons } from "./get-scene-control-buttons.js";
+import { PimpJournal } from "./pimp-journal.js";
 import { TagifySheets } from "./tagify-sheets.js";
 
 export const PtuHooks = {
@@ -22,6 +23,7 @@ export const PtuHooks = {
             DeleteToken,
             AutocompleteInlinePropertiesSetup,
             GetSceneControlButtons,
+            PimpJournal,
             TagifySheets
         ]
         for(const listener of listeners) listener.listen();
