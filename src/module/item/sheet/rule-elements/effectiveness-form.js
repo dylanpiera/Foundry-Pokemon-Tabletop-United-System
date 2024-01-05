@@ -1,4 +1,3 @@
-import { tagify } from '../../../../util/tags.js';
 import { RuleElementForm } from './base.js'
 
 class EffectivenessForm extends RuleElementForm {
