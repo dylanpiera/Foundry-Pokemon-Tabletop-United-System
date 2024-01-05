@@ -209,7 +209,12 @@ export const CompendiumBrowserInlineEnricher = {
                         if (!filterDataMerger) ui.notifications.warn(game.i18n.format("PTU.CompendiumBrowser.Enrichment.UnknownFilterSetting", {filterName: param.name, tabName: tabKey}));
                         else filterData = filterDataMerger(paramValues, param.name, filterData)
                     }
-                    await tab.open(filterData)
+                    try {
+                        await tab.open(filterData)
+                    } catch (e) {
+                        ui.notifications.error(game.i18n.format("PTU.CompendiumBrowser.Enrichment.LikelyMalformedExpressionBrowserCrashed"));
+                        throw e;
+                    }
                 })
             })
         }

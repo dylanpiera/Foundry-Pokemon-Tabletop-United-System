@@ -1017,7 +1017,8 @@
     "CompendiumBrowser": {
       "Enrichment":{
         "UnknownFilterSetting": "Unknown filter \"{filterName}\" for tab {tabName}",
-        "UnknownTab": "Unknown Compendium Browser Tab \"{tabName}\""
+        "UnknownTab": "Unknown Compendium Browser Tab \"{tabName}\"",
+        "LikelyMalformedExpressionBrowserCrashed": "The expression is likely malformed and caused the Compendium Browser to crash when trying to open."
       },
       "ProgressBar": {
         "LoadingComplete": "Loading complete",
