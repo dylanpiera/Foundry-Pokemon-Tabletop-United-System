@@ -10,7 +10,7 @@ export class CompendiumBrowserSpeciesTab extends CompendiumBrowserTab {
         this.searchFields = ["name"]
         this.storeFields = ["name", "uuid", "type", "source", "img", "types", "number", "moves", "abilities", "capabilities"]
 
-        this.index = ["system.source.value", "system.types", "system.number", "system.moves", "system.abilities", "system.capabilities", "system.keywords"];
+        this.index = ["system.source.value", "system.types", "system.number", "system.moves", "system.abilities", "system.capabilities"];
 
         this.capabilitesMinMax = {}
         FILTERABLE_CAPABILITIES.forEach(cap => this.capabilitesMinMax[cap] = { "min": 100, "max": -10 })
@@ -33,7 +33,6 @@ export class CompendiumBrowserSpeciesTab extends CompendiumBrowserTab {
 
         const allMoveSlugsSeen = new Set()
         const allAbilitySlugsSeen = new Set()
-        const allKeywordsSeen = new Set()
 
         for await (const { pack, index } of this.browser.packLoader.loadPacks(
             "Item",
@@ -87,8 +86,6 @@ export class CompendiumBrowserSpeciesTab extends CompendiumBrowserTab {
 
                 this.trackCapabilitiesMinMax(speciesData.system.capabilities);
 
-                speciesData.system.keywords.forEach(kw => allKeywordsSeen.add(kw))
-
                 species.push({
                     name: speciesData.name,
                     type: speciesData.type,
@@ -123,10 +120,6 @@ export class CompendiumBrowserSpeciesTab extends CompendiumBrowserTab {
             this.filterData.sliders[cap].values.lowerLimit = this.capabilitesMinMax[cap].min
             this.filterData.sliders[cap].values.step = 1
         }
-
-        this.filterData.multiselects.keywords.options = Array.from(allKeywordsSeen.map(kw => {
-            return {label: kw, value: sluggify(kw) }
-        })).sort((a, b) => (`` + a.label).localeCompare(b.label));
     }
 
     /** Updates minima and maxima of all FILTERABLE_CAPABILITIES in this.capabilitesMinMax.
@@ -190,7 +183,6 @@ export class CompendiumBrowserSpeciesTab extends CompendiumBrowserTab {
         if (!this.isEntryHonoringMultiselect(multiselects.types, entry.types)) return false;
         if (!this.isEntryHonoringMultiselect(multiselects.moves, entry.moves)) return false;
         if (!this.isEntryHonoringMultiselect(multiselects.abilities, entry.abilities)) return false;
-        if (!this.isEntryHonoringMultiselect(multiselects.keywords, entry.keywords)) return false;
 
         for (const cap of FILTERABLE_CAPABILITIES) {
             const capVal = entry.capabilities[cap] ? entry.capabilities[cap] : 0
@@ -227,12 +219,6 @@ export class CompendiumBrowserSpeciesTab extends CompendiumBrowserTab {
                 abilities: {
                     conjunction: "and",
                     label: "PTU.CompendiumBrowser.FilterOptions.Abilities",
-                    options: [],
-                    selected: []
-                },
-                keywords: {
-                    conjunction: "and",
-                    label: "PTU.CompendiumBrowser.FilterOptions.Keywords",
                     options: [],
                     selected: []
                 },
