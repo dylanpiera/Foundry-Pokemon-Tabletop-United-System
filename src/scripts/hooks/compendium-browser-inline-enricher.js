@@ -1,19 +1,4 @@
 /**
- * Ideally, this would not be needed. But the chat gets rendered before PTU initializes the Browser, and introducing
- * statics into classes are more of a hassle than having a hard coded list of tabs here.
- * @type {string[]}
- */
-const MANUAL_NAMES_OF_COMPENDIUM_BROWSER_TABS_LOWER = [
-    "abilities",
-    "edges",
-    "feats",
-    "items",
-    "moves",
-    "pokeEdges",
-    "species"
-]
-
-/**
  * @param {Array.<String>} values Values for given parameter, excluding param name. E.g ["water", "not:fire"]
  * @param {string} paramName Parameter name as named in compendium browser filter data, e.g. "types"
  * @param {Object} filterData Whole filterData of CompendiumBrowserTab. Will not get modified.
@@ -129,68 +114,30 @@ function search(values, paramName, filterData) {
     return fd
 }
 
-function buildEnrichments() {
-    const enrichments = []
-    for (const tabNameLower of MANUAL_NAMES_OF_COMPENDIUM_BROWSER_TABS_LOWER) {
-        const getTab = () => {
-            return game.ptu.compendiumBrowser.tabs[tabNameLower]
-        }
-
-        const getParams = () => {
-            const tab = game.ptu.compendiumBrowser.tabs[tabNameLower];
-            let params = [
-                {
-                    name: "order",
-                    funcAddValuesForParamToFilter: order
-                },
-                {
-                    name: "search",
-                    funcAddValuesForParamToFilter: search
-                }
-            ]
-            for (const x of [[sliders, "sliders"], [checkboxes, "checkboxes"], [multiselects, "multiselects"], [selects, "selects"]]) {
-                const func = x[0];
-                const paramType = x[1];
-                const filterData = tab.filterData[paramType];
-                if (filterData)
-                    params = params.concat(Object.keys(filterData).map(paramName => {
-                        return {name: paramName, funcAddValuesForParamToFilter: func}
-                    }))
-            }
-            return params
-
-        }
-
-        enrichments.push({
-            /**@type{string}*/
-            name: tabNameLower,
-            /**Used on click, referencing browser that is not ready when e.g. Chat is loaded.
-             * Therefor, encapsulate into function call to resolve at click-time
-             * @type{Function}*/
-            compendiumBrowserTabGetter: getTab,
-            /**Used on click, referencing browser that is not ready when e.g. Chat is loaded.
-             * Therefor, encapsulate into function call to resolve at click-time
-             * @type{Function}*/
-            paramsGetter: getParams
-        })
-    }
-    return enrichments
+const FILTERDATA_MERGERS = {
+    checkboxes: checkboxes,
+    multiselects: multiselects,
+    sliders: sliders,
+    selects: selects
 }
 
 export const CompendiumBrowserInlineEnricher = {
     listen: () => {
+
+        // Set up a single Enricher that goes through all(?) content and subs the hand written
+        // stuff with an anchor https://discord.com/channels/170995199584108546/722559135371231352/1192834854614737068
         Hooks.on('setup', () => {
             CONFIG.TextEditor.enrichers.push({
                 pattern: /@([A-Z][a-z]+)Browser\[([|:_0-9a-zA-Z\- ]*)\](:?{(:?[^\[\]\{\}@]*)?})?/gim,
                 enricher: async (match, enrichmentOptions) => {
-                    const [tabNameUpper, paramString] = match.slice(1,3)
+                    const [tabNameUpper, paramString] = match.slice(1, 3)
                     let displayText = match[4]
 
                     const a = document.createElement("a");
                     a.classList.add("inline-roll", "compendium-link")
 
                     const tabNameLower = tabNameUpper.toLowerCase();
-                    a.classList.add(`compendium-link-${tabNameLower}`)
+                    a.setAttribute("compendium-link-tab", tabNameLower)
 
                     const params = paramString.split("|")
                     const pValues = {}
@@ -200,13 +147,13 @@ export const CompendiumBrowserInlineEnricher = {
                         pValues[pName].add(pValue)
                     }
                     for (const pName of Object.keys(pValues)) {
-                        a.setAttribute(`compendium-filter-${pName}`, Array.from(pValues[pName]).join(" "))
+                        a.setAttribute(`compendium-filter-setting-${pName}`, Array.from(pValues[pName]).join(" "))
                     }
-                    a.innerHTML=`<i class="fas fa-th-list"></i>`
+                    a.innerHTML = `<i class="fas fa-th-list"></i>`
 
-                    if(! displayText) {
-                        const numExplicitSettings = Object.keys(pValues).map(k => pValues[k].size).reduce((a,b)=>a+b, 0)
-                        displayText=`${tabNameUpper} Search (${numExplicitSettings} Settings)`
+                    if (!displayText) {
+                        const numExplicitSettings = Object.keys(pValues).map(k => pValues[k].size).reduce((a, b) => a + b, 0)
+                        displayText = `${tabNameUpper} Search (${numExplicitSettings} Settings)`
                     }
                     a.insertAdjacentText("beforeend", displayText)
                     return a;
@@ -214,29 +161,62 @@ export const CompendiumBrowserInlineEnricher = {
             });
         })
 
-        const enrichments = buildEnrichments()
+        // This function adds Event Listeners to the given htmlElement for the compendium-link anchors
+        // that the previous enricher will have added to the content
+        const addAll = (htmlElement) => {
+            htmlElement.querySelectorAll(`.compendium-link`).forEach(el => {
+                el.addEventListener("click", async (event) => {
+                    /** @type {CompendiumBrowserTab} */
+                    const tabKey = el.getAttribute("compendium-link-tab")
+                    const tab = game.ptu.compendiumBrowser.tabs[tabKey]
 
-        const addAll= (htmlElement) => {
-            // Now that the Proper HTML is in place, add listeners to freshly enriched HTML elements
-            for (const enrichment of enrichments) {
-                htmlElement.querySelectorAll(`.compendium-link-${enrichment.name}`).forEach(el => {
-                    el.addEventListener("click", async (event) => {
-                        /** @type {CompendiumBrowserTab} */
-                        const tab = enrichment.compendiumBrowserTabGetter();
-                        let filterData = await tab.getFilterData()
-                        for (const eParam of enrichment.paramsGetter()) {
-                            const attribute = el.getAttribute(`compendium-filter-${eParam.name}`)
-                            if (!attribute) continue
-                            const paramValues = attribute.split(" ").map(v => v.trim()).filter(v => v !== "")
-                            if (paramValues.length === 0) continue
-                            filterData = eParam.funcAddValuesForParamToFilter(paramValues, eParam.name, filterData)
+                    if (!tab) {
+                        ui.notifications.warn(game.i18n.format("PTU.CompendiumEnrichment.DontKnowTab", {tabName: tabKey}));
+                        return;
+                    }
+
+                    const allElAttributes = el.getAttributeNames()
+                    const params = allElAttributes.filter(pName => pName.startsWith("compendium-filter-setting-")).map(s => {
+                        return {
+                            name: s.substring(26),
+                            rawString: el.getAttribute(s)
                         }
-                        await tab.open(filterData)
                     })
+
+                    let filterData = await tab.getFilterData()
+                    for (const param of params) {
+                        const paramValues = param.rawString.split(" ").map(v => v.trim()).filter(v => v !== "")
+                        if (paramValues.length === 0) continue
+
+                        //special cases for which there is no nested struture in filterdata
+                        if(param.name==="search"){
+                            filterData = search(paramValues, param.name, filterData);
+                            continue;
+                        }
+                        if(param.name==="order"){
+                            filterData = order(paramValues, param.name, filterData);
+                            continue;
+                        }
+
+                        // Take care of all filters that are nested behind their respective input type
+                        let filterDataMerger;
+                        for (const filterType of Object.keys(FILTERDATA_MERGERS)) {
+                            if (!filterData[filterType]) continue;
+                            if (!filterData[filterType][param.name]) continue;
+                            if (filterDataMerger) throw Error(`Multiple hits for ${param.name}`)
+                            filterDataMerger = FILTERDATA_MERGERS[filterType] //break after
+                        }
+                        if (!filterDataMerger) ui.notifications.warn(game.i18n.format("PTU.CompendiumEnrichment.UnknwonFilterSetting", {filterName: param}));
+                        else filterData = filterDataMerger(paramValues, param.name, filterData)
+                    }
+                    await tab.open(filterData)
                 })
-            }
+            })
         }
 
+        // These Sheets should be interactive, such that clicking on the anchor actually does something
+        // Due to some performance stutters during development, those are relatively restrictive.
+        // It the anchor appears somehwere where it should also work, add an appropriate hook here
         Hooks.on("renderJournalTextPageSheet", (journal, $html) => {
             // maybe related to why this does do need a filter? https://github.com/foundryvtt/foundryvtt/issues/3088
             const journalHtmlElement = $html.filter(".journal-page-content").get(0);
