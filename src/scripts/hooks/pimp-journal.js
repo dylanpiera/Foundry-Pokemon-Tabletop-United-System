@@ -133,7 +133,7 @@ const MANUAL_NAMES_OF_TABS_LOWER = [
  *
  * @param {HTMLElement} htmlElement
  */
-function pimp(htmlElement) {
+function enrichHtmlWithCompendiumBrowserWithoutReattachingListeners(htmlElement) {
     const enrichments = []
     const commonRegexSuffix = /Browser\[([|:_0-9a-zA-Z\- ]*)\]{([^\[\]\{\}@]*)}/
     for (const tabNameLower of MANUAL_NAMES_OF_TABS_LOWER) {
@@ -197,7 +197,7 @@ function pimp(htmlElement) {
                 compFilterString += ` compendium-filter-${pName}="${Array.from(pValues[pName]).join(" ")}"`
             }
             workingString = currentBaseSt.substring(0, match.index)
-            workingString += `<a class="compendium-link compendium-link-${enrichment.name}"${compFilterString}><i class="fas fa-th-list"></i>${displayName}</a>`
+            workingString += `<a class="inline-roll compendium-link compendium-link-${enrichment.name}"${compFilterString}><i class="fas fa-th-list"></i>${displayName}</a>`
             workingString += currentBaseSt.substring(match[0].length + match.index, currentBaseSt.length)
         }
     }
@@ -228,13 +228,31 @@ export const PimpJournal = {
     listen: () => {
         Hooks.on("renderJournalTextPageSheet", (journal, $html) => {
             // maybe related to why this does do need a filter? https://github.com/foundryvtt/foundryvtt/issues/3088
-            const journalHtmlElemtent = $html.filter(".journal-page-content").get(0);
-            pimp(journalHtmlElemtent)
+            const journalHtmlElement = $html.filter(".journal-page-content").get(0);
+            enrichHtmlWithCompendiumBrowserWithoutReattachingListeners(journalHtmlElement)
+            journal.activateListeners($html)
         });
         Hooks.on("renderChatMessage", (message, $html) => {
             // maybe related to why this does not need a filter? https://github.com/foundryvtt/foundryvtt/issues/3088
             const messageHtmlElement = $html.get(0);
-            pimp(messageHtmlElement)
+            enrichHtmlWithCompendiumBrowserWithoutReattachingListeners(messageHtmlElement)
+            message.activateListeners($html)
         });
+        Hooks.on("renderPTUItemSheet", (itemSheet, $html) => {
+            // maybe related to why this does not need a filter? https://github.com/foundryvtt/foundryvtt/issues/3088
+            /** @type{HTMLDivElement}*/
+            const messageHtmlElements = $html.get(0).querySelectorAll(".move-effect");
+            for(const element of messageHtmlElements)
+                enrichHtmlWithCompendiumBrowserWithoutReattachingListeners(element)
+            itemSheet.activateListeners($html)
+        });
+        // Hooks.on("renderPTUActorSheet", (actorSheet, $html) => {
+        //     // item-summary
+        //     // maybe related to why this does not need a filter? https://github.com/foundryvtt/foundryvtt/issues/3088
+        //     const messageHtmlElements = $html.get(0).querySelectorAll(".item-summary");
+        //     for(const element of messageHtmlElements)
+        //         pimp(element)
+        //     actorSheet.activateListeners($html)
+        // });
     }
 }
