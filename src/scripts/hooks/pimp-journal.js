@@ -245,6 +245,7 @@ export const PimpJournal = {
             for(const element of messageHtmlElements)
                 enrichHtmlWithCompendiumBrowserWithoutReattachingListeners(element)
             itemSheet.activateListeners($html)
+            // itemSheet.activateListeners($html)
         });
         // Hooks.on("renderPTUActorSheet", (actorSheet, $html) => {
         //     // item-summary

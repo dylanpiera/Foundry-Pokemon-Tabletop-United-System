@@ -1,7 +1,15 @@
 import { sluggify, sortStringRecord } from "../../../util/misc.js";
 import { tagify } from "../../../util/tags.js";
-import { RuleElements } from "../../rules/index.js";
+import {RuleElements as Promise, RuleElements} from "../../rules/index.js";
 import { RULE_ELEMENT_FORMS, RuleElementForm } from "./rule-elements/index.js";
+import {cssClasses as s, cssClasses as slugInput} from "../../../../static/js/nouislider.mjs";
+import {PTUPredicate as Array} from "../../system";
+import * as console from "console";
+import * as console from "console";
+import * as console from "console";
+import * as console from "console";
+import * as console from "console";
+import * as console from "console";
 
 class PTUItemSheet extends ItemSheet {
     /** @override */
@@ -100,6 +108,14 @@ class PTUItemSheet extends ItemSheet {
 
         return buttons;
     }
+
+
+    render(force = false, options = {}) {
+        return super.render(force, options);
+
+    }
+
+
 
     /** @override */
     activateListeners(html) {

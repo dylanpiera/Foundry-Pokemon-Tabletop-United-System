@@ -8,7 +8,7 @@ export class CompendiumBrowserPokeEdgesTab extends CompendiumBrowserTab {
         this.searchFields = ["name", "prerequisites.label", "prerequisites.tier"]
         this.storeFields = ["name", "uuid", "type", "source", "img", "prerequisites"];
 
-        this.index = ["img", "system.source.value", "system.prerequisites"];
+        this.index = ["img", "system.source.value", "system.prerequisites", "system.keywords"];
 
         this.filterData = this.prepareFilterData();
     }
@@ -26,6 +26,8 @@ export class CompendiumBrowserPokeEdgesTab extends CompendiumBrowserTab {
         const indexFields = duplicate(this.index);
         const sources = new Set();
 
+        const allKeywordsSeen = new Set()
+
         for await (const { pack, index } of this.browser.packLoader.loadPacks(
             "Item",
             this.browser.loadedPacks(this.tabName),
@@ -41,13 +43,16 @@ export class CompendiumBrowserPokeEdgesTab extends CompendiumBrowserTab {
 
                 const prerequisites = edgeData.system.prerequisites ?? [];
 
+                edgeData.system.keywords.forEach(kw => allKeywordsSeen.add(kw))
+
                 abilities.push({
                     name: edgeData.name,
                     type: edgeData.type,
                     img: edgeData.img,
                     uuid: `Compendium.${pack.collection}.${edgeData._id}`,
                     source: sourceSlug,
-                    prerequisites: this.#prerequisitesStringToEntries(prerequisites)
+                    prerequisites: this.#prerequisitesStringToEntries(prerequisites),
+                    keywords: edgeData.system.keywords
                 })
             }
         }
@@ -95,11 +100,12 @@ export class CompendiumBrowserPokeEdgesTab extends CompendiumBrowserTab {
     }
 
     filterIndexData(entry) {
-        const { checkboxes } = this.filterData;
+        const { checkboxes, multiselects } = this.filterData;
 
         if(checkboxes.source.selected.length) {
             if(!checkboxes.source.selected.includes(entry.source)) return false;
         }
+        if (!this.isEntryHonoringMultiselect(multiselects.keywords, entry.keywords)) return false;
 
         return true;
     }
@@ -120,6 +126,14 @@ export class CompendiumBrowserPokeEdgesTab extends CompendiumBrowserTab {
                 options: {
                     name: "PTU.CompendiumBrowser.FilterOptions.Name"
                 }
+            },
+            multiselects:{
+                keywords: {
+                    conjunction: "and",
+                    label: "PTU.CompendiumBrowser.FilterOptions.Keywords",
+                    options: [],
+                    selected: []
+                },
             },
             search: {
                 text: ""

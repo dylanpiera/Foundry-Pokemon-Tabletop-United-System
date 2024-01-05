@@ -201,26 +201,6 @@ export class CompendiumBrowserSpeciesTab extends CompendiumBrowserTab {
 
         return true;
     }
-
-
-    /**
-     @param multiselectFilter - the `selected` from a filter, e.g. `filterData.multiselects.types`
-     @param entrySetToCheck - the set of an entry corresponding to the filter, e.g. `entry.types`
-     @return {boolean} - True if the entry honors the filter, i.e. would be valid result
-     */
-    isEntryHonoringMultiselect(multiselectFilter, entrySetToCheck) {
-        const selected = multiselectFilter.selected.filter(s => !s.not).map(s => s.value);
-        const notSelected = multiselectFilter.selected.filter(s => s.not).map(s => s.value);
-        if (selected.length || notSelected.length) {
-            if (notSelected.some(ns => entrySetToCheck.some(e => sluggify(e) === ns))) return false;
-            const fulfilled =
-                multiselectFilter.conjunction === "and"
-                    ? selected.every(s => entrySetToCheck.some(e => sluggify(e) === s))
-                    : selected.some(s => entrySetToCheck.some(e => sluggify(e) === s));
-            if (!fulfilled) return false;
-        }
-        return true;
-    }
     prepareFilterData() {
         return {
             checkboxes: {
