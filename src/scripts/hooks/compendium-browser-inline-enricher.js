@@ -131,12 +131,7 @@ function search(values, paramName, filterData) {
 
 function buildEnrichments() {
     const enrichments = []
-    const commonRegexSuffix = /Browser\[([|:_0-9a-zA-Z\- ]*)\]{([^\[\]\{\}@]*)}/
     for (const tabNameLower of MANUAL_NAMES_OF_COMPENDIUM_BROWSER_TABS_LOWER) {
-        const tabNamePretty = tabNameLower.charAt(0).toUpperCase() + tabNameLower.substring(1)
-
-        const regex = new RegExp("@" + tabNamePretty + commonRegexSuffix.source)
-
         const getTab = () => {
             return game.ptu.compendiumBrowser.tabs[tabNameLower]
         }
@@ -169,8 +164,6 @@ function buildEnrichments() {
         enrichments.push({
             /**@type{string}*/
             name: tabNameLower,
-            /**@type{RegExp}*/
-            regex: regex,
             /**Used on click, referencing browser that is not ready when e.g. Chat is loaded.
              * Therefor, encapsulate into function call to resolve at click-time
              * @type{Function}*/
@@ -186,44 +179,42 @@ function buildEnrichments() {
 
 export const CompendiumBrowserInlineEnricher = {
     listen: () => {
-        const enrichments = buildEnrichments()
+        Hooks.on('setup', () => {
+            CONFIG.TextEditor.enrichers.push({
+                pattern: /@([A-Z][a-z]+)Browser\[([|:_0-9a-zA-Z\- ]*)\](:?{(:?[^\[\]\{\}@]*)?})?/gim,
+                enricher: async (match, enrichmentOptions) => {
+                    const [tabNameUpper, paramString] = match.slice(1,3)
+                    let displayText = match[4]
 
-        for(const enrichment of enrichments){
-            Hooks.on('setup', () => {
-                CONFIG.TextEditor.enrichers.push({
-                    pattern: /@([A-Z][a-z]+)Browser\[([|:_0-9a-zA-Z\- ]*)\](:?{(:?[^\[\]\{\}@]*)?})?/gim,
-                    enricher: async (match, something) => {
-                        const [tabNameUpper, paramString] = match.slice(1,3)
-                        let displayText = match[4]
+                    const a = document.createElement("a");
+                    a.classList.add("inline-roll", "compendium-link")
 
-                        const a = document.createElement("a");
-                        a.classList.add("inline-roll", "compendium-link")
+                    const tabNameLower = tabNameUpper.toLowerCase();
+                    a.classList.add(`compendium-link-${tabNameLower}`)
 
-                        const tabNameLower = tabNameUpper.toLowerCase();
-                        a.classList.add(`compendium-link-${tabNameLower}`)
-
-                        const params = paramString.split("|")
-                        const pValues = {}
-                        for (const param of params) {
-                            const [pName, pValue] = param.split(/:(.*)/s).splice(0, 2)
-                            if (!pValues[pName]) pValues[pName] = new Set()
-                            pValues[pName].add(pValue)
-                        }
-                        for (const pName of Object.keys(pValues)) {
-                            a.setAttribute(`compendium-filter-${pName}`, Array.from(pValues[pName]).join(" "))
-                        }
-                        a.innerHTML=`<i class="fas fa-th-list"></i>`
-
-                        if(! displayText) {
-                            const numExplicitSettings = Object.keys(pValues).map(k => pValues[k].size).reduce((a,b)=>a+b, 0)
-                            displayText=`${tabNameUpper} Search (${numExplicitSettings} Settings)`
-                        }
-                        a.insertAdjacentText("beforeend", displayText)
-                        return a;
+                    const params = paramString.split("|")
+                    const pValues = {}
+                    for (const param of params) {
+                        const [pName, pValue] = param.split(/:(.*)/s).splice(0, 2)
+                        if (!pValues[pName]) pValues[pName] = new Set()
+                        pValues[pName].add(pValue)
                     }
-                });
-            })
-        }
+                    for (const pName of Object.keys(pValues)) {
+                        a.setAttribute(`compendium-filter-${pName}`, Array.from(pValues[pName]).join(" "))
+                    }
+                    a.innerHTML=`<i class="fas fa-th-list"></i>`
+
+                    if(! displayText) {
+                        const numExplicitSettings = Object.keys(pValues).map(k => pValues[k].size).reduce((a,b)=>a+b, 0)
+                        displayText=`${tabNameUpper} Search (${numExplicitSettings} Settings)`
+                    }
+                    a.insertAdjacentText("beforeend", displayText)
+                    return a;
+                }
+            });
+        })
+
+        const enrichments = buildEnrichments()
 
         const addAll= (htmlElement) => {
             // Now that the Proper HTML is in place, add listeners to freshly enriched HTML elements
@@ -245,7 +236,6 @@ export const CompendiumBrowserInlineEnricher = {
                 })
             }
         }
-
 
         Hooks.on("renderJournalTextPageSheet", (journal, $html) => {
             // maybe related to why this does do need a filter? https://github.com/foundryvtt/foundryvtt/issues/3088
