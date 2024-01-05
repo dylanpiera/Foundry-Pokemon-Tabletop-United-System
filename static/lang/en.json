@@ -1015,6 +1015,10 @@
       "Title": "Type Chart"
     },
     "CompendiumBrowser": {
+      "Enrichment":{
+        "UnknownFilterSetting": "Unknown filter \"{filterName}\" for tab {tabName}",
+        "UnknownTab": "Unknown Compendium Browser Tab \"{tabName}\""
+      },
       "ProgressBar": {
         "LoadingComplete": "Loading complete",
         "LoadingPack": "Loading {pack}"

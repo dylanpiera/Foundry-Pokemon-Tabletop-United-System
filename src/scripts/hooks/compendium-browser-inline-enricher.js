@@ -171,7 +171,7 @@ export const CompendiumBrowserInlineEnricher = {
                     const tab = game.ptu.compendiumBrowser.tabs[tabKey]
 
                     if (!tab) {
-                        ui.notifications.warn(game.i18n.format("PTU.CompendiumEnrichment.DontKnowTab", {tabName: tabKey}));
+                        ui.notifications.warn(game.i18n.format("PTU.CompendiumBrowser.Enrichment.UnknownTab", {tabName: tabKey}));
                         return;
                     }
 
@@ -206,7 +206,7 @@ export const CompendiumBrowserInlineEnricher = {
                             if (filterDataMerger) throw Error(`Multiple hits for ${param.name}`)
                             filterDataMerger = FILTERDATA_MERGERS[filterType] //break after
                         }
-                        if (!filterDataMerger) ui.notifications.warn(game.i18n.format("PTU.CompendiumEnrichment.UnknwonFilterSetting", {filterName: param}));
+                        if (!filterDataMerger) ui.notifications.warn(game.i18n.format("PTU.CompendiumBrowser.Enrichment.UnknownFilterSetting", {filterName: param.name, tabName: tabKey}));
                         else filterData = filterDataMerger(paramValues, param.name, filterData)
                     }
                     await tab.open(filterData)
