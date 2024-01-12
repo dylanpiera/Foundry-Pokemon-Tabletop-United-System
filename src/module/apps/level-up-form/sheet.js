@@ -28,7 +28,7 @@ class LevelUpForm extends FormApplication {
         }
 
         this.resolve = options.resolve;
-        ui.windows[pokemon.sheet.appId].element.css({"filter": "saturate(0.1) opacity(0.95)", "pointer-events": "none"})
+        ui.windows[pokemon.sheet.appId]?.element?.css({"filter": "saturate(0.1) opacity(0.95)", "pointer-events": "none"})
     }
 
     /** @override */
@@ -161,7 +161,7 @@ class LevelUpForm extends FormApplication {
                 log: "error",
                 ...options
             });
-            ui.windows[this.data.pokemon.sheet.appId].element.css({"filter": "", "pointer-events": ""})
+            ui.windows[this.data.pokemon.sheet.appId]?.element?.css({"filter": "", "pointer-events": ""})
         });
         return this;
     }
@@ -187,7 +187,7 @@ class LevelUpForm extends FormApplication {
         }
         this.resolve();
 
-        ui.windows[this.data.pokemon.sheet.appId].element.css({"filter": "", "pointer-events": ""})
+        ui.windows[this.data.pokemon.sheet.appId]?.element?.css({"filter": "", "pointer-events": ""})
         return super.close({...options, force: true});
     }
 }
