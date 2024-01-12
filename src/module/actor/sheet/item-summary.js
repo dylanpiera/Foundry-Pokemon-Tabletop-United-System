@@ -67,7 +67,7 @@ class ItemSummaryRenderer {
             summary.hidden = false;
             await new Promise(resolve => setTimeout(resolve, 1));
             summary.classList.add('show');
-            await game.user.setFlag("ptu", "sheetStates", mergeObject(game.user.getFlag("ptu", "sheetStates") || {}, {
+            await game.user.setFlag("ptu", "sheetStates", foundry.utils.mergeObject(game.user.getFlag("ptu", "sheetStates") || {}, {
                 [actor.id]: {
                     [item.type]: {
                         [item.id]: true
@@ -82,7 +82,7 @@ class ItemSummaryRenderer {
             await new Promise(resolve => setTimeout(resolve, duration * 1000));
             summary.classList.remove('transitioning')
             summary.hidden = true;
-            await game.user.setFlag("ptu", "sheetStates", mergeObject(game.user.getFlag("ptu", "sheetStates") || {}, {
+            await game.user.setFlag("ptu", "sheetStates", foundry.utils.mergeObject(game.user.getFlag("ptu", "sheetStates") || {}, {
                 [actor.id]: {
                     [item.type]: {
                         [item.id]: false

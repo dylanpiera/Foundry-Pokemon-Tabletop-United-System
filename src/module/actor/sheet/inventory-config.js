@@ -2,7 +2,7 @@ class InventoryConfigSheet extends FormApplication {
 
     /** @override */
 	static get defaultOptions() {
-		return mergeObject(super.defaultOptions, {
+		return foundry.utils.mergeObject(super.defaultOptions, {
             title: "Inventory Configuration",
 			classes: ['ptu', 'sheet', 'actor', 'gen8', "inventory", "config"],
 			template: 'systems/ptu/static/templates/config/inventory-config-sheet.hbs',
@@ -65,7 +65,7 @@ class InventoryConfigSheet extends FormApplication {
         const category = event.currentTarget.parentElement.parentElement.dataset.category;
         if(!destination || !column || !category) return;
 
-        const columns = duplicate(this.object.actor.getFlag("ptu", "itemColumns"));
+        const columns = foundry.utils.duplicate(this.object.actor.getFlag("ptu", "itemColumns"));
         columns[column] = columns[column].filter(c => c !== category);
         columns[destination].push(category);
         this.object.actor.setFlag("ptu", "itemColumns", columns).then(() => this.render(true, {source: this.id}));
@@ -90,7 +90,7 @@ class InventoryConfigSheet extends FormApplication {
         if(data.type === "category" && !this._dropBlock) {
             const column = event.currentTarget.dataset.column;
             const category = event.currentTarget.dataset.category;
-            const columns = duplicate(this.object.actor.getFlag("ptu", "itemColumns"));
+            const columns = foundry.utils.duplicate(this.object.actor.getFlag("ptu", "itemColumns"));
 
             // Remove from old column
             columns[data.column] = columns[data.column].filter(c => c !== data.category);

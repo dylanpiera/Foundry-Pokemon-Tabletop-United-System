@@ -193,7 +193,7 @@ class PTUPokemonActor extends PTUActor {
         system.stats = this._calcBaseStats();
 
         const leftoverLevelUpPoints = system.levelUpPoints - Object.values(system.stats).reduce((a, v) => v.levelUp + a, 0);
-        const actualLevel = Math.max(1, system.level.current - Math.max(0, Math.clamped(0, leftoverLevelUpPoints, leftoverLevelUpPoints - system.modifiers.statPoints.total ?? 0)));
+        const actualLevel = Math.max(1, system.level.current - Math.max(0, Math.clamp(0, leftoverLevelUpPoints, leftoverLevelUpPoints - system.modifiers.statPoints.total ?? 0)));
 
         const result = calculateStatTotal({
             level: actualLevel,
@@ -310,7 +310,7 @@ class PTUPokemonActor extends PTUActor {
     }
 
     _calcBaseStats() {
-        const stats = duplicate(this.system.stats);
+        const stats = foundry.utils.duplicate(this.system.stats);
 
         const speciesStats = this.species?.system?.stats;
         for (const stat of Object.keys(stats)) {
@@ -357,7 +357,7 @@ class PTUPokemonActor extends PTUActor {
 
     // TODO: Implement rules for capability changing items
     _calcCapabilities() {
-        const speciesCapabilities = duplicate(this.species?.system?.capabilities ?? {});
+        const speciesCapabilities = foundry.utils.duplicate(this.species?.system?.capabilities ?? {});
         if (!speciesCapabilities) return {};
 
         const finalCapabilities = {}
@@ -414,7 +414,7 @@ class PTUPokemonActor extends PTUActor {
                 if (!changes["system"]["skills"][value]) changes["system"]["skills"][value] = {}
                 if (!changes["system"]["skills"][value]['value']) changes["system"]["skills"][value]['value'] = {}
                 if (!changes["system"]["skills"][value]['value']['mod']) changes["system"]["skills"][value]['value']['mod'] = {}
-                changes["system"]["skills"][value]['value']['mod'][randomID()] = { mode: 'add', value: 1, source: "Skill Background" };
+                changes["system"]["skills"][value]['value']['mod'][foundry.utils.randomID()] = { mode: 'add', value: 1, source: "Skill Background" };
             }
         }
         for (const value of Object.values(this.system.background.decreased)) {
@@ -423,7 +423,7 @@ class PTUPokemonActor extends PTUActor {
                 if (!changes["system"]["skills"][value]) changes["system"]["skills"][value] = {}
                 if (!changes["system"]["skills"][value]['value']) changes["system"]["skills"][value]['value'] = {}
                 if (!changes["system"]["skills"][value]['value']['mod']) changes["system"]["skills"][value]['value']['mod'] = {}
-                changes["system"]["skills"][value]['value']['mod'][randomID()] = { mode: 'add', value: -1, source: "Skill Background" };
+                changes["system"]["skills"][value]['value']['mod'][foundry.utils.randomID()] = { mode: 'add', value: -1, source: "Skill Background" };
             }
         }
         if (game.settings.get("ptu", "variant.spiritPlaytest")) {
@@ -447,46 +447,46 @@ class PTUPokemonActor extends PTUActor {
                 case 5:
                 case 4:
                 case 3: {
-                    changes["system"]["modifiers"]["acBonus"]["mod"][randomID()] = { mode: 'add', value: 1, source: "Spirit" };
-                    changes["system"]["modifiers"]["evasion"]["physical"]["mod"][randomID()] = { mode: 'add', value: 1, source: "Spirit" };
-                    changes["system"]["modifiers"]["evasion"]["special"]["mod"][randomID()] = { mode: 'add', value: 1, source: "Spirit" };
-                    changes["system"]["modifiers"]["evasion"]["speed"]["mod"][randomID()] = { mode: 'add', value: 1, source: "Spirit" };
-                    changes["system"]["modifiers"]["critRange"]["mod"][randomID()] = { mode: 'add', value: 1, source: "Spirit" };
-                    changes["system"]["modifiers"]["saveChecks"]["mod"][randomID()] = { mode: 'add', value: 2, source: "Spirit" };
-                    changes["system"]["modifiers"]["skillBonus"]["mod"][randomID()] = { mode: 'add', value: 2, source: "Spirit" };
+                    changes["system"]["modifiers"]["acBonus"]["mod"][foundry.utils.randomID()] = { mode: 'add', value: 1, source: "Spirit" };
+                    changes["system"]["modifiers"]["evasion"]["physical"]["mod"][foundry.utils.randomID()] = { mode: 'add', value: 1, source: "Spirit" };
+                    changes["system"]["modifiers"]["evasion"]["special"]["mod"][foundry.utils.randomID()] = { mode: 'add', value: 1, source: "Spirit" };
+                    changes["system"]["modifiers"]["evasion"]["speed"]["mod"][foundry.utils.randomID()] = { mode: 'add', value: 1, source: "Spirit" };
+                    changes["system"]["modifiers"]["critRange"]["mod"][foundry.utils.randomID()] = { mode: 'add', value: 1, source: "Spirit" };
+                    changes["system"]["modifiers"]["saveChecks"]["mod"][foundry.utils.randomID()] = { mode: 'add', value: 2, source: "Spirit" };
+                    changes["system"]["modifiers"]["skillBonus"]["mod"][foundry.utils.randomID()] = { mode: 'add', value: 2, source: "Spirit" };
                     break;
                 }
                 case 2: {
-                    changes["system"]["modifiers"]["saveChecks"]["mod"][randomID()] = { mode: 'add', value: 2, source: "Spirit" };
-                    changes["system"]["modifiers"]["skillBonus"]["mod"][randomID()] = { mode: 'add', value: 2, source: "Spirit" };
+                    changes["system"]["modifiers"]["saveChecks"]["mod"][foundry.utils.randomID()] = { mode: 'add', value: 2, source: "Spirit" };
+                    changes["system"]["modifiers"]["skillBonus"]["mod"][foundry.utils.randomID()] = { mode: 'add', value: 2, source: "Spirit" };
                     break;
                 }
                 case 1: {
-                    changes["system"]["modifiers"]["skillBonus"]["mod"][randomID()] = { mode: 'add', value: 2, source: "Spirit" };
+                    changes["system"]["modifiers"]["skillBonus"]["mod"][foundry.utils.randomID()] = { mode: 'add', value: 2, source: "Spirit" };
                     break;
                 }
                 case -1: {
-                    changes["system"]["modifiers"]["skillBonus"]["mod"][randomID()] = { mode: 'add', value: -2, source: "Spirit" };
+                    changes["system"]["modifiers"]["skillBonus"]["mod"][foundry.utils.randomID()] = { mode: 'add', value: -2, source: "Spirit" };
                     break;
                 }
                 case -2: {
-                    changes["system"]["modifiers"]["saveChecks"]["mod"][randomID()] = { mode: 'add', value: -2, source: "Spirit" };
-                    changes["system"]["modifiers"]["skillBonus"]["mod"][randomID()] = { mode: 'add', value: -2, source: "Spirit" };
+                    changes["system"]["modifiers"]["saveChecks"]["mod"][foundry.utils.randomID()] = { mode: 'add', value: -2, source: "Spirit" };
+                    changes["system"]["modifiers"]["skillBonus"]["mod"][foundry.utils.randomID()] = { mode: 'add', value: -2, source: "Spirit" };
                     break;
                 }
                 case -3: {
-                    changes["system"]["modifiers"]["acBonus"]["mod"][randomID()] = { mode: 'add', value: -1, source: "Spirit" };
-                    changes["system"]["modifiers"]["evasion"]["physical"]["mod"][randomID()] = { mode: 'add', value: -1, source: "Spirit" };
-                    changes["system"]["modifiers"]["evasion"]["special"]["mod"][randomID()] = { mode: 'add', value: -1, source: "Spirit" };
-                    changes["system"]["modifiers"]["evasion"]["speed"]["mod"][randomID()] = { mode: 'add', value: -1, source: "Spirit" };
-                    changes["system"]["modifiers"]["critRange"]["mod"][randomID()] = { mode: 'add', value: -1, source: "Spirit" };
-                    changes["system"]["modifiers"]["saveChecks"]["mod"][randomID()] = { mode: 'add', value: -2, source: "Spirit" };
-                    changes["system"]["modifiers"]["skillBonus"]["mod"][randomID()] = { mode: 'add', value: -2, source: "Spirit" };
+                    changes["system"]["modifiers"]["acBonus"]["mod"][foundry.utils.randomID()] = { mode: 'add', value: -1, source: "Spirit" };
+                    changes["system"]["modifiers"]["evasion"]["physical"]["mod"][foundry.utils.randomID()] = { mode: 'add', value: -1, source: "Spirit" };
+                    changes["system"]["modifiers"]["evasion"]["special"]["mod"][foundry.utils.randomID()] = { mode: 'add', value: -1, source: "Spirit" };
+                    changes["system"]["modifiers"]["evasion"]["speed"]["mod"][foundry.utils.randomID()] = { mode: 'add', value: -1, source: "Spirit" };
+                    changes["system"]["modifiers"]["critRange"]["mod"][foundry.utils.randomID()] = { mode: 'add', value: -1, source: "Spirit" };
+                    changes["system"]["modifiers"]["saveChecks"]["mod"][foundry.utils.randomID()] = { mode: 'add', value: -2, source: "Spirit" };
+                    changes["system"]["modifiers"]["skillBonus"]["mod"][foundry.utils.randomID()] = { mode: 'add', value: -2, source: "Spirit" };
                     break;
                 }
             }
         }
-        this.system.changes = mergeObject(
+        this.system.changes = foundry.utils.mergeObject(
             this.system.changes,
             changes
         );
@@ -512,7 +512,7 @@ class PTUPokemonActor extends PTUActor {
         });
 
         if (result) {
-            if (result.changed) mergeObject(changed, result.changed);
+            if (result.changed) foundry.utils.mergeObject(changed, result.changed);
         }
 
         await super._preUpdate(changed, options, userId);
@@ -581,7 +581,7 @@ class PTUPokemonActor extends PTUActor {
                 }
                 else if (!currentAbility) {
                     const newAbility = (await fromUuid(ability.uuid)).toObject();
-                    newAbility.flags.ptu = mergeObject(newAbility.flags?.ptu ?? {}, {
+                    newAbility.flags.ptu = foundry.utils.mergeObject(newAbility.flags?.ptu ?? {}, {
                         abilityChosen: ability.tier
                     });
                     toAdd.push(newAbility);

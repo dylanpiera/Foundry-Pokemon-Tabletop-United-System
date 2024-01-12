@@ -38,7 +38,7 @@ class PTUFeat extends PTUItem {
         if(changed.system?.class !== undefined) {
             newClass.actor = this.actor?.items.find((item) => item.isClass && item.name === changed.system.class);
             if(newClass.actor) {
-                changed.flags = expandObject({"ptu.grantedBy": {id: newClass.actor._id, onDelete: "detach"}});
+                changed.flags = foundry.utils.expandObject({"ptu.grantedBy": {id: newClass.actor._id, onDelete: "detach"}});
                 newClass.update = {"flags.ptu.itemGrants": {[this._id]: {id: this._id, onDelete: "detach"}}};
             }
             if(this.system.class) {
@@ -46,7 +46,7 @@ class PTUFeat extends PTUItem {
                 if(oldClass.actor) {
                     if(!changed.flags?.ptu?.grantedBy?.id && this.flags?.ptu?.grantedBy?.id === oldClass.actor._id) {
                         delete changed.flags?.ptu?.grantedBy;
-                        changed.flags= expandObject({"ptu.-=grantedBy": null});
+                        changed.flags= foundry.utils.expandObject({"ptu.-=grantedBy": null});
                     };
                     oldClass.update = {"flags.ptu.itemGrants": {[`-=${this._id}`]: null}};
                 }

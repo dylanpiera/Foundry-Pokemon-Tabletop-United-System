@@ -9,7 +9,7 @@ export function registerHandlebarsHelpers() {
 function _registerPTUHelpers() {
 
     Handlebars.registerHelper("getGameSetting", function (key) { return game.settings.get("ptu", key) });
-    Handlebars.registerHelper("getProperty", getProperty); // native foundry function
+    Handlebars.registerHelper("getProperty", foundry.utils.getProperty); // native foundry function
 
     Handlebars.registerHelper("json", function (context) { return JSON.stringify(context); });
 
@@ -122,7 +122,7 @@ function _registerPTUHelpers() {
         const dbNumber = Number(item.damageBase.postStab ?? item);
         if (isNaN(dbNumber)) return "Not a valid DB";
 
-        const realDb = Math.clamped(dbNumber, 0, 28);
+        const realDb = Math.clamp(dbNumber, 0, 28);
         const dbString = CONFIG.PTU.data.dbData[realDb];
 
         if (!actor) return dbString;

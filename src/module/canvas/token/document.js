@@ -29,7 +29,7 @@ class PTUTokenDocument extends TokenDocument {
         const autoscaleDefault = game.settings.get("ptu", "tokens.autoscale");
         // Autoscaling is a secondary feature of linking to actor size
         const autoscale = linkToActorSize ? this.flags.ptu.autoscale ?? autoscaleDefault : false;
-        this.flags.ptu = mergeObject(this.flags.ptu ?? {}, { linkToActorSize, autoscale });
+        this.flags.ptu = foundry.utils.mergeObject(this.flags.ptu ?? {}, { linkToActorSize, autoscale });
 
         this.disposition = this.actor.alliance
             ? {

@@ -35,7 +35,7 @@ class PTUPredicate extends Array {
     }
 
     toObject() {
-        return deepClone([...this]);
+        return foundry.utils.deepClone([...this]);
     }
 
     clone() {

@@ -242,7 +242,7 @@ class RuleElementPTU extends foundry.abstract.DataModel {
 
                 const property = prop.replace(regex, replaceFunc.bind(this));
 
-                const value = getProperty(data, property);
+                const value = foundry.utils.getProperty(data, property);
                 if (value === undefined) {
                     this.failValidation(`Failed to resolve injected property "${source}"`);
                 }
@@ -291,9 +291,9 @@ class RuleElementPTU extends foundry.abstract.DataModel {
                 const {actor, item} = this;
 
                 switch(source) {
-                    case "actor": return Number(getProperty(actor, field.substring(seperator + 1))) || 0;
-                    case "item": return Number(getProperty(item, field.substring(seperator + 1))) || 0;
-                    case "rule": return Number(getProperty(this, field.substring(seperator + 1))) || 0;
+                    case "actor": return Number(foundry.utils.getProperty(actor, field.substring(seperator + 1))) || 0;
+                    case "item": return Number(foundry.utils.getProperty(item, field.substring(seperator + 1))) || 0;
+                    case "rule": return Number(foundry.utils.getProperty(this, field.substring(seperator + 1))) || 0;
                     default: return 0;
                 }
             })();
@@ -331,7 +331,7 @@ class RuleElementPTU extends foundry.abstract.DataModel {
         };
 
         return value instanceof Object && defaultValue instanceof Object 
-            ? mergeObject(defaultValue, value, {inplace: false})
+            ? foundry.utils.mergeObject(defaultValue, value, {inplace: false})
             : typeof value === "string" && evaluate
             ? saferEval(Roll.replaceFormulaData(value, {actor: this.actor, item: this.item, ...injectables}))
             : value;

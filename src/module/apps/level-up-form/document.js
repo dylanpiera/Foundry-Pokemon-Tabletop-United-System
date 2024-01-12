@@ -236,7 +236,7 @@ class LevelUpData {
         }
 
         const leftoverLevelUpPoints = (10 + this.level.new + this.pokemon.system.modifiers.statPoints.total ?? 0) - Object.values(this.stats).reduce((a, v) => v.oldLevelUp + v.newLevelUp + a, 0);
-        const actualLevel = Math.max(1, this.level.new - Math.max(0, Math.clamped(0, leftoverLevelUpPoints, leftoverLevelUpPoints - this.pokemon.system.modifiers.statPoints.total ?? 0)));
+        const actualLevel = Math.max(1, this.level.new - Math.max(0, Math.clamp(0, leftoverLevelUpPoints, leftoverLevelUpPoints - this.pokemon.system.modifiers.statPoints.total ?? 0)));
 
         const evolving = (this.evolution?.slug ?? this.pokemon.species.slug) !== this.pokemon.species.slug;
         const actualStats = Object.entries(this.stats).reduce((stats, [stat, value]) => {

@@ -55,7 +55,7 @@ const GamePTU = {
             tokenPanel: new TokenPanel()
         }
 
-        game.ptu = mergeObject(game.ptu ?? {}, initData)
+        game.ptu = foundry.utils.mergeObject(game.ptu ?? {}, initData)
 
         CONFIG.PTU.data.typeEffectiveness = game.settings.get("ptu", "type.typeEffectiveness") ?? CONFIG.PTU.data.typeEffectiveness;
     },

@@ -35,7 +35,7 @@ class PTUEffect extends BaseEffectPTU {
         const badge = this.system.badge;
         if(badge?.type === "counter") {
             const max = badge.labels?.length ?? Infinity;
-            badge.value = Math.clamped(badge.value, 1, max);
+            badge.value = Math.clamp(badge.value, 1, max);
             badge.label = badge.labels?.at(badge.value -1)?.trim() || null;  
         }
     }
@@ -54,14 +54,14 @@ class PTUEffect extends BaseEffectPTU {
         if(badge?.type === "counter" && !this.isExpired) {
             if(badge.value >= (badge.labels?.length ?? Infinity)) return;
 
-            return await this.update({"system.badge.value": duplicate(badge.value)+1});
+            return await this.update({"system.badge.value": foundry.utils.duplicate(badge.value)+1});
         }
     }
 
     async decrease() {
         if(this.system.badge?.type !== "counter" || this.system.badge.value === 1 || this.isExpired) return await this.delete();
 
-        return await this.update({"system.badge.value": duplicate(this.system.badge.value)-1});
+        return await this.update({"system.badge.value": foundry.utils.duplicate(this.system.badge.value)-1});
     }
 
     async apply(targets, source = null) {

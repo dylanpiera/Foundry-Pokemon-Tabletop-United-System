@@ -23,7 +23,7 @@ export class CompendiumBrowserMovesTab extends CompendiumBrowserTab {
 
     async loadData() {
         const moves = [];
-        const indexFields = duplicate(this.index);
+        const indexFields = foundry.utils.duplicate(this.index);
         const sources = new Set();
 
         for await (const { pack, index } of this.browser.packLoader.loadPacks(

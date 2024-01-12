@@ -33,6 +33,6 @@ export class TokenLightRuleElement extends RuleElementPTU {
     /** @override */
     afterPrepareData(){
         if (!this.test()) return;
-        this.actor.synthetics.tokenOverrides.light = deepClone(this.value);
+        this.actor.synthetics.tokenOverrides.light = foundry.utils.deepClone(this.value);
     }
 }

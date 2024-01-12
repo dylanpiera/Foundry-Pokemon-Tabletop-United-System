@@ -64,7 +64,7 @@ class PTUModifier {
         
         this.#originalValue = this.modifier = modifier ?? 0;
 
-        this.adjustments = deepClone(adjustments ?? []);
+        this.adjustments = foundry.utils.deepClone(adjustments ?? []);
         this.enabled = enabled ?? true;
         this.ignored = ignored ?? false;
         this.source = source ?? null;
@@ -124,7 +124,7 @@ class PTUModifier {
     }
 
     toObject() {
-        return duplicate({...this, item: undefined});
+        return foundry.utils.duplicate({...this, item: undefined});
     }
 
     toString() {
@@ -335,7 +335,7 @@ class PTUDiceModifier {
     }
 
     toObject() {
-        return duplicate({...this});
+        return foundry.utils.duplicate({...this});
     }
 
     toString() {

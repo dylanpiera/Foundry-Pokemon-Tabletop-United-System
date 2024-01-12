@@ -6,7 +6,7 @@
 
   /** @override */
   static get defaultOptions() {
-    return mergeObject(super.defaultOptions, {
+    return foundry.utils.mergeObject(super.defaultOptions, {
       template: "systems/ptu/static/templates/config/combat-settings.hbs",
       title: "PTU Combat Settings"
     });

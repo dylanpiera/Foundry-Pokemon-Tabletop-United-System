@@ -66,9 +66,9 @@ class PTUItem extends Item {
 
     /** @override */
     prepareBaseData() {
-        this.flags.ptu = mergeObject({ rulesSelections: {} }, this.flags.ptu ?? {});
+        this.flags.ptu = foundry.utils.mergeObject({ rulesSelections: {} }, this.flags.ptu ?? {});
 
-        this.flags.ptu = mergeObject(this.flags.ptu ?? {}, {
+        this.flags.ptu = foundry.utils.mergeObject(this.flags.ptu ?? {}, {
             rollOptions: {
                 all: {
                     [`item:id:${this._id}`]: true,
@@ -126,7 +126,7 @@ class PTUItem extends Item {
     }
 
     _updateIcon({ source, update } = { source: undefined, update: false }) {
-        source ??= duplicate(this);
+        source ??= foundry.utils.duplicate(this);
 
         let required = false;
         source.img ||= `/systems/ptu/static/css/images/icons/${source.type}_icon.png`
@@ -173,7 +173,7 @@ class PTUItem extends Item {
             }
 
             if (!(context.keepId || context.keepEmbeddedIds)) {
-                source._id = randomID();
+                source._id = foundry.utils.randomID();
             }
 
             const item = new CONFIG.Item.documentClass(source, { parent: actor });
@@ -403,7 +403,7 @@ class PTUItem extends Item {
                 .join("");
         })();
 
-        const referenceEffect = this.referenceEffect ? await TextEditor.enrichHTML(`@UUID[${duplicate(this.referenceEffect)}]`, { async: true }) : null;
+        const referenceEffect = this.referenceEffect ? await TextEditor.enrichHTML(`@UUID[${foundry.utils.duplicate(this.referenceEffect)}]`, { async: true }) : null;
 
         const chatData = {
             user: game.user._id,

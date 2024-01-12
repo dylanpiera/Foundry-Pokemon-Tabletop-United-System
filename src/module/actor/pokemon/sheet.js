@@ -6,7 +6,7 @@ import { ItemSummaryRenderer } from "../sheet/item-summary.js";
 export class PTUPokemonSheet extends PTUActorSheet {
 	/** @override */
 	static get defaultOptions() {
-		const options = mergeObject(super.defaultOptions, {
+		const options = foundry.utils.mergeObject(super.defaultOptions, {
 			classes: ['ptu', 'sheet', 'actor', 'gen8'],
 			template: 'systems/ptu/static/templates/actor/pokemon-sheet.hbs',
 			width: 1200,
@@ -283,7 +283,7 @@ export class PTUPokemonSheet extends PTUActorSheet {
 		// Get the type of item to create.
 		const type = header.dataset.type;
 		// Grab any data associated with this control.
-		const data = duplicate(header.dataset);
+		const data = foundry.utils.duplicate(header.dataset);
 		// Initialize a default name.
 		const name = `New ${game.i18n.localize(`TYPES.Item.${type}`)}`;
 		// Prepare the item object.

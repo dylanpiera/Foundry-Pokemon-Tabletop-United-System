@@ -12,7 +12,7 @@ class PTUPartySheet extends FormApplication {
     }
 
     static get defaultOptions() {
-        return mergeObject(super.defaultOptions, {
+        return foundry.utils.mergeObject(super.defaultOptions, {
             title: "PTU.PartySheet.Title",
             classes: ["ptu", "sheet", "party"],
             width: 637,
@@ -469,7 +469,7 @@ class PTUPartySheet extends FormApplication {
             systemVersion: game.system.version
         };
 
-        const filename = ["fvtt", "ptuParty", this.trainer.name?.slugify(), randomID()].filterJoin("-");
+        const filename = ["fvtt", "ptuParty", this.trainer.name?.slugify(), foundry.utils.randomID()].filterJoin("-");
         saveDataToFile(JSON.stringify(data, null, 2), "text/json", `${filename}.json`);
     }
 
@@ -537,7 +537,7 @@ class PTUPartySheet extends FormApplication {
                     party: partySheet.party,
                     boxed: partySheet.boxed
                 }
-                console.log(duplicate(data));
+                console.log(foundry.utils.duplicate(data));
 
                 // Delete existing party
                 await existingActor.delete();

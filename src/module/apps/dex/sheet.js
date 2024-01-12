@@ -56,7 +56,7 @@ class PTUDexSheet extends FormApplication {
     }
 
     static get defaultOptions() {
-        return mergeObject(super.defaultOptions, {
+        return foundry.utils.mergeObject(super.defaultOptions, {
             title: "PTU.DexSheet.Title",
             classes: ["ptu", "sheet", "gen8", "dex"],
             width: 625,
@@ -84,7 +84,7 @@ class PTUDexSheet extends FormApplication {
 
         data.ballStyle = this.ballStyle;
 
-        const dex = duplicate(this.object.system.dex);
+        const dex = foundry.utils.duplicate(this.object.system.dex);
         const seen = new Set(dex.seen);
         const owned = new Set(dex.owned);
 

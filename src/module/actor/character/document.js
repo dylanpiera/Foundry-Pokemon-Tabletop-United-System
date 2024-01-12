@@ -45,7 +45,7 @@ class PTUTrainerActor extends PTUActor {
         }
 
         system.level.current =
-            Math.clamped(
+            Math.clamp(
                 1
                 + Number(system.level.milestones)
                 + Math.trunc((Number(system.level.miscexp) / levelUpRequirement) + (Number(system.level.dexexp) / levelUpRequirement)),
@@ -144,7 +144,7 @@ class PTUTrainerActor extends PTUActor {
         system.stats = this._calcBaseStats();
 
         const leftoverLevelUpPoints = system.levelUpPoints - Object.values(system.stats).reduce((a, v) => v.levelUp + a, 0);
-        const actualLevel = Math.max(1, system.level.current - Math.max(0, Math.clamped(0, leftoverLevelUpPoints, leftoverLevelUpPoints - system.modifiers.statPoints.total ?? 0)));
+        const actualLevel = Math.max(1, system.level.current - Math.max(0, Math.clamp(0, leftoverLevelUpPoints, leftoverLevelUpPoints - system.modifiers.statPoints.total ?? 0)));
 
         const result = calculateStatTotal({
             level: ["data-revamp", "short-track"].includes(game.settings.get("ptu", "variant.trainerAdvancement")) ? actualLevel * 2 : actualLevel,
@@ -290,7 +290,7 @@ class PTUTrainerActor extends PTUActor {
     }
 
     _calcBaseStats() {
-        const stats = duplicate(this.system.stats);
+        const stats = foundry.utils.duplicate(this.system.stats);
 
         for (const stat of Object.keys(stats)) {
             if (stat === "hp") stats[stat].base = 10;
@@ -312,7 +312,7 @@ class PTUTrainerActor extends PTUActor {
                 if (!changes["system"]["skills"][value]) changes["system"]["skills"][value] = {}
                 if (!changes["system"]["skills"][value]['value']) changes["system"]["skills"][value]['value'] = {}
                 if (!changes["system"]["skills"][value]['value']['mod']) changes["system"]["skills"][value]['value']['mod'] = {}
-                changes["system"]["skills"][value]['value']['mod'][randomID()] = { mode: 'add', value: -1, source: "Pathetic Background Skills" };
+                changes["system"]["skills"][value]['value']['mod'][foundry.utils.randomID()] = { mode: 'add', value: -1, source: "Pathetic Background Skills" };
             }
         }
         const { adept, novice } = this.system.background;
@@ -321,14 +321,14 @@ class PTUTrainerActor extends PTUActor {
             if (!changes["system"]["skills"][adept]) changes["system"]["skills"][adept] = {}
             if (!changes["system"]["skills"][adept]['value']) changes["system"]["skills"][adept]['value'] = {}
             if (!changes["system"]["skills"][adept]['value']['mod']) changes["system"]["skills"][adept]['value']['mod'] = {}
-            changes["system"]["skills"][adept]['value']['mod'][randomID()] = { mode: 'add', value: 2, source: "Adept Background Skill" };
+            changes["system"]["skills"][adept]['value']['mod'][foundry.utils.randomID()] = { mode: 'add', value: 2, source: "Adept Background Skill" };
         }
         if (novice && novice != "blank") {
             if (!changes["system"]["skills"]) changes["system"]["skills"] = {}
             if (!changes["system"]["skills"][novice]) changes["system"]["skills"][novice] = {}
             if (!changes["system"]["skills"][novice]['value']) changes["system"]["skills"][novice]['value'] = {}
             if (!changes["system"]["skills"][novice]['value']['mod']) changes["system"]["skills"][novice]['value']['mod'] = {}
-            changes["system"]["skills"][novice]['value']['mod'][randomID()] = { mode: 'add', value: 1, source: "Novice Background Skill" };
+            changes["system"]["skills"][novice]['value']['mod'][foundry.utils.randomID()] = { mode: 'add', value: 1, source: "Novice Background Skill" };
         }
         changes.system.maxAp = {
             1: {
@@ -352,7 +352,7 @@ class PTUTrainerActor extends PTUActor {
                 value: - b.value
             }
         })
-        this.system.changes = mergeObject(
+        this.system.changes = foundry.utils.mergeObject(
             this.system.changes,
             changes
         );

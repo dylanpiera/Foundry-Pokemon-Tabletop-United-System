@@ -6,7 +6,7 @@ import { RULE_ELEMENT_FORMS, RuleElementForm } from "./rule-elements/index.js";
 class PTUItemSheet extends ItemSheet {
     /** @override */
     static get defaultOptions() {
-        return mergeObject(super.defaultOptions, {
+        return foundry.utils.mergeObject(super.defaultOptions, {
             classes: ["ptu", "sheet", "item"],
             width: 650,
             height: 510,
@@ -28,8 +28,8 @@ class PTUItemSheet extends ItemSheet {
 
         this.object._updateIcon({update: true});
 
-        data.referenceEffect = this.item.referenceEffect ? await TextEditor.enrichHTML(`@UUID[${duplicate(this.item.referenceEffect)}]`, {async: true}) : null;
-        data.itemEffect = this.item.system.effect ? await TextEditor.enrichHTML(duplicate(this.item.system.effect), {async: true}) : this.item.system.effect;
+        data.referenceEffect = this.item.referenceEffect ? await TextEditor.enrichHTML(`@UUID[${foundry.utils.duplicate(this.item.referenceEffect)}]`, {async: true}) : null;
+        data.itemEffect = this.item.system.effect ? await TextEditor.enrichHTML(foundry.utils.duplicate(this.item.system.effect), {async: true}) : this.item.system.effect;
 
         const rules = this.item.toObject().system.rules ?? [];
         this.ruleElementForms = {};
@@ -54,7 +54,7 @@ class PTUItemSheet extends ItemSheet {
                 selected: this.selectedRuleElementType,
                 types: sortStringRecord(
                     Object.keys(RuleElements.all).reduce(
-                        (result, key) => mergeObject(result, {[key]: `RULES.Types.${key}`}),
+                        (result, key) => foundry.utils.mergeObject(result, {[key]: `RULES.Types.${key}`}),
                         {}
                     )
                 )
@@ -189,7 +189,7 @@ class PTUItemSheet extends ItemSheet {
 
     /** @override */
     async _updateObject(event, formData) {
-        const expanded = expandObject(formData);
+        const expanded = foundry.utils.expandObject(formData);
 
         if(Array.isArray(expanded.system.prerequisites)) {
             expanded.system.prerequisites = expanded.system.prerequisites.map(s => s.value).filter(s => !!s)
@@ -221,7 +221,7 @@ class PTUItemSheet extends ItemSheet {
 
                 if(!value) continue;
 
-                rules[idx] = mergeObject(rules[idx] ?? {}, value);
+                rules[idx] = foundry.utils.mergeObject(rules[idx] ?? {}, value);
 
                 // Call specific subhandlers
                 this.ruleElementForms[idx]?._updateObject(rules[idx])
