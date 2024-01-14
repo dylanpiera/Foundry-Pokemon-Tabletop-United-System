@@ -91,7 +91,7 @@
 #token-hud .status-effects .effect-control:hover {
   filter: drop-shadow(0 0 5px #232323aa) drop-shadow(0 0 2px #ababab77);
 }
-.conjunction-not {
+.conjunction-not[not="true"] {
   --tag-inset-shadow-size: 5em !important;
   --tags-border-color: #d3a2a2 !important;
   --tags-hover-border-color: #bc5151 !important;
@@ -100,7 +100,7 @@
   --tag-hover: #bc5151 !important;
   text-decoration: none;
 }
-.conjunction-not[disabled] > .tagify__input {
+.conjunction-not[not="true"][disabled] > .tagify__input {
   display: none;
 }
 .tagify {
