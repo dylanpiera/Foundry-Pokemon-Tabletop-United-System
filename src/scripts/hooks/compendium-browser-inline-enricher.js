@@ -1,5 +1,5 @@
 /**
- * @param {Array.<String>} values Values for given parameter, excluding param name. E.g ["water", "not:fire"]
+ * @param {Array<string>} values ["athlete", "ace-trainer-cr"]
  * @param {string} paramName Parameter name as named in compendium browser filter data, e.g. "types"
  * @param {Object} filterData Whole filterData of CompendiumBrowserTab. Will not get modified.
  *
@@ -20,21 +20,20 @@ function checkboxes(values, paramName, filterData) {
 }
 
 /**
- * @param {Array.<String>} values Values for given parameter, excluding param name. E.g ["water", "not:fire"]
+ * @param {Array<string>} positives
+ * @param {Array<string>} negatives
+ * @param {string|null} conjunction "and"|"or"|null
  * @param {string} paramName Parameter name as named in compendium browser filter data, e.g. "types"
  * @param {Object} filterData Whole filterData of CompendiumBrowserTab. Will not get modified.
  *
  * @return {Object} New Object for filter data, merged with provided
  */
-function multiselects(values, paramName, filterData) {
+function multiselects(positives, negatives, conjunction, paramName, filterData) {
     const fd = deepClone(filterData)
 
-    const conjunction = values.find(v => v.startsWith("logic:"))
-    if (conjunction) fd.multiselects[paramName].conjunction = conjunction.substring(6)
+    if (conjunction) fd.multiselects[paramName].conjunction = conjunction;
 
-    const negatives = values
-        .filter(v => v.startsWith("not:"))
-        .map(v => v.substring(4))
+    const negs = negatives
         .map(value => {
             return {
                 value: value,
@@ -42,8 +41,8 @@ function multiselects(values, paramName, filterData) {
                 label: filterData.multiselects[paramName].options.find(o => o.value === value).label
             }
         })
-    const positives = values
-        .filter(v => !v.includes(":"))
+    const poss = positives
+        .filter(v => !v.startsWith("not-"))
         .map(value => {
             return {
                 value: value,
@@ -51,74 +50,64 @@ function multiselects(values, paramName, filterData) {
             }
         })
 
-    fd.multiselects[paramName].selected = positives.concat(negatives)
+    fd.multiselects[paramName].selected = poss.concat(negs)
     return fd
 }
 
 /**
- * @param {Array.<String>} values Values for given parameter, excluding param name. E.g ["water", "not:fire"]
+ * @param {Number|null} min
  * @param {string} paramName Parameter name as named in compendium browser filter data, e.g. "types"
  * @param {Object} filterData Whole filterData of CompendiumBrowserTab. Will not get modified.
  *
  * @return {Object} New Object for filter data, merged with provided
  */
-function sliders(values, paramName, filterData) {
+function sliders(min, max, paramName, filterData) {
     const fd = deepClone(filterData)
-    for (const end of ["min", "max"]) {
-        const val = values.filter(v => v.startsWith(`${end}:`)).map(v => Number(v.substring(4))).find(v => v)
-        if (val) fd.sliders[paramName].values[end] = val
-    }
+
+    if (min === 0 || min) fd.sliders[paramName].values.min = min
+    if (max === 0 || max) fd.sliders[paramName].values.max = max
+
     return fd;
 }
 
 /**
- * @param {Array.<String>} values Values for given parameter, excluding param name. E.g ["water", "not:fire"]
+ * @param {string} value
  * @param {string} paramName Parameter name as named in compendium browser filter data, e.g. "types"
  * @param {Object} filterData Whole filterData of CompendiumBrowserTab. Will not get modified.
  *
  * @return {Object} New Object for filter data, merged with provided
  */
-function selects(values, paramName, filterData) {
-    const fd = deepClone(filterData)
-    const legalOptionNames = Object.keys(fd.selects[paramName].options)
-    fd.selects[paramName].selected = values.find(v => legalOptionNames.includes(v)) || ""
+function selects(value, paramName, filterData) {
+    const fd = deepClone(filterData);
+    const legalOptionNames = Object.keys(fd.selects[paramName].options);
+    if (legalOptionNames.includes(value)) fd.selects[paramName].selected = value;
     return fd;
 }
 
 /**
- * @param {Array.<String>} values Values for given parameter, excluding param name. E.g ["water", "not:fire"]
- * @param {string} paramName Parameter name as named in compendium browser filter data, e.g. "types"
+ * @param {string|null|undefined} by
+ * @param {string|null|undefined} dir
  * @param {Object} filterData Whole filterData of CompendiumBrowserTab. Will not get modified.
  *
  * @return {Object} New Object for filter data, merged with provided
  */
-function order(values, paramName, filterData) {
+function order(by, dir, filterData) {
     const fd = deepClone(filterData)
-    const by = values.filter(v => v.startsWith("by:")).map(v => v.substring(3))[0]
     if (by) fd.order.by = by
-    const dir = values.filter(v => v.startsWith("dir:")).map(v => v.substring(4))[0]
     if (dir) fd.order.direction = by
     return fd
 }
 
 /**
- * @param {Array.<String>} values Values for given parameter, excluding param name. E.g ["water", "not:fire"]
- * @param {string} paramName Parameter name as named in compendium browser filter data, e.g. "types"
+ * @param {Array.<String>|null|undefined} values Words to be searched for
  * @param {Object} filterData Whole filterData of CompendiumBrowserTab. Will not get modified.
  *
  * @return {Object} New Object for filter data, merged with provided
  */
-function search(values, paramName, filterData) {
+function search(values, filterData) {
     const fd = deepClone(filterData)
-    fd.search.text = values.join(" ")
+    if (values) fd.search.text = values.join(" ")
     return fd
-}
-
-const FILTERDATA_MERGERS = {
-    checkboxes: checkboxes,
-    multiselects: multiselects,
-    sliders: sliders,
-    selects: selects
 }
 
 export const CompendiumBrowserInlineEnricher = {
@@ -128,21 +117,22 @@ export const CompendiumBrowserInlineEnricher = {
         // stuff with an anchor https://discord.com/channels/170995199584108546/722559135371231352/1192834854614737068
         Hooks.on('setup', () => {
             CONFIG.TextEditor.enrichers.push({
-                pattern: /@([A-Z][a-z]+)Browser\[([|:_0-9a-zA-Z\- ]*)\](:?{(:?[^\[\]\{\}@]*)?})?/gim,
+                pattern: /@CompSearch\[([A-Za-z]+) ?([0-9a-zA-Z\-= ]*)\](:?{(:?[^\[\]\{\}@]*)?})?/gim,
                 enricher: async (match, enrichmentOptions) => {
-                    const [tabNameUpper, paramString] = match.slice(1, 3)
+                    const [tabName, paramString] = match.slice(1, 3)
                     let displayText = match[4]
 
                     const a = document.createElement("a");
                     a.classList.add("inline-roll", "compendium-link")
 
-                    const tabNameLower = tabNameUpper.toLowerCase();
+                    const tabNameLower = tabName.toLowerCase();
                     a.setAttribute("compendium-link-tab", tabNameLower)
 
-                    const params = paramString.split("|")
                     const pValues = {}
+                    pValues["search"] = paramString.split(" ").filter(p => !p.includes("="))
+                    const params = paramString.split(" ").filter(p => p.includes("="))
                     for (const param of params) {
-                        const [pName, pValue] = param.split(/:(.*)/s).splice(0, 2)
+                        const [pName, pValue] = param.split(/=(.*)/s).splice(0, 2)
                         if (!pValues[pName]) pValues[pName] = new Set()
                         pValues[pName].add(pValue)
                     }
@@ -152,8 +142,8 @@ export const CompendiumBrowserInlineEnricher = {
                     a.innerHTML = `<i class="fas fa-th-list"></i>`
 
                     if (!displayText) {
-                        const numExplicitSettings = Object.keys(pValues).map(k => pValues[k].size).reduce((a, b) => a + b, 0)
-                        displayText = `${tabNameUpper} Search (${numExplicitSettings} Settings)`
+                        const numExplicitSettings = Object.keys(pValues).length
+                        displayText = `${tabName} Search (${numExplicitSettings} Settings)`
                     }
                     a.insertAdjacentText("beforeend", displayText)
                     return a;
@@ -166,8 +156,9 @@ export const CompendiumBrowserInlineEnricher = {
         const addAll = (htmlElement) => {
             htmlElement.querySelectorAll(`.compendium-link`).forEach(el => {
                 el.addEventListener("click", async (event) => {
+                    let tabKey = el.getAttribute("compendium-link-tab")
+                    if (tabKey === "pokeedges") tabKey = "pokeEdges";
                     /** @type {CompendiumBrowserTab} */
-                    const tabKey = el.getAttribute("compendium-link-tab")
                     const tab = game.ptu.compendiumBrowser.tabs[tabKey]
 
                     if (!tab) {
@@ -175,40 +166,79 @@ export const CompendiumBrowserInlineEnricher = {
                         return;
                     }
 
+                    const prefix = "compendium-filter-setting-"
+
                     const allElAttributes = el.getAttributeNames()
-                    const params = allElAttributes.filter(pName => pName.startsWith("compendium-filter-setting-")).map(s => {
+                    const params = allElAttributes.filter(pName => pName.startsWith(prefix)).map(s => {
                         return {
                             name: s.substring(26),
-                            rawString: el.getAttribute(s)
+                            rawString: el.getAttribute(s),
+                            used: false
                         }
                     })
+                    const usedParams = []
 
                     let filterData = await tab.getFilterData()
-                    for (const param of params) {
-                        const paramValues = param.rawString.split(" ").map(v => v.trim()).filter(v => v !== "")
-                        if (paramValues.length === 0) continue
 
-                        //special cases for which there is no nested struture in filterdata
-                        if(param.name==="search"){
-                            filterData = search(paramValues, param.name, filterData);
-                            continue;
-                        }
-                        if(param.name==="order"){
-                            filterData = order(paramValues, param.name, filterData);
-                            continue;
-                        }
+                    const searchWords = el.getAttribute(prefix + "search")
+                    usedParams.push("search")
+                    filterData = search(searchWords.split(" "), filterData);
 
-                        // Take care of all filters that are nested behind their respective input type
-                        let filterDataMerger;
-                        for (const filterType of Object.keys(FILTERDATA_MERGERS)) {
-                            if (!filterData[filterType]) continue;
-                            if (!filterData[filterType][param.name]) continue;
-                            if (filterDataMerger) throw Error(`Multiple hits for ${param.name}`)
-                            filterDataMerger = FILTERDATA_MERGERS[filterType] //break after
+                    const orderBy = el.getAttribute(prefix + "order-by")
+                    const orderDir = el.getAttribute(prefix + "order-dir")
+                    usedParams.push("order-by")
+                    usedParams.push("order-dir")
+
+                    filterData = order(orderBy, orderDir, filterData)
+
+                    if (filterData.checkboxes) {
+                        for (const checkboxName of Object.keys(filterData.checkboxes)) {
+                            const checkboxString = el.getAttribute(prefix + checkboxName)
+                            usedParams.push(checkboxName)
+                            if (checkboxString) {
+                                filterData = checkboxes(checkboxString.split(" "), checkboxName, filterData)
+                            }
                         }
-                        if (!filterDataMerger) ui.notifications.warn(game.i18n.format("PTU.CompendiumBrowser.Enrichment.UnknownFilterSetting", {filterName: param.name, tabName: tabKey}));
-                        else filterData = filterDataMerger(paramValues, param.name, filterData)
                     }
+                    if (filterData.selects) {
+                        for (const selectName of Object.keys(filterData.selects)) {
+                            const selectString = el.getAttribute(prefix + selectName)
+                            usedParams.push(selectName)
+                            if (selectString) {
+                                filterData = selects(selectString, selectName, filterData)
+                            }
+                        }
+                    }
+                    if (filterData.sliders) {
+                        for (const sliderName of Object.keys(filterData.sliders)) {
+                            const min = el.getAttribute(prefix + `${sliderName}-min`)
+                            const max = el.getAttribute(prefix + `${sliderName}-max`)
+                            usedParams.push(`${sliderName}-min`)
+                            usedParams.push(`${sliderName}-max`)
+                            if (min || max){
+                                filterData = sliders(min, max, sliderName, filterData)
+                            }
+                        }
+                    }
+                    if (filterData.multiselects) {
+                        for (const multiselectName of Object.keys(filterData.multiselects)) {
+                            const multString = el.getAttribute(prefix + multiselectName)
+                            usedParams.push(multiselectName)
+                            if (multString) {
+                                const positives = multString.split(" ").filter(s => !s.startsWith("not-"))
+                                const negatives = multString.split(" ").filter(s => s.startsWith("not-")).map(s => s.substring(4))
+                                const conjunction = el.getAttribute(prefix + `${multiselectName}-logic`)
+                                usedParams.push(`${multiselectName}-logic`)
+                                filterData = multiselects(positives, negatives, conjunction, multiselectName, filterData)
+                            }
+                        }
+                    }
+
+                    params.filter(p => !usedParams.includes(p.name)).forEach(param => ui.notifications.warn(game.i18n.format("PTU.CompendiumBrowser.Enrichment.UnknownFilterSetting", {
+                        filterName: param.name,
+                        tabName: tabKey
+                    })))
+
                     try {
                         await tab.open(filterData)
                     } catch (e) {
