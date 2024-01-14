@@ -396,7 +396,7 @@ class CompendiumBrowser extends Application {
             const form = html.querySelector(".compendium-browser-settings form");
             if (form) {
                 html.querySelector(".compendium-browser-settings button.save-settings")?.addEventListener("click", async () => {
-                    const formData = foundry.utils.flattenObject(new FormDataExtended(form).object);
+                    const formData = foundry.utils.foundry.utils.flattenObject(new FormDataExtended(form).object);
                     for (const [t, packs] of Object.entries(this.settings)) {
                         for (const [key, pack] of Object.entries(packs)) {
                             pack.load = formData[key] ?? pack.load;

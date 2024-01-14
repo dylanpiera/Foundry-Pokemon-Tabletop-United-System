@@ -413,7 +413,7 @@ class PTUSpeciesSheet extends PTUItemSheet {
             expanded.system.evolutions = evolutions.sort((a, b) => a.level - b.level);
         }
 
-        return super._updateObject(event, flattenObject(expanded));
+        return super._updateObject(event, foundry.utils.flattenObject(expanded));
     }
 
     /** @override */

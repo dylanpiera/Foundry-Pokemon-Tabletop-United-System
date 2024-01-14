@@ -149,7 +149,7 @@ export const CompendiumBrowserInlineEnricher = {
                             a.setAttribute(`compendium-filter-setting-${pName}`, Array.from(pValues[pName]).join(" "))
                         }
                         a.innerHTML = `<i class="fas fa-th-list"></i>`
-                        a.insertAdjacentText("beforeend", displayText || `${tabName} Search (${Object.keys(pValues).length} Settings)`)
+                        a.insertAdjacentText("beforeend", displayText || `${tabName} Search`)
                     }
                     return a;
                 }

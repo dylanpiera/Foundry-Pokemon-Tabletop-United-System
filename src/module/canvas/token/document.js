@@ -102,7 +102,7 @@ class PTUTokenDocument extends TokenDocument {
             const preUpdate = this.toObject(false);
             this.reset();
             const postUpdate = this.toObject(false);
-            const changes = diffObject(preUpdate, postUpdate);
+            const changes = foundry.utils.diffObject(preUpdate, postUpdate);
 
             if(Object.keys(changes).length > 0) {
                 this._onUpdate(changes, {}, game.user.id);

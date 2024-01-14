@@ -242,7 +242,7 @@ class PTUItemSheet extends ItemSheet {
             expanded.system.rules = rules;
         }
 
-        return super._updateObject(event, flattenObject(expanded));
+        return super._updateObject(event, foundry.utils.flattenObject(expanded));
     }
 }
 
