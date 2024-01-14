@@ -41,7 +41,7 @@ export function getSpeciesData(species) {
                 }
             }
         }
-        const toReturn = mergeObject(JSON.parse(JSON.stringify(preJson)), extra);
+        const toReturn = foundry.utils.mergeObject(JSON.parse(JSON.stringify(preJson)), extra);
         if (toReturn.Type.indexOf("null") === 1) toReturn.Type.splice(1, 1);
         return toReturn;
     }

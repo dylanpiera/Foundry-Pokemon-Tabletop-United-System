@@ -4,7 +4,7 @@ import { PTUSpecies } from "../../item/index.js";
 export class PTUSpeciesDragOptionsPrompt extends FormApplication {
     /** @override */
     static get defaultOptions() {
-        return mergeObject(super.defaultOptions, {
+        return foundry.utils.mergeObject(super.defaultOptions, {
             classes: ["ptu", "pokemon", "drag-in"],
             template: "systems/ptu/static/templates/apps/species-drag-prompt.hbs",
             width: 250,

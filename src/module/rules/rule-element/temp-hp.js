@@ -13,7 +13,7 @@ export class TempHPRuleElement extends RuleElementPTU {
     onCreate(actorUpdates) {
         if(this.ignored) return;
 
-        const updatedActorData = mergeObject(this.actor._source, actorUpdates, {inplace: false});
+        const updatedActorData = foundry.utils.mergeObject(this.actor._source, actorUpdates, {inplace: false});
         const value = this.resolveValue(this.value)
 
         const rollOptions = Array.from(new Set(this.actor.getRollOptions()));
@@ -21,9 +21,9 @@ export class TempHPRuleElement extends RuleElementPTU {
         if(!this.predicate.test(rollOptions)) return;
         if(typeof value !== "number") return this.failValidation("Temporary HP requires a non-zero value field");
 
-        const currentTempHP = Number(getProperty(updatedActorData, "system.tempHp.value")) || 0;
+        const currentTempHP = Number(foundry.utils.getProperty(updatedActorData, "system.tempHp.value")) || 0;
         if(value > currentTempHP) {
-            mergeObject(actorUpdates, {
+            foundry.utils.mergeObject(actorUpdates, {
                 "system.tempHp.value": value, 
                 "system.tempHp.max": value,
                 "system.tempHp.source": this.item.uuid
@@ -34,11 +34,11 @@ export class TempHPRuleElement extends RuleElementPTU {
 
     /** @override */
     onDelete(actorUpdates) {
-        const updatedActorData = mergeObject(this.actor._source, actorUpdates, {inplace: false});
+        const updatedActorData = foundry.utils.mergeObject(this.actor._source, actorUpdates, {inplace: false});
         if(!this.removeOnDelete) return;
 
-        if(getProperty(updatedActorData, "system.tempHp.source") === this.item.uuid) {
-            mergeObject(actorUpdates, {
+        if(foundry.utils.getProperty(updatedActorData, "system.tempHp.source") === this.item.uuid) {
+            foundry.utils.mergeObject(actorUpdates, {
                 "system.tempHp.value": 0,
                 "system.tempHp.-=source": null
             });

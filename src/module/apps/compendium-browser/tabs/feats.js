@@ -23,7 +23,7 @@ export class CompendiumBrowserFeatsTab extends CompendiumBrowserTab {
 
     async loadData() {
         const feats = [];
-        const indexFields = duplicate(this.index);
+        const indexFields = foundry.utils.duplicate(this.index);
         const sources = new Set();
 
         const classes = new Set();

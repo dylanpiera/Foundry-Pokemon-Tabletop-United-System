@@ -11,7 +11,7 @@ class MigrationRunnerBase {
     /** @type {MigrationBase[]} */
     migrations = []
 
-    static LATEST_SCHEMA_VERSION = 0.111;
+    static LATEST_SCHEMA_VERSION = 0.112;
     static MINIMUM_SAFE_VERSION = 0.100;
     static RECOMMENDED_SAFE_VERSION = 0.101;
 
@@ -73,7 +73,7 @@ class MigrationRunnerBase {
      * @param {MigrationBase[]} migrations 
      */
     async getUpdatedActor(actorSource, migrations) {
-        const currentActor = deepClone(actorSource);
+        const currentActor = foundry.utils.deepClone(actorSource);
 
         for (const migration of migrations) {
             for (const currentItem of currentActor.items) {
@@ -106,7 +106,7 @@ class MigrationRunnerBase {
      * @param {MigrationBase[]} migrations 
      */
     async getUpdatedItem(itemSource, migrations) {
-        const current = deepClone(itemSource);
+        const current = foundry.utils.deepClone(itemSource);
 
         for (const migration of migrations) {
             await migration.preUpdateItem?.(current);
@@ -127,7 +127,7 @@ class MigrationRunnerBase {
      * @param {MigrationBase[]} migrations 
      */
     async getUpdatedTable(tableSource, migrations) {
-        const current = deepClone(tableSource);
+        const current = foundry.utils.deepClone(tableSource);
 
         for (const migration of migrations) {
             try {
@@ -145,7 +145,7 @@ class MigrationRunnerBase {
      * @param {MigrationBase[]} migrations 
      */
     async getUpdatedMacro(macroSource, migrations) {
-        const current = deepClone(macroSource);
+        const current = foundry.utils.deepClone(macroSource);
 
         for (const migration of migrations) {
             try {
@@ -163,7 +163,7 @@ class MigrationRunnerBase {
      * @param {MigrationBase[]} migrations 
      */
     async getUpdatedJournalEntry(journalSource, migrations) {
-        const clone = deepClone(journalSource);
+        const clone = foundry.utils.deepClone(journalSource);
 
         for (const migration of migrations) {
             try {
@@ -194,7 +194,7 @@ class MigrationRunnerBase {
      * @param {MigrationBase[]} migrations 
      */
     async getUpdatedUser(userData, migrations) {
-        const current = deepClone(userData);
+        const current = foundry.utils.deepClone(userData);
         for (const migration of migrations) {
             try {
                 await migration.updateUser?.(current);

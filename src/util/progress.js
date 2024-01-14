@@ -27,7 +27,7 @@ export class Progress {
     #updateUI() {
         const $loader = $("#loading");
         if ($loader.length === 0) return;
-        const pct = Math.clamped((100 * this.counter) / this.steps, 0, 100);
+        const pct = Math.clamp((100 * this.counter) / this.steps, 0, 100);
         $loader.find("#context").text(this.label);
         $loader.find("#loading-bar").css({ width: `${pct}%`, whiteSpace: "nowrap" });
         $loader.find("#progress").text(`${this.counter} / ${this.steps}`);

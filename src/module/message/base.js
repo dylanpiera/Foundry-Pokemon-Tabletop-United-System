@@ -1,6 +1,6 @@
 class ChatMessagePTU extends ChatMessage {
     constructor(data = {}, context = {}) {
-        data.flags = mergeObject(expandObject(data.flags ?? {}), { core: {}, ptu: {} });
+        data.flags = foundry.utils.mergeObject(foundry.utils.expandObject(data.flags ?? {}), { core: {}, ptu: {} });
         super(data, context);
     }
 

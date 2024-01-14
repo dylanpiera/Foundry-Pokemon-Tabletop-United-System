@@ -28,7 +28,7 @@ export class CompendiumBrowserSpeciesTab extends CompendiumBrowserTab {
 
     async loadData() {
         const species = [];
-        const indexFields = duplicate(this.index);
+        const indexFields = foundry.utils.duplicate(this.index);
         const sources = new Set();
 
         const allMoveSlugsSeen = new Set()

@@ -16,7 +16,7 @@ class MigrationSummary extends Application {
             (app) => app instanceof MigrationSummary
         );
         if (existing) {
-            existing.options = mergeObject(existing.options, options);
+            existing.options = foundry.utils.mergeObject(existing.options, options);
             return existing;
         }
     }

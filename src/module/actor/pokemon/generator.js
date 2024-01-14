@@ -24,7 +24,7 @@ export class PokemonGenerator {
         if (!this.level) {
             this.level = (() => {
                 if (minLevel == maxLevel) return minLevel;
-                return Math.clamped(0, (Math.floor(Math.random() * (maxLevel - minLevel + 1)) + minLevel), 100);
+                return Math.clamp(0, (Math.floor(Math.random() * (maxLevel - minLevel + 1)) + minLevel), 100);
             })();
         }
 
@@ -78,7 +78,7 @@ export class PokemonGenerator {
 
         const foundryDefaultSettings = {...game.settings.get("core", "defaultToken")} ?? {};
 
-        const prototypeToken = mergeObject(foundryDefaultSettings, {
+        const prototypeToken = foundry.utils.mergeObject(foundryDefaultSettings, {
             width: this.size.width,
             height: this.size.height,
             actorLink: true,

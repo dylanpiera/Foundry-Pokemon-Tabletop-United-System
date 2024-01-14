@@ -15,7 +15,7 @@ export class TokenPanel extends Application {
 
     /** @override */
     static get defaultOptions() {
-        return mergeObject(super.defaultOptions, {
+        return foundry.utils.mergeObject(super.defaultOptions, {
             id: "ptu-token-panel",
             template: "systems/ptu/static/templates/apps/token-panel.hbs",
             popOut: false,

@@ -23,13 +23,13 @@ class PTUDexSheet extends FormApplication {
             new Promise(
                 async (resolve, reject) => {
                     const packs = Object.entries(game.settings.get("ptu", "compendiumBrowserPacks")["species"]).reduce((acc, [id, value]) => {
-                        if(id === "ptr.species") {
-                            if(value.load === false) acc = acc.filter(id => id !== "ptr.species")
+                        if(id === "ptu.species") {
+                            if(value.load === false) acc = acc.filter(id => id !== "ptu.species")
                             return acc;
                         }
                         if(value?.load) acc.push(id);
                         return acc;
-                    }, ["ptr.species"]) 
+                    }, ["ptu.species"]) 
                     if (packs.length === 0) return ui.notifications.error("Please enable at least one species compendium from the Compendium Browser settings.");
                     const docs = [];
                     for(const packId of packs) {
@@ -56,7 +56,7 @@ class PTUDexSheet extends FormApplication {
     }
 
     static get defaultOptions() {
-        return mergeObject(super.defaultOptions, {
+        return foundry.utils.mergeObject(super.defaultOptions, {
             title: "PTU.DexSheet.Title",
             classes: ["ptu", "sheet", "gen8", "dex"],
             width: 625,
@@ -84,7 +84,7 @@ class PTUDexSheet extends FormApplication {
 
         data.ballStyle = this.ballStyle;
 
-        const dex = duplicate(this.object.system.dex);
+        const dex = foundry.utils.duplicate(this.object.system.dex);
         const seen = new Set(dex.seen);
         const owned = new Set(dex.owned);
 

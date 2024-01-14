@@ -9,7 +9,7 @@ class GrantItemRuleElement extends RuleElementPTU {
 
         if(this.reevaluateOnUpdate) {
             this.replaceSelf = false;
-            this.allowDuplicate = false;
+            this.allowduplicate = false;
         }
 
         this.onDeleteActions = this.#getOnDeleteActions(source);
@@ -25,7 +25,7 @@ class GrantItemRuleElement extends RuleElementPTU {
             flag: new foundry.data.fields.StringField({ required: true, nullable: true, initial: null }),
             reevaluateOnUpdate: new foundry.data.fields.BooleanField({ required: false, nullable: false, initial: false }),
             replaceSelf: new foundry.data.fields.BooleanField({ required: false, nullable: false, initial: false }),
-            allowDuplicate: new foundry.data.fields.BooleanField({ required: false, nullable: false, initial: true }),
+            allowduplicate: new foundry.data.fields.BooleanField({ required: false, nullable: false, initial: true }),
             onDeleteActions: new foundry.data.fields.ObjectField({ required: false, nullable: false, initial: undefined }),
             overwrites: new foundry.data.fields.ObjectField({ required: false, nullable: false, initial: undefined })
         };
@@ -74,7 +74,7 @@ class GrantItemRuleElement extends RuleElementPTU {
         }
 
         const existingItem = this.actor.items.find((i) => i.sourceId === uuid || (grantedItem.type === "condition" && i.slug === grantedItem.slug));
-        if(!this.allowDuplicate && existingItem) {
+        if(!this.allowduplicate && existingItem) {
             if(this.replaceSelf) {
                 pendingItems.splice(pendingItems.indexOf(existingItem), 1);
             }
@@ -83,19 +83,19 @@ class GrantItemRuleElement extends RuleElementPTU {
             return ui.notifications.warn(`Item ${grantedItem.name} is already granted to ${this.actor.name}.`);
         }
 
-        itemSource._id ??= randomID();
+        itemSource._id ??= foundry.utils.randomID();
         const grantedSource = grantedItem.toObject();
-        grantedSource._id = randomID();
+        grantedSource._id = foundry.utils.randomID();
 
         if(["feat", "edge"].includes(grantedSource.type)) {
             grantedSource.system.free = true;
         }
 
         // Guarantee future alreadyGranted checks pass in all cases by re-assigning sourceId
-        grantedSource.flags = mergeObject(grantedSource.flags, { core: { sourceId: uuid } });
+        grantedSource.flags = foundry.utils.mergeObject(grantedSource.flags, { core: { sourceId: uuid } });
 
         // Create a temporary owned item and run its actor-data preparation and early-stage rule-element callbacks
-        const tempGranted = new PTUItem(deepClone(grantedSource), { parent: this.actor });
+        const tempGranted = new PTUItem(foundry.utils.deepClone(grantedSource), { parent: this.actor });
 
         tempGranted.prepareActorData?.();
         for(const rule of tempGranted.prepareRuleElements()) {
@@ -166,7 +166,7 @@ class GrantItemRuleElement extends RuleElementPTU {
     }
 
     #setGrantFlags(granter, grantee) {
-        const flags = mergeObject(granter.flags ?? {}, { ptu: { itemGrants: { } } });
+        const flags = foundry.utils.mergeObject(granter.flags ?? {}, { ptu: { itemGrants: { } } });
         if(!this.flag) throw new Error("GrantItemRuleElement#flag must be set before calling #setGrantFlags");
         flags.ptu.itemGrants[this.flag] = {
             id: grantee instanceof PTUItem ? grantee.id : grantee._id,
@@ -188,7 +188,7 @@ class GrantItemRuleElement extends RuleElementPTU {
             grantee.update({"flags.ptu.grantedBy": grantedBy}, { render: false });
         }
         else {
-            grantee.flags = mergeObject(grantee.flags ?? {}, { ptu: { grantedBy } });
+            grantee.flags = foundry.utils.mergeObject(grantee.flags ?? {}, { ptu: { grantedBy } });
         }
     }
 

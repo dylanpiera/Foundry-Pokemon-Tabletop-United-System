@@ -13,7 +13,7 @@ class ActorConfig extends DocumentSheet {
 
     /** @override */
     static get defaultOptions() {
-        return mergeObject(super.defaultOptions, {
+        return foundry.utils.mergeObject(super.defaultOptions, {
 			template: 'systems/ptu/static/templates/config/actor-config-sheet.hbs',
 			width: 450
 		});

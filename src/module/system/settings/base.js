@@ -12,7 +12,7 @@ class PTUSettingsMenu extends FormApplication {
         const options = super.defaultOptions;
         options.classes.push("ptu-settings-menu");
 
-        return mergeObject(options, {
+        return foundry.utils.mergeObject(options, {
             title: `PTU.Settings.${this.namespace.titleCase()}.Name`,
             id: `${this.namespace}-settings`,
             template: `systems/ptu/static/templates/config/settings/menu.hbs`,
@@ -58,7 +58,7 @@ class PTUSettingsMenu extends FormApplication {
     async getData() {
         const settings = this.constructor.settings;
         const templateData = settingsToSheetData(settings, this.cache, this.prefix)
-        return mergeObject(await super.getData(), {
+        return foundry.utils.mergeObject(await super.getData(), {
             settings: templateData,
             instructions: `PTU.Settings.${this.namespace.titleCase()}.Hint`
         })

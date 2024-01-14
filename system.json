@@ -3,23 +3,34 @@
   "title": "Pokemon Tabletop Reunited",
   "description": "A re-imagining of the Pokemon Tabletop United TTRPG System now made with FoundryVTT as a central pilar.",
   "compatibility": {
-    "minimum": 11,
-    "verified": "11.314",
-    "maximum": 11
+    "minimum": "11.315",
+    "verified": "12.316",
+    "maximum": 12
   },
-  "version": "4.0.8",
+  "version": "4.0.9",
   "templateVersion": 2,
   "authors": [
     {
-      "name": "Ashe Piera",
+      "name": "Ashe Eon",
       "email": "ptu@soaringnetwork.com",
-      "url": "https://github.com/pokemon-tabletop-reunited/Foundry-Pokemon-Tabletop-Reunited-System"
+      "url": "https://github.com/dylanpiera/Foundry-Pokemon-Tabletop-United-System"
     },
     {
       "name": "Ellam Fox"
     },
     {
-      "name": "GSV A Nest of Kindled Embers"
+      "name": "Muhsigbokz"
+    },
+    {
+      "name": "Silverfox3853",
+      "url": "https://startplaying.games/gm/fox-the-gm"
+    },
+    {
+      "name": "TitaniumDragoonNeo"
+    },
+    {
+      "name": "Sajochi",
+      "url": "https://www.youtube.com/channel/UCiUTs4FV0HtdoziFogJAdEw"
     }
   ],
   "esmodules": ["src/ptr.js"],
@@ -160,6 +171,7 @@
       "path": "static/lang/es.json"
     }
   ],
+  "background": "systems/ptu/static/images/banner.webp",
   "url": "https://github.com/dylanpiera/Foundry-Pokemon-Tabletop-United-System",  
   "manifest": "https://github.com/dylanpiera/Foundry-Pokemon-Tabletop-United-System/releases/latest/download/system.json",
   "changelog": "https://github.com/dylanpiera/Foundry-Pokemon-Tabletop-United-System/raw/master/changelog.md",

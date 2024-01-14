@@ -2,7 +2,7 @@ import { PTUItemSheet } from "../index.js";
 
 class PTUMoveSheet extends PTUItemSheet {
     static get defaultOptions() {
-        return mergeObject(super.defaultOptions, {
+        return foundry.utils.mergeObject(super.defaultOptions, {
             template: "systems/ptu/static/templates/item/move-sheet.hbs"
         });
     }

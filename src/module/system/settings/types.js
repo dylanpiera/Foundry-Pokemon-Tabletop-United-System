@@ -22,7 +22,7 @@ export class TypeSettings extends PTUSettingsMenu {
     }
 
     static get defaultOptions() {
-        return mergeObject(super.defaultOptions, {
+        return foundry.utils.mergeObject(super.defaultOptions, {
             width: 820,
             height: 920,
             template: "systems/ptu/static/templates/config/settings/types.hbs",
@@ -38,7 +38,7 @@ export class TypeSettings extends PTUSettingsMenu {
             this.cache["types"] = types;
         }
 
-        const typeEffectiveness = duplicate(this.cache["types"]);
+        const typeEffectiveness = foundry.utils.duplicate(this.cache["types"]);
         delete typeEffectiveness.Untyped;
 
         let typeLength = Object.keys(typeEffectiveness).length + 1;
@@ -77,7 +77,7 @@ export class TypeSettings extends PTUSettingsMenu {
             const { offensive, defensive } = event.currentTarget.dataset;
             if (!offensive || !defensive) return;
 
-            const types = duplicate(this.cache["types"]);
+            const types = foundry.utils.duplicate(this.cache["types"]);
             const newValue = (() => {
                 switch (types[defensive].effectiveness[offensive]) {
                     case 0:
@@ -102,7 +102,7 @@ export class TypeSettings extends PTUSettingsMenu {
             const { offensive, defensive } = event.currentTarget.dataset;
             if (!offensive || !defensive) return;
 
-            const types = duplicate(this.cache["types"]);
+            const types = foundry.utils.duplicate(this.cache["types"]);
             const newValue = (() => {
                 switch (types[defensive].effectiveness[offensive]) {
                     case 0: 
@@ -183,7 +183,7 @@ export class TypeSettings extends PTUSettingsMenu {
                         return obj;
                     }, {});
 
-                    const types = duplicate(this.cache["types"]);
+                    const types = foundry.utils.duplicate(this.cache["types"]);
                     if (exists) {
                         types[typeData.name].images = {
                             bar: formData.barImg,
@@ -196,12 +196,12 @@ export class TypeSettings extends PTUSettingsMenu {
                                 bar: formData.barImg,
                                 icon: formData.iconImg
                             },
-                            effectiveness: duplicate(types.Untyped.effectiveness)
+                            effectiveness: foundry.utils.duplicate(types.Untyped.effectiveness)
                         };
                         for (const type of Object.keys(types)) {
                             types[type].effectiveness[formData.name.titleCase()] = 1;
                         }
-                        const Untyped = duplicate(types.Untyped);
+                        const Untyped = foundry.utils.duplicate(types.Untyped);
                         delete types.Untyped;
                         types.Untyped = Untyped;
                     }
@@ -221,7 +221,7 @@ export class TypeSettings extends PTUSettingsMenu {
                         title: game.i18n.localize("PTU.Settings.Type.Delete.Title"),
                         content: game.i18n.localize("PTU.Settings.Type.Delete.Content"),
                         yes: () => {
-                            const types = duplicate(this.cache["types"]);
+                            const types = foundry.utils.duplicate(this.cache["types"]);
                             delete types[typeData.name];
                             for (const type of Object.keys(types)) {
                                 delete types[type].effectiveness[typeData.name];

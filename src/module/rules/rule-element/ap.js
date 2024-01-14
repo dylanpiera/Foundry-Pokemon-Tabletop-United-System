@@ -24,8 +24,8 @@ export class ActionPointsRuleElement extends RuleElementPTU {
         // drained and bound values are already included. Therefore, the maxAp before this rule can only be calced by adding
         // this rules values up to it again.
         const maxApBeforeRule = (Number(this.actor.system.ap.max) || 0) + this.drainedValue + this.boundValue;
-        const currentApAfterRule = Math.clamped(currentApBeforeRule - this.drainedValue - this.boundValue, 0, maxApBeforeRule - this.drainedValue - this.boundValue);
-        mergeObject(actorUpdates, {
+        const currentApAfterRule = Math.clamp(currentApBeforeRule - this.drainedValue - this.boundValue, 0, maxApBeforeRule - this.drainedValue - this.boundValue);
+        foundry.utils.mergeObject(actorUpdates, {
             "system.ap.value": currentApAfterRule
         });
     }
@@ -42,9 +42,9 @@ export class ActionPointsRuleElement extends RuleElementPTU {
         const maxApBeforeDeletion = Number(this.actor.system.ap.max) || 0;
 
         // Regain previously Bound AP
-        const currentApAfterDeletion = Math.clamped(currentApBeforeDeletion + this.boundValue, 0, maxApBeforeDeletion + this.drainedValue + this.boundValue);
+        const currentApAfterDeletion = Math.clamp(currentApBeforeDeletion + this.boundValue, 0, maxApBeforeDeletion + this.drainedValue + this.boundValue);
 
-        mergeObject(actorUpdates, {
+        foundry.utils.mergeObject(actorUpdates, {
             "system.ap.value": currentApAfterDeletion
         });
     }

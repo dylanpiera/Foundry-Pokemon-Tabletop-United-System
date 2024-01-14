@@ -8,7 +8,7 @@ class TypeMatrix extends FormApplication {
         const options = super.defaultOptions;
         options.classes.push("ptu-settings-menu");
 
-        return mergeObject(options, {
+        return foundry.utils.mergeObject(options, {
             title: "PTU.TypeMatrix.Title",
             template: "systems/ptu/static/templates/config/settings/types.hbs",
             id: "type-matrix",
@@ -28,7 +28,7 @@ class TypeMatrix extends FormApplication {
             this.cache["types"] = types;
         }
 
-        const typeEffectiveness = duplicate(this.cache["types"]);
+        const typeEffectiveness = foundry.utils.duplicate(this.cache["types"]);
         delete typeEffectiveness.Untyped;
 
         let typeLength = Object.keys(typeEffectiveness).length + 1;

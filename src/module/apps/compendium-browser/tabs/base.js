@@ -47,11 +47,11 @@ export class CompendiumBrowserTab {
             extractField: (document, fieldName) => {
                 const getValue = (document, path) => {
                     const split = path.split(".");
-                    const fullValue = getProperty(document, path);
+                    const fullValue = foundry.utils.getProperty(document, path);
                     if(fullValue !== undefined) return fullValue;
 
                     const currPath = split[0];
-                    const currValue = getProperty(document, currPath);
+                    const currValue = foundry.utils.getProperty(document, currPath);
                     if(currValue === undefined) return undefined;
 
                     if(Array.isArray(currValue)) {
@@ -64,7 +64,7 @@ export class CompendiumBrowserTab {
             }
         })
         this.searchEngine.addAll(this.indexData);
-        this.defaultFilterData = deepClone(this.filterData);
+        this.defaultFilterData = foundry.utils.deepClone(this.filterData);
         this.isInitialized = true;
     }
 
@@ -99,11 +99,11 @@ export class CompendiumBrowserTab {
     /** Returns a clean copy of the filterData for this tab. Initializes the tab if necessary. */
     async getFilterData() {
         if (!this.isInitialized) await this.init();
-        return deepClone(this.defaultFilterData);
+        return foundry.utils.deepClone(this.defaultFilterData);
     }
 
     resetFilters() {
-        this.filterData = deepClone(this.defaultFilterData);
+        this.filterData = foundry.utils.deepClone(this.defaultFilterData);
     }
 
     isOfType(...types) {
@@ -237,7 +237,7 @@ export class CompendiumBrowserTab {
     hasAllIndexFields(data, indexFields) {
         for(const field of indexFields) {
             if(["system.source", "system.source.value"].includes(field)) continue;
-            if(getProperty(data, field) === undefined) return false;
+            if(foundry.utils.getProperty(data, field) === undefined) return false;
         }
         return true;
     }

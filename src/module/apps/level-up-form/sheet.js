@@ -3,7 +3,7 @@ import { LevelUpData } from "./document.js";
 class LevelUpForm extends FormApplication {
     /** @override */
     static get defaultOptions() {
-        return mergeObject(super.defaultOptions, {
+        return foundry.utils.mergeObject(super.defaultOptions, {
             classes: ["ptu", "pokemon", "level-up"],
             template: "systems/ptu/static/templates/apps/level-up-form.hbs",
             width: 560,
@@ -28,7 +28,7 @@ class LevelUpForm extends FormApplication {
         }
 
         this.resolve = options.resolve;
-        ui.windows[pokemon.sheet.appId].element.css({"filter": "saturate(0.1) opacity(0.95)", "pointer-events": "none"})
+        ui.windows[pokemon.sheet.appId]?.element?.css({"filter": "saturate(0.1) opacity(0.95)", "pointer-events": "none"})
     }
 
     /** @override */
@@ -126,7 +126,7 @@ class LevelUpForm extends FormApplication {
 
             let current;
             if(this.data.abilities.current[zone]?.uuid) {
-                current = duplicate(this.data.abilities.current[zone]);
+                current = foundry.utils.duplicate(this.data.abilities.current[zone]);
             }
 
             this.data.abilities.current[zone] = {uuid: data.uuid, category: data.category, slug: data.slug};
@@ -142,7 +142,7 @@ class LevelUpForm extends FormApplication {
     async _updateObject(event, formData) {
         event.preventDefault();
 
-        const data = expandObject(formData);
+        const data = foundry.utils.expandObject(formData);
 
         for(const [stat, value] of Object.entries(data.stats)) {
             this.data.stats[stat].newLevelUp = value.newLevelUp;
@@ -161,7 +161,7 @@ class LevelUpForm extends FormApplication {
                 log: "error",
                 ...options
             });
-            ui.windows[this.data.pokemon.sheet.appId].element.css({"filter": "", "pointer-events": ""})
+            ui.windows[this.data.pokemon.sheet.appId]?.element?.css({"filter": "", "pointer-events": ""})
         });
         return this;
     }
@@ -187,7 +187,7 @@ class LevelUpForm extends FormApplication {
         }
         this.resolve();
 
-        ui.windows[this.data.pokemon.sheet.appId].element.css({"filter": "", "pointer-events": ""})
+        ui.windows[this.data.pokemon.sheet.appId]?.element?.css({"filter": "", "pointer-events": ""})
         return super.close({...options, force: true});
     }
 }

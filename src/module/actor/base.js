@@ -64,7 +64,7 @@ class PTUActor extends Actor {
 
     get isPrivate() {
         // TODO : make this a meta knowledge setting
-        return !(this.permission >= CONST.DOCUMENT_PERMISSION_LEVELS.OBSERVER);
+        return !(this.permission >= CONST.DOCUMENT_OWNERSHIP_LEVELS.OBSERVER.OBSERVER);
     }
 
     get types() {
@@ -145,7 +145,7 @@ class PTUActor extends Actor {
         const effectiveness = {};
 
         for (const type of this.types) {
-            const iwr = duplicate(CONFIG.PTU.data.typeEffectiveness[type]?.effectiveness ?? {});
+            const iwr = foundry.utils.duplicate(CONFIG.PTU.data.typeEffectiveness[type]?.effectiveness ?? {});
 
             for (const [key, value] of Object.entries(iwr)) {
                 effectiveness[key] = (effectiveness[key] ?? 1) * value;
@@ -271,7 +271,7 @@ class PTUActor extends Actor {
         const { flags } = this;
 
         // Setup the basic structure of PTU flags with roll options
-        this.flags.ptu = mergeObject(flags.ptu ?? {}, {
+        this.flags.ptu = foundry.utils.mergeObject(flags.ptu ?? {}, {
             rollOptions: {
                 all: {
                     [`self:type:${this.type}`]: true,
@@ -429,7 +429,7 @@ class PTUActor extends Actor {
     /** @override */
     async _preUpdate(changed, options, user) {
         if (changed?.system?.spirit?.value !== undefined) {
-            changed.system.spirit.value = Math.clamped(
+            changed.system.spirit.value = Math.clamp(
                 changed.system.spirit.value,
                 this.system.spirit.min ?? this.system.spirit.min,
                 changed.system.spirit.max ?? this.system.spirit.max
@@ -444,7 +444,7 @@ class PTUActor extends Actor {
 
         return this.clone(
             {
-                items: [deepClone(this._source.items), ephemeralEffects].flat(),
+                items: [foundry.utils.deepClone(this._source.items), ephemeralEffects].flat(),
                 flags: { ptu: { rollOptions: { all: rollOptionsAll } } },
             },
             { keepId: true }
@@ -644,7 +644,7 @@ class PTUActor extends Actor {
                 isHealing: hpDamage < 0,
                 updates: Object.entries(hpUpdate.updates)
                     .map(([path, newValue]) => {
-                        const preUpdateValue = getProperty(preUpdateSource, path);
+                        const preUpdateValue = foundry.utils.getProperty(preUpdateSource, path);
                         if (typeof preUpdateValue === "number") {
                             const difference = preUpdateValue - newValue;
                             if (difference === 0) return [];
@@ -682,7 +682,7 @@ class PTUActor extends Actor {
 
         const actorUpdates = {};
         for (const update of updates) {
-            const currentValue = getProperty(this, update.path);
+            const currentValue = foundry.utils.getProperty(this, update.path);
             if (typeof currentValue === "number") {
                 actorUpdates[update.path] = currentValue + Number(update.value);
             }
@@ -1078,7 +1078,7 @@ class PTUActor extends Actor {
 
         const statistic = new StatisticModifier(move.slug, modifiers)
 
-        const action = mergeObject(statistic, {
+        const action = foundry.utils.mergeObject(statistic, {
             label: move.name,
             img: move.img,
             domains: selectors,
@@ -1211,7 +1211,7 @@ class PTUActor extends Actor {
         const options = [...this.getRollOptions(selectors), `skill:${skill}`, `skill:${this.system.skills[skill].rank.toLocaleLowerCase(game.i18n.lang)}`];
         const statistic = new StatisticModifier(skill, []);
 
-        const action = mergeObject(statistic, {
+        const action = foundry.utils.mergeObject(statistic, {
             label: game.i18n.format("PTU.Check.SkillCheck", { skill: game.i18n.localize(`PTU.Skills.${skill}`) }),
             domains: selectors,
             type: "skill",
@@ -1250,7 +1250,7 @@ class PTUActor extends Actor {
 
         const statistic = new StatisticModifier("initiative", []);
 
-        const action = mergeObject(statistic, {
+        const action = foundry.utils.mergeObject(statistic, {
             label: game.i18n.localize("PTU.Check.Initiative"),
             domains: selectors,
             type: "initiative",
@@ -1719,7 +1719,7 @@ class PTUActor extends Actor {
                 if (existing.value === null) return null;
                 if (min && max && min > max) throw new Error("Min cannot be greater than max.");
                 return min && max
-                    ? Math.clamped(existing.value + 1, min, max)
+                    ? Math.clamp(existing.value + 1, min, max)
                     : max
                         ? Math.min(existing.value + 1, max)
                         : existing.value + 1;
@@ -1736,6 +1736,9 @@ class PTUActor extends Actor {
     async modifyTokenAttribute(attribute, value, isDelta = false, isBar = true) {
         const token = this.getActiveTokens(true, true).shift();
         const health = this.system.health;
+
+        
+
         const isDamage = !!(
             attribute === "health" &&
             health &&
@@ -1746,82 +1749,10 @@ class PTUActor extends Actor {
             return this.applyDamage({ damage, token, skipIWR: true });
         }
         return super.modifyTokenAttribute(attribute, value, isDelta, isBar);
-
-        console.debug(
-            "Modifying Token Attribute",
-            attribute,
-            value,
-            isDelta,
-            isBar
-        );
-
-        const current = duplicate(getProperty(this.system, attribute));
-        if (isBar) {
-            if (attribute == "health") {
-                const temp = duplicate(getProperty(this.system, "tempHp"));
-                if (isDelta) {
-                    if (value < 0 && Number(temp.value) > 0) {
-                        temp.value = Number(temp.value) + value;
-                        if (temp.value >= 0)
-                            return this.update({ [`data.tempHp.value`]: temp.value });
-
-                        let totalValue = Number(current.value) + temp.value;
-                        value = Math.clamped(
-                            totalValue,
-                            Math.min(-50, current.total * -2),
-                            current.max
-                        );
-                        temp.value = 0;
-                        temp.max = 0;
-                    } else {
-                        let totalValue = Number(current.value) + value;
-                        value = Math.clamped(
-                            totalValue,
-                            Math.min(-50, current.total * -2),
-                            current.max
-                        );
-                        if (totalValue > value) {
-                            temp.value = totalValue - value;
-                            temp.max = temp.value;
-                        }
-                    }
-                } else {
-                    if (value > current.max) {
-                        temp.value = value - current.max;
-                        temp.max = temp.value;
-                        value = current.max;
-                    }
-                }
-                console.debug("Updating Character HP with args:", this, {
-                    oldValue: current.value,
-                    newValue: value,
-                    tempHp: temp,
-                });
-                return this.update({
-                    [`data.${attribute}.value`]: value,
-                    [`data.tempHp.value`]: temp.value,
-                    [`data.tempHp.max`]: temp.max,
-                });
-            } else {
-                if (isDelta) {
-                    let totalValue = Number(current.value) + value;
-                    value = Math.clamped(0, totalValue, current.max);
-                }
-                if (attribute == "tempHp")
-                    return this.update({
-                        [`data.${attribute}.value`]: value,
-                        [`data.${attribute}.max`]: value,
-                    });
-                return this.update({ [`data.${attribute}.value`]: value });
-            }
-        } else {
-            if (isDelta) value = Number(current) + value;
-            return this.update({ [`data.${attribute}`]: value });
-        }
     }
 
     _setDefaultChanges() {
-        this.system.changes = mergeObject(
+        this.system.changes = foundry.utils.mergeObject(
             {
                 system: {
                     levelUpPoints: {

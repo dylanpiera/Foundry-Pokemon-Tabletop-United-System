@@ -12,7 +12,7 @@ class PTUPartySheet extends FormApplication {
     }
 
     static get defaultOptions() {
-        return mergeObject(super.defaultOptions, {
+        return foundry.utils.mergeObject(super.defaultOptions, {
             title: "PTU.PartySheet.Title",
             classes: ["ptu", "sheet", "party"],
             width: 637,
@@ -116,8 +116,8 @@ class PTUPartySheet extends FormApplication {
 
     #loadFolders(strict) {
         // Get available folders from the trainer's folder
-        const folder = this.trainer.folder;
-        if (!folder) {
+        const trainerFolder = this.trainer.folder;
+        if (!trainerFolder) {
             if (strict) {
                 ui.notifications.error("PTU.PartySheet.NoFolder", { localize: true });
                 throw new Error("PTU.PartySheet.NoFolder");
@@ -125,18 +125,18 @@ class PTUPartySheet extends FormApplication {
             return;
         };
 
-        const party = folder.children.find(folder => folder.folder.name == "Party")?.folder;
-        const box = folder.children.find(folder => folder.folder.name == "Box")?.folder;
+        const party = trainerFolder.children.find(folder => folder.folder.name == "Party")?.folder ?? game.folders.find(folder => folder.name == "Party" && folder._source.folder == trainerFolder.id);
+        const box = trainerFolder.children.find(folder => folder.folder.name == "Box")?.folder ?? game.folders.find(folder => folder.name == "Box" && folder._source.folder == trainerFolder.id);
 
         this.folders = {
-            root: folder,
+            root: trainerFolder,
             party,
             box
         }
 
         if (!party) {
             // Create the party folder
-            Folder.create({ name: "Party", type: "Actor", folder: folder.id })
+            Folder.create({ name: "Party", type: "Actor", folder: trainerFolder.id })
                 .then(folder => {
                     this.folders.party = folder;
                 })
@@ -148,7 +148,7 @@ class PTUPartySheet extends FormApplication {
                         actor.flags?.ptu?.party?.trainer == this.trainer.id &&
                         !actor.flags?.ptu?.party?.boxed);
 
-                    const available = folder.contents.filter(actor => actor.type == "pokemon" && !actor.flags?.ptu?.party?.trainer) ?? [];
+                    const available = trainerFolder.contents.filter(actor => actor.type == "pokemon" && !actor.flags?.ptu?.party?.trainer) ?? [];
                     for (const mon of available) {
                         if (mon.folder.id == partyFolder.id) continue;
                         await mon.update({
@@ -169,7 +169,7 @@ class PTUPartySheet extends FormApplication {
         }
         if (!box) {
             // Create the box folder
-            Folder.create({ name: "Box", type: "Actor", folder: folder.id })
+            Folder.create({ name: "Box", type: "Actor", folder: trainerFolder.id })
                 .then(folder => {
                     this.folders.box = folder;
                 })
@@ -469,7 +469,7 @@ class PTUPartySheet extends FormApplication {
             systemVersion: game.system.version
         };
 
-        const filename = ["fvtt", "ptuParty", this.trainer.name?.slugify(), randomID()].filterJoin("-");
+        const filename = ["fvtt", "ptuParty", this.trainer.name?.slugify(), foundry.utils.randomID()].filterJoin("-");
         saveDataToFile(JSON.stringify(data, null, 2), "text/json", `${filename}.json`);
     }
 
@@ -537,7 +537,7 @@ class PTUPartySheet extends FormApplication {
                     party: partySheet.party,
                     boxed: partySheet.boxed
                 }
-                console.log(duplicate(data));
+                console.log(foundry.utils.duplicate(data));
 
                 // Delete existing party
                 await existingActor.delete();

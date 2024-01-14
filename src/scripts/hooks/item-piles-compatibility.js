@@ -96,11 +96,6 @@ export async function GetItemArt(item_name, type = ".webp") {
     }
 
     if(result.status === 404) {
-        path = basePath+"generic item"+".webp";
-        result = await fetch(path);
-    }
-
-    if(result.status === 404) {
         return undefined;
     }
     return path;

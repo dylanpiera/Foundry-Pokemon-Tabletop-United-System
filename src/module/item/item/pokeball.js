@@ -44,7 +44,7 @@ class PokeballItem extends PTUItemItem {
         const rollOptions = [...this.getRollOptions(selectors), ...attackRollOptions];
 
         const modifier = new StatisticModifier(this.slug, modifiers);
-        const action = mergeObject(modifier, {
+        const action = foundry.utils.mergeObject(modifier, {
             label: this.name,
             img: this.img,
             domains: selectors,
@@ -463,7 +463,7 @@ class PokeballItem extends PTUItemItem {
                 const trainerSelect = $(html).find("select[name='trainer']");
                 trainerSelect.on("change", (event) => {
                     const styleValue = event.target.options[event.target.selectedIndex].dataset.style;
-                    event.target.style.setProperty('--trainer-img', styleValue);
+                    event.target.style.foundry.utils.setProperty('--trainer-img', styleValue);
                 });
                 trainerSelect.trigger("change");
             },

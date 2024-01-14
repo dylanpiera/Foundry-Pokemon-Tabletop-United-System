@@ -3,7 +3,7 @@ import { PTUCombatant } from "./combatant.js";
 class PTUCombatTracker extends CombatTracker {
 
     static get defaultOptions() {
-        return mergeObject(super.defaultOptions, {
+        return foundry.utils.mergeObject(super.defaultOptions, {
             template: "systems/ptu/static/templates/sidebar/combat-tracker.hbs",
         });
     }

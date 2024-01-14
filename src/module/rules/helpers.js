@@ -46,7 +46,7 @@ async function extractEphemeralEffects({ affects, origin, target, item, domains,
 
 function extractRollSubstitutions(substitutions, domains, rollOptions) {
     return domains
-        .flatMap((d) => deepClone(substitutions?.[d] ?? []))
+        .flatMap((d) => foundry.utils.deepClone(substitutions?.[d] ?? []))
         .filter((s) => s.predicate?.test(rollOptions) ?? true);
 }
 

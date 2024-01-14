@@ -169,7 +169,7 @@ class ChoiceSetRuleElement extends RuleElementPTU {
     }
 
     #choicesFromPath(path) {
-        const choiceObject = getProperty(CONFIG.PTU, path) ?? getProperty(this.actor, path) ?? {};
+        const choiceObject = foundry.utils.getProperty(CONFIG.PTU, path) ?? foundry.utils.getProperty(this.actor, path) ?? {};
         if(Array.isArray(choiceObject) && choiceObject.every((c) => isObject(c) && typeof c.value === "string")) {
             return choiceObject;
         }

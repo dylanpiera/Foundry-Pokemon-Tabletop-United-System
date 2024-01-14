@@ -1,4 +1,3 @@
-import { tagify } from '../../../../util/tags.js';
 import { RuleElementForm } from './index.js';
 
 class GrantItemForm extends RuleElementForm {
@@ -18,7 +17,7 @@ class GrantItemForm extends RuleElementForm {
         return {
             ...data, 
             granted, 
-            allowDuplicate: !!this.rule.allowDuplicate ?? true,
+            allowduplicate: !!this.rule.allowduplicate ?? true,
             predicationIsMultiple: Array.isArray(this.rule.predicate) && this.rule.predicate.every(p => typeof p === "string")
         };
     }
@@ -50,7 +49,7 @@ class GrantItemForm extends RuleElementForm {
         if (!formData.reevaluateOnUpdate) delete formData.reevaluateOnUpdate;
 
         // Optional but defaults to true
-        if (formData.allowDuplicate) delete formData.allowDuplicate;
+        if (formData.allowduplicate) delete formData.allowduplicate;
 
         if(Array.isArray(formData.predicate) && formData.predicate.every(p => !!p.value)) {
             formData.predicate = formData.predicate.map(s => s.value).filter(s => !!s)

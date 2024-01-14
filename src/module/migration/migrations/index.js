@@ -9,3 +9,4 @@ export { Migration108SpritesFix} from './108-sprites-fix.js';
 export { Migration109PokeballFix} from './109-pokeball-fix.js';
 export { Migration110ActorLink} from './110-actor-link.js';
 export { Migration111PrereqItems} from './111-prereq-items.js';
+export { Migration112AgilityReference} from './112-agility-reference.js';

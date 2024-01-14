@@ -348,7 +348,7 @@ class PTUSpeciesSheet extends PTUItemSheet {
 
     /** @override */
     _updateObject(event, formData) {
-        const expanded = expandObject(formData);
+        const expanded = foundry.utils.expandObject(formData);
 
         const types = [...new Set(Object.values(expanded.system.type))].filter(type => type != "Untyped" && type != "");
         if(types.length == 0) types.push("Untyped");
@@ -413,7 +413,7 @@ class PTUSpeciesSheet extends PTUItemSheet {
             expanded.system.evolutions = evolutions.sort((a, b) => a.level - b.level);
         }
 
-        return super._updateObject(event, flattenObject(expanded));
+        return super._updateObject(event, foundry.utils.flattenObject(expanded));
     }
 
     /** @override */
