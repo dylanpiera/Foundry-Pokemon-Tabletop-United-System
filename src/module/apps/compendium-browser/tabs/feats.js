@@ -43,7 +43,7 @@ export class CompendiumBrowserFeatsTab extends CompendiumBrowserTab {
                 if (source) sources.add(source);
 
                 const isClass = featData.img.includes("class");
-                const _class = isClass ? featData.name.trim().toLowerCase().capitalize() : (featData.system.class?.trim()?.toLowerCase()?.capitalize() ?? "");
+                const _class = isClass ? featData.name.trim(): (featData.system.class?.trim() ?? "");
                 const prerequisites = featData.system?.prerequisites ?? "";
 
                 feats.push({
@@ -53,7 +53,8 @@ export class CompendiumBrowserFeatsTab extends CompendiumBrowserTab {
                     uuid: `Compendium.${pack.collection}.${featData._id}`,
                     source: sourceSlug,
                     prerequisites: this.#prerequisitesStringToEntries(prerequisites),
-                    class: _class,
+                    class: sluggify(_class),
+                    classPretty: _class,
                 })
                 if (_class) classes.add(_class);
 
@@ -107,7 +108,7 @@ export class CompendiumBrowserFeatsTab extends CompendiumBrowserTab {
     #generateCheckboxOptions(classSet) {
         return classSet.reduce((result, _class) => ({
             ...result,
-            [_class.toLowerCase()]: {
+            [sluggify(_class)]: {
                 label: _class,
                 selected: false
             }
