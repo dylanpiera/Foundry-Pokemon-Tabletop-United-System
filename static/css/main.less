@@ -112,6 +112,20 @@
     }
 }
 
+.conjunction-not {
+    --tag-inset-shadow-size: 5em !important;
+    --tags-border-color: #d3a2a2 !important;
+    --tags-hover-border-color: #bc5151 !important;
+    --tags-focus-border-color: #bc5151 !important;
+    --tag-bg: #d3a2a2 !important;
+    --tag-hover: #bc5151 !important;
+    text-decoration: none;
+
+    &[disabled] > .tagify__input {
+        display: none;
+    }
+}
+
 .tagify {
     --tag-inset-shadow-size: 5em !important;
     --tags-border-color: #AED3A2 !important;
@@ -119,7 +133,7 @@
     --tags-focus-border-color: #82bc51 !important;
     --tag-bg: #AED3A2 !important;
     --tag-hover: #82bc51 !important;
-
+    text-decoration: none;
 
     &[disabled]>.tagify__input {
         display: none;
