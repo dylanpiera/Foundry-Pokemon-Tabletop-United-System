@@ -344,7 +344,7 @@ class PTUAttackCheck extends PTUDiceCheck {
             ui.notifications.warn("PTU.Action.StatusAttackWhileRaging", { localize: true });
             return false;
         }
-        if (this.conditionOptions.has("condition:disabled") && this.options.includes(`condition:disabled:${move.slug}`)) {
+        if (this.conditionOptions.has("condition:disabled") && this.options.has(`condition:disabled:${this.item.slug}`)) {
             ui.notifications.warn("PTU.Action.DisabledMove", { localize: true });
             return false;
         }
