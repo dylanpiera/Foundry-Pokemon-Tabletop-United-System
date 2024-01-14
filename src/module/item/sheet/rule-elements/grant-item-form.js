@@ -1,4 +1,3 @@
-import { tagify } from '../../../../util/tags.js';
 import { RuleElementForm } from './index.js';
 
 class GrantItemForm extends RuleElementForm {

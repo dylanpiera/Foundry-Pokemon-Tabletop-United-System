@@ -105,10 +105,6 @@ class PTUItemSheet extends ItemSheet {
     activateListeners(html) {
         super.activateListeners(html);
 
-        for(const taggifyElement of html.find(".ptu-tagify")) {
-            tagify(taggifyElement);
-        }
-
         html.find('select[data-action=select-rule-element]').on('change', (event) => {
             this.selectedRuleElementType = event.target.value;
         });
