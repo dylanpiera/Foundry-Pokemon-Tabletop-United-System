@@ -347,6 +347,7 @@ function _registerBasicHelpers() {
     Handlebars.registerHelper("capitalizeFirst", (e) => { return "string" != typeof e ? e : e.charAt(0).toUpperCase() + e.slice(1) });
 
     const capitalize = function (input) {
+        if(!!input == false) return "";
         var i, j, str, lowers, uppers;
         str = input.replace(/([^\W_]+[^\s-]*) */g, function (txt) {
             return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
