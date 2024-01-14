@@ -119,33 +119,38 @@ export const CompendiumBrowserInlineEnricher = {
             CONFIG.TextEditor.enrichers.push({
                 pattern: /@CompSearch\[([A-Za-z]+) ?([0-9a-zA-Z\-= ]*)\](:?{(:?[^\[\]\{\}@]*)?})?/gim,
                 enricher: async (match, enrichmentOptions) => {
-                    const [tabName, paramString] = match.slice(1, 3)
-                    let displayText = match[4]
+                    const [tabName, paramString, displayText] = match.slice(1, 4)
+                    const tabNameSlug = CONFIG.PTU.util.sluggify(tabName, { camel: "dromedary" })
+
+                    const broken = game?.ptu?.compendiumBrowser 
+                        ? game.ptu.compendiumBrowser.tabs[tabNameSlug] === undefined
+                        : false;
 
                     const a = document.createElement("a");
-                    a.classList.add("inline-roll", "compendium-link")
+                    a.classList.add("content-link", "compendium-link")
 
-                    const tabNameLower = tabName.toLowerCase();
-                    a.setAttribute("compendium-link-tab", tabNameLower)
+                    a.setAttribute("compendium-link-tab", tabNameSlug)
 
-                    const pValues = {}
-                    pValues["search"] = paramString.split(" ").filter(p => !p.includes("="))
-                    const params = paramString.split(" ").filter(p => p.includes("="))
-                    for (const param of params) {
-                        const [pName, pValue] = param.split(/=(.*)/s).splice(0, 2)
-                        if (!pValues[pName]) pValues[pName] = new Set()
-                        pValues[pName].add(pValue)
+                    if (broken) {
+                        a.classList.add("broken")
+                        a.innerHTML = `<i class="fas fa-unlink"></i>`
+                        a.insertAdjacentText("beforeend", displayText || `${tabName} Search` + ` (Broken)`)
                     }
-                    for (const pName of Object.keys(pValues)) {
-                        a.setAttribute(`compendium-filter-setting-${pName}`, Array.from(pValues[pName]).join(" "))
+                    else {
+                        const pValues = {}
+                        pValues["search"] = paramString.split(" ").filter(p => !p.includes("="))
+                        const params = paramString.split(" ").filter(p => p.includes("="))
+                        for (const param of params) {
+                            const [pName, pValue] = param.split(/=(.*)/s).splice(0, 2)
+                            if (!pValues[pName]) pValues[pName] = new Set()
+                            pValues[pName].add(pValue)
+                        }
+                        for (const pName of Object.keys(pValues)) {
+                            a.setAttribute(`compendium-filter-setting-${pName}`, Array.from(pValues[pName]).join(" "))
+                        }
+                        a.innerHTML = `<i class="fas fa-th-list"></i>`
+                        a.insertAdjacentText("beforeend", displayText || `${tabName} Search (${Object.keys(pValues).length} Settings)`)
                     }
-                    a.innerHTML = `<i class="fas fa-th-list"></i>`
-
-                    if (!displayText) {
-                        const numExplicitSettings = Object.keys(pValues).length
-                        displayText = `${tabName} Search (${numExplicitSettings} Settings)`
-                    }
-                    a.insertAdjacentText("beforeend", displayText)
                     return a;
                 }
             });
@@ -153,7 +158,7 @@ export const CompendiumBrowserInlineEnricher = {
 
         // This function adds Event Listeners to the given htmlElement for the compendium-link anchors
         // that the previous enricher will have added to the content
-        const addAll = (htmlElement) => {
+        const activateCompendiumEnricherListener = (htmlElement) => {
             htmlElement.querySelectorAll(`.compendium-link`).forEach(el => {
                 el.addEventListener("click", async (event) => {
                     let tabKey = el.getAttribute("compendium-link-tab")
@@ -162,7 +167,11 @@ export const CompendiumBrowserInlineEnricher = {
                     const tab = game.ptu.compendiumBrowser.tabs[tabKey]
 
                     if (!tab) {
-                        ui.notifications.warn(game.i18n.format("PTU.CompendiumBrowser.Enrichment.UnknownTab", {tabName: tabKey}));
+                        if(!event.currentTarget.classList.contains("broken")) {
+                            event.currentTarget.classList.add("broken")
+                            event.currentTarget.firstChild.outerHTML = `<i class="fas fa-unlink"></i>`
+                        };
+                        ui.notifications.warn(game.i18n.format("PTU.CompendiumBrowser.Enrichment.UnknownTab", { tabName: tabKey }));
                         return;
                     }
 
@@ -215,7 +224,7 @@ export const CompendiumBrowserInlineEnricher = {
                             const max = el.getAttribute(prefix + `${sliderName}-max`)
                             usedParams.push(`${sliderName}-min`)
                             usedParams.push(`${sliderName}-max`)
-                            if (min || max){
+                            if (min || max) {
                                 filterData = sliders(min, max, sliderName, filterData)
                             }
                         }
@@ -255,20 +264,20 @@ export const CompendiumBrowserInlineEnricher = {
         Hooks.on("renderJournalTextPageSheet", (journal, $html) => {
             // maybe related to why this does do need a filter? https://github.com/foundryvtt/foundryvtt/issues/3088
             const journalHtmlElement = $html.filter(".journal-page-content").get(0);
-            addAll(journalHtmlElement)
+            activateCompendiumEnricherListener(journalHtmlElement)
 
         });
         Hooks.on("renderChatMessage", (message, $html) => {
             // maybe related to why this does not need a filter? https://github.com/foundryvtt/foundryvtt/issues/3088
             const messageHtmlElement = $html.get(0);
-            addAll(messageHtmlElement)
+            activateCompendiumEnricherListener(messageHtmlElement)
 
             message.activateListeners($html)
         });
         Hooks.on("renderPTUItemSheet", (itemSheet, $html) => {
             // maybe related to why this does not need a filter? https://github.com/foundryvtt/foundryvtt/issues/3088
             const itemHtmlElement = $html.get(0)
-            addAll(itemHtmlElement)
+            activateCompendiumEnricherListener(itemHtmlElement)
         });
     }
 }

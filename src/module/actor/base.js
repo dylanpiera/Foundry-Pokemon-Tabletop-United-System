@@ -1736,6 +1736,9 @@ class PTUActor extends Actor {
     async modifyTokenAttribute(attribute, value, isDelta = false, isBar = true) {
         const token = this.getActiveTokens(true, true).shift();
         const health = this.system.health;
+
+        
+
         const isDamage = !!(
             attribute === "health" &&
             health &&
