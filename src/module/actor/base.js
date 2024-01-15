@@ -64,7 +64,7 @@ class PTUActor extends Actor {
 
     get isPrivate() {
         // TODO : make this a meta knowledge setting
-        return !(this.permission >= CONST.DOCUMENT_OWNERSHIP_LEVELS.OBSERVER.OBSERVER);
+        return !(this.permission >= CONST.DOCUMENT_OWNERSHIP_LEVELS.OBSERVER);
     }
 
     get types() {
