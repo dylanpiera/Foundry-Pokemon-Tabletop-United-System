@@ -134,7 +134,7 @@ export const CompendiumBrowserInlineEnricher = {
                     if (broken) {
                         a.classList.add("broken")
                         a.innerHTML = `<i class="fas fa-unlink"></i>`
-                        a.insertAdjacentText("beforeend", displayText || `${tabName} Search` + ` (Broken)`)
+                        a.insertAdjacentText("beforeend", displayText?.replace("{","")?.replace("}","") || `${tabName} Search` + ` (Broken)`)
                     }
                     else {
                         const pValues = {}
@@ -149,7 +149,7 @@ export const CompendiumBrowserInlineEnricher = {
                             a.setAttribute(`compendium-filter-setting-${pName}`, Array.from(pValues[pName]).join(" "))
                         }
                         a.innerHTML = `<i class="fas fa-th-list"></i>`
-                        a.insertAdjacentText("beforeend", displayText || `${tabName} Search`)
+                        a.insertAdjacentText("beforeend", displayText?.replace("{","")?.replace("}","") || `${tabName} Search`)
                     }
                     return a;
                 }
