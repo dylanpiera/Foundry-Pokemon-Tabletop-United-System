@@ -6,7 +6,7 @@
         <a class="item-link">{{entry.name}}</a>
     </div>
     <div class="tags">
-        {{#if entry.class}}<span class="tag class class-{{entry.class}}" title="{{entry.class}}">{{entry.class}}</span>{{/if}}
+        {{#if entry.class}}<span class="tag class class-{{entry.class}}" title="{{entry.class}}">{{entry.classPretty}}</span>{{/if}}
         {{#each entry.prerequisites as |entry|}}
             {{#if entry.tier}}
                 <span class="tag skill-{{toLowerCase entry.tier}}" title="{{entry.label}}">{{entry.label}}</span>
