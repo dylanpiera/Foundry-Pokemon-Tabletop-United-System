@@ -7,7 +7,7 @@
     "verified": "12.316",
     "maximum": 12
   },
-  "version": "4.0.11",
+  "version": "4.0.12",
   "templateVersion": 2,
   "authors": [
     {
@@ -156,6 +156,12 @@
       "label": "PTR Spirit Actions",
       "type": "Item",
       "name": "spirit-actions",
+      "system": "ptu"
+    },
+    {
+      "label": "PTR Journals",
+      "type": "JournalEntry",
+      "name": "journals",
       "system": "ptu"
     }
   ],

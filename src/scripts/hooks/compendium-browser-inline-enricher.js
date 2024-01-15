@@ -159,6 +159,7 @@ export const CompendiumBrowserInlineEnricher = {
         // This function adds Event Listeners to the given htmlElement for the compendium-link anchors
         // that the previous enricher will have added to the content
         const activateCompendiumEnricherListener = (htmlElement) => {
+            if(!htmlElement) return;
             htmlElement.querySelectorAll(`.compendium-link`).forEach(el => {
                 el.addEventListener("click", async (event) => {
                     let tabKey = el.getAttribute("compendium-link-tab")
