@@ -522,9 +522,9 @@ export function registerSettings() {
 
 export function SetAccessabilityFont(enabled) {
     if (enabled) {
-        document.querySelector(':root').style.foundry.utils.setProperty('--pkmnFontStyle', 'sans-serif')
+        document.querySelector(':root').style.setProperty('--pkmnFontStyle', 'sans-serif')
     } else {
-        document.querySelector(':root').style.foundry.utils.setProperty('--pkmnFontStyle', 'Pokemon GB')
+        document.querySelector(':root').style.setProperty('--pkmnFontStyle', 'Pokemon GB')
     }
 }
 
