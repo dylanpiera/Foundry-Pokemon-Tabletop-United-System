@@ -468,6 +468,284 @@
 .dice-checks.dialog section .check-modifiers-content.skill {
   background: linear-gradient(45deg, #c3eaec, #b7ffdb);
 }
+.ptu.rulebook {
+  background: linear-gradient(45deg, #ECDBEBfa, #DFFFFEa3);
+}
+.ptu.rulebook ::-webkit-scrollbar-thumb {
+  outline: none;
+  border-radius: 3px;
+  background: #ff5a68 !important;
+  border: 1px solid #ff4150 !important;
+}
+.ptu.rulebook ::-webkit-scrollbar-track {
+  box-shadow: 0 0 1px #ff6a77 inset !important;
+  border-radius: 4px;
+}
+.ptu.rulebook table {
+  border-top: 1px solid #ff6a77;
+  border-bottom: 1px solid #ff6a77;
+}
+.ptu.rulebook table thead {
+  background: #ff6a77aa;
+  color: black;
+  text-shadow: unset;
+  border-bottom: 1px solid #ff6a77;
+}
+.ptu.rulebook table tr {
+  text-align: center;
+}
+.ptu.rulebook table tr:nth-child(odd) {
+  background: #ff6a7741;
+}
+.ptu.rulebook table tr:nth-child(even) {
+  background: #ff0e2246;
+}
+.ptu.rulebook table.nature-chart {
+  border: 2px solid #ff6a77;
+}
+.ptu.rulebook table.nature-chart td:nth-child(3) {
+  border-right: 2px solid #ff6a77;
+}
+.ptu.rulebook .journal-entry-content {
+  background: whitesmoke;
+}
+.ptu.rulebook aside {
+  padding: 0.1rem 0 0.1rem 0.4rem;
+}
+.ptu.rulebook .left {
+  float: left;
+  margin: 0 0.75rem 0 0;
+  clear: left;
+}
+.ptu.rulebook .right {
+  float: right;
+  margin: 0 0 0 0.75rem;
+  clear: right;
+}
+.ptu.rulebook .left,
+.ptu.rulebook .right {
+  max-width: 350px;
+  padding: 0.5rem;
+}
+.ptu.rulebook .left > h3,
+.ptu.rulebook .right > h3 {
+  text-align: center;
+  font-family: "Roundest Bold";
+  margin: 0 0 -8px 0;
+  font-size: 1rem;
+  color: black;
+}
+.ptu.rulebook.journal-entry {
+  min-width: 60rem;
+}
+.ptu.rulebook.journal-entry .journal-header {
+  text-align: center;
+  width: 100%;
+  margin: auto;
+  z-index: 2;
+  background: #ff6a77;
+  border-radius: 5px 0 0 5px;
+}
+.ptu.rulebook.journal-entry .journal-header input.title {
+  background: transparent;
+  color: black;
+  text-overflow: ellipsis;
+}
+.ptu.rulebook.journal-entry-page .editable .journal-page-content.editor-content figure.head img {
+  max-width: 700px;
+}
+.ptu.rulebook.journal-entry-page .editable .journal-page-content.editor-content figure img {
+  max-width: 300px;
+}
+.ptu.rulebook.journal-entry-page .editable .journal-page-content.editor-content aside img {
+  max-width: 128px;
+}
+.ptu.rulebook.journal-entry-page,
+.ptu.rulebook section.journal-entry-content {
+  border: unset;
+}
+.ptu.rulebook.journal-entry-page div.editable,
+.ptu.rulebook section.journal-entry-content div.editable {
+  margin: unset;
+}
+.ptu.rulebook.journal-entry-page div.editable div.scrollable,
+.ptu.rulebook section.journal-entry-content div.editable div.scrollable {
+  padding: 0.5rem 0;
+  scrollbar-gutter: stable both-edges;
+}
+.ptu.rulebook.journal-entry-page div.editable div.scrollable div.edit-container,
+.ptu.rulebook section.journal-entry-content div.editable div.scrollable div.edit-container {
+  z-index: 5;
+}
+.ptu.rulebook.journal-entry-page div.editable div.scrollable section.journal-page-content,
+.ptu.rulebook section.journal-entry-content div.editable div.scrollable section.journal-page-content {
+  padding: 0 1rem;
+  margin: 0.5rem 0;
+}
+.ptu.rulebook.journal-entry-page .journal-header,
+.ptu.rulebook section.journal-entry-content .journal-header {
+  z-index: 1;
+}
+.ptu.rulebook.journal-entry-page .journal-header input,
+.ptu.rulebook section.journal-entry-content .journal-header input {
+  color: black;
+  text-overflow: ellipsis;
+  border: none;
+  font-weight: bold;
+}
+.ptu.rulebook.journal-entry-page .journal-page-header,
+.ptu.rulebook section.journal-entry-content .journal-page-header {
+  position: relative;
+  margin: auto;
+  display: flex;
+  justify-content: center;
+}
+.ptu.rulebook.journal-entry-page .journal-page-header h1,
+.ptu.rulebook section.journal-entry-content .journal-page-header h1,
+.ptu.rulebook.journal-entry-page .journal-page-header h2,
+.ptu.rulebook section.journal-entry-content .journal-page-header h2,
+.ptu.rulebook.journal-entry-page .journal-page-header h3,
+.ptu.rulebook section.journal-entry-content .journal-page-header h3 {
+  margin: unset;
+  clear: both;
+  flex: 1;
+}
+.ptu.rulebook.journal-entry-page .journal-page-header h1,
+.ptu.rulebook section.journal-entry-content .journal-page-header h1 {
+  position: relative;
+  color: black;
+  text-align: center;
+  border: unset;
+  line-height: 2.5rem;
+  font-size: 2rem;
+  font-weight: bold;
+  border-bottom: 2px solid #ff6a77;
+  flex: 0 0 60%;
+}
+.ptu.rulebook.journal-entry-page .journal-page-header h2,
+.ptu.rulebook section.journal-entry-content .journal-page-header h2,
+.ptu.rulebook.journal-entry-page .journal-page-header h3,
+.ptu.rulebook section.journal-entry-content .journal-page-header h3 {
+  margin: 0.5rem 1rem 0.25rem 1rem;
+  width: auto;
+  line-height: 2rem;
+  font-size: 1.6rem;
+  color: black;
+  border-bottom: 2px solid black;
+}
+.ptu.rulebook.journal-entry-page .journal-page-header h3,
+.ptu.rulebook section.journal-entry-content .journal-page-header h3 {
+  color: lightgreen;
+  border-bottom: 2px solid lightgreen;
+}
+.ptu.rulebook.journal-entry aside.sidebar.flexcol.directory.journal-sidebar {
+  color: white;
+  border: unset;
+}
+.ptu.rulebook.journal-entry aside.sidebar.flexcol.directory.journal-sidebar div.action-buttons,
+.ptu.rulebook.journal-entry aside.sidebar.flexcol.directory.journal-sidebar header.directory-header {
+  z-index: 2;
+}
+.ptu.rulebook.journal-entry aside.sidebar.flexcol.directory.journal-sidebar div.action-buttons button.next,
+.ptu.rulebook.journal-entry aside.sidebar.flexcol.directory.journal-sidebar header.directory-header button.next,
+.ptu.rulebook.journal-entry aside.sidebar.flexcol.directory.journal-sidebar div.action-buttons button.previous,
+.ptu.rulebook.journal-entry aside.sidebar.flexcol.directory.journal-sidebar header.directory-header button.previous,
+.ptu.rulebook.journal-entry aside.sidebar.flexcol.directory.journal-sidebar div.action-buttons a.action-button,
+.ptu.rulebook.journal-entry aside.sidebar.flexcol.directory.journal-sidebar header.directory-header a.action-button,
+.ptu.rulebook.journal-entry aside.sidebar.flexcol.directory.journal-sidebar div.action-buttons input,
+.ptu.rulebook.journal-entry aside.sidebar.flexcol.directory.journal-sidebar header.directory-header input,
+.ptu.rulebook.journal-entry aside.sidebar.flexcol.directory.journal-sidebar div.action-buttons button.create,
+.ptu.rulebook.journal-entry aside.sidebar.flexcol.directory.journal-sidebar header.directory-header button.create {
+  margin: 0.25rem;
+  border: unset;
+  background: rgba(255, 255, 245, 0.75);
+  border-radius: 4px;
+  line-height: 28px;
+  height: 28px;
+  color: black;
+}
+.ptu.rulebook.journal-entry aside.sidebar.flexcol.directory.journal-sidebar ol.directory-list li.directory-item {
+  line-height: 30px;
+  border: unset;
+}
+.ptu.rulebook.journal-entry aside.sidebar.flexcol.directory.journal-sidebar ol.directory-list li.directory-item.active::after {
+  border: unset;
+}
+.ptu.rulebook.journal-entry aside.sidebar.flexcol.directory.journal-sidebar ol.directory-list li.directory-item span.page-title {
+  text-overflow: ellipsis;
+  font-size: 0.9rem;
+}
+.ptu.rulebook.journal-entry aside.sidebar.flexcol.directory.journal-sidebar ol.directory-list li.directory-item ol.headings {
+  display: none;
+}
+.ptu.rulebook.journal-entry aside.sidebar.flexcol.directory.journal-sidebar ol.directory-list li.directory-item .page-heading {
+  color: black;
+}
+.ptu.rulebook.journal-entry aside.sidebar.flexcol.directory.journal-sidebar ol.directory-list li.directory-item.level1::before {
+  content: "";
+  background-color: #ff6a77;
+  background-size: contain;
+  background-position: center;
+  top: 0;
+  width: 100%;
+  height: 0.5rem;
+  margin: 0.25rem 0;
+  border-radius: 5px;
+}
+.ptu.rulebook.journal-entry aside.sidebar.flexcol.directory.journal-sidebar ol.directory-list li.directory-item.level1 span.page-title {
+  font-size: 1.1rem;
+  font-weight: bold;
+}
+.ptu.rulebook.journal-entry aside.sidebar.flexcol.directory.journal-sidebar ol.directory-list li.directory-item.level2 span.page-title {
+  text-indent: 0rem;
+}
+.ptu.rulebook.journal-entry aside.sidebar.flexcol.directory.journal-sidebar ol.directory-list li.directory-item.level3 span.page-title {
+  text-indent: 0.5rem;
+}
+.ptu.rulebook.journal-entry aside.sidebar.flexcol.directory.journal-sidebar:not(.collapsed) {
+  flex-basis: 16rem;
+}
+.ptu.rulebook.journal-entry aside.sidebar.flexcol.directory.journal-sidebar:not(.collapsed) span.page-number {
+  color: transparent;
+  width: 24px;
+  margin-right: 2px;
+}
+.ptu.rulebook.journal-entry aside.sidebar.flexcol.directory.journal-sidebar:not(.collapsed) .active span.page-number {
+  background-image: url(/icons/svg/downgrade.svg);
+  filter: brightness(0);
+  rotate: 270deg;
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+.ptu.rulebook.journal-entry aside.sidebar.flexcol.directory.journal-sidebar:not(.collapsed) .active + .active span.page-number {
+  background-image: unset;
+}
+.ptu.rulebook.journal-entry aside.sidebar.flexcol.directory.journal-sidebar.collapsed {
+  padding: 0 0 0 0.1rem;
+  flex-basis: 2.5rem;
+}
+.ptu.rulebook.journal-entry aside.sidebar.flexcol.directory.journal-sidebar.collapsed .active {
+  font-weight: bold;
+}
+.ptu.rulebook.journal-entry aside.sidebar.flexcol.directory.journal-sidebar.collapsed .active div.page-heading {
+  background-color: #22222442;
+  border-radius: 8px;
+}
+.ptu.rulebook.journal-entry aside.sidebar.flexcol.directory.journal-sidebar.collapsed .page-number {
+  color: black;
+}
+.ptu.rulebook:not(.minimized) header.window-header {
+  padding-bottom: 2px;
+  line-height: 2rem;
+  z-index: 3;
+  border: unset;
+  filter: drop-shadow(1px 1px 4px #150c0c);
+}
+.ptu.rulebook:not(.minimized) header.window-header h4,
+.ptu.rulebook:not(.minimized) header.window-header a {
+  text-shadow: 1px 2px 3px black;
+}
 .token-panel {
   pointer-events: initial;
   position: absolute;
