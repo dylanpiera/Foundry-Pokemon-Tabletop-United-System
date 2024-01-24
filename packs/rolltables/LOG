@@ -1,16 +1,8 @@
-2024/01/24-13:28:32.335 c9bc Recovering log #176
-2024/01/24-13:28:32.341 c9bc Delete type=0 #176
-2024/01/24-13:28:32.341 c9bc Delete type=3 #170
-2024/01/24-13:28:32.341 c9bc Delete type=3 #172
-2024/01/24-19:43:33.920 2afc Level-0 table #181: started
-2024/01/24-19:43:33.923 2afc Level-0 table #181: 15970 bytes OK
-2024/01/24-19:43:33.925 2afc Delete type=0 #179
-2024/01/24-19:43:33.925 2afc Manual compaction at level-0 from '!folders!2QGVmITcIgGCeRtD' @ 72057594037927935 : 1 .. '!tables.results!wdOETkq5aY7M7hJg.rSBY0YfY0tm73sIu' @ 0 : 0; will stop at (end)
-2024/01/24-19:43:33.933 2afc Manual compaction at level-1 from '!folders!2QGVmITcIgGCeRtD' @ 72057594037927935 : 1 .. '!tables.results!wdOETkq5aY7M7hJg.rSBY0YfY0tm73sIu' @ 0 : 0; will stop at '!tables.results!s6rIVwjscA7c7oiP.yw9U1CNF3SMJxpZu' @ 4831 : 0
-2024/01/24-19:43:33.933 2afc Compacting 1@1 + 1@2 files
-2024/01/24-19:43:33.939 2afc Generated table #182@1: 604 keys, 72725 bytes
-2024/01/24-19:43:33.939 2afc Compacted 1@1 + 1@2 files => 72725 bytes
-2024/01/24-19:43:33.941 2afc compacted to: files[ 0 0 1 0 0 0 0 ]
-2024/01/24-19:43:33.941 2afc Delete type=2 #109
-2024/01/24-19:43:33.941 2afc Delete type=2 #181
-2024/01/24-19:43:33.949 2afc Manual compaction at level-1 from '!tables.results!s6rIVwjscA7c7oiP.yw9U1CNF3SMJxpZu' @ 4831 : 0 .. '!tables.results!wdOETkq5aY7M7hJg.rSBY0YfY0tm73sIu' @ 0 : 0; will stop at (end)
+2024/01/24-20:30:37.492 2f64 Recovering log #193
+2024/01/24-20:30:37.496 2f64 Delete type=0 #193
+2024/01/24-20:30:37.496 2f64 Delete type=3 #191
+2024/01/24-20:52:48.773 d1f8 Level-0 table #198: started
+2024/01/24-20:52:48.773 d1f8 Level-0 table #198: 0 bytes OK
+2024/01/24-20:52:48.776 d1f8 Delete type=0 #196
+2024/01/24-20:52:48.781 d1f8 Manual compaction at level-0 from '!folders!2QGVmITcIgGCeRtD' @ 72057594037927935 : 1 .. '!tables.results!wdOETkq5aY7M7hJg.rSBY0YfY0tm73sIu' @ 0 : 0; will stop at (end)
+2024/01/24-20:52:48.857 d1f8 Manual compaction at level-1 from '!folders!2QGVmITcIgGCeRtD' @ 72057594037927935 : 1 .. '!tables.results!wdOETkq5aY7M7hJg.rSBY0YfY0tm73sIu' @ 0 : 0; will stop at (end)
