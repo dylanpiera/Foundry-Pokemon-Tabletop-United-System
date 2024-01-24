@@ -16,6 +16,11 @@ class PTUItemSheet extends ItemSheet {
     }
 
     /** @override */
+    _canDragDrop(selector) {
+        return this.isEditable;
+    }
+
+    /** @override */
     get template() {
         return `systems/ptu/static/templates/item/${this.object.type}-sheet.hbs`;
     }
@@ -30,6 +35,12 @@ class PTUItemSheet extends ItemSheet {
 
         data.referenceEffect = this.item.referenceEffect ? await TextEditor.enrichHTML(`@UUID[${foundry.utils.duplicate(this.item.referenceEffect)}]`, {async: true}) : null;
         data.itemEffect = this.item.system.effect ? await TextEditor.enrichHTML(foundry.utils.duplicate(this.item.system.effect), {async: true}) : this.item.system.effect;
+        data.itemCost = await (async () => {
+            const cost = parseInt(this.item.system.cost);
+            if(!cost) return this.item.system.cost || "-";
+
+            return TextEditor.enrichHTML(`@Poke[${this.item.uuid} noname]`, {async: true})
+        })();
 
         const rules = this.item.toObject().system.rules ?? [];
         this.ruleElementForms = {};
@@ -78,6 +89,13 @@ class PTUItemSheet extends ItemSheet {
 
     async _onDrop(event) {
         const data = JSON.parse(event.dataTransfer.getData('text/plain'));
+
+        if(data.type === "pokedollar" && this.item.type === "item") {
+            const amount = parseInt(data.data.amount);
+            if(!amount) return;
+
+            this.object.update({"system.cost": amount});
+        }
 
         if(data.type === "Item" && data.uuid) {
             const item = await fromUuid(data.uuid);

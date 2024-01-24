@@ -147,7 +147,7 @@ class PTUTrainerActor extends PTUActor {
         const actualLevel = Math.max(1, system.level.current - Math.max(0, Math.clamp(0, leftoverLevelUpPoints, leftoverLevelUpPoints - system.modifiers.statPoints.total ?? 0)));
 
         const result = calculateStatTotal({
-            level: ["data-revamp", "short-track"].includes(game.settings.get("ptu", "variant.trainerAdvancement")) ? actualLevel * 2 : actualLevel,
+            level: ["data-revamp", "short-track"].includes(game.settings.get("ptu", "variant.trainerAdvancement")) ? actualLevel * 2 : (game.settings.get("ptu", "variant.trainerAdvancement") === "long-track" ? actualLevel * 0.5 : actualLevel),
             actorStats: system.stats,
             nature: null,
             isTrainer: true,
@@ -158,7 +158,7 @@ class PTUTrainerActor extends PTUActor {
         system.stats = result.stats;
         system.levelUpPoints = system.levelUpPoints - result.pointsSpend;
 
-        system.health.total = 10 + (system.level.current * (["data-revamp", "short-track"].includes(game.settings.get("ptu", "variant.trainerAdvancement")) ? 4 : 2)) + (system.stats.hp.total * 3);
+        system.health.total = 10 + (system.level.current * (["data-revamp", "short-track"].includes(game.settings.get("ptu", "variant.trainerAdvancement")) ? 4 : (game.settings.get("ptu", "variant.trainerAdvancement") === "long-track" ? 1 : 2))) + (system.stats.hp.total * 3);
         system.health.max = system.health.injuries > 0 ? Math.trunc(system.health.total * (1 - ((system.modifiers.hardened ? Math.min(system.health.injuries, 5) : system.health.injuries) / 10))) : system.health.total;
 
         system.health.percent = Math.round((system.health.value / system.health.max) * 100);

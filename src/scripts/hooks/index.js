@@ -9,6 +9,7 @@ import { AutocompleteInlinePropertiesSetup } from "./aip-setup.js";
 import { GetSceneControlButtons } from "./get-scene-control-buttons.js";
 import { CompendiumBrowserInlineEnricher } from "./compendium-browser-inline-enricher.js";
 import { TagifySheets } from "./tagify-sheets.js";
+import { PokeDollarEnricher } from "./pokedollar-enricher.js";
 
 export const PtuHooks = {
     listen() {
@@ -24,7 +25,8 @@ export const PtuHooks = {
             AutocompleteInlinePropertiesSetup,
             GetSceneControlButtons,
             CompendiumBrowserInlineEnricher,
-            TagifySheets
+            TagifySheets,
+            PokeDollarEnricher
         ]
         for(const listener of listeners) listener.listen();
     }
