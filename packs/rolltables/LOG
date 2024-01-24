@@ -1,10 +1,16 @@
-2024/01/23-16:55:04.788 b7c0 Recovering log #168
-2024/01/23-16:55:04.788 b7c0 Recovering log #174
-2024/01/23-16:55:04.793 b7c0 Delete type=0 #168
-2024/01/23-16:55:04.793 b7c0 Delete type=0 #174
-2024/01/23-16:55:04.793 b7c0 Delete type=3 #166
-2024/01/23-16:55:54.187 a9e8 Level-0 table #177: started
-2024/01/23-16:55:54.187 a9e8 Level-0 table #177: 0 bytes OK
-2024/01/23-16:55:54.189 a9e8 Delete type=0 #175
-2024/01/23-16:55:54.192 a9e8 Manual compaction at level-0 from '!folders!2QGVmITcIgGCeRtD' @ 72057594037927935 : 1 .. '!tables.results!wdOETkq5aY7M7hJg.rSBY0YfY0tm73sIu' @ 0 : 0; will stop at (end)
-2024/01/23-16:55:54.192 a9e8 Manual compaction at level-1 from '!folders!2QGVmITcIgGCeRtD' @ 72057594037927935 : 1 .. '!tables.results!wdOETkq5aY7M7hJg.rSBY0YfY0tm73sIu' @ 0 : 0; will stop at (end)
+2024/01/24-13:28:32.335 c9bc Recovering log #176
+2024/01/24-13:28:32.341 c9bc Delete type=0 #176
+2024/01/24-13:28:32.341 c9bc Delete type=3 #170
+2024/01/24-13:28:32.341 c9bc Delete type=3 #172
+2024/01/24-19:43:33.920 2afc Level-0 table #181: started
+2024/01/24-19:43:33.923 2afc Level-0 table #181: 15970 bytes OK
+2024/01/24-19:43:33.925 2afc Delete type=0 #179
+2024/01/24-19:43:33.925 2afc Manual compaction at level-0 from '!folders!2QGVmITcIgGCeRtD' @ 72057594037927935 : 1 .. '!tables.results!wdOETkq5aY7M7hJg.rSBY0YfY0tm73sIu' @ 0 : 0; will stop at (end)
+2024/01/24-19:43:33.933 2afc Manual compaction at level-1 from '!folders!2QGVmITcIgGCeRtD' @ 72057594037927935 : 1 .. '!tables.results!wdOETkq5aY7M7hJg.rSBY0YfY0tm73sIu' @ 0 : 0; will stop at '!tables.results!s6rIVwjscA7c7oiP.yw9U1CNF3SMJxpZu' @ 4831 : 0
+2024/01/24-19:43:33.933 2afc Compacting 1@1 + 1@2 files
+2024/01/24-19:43:33.939 2afc Generated table #182@1: 604 keys, 72725 bytes
+2024/01/24-19:43:33.939 2afc Compacted 1@1 + 1@2 files => 72725 bytes
+2024/01/24-19:43:33.941 2afc compacted to: files[ 0 0 1 0 0 0 0 ]
+2024/01/24-19:43:33.941 2afc Delete type=2 #109
+2024/01/24-19:43:33.941 2afc Delete type=2 #181
+2024/01/24-19:43:33.949 2afc Manual compaction at level-1 from '!tables.results!s6rIVwjscA7c7oiP.yw9U1CNF3SMJxpZu' @ 4831 : 0 .. '!tables.results!wdOETkq5aY7M7hJg.rSBY0YfY0tm73sIu' @ 0 : 0; will stop at (end)

@@ -571,6 +571,35 @@
     }
 }
 
+a.pokedollar {
+    &.cost {
+        color: #ff5a68;
+
+        & span::before {
+            filter: invert(46%) sepia(46%) saturate(1698%) hue-rotate(321deg) brightness(102%) contrast(101%);
+        }
+    }
+
+    span {
+        position: relative;
+        padding-left: 10px;
+
+
+        &::before {
+            content: "";
+            background: url(/systems/ptu/static/css/images/Pokémon_Dollar_sign.svg);
+            background-size: contain;
+            background-repeat: no-repeat;
+            position: absolute;
+            height: 11px;
+            width: 8px;
+            bottom: 3px;
+            left: 1px;
+            filter: invert(28%) sepia(2%) saturate(3040%) hue-rotate(14deg) brightness(78%) contrast(75%);
+        }
+    }
+}
+
 .ptu.rulebook {
     background: linear-gradient(45deg, #ECDBEBfa, #DFFFFEa3);
 
@@ -580,6 +609,7 @@
         background: #ff5a68 !important;
         border: 1px solid #ff4150 !important;
     }
+
     ::-webkit-scrollbar-track {
         box-shadow: 0 0 1px #ff6a77 inset !important;
         border-radius: 4px;
@@ -598,9 +628,11 @@
 
         tr {
             text-align: center;
+
             &:nth-child(odd) {
                 background: #ff6a7741;
             }
+
             &:nth-child(even) {
                 background: #ff0e2246;
             }
@@ -702,7 +734,7 @@
         border: unset;
 
         div.editable {
-            margin: unset; 
+            margin: unset;
 
             div.scrollable {
                 padding: 0.5rem 0;
@@ -845,7 +877,7 @@
                     span.page-title {
                         font-size: 1.1rem;
                         font-weight: bold;
-                    }  
+                    }
                 }
 
                 &.level2 span.page-title {
@@ -894,6 +926,7 @@
 
             .active {
                 font-weight: bold;
+
                 div.page-heading {
                     background-color: #22222442;
                     border-radius: 8px;

@@ -1,11 +1,16 @@
-2024/01/23-16:55:04.801 a1c Recovering log #803
-2024/01/23-16:55:04.801 a1c Recovering log #809
-2024/01/23-16:55:04.805 a1c Delete type=2 #736
-2024/01/23-16:55:04.805 a1c Delete type=0 #803
-2024/01/23-16:55:04.805 a1c Delete type=0 #809
-2024/01/23-16:55:04.805 a1c Delete type=3 #801
-2024/01/23-16:55:54.194 a9e8 Level-0 table #812: started
-2024/01/23-16:55:54.194 a9e8 Level-0 table #812: 0 bytes OK
-2024/01/23-16:55:54.196 a9e8 Delete type=0 #810
-2024/01/23-16:55:54.202 a9e8 Manual compaction at level-0 from '!folders!3G5h8GgoAC59jCdA' @ 72057594037927935 : 1 .. '!items!znvgEviVbL2WnCGJ' @ 0 : 0; will stop at (end)
-2024/01/23-16:55:54.202 a9e8 Manual compaction at level-1 from '!folders!3G5h8GgoAC59jCdA' @ 72057594037927935 : 1 .. '!items!znvgEviVbL2WnCGJ' @ 0 : 0; will stop at (end)
+2024/01/24-13:28:32.357 4a90 Recovering log #811
+2024/01/24-13:28:32.362 4a90 Delete type=0 #811
+2024/01/24-13:28:32.362 4a90 Delete type=3 #806
+2024/01/24-13:28:32.362 4a90 Delete type=3 #807
+2024/01/24-19:43:33.912 2afc Level-0 table #816: started
+2024/01/24-19:43:33.917 2afc Level-0 table #816: 33916 bytes OK
+2024/01/24-19:43:33.919 2afc Delete type=0 #814
+2024/01/24-19:43:33.925 2afc Manual compaction at level-0 from '!folders!3G5h8GgoAC59jCdA' @ 72057594037927935 : 1 .. '!items!znvgEviVbL2WnCGJ' @ 0 : 0; will stop at (end)
+2024/01/24-19:43:33.925 2afc Manual compaction at level-1 from '!folders!3G5h8GgoAC59jCdA' @ 72057594037927935 : 1 .. '!items!znvgEviVbL2WnCGJ' @ 0 : 0; will stop at '!items!ed6GkfPq9AmYTTnf' @ 1702 : 1
+2024/01/24-19:43:33.925 2afc Compacting 1@1 + 1@2 files
+2024/01/24-19:43:33.930 2afc Generated table #817@1: 173 keys, 95945 bytes
+2024/01/24-19:43:33.930 2afc Compacted 1@1 + 1@2 files => 95945 bytes
+2024/01/24-19:43:33.932 2afc compacted to: files[ 0 0 1 0 0 0 0 ]
+2024/01/24-19:43:33.933 2afc Delete type=2 #805
+2024/01/24-19:43:33.933 2afc Delete type=2 #816
+2024/01/24-19:43:33.949 2afc Manual compaction at level-1 from '!items!ed6GkfPq9AmYTTnf' @ 1702 : 1 .. '!items!znvgEviVbL2WnCGJ' @ 0 : 0; will stop at (end)

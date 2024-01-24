@@ -558,22 +558,22 @@
                                             style="position: relative; left: 15px; width: 96%; line-height: 15px; text-align: start;">
                                             {{#if actor.system.modifiers.hardened}}<li>{{localize "PTU.HardenedEffect0"}}</li>
                                             {{/if}}
-                                            {{#if (and (is "true" actor.system.modifiers.hardened) (biggerOrEqual
+                                            {{#if (and (is true actor.system.modifiers.hardened) (biggerOrEqual
                                             actor.system.health.injuries 1))}}<li>{{localize "PTU.HardenedEffect1"}}</li>{{/if}}
-                                            {{#if (and (is "true" actor.system.modifiers.hardened) (biggerOrEqual
+                                            {{#if (and (is true actor.system.modifiers.hardened) (biggerOrEqual
                                             actor.system.health.injuries 3))}}<li>{{localize "PTU.HardenedEffect2"}}</li>{{/if}}
                                             {{#if (biggerOrEqual actor.system.health.injuries 5)}}<li>{{localize
                                                 "PTU.InjuryEffect1"}}</li>{{/if}}
-                                            {{#if (and (is "true" actor.system.modifiers.hardened) (biggerOrEqual
+                                            {{#if (and (is true actor.system.modifiers.hardened) (biggerOrEqual
                                             actor.system.health.injuries 5))}}<li>{{localize "PTU.HardenedEffect3"}}</li>{{/if}}
-                                            {{#if (and (not "true" actor.system.modifiers.hardened) (biggerOrEqual
+                                            {{#if (and (not true actor.system.modifiers.hardened) (biggerOrEqual
                                             actor.system.health.injuries 5))}}<li>{{localize "PTU.InjuryEffect2" (ld "injuries"
                                                 actor.system.health.injuries)}}</li>{{/if}}
-                                            {{#if (and (is "true" actor.system.modifiers.hardened) (biggerOrEqual
+                                            {{#if (and (is true actor.system.modifiers.hardened) (biggerOrEqual
                                             actor.system.health.injuries 7))}}<li>{{localize "PTU.HardenedEffect4"}}</li>{{/if}}
-                                            {{#if (and (is "true" actor.system.modifiers.hardened) (biggerOrEqual
+                                            {{#if (and (is true actor.system.modifiers.hardened) (biggerOrEqual
                                             actor.system.health.injuries 9))}}<li>{{localize "PTU.HardenedEffect5"}}</li>{{/if}}
-                                            {{#if (and (not "true" actor.system.modifiers.hardened) (biggerOrEqual
+                                            {{#if (and (not true actor.system.modifiers.hardened) (biggerOrEqual
                                             actor.system.health.injuries 10))}}<li><b>{{localize "PTU.InjuryEffect3"}}</b></li>
                                             {{/if}}
                                         </ul>

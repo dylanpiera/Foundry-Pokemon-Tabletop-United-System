@@ -468,6 +468,28 @@
 .dice-checks.dialog section .check-modifiers-content.skill {
   background: linear-gradient(45deg, #c3eaec, #b7ffdb);
 }
+a.pokedollar.cost {
+  color: #ff5a68;
+}
+a.pokedollar.cost span::before {
+  filter: invert(46%) sepia(46%) saturate(1698%) hue-rotate(321deg) brightness(102%) contrast(101%);
+}
+a.pokedollar span {
+  position: relative;
+  padding-left: 10px;
+}
+a.pokedollar span::before {
+  content: "";
+  background: url(/systems/ptu/static/css/images/Pokémon_Dollar_sign.svg);
+  background-size: contain;
+  background-repeat: no-repeat;
+  position: absolute;
+  height: 11px;
+  width: 8px;
+  bottom: 3px;
+  left: 1px;
+  filter: invert(28%) sepia(2%) saturate(3040%) hue-rotate(14deg) brightness(78%) contrast(75%);
+}
 .ptu.rulebook {
   background: linear-gradient(45deg, #ECDBEBfa, #DFFFFEa3);
 }
