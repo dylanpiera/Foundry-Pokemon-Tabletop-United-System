@@ -121,7 +121,7 @@
     --tag-hover: #bc5151 !important;
     text-decoration: none;
 
-    &[disabled] > .tagify__input {
+    &[disabled]>.tagify__input {
         display: none;
     }
 }
@@ -201,9 +201,11 @@
                             flex-direction: column;
                             margin-bottom: 10px;
                         }
+
                         button.save-settings {
                             margin-top: auto;
                         }
+
                         .settings-container {
                             overflow-y: auto;
                             display: flex;
@@ -222,6 +224,7 @@
                                     margin: 0;
                                     cursor: pointer;
                                 }
+
                                 dl {
                                     margin: 5px 0;
 
@@ -231,6 +234,7 @@
                                         dt {
                                             flex: 0 0 30px;
                                         }
+
                                         dd {
                                             flex: 1;
                                         }
@@ -264,11 +268,13 @@
                                 margin-top: 5px;
                                 padding: 2px;
                             }
+
                             .slidercontainer {
                                 &-flex {
                                     display: flex;
                                     justify-content: space-around;
                                     align-items: baseline;
+
                                     label {
                                         width: 10px;
                                     }
@@ -292,7 +298,7 @@
                                     padding-left: 5px;
                                     margin: 3px 0;
                                     text-transform: capitalize;
-                                    
+
                                 }
 
                                 &.type,
@@ -307,9 +313,10 @@
                                         padding-left: 0;
                                         margin: 0;
                                         flex: 0 0 auto;
+
                                         select {
                                             width: 150px;
-    
+
                                             &.order {
                                                 width: 131px;
                                             }
@@ -346,15 +353,18 @@
                                     flex-direction: row;
                                     justify-content: start;
                                     margin-top: 0.25rem;
+
                                     label {
                                         flex: 0 0 110px;
                                         display: flex;
                                         align-items: center;
                                         justify-content: center;
+
                                         input {
                                             flex: 0 0 20px;
                                             top: auto;
                                         }
+
                                         span {
                                             flex: 1;
                                         }
@@ -556,6 +566,390 @@
 
             &.skill {
                 background: linear-gradient(45deg, #c3eaec, #b7ffdb);
+            }
+        }
+    }
+}
+
+a.pokedollar {
+    &.cost {
+        color: #ff5a68;
+
+        & span::before {
+            filter: invert(46%) sepia(46%) saturate(1698%) hue-rotate(321deg) brightness(102%) contrast(101%);
+        }
+    }
+
+    span {
+        position: relative;
+        padding-left: 10px;
+
+
+        &::before {
+            content: "";
+            background: url(/systems/ptu/static/css/images/Pokémon_Dollar_sign.svg);
+            background-size: contain;
+            background-repeat: no-repeat;
+            position: absolute;
+            height: 11px;
+            width: 8px;
+            bottom: 3px;
+            left: 1px;
+            filter: invert(28%) sepia(2%) saturate(3040%) hue-rotate(14deg) brightness(78%) contrast(75%);
+        }
+    }
+}
+
+.ptu.rulebook {
+    background: linear-gradient(45deg, #ECDBEBfa, #DFFFFEa3);
+
+    ::-webkit-scrollbar-thumb {
+        outline: none;
+        border-radius: 3px;
+        background: #ff5a68 !important;
+        border: 1px solid #ff4150 !important;
+    }
+
+    ::-webkit-scrollbar-track {
+        box-shadow: 0 0 1px #ff6a77 inset !important;
+        border-radius: 4px;
+    }
+
+    table {
+        border-top: 1px solid #ff6a77;
+        border-bottom: 1px solid #ff6a77;
+
+        thead {
+            background: #ff6a77aa;
+            color: black;
+            text-shadow: unset;
+            border-bottom: 1px solid #ff6a77;
+        }
+
+        tr {
+            text-align: center;
+
+            &:nth-child(odd) {
+                background: #ff6a7741;
+            }
+
+            &:nth-child(even) {
+                background: #ff0e2246;
+            }
+        }
+
+        &.nature-chart {
+            border: 2px solid #ff6a77;
+
+            td:nth-child(3) {
+                border-right: 2px solid #ff6a77;
+            }
+        }
+    }
+
+    .journal-entry-content {
+        background: whitesmoke;
+    }
+
+    aside {
+        padding: 0.1rem 0 0.1rem 0.4rem;
+    }
+
+    // Governs all uses of the floats, used on the general asides, quest sections, or as banners in other boxes
+    .left {
+        float: left;
+        margin: 0 0.75rem 0 0;
+        clear: left;
+    }
+
+    .right {
+        float: right;
+        margin: 0 0 0 0.75rem;
+        clear: right;
+    }
+
+    .left,
+    .right {
+        max-width: 350px;
+        padding: 0.5rem;
+    }
+
+    .left,
+    .right {
+        >h3 {
+            text-align: center;
+            font-family: "Roundest Bold";
+            margin: 0 0 -8px 0;
+            font-size: 1rem;
+            color: black;
+        }
+    }
+
+    //   ===================  //
+    //     SIZE AND LAYOUT    //
+    //   ===================  //
+    // ====    Journal     ==== //
+    &.journal-entry {
+        min-width: 60rem;
+
+        // ====    Journal Header    ==== //
+        .journal-header {
+            text-align: center;
+            width: 100%;
+            margin: auto;
+            z-index: 2;
+            background: #ff6a77;
+            border-radius: 5px 0 0 5px;
+
+            input.title {
+                background: transparent;
+                color: black;
+                text-overflow: ellipsis;
+            }
+        }
+    }
+
+    // ====    Page    ==== //
+    &.journal-entry-page {
+        .editable .journal-page-content.editor-content {
+
+            // Make images less obnoxious to scroll past
+            figure.head img {
+                max-width: 700px;
+            }
+
+            figure img {
+                max-width: 300px;
+            }
+
+            aside img {
+                max-width: 128px;
+            }
+        }
+    }
+
+    // ====    Page & Journal    ==== //
+    &.journal-entry-page,
+    section.journal-entry-content {
+        border: unset;
+
+        div.editable {
+            margin: unset;
+
+            div.scrollable {
+                padding: 0.5rem 0;
+                scrollbar-gutter: stable both-edges;
+
+                div.edit-container {
+                    z-index: 5;
+                }
+
+                section.journal-page-content {
+                    padding: 0 1rem;
+                    margin: 0.5rem 0;
+                }
+            }
+        }
+
+        // ====    Single-page Header    ==== //
+        .journal-header {
+            z-index: 1;
+
+            input {
+                color: black;
+                text-overflow: ellipsis;
+                border: none;
+                font-weight: bold;
+            }
+        }
+
+        // ====    Page Titles    ==== //
+        .journal-page-header {
+            position: relative;
+            margin: auto;
+            display: flex;
+            justify-content: center;
+
+            h1,
+            h2,
+            h3 {
+                margin: unset;
+                clear: both;
+                flex: 1;
+            }
+
+            h1 {
+                position: relative;
+                color: black;
+                text-align: center;
+                border: unset;
+                line-height: 2.5rem;
+                font-size: 2rem;
+                font-weight: bold;
+                border-bottom: 2px solid #ff6a77;
+                flex: 0 0 60%;
+            }
+
+            h2,
+            h3 {
+                margin: 0.5rem 1rem 0.25rem 1rem;
+                width: auto;
+                line-height: 2rem;
+                font-size: 1.6rem;
+                color: black;
+                border-bottom: 2px solid black;
+            }
+
+            h3 {
+                color: lightgreen;
+                border-bottom: 2px solid lightgreen;
+            }
+        }
+    }
+
+    // ====    Table of Contents    ==== //
+    &.journal-entry aside.sidebar.flexcol.directory.journal-sidebar {
+        color: white;
+        border: unset;
+
+        // ====    Buttons    ==== //
+        div.action-buttons,
+        header.directory-header {
+            z-index: 2;
+
+            button.next,
+            button.previous,
+            a.action-button,
+            input,
+            button.create {
+                margin: 0.25rem;
+                border: unset;
+                background: rgba(255, 255, 245, 0.75);
+                border-radius: 4px;
+                line-height: 28px;
+                height: 28px;
+                color: black;
+            }
+        }
+
+        // ====    Directory    ==== //
+        ol.directory-list {
+            //padding: 2rem 0 1rem 0;
+
+            // ====    List Items    ==== //
+            li.directory-item {
+                line-height: 30px;
+                border: unset;
+
+                &.active::after {
+                    border: unset;
+                }
+
+                // ====    Page titles    ==== //
+                span.page-title {
+                    text-overflow: ellipsis;
+                    font-size: 0.9rem;
+                }
+
+                // ====    Page subheadings    ==== //
+                ol.headings {
+                    display: none;
+                }
+
+                .page-heading {
+                    color: black;
+                }
+
+                // ====    Per-level rules    ==== //A
+                &.level1 {
+                    &::before {
+                        content: "";
+                        background-color: #ff6a77;
+                        background-size: contain;
+                        background-position: center;
+                        top: 0;
+                        width: 100%;
+                        height: 0.5rem;
+                        margin: 0.25rem 0;
+                        border-radius: 5px;
+                    }
+
+                    span.page-title {
+                        font-size: 1.1rem;
+                        font-weight: bold;
+                    }
+                }
+
+                &.level2 span.page-title {
+                    text-indent: 0rem;
+                }
+
+                &.level3 span.page-title {
+                    text-indent: 0.5rem;
+                }
+            }
+        }
+
+        // ====    Expanded List    ==== //
+        &:not(.collapsed) {
+            flex-basis: 16rem;
+
+            // Hide page numbers
+            span.page-number {
+                color: transparent;
+                width: 24px;
+                margin-right: 2px;
+            }
+
+            // ====    Active Page Pointer    ==== //
+            .active {
+                span.page-number {
+                    background-image: url(/icons/svg/downgrade.svg);
+                    filter: brightness(0);
+                    rotate: 270deg;
+                    background-size: contain;
+                    background-position: center;
+                    background-repeat: no-repeat;
+                }
+            }
+
+            .active+.active {
+                span.page-number {
+                    background-image: unset;
+                }
+            }
+        }
+
+        &.collapsed {
+            padding: 0 0 0 0.1rem;
+            flex-basis: 2.5rem;
+
+            .active {
+                font-weight: bold;
+
+                div.page-heading {
+                    background-color: #22222442;
+                    border-radius: 8px;
+                }
+            }
+
+            .page-number {
+                color: black;
+            }
+        }
+    }
+
+    &:not(.minimized) {
+        header.window-header {
+            padding-bottom: 2px;
+            line-height: 2rem;
+            z-index: 3;
+            border: unset;
+            filter: drop-shadow(1px 1px 4px rgb(21, 12, 12));
+
+            h4,
+            a {
+                text-shadow: 1px 2px 3px black;
             }
         }
     }

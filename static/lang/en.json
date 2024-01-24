@@ -1070,7 +1070,8 @@
       "Neutral": "Neutral",
       "Opposition": "Opposition",
       "Party": "Party"
-    }
+    },
+    "RulebookJournalSheetName": "Rulebook Sheet"
   },
 
   "physical-evasion": "Physical Evasion",

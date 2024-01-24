@@ -463,7 +463,7 @@ class PokeballItem extends PTUItemItem {
                 const trainerSelect = $(html).find("select[name='trainer']");
                 trainerSelect.on("change", (event) => {
                     const styleValue = event.target.options[event.target.selectedIndex].dataset.style;
-                    event.target.style.foundry.utils.setProperty('--trainer-img', styleValue);
+                    event.target.style.setProperty('--trainer-img', styleValue);
                 });
                 trainerSelect.trigger("change");
             },

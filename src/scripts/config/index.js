@@ -41,6 +41,7 @@ import { PTUContestMoveSheet } from '../../module/item/contestmove/sheet.js';
 import { PTUHotBar } from '../../module/apps/hotbar.js';
 import { PTUTokenConfig } from '../../module/canvas/token/sheet.js';
 import { PackLoader } from '../../module/apps/compendium-browser/index.js';
+import PTURuleBookJournal from '../../module/apps/rulebook-journal.js';
 
 const data = {
   skills: {
@@ -232,6 +233,11 @@ export const PTUCONFIG = {
       contestmove: PTUContestMoveSheet,
       effect: PTUEffectSheet,
       species: PTUSpeciesSheet,
+    }
+  },
+  Journal: {
+    Rulebook: {
+      journalClass: PTURuleBookJournal
     }
   },
   rule: {

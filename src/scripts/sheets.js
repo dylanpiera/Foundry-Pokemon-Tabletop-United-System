@@ -12,6 +12,12 @@ function registerSheets() {
     Items.registerSheet("ptu", CONFIG.PTU.Item.sheetClasses.effect, { types: ["effect"], makeDefault: true });
     Items.registerSheet("ptu", CONFIG.PTU.Item.sheetClasses.species, { types: ["species"], makeDefault: true });
 
+    DocumentSheetConfig.registerSheet(JournalEntry, "ptu", CONFIG.PTU.Journal.Rulebook.journalClass, {
+        types: ["base"],
+        label: "PTU.RulebookJournalSheetName",
+        makeDefault: false
+      });
+
     DocumentSheetConfig.registerSheet(CONFIG.PTU.Token.documentClass, "ptu", CONFIG.PTU.Token.sheetClass, { makeDefault: true });
 }
 

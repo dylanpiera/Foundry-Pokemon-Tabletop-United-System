@@ -162,9 +162,9 @@ class PTUActor extends Actor {
         }
 
         const effectivenessMod = this.system.modifiers?.resistanceSteps?.total ?? 0;
-        for (const [key, value] of Object.entries(effectiveness)) {
+        for (let [key, value] of Object.entries(effectiveness)) {
+            if (effectivenessMod) value *= effectivenessMod;
             const type = key.toLocaleLowerCase(game.i18n.locale)
-            if (effectivenessMod) effectiveness[type] *= effectivenessMod;
 
             if (value == 0) {
                 results.immunities.push(new ImmunityData({ type, value, source: "type" }));
