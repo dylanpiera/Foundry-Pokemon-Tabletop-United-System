@@ -58,10 +58,11 @@ class ApplyEffectRuleElement extends RuleElementPTU {
                     return null;
                 }
 
-                grantedItem.system.effect ??= "";
-                grantedItem.system.effect += `<blockquote>Applied by ${this.label ?? this.item.name} from ${this.actor.name}</blockquote>`;
+                const itemObject = grantedItem.toObject();
+                itemObject.system.effect ??= "";
+                itemObject.system.effect += `<blockquote>Applied by ${this.label ?? this.item.name} from ${this.actor.name}</blockquote>`;
 
-                return grantedItem.toObject();
+                return itemObject;
             }
 
             const synthetics = ((this.actor.synthetics.applyEffects[selector] ??= { target: [], origin: [] }));
