@@ -1,15 +1,15 @@
-2024/01/24-20:30:37.506 2f64 Recovering log #828
-2024/01/24-20:30:37.513 2f64 Delete type=0 #828
-2024/01/24-20:30:37.514 2f64 Delete type=3 #826
-2024/01/24-20:52:48.763 d1f8 Level-0 table #833: started
-2024/01/24-20:52:48.764 d1f8 Level-0 table #833: 1274 bytes OK
-2024/01/24-20:52:48.766 d1f8 Delete type=0 #831
-2024/01/24-20:52:48.766 d1f8 Manual compaction at level-0 from '!folders!3G5h8GgoAC59jCdA' @ 72057594037927935 : 1 .. '!items!znvgEviVbL2WnCGJ' @ 0 : 0; will stop at (end)
-2024/01/24-20:52:48.766 d1f8 Manual compaction at level-1 from '!folders!3G5h8GgoAC59jCdA' @ 72057594037927935 : 1 .. '!items!znvgEviVbL2WnCGJ' @ 0 : 0; will stop at '!items!e6eWrcu5JugErmjT' @ 1786 : 1
-2024/01/24-20:52:48.766 d1f8 Compacting 1@1 + 1@2 files
-2024/01/24-20:52:48.771 d1f8 Generated table #834@1: 173 keys, 95954 bytes
-2024/01/24-20:52:48.772 d1f8 Compacted 1@1 + 1@2 files => 95954 bytes
-2024/01/24-20:52:48.773 d1f8 compacted to: files[ 0 0 1 0 0 0 0 ]
-2024/01/24-20:52:48.773 d1f8 Delete type=2 #817
-2024/01/24-20:52:48.773 d1f8 Delete type=2 #833
-2024/01/24-20:52:48.781 d1f8 Manual compaction at level-1 from '!items!e6eWrcu5JugErmjT' @ 1786 : 1 .. '!items!znvgEviVbL2WnCGJ' @ 0 : 0; will stop at (end)
+2024/01/28-16:29:42.570 8394 Recovering log #842
+2024/01/28-16:29:42.575 8394 Delete type=0 #842
+2024/01/28-16:29:42.575 8394 Delete type=3 #840
+2024/01/28-18:32:12.557 6d54 Level-0 table #848: started
+2024/01/28-18:32:12.560 6d54 Level-0 table #848: 24382 bytes OK
+2024/01/28-18:32:12.563 6d54 Delete type=0 #846
+2024/01/28-18:32:12.572 6d54 Manual compaction at level-0 from '!folders!2Idf6tl6HbJkRYPL' @ 72057594037927935 : 1 .. '!items!znvgEviVbL2WnCGJ' @ 0 : 0; will stop at (end)
+2024/01/28-18:32:12.572 6d54 Manual compaction at level-1 from '!folders!2Idf6tl6HbJkRYPL' @ 72057594037927935 : 1 .. '!items!znvgEviVbL2WnCGJ' @ 0 : 0; will stop at '!items!wy0n2XJqupaVQhMR' @ 1964 : 1
+2024/01/28-18:32:12.572 6d54 Compacting 1@1 + 1@2 files
+2024/01/28-18:32:12.579 6d54 Generated table #849@1: 239 keys, 127538 bytes
+2024/01/28-18:32:12.579 6d54 Compacted 1@1 + 1@2 files => 127538 bytes
+2024/01/28-18:32:12.581 6d54 compacted to: files[ 0 0 1 0 0 0 0 ]
+2024/01/28-18:32:12.582 6d54 Delete type=2 #844
+2024/01/28-18:32:12.582 6d54 Delete type=2 #848
+2024/01/28-18:32:12.588 6d54 Manual compaction at level-1 from '!items!wy0n2XJqupaVQhMR' @ 1964 : 1 .. '!items!znvgEviVbL2WnCGJ' @ 0 : 0; will stop at (end)

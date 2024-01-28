@@ -13,6 +13,7 @@ import { TempHPRuleElement } from "./rule-element/temp-hp.js";
 import { EffectivenessRuleElement } from "./rule-element/effectiveness.js";
 import { EphemeralEffectRuleElement } from "./rule-element/ephemeral-effect.js";
 import { ActionPointsRuleElement } from "./rule-element/ap.js";
+import { ApplyEffectRuleElement } from "./rule-element/apply-effect.js";
 
 class RuleElements {
     static builtin = {
@@ -29,7 +30,8 @@ class RuleElements {
         "TempHP": TempHPRuleElement,
         "Effectiveness": EffectivenessRuleElement,
         "EphemeralEffect": EphemeralEffectRuleElement,
-        "ActionPoint": ActionPointsRuleElement
+        "ActionPoint": ActionPointsRuleElement,
+        "ApplyEffect": ApplyEffectRuleElement,
     }
 
     static custom = {}

@@ -176,6 +176,8 @@ class PTUItem extends Item {
                 source._id = foundry.utils.randomID();
             }
 
+            if(source.system.stackSlugs) source.system.slug = sluggify(source.name + foundry.utils.randomID());
+
             const item = new CONFIG.Item.documentClass(source, { parent: actor });
 
             if (item.type === "condition") {
@@ -185,6 +187,7 @@ class PTUItem extends Item {
                     continue;
                 }
             }
+
             items.push(item);
             outputSources.push(item._source);
         }

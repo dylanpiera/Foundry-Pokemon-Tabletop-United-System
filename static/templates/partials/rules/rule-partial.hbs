@@ -28,6 +28,10 @@
             <a class="item-control sluggify" data-action="regenerate-slug" title="(Re)generate Slug"><i class="fas fa-sync-alt"></i></a>
         </div>
     </div>
+    <div class="item slug">
+        <label for="system.stackSlugs">{{localize "ITEM.StackSlugs"}}</label>
+        <input class="ml-1 mr-1" style="flex: none;" name="system.stackSlugs" type="checkbox" {{checked item.system.stackSlugs}}/>
+    </div>
 </div>
 <div class="rules-list">
     {{#each rules.elements}}
