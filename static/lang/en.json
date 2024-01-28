@@ -21,6 +21,7 @@
   "TYPES.Item.reference": "Reference",
   "TYPES.Item.spiritaction": "Spirit Action",
   "ITEM": {
+    "StackSlugs": "Stack Slugs",
     "AddButton": "Add",
     "AddRulesButton": "New Rule Element",
     "EditButton": "Edit",
