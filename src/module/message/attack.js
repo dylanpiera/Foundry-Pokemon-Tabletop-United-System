@@ -78,6 +78,7 @@ class AttackMessagePTU extends ChatMessagePTU {
         const params = {
             event,
             options: this.context.options ?? [],
+            rollResult: this.context.rollResult ?? null,
             actor: this.actor,
             targets: this.targets,
             callback: () => {

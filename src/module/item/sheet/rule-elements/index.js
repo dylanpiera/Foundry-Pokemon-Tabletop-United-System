@@ -1,4 +1,5 @@
 import { AELikeForm } from "./ae-like-form.js"
+import { ApplyEffectForm } from "./apply-effect-form.js"
 import { RuleElementForm } from "./base.js"
 import { EffectivenessForm } from "./effectiveness-form.js"
 import { EphemeralEffectForm } from "./ephemeral-effect-form.js"
@@ -12,7 +13,8 @@ const RULE_ELEMENT_FORMS = {
     RollOption: RollOptionForm,
     ActiveEffectLike: AELikeForm,
     Effectiveness: EffectivenessForm,
-    EphemeralEffect: EphemeralEffectForm
+    EphemeralEffect: EphemeralEffectForm,
+    ApplyEffect: ApplyEffectForm
 }
 
 export { RULE_ELEMENT_FORMS, RuleElementForm}

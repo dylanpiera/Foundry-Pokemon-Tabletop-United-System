@@ -128,7 +128,7 @@ class ChatMessagePTU extends ChatMessage {
 
                     const options = actor.getRollOptions(["all", "attack-roll"]);
 
-                    const rollArgs = { event, options };
+                    const rollArgs = { event, options, rollResult: this.context.rollResult ?? null, };
 
                     return attack.damage?.(rollArgs);
                 }

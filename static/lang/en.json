@@ -135,7 +135,8 @@
     "TempHP": "Temporary HP",
     "Effectiveness": "Effectiveness",
     "EphemeralEffect": "Ephemeral Effect",
-    "ActionPoint": "AP Consumption"
+    "ActionPoint": "AP Consumption",
+    "ApplyEffect": "Apply Effect"
   },
   "PTU": {
     "Skills": {
@@ -745,7 +746,9 @@
           "AfterDerived": "After Derived",
           "BeforeRoll": "Before Roll"
         },
-        "Path": "Path"
+        "Path": "Path",
+        "Even": "Even",
+        "EvenHelpText": "Triggers when roll result is even."
       },
       "GrantItem": {
         "AllowDuplicate": "Allow Duplicates",

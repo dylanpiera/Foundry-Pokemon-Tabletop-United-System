@@ -7,10 +7,11 @@ import { CheckDialog } from "./dialogs/dialog.js";
 
 class PTUDamageCheck extends PTUDiceCheck {
 
-    constructor({ source, targets, selectors, event, outcomes }) {
+    constructor({ source, targets, selectors, event, outcomes, accuracyRollResult }) {
         super({ source, targets, selectors, event });
 
         this.outcomes = outcomes;
+        this.accuracyRollResult = accuracyRollResult;
     }
 
     get isSelfAttack() {
@@ -374,6 +375,7 @@ class PTUDamageCheck extends PTUDiceCheck {
                     skipDialog,
                     isReroll,
                     outcomes: this.outcomes,
+                    accuracyRollResult: this.accuracyRollResult
                 },
                 modifierName: this.statistic.slug,
                 modifiers: this.statistic.modifiers.map(m => m.toObject()),

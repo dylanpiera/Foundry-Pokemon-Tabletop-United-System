@@ -266,7 +266,8 @@ export class PTUCharacterSheet extends PTUActorSheet {
 						event,
 						options: msg.context.options ?? [],
 						actor: msg.actor,
-						targets: msg.targets
+						targets: msg.targets,
+						rollResult: msg.context.rollResult ?? null,
 					}
 					const result = await attack.damage?.(params);
 					if (result === null) {

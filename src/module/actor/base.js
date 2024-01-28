@@ -231,7 +231,8 @@ class PTUActor extends Actor {
             speciesOverride: {},
             typeOverride: {},
             effectiveness: [],
-            apAdjustments: {drained: [], bound: []}
+            apAdjustments: {drained: [], bound: []},
+            applyEffects: {}
         }
 
         super._initialize();
@@ -1115,6 +1116,7 @@ class PTUActor extends Actor {
 
         action.damage = async (params = {}) => {
             const domains = selectors.map(s => s.replace("attack", "damage"));
+            const accuracyRollResult = params.rollResult;
 
             const preTargets = params.targets?.length > 0 ? params.targets : [...game.user.targets];
             const targets = [];
@@ -1142,6 +1144,7 @@ class PTUActor extends Actor {
                 outcomes,
                 selectors: domains,
                 event: params.event,
+                accuracyRollResult
             })
 
             return await check.executeDamage(params.callback, action);

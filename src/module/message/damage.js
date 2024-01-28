@@ -1,4 +1,4 @@
-import { extractEphemeralEffects } from "../rules/helpers.js";
+import { extractApplyEffects, extractEphemeralEffects } from "../rules/helpers.js";
 import { DamageRoll } from "../system/damage/roll.js";
 import { ChatMessagePTU } from "./base.js";
 
@@ -225,6 +225,20 @@ async function applyDamageFromMessage({ message, targets, mode = "full", addend 
             })
         ];
 
+        const applyEffectsTarget = Object.values([
+            ...await extractApplyEffects({
+                affects: "target",
+                origin: message.actor,
+                target: token.actor,
+                item: message.item,
+                domains: ["damage-received"],
+                options: messageRollOptions,
+                roll: Number(message.flags.ptu.context.accuracyRollResult ?? 0)
+            }),
+        ].reduce((a, b) => {
+            if (!a[b.slug]) a[b.slug] = b;
+            return a;
+        }, {}));
 
         const contextClone = token.actor.getContextualClone(originRollOptions, ephemeralEffects);
         const applicationRollOptions = new Set([
@@ -241,6 +255,40 @@ async function applyDamageFromMessage({ message, targets, mode = "full", addend 
             rollOptions: applicationRollOptions,
             skipIWR
         });
+
+        if(applyEffectsTarget.length > 0) {
+            const newItems = await contextClone.createEmbeddedDocuments("Item", applyEffectsTarget);
+            await ChatMessage.create({
+                content: await renderTemplate("systems/ptu/static/templates/chat/damage/effects-applied.hbs", { target: contextClone, effects: newItems }),
+                speaker: ChatMessage.getSpeaker({ actor: contextClone }),
+                whisper: ChatMessage.getWhisperRecipients("GM")
+            })
+        }
+    }
+
+    const applyEffectsOrigin = Object.values([
+        ...await extractApplyEffects({
+            affects: "origin",
+            origin: message.actor,
+            target: message.actor,
+            item: message.item,
+            domains: ["damage-dealt"],
+            options: messageRollOptions,
+            roll: Number(message.flags.ptu.context.accuracyRollResult ?? 0) 
+        }),
+    ].reduce((a, b) => {
+        if (!a[b.slug]) a[b.slug] = b;
+        return a;
+    }, {}));
+
+    if (applyEffectsOrigin.length > 0) {
+        const newItems = await message.actor.createEmbeddedDocuments("Item", applyEffectsOrigin);
+        await ChatMessage.create({
+            content: await renderTemplate("systems/ptu/static/templates/chat/damage/effects-applied.hbs", { target: message.actor, effects: newItems }),
+            speaker: ChatMessage.getSpeaker({ actor: message.actor }),
+            whisper: ChatMessage.getWhisperRecipients("GM")
+        })
+    
     }
 }
 
