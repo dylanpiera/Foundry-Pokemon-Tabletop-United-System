@@ -77,6 +77,7 @@ class PTUDamageCheck extends PTUDiceCheck {
         }
 
         const modifiers = []
+        const diceModifiers = []
 
         const damageBonus = isNaN(Number(this.item.system.damageBonus)) ? 0 : Number(this.item.system.damageBonus);
         if (damageBonus != 0) {
@@ -141,9 +142,20 @@ class PTUDamageCheck extends PTUDiceCheck {
                 `${sluggify(this.item.system.frequency)}-damage-base`
             ], { injectables: { move: this.item, item: this.item, actor: this.actor }, test: this.targetOptions })
         )
+        diceModifiers.push(
+            ...extractModifiers(this.actor.synthetics, [
+                "damage-dice",
+                `${this.item.id}-damage-dice`,
+                `${this.item.slug}-damage-dice`,
+                `${sluggify(this.item.system.category)}-damage-dice`,
+                `${sluggify(this.item.system.type)}-damage-dice`,
+                `${sluggify(this.item.system.frequency)}-damage-dice`
+            ], { injectables: { move: this.item, item: this.item, actor: this.actor }, test: this.targetOptions })
+        )
 
         this.modifiers = modifiers;
         this.damageBaseModifiers = damageBaseModifiers;
+        this.diceModifiers = diceModifiers;
 
         return this;
     }
@@ -317,7 +329,20 @@ class PTUDamageCheck extends PTUDiceCheck {
         const totalModifiersPart = this.statistic.totalModifier?.signedString() ?? "";
         options.modifierPart = totalModifiersPart;
 
-        const roll = new this.rollCls(`${diceString}${totalModifiersPart}`, {}, options);
+        // Add the dice modifier to the total modifier
+        const diceModifierParts = this.diceModifiers.reduce((a, b) => {
+            if (!b.ignored && !a[b.slug]) a[b.slug] = b.modifier;
+            return a;
+        }, {});
+
+        if (this.options.has("charge:bonus") && this.options.has("move:type:electric")) {
+            diceModifierParts["charge"] = `${diceString}+${diceModifier}`;
+        }
+
+        const diceModifiers = Object.values(diceModifierParts).reduce((a, b) => `${a} + ${b}`, "");
+        options.diceModifiers = diceModifiers;
+
+        const roll = new this.rollCls(`${diceString}${totalModifiersPart}${diceModifiers}`, {}, options);
         const rollResult = await roll.evaluate({ async: true });
 
         const critDice = `${diceString}+${diceString}`;
@@ -328,7 +353,7 @@ class PTUDamageCheck extends PTUDiceCheck {
         }
 
         const hasCrit = Object.values(this.outcomes).some(o => o == "crit-hit")
-        const critRoll = new this.rollCls(`${critDice}${totalModifiersPartCrit}`, {}, { ...options, crit: { hit: true, show: hasCrit, nonCritValue: rollResult.total }, fudges });
+        const critRoll = new this.rollCls(`${critDice}${totalModifiersPartCrit}${diceModifiers}`, {}, { ...options, crit: { hit: true, show: hasCrit, nonCritValue: rollResult.total }, fudges });
         const critRollResult = await critRoll.evaluate({ async: true });
 
         const flags = {
@@ -358,6 +383,7 @@ class PTUDamageCheck extends PTUDiceCheck {
         }
 
         const extraTags = this.fiveStrikeResult > 0 ? [`Five Strike x${this.fiveStrikeResult}`] : [];
+        extraTags.push(...Object.entries(diceModifierParts).flatMap(([slug, mod]) => `${Handlebars.helpers.formatSlug(slug)} +${mod}`))
 
         const message = await this.createMessage({ roll, rollMode, flags, inverse: false, critRoll, type, extraTags });
 
