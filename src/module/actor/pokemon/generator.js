@@ -53,6 +53,13 @@ export class PokemonGenerator {
         if (!this.form) this.prepareForm();
 
         this.img = await PokemonGenerator.getImage(this.species, { gender: this.gender, shiny: this.shiny });
+        this.tokenImg = (() => {
+            if(!this.img) return;
+            const tokenImageExtension = game.settings.get("ptu", "generation.defaultTokenImageExtension");
+            if(this.img.endsWith(tokenImageExtension)) return this.img;
+            const actorImageExtension = game.settings.get("ptu", "generation.defaultImageExtension");
+            return this.img.replace(actorImageExtension, tokenImageExtension);
+        })();
 
         if (saveDefault) {
             //TODO: Save Default Settings to system
@@ -85,7 +92,8 @@ export class PokemonGenerator {
             displayBars: foundryDefaultSettings.displayBars ?? CONST.TOKEN_DISPLAY_MODES.OWNER_HOVER,
             displayName: foundryDefaultSettings.displayName ?? CONST.TOKEN_DISPLAY_MODES.OWNER,
             bar1: { attribute: foundryDefaultSettings.bar1?.attribute || "health" },
-            img: this.img
+            img: this.tokenImg,
+            "texture.src": this.tokenImg,
         });
 
         const actorData = {

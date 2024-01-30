@@ -14,6 +14,12 @@ const GenerationSettingsConfig = {
         type: String,
         default: ".webp"
     },
+    "defaultTokenImageExtension": {
+        name: "PTU.Settings.Generation.DefaultTokenImageExtension.Name",
+        hint: "PTU.Settings.Generation.DefaultTokenImageExtension.Hint",
+        type: String,
+        default: ".webp"
+    },
     "defaultPokemonImageNameType": {
         name: "PTU.Settings.Generation.DefaultPokemonImageNameType.Name",
         hint: "PTU.Settings.Generation.DefaultPokemonImageNameType.Hint",

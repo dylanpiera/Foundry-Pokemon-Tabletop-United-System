@@ -875,6 +875,10 @@
           "Name": "Default Image Extension",
           "Hint": "The default extension to use when looking for images for generating a Pokémon."
         },
+        "DefaultTokenImageExtension": {
+          "Name": "Default Token Image Extension",
+          "Hint": "The default extension to use when looking for token images for generating a Pokémon."
+        },
         "DefaultPokemonImageNameType": {
           "Name": "Pokemon Image Name Type",
           "Hint": "Whether the images are based on name (checked) or dex number (unchecked)"
