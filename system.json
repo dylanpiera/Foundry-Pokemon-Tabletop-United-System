@@ -7,7 +7,7 @@
     "verified": "12.316",
     "maximum": 12
   },
-  "version": "4.1.2",
+  "version": "4.1.3",
   "templateVersion": 2,
   "authors": [
     {
@@ -175,6 +175,40 @@
       "lang": "es",
       "name": "Spanish",
       "path": "static/lang/es.json"
+    }
+  ],
+  "packFolders": [
+    {
+      "name": "Rolltables",
+      "sorting": "m",
+      "color": "#ff0000",
+      "packs": ["habitats", "rolltables"]
+    },
+    {
+      "name": "Items",
+      "sorting": "a",
+      "color": "#9c85b7",
+      "packs": ["abilities", "capabilities", "items", "moves"],
+      "folders": [
+        {
+          "name": "Trainer",
+          "sorting": "a",
+          "color": "#4b98d2",
+          "packs": ["edges", "feats"]
+        },
+        {
+          "name": "Pokemon",
+          "sorting": "a",
+          "color": "#d26565",
+          "packs": ["poke-edges", "species", "spirit-actions"]
+        }
+      ]
+    },
+    {
+      "name": "Automation & Information",
+      "sorting": "m",
+      "color": "#89a380",
+      "packs": ["journals", "references", "macros", "effects"]
     }
   ],
   "background": "systems/ptu/static/images/banner.webp",
