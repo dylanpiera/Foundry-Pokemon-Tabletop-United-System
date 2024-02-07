@@ -298,7 +298,11 @@ class PTUPokemonActor extends PTUActor {
 
         this.attributes.health.max = system.health.max;
 
-        this.attributes.level.cap = Math.ceil(5 + (1.58 * ((this.trainer?.system.level.current ?? 0) * (["data-revamp", "short-track"].includes(game.settings.get("ptu", "variant.trainerAdvancement")) ? 2 : ["long-track"].includes(game.settings.get("ptu", "variant.trainerAdvancement")) ? 0.5 : 1))) + ((4 / 3) * (system.friendship ?? 0) * Math.pow(1 + (((this.trainer?.system.level.current ?? 0) * (["data-revamp", "short-track"].includes(game.settings.get("ptu", "variant.trainerAdvancement")) ? 2 : ["long-track"].includes(game.settings.get("ptu", "variant.trainerAdvancement")) ? 0.5 : 1)) / 34), 2)));
+        const calcLevelCap = (friendship) => Math.ceil(5 + (1.58 * ((this.trainer?.system.level.current ?? 0) * (["data-revamp", "short-track"].includes(game.settings.get("ptu", "variant.trainerAdvancement")) ? 2 : ["long-track"].includes(game.settings.get("ptu", "variant.trainerAdvancement")) ? 0.5 : 1))) + ((4 / 3) * (friendship) * Math.pow(1 + (((this.trainer?.system.level.current ?? 0) * (["data-revamp", "short-track"].includes(game.settings.get("ptu", "variant.trainerAdvancement")) ? 2 : ["long-track"].includes(game.settings.get("ptu", "variant.trainerAdvancement")) ? 0.5 : 1)) / 34), 2)));
+        this.attributes.level.cap = {
+            current: calcLevelCap(system.friendship ?? 0),
+            training: calcLevelCap(0),
+        }
 
         /* The Corner of Exceptions */
 

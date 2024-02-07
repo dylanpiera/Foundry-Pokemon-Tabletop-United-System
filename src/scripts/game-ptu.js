@@ -13,6 +13,7 @@ import { dexSync } from "./macros/dex-sync.js"
 import { pokedex } from "./macros/pokedex.js"
 import { changeRotomForm } from "./macros/rotom-form-change.js"
 import { TypeMatrix } from "../module/apps/type-matrix.js";
+import { Weather } from "../module/apps/weather.js";
 
 const GamePTU = {
     onInit() {
@@ -39,6 +40,7 @@ const GamePTU = {
                 MigrationRunner,
                 MigrationSummary
             },
+            weather: Weather,
             macros: {
                 changeRotomForm,
                 pokedex,
@@ -55,11 +57,13 @@ const GamePTU = {
             tokenPanel: new TokenPanel()
         }
 
+        Weather._initializeGlobalEffects();
+
         game.ptu = foundry.utils.mergeObject(game.ptu ?? {}, initData)
 
         CONFIG.PTU.data.typeEffectiveness = game.settings.get("ptu", "type.typeEffectiveness") ?? CONFIG.PTU.data.typeEffectiveness;
     },
-    onSetup() { },
+    onSetup() {},
     onReady() {
         game.ptu.compendiumBrowser = new CompendiumBrowser();
         game.ptu.typeMatrix = new TypeMatrix()

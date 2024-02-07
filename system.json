@@ -181,7 +181,7 @@
     {
       "name": "Rolltables",
       "sorting": "m",
-      "color": "#ff0000",
+      "color": "#89a380",
       "packs": ["habitats", "rolltables"]
     },
     {

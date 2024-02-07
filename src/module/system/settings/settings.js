@@ -200,6 +200,17 @@ export function registerSettings() {
         type: Number,
     });
 
+    game.settings.register("ptu", "weatherEffects", {
+        name: "Weather & Global Effects",
+        scope: "world",
+        config: false,
+        default: [],
+        type: Object,
+        onChange: () => {
+            game.ptu.weather.updateGameState();
+        }
+    });
+
 
     // // game.settings.register("ptu", "nonOwnerCanSeeTabs", {
     // //     name: "Non-owners can see Sheet Tabs",

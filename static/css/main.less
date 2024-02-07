@@ -3808,6 +3808,67 @@ a.content-link {
     }
 }
 
+.ptu.weather {
+    --weather-border-divider: 1px solid var(--color-underline-header);
+
+    .window-content {
+        background: #d1fed4;
+    }
+    .hint-text {
+        flex: 0 1 auto;
+        padding-bottom: 0.5rem;
+        border-bottom: var(--weather-border-divider);
+
+        
+    }
+    .effects {
+        flex: 1 0 auto;
+        display: flex;
+        flex-direction: column;
+
+        .effect {
+            flex: 0 0 25px;
+            display: flex;
+            flex-direction: row;
+            gap: 5px;
+            padding: 0.5rem 0;
+
+            &:nth-child(even) {
+                border-top: var(--weather-border-divider);
+            }
+
+            &:last-child {
+                border-bottom: var(--weather-border-divider);
+            }
+
+            .icon {
+                flex: 0 0 25px;
+                height: 25px;
+            }
+            
+            .name {
+                flex: 1 0 auto;
+                align-self: center;
+                font-weight: bold;
+            }
+
+            .mode-select {
+                flex: 0 0 100px;
+            }
+            
+            .item-controls {
+                flex: 0 1 40px;
+                display: flex;
+                flex-direction: row;
+                flex-wrap: wrap;
+                align-self: center;
+                justify-content: center;
+                gap: 5px;
+            }
+        }
+    }
+}
+
 /* -------------------------------------------- */
 /*  Item Sheet                                  */
 /* -------------------------------------------- */

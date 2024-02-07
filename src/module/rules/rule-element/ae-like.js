@@ -212,7 +212,7 @@ class AELikeRuleElement extends RuleElementPTU {
         const { changes } = this.actor.system;
         const realPath = this.resolveInjectedProperties(this.path);
         const entries = (changes[realPath] ??= {});
-        entries[foundry.utils.randomID()] = { mode: this.mode, value, sourceId: this.item.uuid, source: this.item.name.includes(":") ? this.item.name.split(":")[1].trim() : this.item.name };
+        entries[foundry.utils.randomID()] = { mode: this.mode, value, sourceId: this.item.isGlobal ? (this.item.flags?.core?.sourceId ?? this.item.uuid) : this.item.uuid, source: this.item.name.includes(":") ? this.item.name.split(":")[1].trim() : this.item.name};
     }
 
     _warn(property) {

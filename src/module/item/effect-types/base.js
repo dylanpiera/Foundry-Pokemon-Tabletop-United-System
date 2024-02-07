@@ -19,6 +19,10 @@ class BaseEffectPTU extends PTUItem {
         return this.system.expired;
     }
 
+    get isGlobal() {
+        return !!this.system.global;
+    }
+
     get totalDuration() {
         const { duration } = this.system;
         if(["unlimited", "encounter"].includes(duration.unit)) return Infinity;
@@ -160,4 +164,3 @@ class BaseEffectPTU extends PTUItem {
 }
 
 export { BaseEffectPTU }
-globalThis.BaseEffectPTU = BaseEffectPTU;

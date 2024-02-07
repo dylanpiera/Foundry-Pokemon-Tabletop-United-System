@@ -42,6 +42,7 @@ import { PTUHotBar } from '../../module/apps/hotbar.js';
 import { PTUTokenConfig } from '../../module/canvas/token/sheet.js';
 import { PackLoader } from '../../module/apps/compendium-browser/index.js';
 import PTURuleBookJournal from '../../module/apps/rulebook-journal.js';
+import { BaseEffectPTU } from '../../module/item/effect-types/base.js';
 
 const data = {
   skills: {
@@ -223,7 +224,7 @@ export const PTUCONFIG = {
       species: PTUSpecies,
       condition: PTUCondition,
       reference: PTUItem,
-      spiritaction: PTUItem
+      spiritaction: PTUItem,
     },
     sheetClasses: {
       item: PTUItemSheet,
@@ -233,7 +234,8 @@ export const PTUCONFIG = {
       contestmove: PTUContestMoveSheet,
       effect: PTUEffectSheet,
       species: PTUSpeciesSheet,
-    }
+    },
+    baseEffect: BaseEffectPTU
   },
   Journal: {
     Rulebook: {
