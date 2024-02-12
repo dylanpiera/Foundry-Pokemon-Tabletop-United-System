@@ -62,6 +62,17 @@
                                         disabled
                                     />
                                 </span>
+                                <span class="d-flex justify-content-between" style="flex: 0 0 100%">
+                                    KEYWORDS 
+                                    <input 
+                                        type="text" 
+                                        class="ptu-tagify system-keywords" 
+                                        name="" 
+                                        value="{{json item.system.keywords}}" 
+                                        data-dtype="JSON"
+                                        disabled
+                                    />
+                                </span>
                             </div>
                         </div>
                     </div>
@@ -81,8 +92,8 @@
                 <input class="ml-1 mr-1" name="system.tier" type="text" value="{{item.system.tier}}" placeholder="{{localize "ITEM.Tier"}}"/>
             </div>
             <div class="item-row">
-                <label for="system.origin">{{localize "ITEM.Origin"}}</label>
-                <input class="ml-1 mr-1" name="system.origin" type="text" value="{{item.system.origin}}" placeholder="{{localize "ITEM.Origin"}}"/>
+                <label for="system.keywords">{{localize "ITEM.Keywords"}}</label>
+                <input type="text" class="ptu-tagify system-keywords" name="system.keywords" value="{{json item.system.keywords}}" data-dtype="JSON"/>
             </div>
             <div class="item-row">
                 <label for="system.referenceEffect">{{localize "ITEM.ReferenceEffect"}}</label>

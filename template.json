@@ -608,7 +608,8 @@
         "source": {
           "value": "Homebrew"
         },
-        "stackSlugs": false
+        "stackSlugs": false,
+        "keywords": []
       },
       "interactions": {
         "sheerForce": false,

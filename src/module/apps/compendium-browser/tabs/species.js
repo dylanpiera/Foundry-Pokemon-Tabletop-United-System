@@ -8,9 +8,9 @@ export class CompendiumBrowserSpeciesTab extends CompendiumBrowserTab {
         super(browser);
 
         this.searchFields = ["name"]
-        this.storeFields = ["name", "uuid", "type", "source", "img", "types", "number", "moves", "abilities", "capabilities"]
+        this.storeFields = ["name", "uuid", "type", "source", "img", "types", "number", "moves", "abilities", "capabilities", "keywords"]
 
-        this.index = ["system.source.value", "system.types", "system.number", "system.moves", "system.abilities", "system.capabilities"];
+        this.index = ["system.source.value", "system.types", "system.number", "system.moves", "system.abilities", "system.capabilities", "system.keywords"];
 
         this.capabilitesMinMax = {}
         FILTERABLE_CAPABILITIES.forEach(cap => this.capabilitesMinMax[cap] = { "min": 100, "max": -10 })
@@ -33,6 +33,8 @@ export class CompendiumBrowserSpeciesTab extends CompendiumBrowserTab {
 
         const allMoveSlugsSeen = new Set()
         const allAbilitySlugsSeen = new Set()
+
+        const allKeywordsSeen = new Set();
 
         for await (const { pack, index } of this.browser.packLoader.loadPacks(
             "Item",
@@ -84,6 +86,10 @@ export class CompendiumBrowserSpeciesTab extends CompendiumBrowserTab {
                     continue;
                 }
 
+                for (const keyword of speciesData.system.keywords) {
+                    allKeywordsSeen.add(keyword);
+                }
+
                 this.trackCapabilitiesMinMax(speciesData.system.capabilities);
 
                 species.push({
@@ -112,6 +118,8 @@ export class CompendiumBrowserSpeciesTab extends CompendiumBrowserTab {
 
         this.filterData.multiselects.moves.options = this.filterOptionsFromSlugList(allMoveSlugsSeen)
         this.filterData.multiselects.abilities.options = this.filterOptionsFromSlugList(allAbilitySlugsSeen)
+        this.filterData.multiselects.keywords.options = this.filterOptionsFromSet(allKeywordsSeen)
+        
         for (const cap of FILTERABLE_CAPABILITIES) {
             this.filterData.sliders[cap].values.max = this.capabilitesMinMax[cap].max
             this.filterData.sliders[cap].values.upperLimit = this.capabilitesMinMax[cap].max
@@ -143,6 +151,7 @@ export class CompendiumBrowserSpeciesTab extends CompendiumBrowserTab {
         }
         return nameSlugPairs.sort((a, b) => (`` + a.label).localeCompare(b.label));
     }
+
     #getImagePath(speciesName, speciesNumber) {
         const path = game.settings.get("ptu", "generation.defaultImageDirectory");
         const useName = game.settings.get("ptu", "generation.defaultPokemonImageNameType");
@@ -182,6 +191,7 @@ export class CompendiumBrowserSpeciesTab extends CompendiumBrowserTab {
         if (!this.isEntryHonoringMultiselect(multiselects.types, entry.types)) return false;
         if (!this.isEntryHonoringMultiselect(multiselects.moves, entry.moves)) return false;
         if (!this.isEntryHonoringMultiselect(multiselects.abilities, entry.abilities)) return false;
+        if (!this.isEntryHonoringMultiselect(multiselects.keywords, entry.keywords, false)) return false;
 
         for (const cap of FILTERABLE_CAPABILITIES) {
             const capVal = entry.capabilities[cap] ? entry.capabilities[cap] : 0
@@ -193,25 +203,29 @@ export class CompendiumBrowserSpeciesTab extends CompendiumBrowserTab {
         return true;
     }
 
+    filterOptionsFromSet(set) {
+        return [...set].map(value => ({ value, label: value })).sort((a, b) => a.label.localeCompare(b.label));
+    }
 
     /**
      @param multiselectFilter - the `selected` from a filter, e.g. `filterData.multiselects.types`
      @param entrySetToCheck - the set of an entry corresponding to the filter, e.g. `entry.types`
      @return {boolean} - True if the entry honors the filter, i.e. would be valid result
      */
-    isEntryHonoringMultiselect(multiselectFilter, entrySetToCheck) {
+    isEntryHonoringMultiselect(multiselectFilter, entrySetToCheck, slug = true) {
         const selected = multiselectFilter.selected.filter(s => !s.not).map(s => s.value);
         const notSelected = multiselectFilter.selected.filter(s => s.not).map(s => s.value);
         if (selected.length || notSelected.length) {
-            if (notSelected.some(ns => entrySetToCheck.some(e => sluggify(e) === ns))) return false;
+            if (notSelected.some(ns => entrySetToCheck.some(e => sluggify(e) === (slug ? ns : sluggify(ns))))) return false;
             const fulfilled =
                 multiselectFilter.conjunction === "and"
-                    ? selected.every(s => entrySetToCheck.some(e => sluggify(e) === s))
-                    : selected.some(s => entrySetToCheck.some(e => sluggify(e) === s));
+                    ? selected.every(s => entrySetToCheck.some(e => sluggify(e) === (slug ? s : sluggify(s))))
+                    : selected.some(s => entrySetToCheck.some(e => sluggify(e) === (slug ? s : sluggify(s))));
             if (!fulfilled) return false;
         }
         return true;
     }
+
     prepareFilterData() {
         return {
             checkboxes: {
@@ -241,6 +255,12 @@ export class CompendiumBrowserSpeciesTab extends CompendiumBrowserTab {
                     options: [],
                     selected: []
                 },
+                keywords: {
+                    conjunction: "and",
+                    label: "PTU.CompendiumBrowser.FilterOptions.Keywords",
+                    options: [],
+                    selected: []
+                }
             },
             sliders: {
                 overland: {

@@ -6,9 +6,9 @@ export class CompendiumBrowserItemsTab extends CompendiumBrowserTab {
         super(browser);
 
         this.searchFields = ["name"]
-        this.storeFields = ["name", "uuid", "type", "source", "img", "cost", "subtype"];
+        this.storeFields = ["name", "uuid", "type", "source", "img", "cost", "subtype", "keywords"];
 
-        this.index = ["img", "system.source.value", "system.cost", "system.subtype"];
+        this.index = ["img", "system.source.value", "system.cost", "system.subtype", "system.keywords"];
 
         this.filterData = this.prepareFilterData();
     }
@@ -25,6 +25,7 @@ export class CompendiumBrowserItemsTab extends CompendiumBrowserTab {
         const items = [];
         const indexFields = foundry.utils.duplicate(this.index);
         const sources = new Set();
+        const allKeywordsSeen = new Set();
 
         for await (const { pack, index } of this.browser.packLoader.loadPacks(
             "Item",
@@ -39,6 +40,10 @@ export class CompendiumBrowserItemsTab extends CompendiumBrowserTab {
                 const sourceSlug = sluggify(source);
                 if (source) sources.add(source);
 
+                for(const keyword of itemData.system.keywords) {
+                    allKeywordsSeen.add(keyword);
+                }
+
                 items.push({
                     name: itemData.name,
                     type: itemData.type,
@@ -47,6 +52,7 @@ export class CompendiumBrowserItemsTab extends CompendiumBrowserTab {
                     source: sourceSlug,
                     cost: itemData.system.cost || 0,
                     subtype: itemData.system.subtype || "",
+                    keywords: itemData.system.keywords
                 })
             }
         }
@@ -55,29 +61,41 @@ export class CompendiumBrowserItemsTab extends CompendiumBrowserTab {
 
         // Set filters if necessary
         this.filterData.checkboxes.source.options = this.generateSourceCheckboxOptions(sources);
+        this.filterData.multiselects.keywords.options = this.filterOptionsFromSet(allKeywordsSeen)
     }
 
     filterIndexData(entry) {
-        const { selects, checkboxes } = this.filterData;
+        const { multiselects, checkboxes } = this.filterData;
 
-        if(checkboxes.source.selected.length) {
-            if(!checkboxes.source.selected.includes(entry.source)) return false;
+        if (checkboxes.source.selected.length) {
+            if (!checkboxes.source.selected.includes(entry.source)) return false;
         }
 
-        if(selects.type.selected) {
-            switch (selects.type.selected) {
-                case "pokeball":
-                    if (entry.subtype !== "pokeball") return false;
-                    break;
-                case "tms":
-                    if (/TM(\d{1,3})\s/.test(entry.name) === false) return false;
-                    break;
-                case "berries":
-                    if (!entry.name.trim().endsWith("Berry")) return false;
-                    break;
-            }
-        }
+        if (!this.isEntryHonoringMultiselect(multiselects.keywords, entry.keywords)) return false;
 
+        return true;
+    }
+
+    filterOptionsFromSet(set) {
+        return [...set].map(value => ({ value, label: value })).sort((a, b) => a.label.localeCompare(b.label));
+    }
+
+    /**
+     *  @param multiselectFilter - the `selected` from a filter, e.g. `filterData.multiselects.types`
+     *  @param entrySetToCheck - the set of an entry corresponding to the filter, e.g. `entry.types`
+     *  @return {boolean} - True if the entry honors the filter, i.e. would be valid result
+    */
+    isEntryHonoringMultiselect(multiselectFilter, entrySetToCheck) {
+        const selected = multiselectFilter.selected.filter(s => !s.not).map(s => s.value);
+        const notSelected = multiselectFilter.selected.filter(s => s.not).map(s => s.value);
+        if (selected.length || notSelected.length) {
+            if (notSelected.some(ns => entrySetToCheck.some(e => sluggify(e) === sluggify(ns)))) return false;
+            const fulfilled =
+                multiselectFilter.conjunction === "and"
+                    ? selected.every(s => entrySetToCheck.some(e => sluggify(e) === sluggify(s)))
+                    : selected.some(s => entrySetToCheck.some(e => sluggify(e) === sluggify(s)));
+            if (!fulfilled) return false;
+        }
         return true;
     }
 
@@ -91,13 +109,13 @@ export class CompendiumBrowserItemsTab extends CompendiumBrowserTab {
                     selected: []
                 }
             },
-            selects: {
-                type: {
-                    isExpanded: false,
-                    label: "PTU.CompendiumBrowser.FilterOptions.ItemType",
-                    options: { pokeball: "Pokéball", tms: "TMs", berries: "Berries" },
-                    selected: ""
-                },
+            multiselects: {
+                keywords: {
+                    conjunction: "and",
+                    label: "PTU.CompendiumBrowser.FilterOptions.Keywords",
+                    options: [],
+                    selected: []
+                }
             },
             order: {
                 by: "name",

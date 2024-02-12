@@ -1,14 +1,16 @@
-2024/01/28-16:29:42.409 a648 Recovering log #834
-2024/01/28-16:29:42.413 a648 Delete type=0 #834
-2024/01/28-16:29:42.413 a648 Delete type=3 #832
-2024/01/28-18:32:12.514 6d54 Level-0 table #840: started
-2024/01/28-18:32:12.516 6d54 Level-0 table #840: 12635 bytes OK
-2024/01/28-18:32:12.519 6d54 Delete type=0 #838
-2024/01/28-18:32:12.524 6d54 Manual compaction at level-0 from '!folders!3AhTAywjx4AYtRjv' @ 72057594037927935 : 1 .. '!items!zxUzqjCE0wNYL1er' @ 0 : 0; will stop at '!items!f25cGYvLApdYt14w' @ 14892 : 1
-2024/01/28-18:32:12.524 6d54 Compacting 1@0 + 1@1 files
-2024/01/28-18:32:12.541 6d54 Generated table #841@0: 1281 keys, 588461 bytes
-2024/01/28-18:32:12.541 6d54 Compacted 1@0 + 1@1 files => 588461 bytes
-2024/01/28-18:32:12.543 6d54 compacted to: files[ 0 1 0 0 0 0 0 ]
-2024/01/28-18:32:12.544 6d54 Delete type=2 #836
-2024/01/28-18:32:12.544 6d54 Delete type=2 #840
-2024/01/28-18:32:12.544 6d54 Manual compaction at level-0 from '!items!f25cGYvLApdYt14w' @ 14892 : 1 .. '!items!zxUzqjCE0wNYL1er' @ 0 : 0; will stop at (end)
+2024/02/12-17:35:39.164 76a4 Recovering log #844
+2024/02/12-17:35:39.164 76a4 Recovering log #871
+2024/02/12-17:35:39.169 76a4 Delete type=0 #844
+2024/02/12-17:35:39.169 76a4 Delete type=0 #871
+2024/02/12-17:35:39.169 76a4 Delete type=3 #842
+2024/02/12-19:21:33.480 7d0 Level-0 table #874: started
+2024/02/12-19:21:33.492 7d0 Level-0 table #874: 970799 bytes OK
+2024/02/12-19:21:33.495 7d0 Delete type=0 #872
+2024/02/12-19:21:33.530 7d0 Manual compaction at level-0 from '!folders!3AhTAywjx4AYtRjv' @ 72057594037927935 : 1 .. '!items!zxUzqjCE0wNYL1er' @ 0 : 0; will stop at '!items!zxUzqjCE0wNYL1er' @ 16179 : 1
+2024/02/12-19:21:33.530 7d0 Compacting 1@0 + 1@1 files
+2024/02/12-19:21:33.544 7d0 Generated table #875@0: 1281 keys, 582885 bytes
+2024/02/12-19:21:33.545 7d0 Compacted 1@0 + 1@1 files => 582885 bytes
+2024/02/12-19:21:33.546 7d0 compacted to: files[ 0 1 0 0 0 0 0 ]
+2024/02/12-19:21:33.546 7d0 Delete type=2 #846
+2024/02/12-19:21:33.547 7d0 Delete type=2 #874
+2024/02/12-19:21:33.566 7d0 Manual compaction at level-0 from '!items!zxUzqjCE0wNYL1er' @ 16179 : 1 .. '!items!zxUzqjCE0wNYL1er' @ 0 : 0; will stop at (end)

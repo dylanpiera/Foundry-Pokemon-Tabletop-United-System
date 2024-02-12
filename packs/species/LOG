@@ -1,7 +1,30 @@
-2024/01/28-16:29:42.582 8394 Recovering log #1026
-2024/01/28-16:29:42.588 8394 Delete type=0 #1026
-2024/01/28-16:29:42.588 8394 Delete type=3 #1024
-2024/01/28-18:32:12.564 6d54 Level-0 table #1031: started
-2024/01/28-18:32:12.564 6d54 Level-0 table #1031: 0 bytes OK
-2024/01/28-18:32:12.566 6d54 Delete type=0 #1029
-2024/01/28-18:32:12.572 6d54 Manual compaction at level-0 from '!folders!CMymFngAhNsaPlS5' @ 72057594037927935 : 1 .. '!items!zyXhWVwTmu553jFn' @ 0 : 0; will stop at (end)
+2024/02/12-17:35:39.336 8450 Recovering log #1034
+2024/02/12-17:35:39.336 8450 Recovering log #1060
+2024/02/12-17:35:39.340 8450 Delete type=2 #1017
+2024/02/12-17:35:39.340 8450 Delete type=2 #1018
+2024/02/12-17:35:39.340 8450 Delete type=0 #1034
+2024/02/12-17:35:39.340 8450 Delete type=0 #1060
+2024/02/12-17:35:39.340 8450 Delete type=3 #1032
+2024/02/12-19:17:23.386 7d0 Level-0 table #1063: started
+2024/02/12-19:17:23.454 7d0 Level-0 table #1063: 7621549 bytes OK
+2024/02/12-19:17:23.455 7d0 Delete type=0 #1061
+2024/02/12-19:21:33.628 7d0 Level-0 table #1065: started
+2024/02/12-19:21:33.701 7d0 Level-0 table #1065: 7618859 bytes OK
+2024/02/12-19:21:33.704 7d0 Delete type=0 #1062
+2024/02/12-19:21:33.709 7d0 Manual compaction at level-0 from '!folders!CMymFngAhNsaPlS5' @ 72057594037927935 : 1 .. '!items!zyXhWVwTmu553jFn' @ 0 : 0; will stop at '!items!zyXhWVwTmu553jFn' @ 42222 : 1
+2024/02/12-19:21:33.709 7d0 Compacting 2@0 + 6@1 files
+2024/02/12-19:21:33.739 7d0 Generated table #1066@0: 502 keys, 2117069 bytes
+2024/02/12-19:21:33.770 7d0 Generated table #1067@0: 503 keys, 2117613 bytes
+2024/02/12-19:21:33.799 7d0 Generated table #1068@0: 505 keys, 2118842 bytes
+2024/02/12-19:21:33.817 7d0 Generated table #1069@0: 300 keys, 1265030 bytes
+2024/02/12-19:21:33.817 7d0 Compacted 2@0 + 6@1 files => 7618554 bytes
+2024/02/12-19:21:33.818 7d0 compacted to: files[ 0 4 0 0 0 0 0 ]
+2024/02/12-19:21:33.818 7d0 Delete type=2 #982
+2024/02/12-19:21:33.818 7d0 Delete type=2 #988
+2024/02/12-19:21:33.819 7d0 Delete type=2 #1016
+2024/02/12-19:21:33.819 7d0 Delete type=2 #1019
+2024/02/12-19:21:33.819 7d0 Delete type=2 #1036
+2024/02/12-19:21:33.819 7d0 Delete type=2 #1037
+2024/02/12-19:21:33.819 7d0 Delete type=2 #1063
+2024/02/12-19:21:33.820 7d0 Delete type=2 #1065
+2024/02/12-19:21:33.821 7d0 Manual compaction at level-0 from '!items!zyXhWVwTmu553jFn' @ 42222 : 1 .. '!items!zyXhWVwTmu553jFn' @ 0 : 0; will stop at (end)

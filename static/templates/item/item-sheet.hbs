@@ -81,6 +81,17 @@
                                     />
                                 </span>
                                 {{/if}}
+                                <span class="d-flex justify-content-between" style="flex: 0 0 100%">
+                                    KEYWORDS 
+                                    <input 
+                                        type="text" 
+                                        class="ptu-tagify system-keywords" 
+                                        name="" 
+                                        value="{{json item.system.keywords}}" 
+                                        data-dtype="JSON"
+                                        disabled
+                                    />
+                                </span>
                             </div>
                         </div>
                     </div>
@@ -104,8 +115,8 @@
                 <input class="ml-1 mr-1" name="system.category" type="text" value="{{item.system.category}}" placeholder="{{localize "ITEM.Category"}}"/>
             </div>
             <div class="item-row">
-                <label for="system.origin">{{localize "ITEM.Origin"}}</label>
-                <input class="ml-1 mr-1" name="system.origin" type="text" value="{{item.system.origin}}" placeholder="{{localize "ITEM.Origin"}}"/>
+                <label for="system.keywords">{{localize "ITEM.Keywords"}}</label>
+                <input type="text" class="ptu-tagify system-keywords" name="system.keywords" value="{{json item.system.keywords}}" data-dtype="JSON"/>
             </div>
             {{#if (is item.system.subtype "pokeball")}}
                 <div class="item-row">

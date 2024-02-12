@@ -65,7 +65,8 @@
     "Modifier": "Modifier",
     "ShowInTokenPanel": "Show in Token Panel",
     "Dice": "Base Dice",
-    "Snippet": "Effect Snippet"
+    "Snippet": "Effect Snippet",
+    "Keywords": "Keywords"
   },
 
   "SPECIES.Height": "Height",
@@ -1066,7 +1067,8 @@
         "Number": "Dex Number",
         "HasForm": "Has Form",
         "LearnableMoves": "Learnable Moves",
-        "Abilities": "Obtainable Abilities"
+        "Abilities": "Obtainable Abilities",
+        "Keywords":"Keywords"
       },
       "Search": {
         "Placeholder": "Your query...",

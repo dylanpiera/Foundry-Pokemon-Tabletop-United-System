@@ -3944,6 +3944,10 @@ a.content-link img {
 .sheet.item.species .capabilities > .fb-48 {
   max-height: 270px;
 }
+.sheet.item.species .capabilities tags.tagify,
+.sheet.item.species .capabilities .tagify__input {
+  width: 100%;
+}
 .sheet.item.species .evolutions {
   padding: 0.25rem 0.75rem;
   flex-direction: column;
