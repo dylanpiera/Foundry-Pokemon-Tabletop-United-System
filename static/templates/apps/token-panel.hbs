@@ -178,7 +178,7 @@
             {{#if (and (and (is actor.type "character") show.feats) (gt feats.length 0))}}
                 <div class="feats">
                     {{#each feats as |feat|}}
-                        <div class="action {{#if feat.rollable}}rollable{{/if}}" data-id="{{feat.id}}" {{log feat}}
+                        <div class="action {{#if feat.rollable}}rollable{{/if}}" data-id="{{feat.id}}"
                             title="<div class='effect-popup'>{{#if feat.keywords}}<div class='d-flex justify-content-center'>{{#each feat.keywords}}<div class='effect-range'>{{this}}</div>{{/each}}</div>{{/if}}<div class='effect-effect'>{{feat.effect}}</div></div>">
                             <div class="icon">
                                 <img class="icon" src="{{feat.img}}" alt="{{feat.name}}">
