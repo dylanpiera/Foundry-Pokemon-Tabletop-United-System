@@ -1,8 +1,8 @@
-2024/02/13-11:16:36.847 8e68 Recovering log #534
-2024/02/13-11:16:36.851 8e68 Delete type=0 #534
-2024/02/13-11:16:36.851 8e68 Delete type=3 #532
-2024/02/13-11:36:24.854 7d0 Level-0 table #539: started
-2024/02/13-11:36:24.854 7d0 Level-0 table #539: 0 bytes OK
-2024/02/13-11:36:24.863 7d0 Delete type=0 #537
-2024/02/13-11:36:24.863 7d0 Manual compaction at level-0 from '!folders!DIBPjL86EbMDaAMi' @ 72057594037927935 : 1 .. '!items!zW8DWXGrCPQAtxWZ' @ 0 : 0; will stop at (end)
-2024/02/13-11:36:24.863 7d0 Manual compaction at level-1 from '!folders!DIBPjL86EbMDaAMi' @ 72057594037927935 : 1 .. '!items!zW8DWXGrCPQAtxWZ' @ 0 : 0; will stop at (end)
+2024/02/13-12:08:24.297 8c38 Recovering log #546
+2024/02/13-12:08:24.300 8c38 Delete type=0 #546
+2024/02/13-12:08:24.301 8c38 Delete type=3 #544
+2024/02/13-13:30:10.526 f0ac Level-0 table #551: started
+2024/02/13-13:30:10.526 f0ac Level-0 table #551: 0 bytes OK
+2024/02/13-13:30:10.527 f0ac Delete type=0 #549
+2024/02/13-13:30:10.530 f0ac Manual compaction at level-0 from '!folders!DIBPjL86EbMDaAMi' @ 72057594037927935 : 1 .. '!items!zW8DWXGrCPQAtxWZ' @ 0 : 0; will stop at (end)
+2024/02/13-13:30:10.530 f0ac Manual compaction at level-1 from '!folders!DIBPjL86EbMDaAMi' @ 72057594037927935 : 1 .. '!items!zW8DWXGrCPQAtxWZ' @ 0 : 0; will stop at (end)

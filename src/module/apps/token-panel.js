@@ -44,6 +44,7 @@ export class TokenPanel extends Application {
                 rollable: !!attack.roll,
                 effect: attack.item?.system.effect ?? "",
                 range: attack.item?.system.range ?? "",
+                keywords: attack.item?.system.keywords ?? [],
             };
             if (attack.item.system.isStruggle) struggles.push(data);
             else attacks.push(data);

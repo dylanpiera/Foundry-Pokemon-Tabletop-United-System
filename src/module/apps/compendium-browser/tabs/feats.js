@@ -6,7 +6,7 @@ export class CompendiumBrowserFeatsTab extends CompendiumBrowserTab {
         super(browser);
 
         this.searchFields = ["name", "prerequisites.label", "prerequisites.tier", "class"]
-        this.storeFields = ["name", "uuid", "type", "source", "img", "prerequisites", "class", "keywords"];
+        this.storeFields = ["name", "uuid", "type", "source", "img", "prerequisites", "class", "classPretty", "keywords"];
 
         this.index = ["img", "system.source.value", "system.prerequisites", "system.class", "system.keywords"];
 
@@ -43,7 +43,7 @@ export class CompendiumBrowserFeatsTab extends CompendiumBrowserTab {
                 const sourceSlug = sluggify(source);
                 if (source) sources.add(source);
 
-                const isClass = featData.img.includes("class");
+                const isClass = featData.system.keywords.includes("Class");
                 const _class = isClass ? featData.name.trim(): (featData.system.class?.trim() ?? "");
                 const prerequisites = featData.system?.prerequisites ?? "";
 
@@ -73,6 +73,7 @@ export class CompendiumBrowserFeatsTab extends CompendiumBrowserTab {
             for (const prereq of feat.prerequisites) {
                 if (classes.has(prereq.label.toLowerCase().capitalize())) {
                     feat.class ||= prereq.label;
+                    feat.classPretty ||= prereq.label;
                     continue;
                 }
                 if (featNames.has(prereq.label)) prereq.feat = true;
@@ -183,7 +184,7 @@ export class CompendiumBrowserFeatsTab extends CompendiumBrowserTab {
                     conjunction: "and",
                     label: "PTU.CompendiumBrowser.FilterOptions.Keywords",
                     options: [],
-                    selected: []
+                    selected: [{value: 'Obsolete', label: 'Obsolete', not: true}]
                 }
             },
             order: {

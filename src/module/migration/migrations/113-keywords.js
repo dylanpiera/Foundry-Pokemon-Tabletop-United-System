@@ -26,5 +26,8 @@ export class Migration113Keywords extends MigrationBase {
             delete item.system.tags;
             item.system["-=tags"] = null;
         }
+        if(item.type === "move") {
+            item.system.range = entry.system.range;
+        }
     }
 }

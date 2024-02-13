@@ -114,7 +114,7 @@ export class CompendiumBrowserItemsTab extends CompendiumBrowserTab {
                     conjunction: "and",
                     label: "PTU.CompendiumBrowser.FilterOptions.Keywords",
                     options: [],
-                    selected: []
+                    selected: [{value: 'Obsolete', label: 'Obsolete', not: true}]
                 }
             },
             order: {
