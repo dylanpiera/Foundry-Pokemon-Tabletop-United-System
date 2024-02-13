@@ -323,7 +323,8 @@ class PTUActor extends Actor {
 
         this.prepareDataFromItems();
 
-        for (const rule of this.rules) {
+
+        for (const rule of this.rules.sort((a, b) => (a.priority ?? 0) - (b.priority ?? 0))) {
             rule.onApplyActiveEffects?.();
         }
     }

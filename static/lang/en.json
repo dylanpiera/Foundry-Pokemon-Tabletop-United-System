@@ -736,6 +736,7 @@
         "Target": "Target",
         "Origin": "Origin",
         "Affects": "Affects",
+        "Priority": "Priority",
         "Modes": {
           "Label": "Mode",
           "Add": "Add",

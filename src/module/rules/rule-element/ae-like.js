@@ -18,7 +18,8 @@ class AELikeRuleElement extends RuleElementPTU {
             mode: new foundry.data.fields.StringField({ type: String, required: true, choices: Object.keys(AELikeRuleElement.CHANGE_MODES), initial: undefined }),
             path: new foundry.data.fields.StringField({ type: String, required: true, nullable: false, blank: false, initial: undefined }),
             phase: new foundry.data.fields.StringField({ type: String, required: false, nullable: false, choices: foundry.utils.deepClone(AELikeRuleElement.PHASES), initial: "applyAEs" }),
-            value: new ResolvableValueField({ required: true, nullable: true, initial: undefined })
+            value: new ResolvableValueField({ required: true, nullable: true, initial: undefined }),
+            priority: new foundry.data.fields.NumberField({ required: false, nullable: true, initial: undefined }),
         }
     }
 
