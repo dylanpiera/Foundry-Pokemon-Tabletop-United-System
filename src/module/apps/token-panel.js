@@ -67,7 +67,7 @@ export class TokenPanel extends Application {
                 effect: feat.system.effect,
                 frequency: feat.system.frequency,
                 rollable: !!feat.roll,
-                tags: feat.system.tags,
+                keywords: feat.system.keywords,
             })
         }
 

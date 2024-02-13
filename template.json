@@ -631,7 +631,6 @@
       "templates": ["base"],
       "prerequisites": [],
       "frequency": "At Will - Standard Action",
-      "tags": "",
       "notes": "",
       "free": false,
       "class": ""

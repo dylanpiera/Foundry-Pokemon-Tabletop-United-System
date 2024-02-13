@@ -2,8 +2,7 @@ import { sluggify } from '../../../util/misc.js';
 import { PTUItem } from '../index.js';
 class PTUFeat extends PTUItem {
     get category() {
-        const { tags } = this.system;
-        if (tags.includes("[Class]")) return "class";
+        if(this.system.keywords?.includes("Class")) return "class";
         return "feat";
     }
 

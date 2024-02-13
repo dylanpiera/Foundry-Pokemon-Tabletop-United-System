@@ -62,25 +62,6 @@
                                         disabled
                                     />
                                 </span>
-                                <span style="flex: 0 0 100%">
-                                    TAGS 
-                                    <input
-                                        class="ml-2"
-                                        name=""
-                                        type="text"
-                                        value="{{item.system.tags}}"
-                                        placeholder=""
-                                        disabled
-                                    />
-                                </span>
-                                <span style="flex: 0 0 100%;">
-                                    FREE FEAT
-                                    <input
-                                        class="ml-2 mr-2"
-                                        type="checkbox" {{checked item.system.free}}
-                                        disabled
-                                    />
-                                </span>
                                 <span class="d-flex justify-content-between" style="flex: 0 0 100%">
                                     KEYWORDS 
                                     <input 
@@ -89,6 +70,14 @@
                                         name="" 
                                         value="{{json item.system.keywords}}" 
                                         data-dtype="JSON"
+                                        disabled
+                                    />
+                                </span>
+                                <span style="flex: 0 0 100%;">
+                                    FREE FEAT
+                                    <input
+                                        class="ml-2 mr-2"
+                                        type="checkbox" {{checked item.system.free}}
                                         disabled
                                     />
                                 </span>
@@ -109,10 +98,6 @@
             <div class="item-row">
                 <label for="system.frequency">{{localize "ITEM.Frequency"}}</label>
                 <input class="ml-1 mr-1" name="system.frequency" type="text" value="{{item.system.frequency}}" placeholder="{{localize "ITEM.Frequency"}}"/>
-            </div>
-            <div class="item-row">
-                <label for="system.tags">{{localize "ITEM.Tags"}}</label>
-                <input class="ml-1 mr-1" name="system.tags" type="text" value="{{item.system.tags}}" placeholder="{{localize "ITEM.Tags"}}"/>
             </div>
             <div class="item-row">
                 <label for="system.class">{{localize "ITEM.Class"}}</label>

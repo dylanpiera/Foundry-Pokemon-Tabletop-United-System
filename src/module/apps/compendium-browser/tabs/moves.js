@@ -5,10 +5,10 @@ export class CompendiumBrowserMovesTab extends CompendiumBrowserTab {
     constructor(browser) {
         super(browser);
 
-        this.searchFields = ["name"]
-        this.storeFields = ["name", "uuid", "type", "source", "img", "moveType", "category", "damageBase", "keywords"];
+        this.searchFields = ["name", "range"]
+        this.storeFields = ["name", "uuid", "type", "source", "img", "moveType", "category", "damageBase", "range", "keywords"];
 
-        this.index = ["img", "system.source.value", "system.type", "system.category", "system.damageBase", "system.keywords"];
+        this.index = ["img", "system.source.value", "system.type", "system.category", "system.damageBase", "system.range", "system.keywords"];
 
         this.filterData = this.prepareFilterData();
     }
@@ -55,6 +55,7 @@ export class CompendiumBrowserMovesTab extends CompendiumBrowserTab {
                     category: moveData.system.category,
                     damageBase: isNaN(db) ? 0 : db,
                     moveType: moveData.system.type,
+                    range: moveData.system.range,
                     keywords: moveData.system.keywords
                 })
             }
