@@ -655,11 +655,6 @@ a.pokedollar span::before {
   color: black;
   border-bottom: 2px solid black;
 }
-.ptu.rulebook.journal-entry-page .journal-page-header h3,
-.ptu.rulebook section.journal-entry-content .journal-page-header h3 {
-  color: lightgreen;
-  border-bottom: 2px solid lightgreen;
-}
 .ptu.rulebook.journal-entry aside.sidebar.flexcol.directory.journal-sidebar {
   color: white;
   border: unset;
