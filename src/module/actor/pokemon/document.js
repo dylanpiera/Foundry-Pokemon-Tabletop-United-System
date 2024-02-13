@@ -530,13 +530,26 @@ class PTUPokemonActor extends PTUActor {
             const tokenUpdates = {};
 
             const curImg = await PokemonGenerator.getImage(this.species, { gender: this.system.gender, shiny: this.system.shiny });
+            const curTokenImg = (() => {
+                const tokenImageExtension = game.settings.get("ptu", "generation.defaultTokenImageExtension");
+                if(curImg.endsWith(tokenImageExtension)) return curImg;
+                const actorImageExtension = game.settings.get("ptu", "generation.defaultImageExtension");
+                return curImg.replace(actorImageExtension, tokenImageExtension);
+            })();
             const newImg = await PokemonGenerator.getImage(result.evolution, { gender: this.system.gender, shiny: this.system.shiny });
+            const newTokenImg = (() => {
+                const tokenImageExtension = game.settings.get("ptu", "generation.defaultTokenImageExtension");
+                if(newImg.endsWith(tokenImageExtension)) return newImg;
+                const actorImageExtension = game.settings.get("ptu", "generation.defaultImageExtension");
+                return newImg.replace(actorImageExtension, tokenImageExtension);
+            })();
 
             if (this.img === curImg) update.img = newImg;
-            if (this.prototypeToken.texture.src === curImg) {
-                update["prototypeToken.texture.src"] = newImg;
+            if (this.prototypeToken.texture.src === curTokenImg) {
+                update["prototypeToken.texture.src"] = newTokenImg;
                 tokenUpdates["texture.src"] = update["prototypeToken.texture.src"];
             }
+
             if (sluggify(this.name) == this.species.slug) {
                 update.name = Handlebars.helpers.capitalizeFirst(result.evolution.name);
                 tokenUpdates["name"] = update.name;
