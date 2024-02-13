@@ -270,6 +270,15 @@ export class PTUPokemonSheet extends PTUActorSheet {
 			item.sheet.render(true);
 		});
 
+		html.find(".item-quantity input[type='number']").change((ev) => {
+			const value = Number(ev.currentTarget.value);
+			const id = ev.currentTarget.dataset.itemId;
+			if (value >= 0 && id) {
+				const item = this.actor.items.get(id);
+				item?.update({ "system.quantity": value });
+			}
+		});
+
 		html.find('.item-delete').click(this._onItemDelete.bind(this));
 
 		this._contextMenu(html);
