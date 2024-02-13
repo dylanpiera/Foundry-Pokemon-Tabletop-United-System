@@ -95,6 +95,7 @@ export class CompendiumBrowserFeatsTab extends CompendiumBrowserTab {
 
         const entries = [];
         for (const prereq of prerequisites) {
+            if(prereq === 'Rune Master') continue;
             let tierFound = false;
             const entry = prereq.split(" ").map(p => p.trim()).reduce((acc, curr) => {
                 if (!tierFound && tiers.has(curr.toLowerCase())) {
