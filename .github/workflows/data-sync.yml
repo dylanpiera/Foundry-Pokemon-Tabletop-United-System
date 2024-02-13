@@ -37,7 +37,7 @@ jobs:
           fvtt package unpack species
           fvtt package unpack spirit-actions
       - name: Upload Artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: ptr-data-jsons
           path: /home/runner/work/Foundry-Pokemon-Tabletop-United-System/Foundry-Pokemon-Tabletop-United-System/Data/systems/ptu/packs/**/*.json
@@ -54,7 +54,7 @@ jobs:
           ref: master
           token: ${{ secrets.ACTIONS_GITHUB_TOKEN }}
       - name: Load Artifacts
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with: 
           name: ptr-data-jsons
       - name: Commit & Push
