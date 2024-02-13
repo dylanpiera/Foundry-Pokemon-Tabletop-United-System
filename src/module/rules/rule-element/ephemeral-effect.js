@@ -41,7 +41,7 @@ class EphemeralEffectRuleElement extends RuleElementPTU {
                 return null;
             }
             const effect = (await fromUuid(uuid));
-            if (!(effect instanceof BaseEffectPTU && ["condition", "effect"].includes(effect.type))) {
+            if (!(effect instanceof CONFIG.PTU.Item.baseEffect && ["condition", "effect"].includes(effect.type))) {
                 this.failValidation(`unable to find effect or condition item with uuid "${uuid}"`);
                 return null;
             }
