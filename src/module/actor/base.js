@@ -162,7 +162,12 @@ class PTUActor extends Actor {
             if (effectiveness["Shadow"] > 2) effectiveness["Shadow"] = 2;
         }
 
-        const effectivenessMod = this.system.modifiers?.resistanceSteps?.total ?? 0;
+        const effectivenessMod = (() => {
+            const mod = this.system.modifiers?.resistanceSteps?.total ?? 0;
+            if(mod > 0) return 1 / (2 ** mod);
+            if(mod < 0) return 2 ** Math.abs(mod);
+            return 1;
+        })();
         for (let [key, value] of Object.entries(effectiveness)) {
             if (effectivenessMod) value *= effectivenessMod;
             const type = key.toLocaleLowerCase(game.i18n.locale)
