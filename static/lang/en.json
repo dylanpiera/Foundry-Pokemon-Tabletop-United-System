@@ -66,7 +66,22 @@
     "ShowInTokenPanel": "Show in Token Panel",
     "Dice": "Base Dice",
     "Snippet": "Effect Snippet",
-    "Keywords": "Keywords"
+    "Keywords": "Keywords",
+    "Duration": {
+      "Value": "Duration",
+      "Unit": {
+        "Label": "Duration Unit",
+        "Rounds": "Rounds",
+        "Encounter": "End of Encounter",
+        "Unlimited": "Unlimited (never expires)"
+      },
+      "Expiry": {
+        "Label": "Expiry Timing",
+        "TurnStart": "Start of Turn",
+        "TurnEnd": "End of Turn",
+        "RoundStart": "Start of Round"
+      }
+    }
   },
 
   "SPECIES.Height": "Height",

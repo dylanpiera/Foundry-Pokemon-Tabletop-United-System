@@ -1,24 +1,7 @@
-2024/02/15-22:38:49.290 71cc Recovering log #1103
-2024/02/15-22:38:49.295 71cc Delete type=0 #1103
-2024/02/15-22:38:49.295 71cc Delete type=3 #1102
-2024/02/16-15:48:15.749 556c Level-0 table #1107: started
-2024/02/16-15:48:15.844 556c Level-0 table #1107: 5036096 bytes OK
-2024/02/16-15:48:15.847 556c Delete type=0 #1105
-2024/02/16-16:10:06.830 556c Level-0 table #1109: started
-2024/02/16-16:10:06.835 556c Level-0 table #1109: 80819 bytes OK
-2024/02/16-16:10:06.837 556c Delete type=0 #1106
-2024/02/16-16:10:06.847 556c Manual compaction at level-0 from '!folders!CMymFngAhNsaPlS5' @ 72057594037927935 : 1 .. '!items!zyXhWVwTmu553jFn' @ 0 : 0; will stop at '!items!yXs3Y4b0iwr1wlZz' @ 45186 : 1
-2024/02/16-16:10:06.847 556c Compacting 2@0 + 4@1 files
-2024/02/16-16:10:06.898 556c Generated table #1110@0: 502 keys, 2116856 bytes
-2024/02/16-16:10:06.933 556c Generated table #1111@0: 503 keys, 2117405 bytes
-2024/02/16-16:10:06.969 556c Generated table #1112@0: 505 keys, 2119623 bytes
-2024/02/16-16:10:07.002 556c Generated table #1113@0: 301 keys, 1268506 bytes
-2024/02/16-16:10:07.002 556c Compacted 2@0 + 4@1 files => 7622390 bytes
-2024/02/16-16:10:07.003 556c compacted to: files[ 0 4 0 0 0 0 0 ]
-2024/02/16-16:10:07.004 556c Delete type=2 #1066
-2024/02/16-16:10:07.006 556c Delete type=2 #1067
-2024/02/16-16:10:07.006 556c Delete type=2 #1068
-2024/02/16-16:10:07.007 556c Delete type=2 #1069
-2024/02/16-16:10:07.007 556c Delete type=2 #1107
-2024/02/16-16:10:07.008 556c Delete type=2 #1109
-2024/02/16-16:10:07.008 556c Manual compaction at level-0 from '!items!yXs3Y4b0iwr1wlZz' @ 45186 : 1 .. '!items!zyXhWVwTmu553jFn' @ 0 : 0; will stop at (end)
+2024/02/16-16:27:28.969 60a4 Recovering log #1108
+2024/02/16-16:27:28.973 60a4 Delete type=0 #1108
+2024/02/16-16:27:28.975 60a4 Delete type=3 #1104
+2024/02/16-17:03:41.381 556c Level-0 table #1117: started
+2024/02/16-17:03:41.381 556c Level-0 table #1117: 0 bytes OK
+2024/02/16-17:03:41.383 556c Delete type=0 #1115
+2024/02/16-17:03:41.385 556c Manual compaction at level-0 from '!folders!CMymFngAhNsaPlS5' @ 72057594037927935 : 1 .. '!items!zyXhWVwTmu553jFn' @ 0 : 0; will stop at (end)

@@ -1,15 +1,8 @@
-2024/02/15-22:38:49.600 71cc Recovering log #229
-2024/02/15-22:38:49.606 71cc Delete type=0 #229
-2024/02/15-22:38:49.606 71cc Delete type=3 #228
-2024/02/16-16:10:06.837 556c Level-0 table #233: started
-2024/02/16-16:10:06.843 556c Level-0 table #233: 25924 bytes OK
-2024/02/16-16:10:06.847 556c Delete type=0 #231
-2024/02/16-16:10:07.008 556c Manual compaction at level-0 from '!journal!XaqlAbknAD3Tpx5E' @ 72057594037927935 : 1 .. '!journal.pages!cP772AChmDjr486z.zfGYRNnCuY6X2sS2' @ 0 : 0; will stop at (end)
-2024/02/16-16:10:07.009 556c Manual compaction at level-1 from '!journal!XaqlAbknAD3Tpx5E' @ 72057594037927935 : 1 .. '!journal.pages!cP772AChmDjr486z.zfGYRNnCuY6X2sS2' @ 0 : 0; will stop at '!journal.pages!XaqlAbknAD3Tpx5E.y5XB5KR2FF2XysmZ' @ 59915 : 1
-2024/02/16-16:10:07.009 556c Compacting 1@1 + 1@2 files
-2024/02/16-16:10:07.028 556c Generated table #234@1: 273 keys, 737007 bytes
-2024/02/16-16:10:07.028 556c Compacted 1@1 + 1@2 files => 737007 bytes
-2024/02/16-16:10:07.030 556c compacted to: files[ 0 0 1 0 0 0 0 ]
-2024/02/16-16:10:07.030 556c Delete type=2 #227
-2024/02/16-16:10:07.031 556c Delete type=2 #233
-2024/02/16-16:10:07.031 556c Manual compaction at level-1 from '!journal.pages!XaqlAbknAD3Tpx5E.y5XB5KR2FF2XysmZ' @ 59915 : 1 .. '!journal.pages!cP772AChmDjr486z.zfGYRNnCuY6X2sS2' @ 0 : 0; will stop at (end)
+2024/02/16-16:27:29.241 77d0 Recovering log #232
+2024/02/16-16:27:29.246 77d0 Delete type=0 #232
+2024/02/16-16:27:29.246 77d0 Delete type=3 #230
+2024/02/16-17:03:41.396 556c Level-0 table #238: started
+2024/02/16-17:03:41.397 556c Level-0 table #238: 0 bytes OK
+2024/02/16-17:03:41.401 556c Delete type=0 #236
+2024/02/16-17:03:41.402 556c Manual compaction at level-0 from '!journal!XaqlAbknAD3Tpx5E' @ 72057594037927935 : 1 .. '!journal.pages!cP772AChmDjr486z.zfGYRNnCuY6X2sS2' @ 0 : 0; will stop at (end)
+2024/02/16-17:03:41.402 556c Manual compaction at level-1 from '!journal!XaqlAbknAD3Tpx5E' @ 72057594037927935 : 1 .. '!journal.pages!cP772AChmDjr486z.zfGYRNnCuY6X2sS2' @ 0 : 0; will stop at (end)

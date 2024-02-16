@@ -3423,9 +3423,14 @@ a.content-link img {
 .sheet.item section form.item-sheet .sheet-body .details .item-row input {
   flex: 1 0 0;
   padding-left: 0.25rem;
+  margin: 0 0.25rem;
 }
 .sheet.item section form.item-sheet .sheet-body .details .item-row input[type="checkbox"] {
   flex: 0 0 20px;
+}
+.sheet.item section form.item-sheet .sheet-body .details .item-row select {
+  flex: 1;
+  margin: 0 0.25rem;
 }
 .sheet.item section form.item-sheet .sheet-body .details .item-row tags {
   flex: 1 0 0;

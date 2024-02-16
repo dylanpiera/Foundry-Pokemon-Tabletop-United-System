@@ -65,6 +65,31 @@
                 <input type="text" class="ptu-tagify system-keywords" name="system.keywords" value="{{json item.system.keywords}}" data-dtype="JSON"/>
             </div>
             <div class="item-row">
+                <label for="system.duration.value">{{localize "ITEM.Duration.Value"}}</label>
+                <input type="number" name="system.duration.value" value="{{item.system.duration.value}}"/>
+            </div>
+            <div class="item-row">
+                <label for="system.duration.unit">{{localize "ITEM.Duration.Unit.Label"}}</label>
+                {{#select item.system.duration.unit}}
+                <select name="system.duration.unit">
+                    <option value="unlimited">{{localize "ITEM.Duration.Unit.Unlimited"}}</option>
+                    <option value="encounter">{{localize "ITEM.Duration.Unit.Encounter"}}</option>
+                    <option value="rounds">{{localize "ITEM.Duration.Unit.Rounds"}}</option>
+                </select>
+                {{/select}}
+            </div>
+            <div class="item-row">
+                <label for="system.duration.expiry">{{localize "ITEM.Duration.Expiry.Label"}}</label>
+                {{#select item.system.duration.expiry}}
+                    <select name="system.duration.expiry" {{#unless (is item.system.duration.unit "rounds")}}disabled{{/unless}}>
+                        <option value=""></option>
+                        <option value="turn-start">{{localize "ITEM.Duration.Expiry.TurnStart"}}</option>
+                        <option value="turn-end">{{localize "ITEM.Duration.Expiry.TurnEnd"}}</option>
+                        <option value="round-end">{{localize "ITEM.Duration.Expiry.RoundStart"}}</option>
+                    </select>
+                {{/select}}
+            </div>
+            <div class="item-row">
                 <label for="system.effect">{{localize "ITEM.Effect"}}</label>
                 <textarea class="ml-1 mr-1" name="system.effect">{{item.system.effect}}</textarea>
             </div>
