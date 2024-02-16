@@ -1,14 +1,16 @@
-2024/02/13-17:09:10.132 71b4 Recovering log #891
-2024/02/13-17:09:10.137 71b4 Delete type=0 #891
-2024/02/13-17:09:10.137 71b4 Delete type=3 #889
-2024/02/13-21:12:50.257 f0ac Level-0 table #897: started
-2024/02/13-21:12:50.260 f0ac Level-0 table #897: 4019 bytes OK
-2024/02/13-21:12:50.262 f0ac Delete type=0 #895
-2024/02/13-21:12:50.271 f0ac Manual compaction at level-0 from '!folders!55ncmIvjbjv3PZZ8' @ 72057594037927935 : 1 .. '!items!zyrvCDXykruLOC8Y' @ 0 : 0; will stop at '!items!p7fKMecIcZFjCDXB' @ 11221 : 1
-2024/02/13-21:12:50.271 f0ac Compacting 1@0 + 1@1 files
-2024/02/13-21:12:50.278 f0ac Generated table #898@0: 830 keys, 335478 bytes
-2024/02/13-21:12:50.278 f0ac Compacted 1@0 + 1@1 files => 335478 bytes
-2024/02/13-21:12:50.280 f0ac compacted to: files[ 0 1 0 0 0 0 0 ]
-2024/02/13-21:12:50.280 f0ac Delete type=2 #893
-2024/02/13-21:12:50.281 f0ac Delete type=2 #897
-2024/02/13-21:12:50.286 f0ac Manual compaction at level-0 from '!items!p7fKMecIcZFjCDXB' @ 11221 : 1 .. '!items!zyrvCDXykruLOC8Y' @ 0 : 0; will stop at (end)
+2024/02/15-22:38:49.146 7524 Recovering log #900
+2024/02/15-22:38:49.146 7524 Level-0 table #902: started
+2024/02/15-22:38:49.148 7524 Level-0 table #902: 1016 bytes OK
+2024/02/15-22:38:49.154 7524 Delete type=0 #900
+2024/02/15-22:38:49.154 7524 Delete type=3 #899
+2024/02/16-16:10:06.799 556c Level-0 table #905: started
+2024/02/16-16:10:06.799 556c Level-0 table #905: 0 bytes OK
+2024/02/16-16:10:06.801 556c Delete type=0 #903
+2024/02/16-16:10:06.803 556c Manual compaction at level-0 from '!folders!55ncmIvjbjv3PZZ8' @ 72057594037927935 : 1 .. '!items!zyrvCDXykruLOC8Y' @ 0 : 0; will stop at '!items!3WZ1SjFAF8nSQfBn' @ 11231 : 1
+2024/02/16-16:10:06.803 556c Compacting 1@0 + 1@1 files
+2024/02/16-16:10:06.812 556c Generated table #906@0: 830 keys, 335510 bytes
+2024/02/16-16:10:06.812 556c Compacted 1@0 + 1@1 files => 335510 bytes
+2024/02/16-16:10:06.814 556c compacted to: files[ 0 1 0 0 0 0 0 ]
+2024/02/16-16:10:06.814 556c Delete type=2 #898
+2024/02/16-16:10:06.815 556c Delete type=2 #902
+2024/02/16-16:10:06.817 556c Manual compaction at level-0 from '!items!3WZ1SjFAF8nSQfBn' @ 11231 : 1 .. '!items!zyrvCDXykruLOC8Y' @ 0 : 0; will stop at (end)
