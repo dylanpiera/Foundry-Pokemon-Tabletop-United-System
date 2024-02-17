@@ -404,7 +404,6 @@ class PTUToken extends Token {
             };
         }, {});
 
-        console.log(Object.entries(flankersFlanking).map(([id, count]) => `${canvas.tokens.get(id).name}: ${count}`));
         const flankedByCount = Object.values(flankersFlanking).reduce((acc, count) => Math.max(acc, count), 0);
 
         return flankedByCount >= flankerRequirement;

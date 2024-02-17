@@ -58,8 +58,6 @@ export class ActiveEffectPTU extends ActiveEffect {
 
     /** @override */
     static async deleteDocuments(ids, context={}) {
-        console.log(ids, context);
-
         return super.deleteDocuments(ids, context);
     }
 
