@@ -1,4 +1,5 @@
 import { sluggify } from "../../util/misc.js";
+import { Weather } from "../apps/weather.js";
 import { PTUCombatant } from "../combat/combatant.js";
 import { PTUCondition } from "../item/index.js";
 import { ChatMessagePTU } from "../message/base.js";
@@ -27,7 +28,7 @@ class PTUActor extends Actor {
     }
 
     get rollOptions() {
-        return this.flags.ptu?.rollOptions; 
+        return this.flags.ptu?.rollOptions;
     }
 
     get combatant() {
@@ -161,7 +162,12 @@ class PTUActor extends Actor {
             if (effectiveness["Shadow"] > 2) effectiveness["Shadow"] = 2;
         }
 
-        const effectivenessMod = this.system.modifiers?.resistanceSteps?.total ?? 0;
+        const effectivenessMod = (() => {
+            const mod = this.system.modifiers?.resistanceSteps?.total ?? 0;
+            if(mod > 0) return 1 / (2 ** mod);
+            if(mod < 0) return 2 ** Math.abs(mod);
+            return 1;
+        })();
         for (let [key, value] of Object.entries(effectiveness)) {
             if (effectivenessMod) value *= effectivenessMod;
             const type = key.toLocaleLowerCase(game.i18n.locale)
@@ -231,7 +237,7 @@ class PTUActor extends Actor {
             speciesOverride: {},
             typeOverride: {},
             effectiveness: [],
-            apAdjustments: {drained: [], bound: []},
+            apAdjustments: { drained: [], bound: [] },
             applyEffects: {}
         }
 
@@ -243,6 +249,12 @@ class PTUActor extends Actor {
         this.constructed = false;
         super.prepareData();
         this.constructed = true;
+
+        // Extra Rolloptions before 'After Derived' hooks get called
+        if (!this.types.includes("Untyped")) delete this.flags.ptu.rollOptions.all["self:types:untyped"]
+        for (const type of this.types) {
+            this.flags.ptu.rollOptions.all["self:types:" + type.toLowerCase()] = true;
+        }
 
         // Call post-derived-preparation `RuleElement` hooks
         for (const rule of this.rules) {
@@ -294,12 +306,6 @@ class PTUActor extends Actor {
     prepareDerivedData() {
         this.prepareSynthetics();
 
-        // Extra Rolloptions
-        if (!this.types.includes("Untyped")) delete this.flags.ptu.rollOptions.all["self:types:untyped"]
-        for (const type of this.types) {
-            this.flags.ptu.rollOptions.all["self:types:" + type.toLowerCase()] = true;
-        }
-
         if (this.allowedItemTypes.includes('move')) {
             this.system.attacks = this.prepareMoves();
         }
@@ -317,7 +323,8 @@ class PTUActor extends Actor {
 
         this.prepareDataFromItems();
 
-        for (const rule of this.rules) {
+
+        for (const rule of this.rules.sort((a, b) => (a.priority ?? 0) - (b.priority ?? 0))) {
             rule.onApplyActiveEffects?.();
         }
     }
@@ -335,8 +342,35 @@ class PTUActor extends Actor {
     }
 
     prepareRuleElements() {
-        return this.items.contents
-            .flatMap((item) => item.prepareRuleElements())
+        const globalEffects = [];
+        try {
+            for (const effect of Weather.globalEffects?.values?.() ?? []) {
+                switch(effect.system.mode) {
+                    case "disabled": 
+                        continue;
+                    case "all":
+                        break;
+                    case "players":
+                        if (this.alliance !== "party") continue;
+                        break;
+                    case "opposition":
+                        if (this.alliance !== "opposition") continue;
+                        break;
+                }
+
+                const item = new CONFIG.PTU.Item.proxy(effect.toObject(), { temporary: true, parent: this })
+                item.updateSource({ "flags.core.sourceId": effect.flags?.core?.sourceId ?? effect.uuid });
+                globalEffects.push(item);
+            }
+        }
+        catch (error) {
+            console.error("PTU | Failed to prepare global effects.", error);
+        }
+        return [
+            this.items.contents.flatMap((item) => item.prepareRuleElements()),
+            globalEffects.flatMap((effect) => effect.prepareRuleElements())
+        ]
+            .flat()
             .filter((rule) => !rule.ignored)
             .sort((a, b) => a.priority - b.priority);
     }
@@ -568,7 +602,7 @@ class PTUActor extends Actor {
 
                     if (currentPercentage > i && i >= newPercentage) {
                         injuries++;
-                        const percentageShortened = Math.floor(i*1000)/1000
+                        const percentageShortened = Math.floor(i * 1000) / 1000
                         injuryStatements.push(game.i18n.format("PTU.ApplyDamage.HpThresholdInjury", { actor: this.link, percentage: percentageShortened }));
                     }
                     else break;
@@ -591,10 +625,10 @@ class PTUActor extends Actor {
                 if (bars > 0) {
                     const newBars = Math.max(bars - 1, 0);
                     hpUpdate.updates["system.boss.bars"] = newBars;
-                    hpUpdate.updates["system.health.value"] = 
+                    hpUpdate.updates["system.health.value"] =
                         (injuries > this.system.health.injuries)
-                        ? Math.trunc(this.system.health.total * (1 - ((this.system.modifiers.hardened ? Math.min(this.system.health.injuries, 5) : this.system.health.injuries) / 10)))
-                        : this.system.health.max;
+                            ? Math.trunc(this.system.health.total * (1 - ((this.system.modifiers.hardened ? Math.min(this.system.health.injuries, 5) : this.system.health.injuries) / 10)))
+                            : this.system.health.max;
                     //TODO: Apply Injuries
                     await this.update(hpUpdate.updates);
                     bossStatement = game.i18n.format("PTU.ApplyDamage.BossBarBroken", { actor: this.link, bars: newBars });
@@ -852,12 +886,12 @@ class PTUActor extends Actor {
 
         if (data.system?.health?.value !== undefined) {
             if (data.system.health.value <= 0 && game.settings.get("ptu", "automation.autoFaint")) {
-                if(this.primaryUpdater?.id !== game.user.id) return;
+                if (this.primaryUpdater?.id !== game.user.id) return;
                 const fainted = this.conditions.bySlug("fainted");
                 if (fainted.length === 0) PTUCondition.FromEffects([{ id: "fainted" }]).then(items => this.createEmbeddedDocuments("Item", items));
             }
             else if (data.system.health.value > 0 && game.settings.get("ptu", "automation.autoFaintRecovery")) {
-                if(this.primaryUpdater?.id !== game.user.id) return;
+                if (this.primaryUpdater?.id !== game.user.id) return;
                 const fainted = this.conditions.bySlug("fainted");
                 if (fainted.length > 0) fainted.forEach(f => f.delete());
             }
@@ -951,7 +985,7 @@ class PTUActor extends Actor {
             // Get the data common between all Struggles out of the way first
             const strugglePlusRollOptions = this.rollOptions.struggle ? Object.keys(this.rollOptions.struggle).filter(o => o.startsWith("skill:")) : [];
             const isStrugglePlus = (() => {
-                for(const skill of strugglePlusRollOptions) {
+                for (const skill of strugglePlusRollOptions) {
                     if (this.system.skills?.[skill.replace("skill:", "")]?.value?.total > 4) return true;
                 }
                 return this.system.skills?.combat?.value?.total > 4;
@@ -959,24 +993,24 @@ class PTUActor extends Actor {
 
             const constructStruggleItem = (type, category, range, ptuFlags, isRangedStruggle = false) => {
                 return new Item.implementation({
-                        name: `Struggle (${type})`,
-                        type: "move",
-                        img: CONFIG.PTU.data.typeEffectiveness[type].images.icon,
-                        system: {
-                            ac: isStrugglePlus ? 3 : 4,
-                            damageBase: isStrugglePlus ? 5 : 4,
-                            stab: false,
-                            frequency: "At-Will",
-                            isStruggle: true,
-                            isRangedStruggle: isRangedStruggle,
-                            category: category,
-                            range: range,
-                            type: type
-                        },
-                        flags: {
-                            ptu: ptuFlags || {}
-                        }
+                    name: `Struggle (${type})`,
+                    type: "move",
+                    img: CONFIG.PTU.data.typeEffectiveness[type].images.icon,
+                    system: {
+                        ac: isStrugglePlus ? 3 : 4,
+                        damageBase: isStrugglePlus ? 5 : 4,
+                        stab: false,
+                        frequency: "At-Will",
+                        isStruggle: true,
+                        isRangedStruggle: isRangedStruggle,
+                        category: category,
+                        range: range,
+                        type: type
                     },
+                    flags: {
+                        ptu: ptuFlags || {}
+                    }
+                },
                     {
                         parent: this,
                         temporary: true
@@ -1451,6 +1485,10 @@ class PTUActor extends Actor {
             typeof distance === "number"
                 ? [`origin:distance:${distance}`, `target:distance:${distance}`]
                 : [null, null];
+        const rangeOptions = (() => {
+            if (distance >= 4) return ["target:distance:4+"];
+            return [];
+        })();
 
         const targetEphemeralEffects = await extractEphemeralEffects({
             affects: "target",
@@ -1458,7 +1496,7 @@ class PTUActor extends Actor {
             target: targetToken?.actor ?? null,
             item: selfItem,
             domains,
-            options: [...selfOptions, ...itemOptions, ...targetRollOptions]
+            options: [...selfOptions, ...itemOptions, ...targetRollOptions, ...rangeOptions]
         });
 
         const targetActor = (targetToken?.actor)?.getContextualClone(
@@ -1466,11 +1504,12 @@ class PTUActor extends Actor {
                 ...selfActor.getSelfRollOptions("origin"),
                 ...itemOptions,
                 ...(originDistance ? [originDistance] : []),
+                ...rangeOptions
             ],
             targetEphemeralEffects
         ) ?? null;
 
-        const targetOptions = new Set(targetActor ? getTargetRollOptions(targetActor) : targetRollOptions);
+        const targetOptions = new Set([...(targetActor ? getTargetRollOptions(targetActor) : targetRollOptions), ...rangeOptions]);
 
         if (targetOptions.has("target:immune:flanked")) targetOptions.delete("target:flanked");
         else if (isFlanked) targetOptions.add("target:flanked");
@@ -1480,6 +1519,7 @@ class PTUActor extends Actor {
             ...itemOptions,
             ...targetOptions,
             ...(targetDistance ? [targetDistance] : []),
+            ...rangeOptions
         ])
 
         return {
@@ -1625,6 +1665,10 @@ class PTUActor extends Actor {
             typeof distance === "number"
                 ? [`origin:distance:${distance}`, `target:distance:${distance}`]
                 : [null, null];
+        const rangeOptions = (() => {
+            if (distance >= 4) return ["target:distance:4+"];
+            return [];
+        })();
 
         const targetEphemeralEffects = await extractEphemeralEffects({
             affects: "target",
@@ -1642,6 +1686,7 @@ class PTUActor extends Actor {
                     ...selfActor.getSelfRollOptions("origin"),
                     ...itemOptions,
                     ...(originDistance ? [originDistance] : []),
+                    ...rangeOptions
                 ],
                 targetEphemeralEffects
             ) ?? null;
@@ -1651,6 +1696,7 @@ class PTUActor extends Actor {
             ...selfOptions,
             ...itemOptions,
             ...(targetActor ? getTargetRollOptions(targetActor) : targetRollOptions),
+            ...rangeOptions
         ])
         if (targetDistance) rollOptions.add(targetDistance);
 
@@ -1740,7 +1786,7 @@ class PTUActor extends Actor {
         const token = this.getActiveTokens(true, true).shift();
         const health = this.system.health;
 
-        
+
 
         const isDamage = !!(
             attribute === "health" &&
@@ -1769,7 +1815,7 @@ class PTUActor extends Actor {
                             mode: "add",
                             value: (
                                 this.type === "character" && ["data-revamp", "short-track"].includes(game.settings.get("ptu", "variant.trainerAdvancement"))
-                                    ? (this.system.level.current + this.system.level.current) 
+                                    ? (this.system.level.current + this.system.level.current)
                                     : this.system.level.current),
                         },
                         3: {

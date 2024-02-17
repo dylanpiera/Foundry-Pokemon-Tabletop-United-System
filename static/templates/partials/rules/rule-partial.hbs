@@ -32,6 +32,10 @@
         <label for="system.stackSlugs">{{localize "ITEM.StackSlugs"}}</label>
         <input class="ml-1 mr-1" style="flex: none;" name="system.stackSlugs" type="checkbox" {{checked item.system.stackSlugs}}/>
     </div>
+    <div class="item enabled">
+        <label for="system.enabled">Enabled</label>
+        <input style="flex: none" class="ml-1 mr-1" name="system.enabled" type="checkbox" {{checked item.system.enabled}}/>
+    </div>
 </div>
 <div class="rules-list">
     {{#each rules.elements}}

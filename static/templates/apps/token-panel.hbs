@@ -43,7 +43,7 @@
             </div>
             <div class="effects">
                 {{#each effects as |effect|}}
-                    <div class="effect" data-actor-id="{{effect.parent.id}}" data-item-id="{{effect.id}}" {{#if effect.system.effect}}title="{{effect.system.effect}}"{{/if}}>
+                    <div class="effect" data-actor-id="{{effect.parent}}" data-item-id="{{effect.id}}" {{#if effect.effect}}title="{{effect.effect}}"{{/if}}>
                         <img class="icon" src="{{effect.img}}" alt="{{effect.name}}">
                         <span class="name">{{effect.name}}</span>
                     </div>
@@ -105,7 +105,7 @@
                         <div class="actions-actions">
                             {{#each attacks as |attack|}}
                                 <div class="action {{#if attack.rollable}}rollable{{/if}}" data-id="{{attack.id}}"
-                                    title="<div class='effect-popup'><div class='effect-range'>{{attack.range}}</div><div class='effect-effect'>{{attack.effect}}</div></div>">
+                                    title="<div class='effect-popup'><div class='d-flex justify-content-center'><div class='effect-range'>{{attack.range}}</div>{{#each attack.keywords}}<div class='effect-range'>{{this}}</div>{{/each}}</div><div class='effect-effect'>{{attack.effect}}</div></div>">
                                     <div class="icon">
                                         <img class="icon" src="{{attack.img}}" alt="{{attack.name}}">
                                         <img class="dice" src="/icons/svg/d20.svg" title="Roll {{attack.name}}">
@@ -179,7 +179,7 @@
                 <div class="feats">
                     {{#each feats as |feat|}}
                         <div class="action {{#if feat.rollable}}rollable{{/if}}" data-id="{{feat.id}}"
-                            title="{{feat.effect}}">
+                            title="<div class='effect-popup'>{{#if feat.keywords}}<div class='d-flex justify-content-center'>{{#each feat.keywords}}<div class='effect-range'>{{this}}</div>{{/each}}</div>{{/if}}<div class='effect-effect'>{{feat.effect}}</div></div>">
                             <div class="icon">
                                 <img class="icon" src="{{feat.img}}" alt="{{feat.name}}">
                                 <img class="dice" src="/icons/svg/d20.svg" title="Roll {{feat.name}}">

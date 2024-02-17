@@ -10,6 +10,15 @@ export const GetSceneControlButtons = {
                 button: true,
                 onClick: game.ptu.macros.pokedex
               });
+              if(game.user.isGM) {
+                hud.tools.push({
+                  name: "PTU.WeatherButtonName",
+                  title: "PTU.WeatherButtonHint",
+                  icon: "fas fa-cloud-sun-rain",
+                  button: true,
+                  onClick: game.ptu.weather.openWeatherMenu
+                });
+              }
             }
           });
     },

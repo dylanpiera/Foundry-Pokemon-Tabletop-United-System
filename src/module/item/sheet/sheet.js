@@ -1,5 +1,4 @@
 import { sluggify, sortStringRecord } from "../../../util/misc.js";
-import { tagify } from "../../../util/tags.js";
 import { RuleElements } from "../../rules/index.js";
 import { RULE_ELEMENT_FORMS, RuleElementForm } from "./rule-elements/index.js";
 
@@ -207,6 +206,9 @@ class PTUItemSheet extends ItemSheet {
 
         if(Array.isArray(expanded.system.prerequisites)) {
             expanded.system.prerequisites = expanded.system.prerequisites.map(s => s.value).filter(s => !!s)
+        }
+        if(Array.isArray(expanded.system.keywords)) {
+            expanded.system.keywords = expanded.system.keywords.map(s => s.value).filter(s => !!s)
         }
 
         if(expanded.system?.rules) {

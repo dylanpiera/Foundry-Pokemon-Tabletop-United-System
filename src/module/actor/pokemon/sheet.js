@@ -257,6 +257,13 @@ export class PTUPokemonSheet extends PTUActorSheet {
 		// Add Inventory Item
 		html.find('.item-create').click(this._onItemCreate.bind(this));
 
+		html.find('.item-enable').click((ev) => {
+			const li = $(ev.currentTarget).parents('.item');
+			/** @type {PTUItem} */
+			const item = this.actor.items.get(li.data('itemId'));
+			return item?.toggleEnableState?.();
+		});
+
 		html.find('.item-to-chat').click((ev) => {
 			const li = $(ev.currentTarget).parents('.item');
 			const item = this.actor.items.get(li.data('itemId'));
@@ -268,6 +275,15 @@ export class PTUPokemonSheet extends PTUActorSheet {
 			const li = $(ev.currentTarget).parents('.item');
 			const item = this.actor.items.get(li.data('itemId'));
 			item.sheet.render(true);
+		});
+
+		html.find(".item-quantity input[type='number']").change((ev) => {
+			const value = Number(ev.currentTarget.value);
+			const id = ev.currentTarget.dataset.itemId;
+			if (value >= 0 && id) {
+				const item = this.actor.items.get(id);
+				item?.update({ "system.quantity": value });
+			}
 		});
 
 		html.find('.item-delete').click(this._onItemDelete.bind(this));

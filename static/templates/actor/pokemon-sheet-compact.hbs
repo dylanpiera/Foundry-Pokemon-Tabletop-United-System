@@ -483,7 +483,19 @@
                                 <input name="system.friendship" type="number" value="{{actor.system.friendship}}" {{#unless (isGm)}}disabled{{/unless}}/>
                             </div>
                             <div class="fb-48">
-                                <input type="number" value="{{actor.attributes.level.cap}}" disabled/>
+                                <input type="number" value="{{actor.attributes.level.cap.current}}" disabled/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="swsh-box mb-2 w-100">
+                        <div class="swsh-header ball-themes {{ballStyle}} highlight pt-2 pb-2 center-text justify-content-center">
+                            <div class="fb-48">
+                                <b>{{localize "PTU.LevelCapTraining"}}</b>
+                            </div>
+                        </div>
+                        <div class="swsh-body d-flex align-items-center justify-content-center pt-1 pb-1 center-text">
+                            <div class="fb-48">
+                                <input type="number" value="{{actor.attributes.level.cap.training}}" disabled/>
                             </div>
                         </div>
                     </div>
@@ -549,6 +561,7 @@
                             {{#each actor.system.capabilities as |capability key|}}
                             {{#if (and (not key "Other") (not key "other"))}}
                             {{#unless (or (is key "Naturewalk") (is key "naturewalk"))}}
+                            {{#unless (is capability 0)}}
                             <div class="fb-35">
                                 <label class="pl-1" for="system.capabilities.{{key}}">{{localize key}}</label>
                             </div>
@@ -556,6 +569,7 @@
                                 <input type="number" name="system.capabilities.{{key}}" value="{{capability}}"
                                     disabled />
                             </div>
+                            {{/unless}}
                             {{/unless}}
                             {{/if}}
                             {{/each}}

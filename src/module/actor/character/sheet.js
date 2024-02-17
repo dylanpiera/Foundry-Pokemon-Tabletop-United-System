@@ -315,6 +315,13 @@ export class PTUCharacterSheet extends PTUActorSheet {
 			}
 		});
 
+		html.find('.item-enable').click((ev) => {
+			const li = $(ev.currentTarget).parents('.item');
+			/** @type {PTUItem} */
+			const item = this.actor.items.get(li.data('itemId'));
+			return item?.toggleEnableState?.();
+		});
+
 		html.find('.item-to-chat').click((ev) => {
 			const li = $(ev.currentTarget).parents('.item');
 			const item = this.actor.items.get(li.data('itemId'));

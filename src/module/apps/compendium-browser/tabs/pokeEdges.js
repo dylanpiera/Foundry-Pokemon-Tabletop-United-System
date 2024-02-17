@@ -6,9 +6,9 @@ export class CompendiumBrowserPokeEdgesTab extends CompendiumBrowserTab {
         super(browser);
 
         this.searchFields = ["name", "prerequisites.label", "prerequisites.tier"]
-        this.storeFields = ["name", "uuid", "type", "source", "img", "prerequisites"];
+        this.storeFields = ["name", "uuid", "type", "source", "img", "prerequisites", "keywords"];
 
-        this.index = ["img", "system.source.value", "system.prerequisites"];
+        this.index = ["img", "system.source.value", "system.prerequisites", "system.keywords"];
 
         this.filterData = this.prepareFilterData();
     }
@@ -26,6 +26,8 @@ export class CompendiumBrowserPokeEdgesTab extends CompendiumBrowserTab {
         const indexFields = foundry.utils.duplicate(this.index);
         const sources = new Set();
 
+        const allKeywordsSeen = new Set();
+
         for await (const { pack, index } of this.browser.packLoader.loadPacks(
             "Item",
             this.browser.loadedPacks(this.tabName),
@@ -41,13 +43,18 @@ export class CompendiumBrowserPokeEdgesTab extends CompendiumBrowserTab {
 
                 const prerequisites = edgeData.system.prerequisites ?? [];
 
+                for(const keyword of edgeData.system.keywords) {
+                    allKeywordsSeen.add(keyword);
+                }
+
                 abilities.push({
                     name: edgeData.name,
                     type: edgeData.type,
                     img: edgeData.img,
                     uuid: `Compendium.${pack.collection}.${edgeData._id}`,
                     source: sourceSlug,
-                    prerequisites: this.#prerequisitesStringToEntries(prerequisites)
+                    prerequisites: this.#prerequisitesStringToEntries(prerequisites),
+                    keywords: edgeData.system.keywords
                 })
             }
         }
@@ -56,6 +63,7 @@ export class CompendiumBrowserPokeEdgesTab extends CompendiumBrowserTab {
 
         // Set filters if necessary
         this.filterData.checkboxes.source.options = this.generateSourceCheckboxOptions(sources);
+        this.filterData.multiselects.keywords.options = this.filterOptionsFromSet(allKeywordsSeen);
     }
 
     #prerequisitesStringToEntries(prerequisites) {
@@ -95,12 +103,37 @@ export class CompendiumBrowserPokeEdgesTab extends CompendiumBrowserTab {
     }
 
     filterIndexData(entry) {
-        const { checkboxes } = this.filterData;
+        const { checkboxes, multiselects } = this.filterData;
 
         if(checkboxes.source.selected.length) {
             if(!checkboxes.source.selected.includes(entry.source)) return false;
         }
 
+        if(!this.isEntryHonoringMultiselect(multiselects.keywords, entry.keywords)) return false;
+
+        return true;
+    }
+
+    filterOptionsFromSet(set) {
+        return [...set].map(value => ({ value, label: value })).sort((a, b) => a.label.localeCompare(b.label));
+    }
+
+    /**
+     *  @param multiselectFilter - the `selected` from a filter, e.g. `filterData.multiselects.types`
+     *  @param entrySetToCheck - the set of an entry corresponding to the filter, e.g. `entry.types`
+     *  @return {boolean} - True if the entry honors the filter, i.e. would be valid result
+    */
+    isEntryHonoringMultiselect(multiselectFilter, entrySetToCheck) {
+        const selected = multiselectFilter.selected.filter(s => !s.not).map(s => s.value);
+        const notSelected = multiselectFilter.selected.filter(s => s.not).map(s => s.value);
+        if (selected.length || notSelected.length) {
+            if (notSelected.some(ns => entrySetToCheck.some(e => sluggify(e) === sluggify(ns)))) return false;
+            const fulfilled =
+                multiselectFilter.conjunction === "and"
+                    ? selected.every(s => entrySetToCheck.some(e => sluggify(e) === sluggify(s)))
+                    : selected.some(s => entrySetToCheck.some(e => sluggify(e) === sluggify(s)));
+            if (!fulfilled) return false;
+        }
         return true;
     }
 
@@ -112,6 +145,14 @@ export class CompendiumBrowserPokeEdgesTab extends CompendiumBrowserTab {
                     label: "PTU.CompendiumBrowser.FilterOptions.Source",
                     options: {},
                     selected: []
+                }
+            },
+            multiselects: {
+                keywords: {
+                    conjunction: "and",
+                    label: "PTU.CompendiumBrowser.FilterOptions.Keywords",
+                    options: [],
+                    selected: [{value: 'Obsolete', label: 'Obsolete', not: true}]
                 }
             },
             order: {

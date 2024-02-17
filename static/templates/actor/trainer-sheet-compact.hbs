@@ -502,12 +502,14 @@
                             <div class="swsh-body flex-row w-100 align-items-center" style="white-space: nowrap;">
                                 {{#each actor.system.capabilities as |capability key|}}
                                     {{#if (not key "Other")}}
+                                    {{#unless (is capability 0)}}
                                         <div class="fb-35">
                                             <label class="pl-1" for="system.capabilities.{{key}}">{{localize key}}</label>
                                         </div>
                                         <div class="fb-15 p-1 center-text">
                                             <input type="number" name="system.capabilities.{{key}}" value="{{capability}}" disabled />
                                         </div>
+                                    {{/unless}}
                                     {{/if}}
                                 {{/each}}
                             </div>

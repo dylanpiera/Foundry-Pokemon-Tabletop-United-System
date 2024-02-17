@@ -599,6 +599,7 @@
         "effect": "",
         "snippet": "",
         "rules": [],
+        "enabled": true,
         "slug": null,
         "schema": {
           "version": null,
@@ -608,7 +609,8 @@
         "source": {
           "value": "Homebrew"
         },
-        "stackSlugs": false
+        "stackSlugs": false,
+        "keywords": []
       },
       "interactions": {
         "sheerForce": false,
@@ -630,7 +632,6 @@
       "templates": ["base"],
       "prerequisites": [],
       "frequency": "At Will - Standard Action",
-      "tags": "",
       "notes": "",
       "free": false,
       "class": ""

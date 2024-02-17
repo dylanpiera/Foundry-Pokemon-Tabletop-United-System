@@ -298,7 +298,11 @@ class PTUPokemonActor extends PTUActor {
 
         this.attributes.health.max = system.health.max;
 
-        this.attributes.level.cap = Math.ceil(5 + (1.58 * ((this.trainer?.system.level.current ?? 0) * (["data-revamp", "short-track"].includes(game.settings.get("ptu", "variant.trainerAdvancement")) ? 2 : ["long-track"].includes(game.settings.get("ptu", "variant.trainerAdvancement")) ? 0.5 : 1))) + ((4 / 3) * (system.friendship ?? 0) * Math.pow(1 + (((this.trainer?.system.level.current ?? 0) * (["data-revamp", "short-track"].includes(game.settings.get("ptu", "variant.trainerAdvancement")) ? 2 : ["long-track"].includes(game.settings.get("ptu", "variant.trainerAdvancement")) ? 0.5 : 1)) / 34), 2)));
+        const calcLevelCap = (friendship) => Math.ceil(5 + (1.58 * ((this.trainer?.system.level.current ?? 0) * (["data-revamp", "short-track"].includes(game.settings.get("ptu", "variant.trainerAdvancement")) ? 2 : ["long-track"].includes(game.settings.get("ptu", "variant.trainerAdvancement")) ? 0.5 : 1))) + ((4 / 3) * (friendship) * Math.pow(1 + (((this.trainer?.system.level.current ?? 0) * (["data-revamp", "short-track"].includes(game.settings.get("ptu", "variant.trainerAdvancement")) ? 2 : ["long-track"].includes(game.settings.get("ptu", "variant.trainerAdvancement")) ? 0.5 : 1)) / 34), 2)));
+        this.attributes.level.cap = {
+            current: calcLevelCap(system.friendship ?? 0),
+            training: calcLevelCap(0),
+        }
 
         /* The Corner of Exceptions */
 
@@ -375,6 +379,7 @@ class PTUPokemonActor extends PTUActor {
             if (this.system.modifiers.capabilities[moveCap] || speciesCapabilities[moveCap]) {
                 const mod = this.system.modifiers?.capabilities[moveCap] ? this.system.modifiers?.capabilities[moveCap] : 0
                 const speciesCap = speciesCapabilities[moveCap] ? speciesCapabilities[moveCap] : 0
+                if(speciesCap <= 0 && mod <= 0) continue;
                 finalCapabilities[moveCap] = Math.max(1, Math.floor(slowedMultiplier * (speciesCap + spdCsChanges + omniMovementMod + mod)))
             } else {
                 delete finalCapabilities[moveCap];
@@ -400,6 +405,9 @@ class PTUPokemonActor extends PTUActor {
             console.warn(`Actor ${this.uuid} had unexpected Capability ${cap} of ${speciesCapabilities[cap]}`)
             finalCapabilities[cap] = speciesCapabilities[cap]
         }
+
+        if(finalCapabilities["levitate"] === undefined) finalCapabilities["levitate"] = 0;
+        if(finalCapabilities["sky"] === undefined) finalCapabilities["sky"] = 0;
 
         return finalCapabilities;
     }
@@ -526,13 +534,26 @@ class PTUPokemonActor extends PTUActor {
             const tokenUpdates = {};
 
             const curImg = await PokemonGenerator.getImage(this.species, { gender: this.system.gender, shiny: this.system.shiny });
+            const curTokenImg = (() => {
+                const tokenImageExtension = game.settings.get("ptu", "generation.defaultTokenImageExtension");
+                if(curImg.endsWith(tokenImageExtension)) return curImg;
+                const actorImageExtension = game.settings.get("ptu", "generation.defaultImageExtension");
+                return curImg.replace(actorImageExtension, tokenImageExtension);
+            })();
             const newImg = await PokemonGenerator.getImage(result.evolution, { gender: this.system.gender, shiny: this.system.shiny });
+            const newTokenImg = (() => {
+                const tokenImageExtension = game.settings.get("ptu", "generation.defaultTokenImageExtension");
+                if(newImg.endsWith(tokenImageExtension)) return newImg;
+                const actorImageExtension = game.settings.get("ptu", "generation.defaultImageExtension");
+                return newImg.replace(actorImageExtension, tokenImageExtension);
+            })();
 
             if (this.img === curImg) update.img = newImg;
-            if (this.prototypeToken.texture.src === curImg) {
-                update["prototypeToken.texture.src"] = newImg;
+            if (this.prototypeToken.texture.src === curTokenImg) {
+                update["prototypeToken.texture.src"] = newTokenImg;
                 tokenUpdates["texture.src"] = update["prototypeToken.texture.src"];
             }
+
             if (sluggify(this.name) == this.species.slug) {
                 update.name = Handlebars.helpers.capitalizeFirst(result.evolution.name);
                 tokenUpdates["name"] = update.name;

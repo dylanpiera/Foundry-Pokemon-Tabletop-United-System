@@ -65,12 +65,12 @@ function extractRollSubstitutions(substitutions, domains, rollOptions) {
         .filter((s) => s.predicate?.test(rollOptions) ?? true);
 }
 
-async function processPreUpdateActorHooks(changed,{ pack }){
+async function processPreUpdateActorHooks(changed, { pack }) {
     const actorId = String(changed._id);
     const actor = pack ? await game.packs.get(pack)?.getDocument(actorId) : game.actors.get(actorId);
     if (!(actor instanceof CONFIG.PTU.Actor.documentClass)) return;
 
-    if(actor.prototypeToken.actorLink !== true) {
+    if (actor.prototypeToken.actorLink !== true) {
         changed.prototypeToken ??= {};
         changed.prototypeToken.actorLink = true;
     }
@@ -84,8 +84,7 @@ async function processPreUpdateActorHooks(changed,{ pack }){
         await Promise.all(
             rules.map(
                 (r) =>
-                    actor.items.has(r.item.id) ? r.preUpdateActor() : new Promise(() => ({ create: [], delete: [] }))
-            )
+                    actor.items.has(r.item.id) ? r.preUpdateActor() : { create: [], delete: [] })
         )
     ).reduce(
         (combined, cd) => ({
@@ -100,7 +99,7 @@ async function processPreUpdateActorHooks(changed,{ pack }){
     await actor.deleteEmbeddedDocuments("Item", createDeletes.delete, { render: false });
 }
 
-export { extractEphemeralEffects, extractApplyEffects, extractDamageDice, extractNotes, extractModifierAdjustments, extractRollSubstitutions, extractModifiers, processPreUpdateActorHooks}
+export { extractEphemeralEffects, extractApplyEffects, extractDamageDice, extractNotes, extractModifierAdjustments, extractRollSubstitutions, extractModifiers, processPreUpdateActorHooks }
 
 globalThis.extractEphemeralEffects = extractEphemeralEffects;
 globalThis.extractDamageDice = extractDamageDice;

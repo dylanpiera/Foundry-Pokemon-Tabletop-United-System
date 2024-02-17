@@ -6,9 +6,9 @@ export class CompendiumBrowserFeatsTab extends CompendiumBrowserTab {
         super(browser);
 
         this.searchFields = ["name", "prerequisites.label", "prerequisites.tier", "class"]
-        this.storeFields = ["name", "uuid", "type", "source", "img", "prerequisites", "class"];
+        this.storeFields = ["name", "uuid", "type", "source", "img", "prerequisites", "class", "classPretty", "keywords"];
 
-        this.index = ["img", "system.source.value", "system.prerequisites", "system.class"];
+        this.index = ["img", "system.source.value", "system.prerequisites", "system.class", "system.keywords"];
 
         this.filterData = this.prepareFilterData();
     }
@@ -28,6 +28,7 @@ export class CompendiumBrowserFeatsTab extends CompendiumBrowserTab {
 
         const classes = new Set();
         const featNames = new Set();
+        const allKeywordsSeen = new Set();
 
         for await (const { pack, index } of this.browser.packLoader.loadPacks(
             "Item",
@@ -42,9 +43,13 @@ export class CompendiumBrowserFeatsTab extends CompendiumBrowserTab {
                 const sourceSlug = sluggify(source);
                 if (source) sources.add(source);
 
-                const isClass = featData.img.includes("class");
+                const isClass = featData.system.keywords.includes("Class");
                 const _class = isClass ? featData.name.trim(): (featData.system.class?.trim() ?? "");
                 const prerequisites = featData.system?.prerequisites ?? "";
+
+                for(const keyword of featData.system.keywords) {
+                    allKeywordsSeen.add(keyword);
+                }
 
                 feats.push({
                     name: featData.name,
@@ -55,6 +60,7 @@ export class CompendiumBrowserFeatsTab extends CompendiumBrowserTab {
                     prerequisites: this.#prerequisitesStringToEntries(prerequisites),
                     class: sluggify(_class),
                     classPretty: _class,
+                    keywords: featData.system.keywords
                 })
                 if (_class) classes.add(_class);
 
@@ -67,6 +73,7 @@ export class CompendiumBrowserFeatsTab extends CompendiumBrowserTab {
             for (const prereq of feat.prerequisites) {
                 if (classes.has(prereq.label.toLowerCase().capitalize())) {
                     feat.class ||= prereq.label;
+                    feat.classPretty ||= prereq.label;
                     continue;
                 }
                 if (featNames.has(prereq.label)) prereq.feat = true;
@@ -80,6 +87,7 @@ export class CompendiumBrowserFeatsTab extends CompendiumBrowserTab {
         // Set filters if necessary
         this.filterData.checkboxes.class.options = this.#generateCheckboxOptions([...classes].sort());
         this.filterData.checkboxes.source.options = this.generateSourceCheckboxOptions(sources);
+        this.filterData.multiselects.keywords.options = this.filterOptionsFromSet(allKeywordsSeen)
     }
 
     #prerequisitesStringToEntries(prerequisites) {
@@ -87,6 +95,7 @@ export class CompendiumBrowserFeatsTab extends CompendiumBrowserTab {
 
         const entries = [];
         for (const prereq of prerequisites) {
+            if(prereq === 'Rune Master') continue;
             let tierFound = false;
             const entry = prereq.split(" ").map(p => p.trim()).reduce((acc, curr) => {
                 if (!tierFound && tiers.has(curr.toLowerCase())) {
@@ -116,7 +125,7 @@ export class CompendiumBrowserFeatsTab extends CompendiumBrowserTab {
     }
 
     filterIndexData(entry) {
-        const { checkboxes } = this.filterData;
+        const { multiselects, checkboxes } = this.filterData;
 
         if (checkboxes.source.selected.length) {
             if (!checkboxes.source.selected.includes(entry.source)) return false;
@@ -127,6 +136,31 @@ export class CompendiumBrowserFeatsTab extends CompendiumBrowserTab {
             if (!checkboxes.class.selected.includes(entry.class.toLowerCase())) return false;
         }
 
+        if (!this.isEntryHonoringMultiselect(multiselects.keywords, entry.keywords)) return false;
+
+        return true;
+    }
+
+    filterOptionsFromSet(set) {
+        return [...set].map(value => ({ value, label: value })).sort((a, b) => a.label.localeCompare(b.label));
+    }
+
+    /**
+     *  @param multiselectFilter - the `selected` from a filter, e.g. `filterData.multiselects.types`
+     *  @param entrySetToCheck - the set of an entry corresponding to the filter, e.g. `entry.types`
+     *  @return {boolean} - True if the entry honors the filter, i.e. would be valid result
+    */
+    isEntryHonoringMultiselect(multiselectFilter, entrySetToCheck) {
+        const selected = multiselectFilter.selected.filter(s => !s.not).map(s => s.value);
+        const notSelected = multiselectFilter.selected.filter(s => s.not).map(s => s.value);
+        if (selected.length || notSelected.length) {
+            if (notSelected.some(ns => entrySetToCheck.some(e => sluggify(e) === sluggify(ns)))) return false;
+            const fulfilled =
+                multiselectFilter.conjunction === "and"
+                    ? selected.every(s => entrySetToCheck.some(e => sluggify(e) === sluggify(s)))
+                    : selected.some(s => entrySetToCheck.some(e => sluggify(e) === sluggify(s)));
+            if (!fulfilled) return false;
+        }
         return true;
     }
 
@@ -139,17 +173,19 @@ export class CompendiumBrowserFeatsTab extends CompendiumBrowserTab {
                     options: {},
                     selected: []
                 },
-                // skills: {
-                //     isExpanded: false,
-                //     label: "PTU.CompendiumBrowser.FilterOptions.Skills",
-                //     options: CONFIG.PTU.data.skills.keys.reduce((result, skill) => ({ ...result, [skill.toLowerCase()]: { label: skill, selected: false } }), {}),
-                //     selected: []
-                // },
                 source: {
                     isExpanded: false,
                     label: "PTU.CompendiumBrowser.FilterOptions.Source",
                     options: {},
                     selected: []
+                }
+            },
+            multiselects: {
+                keywords: {
+                    conjunction: "and",
+                    label: "PTU.CompendiumBrowser.FilterOptions.Keywords",
+                    options: [],
+                    selected: [{value: 'Obsolete', label: 'Obsolete', not: true}]
                 }
             },
             order: {
@@ -165,47 +201,4 @@ export class CompendiumBrowserFeatsTab extends CompendiumBrowserTab {
             }
         }
     }
-
-    // const skills = new Set(['acrobatics', 'athletics', 'charm', 'combat', 'command', 'generalEd', 'generalEducation', 'medicineEd', 'medicineEducation', 'occultEd', 'occultEducation', 'pokemonEd', 'pokemonEducation', 'pokémonEducation', 'techEd', 'technologyEducation', 'focus', 'guile', 'intimidate', 'intuition', 'perception', 'stealth', 'survival']);
-
-    // const entries = [];
-    // const statements = prerequisites.split(",").map(s => s.trim());
-    // let lastTier = "";
-    // for (let statement of statements) {
-    //     if (entries.length === 3) {
-    //         entries.push({ label: "..." })
-    //         break;
-    //     }
-
-    //     if(statement.trim() === "or") continue;
-
-    //     const splits = statement.split(" ").map(s => s.trim());
-    //     const tier = splits.at(0);
-    //     const skill = splits.slice(1).join(" ");
-    //     const tierSlug = sluggify(tier ?? "", { camel: "dromedary" });
-    //     const skillSlug = sluggify(skill ?? "", { camel: "dromedary" });
-    //     const isTierOr = tierSlug === "or";
-    //     const skillIncludesOr = skill.includes("or");
-
-    //     if (tiers.has(tierSlug) && skills.has(skillSlug)) {
-    //         entries.push({ label: `${tier} ${skill}`, tier })
-    //         lastTier = tier;
-    //         continue;
-    //     }
-    //     else if (tierSlug && (tierSlug.length > 3 && (!skill || skillIncludesOr)) || isTierOr) {
-    //         if (skills.has(isTierOr ? skillSlug : tierSlug) && lastTier.length > 0) {
-    //             entries.at(-1).label += ` or ${isTierOr ? skill : statement}`;
-    //             continue;
-    //         }
-    //     }
-
-    //     const statementTier = statement.split(' ').find(word => tiers.has(sluggify(word ?? "", { camel: "dromedary" })));
-    //     entries.push({ label: statement, tier: statementTier ?? "" })
-    //     if(statementTier) {
-    //         lastTier = statementTier;
-    //         continue;
-    //     }
-
-    //     lastTier = "";
-    // }
 } 

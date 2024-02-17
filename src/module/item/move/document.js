@@ -12,6 +12,10 @@ class PTUMove extends PTUItem {
     /** @override */
     get rollOptions() {
         const options = super.rollOptions;
+        if(this.isDamaging && this.damageBase.isStab) {
+            options.all['move:is-stab'] = true;
+            options.item['move:is-stab'] = true;
+        }
         if (this.isDamaging && this.damageBase.isStab && !!options.all[`move:damage-base:${this.damageBase.preStab}`]) {
             delete this.flags.ptu.rollOptions.all[`move:damage-base:${this.damageBase.preStab}`];
             delete this.flags.ptu.rollOptions.item[`move:damage-base:${this.damageBase.preStab}`];
@@ -21,6 +25,10 @@ class PTUMove extends PTUItem {
 
             options.all[`move:damage-base:${this.damageBase.postStab}`] = true;
             options.item[`move:damage-base:${this.damageBase.postStab}`] = true;
+        }
+        for(const keyword of this.system.keywords) {
+            options.all[`move:${sluggify(keyword)}`] = true;
+            options.item[`move:${sluggify(keyword)}`] = true;
         }
         return options;
     }

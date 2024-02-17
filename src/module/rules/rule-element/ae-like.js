@@ -18,7 +18,8 @@ class AELikeRuleElement extends RuleElementPTU {
             mode: new foundry.data.fields.StringField({ type: String, required: true, choices: Object.keys(AELikeRuleElement.CHANGE_MODES), initial: undefined }),
             path: new foundry.data.fields.StringField({ type: String, required: true, nullable: false, blank: false, initial: undefined }),
             phase: new foundry.data.fields.StringField({ type: String, required: false, nullable: false, choices: foundry.utils.deepClone(AELikeRuleElement.PHASES), initial: "applyAEs" }),
-            value: new ResolvableValueField({ required: true, nullable: true, initial: undefined })
+            value: new ResolvableValueField({ required: true, nullable: true, initial: undefined }),
+            priority: new foundry.data.fields.NumberField({ required: false, nullable: true, initial: undefined }),
         }
     }
 
@@ -101,7 +102,7 @@ class AELikeRuleElement extends RuleElementPTU {
 
     apply(rollOptions) {
         this.validateData();
-        if (!this.test(rollOptions)) return;
+        if (!this.test(rollOptions ?? this.actor.getRollOptions())) return;
 
         const path = this.resolveInjectedProperties(this.path);
 
@@ -212,7 +213,7 @@ class AELikeRuleElement extends RuleElementPTU {
         const { changes } = this.actor.system;
         const realPath = this.resolveInjectedProperties(this.path);
         const entries = (changes[realPath] ??= {});
-        entries[foundry.utils.randomID()] = { mode: this.mode, value, sourceId: this.item.uuid, source: this.item.name.includes(":") ? this.item.name.split(":")[1].trim() : this.item.name };
+        entries[foundry.utils.randomID()] = { mode: this.mode, value, sourceId: this.item.isGlobal ? (this.item.flags?.core?.sourceId ?? this.item.uuid) : this.item.uuid, source: this.item.name.includes(":") ? this.item.name.split(":")[1].trim() : this.item.name};
     }
 
     _warn(property) {

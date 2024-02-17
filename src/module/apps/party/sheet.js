@@ -537,8 +537,7 @@ class PTUPartySheet extends FormApplication {
                     party: partySheet.party,
                     boxed: partySheet.boxed
                 }
-                console.log(foundry.utils.duplicate(data));
-
+                
                 // Delete existing party
                 await existingActor.delete();
                 for (const actor of partySheet.party) {

@@ -10,3 +10,5 @@ export { Migration109PokeballFix} from './109-pokeball-fix.js';
 export { Migration110ActorLink} from './110-actor-link.js';
 export { Migration111PrereqItems} from './111-prereq-items.js';
 export { Migration112AgilityReference} from './112-agility-reference.js';
+export { Migration113Keywords} from './113-keywords.js';
+export { Migration114Hardened} from './114-hardened.js';

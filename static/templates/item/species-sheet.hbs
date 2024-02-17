@@ -128,7 +128,7 @@
             {{/if}}
         </div>
         <div class="tab capabilities h-100" data-group="primary" data-tab="capabilities">
-            <div class="d-flex flex-row">
+            <div class="d-flex justify-content-between flex-row">
                 <div class="fb-48 p-1 d-flex flex-column" style="gap: 5px;">
                     <div class="item-row">
                         <label for="system.size.height">{{localize "SPECIES.Height"}}</label>
@@ -177,6 +177,10 @@
                         <input class="ml-1" name="system.capabilities.naturewalk" type="text" value="{{item.system.capabilities.naturewalk}}"/>
                     </div>
                 </div>
+            </div>
+            <div class="d-flex flex-row justify-content-start align-items-center p-1">
+                <label style="flex: 0 0 17%;" for="system.keywords"><b>{{localize "ITEM.Keywords"}}</b></label>
+                <input style="flex: 1;" type="text" class="ptu-tagify system-keywords" name="system.keywords" value="{{json item.system.keywords}}" data-dtype="JSON"/>
             </div>
             <div class="d-flex flex-column">
                 {{> systems/ptu/static/templates/partials/species-item-partial.hbs title=(localize "SPECIES.Other") type="capability" items=item.system.capabilities.other}}
