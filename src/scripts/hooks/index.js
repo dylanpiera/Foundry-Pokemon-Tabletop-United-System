@@ -10,6 +10,7 @@ import { GetSceneControlButtons } from "./get-scene-control-buttons.js";
 import { CompendiumBrowserInlineEnricher } from "./compendium-browser-inline-enricher.js";
 import { TagifySheets } from "./tagify-sheets.js";
 import { PokeDollarEnricher } from "./pokedollar-enricher.js";
+import { V11EmbedCompatability } from "./embed-enricher.js";
 
 export const PtuHooks = {
     listen() {
@@ -26,7 +27,8 @@ export const PtuHooks = {
             GetSceneControlButtons,
             CompendiumBrowserInlineEnricher,
             TagifySheets,
-            PokeDollarEnricher
+            PokeDollarEnricher,
+            V11EmbedCompatability
         ]
         for(const listener of listeners) listener.listen();
     }

@@ -102,7 +102,7 @@ class AELikeRuleElement extends RuleElementPTU {
 
     apply(rollOptions) {
         this.validateData();
-        if (!this.test(rollOptions)) return;
+        if (!this.test(rollOptions ?? this.actor.getRollOptions())) return;
 
         const path = this.resolveInjectedProperties(this.path);
 

@@ -83,6 +83,11 @@ class GrantItemRuleElement extends RuleElementPTU {
             return ui.notifications.warn(`Item ${grantedItem.name} is already granted to ${this.actor.name}.`);
         }
 
+        if (!this.actor?.allowedItemTypes.includes(grantedItem.type)) {
+            ui.notifications.error(`PTU | ${source.type.capitalize()}s cannot be added to ${actor.name}`);
+            return [];
+        }
+
         itemSource._id ??= foundry.utils.randomID();
         const grantedSource = grantedItem.toObject();
         grantedSource._id = foundry.utils.randomID();

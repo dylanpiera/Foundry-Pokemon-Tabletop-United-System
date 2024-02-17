@@ -379,6 +379,7 @@ class PTUPokemonActor extends PTUActor {
             if (this.system.modifiers.capabilities[moveCap] || speciesCapabilities[moveCap]) {
                 const mod = this.system.modifiers?.capabilities[moveCap] ? this.system.modifiers?.capabilities[moveCap] : 0
                 const speciesCap = speciesCapabilities[moveCap] ? speciesCapabilities[moveCap] : 0
+                if(speciesCap <= 0 && mod <= 0) continue;
                 finalCapabilities[moveCap] = Math.max(1, Math.floor(slowedMultiplier * (speciesCap + spdCsChanges + omniMovementMod + mod)))
             } else {
                 delete finalCapabilities[moveCap];
@@ -404,6 +405,9 @@ class PTUPokemonActor extends PTUActor {
             console.warn(`Actor ${this.uuid} had unexpected Capability ${cap} of ${speciesCapabilities[cap]}`)
             finalCapabilities[cap] = speciesCapabilities[cap]
         }
+
+        if(finalCapabilities["levitate"] === undefined) finalCapabilities["levitate"] = 0;
+        if(finalCapabilities["sky"] === undefined) finalCapabilities["sky"] = 0;
 
         return finalCapabilities;
     }
