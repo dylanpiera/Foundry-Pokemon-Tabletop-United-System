@@ -43,7 +43,7 @@
             </div>
             <div class="effects">
                 {{#each effects as |effect|}}
-                    <div class="effect" data-actor-id="{{effect.parent.id}}" data-item-id="{{effect.id}}" {{#if effect.system.effect}}title="{{effect.system.effect}}"{{/if}}>
+                    <div class="effect" data-actor-id="{{effect.parent}}" data-item-id="{{effect.id}}" {{#if effect.effect}}title="{{effect.effect}}"{{/if}}>
                         <img class="icon" src="{{effect.img}}" alt="{{effect.name}}">
                         <span class="name">{{effect.name}}</span>
                     </div>

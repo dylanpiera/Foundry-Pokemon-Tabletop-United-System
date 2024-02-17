@@ -46,7 +46,6 @@ export function changeRotomForm() {
                 }
             })();
             const item = actor.itemTypes.move.find(m => m.slug == moveSlug);
-            console.log(item)
             if (item) await actor.deleteEmbeddedDocuments("Item", [item.id]);
             if (move) toCreate.push(move.toObject());
         }

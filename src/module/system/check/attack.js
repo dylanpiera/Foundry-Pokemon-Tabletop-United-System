@@ -62,6 +62,25 @@ class PTUAttackCheck extends PTUDiceCheck {
 
         this.modifiers = modifiers;
 
+        const critRangeModifiers = [
+            new PTUModifier({
+                slug: "crit-range",
+                label: "Crit Range",
+                modifier: this.actor.system.modifiers.critRange.total ?? 0
+            }),
+        ];
+
+        critRangeModifiers.push(...extractModifiers(this.actor.synthetics, [
+            "crit-range",
+            `${this.item.id}-crit-range`,
+            `${this.item.slug}-crit-range`,
+            `${sluggify(this.item.system.category)}-crit-range`,
+            `${sluggify(this.item.system.type)}-crit-range`,
+            `${sluggify(this.item.system.frequency)}-crit-range`
+        ], { test: this.options }));
+
+        this.critRangeModifiers = critRangeModifiers;
+
         return this;
     }
 
@@ -71,6 +90,16 @@ class PTUAttackCheck extends PTUDiceCheck {
      */
     prepareStatistic() {
         super.prepareStatistic(sluggify(game.i18n.format("PTU.Action.AttackRoll", { move: this.item.name })));
+
+        this.critMod = Math.max(
+            0,
+            Object.values(
+                this.critRangeModifiers.reduce((acc, mod) => {
+                    if(!mod.ignored && !acc[mod.slug]) acc[mod.slug] = mod.modifier;
+                    return acc;
+                }, {})
+            ).reduce((acc, mod) => acc + mod, 0)
+        )
         return this;
     }
 
@@ -112,8 +141,7 @@ class PTUAttackCheck extends PTUDiceCheck {
         /** @type {DcCollection} */
         const dcs = (() => {
             const targets = new Map();
-            const critMod = this.actor.system.modifiers?.critRange?.total ?? 0;
-            const critRange = Array.fromRange(1 + Math.max(critMod, 0), 20 - Math.max(critMod, 0));
+            const critRange = Array.fromRange(1 + Math.max(this.critMod, 0), 20 - Math.max(this.critMod, 0));
 
             /** @type {TargetContext[]} */
             const contexts = this._contexts.size > 0 ? this._contexts : [{ actor: this.actor, options: this.options, token: this.token }]
@@ -190,7 +218,7 @@ class PTUAttackCheck extends PTUDiceCheck {
                     }
                 }
 
-                for(const modifier of extractModifiers(context.actor.synthetics, ["evasion"], { test: context.options })) {
+                for (const modifier of extractModifiers(context.actor.synthetics, ["evasion"], { test: context.options })) {
                     target.statistic.push(modifier);
                 }
 

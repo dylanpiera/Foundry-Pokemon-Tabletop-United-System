@@ -1,3 +1,5 @@
+import { sluggify } from "../../../util/misc.js";
+import { PTUModifier } from "../../actor/modifiers.js";
 import { ResolvableValueField } from "../../system/schema-data-fields.js";
 import { RuleElementPTU } from "./base.js";
 
@@ -39,7 +41,7 @@ class ApplyEffectRuleElement extends RuleElementPTU {
                     return null;
                 }
 
-                const grantedItem = await(async () => {
+                const grantedItem = await (async () => {
                     try {
                         return (await fromUuid(uuid))?.clone(this.overwrites ?? {}) ?? null;
                     }
@@ -54,7 +56,36 @@ class ApplyEffectRuleElement extends RuleElementPTU {
                     return null;
                 }
 
-                if (this.range && (Number(options.roll) + (this.actor?.system?.modifiers?.effectRange?.total ?? 0)) < Number(this.range)) {
+                const effectRange = (() => {
+                    const modifiers = [
+                        new PTUModifier({
+                            slug: "effect-range",
+                            label: "Effect Range",
+                            modifier: this.actor?.system?.modifiers?.effectRange?.total ?? 0,
+                        })
+                    ]
+                    if (this.actor?.synthetics) {
+                        modifiers.push(
+                            ...extractModifiers(this.actor?.synthetics, [
+                                "effect-range",
+                                this.item?.id ? `${this.item.id}-effect-range` : [],
+                                this.item?.slug ? `${this.item.slug}-effect-range` : [],
+                                this.item?.system?.category ? `${sluggify(this.item.system.category)}-effect-range` : [],
+                                this.item?.system?.type ? `${sluggify(this.item.system.type)}-effect-range` : [],
+                                this.item?.system?.frequency ? `${sluggify(this.item.system.frequency)}-effect-range` : [],
+                            ].flat(), { test: options.test ?? this.actor.getRollOptions() })
+                        )
+                    }
+
+                    return Number(Object.values(
+                        modifiers.reduce((acc, mod) => {
+                            if (!mod.ignored && !acc[mod.slug]) acc[mod.slug] = mod.modifier;
+                            return acc;
+                        }, {})
+                    ).reduce((acc, mod) => acc + mod, 0)) || 0;
+                })();
+
+                if (this.range && (Number(options.roll) + effectRange) < Number(this.range)) {
                     return null;
                 }
 

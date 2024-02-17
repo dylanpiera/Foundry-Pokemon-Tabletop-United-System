@@ -1,6 +1,13 @@
 import { sluggify } from "../../../util/misc.js";
 import { PTUItem } from "../base.js";
 
+/**
+ * @typedef DurationData
+ * @property {number} value
+ * @property {"rounds" | "unlimited" | "encounter"} unit
+ * @property {"turn-start" | "turn-end" | "round-end" | null} expiry
+ */
+
 class BaseEffectPTU extends PTUItem {
 
     get badge() {

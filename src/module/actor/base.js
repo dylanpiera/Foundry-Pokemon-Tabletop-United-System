@@ -162,7 +162,12 @@ class PTUActor extends Actor {
             if (effectiveness["Shadow"] > 2) effectiveness["Shadow"] = 2;
         }
 
-        const effectivenessMod = this.system.modifiers?.resistanceSteps?.total ?? 0;
+        const effectivenessMod = (() => {
+            const mod = this.system.modifiers?.resistanceSteps?.total ?? 0;
+            if(mod > 0) return 1 / (2 ** mod);
+            if(mod < 0) return 2 ** Math.abs(mod);
+            return 1;
+        })();
         for (let [key, value] of Object.entries(effectiveness)) {
             if (effectivenessMod) value *= effectivenessMod;
             const type = key.toLocaleLowerCase(game.i18n.locale)
@@ -245,6 +250,12 @@ class PTUActor extends Actor {
         super.prepareData();
         this.constructed = true;
 
+        // Extra Rolloptions before 'After Derived' hooks get called
+        if (!this.types.includes("Untyped")) delete this.flags.ptu.rollOptions.all["self:types:untyped"]
+        for (const type of this.types) {
+            this.flags.ptu.rollOptions.all["self:types:" + type.toLowerCase()] = true;
+        }
+
         // Call post-derived-preparation `RuleElement` hooks
         for (const rule of this.rules) {
             rule.afterPrepareData?.();
@@ -295,12 +306,6 @@ class PTUActor extends Actor {
     prepareDerivedData() {
         this.prepareSynthetics();
 
-        // Extra Rolloptions
-        if (!this.types.includes("Untyped")) delete this.flags.ptu.rollOptions.all["self:types:untyped"]
-        for (const type of this.types) {
-            this.flags.ptu.rollOptions.all["self:types:" + type.toLowerCase()] = true;
-        }
-
         if (this.allowedItemTypes.includes('move')) {
             this.system.attacks = this.prepareMoves();
         }
@@ -318,7 +323,8 @@ class PTUActor extends Actor {
 
         this.prepareDataFromItems();
 
-        for (const rule of this.rules) {
+
+        for (const rule of this.rules.sort((a, b) => (a.priority ?? 0) - (b.priority ?? 0))) {
             rule.onApplyActiveEffects?.();
         }
     }
@@ -1479,6 +1485,10 @@ class PTUActor extends Actor {
             typeof distance === "number"
                 ? [`origin:distance:${distance}`, `target:distance:${distance}`]
                 : [null, null];
+        const rangeOptions = (() => {
+            if (distance >= 4) return ["target:distance:4+"];
+            return [];
+        })();
 
         const targetEphemeralEffects = await extractEphemeralEffects({
             affects: "target",
@@ -1486,7 +1496,7 @@ class PTUActor extends Actor {
             target: targetToken?.actor ?? null,
             item: selfItem,
             domains,
-            options: [...selfOptions, ...itemOptions, ...targetRollOptions]
+            options: [...selfOptions, ...itemOptions, ...targetRollOptions, ...rangeOptions]
         });
 
         const targetActor = (targetToken?.actor)?.getContextualClone(
@@ -1494,11 +1504,12 @@ class PTUActor extends Actor {
                 ...selfActor.getSelfRollOptions("origin"),
                 ...itemOptions,
                 ...(originDistance ? [originDistance] : []),
+                ...rangeOptions
             ],
             targetEphemeralEffects
         ) ?? null;
 
-        const targetOptions = new Set(targetActor ? getTargetRollOptions(targetActor) : targetRollOptions);
+        const targetOptions = new Set([...(targetActor ? getTargetRollOptions(targetActor) : targetRollOptions), ...rangeOptions]);
 
         if (targetOptions.has("target:immune:flanked")) targetOptions.delete("target:flanked");
         else if (isFlanked) targetOptions.add("target:flanked");
@@ -1508,6 +1519,7 @@ class PTUActor extends Actor {
             ...itemOptions,
             ...targetOptions,
             ...(targetDistance ? [targetDistance] : []),
+            ...rangeOptions
         ])
 
         return {
@@ -1653,6 +1665,10 @@ class PTUActor extends Actor {
             typeof distance === "number"
                 ? [`origin:distance:${distance}`, `target:distance:${distance}`]
                 : [null, null];
+        const rangeOptions = (() => {
+            if (distance >= 4) return ["target:distance:4+"];
+            return [];
+        })();
 
         const targetEphemeralEffects = await extractEphemeralEffects({
             affects: "target",
@@ -1670,6 +1686,7 @@ class PTUActor extends Actor {
                     ...selfActor.getSelfRollOptions("origin"),
                     ...itemOptions,
                     ...(originDistance ? [originDistance] : []),
+                    ...rangeOptions
                 ],
                 targetEphemeralEffects
             ) ?? null;
@@ -1679,6 +1696,7 @@ class PTUActor extends Actor {
             ...selfOptions,
             ...itemOptions,
             ...(targetActor ? getTargetRollOptions(targetActor) : targetRollOptions),
+            ...rangeOptions
         ])
         if (targetDistance) rollOptions.add(targetDistance);
 
