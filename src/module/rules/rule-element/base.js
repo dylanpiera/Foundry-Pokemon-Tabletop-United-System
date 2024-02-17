@@ -196,6 +196,7 @@ class RuleElementPTU extends foundry.abstract.DataModel {
 
     test(options) {
         if(this.ignored) return false;
+        if(! this.item.enabled) return false;
         if(this.predicate.length === 0) return true;
 
         const optionSet = new Set([

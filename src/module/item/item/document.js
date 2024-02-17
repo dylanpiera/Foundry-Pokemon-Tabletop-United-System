@@ -9,6 +9,15 @@ class PTUItemItem extends PTUItem {
         return this.system.container;
     }
 
+    prepareBaseData() {
+        super.prepareBaseData();
+        
+        if(this.enabled) {
+            this.flags.ptu.rollOptions.all[`item:equipped`] = true;
+            this.flags.ptu.rollOptions.item[`item:equipped`] = true;
+        }
+    }
+
     /** @override */
     prepareSiblingData() {
         const itemGrants = this.flags.ptu.itemGrants;
