@@ -599,6 +599,7 @@
         "effect": "",
         "snippet": "",
         "rules": [],
+        "enabled": true,
         "slug": null,
         "schema": {
           "version": null,

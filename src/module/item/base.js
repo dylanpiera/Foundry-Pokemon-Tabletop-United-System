@@ -64,6 +64,19 @@ class PTUItem extends Item {
         return this.img.includes("class");
     }
 
+    get enabled(){
+        return !!(this.system.enabled ?? true)
+    }
+
+    /** Change state of whether items automation should be enabled or disabled. If called
+     *  without argument, toggles between on and off.
+     * @param newState
+     * @return {Promise<abstract.Document|*>}
+     */
+    async toggleEnableState(newState = !this.enabled){
+        return this.update({"system.enabled": newState})
+    }
+
     /** @override */
     prepareBaseData() {
         this.flags.ptu = foundry.utils.mergeObject({ rulesSelections: {} }, this.flags.ptu ?? {});
@@ -74,13 +87,17 @@ class PTUItem extends Item {
                     [`item:id:${this._id}`]: true,
                     [`item:slug:${this.slug}`]: true,
                     [`item:type:${this.type}`]: true,
-                    [`${this.type}:${this.slug}`]: true
+                    [`${this.type}:${this.slug}`]: true,
+                    [`item:equipped`]: this.enabled && this.type ==="item",
+                    [`item:enabled`]: this.enabled
                 },
                 item: {
                     [`item:id:${this._id}`]: true,
                     [`item:slug:${this.slug}`]: true,
                     [`item:type:${this.type}`]: true,
-                    [`${this.type}:${this.slug}`]: true
+                    [`${this.type}:${this.slug}`]: true,
+                    [`item:equipped`]: this.enabled && this.type ==="item",
+                    [`item:enabled`]: this.enabled
                 }
             }
         });
