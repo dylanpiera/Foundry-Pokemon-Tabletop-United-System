@@ -45,7 +45,7 @@ class PTUMove extends PTUItem {
     }
 
     get isFiveStrike() {
-        return !!this.rollOptions.item["move:range:five-strike"];
+        return (!!this.rollOptions.item["move:range:five-strike"]) || (!!this.rollOptions.item["move:five-strike"]);
     }
 
     get damageBase() {
