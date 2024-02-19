@@ -2887,7 +2887,7 @@ a.content-link img {
 }
 .ptu.sheet.gen8.actor .item-list .item .item-controls,
 .ptu.sheet.gen8.dex .item-list .item .item-controls {
-  flex: 0 0 72px;
+  flex: 0 0 90px;
   justify-content: end;
   display: flex;
   flex-direction: row;

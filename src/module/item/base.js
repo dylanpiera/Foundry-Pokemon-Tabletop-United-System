@@ -1,6 +1,7 @@
 import { RuleElements } from "../rules/index.js";
 import { processGrantDeletions } from "../rules/rule-element/grant-item/helper.js";
 import { sluggify } from "../../util/misc.js"
+import { GrantItemRuleElement } from "../rules/rule-element/grant-item/rule-element.js";
 
 class PTUItem extends Item {
 
@@ -74,7 +75,11 @@ class PTUItem extends Item {
      * @return {Promise<abstract.Document|*>}
      */
     async toggleEnableState(newState = !this.enabled){
-        return this.update({"system.enabled": newState})
+        await this.update({"system.enabled": newState})
+        for(const rule of this.rules) {
+            if(rule.ignored || !(rule instanceof GrantItemRuleElement)) continue;
+            return this.actor.update({"system.timestamp": Date.now()})
+        }
     }
 
     /** @override */

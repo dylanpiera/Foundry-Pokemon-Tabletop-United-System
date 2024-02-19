@@ -1,14 +1,14 @@
-2024/02/16-18:15:20.587 53b0 Recovering log #929
-2024/02/16-18:15:20.592 53b0 Delete type=0 #929
-2024/02/16-18:15:20.592 53b0 Delete type=3 #927
-2024/02/17-15:34:44.222 7334 Level-0 table #934: started
-2024/02/17-15:34:44.226 7334 Level-0 table #934: 1236 bytes OK
-2024/02/17-15:34:44.227 7334 Delete type=0 #932
-2024/02/17-15:34:44.237 7334 Manual compaction at level-0 from '!folders!MsdL8dYgE7JbY1ya' @ 72057594037927935 : 1 .. '!items!ztjoTjB46kPDTEfV' @ 0 : 0; will stop at '!items!VeCeKD06r2h3Iuyd' @ 10347 : 1
-2024/02/17-15:34:44.237 7334 Compacting 1@0 + 1@1 files
-2024/02/17-15:34:44.244 7334 Generated table #935@0: 630 keys, 229134 bytes
-2024/02/17-15:34:44.244 7334 Compacted 1@0 + 1@1 files => 229134 bytes
-2024/02/17-15:34:44.245 7334 compacted to: files[ 0 1 0 0 0 0 0 ]
-2024/02/17-15:34:44.246 7334 Delete type=2 #922
-2024/02/17-15:34:44.246 7334 Delete type=2 #934
-2024/02/17-15:34:44.264 7334 Manual compaction at level-0 from '!items!VeCeKD06r2h3Iuyd' @ 10347 : 1 .. '!items!ztjoTjB46kPDTEfV' @ 0 : 0; will stop at (end)
+2024/02/17-22:55:40.101 28b4 Recovering log #938
+2024/02/17-22:55:40.106 28b4 Delete type=0 #938
+2024/02/17-22:55:40.107 28b4 Delete type=3 #936
+2024/02/19-14:24:58.729 6174 Level-0 table #943: started
+2024/02/19-14:24:58.734 6174 Level-0 table #943: 22935 bytes OK
+2024/02/19-14:24:58.738 6174 Delete type=0 #941
+2024/02/19-14:24:58.752 6174 Manual compaction at level-0 from '!folders!MsdL8dYgE7JbY1ya' @ 72057594037927935 : 1 .. '!items!ztjoTjB46kPDTEfV' @ 0 : 0; will stop at '!items!zsUI5UfX8919TRuY' @ 10407 : 1
+2024/02/19-14:24:58.752 6174 Compacting 1@0 + 1@1 files
+2024/02/19-14:24:58.760 6174 Generated table #944@0: 631 keys, 231900 bytes
+2024/02/19-14:24:58.760 6174 Compacted 1@0 + 1@1 files => 231900 bytes
+2024/02/19-14:24:58.762 6174 compacted to: files[ 0 1 0 0 0 0 0 ]
+2024/02/19-14:24:58.762 6174 Delete type=2 #935
+2024/02/19-14:24:58.763 6174 Delete type=2 #943
+2024/02/19-14:24:58.800 6174 Manual compaction at level-0 from '!items!zsUI5UfX8919TRuY' @ 10407 : 1 .. '!items!ztjoTjB46kPDTEfV' @ 0 : 0; will stop at (end)
