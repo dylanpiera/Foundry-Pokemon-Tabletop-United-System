@@ -1,19 +1,21 @@
-2024/02/17-22:55:40.438 5804 Recovering log #1134
-2024/02/17-22:55:40.445 5804 Delete type=0 #1134
-2024/02/17-22:55:40.445 5804 Delete type=3 #1132
-2024/02/19-14:24:58.850 6174 Level-0 table #1139: started
-2024/02/19-14:24:58.854 6174 Level-0 table #1139: 25529 bytes OK
-2024/02/19-14:24:58.856 6174 Delete type=0 #1137
-2024/02/19-14:24:58.861 6174 Manual compaction at level-0 from '!folders!CMymFngAhNsaPlS5' @ 72057594037927935 : 1 .. '!items!zyXhWVwTmu553jFn' @ 0 : 0; will stop at '!items!d4bozHKgocOiJibK' @ 45311 : 1
-2024/02/19-14:24:58.862 6174 Compacting 1@0 + 3@1 files
-2024/02/19-14:24:58.897 6174 Generated table #1140@0: 502 keys, 2117468 bytes
-2024/02/19-14:24:58.933 6174 Generated table #1141@0: 503 keys, 2117711 bytes
-2024/02/19-14:24:58.970 6174 Generated table #1142@0: 505 keys, 2119404 bytes
-2024/02/19-14:24:58.973 6174 Generated table #1143@0: 1 keys, 5080 bytes
-2024/02/19-14:24:58.973 6174 Compacted 1@0 + 3@1 files => 6359663 bytes
-2024/02/19-14:24:58.974 6174 compacted to: files[ 0 5 0 0 0 0 0 ]
-2024/02/19-14:24:58.975 6174 Delete type=2 #1122
-2024/02/19-14:24:58.976 6174 Delete type=2 #1123
-2024/02/19-14:24:58.976 6174 Delete type=2 #1124
-2024/02/19-14:24:58.977 6174 Delete type=2 #1139
-2024/02/19-14:24:58.983 6174 Manual compaction at level-0 from '!items!d4bozHKgocOiJibK' @ 45311 : 1 .. '!items!zyXhWVwTmu553jFn' @ 0 : 0; will stop at (end)
+2024/02/23-22:00:59.518 b538 Recovering log #1166
+2024/02/23-22:00:59.522 b538 Delete type=0 #1166
+2024/02/23-22:00:59.523 b538 Delete type=3 #1164
+2024/02/24-09:54:46.465 5f34 Level-0 table #1171: started
+2024/02/24-09:54:46.538 5f34 Level-0 table #1171: 7629303 bytes OK
+2024/02/24-09:54:46.544 5f34 Delete type=0 #1169
+2024/02/24-09:54:46.554 5f34 Manual compaction at level-0 from '!folders!CMymFngAhNsaPlS5' @ 72057594037927935 : 1 .. '!items!zyXhWVwTmu553jFn' @ 0 : 0; will stop at '!items!zyXhWVwTmu553jFn' @ 47120 : 1
+2024/02/24-09:54:46.554 5f34 Compacting 1@0 + 5@1 files
+2024/02/24-09:54:46.582 5f34 Generated table #1172@0: 502 keys, 2117680 bytes
+2024/02/24-09:54:46.612 5f34 Generated table #1173@0: 503 keys, 2117900 bytes
+2024/02/24-09:54:46.641 5f34 Generated table #1174@0: 505 keys, 2119587 bytes
+2024/02/24-09:54:46.658 5f34 Generated table #1175@0: 302 keys, 1273824 bytes
+2024/02/24-09:54:46.658 5f34 Compacted 1@0 + 5@1 files => 7628991 bytes
+2024/02/24-09:54:46.658 5f34 compacted to: files[ 0 4 0 0 0 0 0 ]
+2024/02/24-09:54:46.659 5f34 Delete type=2 #1125
+2024/02/24-09:54:46.659 5f34 Delete type=2 #1140
+2024/02/24-09:54:46.660 5f34 Delete type=2 #1141
+2024/02/24-09:54:46.661 5f34 Delete type=2 #1142
+2024/02/24-09:54:46.662 5f34 Delete type=2 #1143
+2024/02/24-09:54:46.662 5f34 Delete type=2 #1171
+2024/02/24-09:54:46.670 5f34 Manual compaction at level-0 from '!items!zyXhWVwTmu553jFn' @ 47120 : 1 .. '!items!zyXhWVwTmu553jFn' @ 0 : 0; will stop at (end)

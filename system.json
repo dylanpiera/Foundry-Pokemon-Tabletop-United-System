@@ -83,7 +83,13 @@
       "type": "Item",
       "name": "dex-entries",
       "path": "packs/dex-entries.db",
-      "system": "ptu"
+      "system": "ptu",
+      "ownership": {
+        "PLAYER": "LIMITED",
+        "TRUSTED": "LIMITED",
+        "ASSISTANT": "LIMITED",
+        "GAMEMASTER": "LIMITED"
+      }
     },
     {
       "label": "PTR Edges",
