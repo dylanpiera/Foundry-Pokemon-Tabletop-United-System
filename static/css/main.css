@@ -1023,6 +1023,20 @@ a.pokedollar span::before {
   flex: 0 0 25px;
   display: flex;
 }
+.token-panel .main-panel .actions-accordion .action .icon.with-category,
+.token-panel .main-panel .items-accordion .action .icon.with-category {
+  flex: 0 0 44px;
+}
+.token-panel .main-panel .actions-accordion .action .icon.with-category img,
+.token-panel .main-panel .items-accordion .action .icon.with-category img {
+  height: 22px;
+  width: 22px;
+  flex: 0 0 22px;
+}
+.token-panel .main-panel .actions-accordion .action .icon.with-category img.category,
+.token-panel .main-panel .items-accordion .action .icon.with-category img.category {
+  border-radius: 0 5px 5px 0;
+}
 .token-panel .main-panel .actions-accordion .action .icon img,
 .token-panel .main-panel .items-accordion .action .icon img {
   height: 25px;
@@ -1033,13 +1047,25 @@ a.pokedollar span::before {
 }
 .token-panel .main-panel .actions-accordion .action .name,
 .token-panel .main-panel .items-accordion .action .name {
-  flex: 0 0 auto;
+  flex: 0 0 100px;
   align-self: center;
+  font-size: 12px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .token-panel .main-panel .actions-accordion .action .tags,
 .token-panel .main-panel .items-accordion .action .tags {
   flex: 0 0 100%;
   height: 20px;
+}
+.token-panel .main-panel .actions-accordion .action:hover .icon,
+.token-panel .main-panel .items-accordion .action:hover .icon {
+  flex: 0 0 25px;
+}
+.token-panel .main-panel .actions-accordion .action:hover .name,
+.token-panel .main-panel .items-accordion .action:hover .name {
+  flex: 0 0 120px;
 }
 .token-panel .main-panel .items-accordion .pokeball-items,
 .token-panel .main-panel .items-accordion .other-items {

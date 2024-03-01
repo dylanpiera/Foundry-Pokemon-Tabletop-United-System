@@ -46,6 +46,7 @@ export class TokenPanel extends Application {
                 range: attack.item?.system.range ?? "",
                 keywords: attack.item?.system.keywords ?? [],
             };
+            if(attack.item?.system.category) data.category = `/systems/ptu/static/css/images/types2/${attack.item?.system.category}IC_Icon.png`;
             if (attack.item.system.isStruggle) struggles.push(data);
             else attacks.push(data);
         }

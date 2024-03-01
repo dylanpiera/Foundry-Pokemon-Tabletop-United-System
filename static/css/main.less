@@ -1242,25 +1242,52 @@ a.pokedollar {
                 .icon {
                     flex: 0 0 25px;
 
+                    &.with-category {
+                        flex: 0 0 44px;
+
+                        img {
+                            height: 22px;
+                            width: 22px;
+                            flex: 0 0 22px;
+
+                            &.category {
+                                border-radius: 0 5px 5px 0;
+                            }
+                        }
+                    }
+
                     img {
                         height: 25px;
                         width: 25px;
                         object-fit: fill;
                         border: unset;
-                        border-radius: 5px 0 0 0
+                        border-radius: 5px 0 0 0;
                     }
 
                     display: flex;
                 }
 
                 .name {
-                    flex: 0 0 auto;
+                    flex: 0 0 100px;
                     align-self: center;
+                    font-size: 12px;
+                    white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
                 }
 
                 .tags {
                     flex: 0 0 100%;
                     height: 20px;
+                }
+
+                &:hover {
+                    .icon {
+                        flex: 0 0 25px;
+                    }
+                    .name {
+                        flex: 0 0 120px;
+                    }
                 }
             }
         }
