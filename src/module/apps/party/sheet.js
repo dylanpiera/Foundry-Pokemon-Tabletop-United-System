@@ -40,11 +40,6 @@ class PTUPartySheet extends FormApplication {
     getData() {
         const data = super.getData();
 
-        data.trainer = this.trainer;
-        data.party = this.party;
-        data.boxed = this.boxed;
-        data.available = this.available;
-
         const averageLevelOfMons = monArray => (
             monArray.reduce(
                 (a, b) => a + (b.attributes.level.current ?? 0),
@@ -52,9 +47,34 @@ class PTUPartySheet extends FormApplication {
             ) / monArray.length
         ).toFixed(1);
 
-        data.partyApl = this.party?.length > 0 ? averageLevelOfMons(data.party) : undefined
-        data.boxedApl = this.boxed?.length > 0 ? averageLevelOfMons(data.boxed) : undefined
-        data.availableApl = this.available?.length > 0 ? averageLevelOfMons(data.available) : undefined
+        data.trainer = this.trainer;
+        data.boxes = {
+            party: {
+                contents: this.party,
+                apl: this.party?.length > 0 ? averageLevelOfMons(this.party) : undefined
+            },
+            boxed: {
+                contents: this.boxed,
+                apl: this.boxed?.length > 0 ? averageLevelOfMons(this.boxed) : undefined
+            },
+        }
+        if(this.available?.length > 0) {
+            data.boxes.available = {
+                contents: this.available,
+                apl: averageLevelOfMons(this.available)
+            }
+        }
+
+        for (const child of this.trainer.folder.children) {
+            if ([this.folders.party?.id, this.folders.box?.id].includes(child.folder.id)) continue;
+            
+            const slug = CONFIG.PTU.util.sluggify(child.folder.name);
+            data.boxes[slug] = {
+                contents: child.entries.filter(actor => actor.type == "pokemon"),
+            }
+            data.boxes[slug].apl = data.boxes[slug].contents?.length > 0 ? averageLevelOfMons(data.boxes[slug].contents) : undefined;
+            this.folders[slug] = child.folder;
+        }
 
         return data;
     }
@@ -260,6 +280,12 @@ class PTUPartySheet extends FormApplication {
             event.preventDefault();
             event.currentTarget.classList.remove("dragover");
         });
+
+        html.find(".party-item[data-actor-uuid]").on('dblclick', async (event) => {
+            event.preventDefault();
+            const actor = await fromUuid(event.currentTarget.dataset.actorUuid);
+            actor?.sheet?.render(true);
+        })
     }
 
     /** @override */
@@ -338,6 +364,18 @@ class PTUPartySheet extends FormApplication {
 
                         this.boxed.push(actor);
                         this.available = this.available.filter(a => a.uuid != actor.uuid);
+                        this.handledDrop = false;
+                        return this.render();
+                    }
+                    default: {
+                        const folder = this.folders[partyStatus];
+                        if(!folder) return ui.notifications.error("Invalid folder");
+
+                        if (actor.folder?.id != folder.id) {
+                            await actor.update({ folder: folder.id });
+                        }
+                        await actor.setFlag("ptu", "party", { trainer: this.trainer.id, boxed: true });
+
                         this.handledDrop = false;
                         return this.render();
                     }
@@ -433,6 +471,18 @@ class PTUPartySheet extends FormApplication {
 
                 this[type].splice(index, 1);
                 this.boxed.push(actor);
+                return this.render();
+            }
+            default: {
+                const folder = this.folders[partyStatus];
+                if(!folder) return ui.notifications.error("Invalid folder");
+
+                if (actor.folder?.id != folder.id) {
+                    await actor.update({ folder: folder.id });
+                }
+                await actor.setFlag("ptu", "party", { trainer: this.trainer.id, boxed: true });
+
+                this[type]?.splice?.(index, 1);
                 return this.render();
             }
         }
@@ -537,7 +587,7 @@ class PTUPartySheet extends FormApplication {
                     party: partySheet.party,
                     boxed: partySheet.boxed
                 }
-                
+
                 // Delete existing party
                 await existingActor.delete();
                 for (const actor of partySheet.party) {

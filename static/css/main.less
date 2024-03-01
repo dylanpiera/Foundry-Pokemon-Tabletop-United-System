@@ -4959,13 +4959,23 @@ a.content-link {
                 border: unset;
             }
 
-            label {
-                text-align: center;
-                align-self: center;
-                margin: 0;
-                padding: 0;
+            .labels {
+                display: flex;
+                flex-direction: column;
                 flex: 1;
-                text-overflow: ellipsis;
+                justify-content: center;
+                text-align: center;
+
+                label {
+                    text-align: center;
+                    align-self: center;
+                    margin: 0;
+                    padding: 0;
+                    text-overflow: ellipsis;
+                }
+                small {
+                    font-size: 10px;
+                }
             }
 
             &.empty {

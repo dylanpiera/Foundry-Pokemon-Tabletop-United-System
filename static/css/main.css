@@ -4048,13 +4048,22 @@ a.content-link img {
   flex: 0 0 50px;
   border: unset;
 }
-.sheet.party .party-list .party-item label {
+.sheet.party .party-list .party-item .labels {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  justify-content: center;
+  text-align: center;
+}
+.sheet.party .party-list .party-item .labels label {
   text-align: center;
   align-self: center;
   margin: 0;
   padding: 0;
-  flex: 1;
   text-overflow: ellipsis;
+}
+.sheet.party .party-list .party-item .labels small {
+  font-size: 10px;
 }
 .sheet.party .party-list .party-item.empty {
   flex: 1;
