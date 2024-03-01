@@ -1059,12 +1059,12 @@ a.pokedollar span::before {
   flex: 0 0 100%;
   height: 20px;
 }
-.token-panel .main-panel .actions-accordion .action:hover .icon,
-.token-panel .main-panel .items-accordion .action:hover .icon {
+.token-panel .main-panel .actions-accordion .action.rollable:hover .icon,
+.token-panel .main-panel .items-accordion .action.rollable:hover .icon {
   flex: 0 0 25px;
 }
-.token-panel .main-panel .actions-accordion .action:hover .name,
-.token-panel .main-panel .items-accordion .action:hover .name {
+.token-panel .main-panel .actions-accordion .action.rollable:hover .name,
+.token-panel .main-panel .items-accordion .action.rollable:hover .name {
   flex: 0 0 120px;
 }
 .token-panel .main-panel .items-accordion .pokeball-items,
