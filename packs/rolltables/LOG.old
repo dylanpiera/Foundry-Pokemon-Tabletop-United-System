@@ -1,8 +1,18 @@
-2024/02/19-14:14:44.838153 7f9a017fa640 Recovering log #303
-2024/02/19-14:14:44.839652 7f9a017fa640 Delete type=0 #303
-2024/02/19-14:14:44.839685 7f9a017fa640 Delete type=3 #301
-2024/03/02-07:54:11.568409 7f99fed38640 Level-0 table #308: started
-2024/03/02-07:54:11.568432 7f99fed38640 Level-0 table #308: 0 bytes OK
-2024/03/02-07:54:11.568804 7f99fed38640 Delete type=0 #306
-2024/03/02-07:54:11.572371 7f99fed38640 Manual compaction at level-0 from '!folders!2QGVmITcIgGCeRtD' @ 72057594037927935 : 1 .. '!tables.results!wdOETkq5aY7M7hJg.rSBY0YfY0tm73sIu' @ 0 : 0; will stop at (end)
-2024/03/02-07:54:11.675682 7f99fed38640 Manual compaction at level-1 from '!folders!2QGVmITcIgGCeRtD' @ 72057594037927935 : 1 .. '!tables.results!wdOETkq5aY7M7hJg.rSBY0YfY0tm73sIu' @ 0 : 0; will stop at (end)
+2024/03/02-08:55:09.654 4454 Recovering log #307
+2024/03/02-08:55:09.654 4454 Recovering log #336
+2024/03/02-08:55:09.669 4454 Delete type=0 #307
+2024/03/02-08:55:09.669 4454 Delete type=2 #329
+2024/03/02-08:55:09.669 4454 Delete type=0 #336
+2024/03/02-08:55:09.669 4454 Delete type=3 #305
+2024/03/02-10:25:23.059 ab8c Level-0 table #339: started
+2024/03/02-10:25:23.062 ab8c Level-0 table #339: 73080 bytes OK
+2024/03/02-10:25:23.066 ab8c Delete type=0 #337
+2024/03/02-10:25:23.090 ab8c Manual compaction at level-0 from '!folders!2QGVmITcIgGCeRtD' @ 72057594037927935 : 1 .. '!tables.results!wdOETkq5aY7M7hJg.rSBY0YfY0tm73sIu' @ 0 : 0; will stop at (end)
+2024/03/02-10:25:23.096 ab8c Manual compaction at level-1 from '!folders!2QGVmITcIgGCeRtD' @ 72057594037927935 : 1 .. '!tables.results!wdOETkq5aY7M7hJg.rSBY0YfY0tm73sIu' @ 0 : 0; will stop at '!tables.results!wdOETkq5aY7M7hJg.rSBY0YfY0tm73sIu' @ 5919 : 1
+2024/03/02-10:25:23.096 ab8c Compacting 1@1 + 1@2 files
+2024/03/02-10:25:23.102 ab8c Generated table #340@1: 604 keys, 73494 bytes
+2024/03/02-10:25:23.102 ab8c Compacted 1@1 + 1@2 files => 73494 bytes
+2024/03/02-10:25:23.104 ab8c compacted to: files[ 0 0 1 0 0 0 0 ]
+2024/03/02-10:25:23.104 ab8c Delete type=2 #182
+2024/03/02-10:25:23.104 ab8c Delete type=2 #339
+2024/03/02-10:25:23.131 ab8c Manual compaction at level-1 from '!tables.results!wdOETkq5aY7M7hJg.rSBY0YfY0tm73sIu' @ 5919 : 1 .. '!tables.results!wdOETkq5aY7M7hJg.rSBY0YfY0tm73sIu' @ 0 : 0; will stop at (end)
