@@ -4,66 +4,38 @@
             <div class="d-flex flex-column mb-2 trainer">
                 <h3>Trainer</h3>
                 <div class="d-flex flex-row party-list">
-                    <div class="party-item">
+                    <div class="party-item" data-actor-uuid="{{trainer.uuid}}">
                         <img src="{{trainer.img}}" alt="{{trainer.name}}" title="{{trainer.name}}" />
-                        <label>{{trainer.name}}</label>
+                        <div class="labels">
+                            <label>{{trainer.name}}</label>
+                            <small>Level: {{trainer.system.level.current}}</small>
+                        </div>
                     </div>
                 </div>
             </div>
         {{/if}}
-        <div class="d-flex flex-column mb-2">
-            <h3>Party {{#if partyApl}}<span style="float:right;">Average Level: {{partyApl}}{{/if}}</span></h3>
-            <div class="d-flex flex-row party-list droppable" data-party-status="party">
-                {{#each party}}
-                    <div class="party-item draggable" data-actor-uuid="{{uuid}}" data-party-status="party" data-actor-index="{{@index}}">
-                        <img src="{{img}}" alt="{{name}}" title="{{name}}" />
-                        <label>{{name}}</label>
-                    </div>
-                {{/each}}
-                {{#unless party}}
-                    <div class="party-item empty">
-                        <div class="item-name">
-                            <small><i>Drop actors here</i></small>
+        {{#each boxes as |box name|}}
+            <div class="d-flex flex-column mb-2">
+                <h3>{{formatSlug name}}<span style="float:right;">{{#if box.apl}}Average Level: {{box.apl}}{{/if}}</span></h3>
+                <div class="d-flex flex-row party-list droppable" data-party-status="{{name}}">
+                    {{#each box.contents as |actor|}}
+                        <div class="party-item draggable" data-actor-uuid="{{actor.uuid}}" data-party-status="{{#if (is name "party")}}party{{else}}{{#if (is name "available")}}available{{else}}boxed{{/if}}{{/if}}" data-actor-index="{{@index}}">
+                            <img src="{{actor.img}}" alt="{{actor.name}}" title="{{actor.name}}" />
+                            <div class="labels">
+                                <label>{{actor.name}}</label>
+                                <small>Level: {{actor.system.level.current}}</small>
+                            </div>
                         </div>
-                    </div>
-                {{/unless}}
-            </div>
-        </div>
-        <div class="d-flex flex-column mb-2">
-            <h3>Boxed{{#if boxedApl}}<span style="float:right;">Average Level: {{boxedApl}}{{/if}}</span></h3>
-            <div class="d-flex flex-row party-list droppable" data-party-status="boxed">
-                {{#each boxed}}
-                    <div class="party-item draggable" data-actor-uuid="{{uuid}}" data-party-status="boxed" data-actor-index="{{@index}}">
-                        <img src="{{img}}" alt="{{name}}" title="{{name}}" />
-                        <label>{{name}}</label>
-                    </div>
-                {{/each}}
-                {{#unless boxed}}
-                    <div class="party-item empty">
-                        <div class="item-name">
-                            <small><i>Drop actors here</i></small>
+                    {{/each}}
+                    {{#unless box.contents}}
+                        <div class="party-item empty">
+                            <div class="item-name">
+                                <small><i>Drop actors here</i></small>
+                            </div>
                         </div>
-                    </div>
-                {{/unless}}
+                    {{/unless}}
+                </div>
             </div>
-        </div>
-        <div class="d-flex flex-column mb-2">
-            <h3>Available{{#if availableApl}}<span style="float:right;">Average Level: {{availableApl}}{{/if}}</h3>
-            <div class="d-flex flex-row party-list droppable" data-party-status="available">
-                {{#each available}}
-                    <div class="party-item draggable" data-actor-uuid="{{uuid}}" data-party-status="available" data-actor-index="{{@index}}">
-                        <img src="{{img}}" alt="{{name}}" title="{{name}}" />
-                        <label>{{name}}</label>
-                    </div>
-                {{/each}}
-                {{#unless available}}
-                    <div class="party-item empty">
-                        <div class="item-name">
-                            <small><i>Drop actors here</i></small>
-                        </div>
-                    </div>
-                {{/unless}}
-            </div>
-        </div>
+        {{/each}}
     </div>
 </form>

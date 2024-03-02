@@ -159,7 +159,9 @@ class PTUActor extends Actor {
             delete effectiveness["Shadow"];
         }
         else {
-            if (effectiveness["Shadow"] > 2) effectiveness["Shadow"] = 2;
+            if (this.types.includes("Shadow")) effectiveness["Shadow"] = 0.5;
+            else if (this.types.includes("Untyped")) effectiveness["Shadow"] = 1;
+            else effectiveness["Shadow"] = 2;
         }
 
         const effectivenessMod = (() => {

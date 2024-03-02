@@ -207,14 +207,16 @@ class ChatMessagePTU extends ChatMessage {
     activateListeners($html) {
         $html.find("button.use").on("click", async event => {
             event.preventDefault();
+            event.stopImmediatePropagation();
             const item = await fromUuid(this.flags.ptu.origin.item);
             if (!item) return;
 
             await item?.use();
         });
+        console.log('Apply Capture Hook')
         $html.find("button.apply-capture").on("click", async event => {
             event.preventDefault();
-            event.stopPropagation();
+            event.stopImmediatePropagation();
             const item = await fromUuid(this.flags.ptu.origin.uuid);
             if (!item) return;
 
@@ -222,7 +224,7 @@ class ChatMessagePTU extends ChatMessage {
         });
         $html.find("button.contested-check").on("click", async event => {
             event.preventDefault();
-            event.stopPropagation();
+            event.stopImmediatePropagation();
 
             const total = this.rolls[0]?.total;
             const target = this.targets.find(t => t.actor.isOwner);

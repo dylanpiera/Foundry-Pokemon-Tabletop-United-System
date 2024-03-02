@@ -18,6 +18,44 @@ class PTUActorSheet extends ActorSheet {
                 icon: "fas fa-cog",
                 onclick: () => this._onConfigureActor(),
             });
+
+            // Add a button to heal the character as if Pokecenter Healing was done
+            buttons.unshift({
+                label: "Heal",
+                class: "heal-character",
+                icon: "fas fa-heart",
+                onclick: async () => {
+                    const hp = this.actor.system.health.value;
+                    const maxHp = this.actor.system.health.max;
+                    const totalHp = this.actor.system.health.total;
+                    const injuries = this.actor.system.health.injuries;
+                    if(injuries === 0 && hp === maxHp) return ui.notifications.info(`${this.actor.name} is already at full health!`);
+                    if(injuries <= 3) {
+                        await this.actor.update({
+                            "system.health.value": totalHp,
+                            "system.health.injuries": 0
+                        });
+                        await ChatMessage.create({
+                            speaker: {alias: this.actor.name},
+                            content: `${this.actor.name} was healed to full health! (${hp} -> ${totalHp}) and healed ${injuries} injuries! (${injuries} -> 0)`
+                        })
+                    } 
+                    else {
+                        await this.actor.update({
+                            "system.health.injuries": Math.max(0, injuries - 3)
+                        })
+
+                        const newMax = this.actor.system.health.max;
+                        await this.actor.update({
+                            "system.health.value": newMax
+                        });
+                        await ChatMessage.create({
+                            speaker: {alias: this.actor.name},
+                            content: `${this.actor.name} was healed to full health! (${hp} -> ${newMax}) and healed 3 injuries! (${injuries} -> ${Math.max(0, injuries - 3)})`
+                        })
+                    }
+                }
+            })
         }
 
         // Add notes button

@@ -109,6 +109,13 @@
                                 {{/if}}
                             {{/each}}
                         {{/if}}
+                        {{#if item.system.keywords}}
+                            {{#each item.system.keywords as | keyword |}}
+                                <div class="tag gradient">
+                                    <span>{{keyword}}</span>
+                                </div>
+                            {{/each}}
+                        {{/if}}
                     </div>
                 </div>
             </li>

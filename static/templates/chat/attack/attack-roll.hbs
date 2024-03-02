@@ -107,6 +107,11 @@
                     {{/if}}
                     {{/unless}}
                 {{/each}}
+                {{#each item.system.keywords as |keyword|}}
+                    <div class="tag ball-themes gradient default effect">
+                        <span>{{keyword}}</span>
+                    </div>
+                {{/each}}
             </div>
         </div>
     </div>

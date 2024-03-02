@@ -106,9 +106,12 @@
                             {{#each attacks as |attack|}}
                                 <div class="action {{#if attack.rollable}}rollable{{/if}}" data-id="{{attack.id}}"
                                     title="<div class='effect-popup'><div class='d-flex justify-content-center'><div class='effect-range'>{{attack.range}}</div>{{#each attack.keywords}}<div class='effect-range'>{{this}}</div>{{/each}}</div><div class='effect-effect'>{{attack.effect}}</div></div>">
-                                    <div class="icon">
+                                    <div class="icon {{#if attack.category}}with-category{{/if}}">
                                         <img class="icon" src="{{attack.img}}" alt="{{attack.name}}">
                                         <img class="dice" src="/icons/svg/d20.svg" title="Roll {{attack.name}}">
+                                        {{#if attack.category}}
+                                            <img class="icon category" src="{{attack.category}}" alt="{{attack.name}}">
+                                        {{/if}}
                                     </div>
                                     <div class="name">
                                         {{attack.name}}
@@ -144,9 +147,12 @@
                         <div class="struggles-actions">
                             {{#each struggles as |struggle|}}
                             <div class="action rollable" data-id="{{struggle.id}}">
-                                <div class="icon">
+                                <div class="icon {{#if struggle.category}}with-category{{/if}}">
                                     <img class="icon" src="{{struggle.img}}" alt="{{struggle.name}}">
                                     <img class="dice" src="/icons/svg/d20.svg" title="Roll {{struggle.name}}">
+                                    {{#if struggle.category}}
+                                        <img class="icon category" src="{{struggle.category}}" alt="{{struggle.name}}">
+                                    {{/if}}
                                 </div>
                                 <div class="name">
                                     {{struggle.name}}
