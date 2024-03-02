@@ -19,7 +19,7 @@ class Weather extends Application {
         for (const effect of effects) {
             const item = new CONFIG.PTU.Item.proxy(effect, { temporary: true });
             const updates = {};
-            if (item.system.mode === undefined) updates["system.mode"] = 'all';
+            if (item.system.mode === undefined) updates["system.mode"] = 'disabled';
             if (item.system.global === undefined) updates["system.global"] = true;
             item.updateSource(updates);
             Weather.globalEffects.set(item.id, item);
@@ -107,7 +107,7 @@ class Weather extends Application {
             return;
         }
 
-        Weather.globalEffects.get(effect.id).updateSource({ "system.mode": 'all', "system.global": true })
+        Weather.globalEffects.get(effect.id).updateSource({ "system.mode": 'disabled', "system.global": true })
 
         await game.settings.set("ptu", "weatherEffects", Array.from(Weather.globalEffects.values(), effect => effect.toObject()));
         this.render(true);

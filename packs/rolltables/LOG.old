@@ -1,15 +1,8 @@
-2024/02/23-22:00:59.494 b538 Recovering log #323
-2024/02/23-22:00:59.498 b538 Delete type=0 #323
-2024/02/23-22:00:59.499 b538 Delete type=3 #321
-2024/02/24-09:54:46.454 5f34 Level-0 table #328: started
-2024/02/24-09:54:46.456 5f34 Level-0 table #328: 73080 bytes OK
-2024/02/24-09:54:46.459 5f34 Delete type=0 #326
-2024/02/24-09:54:46.465 5f34 Manual compaction at level-0 from '!folders!2QGVmITcIgGCeRtD' @ 72057594037927935 : 1 .. '!tables.results!wdOETkq5aY7M7hJg.rSBY0YfY0tm73sIu' @ 0 : 0; will stop at (end)
-2024/02/24-09:54:46.545 5f34 Manual compaction at level-1 from '!folders!2QGVmITcIgGCeRtD' @ 72057594037927935 : 1 .. '!tables.results!wdOETkq5aY7M7hJg.rSBY0YfY0tm73sIu' @ 0 : 0; will stop at '!tables.results!wdOETkq5aY7M7hJg.rSBY0YfY0tm73sIu' @ 5919 : 1
-2024/02/24-09:54:46.545 5f34 Compacting 1@1 + 1@2 files
-2024/02/24-09:54:46.548 5f34 Generated table #329@1: 604 keys, 73494 bytes
-2024/02/24-09:54:46.548 5f34 Compacted 1@1 + 1@2 files => 73494 bytes
-2024/02/24-09:54:46.550 5f34 compacted to: files[ 0 0 1 0 0 0 0 ]
-2024/02/24-09:54:46.550 5f34 Delete type=2 #182
-2024/02/24-09:54:46.550 5f34 Delete type=2 #328
-2024/02/24-09:54:46.670 5f34 Manual compaction at level-1 from '!tables.results!wdOETkq5aY7M7hJg.rSBY0YfY0tm73sIu' @ 5919 : 1 .. '!tables.results!wdOETkq5aY7M7hJg.rSBY0YfY0tm73sIu' @ 0 : 0; will stop at (end)
+2024/02/19-14:14:44.838153 7f9a017fa640 Recovering log #303
+2024/02/19-14:14:44.839652 7f9a017fa640 Delete type=0 #303
+2024/02/19-14:14:44.839685 7f9a017fa640 Delete type=3 #301
+2024/03/02-07:54:11.568409 7f99fed38640 Level-0 table #308: started
+2024/03/02-07:54:11.568432 7f99fed38640 Level-0 table #308: 0 bytes OK
+2024/03/02-07:54:11.568804 7f99fed38640 Delete type=0 #306
+2024/03/02-07:54:11.572371 7f99fed38640 Manual compaction at level-0 from '!folders!2QGVmITcIgGCeRtD' @ 72057594037927935 : 1 .. '!tables.results!wdOETkq5aY7M7hJg.rSBY0YfY0tm73sIu' @ 0 : 0; will stop at (end)
+2024/03/02-07:54:11.675682 7f99fed38640 Manual compaction at level-1 from '!folders!2QGVmITcIgGCeRtD' @ 72057594037927935 : 1 .. '!tables.results!wdOETkq5aY7M7hJg.rSBY0YfY0tm73sIu' @ 0 : 0; will stop at (end)
