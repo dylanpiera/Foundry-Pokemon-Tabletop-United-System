@@ -74,30 +74,7 @@
                 </div> --}}
             </div>
         </div>
-        {{#if (and (not actor.type "character") heldItem)}}
-            <div class="misc-menu">
-                {{#if heldItem}}
-                    <div class="header">
-                        Held Item
-                    </div>
-                    <div class="item">
-                        <img class="icon" src="{{heldItem.img}}" alt="{{heldItem.name}}">
-                        <span class="name">{{heldItem.name}}</span>
-                    </div>
-                {{/if}}
-                {{#if foodBuff}}
-                    <div class="header">
-                        Food Buff
-                    </div>
-                    <div class="item">
-                        <img class="icon" src="{{foodBuff.img}}" alt="{{foodBuff.name}}">
-                        <span class="name">{{foodBuff.name}}</span>
-                    </div>
-                {{/if}}
-            </div>
-        {{else}}
-            <div style="margin-right: 0.5rem; height: 150px; width: 1px;"></div>
-        {{/if}}
+        <div style="margin-right: 0.5rem; height: 150px; width: 1px;"></div>
         <div class="items-body">
             {{#if show.actions}}
                 <div class="actions actions-accordion" id="actions-accordion">
@@ -229,7 +206,7 @@
                 </div>
                 <div class="divider"></div>
             {{/if}}
-            {{#if (and (and (is actor.type "character") show.items) (or (gt items.balls.length 0) (gt items.other.length 0)))}}
+            {{#if (and show.items (or (gt items.balls.length 0) (gt items.other.length 0)))}}
                 <div class="items items-accordion" id="items-accordion">
                     {{#if (gt items.balls.length 0)}}
                     <div class="pokeball-items">
