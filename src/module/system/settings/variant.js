@@ -18,7 +18,7 @@ const VariantSettingsConfig = {
         name: "PTU.Settings.Variant.SpiritPlaytest.Name",
         hint: "PTU.Settings.Variant.SpiritPlaytest.Hint",
         type: Boolean,
-        default: false,
+        default: true,
         requiresReload: true
     },
     "improvedStatsRework": {
