@@ -27,7 +27,7 @@ export const V11EmbedCompatability = {
 
                             // Handle default embed configuration options.
                             if (!("cite" in config)) config.cite = true;
-                            if (!("caption" in config)) config.caption = true;
+                            if (!("caption" in config)) config.caption = false;
                             if (!("inline" in config)) {
                                 const idx = config.values.indexOf("inline");
                                 if (idx > -1) {
@@ -60,7 +60,7 @@ export const V11EmbedCompatability = {
                             const enrichedPage = await TextEditor.enrichHTML(text, options);
                             const container = document.createElement("div");
                             container.innerHTML = enrichedPage;
-                            return container.children;
+                            return container.children.length > 0 ? container.children : container;
                         };
 
                         const createInlineEmbed = async (content, config, options) => {
