@@ -94,7 +94,7 @@ class GrantItemRuleElement extends RuleElementPTU {
         const grantedSource = grantedItem.toObject();
         grantedSource._id = foundry.utils.randomID();
 
-        if (["feat", "edge"].includes(grantedSource.type)) {
+        if (["feat", "edge"].includes(grantedSource.type) && this.item?.slug !== 'grant-training-feature') {
             grantedSource.system.free = true;
         }
 

@@ -1,17 +1,15 @@
-2024/03/02-08:55:09.629 318c Recovering log #928
-2024/03/02-08:55:09.629 318c Recovering log #957
-2024/03/02-08:55:09.633 318c Delete type=0 #928
-2024/03/02-08:55:09.633 318c Delete type=2 #950
-2024/03/02-08:55:09.633 318c Delete type=0 #957
-2024/03/02-08:55:09.633 318c Delete type=3 #926
-2024/03/02-10:25:23.024 ab8c Level-0 table #960: started
-2024/03/02-10:25:23.028 ab8c Level-0 table #960: 67671 bytes OK
-2024/03/02-10:25:23.030 ab8c Delete type=0 #958
-2024/03/02-10:25:23.041 ab8c Manual compaction at level-0 from '!folders!4yLFZsM42OJ7FDLn' @ 72057594037927935 : 1 .. '!items!zzJWpOj40dLelBm5' @ 0 : 0; will stop at '!items!zzJWpOj40dLelBm5' @ 1591 : 1
-2024/03/02-10:25:23.041 ab8c Compacting 1@0 + 1@1 files
-2024/03/02-10:25:23.045 ab8c Generated table #961@0: 147 keys, 68242 bytes
-2024/03/02-10:25:23.045 ab8c Compacted 1@0 + 1@1 files => 68242 bytes
-2024/03/02-10:25:23.047 ab8c compacted to: files[ 0 1 0 0 0 0 0 ]
-2024/03/02-10:25:23.048 ab8c Delete type=2 #823
-2024/03/02-10:25:23.048 ab8c Delete type=2 #960
-2024/03/02-10:25:23.066 ab8c Manual compaction at level-0 from '!items!zzJWpOj40dLelBm5' @ 1591 : 1 .. '!items!zzJWpOj40dLelBm5' @ 0 : 0; will stop at (end)
+2024/03/18-13:02:22.027 9630 Recovering log #968
+2024/03/18-13:02:22.033 9630 Delete type=0 #967
+2024/03/18-13:02:22.033 9630 Delete type=0 #968
+2024/03/18-13:02:22.033 9630 Delete type=3 #966
+2024/03/18-15:42:15.471 7690 Level-0 table #973: started
+2024/03/18-15:42:15.473 7690 Level-0 table #973: 68632 bytes OK
+2024/03/18-15:42:15.475 7690 Delete type=0 #971
+2024/03/18-15:42:15.509 7690 Manual compaction at level-0 from '!folders!4yLFZsM42OJ7FDLn' @ 72057594037927935 : 1 .. '!items!zzJWpOj40dLelBm5' @ 0 : 0; will stop at '!items!zzJWpOj40dLelBm5' @ 1734 : 1
+2024/03/18-15:42:15.509 7690 Compacting 1@0 + 1@1 files
+2024/03/18-15:42:15.513 7690 Generated table #974@0: 148 keys, 68566 bytes
+2024/03/18-15:42:15.513 7690 Compacted 1@0 + 1@1 files => 68566 bytes
+2024/03/18-15:42:15.515 7690 compacted to: files[ 0 1 0 0 0 0 0 ]
+2024/03/18-15:42:15.515 7690 Delete type=2 #961
+2024/03/18-15:42:15.516 7690 Delete type=2 #973
+2024/03/18-15:42:15.541 7690 Manual compaction at level-0 from '!items!zzJWpOj40dLelBm5' @ 1734 : 1 .. '!items!zzJWpOj40dLelBm5' @ 0 : 0; will stop at (end)
