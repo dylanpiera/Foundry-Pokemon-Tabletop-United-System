@@ -45,6 +45,7 @@ export class TokenPanel extends Application {
                 effect: attack.item?.system.effect ? await TextEditor.enrichHTML(foundry.utils.duplicate(attack.item.system.effect), {async: true}) : "",
                 range: attack.item?.system.range ?? "",
                 keywords: attack.item?.system.keywords ?? [],
+                sort: attack.item?.sort ?? 0,
             };
             if(attack.item?.system.category) data.category = `/systems/ptu/static/css/images/types2/${attack.item?.system.category}IC_Icon.png`;
             if (attack.item.system.isStruggle) struggles.push(data);
@@ -126,7 +127,7 @@ export class TokenPanel extends Application {
             ...(await super.getData(options)),
             user: { isGM: game.user.isGM },
             actor,
-            attacks,
+            attacks: attacks.sort((a, b) => a.sort - b.sort),
             struggles,
             items,
             show,
