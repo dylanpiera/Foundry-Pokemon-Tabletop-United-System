@@ -33,7 +33,7 @@ export class CompendiumBrowserSpeciesTab extends CompendiumBrowserTab {
 
         const allMoveSlugsSeen = new Set()
         const allAbilitySlugsSeen = new Set()
-
+        const allCapabilitiesSeen = new Set()
         const allKeywordsSeen = new Set();
 
         for await (const { pack, index } of this.browser.packLoader.loadPacks(
@@ -86,6 +86,10 @@ export class CompendiumBrowserSpeciesTab extends CompendiumBrowserTab {
                     continue;
                 }
 
+                for(const capability of speciesData.system.capabilities.other) {
+                    allCapabilitiesSeen.add(capability.slug);
+                }
+
                 for (const keyword of speciesData.system.keywords) {
                     allKeywordsSeen.add(keyword);
                 }
@@ -118,6 +122,7 @@ export class CompendiumBrowserSpeciesTab extends CompendiumBrowserTab {
 
         this.filterData.multiselects.moves.options = this.filterOptionsFromSlugList(allMoveSlugsSeen)
         this.filterData.multiselects.abilities.options = this.filterOptionsFromSlugList(allAbilitySlugsSeen)
+        this.filterData.multiselects.capabilities.options = this.filterOptionsFromSlugList(allCapabilitiesSeen)
         this.filterData.multiselects.keywords.options = this.filterOptionsFromSet(allKeywordsSeen)
         
         for (const cap of FILTERABLE_CAPABILITIES) {
@@ -191,6 +196,7 @@ export class CompendiumBrowserSpeciesTab extends CompendiumBrowserTab {
         if (!this.isEntryHonoringMultiselect(multiselects.types, entry.types)) return false;
         if (!this.isEntryHonoringMultiselect(multiselects.moves, entry.moves)) return false;
         if (!this.isEntryHonoringMultiselect(multiselects.abilities, entry.abilities)) return false;
+        if (!this.isEntryHonoringMultiselect(multiselects.capabilities, entry.capabilities.other.map(c => c.slug))) return false;
         if (!this.isEntryHonoringMultiselect(multiselects.keywords, entry.keywords, false)) return false;
 
         for (const cap of FILTERABLE_CAPABILITIES) {
@@ -252,6 +258,12 @@ export class CompendiumBrowserSpeciesTab extends CompendiumBrowserTab {
                 abilities: {
                     conjunction: "and",
                     label: "PTU.CompendiumBrowser.FilterOptions.Abilities",
+                    options: [],
+                    selected: []
+                },
+                capabilities: {
+                    conjunction: "and",
+                    label: "PTU.CompendiumBrowser.FilterOptions.Capabilities",
                     options: [],
                     selected: []
                 },
