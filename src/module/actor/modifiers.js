@@ -65,7 +65,7 @@ class PTUModifier {
         this.#originalValue = this.modifier = modifier ?? 0;
 
         this.adjustments = foundry.utils.deepClone(adjustments ?? []);
-        this.enabled = enabled ?? true;
+        this.enabled = enabled ?? item?.enabled ?? true;
         this.ignored = ignored ?? false;
         this.source = source ?? null;
         this.predicate = new PTUPredicate(predicate ?? []);
