@@ -309,7 +309,7 @@ class StatisticCheck {
             context,
             null,
             args.callback,
-            new StatisticDiceModifier(args.label || this.label, this.diceModifiers, options)
+            (args?.slug || this.slug || this.parent?.slug) === 'save-check' ? null : new StatisticDiceModifier(args.label || this.label, this.diceModifiers, options)
         )
 
         for(const rule of actor.rules.filter(r => !r.ignored)) {

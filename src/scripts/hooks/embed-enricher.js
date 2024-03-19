@@ -7,8 +7,8 @@ export const V11EmbedCompatability = {
                     pattern: /@Embed\[(?<config>[^\]]+)](?:{(?<label>[^}]+)})?/gi,
                     enricher: async (match, options) => {
                         options._embedDepth ??= 0;
-                        if (options._embedDepth > CONST.TEXT_ENRICH_EMBED_MAX_DEPTH) {
-                            console.warn(`Nested Document embedding is restricted to a maximum depth of ${CONST.TEXT_ENRICH_EMBED_MAX_DEPTH}.`
+                        if (options._embedDepth > (CONST.TEXT_ENRICH_EMBED_MAX_DEPTH ?? 5)) {
+                            console.warn(`Nested Document embedding is restricted to a maximum depth of ${CONST.TEXT_ENRICH_EMBED_MAX_DEPTH ?? 5}.`
                                 + ` ${match.input} cannot be fully enriched.`);
                             return null;
                         }
@@ -55,12 +55,12 @@ export const V11EmbedCompatability = {
                         const doc = await fromUuid(config.uuid, { relative: options.relativeTo });
                         if (!doc) return null;
 
-                        const buildEmbedHTML = async (text, config, options) => {
+                        const buildEmbedHTML = async (text, config, options, withChildren = true) => {
                             options = { ...options, _embedDepth: options._embedDepth + 1, relativeTo: options.relativeTo };
                             const enrichedPage = await TextEditor.enrichHTML(text, options);
                             const container = document.createElement("div");
                             container.innerHTML = enrichedPage;
-                            return container.children.length > 0 ? container.children : container;
+                            return (withChildren && container.children.length > 0) ? container.children : container;
                         };
 
                         const createInlineEmbed = async (content, config, options) => {
@@ -86,7 +86,7 @@ export const V11EmbedCompatability = {
                         const toEmbed = async (document, config, options = {}) => {
                             const content = await (async () => {
                                 if (document instanceof JournalEntryPage) return await buildEmbedHTML(document.text.content, config, options);
-                                if (document?.system?.effect) return await buildEmbedHTML(document.system.effect, config, options);
+                                if (document?.system?.effect) return await buildEmbedHTML(document.system.effect, config, options, false);
                             })();
                             if (!content) return null;
                             let embed;
