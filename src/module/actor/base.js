@@ -465,13 +465,14 @@ class PTUActor extends Actor {
 
     _onCreate(data, options, user) {
         super._onCreate(data, options, user);
-        console.log(user);
         if(user !== game.user.id) return;
         if(data.type === 'character') {
-            // Grant lvl 1 training
-            fromUuid('Compendium.ptu.effects.Item.fm0TZUuQK0uRhkJA').then((effect) => {
-                this.createEmbeddedDocuments('Item', [effect.toObject()]);
-            });
+            if(!data.items.some(i => i.name.endsWith("Training"))) {
+                // Grant lvl 1 training
+                fromUuid('Compendium.ptu.effects.Item.fm0TZUuQK0uRhkJA').then((effect) => {
+                    this.createEmbeddedDocuments('Item', [effect.toObject()]);
+                });
+            }
         }
     }
 

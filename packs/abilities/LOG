@@ -1,3 +1,7 @@
 2024/03/19-14:30:25.334 8894 Recovering log #1033
 2024/03/19-14:30:25.339 8894 Delete type=0 #1033
 2024/03/19-14:30:25.339 8894 Delete type=3 #1031
+2024/03/19-15:07:50.772 8ba8 Level-0 table #1038: started
+2024/03/19-15:07:50.772 8ba8 Level-0 table #1038: 0 bytes OK
+2024/03/19-15:07:50.774 8ba8 Delete type=0 #1036
+2024/03/19-15:07:50.776 8ba8 Manual compaction at level-0 from '!folders!MsdL8dYgE7JbY1ya' @ 72057594037927935 : 1 .. '!items!ztjoTjB46kPDTEfV' @ 0 : 0; will stop at (end)
