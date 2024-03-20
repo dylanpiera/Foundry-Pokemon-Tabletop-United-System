@@ -198,6 +198,7 @@ export function registerSettings() {
         config: true,
         default: MigrationRunner.MINIMUM_SAFE_VERSION,
         type: Number,
+        requiresReload: true
     });
 
     game.settings.register("ptu", "weatherEffects", {

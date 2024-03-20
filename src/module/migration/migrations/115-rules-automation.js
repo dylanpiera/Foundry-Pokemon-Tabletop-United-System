@@ -1,3 +1,4 @@
+import { sluggify } from "../../../util/misc.js";
 import { MigrationBase } from "../base.js";
 
 export class Migration115RulesAutomation extends MigrationBase {
@@ -10,7 +11,7 @@ export class Migration115RulesAutomation extends MigrationBase {
     async updateItem(item, actor) {
         if(item.type !== "move") return;
         const moves = this.moves ??= await game.packs.get("ptu.moves").getDocuments();
-        const slug = item.slug;
+        const slug = item.system.slug || sluggify(item.name);
 
         const move = (() => {
             // Try to look up by source ID
@@ -25,6 +26,10 @@ export class Migration115RulesAutomation extends MigrationBase {
             return moves.find(move => move.slug === slug);
         })();
         if(!move) return;
+
+        if(move.system.referenceEffect && !item.system.referenceEffect) {
+            item.system.referenceEffect = move.system.referenceEffect;
+        }
 
         if(move.system.rules?.length == 0) return;
 

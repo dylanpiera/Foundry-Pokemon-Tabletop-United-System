@@ -38,7 +38,7 @@ class RollOptionRuleElement extends RuleElementPTU {
 
     #resolveOption() {
         return this.resolveInjectedProperties(this.option)
-            .replace(/[^-:\w]/g, "")
+            ?.replace(/[^-:\w]/g, "")
             .replace(/:+/g, ":")
             .replace(/-+/g, "-")
             .trim();
