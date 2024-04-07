@@ -23,6 +23,8 @@ class ChoiceSetRuleElement extends RuleElementPTU {
             this.choices.predicate = new PTUPredicate(this.choices.predicate ?? []);
         }
 
+
+        this.prompt = typeof data.prompt === "string" ? this.resolveInjectedProperties(data.prompt) : data.prompt;
         // Assign the selection to a flag on the parent item
         if (this.selection !== null) {
             const resolvedFlag = this.resolveInjectedProperties(this.flag);
