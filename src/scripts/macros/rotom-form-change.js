@@ -6,7 +6,7 @@ export function changeRotomForm() {
         const notifId = ui.notifications.info("Updating rotom...")
         const [species, move] = await (async () => {
             switch (forme) {
-                case "normal": return [await game.ptu.item.get("rotom", "species"), null]
+                case "normal": return [await game.ptu.item.get("rotom-normal", "species"), null]
                 case "fan": return [await game.ptu.item.get("rotom-fan", "species"), await game.ptu.item.get("air-slash", "move")]
                 case "frost": return [await game.ptu.item.get("rotom-frost", "species"), await game.ptu.item.get("blizzard", "move")]
                 case "heat": return [await game.ptu.item.get("rotom-heat", "species"), await game.ptu.item.get("overheat", "move")]
@@ -32,10 +32,10 @@ export function changeRotomForm() {
 
         const toCreate = [species.toObject()];
 
-        if (actor.species.slug == "rotom") {
+        if (actor.species.slug == "rotom-normal") {
             toCreate.push(move.toObject());
         }
-        if (actor.species.slug != "rotom") {
+        if (actor.species.slug != "rotom-normal") {
             const moveSlug = (() => {
                 switch (actor.species.system.form) {
                     case "fan": return "air-slash";

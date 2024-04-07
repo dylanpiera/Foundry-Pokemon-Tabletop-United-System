@@ -91,7 +91,7 @@ class PTUCombatant extends Combatant {
                     hidden,
                     sceneId,
                     tokenId,
-                    ...(index === 0 && turns > 1 ? { flags: { ptu: { isPrimaryBossCombatant: true } } } : {})
+                    ...(index === 0 ? { flags: { ptu: { isPrimaryBossCombatant: true } } } : {})
                 }));
         });
         return super.createDocuments(realData, context);
