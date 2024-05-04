@@ -1,7 +1,7 @@
-2024/04/07-14:02:52.415 8dd4 Recovering log #897
-2024/04/07-14:02:52.422 8dd4 Delete type=0 #897
-2024/04/07-14:02:52.422 8dd4 Delete type=3 #895
-2024/04/07-14:23:55.219 ad90 Level-0 table #902: started
-2024/04/07-14:23:55.219 ad90 Level-0 table #902: 0 bytes OK
-2024/04/07-14:23:55.221 ad90 Delete type=0 #900
-2024/04/07-14:23:55.223 ad90 Manual compaction at level-0 from '!items!00NxeCghePCTFezd' @ 72057594037927935 : 1 .. '!items!zskGVWQJ7ih85MQp' @ 0 : 0; will stop at (end)
+2024/04/07-14:24:18.042 8dd4 Recovering log #901
+2024/04/07-14:24:18.047 8dd4 Delete type=0 #901
+2024/04/07-14:24:18.047 8dd4 Delete type=3 #899
+2024/04/07-16:38:21.762 ad90 Level-0 table #906: started
+2024/04/07-16:38:21.762 ad90 Level-0 table #906: 0 bytes OK
+2024/04/07-16:38:21.764 ad90 Delete type=0 #904
+2024/04/07-16:38:21.770 ad90 Manual compaction at level-0 from '!items!00NxeCghePCTFezd' @ 72057594037927935 : 1 .. '!items!zskGVWQJ7ih85MQp' @ 0 : 0; will stop at (end)
