@@ -1,7 +1,14 @@
-2023/11/06-11:44:25.669 5940 Recovering log #589
-2023/11/06-11:44:25.673 5940 Delete type=0 #589
-2023/11/06-11:44:25.673 5940 Delete type=3 #587
-2023/11/06-12:14:26.843 378c Level-0 table #594: started
-2023/11/06-12:14:26.843 378c Level-0 table #594: 0 bytes OK
-2023/11/06-12:14:26.845 378c Delete type=0 #592
-2023/11/06-12:14:26.845 378c Manual compaction at level-0 from '!folders!rAhydZslb0d4Cvio' @ 72057594037927935 : 1 .. '!items!ztjoTjB46kPDTEfV' @ 0 : 0; will stop at (end)
+2024/04/07-14:24:18.012 98e4 Recovering log #1059
+2024/04/07-14:24:18.017 98e4 Delete type=0 #1059
+2024/04/07-14:24:18.017 98e4 Delete type=3 #1057
+2024/04/07-16:38:21.681 ad90 Level-0 table #1065: started
+2024/04/07-16:38:21.686 ad90 Level-0 table #1065: 236813 bytes OK
+2024/04/07-16:38:21.688 ad90 Delete type=0 #1063
+2024/04/07-16:38:21.692 ad90 Manual compaction at level-0 from '!folders!MsdL8dYgE7JbY1ya' @ 72057594037927935 : 1 .. '!items!ztjoTjB46kPDTEfV' @ 0 : 0; will stop at '!items!zh8PTv5UFMRuL3tN' @ 13074 : 1
+2024/04/07-16:38:21.692 ad90 Compacting 1@0 + 1@1 files
+2024/04/07-16:38:21.697 ad90 Generated table #1066@0: 634 keys, 255428 bytes
+2024/04/07-16:38:21.697 ad90 Compacted 1@0 + 1@1 files => 255428 bytes
+2024/04/07-16:38:21.698 ad90 compacted to: files[ 0 1 0 0 0 0 0 ]
+2024/04/07-16:38:21.699 ad90 Delete type=2 #1061
+2024/04/07-16:38:21.699 ad90 Delete type=2 #1065
+2024/04/07-16:38:21.717 ad90 Manual compaction at level-0 from '!items!zh8PTv5UFMRuL3tN' @ 13074 : 1 .. '!items!ztjoTjB46kPDTEfV' @ 0 : 0; will stop at (end)

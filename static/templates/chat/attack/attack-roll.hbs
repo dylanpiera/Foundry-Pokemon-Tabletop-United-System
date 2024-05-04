@@ -49,7 +49,6 @@
                                 {{/case}}
                             {{/switch}}
                         {{else}}
-                        {{log target}}
                             {{#switch (lookup @root/outcomes target.uuid)}}
                                 {{#case "hit"}}
                                     <img src="/systems/ptu/images/icons/HitIcon.png">
@@ -107,6 +106,11 @@
                         {{/if}}
                     {{/if}}
                     {{/unless}}
+                {{/each}}
+                {{#each item.system.keywords as |keyword|}}
+                    <div class="tag ball-themes gradient default effect">
+                        <span>{{keyword}}</span>
+                    </div>
                 {{/each}}
             </div>
         </div>

@@ -44,18 +44,33 @@ async function extractEphemeralEffects({ affects, origin, target, item, domains,
     ).flatMap(e => e ?? [])
 }
 
+async function extractApplyEffects({ affects, origin, target, item, domains, options, roll }) {
+    if (!(origin && target)) return [];
+
+    const [effectsFrom, effectsTo] = affects === "target" ? [origin, target] : [target, origin];
+    const fullOptions = [...options, ...effectsTo.getSelfRollOptions(affects)];
+    const resolvables = item?.type == "move" ? { move: item } : {};
+    return (
+        await Promise.all(
+            domains
+                .flatMap(s => effectsFrom.synthetics.applyEffects[s]?.[affects] ?? [])
+                .map(d => d({ test: fullOptions, resolvables, roll }))
+        )
+    ).flatMap(e => e ?? [])
+}
+
 function extractRollSubstitutions(substitutions, domains, rollOptions) {
     return domains
-        .flatMap((d) => deepClone(substitutions?.[d] ?? []))
+        .flatMap((d) => foundry.utils.deepClone(substitutions?.[d] ?? []))
         .filter((s) => s.predicate?.test(rollOptions) ?? true);
 }
 
-async function processPreUpdateActorHooks(changed,{ pack }){
+async function processPreUpdateActorHooks(changed, { pack }) {
     const actorId = String(changed._id);
     const actor = pack ? await game.packs.get(pack)?.getDocument(actorId) : game.actors.get(actorId);
     if (!(actor instanceof CONFIG.PTU.Actor.documentClass)) return;
 
-    if(actor.prototypeToken.actorLink !== true) {
+    if (actor.prototypeToken.actorLink !== true) {
         changed.prototypeToken ??= {};
         changed.prototypeToken.actorLink = true;
     }
@@ -69,8 +84,7 @@ async function processPreUpdateActorHooks(changed,{ pack }){
         await Promise.all(
             rules.map(
                 (r) =>
-                    actor.items.has(r.item.id) ? r.preUpdateActor() : new Promise(() => ({ create: [], delete: [] }))
-            )
+                    actor.items.has(r.item.id) ? r.preUpdateActor() : { create: [], delete: [] })
         )
     ).reduce(
         (combined, cd) => ({
@@ -85,7 +99,7 @@ async function processPreUpdateActorHooks(changed,{ pack }){
     await actor.deleteEmbeddedDocuments("Item", createDeletes.delete, { render: false });
 }
 
-export { extractEphemeralEffects, extractDamageDice, extractNotes, extractModifierAdjustments, extractRollSubstitutions, extractModifiers, processPreUpdateActorHooks}
+export { extractEphemeralEffects, extractApplyEffects, extractDamageDice, extractNotes, extractModifierAdjustments, extractRollSubstitutions, extractModifiers, processPreUpdateActorHooks }
 
 globalThis.extractEphemeralEffects = extractEphemeralEffects;
 globalThis.extractDamageDice = extractDamageDice;

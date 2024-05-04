@@ -23,6 +23,8 @@ class ChoiceSetRuleElement extends RuleElementPTU {
             this.choices.predicate = new PTUPredicate(this.choices.predicate ?? []);
         }
 
+
+        this.prompt = typeof data.prompt === "string" ? this.resolveInjectedProperties(data.prompt) : data.prompt;
         // Assign the selection to a flag on the parent item
         if (this.selection !== null) {
             const resolvedFlag = this.resolveInjectedProperties(this.flag);
@@ -169,7 +171,7 @@ class ChoiceSetRuleElement extends RuleElementPTU {
     }
 
     #choicesFromPath(path) {
-        const choiceObject = getProperty(CONFIG.PTU, path) ?? getProperty(this.actor, path) ?? {};
+        const choiceObject = foundry.utils.getProperty(CONFIG.PTU, path) ?? foundry.utils.getProperty(this.actor, path) ?? {};
         if(Array.isArray(choiceObject) && choiceObject.every((c) => isObject(c) && typeof c.value === "string")) {
             return choiceObject;
         }

@@ -1,4 +1,3 @@
-import { tagify } from '../../../../util/tags.js';
 import { RuleElementForm } from './index.js';
 
 class EphemeralEffectForm extends RuleElementForm {
@@ -18,7 +17,7 @@ class EphemeralEffectForm extends RuleElementForm {
         return {
             ...data, 
             granted, 
-            allowDuplicate: !!this.rule.allowDuplicate ?? true,
+            allowduplicate: !!this.rule.allowduplicate ?? true,
             selectorIsArray: Array.isArray(this.rule.selectors),
             predicationIsMultiple: Array.isArray(this.rule.predicate) && this.rule.predicate.every(p => typeof p === "string")
         };

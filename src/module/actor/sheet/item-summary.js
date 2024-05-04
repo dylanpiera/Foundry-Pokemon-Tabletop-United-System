@@ -11,7 +11,23 @@ class ItemSummaryRenderer {
                 const element = el.closest('[data-item-id], .expandable');
                 if(element) await this.toggleSummary(element);
             });
+
+            this.initialOpen(el);
         }
+    }
+
+    initialOpen(el) {
+        const element = el.closest('[data-item-id], .expandable');
+        if(!element) return;
+
+        const item = this.sheet.actor.items.get(element.dataset.itemId);
+        if(!item) return;
+        
+        const sheetState = game.user.getFlag("ptu", "sheetStates")?.[this.sheet.actor.id];
+        if(!sheetState) return;
+
+        const state = sheetState[item.type]?.[item.id];
+        if(state) return this.toggleSummary(element);
     }
 
     async toggleSummary(element) {
@@ -51,6 +67,13 @@ class ItemSummaryRenderer {
             summary.hidden = false;
             await new Promise(resolve => setTimeout(resolve, 1));
             summary.classList.add('show');
+            await game.user.setFlag("ptu", "sheetStates", foundry.utils.mergeObject(game.user.getFlag("ptu", "sheetStates") || {}, {
+                [actor.id]: {
+                    [item.type]: {
+                        [item.id]: true
+                    }
+                }
+            }));
         }
         else {
             element.classList.remove('expanded');
@@ -59,6 +82,13 @@ class ItemSummaryRenderer {
             await new Promise(resolve => setTimeout(resolve, duration * 1000));
             summary.classList.remove('transitioning')
             summary.hidden = true;
+            await game.user.setFlag("ptu", "sheetStates", foundry.utils.mergeObject(game.user.getFlag("ptu", "sheetStates") || {}, {
+                [actor.id]: {
+                    [item.type]: {
+                        [item.id]: false
+                    }
+                }
+            }));
         }
     }
 

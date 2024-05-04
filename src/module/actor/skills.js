@@ -10,14 +10,14 @@ class PTUSkills {
      */
     static getRankSlug(skillRank) {
         switch (skillRank) {
-            case 1: return game.i18n.localize("PTU.SkillPathetic");
-            case 2: return game.i18n.localize("PTU.SkillUntrained");
-            case 3: return game.i18n.localize("PTU.SkillNovice");
-            case 4: return game.i18n.localize("PTU.SkillAdept");
-            case 5: return game.i18n.localize("PTU.SkillExpert");
-            case 6: return game.i18n.localize("PTU.SkillMaster");
-            case 8: return game.i18n.localize("PTU.SkillVirtuoso");
-            default: return game.i18n.localize("PTU.SkillInvalid");
+            case 1: return "pathetic"//game.i18n.localize("PTU.SkillPathetic");
+            case 2: return "untrained"//game.i18n.localize("PTU.SkillUntrained");
+            case 3: return "novice"//game.i18n.localize("PTU.SkillNovice");
+            case 4: return "adept"//game.i18n.localize("PTU.SkillAdept");
+            case 5: return "expert"//game.i18n.localize("PTU.SkillExpert");
+            case 6: return "master"//game.i18n.localize("PTU.SkillMaster");
+            case 8: return "virtuoso"//game.i18n.localize("PTU.SkillVirtuoso");
+            default: return "invalid"//game.i18n.localize("PTU.SkillInvalid");
         }
     }
 

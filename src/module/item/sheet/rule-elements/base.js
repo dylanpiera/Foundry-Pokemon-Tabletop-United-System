@@ -35,7 +35,7 @@ class RuleElementForm {
 
     updateItem(updates) {
         const rules = this.item.toObject().system.rules;
-        rules[this.index] = mergeObject(this.rule, updates, { performDeletions: true });
+        rules[this.index] = foundry.utils.mergeObject(this.rule, updates, { performDeletions: true });
         this.item.update({ [`system.rules`]: rules });
     }
 

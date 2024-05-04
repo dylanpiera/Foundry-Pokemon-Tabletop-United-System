@@ -1,6 +1,7 @@
 import { RuleElements } from "../rules/index.js";
 import { processGrantDeletions } from "../rules/rule-element/grant-item/helper.js";
 import { sluggify } from "../../util/misc.js"
+import { GrantItemRuleElement } from "../rules/rule-element/grant-item/rule-element.js";
 
 class PTUItem extends Item {
 
@@ -64,11 +65,28 @@ class PTUItem extends Item {
         return this.img.includes("class");
     }
 
+    get enabled(){
+        return !!(this.system.enabled ?? true)
+    }
+
+    /** Change state of whether items automation should be enabled or disabled. If called
+     *  without argument, toggles between on and off.
+     * @param newState
+     * @return {Promise<abstract.Document|*>}
+     */
+    async toggleEnableState(newState = !this.enabled){
+        await this.update({"system.enabled": newState})
+        for(const rule of this.rules) {
+            if(rule.ignored || !(rule instanceof GrantItemRuleElement)) continue;
+            return this.actor.update({"system.timestamp": Date.now()})
+        }
+    }
+
     /** @override */
     prepareBaseData() {
-        this.flags.ptu = mergeObject({ rulesSelections: {} }, this.flags.ptu ?? {});
+        this.flags.ptu = foundry.utils.mergeObject({ rulesSelections: {} }, this.flags.ptu ?? {});
 
-        this.flags.ptu = mergeObject(this.flags.ptu ?? {}, {
+        this.flags.ptu = foundry.utils.mergeObject(this.flags.ptu ?? {}, {
             rollOptions: {
                 all: {
                     [`item:id:${this._id}`]: true,
@@ -80,10 +98,15 @@ class PTUItem extends Item {
                     [`item:id:${this._id}`]: true,
                     [`item:slug:${this.slug}`]: true,
                     [`item:type:${this.type}`]: true,
-                    [`${this.type}:${this.slug}`]: true
+                    [`${this.type}:${this.slug}`]: true,
                 }
             }
         });
+
+        if(this.enabled) {
+            this.flags.ptu.rollOptions.all[`item:enabled`] = true;
+            this.flags.ptu.rollOptions.item[`item:enabled`] = true;
+        }
     }
 
     /** @override */
@@ -126,7 +149,7 @@ class PTUItem extends Item {
     }
 
     _updateIcon({ source, update } = { source: undefined, update: false }) {
-        source ??= duplicate(this);
+        source ??= foundry.utils.duplicate(this);
 
         let required = false;
         source.img ||= `/systems/ptu/static/css/images/icons/${source.type}_icon.png`
@@ -173,8 +196,10 @@ class PTUItem extends Item {
             }
 
             if (!(context.keepId || context.keepEmbeddedIds)) {
-                source._id = randomID();
+                source._id = foundry.utils.randomID();
             }
+
+            if(source.system.stackSlugs) source.system.slug = sluggify(source.name + foundry.utils.randomID());
 
             const item = new CONFIG.Item.documentClass(source, { parent: actor });
 
@@ -185,6 +210,7 @@ class PTUItem extends Item {
                     continue;
                 }
             }
+
             items.push(item);
             outputSources.push(item._source);
         }
@@ -403,7 +429,7 @@ class PTUItem extends Item {
                 .join("");
         })();
 
-        const referenceEffect = this.referenceEffect ? await TextEditor.enrichHTML(`@UUID[${duplicate(this.referenceEffect)}]`, { async: true }) : null;
+        const referenceEffect = this.referenceEffect ? await TextEditor.enrichHTML(`@UUID[${foundry.utils.duplicate(this.referenceEffect)}]`, { async: true }) : null;
 
         const chatData = {
             user: game.user._id,

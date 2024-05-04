@@ -14,7 +14,7 @@ function measureDistanceCuboid(r0, r1, {
         return canvas.grid.measureDistance(r0, r1);
     }
 
-    const gridWidth = canvas.grid.grid.w;
+    const gridWidth = canvas.grid.grid.sizeX ?? canvas.grid.grid.w;
 
     const distance = {
         dx: 0,
@@ -137,6 +137,11 @@ function measureDistanceOnGrid(segment, options = {}) {
         diagonal: sortedDistance[1] - sortedDistance[0],
         straight: sortedDistance[2] - sortedDistance[1],
     };
+
+    // If a move has a burst range it should ignore doubling diagonals
+    if(options.burst) {
+        return (squares.doubleDiagonal + squares.diagonal + squares.straight) * gridDistance;
+    }
 
     // Diagonals in PTU pretty much count as 1.5 times a straight
     // for diagonals across the x, y, and z axis count it as 1.75 as a best guess

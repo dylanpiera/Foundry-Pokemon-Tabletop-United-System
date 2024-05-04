@@ -21,6 +21,7 @@
   "TYPES.Item.reference": "Reference",
   "TYPES.Item.spiritaction": "Spirit Action",
   "ITEM": {
+    "StackSlugs": "Stack Slugs",
     "AddButton": "Add",
     "AddRulesButton": "New Rule Element",
     "EditButton": "Edit",
@@ -63,7 +64,24 @@
     "TypeSpiritActionPlural": "Spirit Actions",
     "Modifier": "Modifier",
     "ShowInTokenPanel": "Show in Token Panel",
-    "Dice": "Base Dice"
+    "Dice": "Base Dice",
+    "Snippet": "Effect Snippet",
+    "Keywords": "Keywords",
+    "Duration": {
+      "Value": "Duration",
+      "Unit": {
+        "Label": "Duration Unit",
+        "Rounds": "Rounds",
+        "Encounter": "End of Encounter",
+        "Unlimited": "Unlimited (never expires)"
+      },
+      "Expiry": {
+        "Label": "Expiry Timing",
+        "TurnStart": "Start of Turn",
+        "TurnEnd": "End of Turn",
+        "RoundStart": "Start of Round"
+      }
+    }
   },
 
   "SPECIES.Height": "Height",
@@ -133,7 +151,8 @@
     "TempHP": "Temporary HP",
     "Effectiveness": "Effectiveness",
     "EphemeralEffect": "Ephemeral Effect",
-    "ActionPoint": "AP Consumption"
+    "ActionPoint": "AP Consumption",
+    "ApplyEffect": "Apply Effect"
   },
   "PTU": {
     "Skills": {
@@ -155,7 +174,7 @@
       "pokemonEd": "Pokémon Education",
       "techEd": "Technology Education"
     },
-    "Title": "Pokémon Tabletop United",
+    "Title": "Pokémon Tabletop Reunited",
 
     "TabsSkills": "Skills",
     "TabsInventory": "Inventory",
@@ -236,6 +255,7 @@
     "SaveCheckAction": "Make Save",
 
     "ItemEffect": "Item Effect",
+    "HeldItems": "Held Items",
     "FoodBuff": "Food Buff",
     "HpGuidelines": "HP Guidelines",
     "16th": "1/16th",
@@ -309,6 +329,7 @@
     "LevelMiscExp": "Misc Exp",
 
     "LevelCap": "Level Cap",
+    "LevelCapTraining": "EXP Training Level Cap",
 
     "Money": "Money",
     "ItemCategories": "Item Categories",
@@ -326,10 +347,15 @@
     "Obsessions": "Obsessions",
     "Notes": "Notes",
 
+    "WeatherLabel": "Weather & Global Effects",
+    "WeatherHint": "<h4>Set and edit ongoing weather or other global effects!</h4><p>Create new global effects by dragging any Effect Item onto this window.<br>You can set the weather to apply to 'Players', 'Opposition' or 'All' actors.</p>",
+
     "DexButtonName": "Pokédex",
-    "DexButtonHint": "Scan the pokemon with your pokédex",
+    "DexButtonHint": "<div class='toolclip'><h4>Pokédex</h4><p>Scan the pokemon with your pokédex</p></div>",
     "SearchButtonName": "PTR Search",
-    "SearchButtonHint": "Search the PTR Data Source for information",
+    "SearchButtonHint": "<div class='toolclip'><h4>PTR Search</h4><p>Search the PTR Data Source for information</p></div>",
+    "WeatherButtonName": "Weather & Global Effects Menu",
+    "WeatherButtonHint": "<div class='toolclip'><h4>Weather & Global Effects Menu</h4><p>Set and edit ongoing weather or other global effects!</p></div>",
 
     "AutomationTarget.TARGET": "Target",
     "AutomationTarget.MOVE": "Move",
@@ -532,6 +558,19 @@
         "Fail": "{name} is paralyzed and cannot move!",
         "Success": "{name} is paralyzed but managed to move anyway!"
       },
+      "Hypermode": {
+        "Suppressed": {
+          "One": "The effects of",
+          "Two": "are suppressed for this round."
+        },
+        "Applicable": {
+          "One": "The effects of",
+          "Two": "are in effect this round."
+        },
+        "Fail": "{name} is raging and can only use Shadow Moves!",
+        "Success": "{name} is barely containing it's rage!",
+        "Create": "{name}'s rage is getting out of hand, they entered Hyper Mode!"
+      },
       "DamageSelector": "Damage Selector",
       "Damage": "Damage",
       "Apply": "Apply Damage",
@@ -712,6 +751,7 @@
         "Target": "Target",
         "Origin": "Origin",
         "Affects": "Affects",
+        "Priority": "Priority",
         "Modes": {
           "Label": "Mode",
           "Add": "Add",
@@ -729,7 +769,9 @@
           "AfterDerived": "After Derived",
           "BeforeRoll": "Before Roll"
         },
-        "Path": "Path"
+        "Path": "Path",
+        "Even": "Even",
+        "EvenHelpText": "Triggers when roll result is even."
       },
       "GrantItem": {
         "AllowDuplicate": "Allow Duplicates",
@@ -780,6 +822,15 @@
         "TrainerRevamp": {
           "Name": "Use Trainer Revamp (max lvl 25)",
           "Hint": "Use DataNinja's alt. Trainer Revamp ruleset, disables Dex Exp. (see: https://shorturl.at/oCDWY)"
+        },
+        "trainerAdvancement": {
+          "Name": "Trainer Advancement Track",
+          "Hint": "The Trainer Advancement Track to use for Trainer Leveling.",
+          "Original": "PTU Original Standard Progression",
+          "DataRevamp": "DataNinja's Revamped Condensed Progression",
+          "ShortTrack": "PTR Condensed Progression",
+          "PTRUpdate": "PTR Standard Progression",
+          "LongTrack": "PTR Extended Progression"
         },
         "SpiritPlaytest": {
           "Name": "Enable Friendship & Spirit [Playtest]",
@@ -846,6 +897,10 @@
         "DefaultImageExtension": {
           "Name": "Default Image Extension",
           "Hint": "The default extension to use when looking for images for generating a Pokémon."
+        },
+        "DefaultTokenImageExtension": {
+          "Name": "Default Token Image Extension",
+          "Hint": "The default extension to use when looking for token images for generating a Pokémon."
         },
         "DefaultPokemonImageNameType": {
           "Name": "Pokemon Image Name Type",
@@ -991,6 +1046,11 @@
       "Title": "Type Chart"
     },
     "CompendiumBrowser": {
+      "Enrichment":{
+        "UnknownFilterSetting": "Unknown filter \"{filterName}\" for tab {tabName}",
+        "UnknownTab": "Unknown Compendium Browser Tab \"{tabName}\"",
+        "LikelyMalformedExpressionBrowserCrashed": "The expression is likely malformed and caused the Compendium Browser to crash when trying to open."
+      },
       "ProgressBar": {
         "LoadingComplete": "Loading complete",
         "LoadingPack": "Loading {pack}"
@@ -1021,7 +1081,11 @@
         "Category": "Category",
         "DamageBase": "Damage Base",
         "Number": "Dex Number",
-        "HasForm": "Has Form"
+        "HasForm": "Has Form",
+        "LearnableMoves": "Learnable Moves",
+        "Abilities": "Obtainable Abilities",
+        "Capabilities": "Obtainable Capabilities",
+        "Keywords":"Keywords"
       },
       "Search": {
         "Placeholder": "Your query...",
@@ -1039,7 +1103,8 @@
       "Neutral": "Neutral",
       "Opposition": "Opposition",
       "Party": "Party"
-    }
+    },
+    "RulebookJournalSheetName": "Rulebook Sheet"
   },
 
   "physical-evasion": "Physical Evasion",

@@ -205,18 +205,15 @@
                                     </div>
                                 </div>
                                 <div class="swsh-header ball-themes {{ballStyle}} highlight">
-                                    <div class="d-flex w-100 mt-2 mb-2 align-items-center justify-content-between ">
+                                    <div class="d-flex w-100 mt-2 mb-2 align-items-center justify-content-center ">
                                         <div class="fb-45">
                                             <label for="system.nature.value"><b>{{localize "PTU.Nature"}}</b></label>
-                                        </div>
-                                        <div class="fb-45">
-                                            <label for="system.heldItem"><b>{{localize "TYPES.Item.item"}}</b></label>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="swsh-body">
                                     <div
-                                        class="d-flex w-100 pt-1 pb-1 align-items-center justify-content-between center-text">
+                                        class="d-flex w-100 pt-1 pb-1 align-items-center justify-content-center center-text">
                                         <div class="fb-45">
                                             {{#select actor.system.nature.value}}
                                             <select name="system.nature.value" class="w-100">
@@ -225,10 +222,6 @@
                                                 {{/each}}
                                             </select>
                                             {{/select}}
-                                        </div>
-                                        <div class="fb-45">
-                                            <input type="text" name="system.heldItem" value="{{actor.system.heldItem}}"
-                                                data-dtype="String" />
                                         </div>
                                     </div>
                                 </div>
@@ -490,7 +483,19 @@
                                 <input name="system.friendship" type="number" value="{{actor.system.friendship}}" {{#unless (isGm)}}disabled{{/unless}}/>
                             </div>
                             <div class="fb-48">
-                                <input type="number" value="{{actor.attributes.level.cap}}" disabled/>
+                                <input type="number" value="{{actor.attributes.level.cap.current}}" disabled/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="swsh-box mb-2 w-100">
+                        <div class="swsh-header ball-themes {{ballStyle}} highlight pt-2 pb-2 center-text justify-content-center">
+                            <div class="fb-48">
+                                <b>{{localize "PTU.LevelCapTraining"}}</b>
+                            </div>
+                        </div>
+                        <div class="swsh-body d-flex align-items-center justify-content-center pt-1 pb-1 center-text">
+                            <div class="fb-48">
+                                <input type="number" value="{{actor.attributes.level.cap.training}}" disabled/>
                             </div>
                         </div>
                     </div>
@@ -545,7 +550,7 @@
         <!-- Capabilities Tab -->
         <div class="tab details capability" data-group="primary" data-tab="capability">
             <div class="d-flex flex-row justify-content-between h-100 w-100">
-                <div class="fb-48">
+                <div class="fb-40">
                     <!-- Capabilities -->
                     <div class="swsh-box mb-2 w-100">
                         <div
@@ -556,6 +561,7 @@
                             {{#each actor.system.capabilities as |capability key|}}
                             {{#if (and (not key "Other") (not key "other"))}}
                             {{#unless (or (is key "Naturewalk") (is key "naturewalk"))}}
+                            {{#unless (is capability 0)}}
                             <div class="fb-35">
                                 <label class="pl-1" for="system.capabilities.{{key}}">{{localize key}}</label>
                             </div>
@@ -563,6 +569,7 @@
                                 <input type="number" name="system.capabilities.{{key}}" value="{{capability}}"
                                     disabled />
                             </div>
+                            {{/unless}}
                             {{/unless}}
                             {{/if}}
                             {{/each}}
@@ -591,23 +598,23 @@
                         </div>
                     </div>
                 </div>
-                <div class="d-flex fb-48 skills">
+                <div class="d-flex fb-58 skills">
                     <!-- Skills -->
                     <div class="swsh-box w-100 mb-2" style="height: fit-content;">
                         <div class="swsh-header d-flex flex-row center-text ball-themes {{ballStyle}} highlight"
                             style="padding:unset;">
-                            <div class="fb-25 mt-2 mb-2"><b>{{localize "PTU.SkillLabel"}}</b></div>
+                            <div class="fb-30 mt-2 mb-2"><b>{{localize "PTU.SkillLabel"}}</b></div>
                             <div class="fb-15 mt-2 mb-2"><b>{{localize "PTU.SkillValue"}}</b></div>
-                            <div class="fb-25 mt-2 mb-2"><b>{{localize "PTU.SkillRank"}}</b></div>
+                            <div class="fb-20 mt-2 mb-2"><b>{{localize "PTU.SkillRank"}}</b></div>
                             <div class="fb-15 mt-2 mb-2"><b>{{localize "PTU.SkillMod"}}</b></div>
                             <div class="fb-20 mt-2 mb-2"><b>{{localize "PTU.SkillDice"}}</b></div>
                         </div>
                         <div class="swsh-body p-0">
                             {{#each actor.system.skills as |skill key|}}
                             <div class="d-flex flex-row {{key}} align-items-center w-100">
-                                <div class="skill {{key}} fb-25 bgcolor key type--{{skill.type}} align-self-center">
+                                <div class="skill {{key}} fb-30 bgcolor key type--{{skill.type}} align-self-center">
                                     <label for="system.skills.{{key}}.label"
-                                        class="resource-label">{{skill.label}}</label>
+                                        class="resource-label">{{localize (concat "PTU.Skills." skill.slug)}}</label>
                                 </div>
                                 <div class="skill {{key}} fb-15 pl-1 pr-1 center-text center-self">
                                     {{> "systems/ptu/static/templates/partials/mod-field.hbs"
@@ -620,10 +627,8 @@
                                     flipped=(gt 8 @index)
                                     disabled=true}}
                                 </div>
-                                <div
-                                    class="skill {{key}} fb-25 align-self-center bgcolor skill--{{skill.rank}} center-text center-self">
-                                    <label for="system.skills.{{key}}.rank" class="resource-label">{{localize (concat
-                                        "PTU.Skill" skill.rank)}}</label>
+                                <div class="skill {{key}} fb-20 align-self-center bgcolor skill--{{skill.rank}} center-text center-self">
+                                    <label for="system.skills.{{key}}.rank" class="resource-label">{{localize (concat "PTU.Skill" (capitalize skill.rank))}}</label>
                                 </div>
                                 <div class="skill {{key}} fb-15 pl-1 center-text center-self">
                                     {{> "systems/ptu/static/templates/partials/mod-field.hbs"
@@ -749,6 +754,18 @@
                             </div>
                             {{/if}}
                         </div>
+
+                        <!-- Items -->
+                        <div class="swsh-box mb-2 w-100">
+                            <div
+                                class="swsh-header ball-themes {{ballStyle}} highlight pt-2 pb-2 center-text justify-content-center">
+                                <b>{{localize "PTU.HeldItems"}}</b>
+                            </div>
+                            <div class="swsh-body w-100" style="display: block;">
+                                {{> "systems/ptu/static/templates/partials/item-display-partial.hbs" title=(localize
+                                "ITEM.TypeItemPlural") type="item" items=items ballStyle=ballStyle}}
+                            </div>
+                        </div>
                     </div>
                 </div>
 
@@ -791,28 +808,28 @@
                                         {{#if actor.system.modifiers.hardened}}<li>{{localize "PTU.HardenedEffect0"}}
                                         </li>
                                         {{/if}}
-                                        {{#if (and (is "true" actor.system.modifiers.hardened) (biggerOrEqual
+                                        {{#if (and (is true actor.system.modifiers.hardened) (biggerOrEqual
                                         actor.system.health.injuries 1))}}<li>{{localize "PTU.HardenedEffect1"}}</li>
                                         {{/if}}
-                                        {{#if (and (is "true" actor.system.modifiers.hardened) (biggerOrEqual
+                                        {{#if (and (is true actor.system.modifiers.hardened) (biggerOrEqual
                                         actor.system.health.injuries 3))}}<li>{{localize "PTU.HardenedEffect2"}}</li>
                                         {{/if}}
                                         {{#if (biggerOrEqual actor.system.health.injuries 5)}}<li>{{localize
                                             "PTU.InjuryEffect1"}}</li>{{/if}}
-                                        {{#if (and (is "true" actor.system.modifiers.hardened) (biggerOrEqual
+                                        {{#if (and (is true actor.system.modifiers.hardened) (biggerOrEqual
                                         actor.system.health.injuries 5))}}<li>{{localize "PTU.HardenedEffect3"}}</li>
                                         {{/if}}
-                                        {{#if (and (not "true" actor.system.modifiers.hardened) (biggerOrEqual
+                                        {{#if (and (not true actor.system.modifiers.hardened) (biggerOrEqual
                                         actor.system.health.injuries 5))}}<li>{{localize "PTU.InjuryEffect2" (ld
                                             "injuries"
                                             actor.system.health.injuries)}}</li>{{/if}}
-                                        {{#if (and (is "true" actor.system.modifiers.hardened) (biggerOrEqual
+                                        {{#if (and (is true actor.system.modifiers.hardened) (biggerOrEqual
                                         actor.system.health.injuries 7))}}<li>{{localize "PTU.HardenedEffect4"}}</li>
                                         {{/if}}
-                                        {{#if (and (is "true" actor.system.modifiers.hardened) (biggerOrEqual
+                                        {{#if (and (is true actor.system.modifiers.hardened) (biggerOrEqual
                                         actor.system.health.injuries 9))}}<li>{{localize "PTU.HardenedEffect5"}}</li>
                                         {{/if}}
-                                        {{#if (and (not "true" actor.system.modifiers.hardened) (biggerOrEqual
+                                        {{#if (and (not true actor.system.modifiers.hardened) (biggerOrEqual
                                         actor.system.health.injuries 10))}}<li><b>{{localize "PTU.InjuryEffect3"}}</b>
                                         </li>
                                         {{/if}}

@@ -4,7 +4,7 @@ import { SpeciesGeneratorData } from "./document.js";
 export class PTUSpeciesMassGenerator extends FormApplication {
     /** @override */
     static get defaultOptions() {
-        return mergeObject(super.defaultOptions, {
+        return foundry.utils.mergeObject(super.defaultOptions, {
             classes: ["ptu", "pokemon", "generator"],
             template: "systems/ptu/static/templates/apps/species-mass-generator-sheet.hbs",
             width: 350,

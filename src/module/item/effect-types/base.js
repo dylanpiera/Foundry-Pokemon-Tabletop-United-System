@@ -1,6 +1,13 @@
 import { sluggify } from "../../../util/misc.js";
 import { PTUItem } from "../base.js";
 
+/**
+ * @typedef DurationData
+ * @property {number} value
+ * @property {"rounds" | "unlimited" | "encounter"} unit
+ * @property {"turn-start" | "turn-end" | "round-end" | null} expiry
+ */
+
 class BaseEffectPTU extends PTUItem {
 
     get badge() {
@@ -17,6 +24,10 @@ class BaseEffectPTU extends PTUItem {
 
     get isExpired() {
         return this.system.expired;
+    }
+
+    get isGlobal() {
+        return !!this.system.global;
     }
 
     get totalDuration() {
@@ -160,4 +171,3 @@ class BaseEffectPTU extends PTUItem {
 }
 
 export { BaseEffectPTU }
-globalThis.BaseEffectPTU = BaseEffectPTU;

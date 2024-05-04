@@ -10,7 +10,7 @@ export class PTUUser extends User {
     /** @override */
     prepareBaseData() {
         super.prepareBaseData();
-        this.flags = mergeObject(
+        this.flags = foundry.utils.mergeObject(
             {
                 ptu: {
                     settings: {

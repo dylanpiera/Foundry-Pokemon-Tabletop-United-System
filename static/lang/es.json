@@ -1,0 +1,1091 @@
+{
+  "TYPES.Actor.character": "Personaje",
+  "ACTOR.TypeCharacterPlural": "Personajes",
+  "TYPES.Actor.pokemon": "Pokémon",
+  "ACTOR.TypePokemonPlural": "Pokémon",
+  "TYPES.Item.feat": "Rasgo",
+  "TYPES.Item.edge": "Umbral",
+  "TYPES.Item.ability": "Habilidad",
+  "TYPES.Item.move": "Movimiento",
+  "TYPES.Item.item": "Objeto",
+  "TYPES.Item.capability": "Capacidad",
+  "TYPES.Item.pokeedge": "Poké Edge",
+  "TYPES.Item.dexentry": "Dex Entry",
+  "TYPES.Item.effect": "Efecto",
+  "TYPES.Item.effectPlural": "Efectos",
+  "TYPES.Item.conditionPlural": "Conditions",
+  "TYPES.Item.contestmove": "Movimiento de Concurso",
+  "TYPES.Item.contestmovePlural": "Movimientos de Concurso",
+  "TYPES.Item.species": "Especies",
+  "TYPES.Item.condition": "Condition",
+  "TYPES.Item.reference": "Reference",
+  "TYPES.Item.spiritaction": "Spirit Action",
+  "ITEM": {
+    "AddButton": "Añadir",
+    "AddRulesButton": "Nueva regla",
+    "EditButton": "Editar",
+    "DeleteButton": "Eliminar",
+    "DexEntrySeen": "Visto",
+    "DexEntryOwned": "Obtenido",
+    "Origin": "Origen",
+    "ReferenceEffect": "Efecto vinculado",
+    "Prerequisites": "Prerrequisitos",
+    "Tags": "Etiquetas",
+    "Frequency": "Frecuencia",
+    "FreeFeat": "Rasgo Gratuito",
+    "FreeEdge": "Umbral Gratuito",
+    "Effect": "Efecto",
+    "Type": "Tipo",
+    "Category": "Categoría",
+    "Range": "Rango",
+    "AC": "CP",
+    "DB": "DB",
+    "Bonus": "Bonus",
+    "DamageBase": "Daño Base",
+    "DamageBonus": "Bonificador de Daño",
+    "ContestType": "Tipo de Concurso",
+    "Quantity": "Cantidad",
+    "Cost": "Coste",
+    "Notes": "Notas",
+    "Tier": "Categoría",
+    "Class": "Rasgo de clase de",
+    "Container": "Es un contenedor",
+    "TypeFeatPlural": "Rasgos",
+    "TypeEdgePlural": "Umbrales",
+    "TypeAbilityPlural": "Habilidades",
+    "TypeMovePlural": "Movimientos",
+    "TypeStrugglePlural": "Forcejeos",
+    "TypeItemPlural": "Objetos",
+    "TypeCapabilityPlural": "Capacidades",
+    "TypePokeedgePlural": "Poké Umbrales",
+    "TypeDexentryPlural": "Entradas Pokédex",
+    "TypeContestMovesPlural": "Movimientos de Concurso",
+    "TypeSpiritActionPlural": "Acciones de Espíritu",
+    "Modifier": "Modificador",
+    "ShowInTokenPanel": "Mostrar en el panel de token",
+    "Dice": "Dados Base",
+    "Snippet": "Efecto Residual"
+  },
+
+  "SPECIES.Height": "Altura",
+  "SPECIES.Weight": "Peso",
+  "SPECIES.SizeClass": "Tamaño",
+  "SPECIES.WeightClass": "Clase de Peso",
+  "SPECIES.EggGroups": "Grupos de Huevo",
+  "SPECIES.GenderRatio": "Ratio de Género",
+  "SPECIES.Habitats": "Hábitat",
+  "SPECIES.Diet": "Dieta",
+
+  "SPECIES.Overland": "Tierra",
+  "SPECIES.Swim": "Natación",
+  "SPECIES.Sky": "Vuelo",
+  "SPECIES.Levitate": "Levitación",
+  "SPECIES.Burrow": "Excavar",
+  "SPECIES.HighJump": "Salto de Altura",
+  "SPECIES.LongJump": "Salto de Longitud",
+  "SPECIES.Power": "Potencia",
+  "SPECIES.Teleporter": "Teletransportador",
+  "SPECIES.Naturewalk": "Terreno Predilecto",
+  "SPECIES.Other": "Otras Capacidades",
+  "SPECIES.AbilitiesBasic": "Habilidades Básicas",
+  "SPECIES.AbilitiesAdvanced": "Habilidades Avanzadas",
+  "SPECIES.AbilitiesHigh": "Habilidades Máximas",
+  "SPECIES.MovesLevel": "Movimientos de Nivel",
+  "SPECIES.MovesEgg": "Movimiento Huevo",
+  "SPECIES.MovesTutor": "Movimientos de Tutor",
+  "SPECIES.MovesMachine": "Movimientos MT/MO",
+  "SPECIES.Evolutions": "Evoluciones",
+
+  "SKILL.acrobatics": "Acrobacias",
+  "SKILL.athletics": "Atletísmo",
+  "SKILL.charm": "Encanto",
+  "SKILL.command": "Liderazgo",
+  "SKILL.focus": "Concentración",
+  "SKILL.guile": "Astucia",
+  "SKILL.intimidate": "Intimidación",
+  "SKILL.intuition": "Intuición",
+  "SKILL.perception": "Percepción",
+  "SKILL.stealth": "Sigilo",
+  "SKILL.survival": "Supervivencia",
+  "SKILL.combat": "Combate",
+  "SKILL.generalEd": "Cultura General",
+  "SKILL.medicineEd": "Medicina",
+  "SKILL.occultEd": "Ocultismo",
+  "SKILL.pokemonEd": "Conocimiento Pokémon",
+  "SKILL.techEd": "Tecnología",
+
+  "DIALOG.DeleteItem.Title": "Confirmar Eliminar",
+  "DIALOG.DeleteItem.Content": "¿Seguro que quieres eliminar '{name}'?",
+  "DIALOG.DeleteItem.Restricted": "'{name}' no puede eliminarse porque está restringido por '{parentName}'.",
+  "DIALOG.DeleteItem.Yes": "Si",
+  "DIALOG.DeleteItem.Cancel": "Cancelar",
+
+  "RULES.Types": {
+    "ActiveEffectLike": "Tipo de Efecto Activo",
+    "GrantItem": "Artículo",
+    "RollOption": "Opción de Tirada",
+    "ChoiceSet": "Conjunto de elección",
+    "FlatModifier": "Modificador fijo",
+    "TokenImage": "Imagen de Token",
+    "TokenName": "Nombre de Token",
+    "TokenLight": "Iluminación de Token",
+    "TemporarySpecies": "Especies temporales",
+    "TypeOverwrite": "Sobrescribir Tipo",
+    "TempHP": "PS Temporales",
+    "Effectiveness": "Efectividad",
+    "EphemeralEffect": "Efecto Transitorio",
+    "ActionPoint": "Consumo de AP"
+  },
+  "PTU": {
+    "Skills": {
+      "acrobatics": "Acrobacias",
+      "athletics": "Atletismo",
+      "charm": "Encanto",
+      "command": "Mando",
+      "focus": "Concentración",
+      "guile": "Astucia",
+      "intimidate": "Intimidación",
+      "intuition": "Intuición",
+      "perception": "Percepción",
+      "stealth": "Sigilo",
+      "survival": "Supervivencia",
+      "combat": "Combate",
+      "generalEd": "Cultura General",
+      "medicineEd": "Medicina",
+      "occultEd": "Ocultismo",
+      "pokemonEd": "Conocimiento Pokémon",
+      "techEd": "Tecnología"
+    },
+    "Title": "Pokémon Tabletop Reunited",
+
+    "TabsSkills": "Aptitudes",
+    "TabsInventory": "Inventario",
+    "TabsFeatsAndEdges": "Rasgos y Umbrales",
+    "TabsDex": "Pokédex",
+    "TabsStats": "Estadísticas",
+    "TabsMoves": "Movimientos",
+    "TabsCapabilities": "Capacidades",
+    "TabsCombat": "Combate",
+    "TabsExtra": "Extra",
+    "TabsEffects": "Efectos",
+    "TabsNotes": "Notas",
+
+    "StatsLabel": "Estadísticas",
+    "StatsBase": "Base",
+    "StatsBaseMod": "Base Mod",
+    "StatsBaseTotal": "Base Total",
+    "StatsMod": "Mod",
+    "StatsLevelup": "Subida de Nivel",
+    "StatsStage": "Fase",
+    "StatsTotal": "Total",
+    "StatsRemainingLevelupPoints": "Puntos de Subida de Nivel restantes",
+
+    "HPTemp": "temp",
+    "Typing": "Tipo",
+    "TypingWeaknesses": "Debilidades",
+    "TypingNormal": "Normal",
+    "TypingResistances": "Resistencias",
+    "TypingImmunities": "Inmunidades",
+    "Experience": "Experiencia",
+    "ExperienceNext": "EXP para próximo Nivel",
+    "Level": "Nivel",
+    "Nature": "Naturaleza",
+
+    "DamageModPhysical": "Mod. Daño Físico",
+    "DamageModSpecial": "Special Damage Mod",
+    "MoveLabel": "Movimiento",
+    "MoveType": "Typo",
+    "MoveCategory": "Categoría",
+    "MoveDb": "DB",
+    "MoveDamageRoll": "Tirada de Daño",
+    "MoveFrequency": "Frecuencia",
+    "MoveAc": "CP",
+    "MoveRange": "Rango",
+    "MoveEffect": "Efecto",
+
+    "CapabilityNaturewalk": "Terreno Predilecto",
+    "CapabilityOther": "Otras Capacidades",
+
+    "TutorPoints": "Puntos de Tutor",
+    "PokeedgePoints": "Puntos de Poké Umbral Usados",
+
+    "EvasionPhysical": "Evasión<br>Física",
+    "EvasionSpecial": "Evasión<br>Especial",
+    "EvasionSpeed": "Evasión de<br>Velocidad",
+    "Injuries": "Heridas",
+    "Hardened": "Endurecido",
+    "TotalHealth": "Salud Total",
+    "IgnoringInjuries": "Ignorando Heridas",
+    "HardenedEffect0": "Las Heridas más allá de la 5ª no reducen los Puntos de Salud Máximos",
+    "HardenedEffect1": "+1 a Golpe Crítico y Rango de Efecto",
+    "HardenedEffect2": "+1 a Evasión y +5 a la Iniciativa",
+    "HardenedEffect3": "+5 a la Reducción de Daño",
+    "HardenedEffect4": "Inmune a la pérdida de Puntos de Salud (pero no al daño) a todos los efectos",
+    "HardenedEffect5": "Resiste todo el daño un grado más",
+    "InjuryEffect1": "Imposible recuperar Puntos de Salud al Descansar",
+    "InjuryEffect2": "Recibe daño por {injuries} cada vez que realiza una Acción Estándar durante el Combate",
+    "InjuryEffect3": "Muerte",
+    "Training": "Entrenamiento",
+    "TrainingTrained": "Entrenado",
+    "TrainingOrdered": "Ordenado",
+    "TrainingAgility": "Entrenamiento Ágil",
+    "TrainingBrutal": "Entrenamiento Brutal",
+    "TrainingFocused": "Entrenamiento Concentrado",
+    "TrainingInspired": "Entrenamiento Inspirador",
+    "TrainingCriticalMoment": "Momento Crítico",
+    "SaveCheckLabel": "Modificador de Tirada de Salvación",
+    "SaveCheckAction": "Realizar Salvación",
+
+    "ItemEffect": "Efecto de Objeto",
+    "HeldItems": "Objetos Almacenados",
+    "FoodBuff": "Mejora por Comida",
+    "HpGuidelines": "Guías PS",
+    "16th": "1/16",
+    "10th": "Marca 1/10",
+    "8th": "1/8",
+    "310th": "3/10",
+    "4th": "1/4",
+    "2nd": "1/2",
+
+    "Species": "Especies",
+    "Gender": "Género",
+    "Owner": "Dueño",
+    "EggGroup": "Grupo Huevo",
+    "Shiny": "Shiny",
+    "Loyalty": "Lealtad",
+    "GmOnly": "solo dj",
+    "Bonus": "Bonus",
+    "Initiative": "Iniciativa",
+    "StatPoint": "Punto de Estat.",
+    "Accuracy": "Precisión",
+    "CritRange": "Rango de Crítico",
+    "EffectRange": "Rango de Efecto",
+    "Skill": "Aptitud",
+    "DamageReduction": "Reducción de Daño",
+    "Physical": "Físico",
+    "Special": "Especial",
+    "Status": "Estado",
+    "EvasionShort": "Eva",
+    "EvasionPhysicalShort": "Fis",
+    "EvasionSpecialShort": "Esp",
+    "EvasionSpeedShort": "Vel",
+    "SkillBackground": "Aptitudes Previas",
+    "SkillBackgroundNotice": "Ten en cuenta que esto es sólo para que lleves la cuenta. <br>La ficha no aplica automáticamente los aptitudes previas del Entrenador.",
+    "SkillUp": "Mejora",
+    "SkillDown": "Empeora",
+    "SelectNone": "Ninguno",
+    "Pokeball": "Pokéball",
+    "BossSettings": "Ajustes del Jefe",
+    "BossIs": "¿Es un Jefe?",
+    "BossTurns": "Turnos",
+    "BossBars": "Barras de Reserva de PS",
+
+    "SkillLabel": "Aptitud",
+    "SkillMod": "Mod",
+    "SkillRank": "Rango",
+    "SkillValue": "Valor",
+    "SkillDice": "Dado",
+    "SkillPathetic": "Penoso",
+    "SkillUntrained": "Sin Entrenar",
+    "SkillNovice": "Novato",
+    "SkillAdept": "Adepto",
+    "SkillExpert": "Experto",
+    "SkillMaster": "Maestro",
+    "SkillVirtuoso": "Virtuoso",
+    "SkillInvalid": "Inválido",
+
+    "ActiveEffects": "Efectos Activos",
+    "Effect": "Efecto",
+    "EffectEnable": "Activar",
+    "EffectDisable": "Desactivar",
+    "EffectDisabled": "Desactivado",
+    "EffectTarget": "Objetivo",
+    "EffectValue": "Valor",
+    "EffectMode": "Modo",
+    "EffectPriority": "Prioridad",
+
+    "ActionPoints": "Puntos de Acción",
+    "MaxActionPointsShort": "Max PA",
+    "LevelMilestones": "Hitos",
+    "LevelDexExp": "Dex Exp",
+    "LevelMiscExp": "Misc Exp",
+
+    "LevelCap": "Limite de Nv",
+
+    "Money": "Dinero",
+    "ItemCategories": "Categorías de Objeto",
+    "HeldItem": "Objeto Almacenado",
+
+    "Age": "Edad",
+    "Sex": "Género",
+    "Height": "Altura",
+    "Weight": "Peso",
+    "PhysicalDescription": "Descripción física",
+    "Background": "Trasfondo",
+    "Personality": "Personalidad",
+    "Goals": "Metas",
+    "Dreams": "Sueños",
+    "Obsessions": "Obsesiones",
+    "Notes": "Notas",
+
+    "DexButtonName": "Pokédex",
+    "DexButtonHint": "Escanea el pokemon con tu pokédex",
+    "SearchButtonName": "Busqueda PTR",
+    "SearchButtonHint": "Buscar información en la Base de Datos PTR",
+
+    "AutomationTarget.TARGET": "Objetivo",
+    "AutomationTarget.MOVE": "Movimiento",
+    "AutomationTarget.HIT": "Impacto",
+    "AutomationTarget.ITEM": "Objeto",
+    "AutomationEffect.ADD_DAMAGE": "Añadir Daño",
+    "AutomationEffect.ADD_EFFECT": "Añadir Efecto",
+    "AutomationEffect.REMOVE_EFFECT": "Eliminar Efecto",
+    "AutomationEffect.ADD_EFFECTIVENESS": "Añadir Efectividad",
+    "AutomationTiming.BEFORE_ROLL": "Antes de Tirar",
+    "AutomationTiming.AFTER_ROLL": "Después de Tirar",
+    "AutomationTiming.BEFORE_DAMAGE": "Antes del Daño",
+    "AutomationTiming.AFTER_DAMAGE": "Después del Dño",
+    "AutomationCondition.ATTACK_ROLL": "Tirada de Ataque",
+    "AutomationCondition.EFFECTIVENESS": "Efectividad",
+    "AutomationCondition.ITEM_TYPE": "Tipo de Objeto",
+    "AutomationCondition.MOVE_TYPE": "Tipo del Movimiento",
+    "AutomationOperators.EQUALS": "Igual",
+    "AutomationOperators.NOT_EQUALS": "No Igual",
+    "AutomationOperators.GREATER_THAN": "Mayor que",
+    "AutomationOperators.LESS_THAN": "Menor que",
+    "AutomationOperators.GREATER_THAN_OR_EQUAL": "Mayor o Igual que",
+    "AutomationOperators.LESS_THAN_OR_EQUAL": "Menor o Igual que",
+    "AutomationRangeIncrease.NONE": "Ninguno",
+    "AutomationRangeIncrease.EFFECT_RANGE": "Rango de Efecto",
+
+    "DexScan.Off": "El DJ ha desactivado la función de escaneo de la Pokédex.",
+    "DexScan.Description": "Sólo descripción",
+    "DexScan.Full": "Escaneo completo",
+    "DexScan.Denied": "No puedes usar tu Pokédex en este momento.",
+    "DexScan.Timeout": "Solicitud a DJ para escaneo de Pokédex agotada.",
+
+    "RuleElement": {
+      "ChoiceSet": {
+        "SaveLabel": "Guardar",
+        "DeclineLabel": "Cancelar",
+        "NoSelectionNotAllowed": "No se ha realizado ninguna selección: {item} no se ha podido crear",
+        "DragItemHere": "Arrastre aquí un elemento Personalizado si utiliza uno en lugar de las opciones anteriores",
+        "DragItem": "Objeto Personalizado"
+      },
+      "Prompt": {
+        "DropNotAllowed": "{badType} no puede soltarse aquí (debe ser {goodType})",
+        "NoValidOptions": "{actor} no tiene opciones válidas para {item}",
+        "NoSelection": "No se ha hecho ninguna selección: {item} está inactivo.",
+        "Default": "Selecciona."
+      }
+    },
+
+    "FolderNotFound": "Carpeta no encontrada: {folder}, crear una nueva",
+
+    "PartySheet.NoActor": "Es necesario proporcionar un actor al formulario",
+    "PartySheet.NoTrainer": "Este Pokémon no pertenece a ningún equipo, por favor asigna a uno en la ficha de un entrenador.",
+    "PartySheet.NoFolder": "El entrenador debe tener su propia carpeta en el directorio del actor.",
+    "PartySheet.Title": "Ficha del Equipo",
+    "DexSheet": {
+      "Title": "Dex",
+      "Notifications": {
+        "Unowned": "Eliminado {name} de obtenidos de tu Pokédex",
+        "Owned": "Añadido {name} a obtenidos a tu Pokédex.",
+        "Unseen": "Eliminado {name} de vistos en tu Pokédex",
+        "Seen": "Añadido {name} a vistos en tu Pokédex."
+      }
+    },
+    "BaseStatModifiers": "Modificadores de Estadísticas Base",
+
+    "RuleParseSyntaxError": "Error de sintaxis en las reglas de definición del elemento: {message}",
+    "RuleParseUnknownRule": "La regla clave '{key}' no es una regla conocida.",
+    "ClipboardNotification": "Copiado '{clipText}' al portapapeles.",
+
+    "QuickPokemonGeneration": "Generación rápida de Pokemon",
+    "LevelRange": "Rango de Nivel",
+    "ShinyChance": "Oportunidad de Shiny",
+    "StatRandomness": "% de Estadísticas <br>aleatorias",
+    "PreventEvolution": "¿Impedir la evolución?",
+    "Submit": "Enviar",
+
+    "ConditionFainted": "Debilitado",
+    "ConditionBurned": "Quemado",
+    "ConditionFrozen": "Congelado",
+    "ConditionParalysis": "Paralizado",
+    "ConditionPoisoned": "Envenenado",
+    "ConditionBadlyPoisoned": "Gravemente Envenenado",
+    "ConditionConfused": "Confuso",
+    "ConditionCursed": "Maldito",
+    "ConditionDisabled": "Anulado",
+    "ConditionFlinch": "Amedrentado",
+    "ConditionInfatuation": "Enamorado",
+    "ConditionRage": "Enfurecido",
+    "ConditionSleep": "Dormido",
+    "ConditionBadSleep": "Pesadilla",
+    "ConditionSuppressed": "Suprimido",
+    "ConditionBlindness": "Cegado",
+    "ConditionTotalBlindness": "Totalmente Cegado",
+    "ConditionSlowed": "Relentizado",
+    "ConditionStuck": "Apresado",
+    "ConditionTrapped": "Atrapado",
+    "ConditionTripped": "Derribado",
+    "ConditionVulnerable": "Vulnerable",
+    "ConditionTagged": "Marcado",
+    "ConditionCheered": "Animado",
+    "ConditionVortex": "Remolino",
+    "ConditionSeeded": "Drenadoras",
+    "Unidentified": "Pokemon no identificado",
+    "Genderless": "Sin género",
+    "Male": "Macho",
+    "Female": "Hembra",
+    "BossBarTooltip": "Las Barras de reserva del Jefe son la cantidad de Turnos del Jefe - 1",
+
+    "LevelUpForm": {
+      "Stats": "Estads.",
+      "Base": "Base",
+      "Level": "Subida de Estads.",
+      "Final": "Final",
+      "Current": "Actual",
+      "KnownMoves": "Movimientos conocidos",
+      "AvailableMoves": "Movimientos disponibles",
+      "Move": "Movimiento",
+      "Keep": "¿Mantener?",
+      "Abilities": {
+        "Basic": "Basica",
+        "Advanced": "Advanzada",
+        "High": "Máxima",
+        "Header": "Nuevas habilidades obtenidas al subir de nivel",
+        "Locked": "Bloqueado hasta nivel",
+        "Select": "Seleccionar Habilidad"
+      },
+      "EvolutionHint": "Parece que {name} está listo para evolucionar. Te gustaría que evolucionara ahora?"
+    },
+
+    "MassGenerator": {
+      "Title": "Generador en masa",
+      "Amount": "Cantidad a generar",
+      "Level": "Rango de Nivel",
+      "PokemonSelect": "¿Generar por especies o por Tabla?",
+      "Species": "Especies",
+      "HabitatTable": "Tabla",
+      "FoundSpecies": "Especies detectadas",
+      "CouldNotFindSpecies": "No se han detectado especies: {species}",
+      "FoundTable": "Tabla detectada",
+      "CouldNotFindTable": "No se ha podido detectar la tabla: {table}",
+      "Folder": "Carpeta para guardar los Pokémon generados",
+      "InvalidFolder": "La carpeta debe admitir actores Pokémon",
+      "FoundFolder": "Carpeta detectada",
+      "CouldNotFindFolder": "Carpeta {folder} no encontrada, se creará al aceptar",
+      "Submit": "Generar"
+    },
+
+    "Stats": {
+      "hp": "PS",
+      "atk": "Ataque",
+      "def": "Defensa",
+      "spatk": "Ataque Especial",
+      "spdef": "Defensa Especial",
+      "spd": "Velocidad",
+      "LevelUpPointsRemaining": "Level-Up Points Remaining"
+    },
+
+    "Roll": {
+      "Add": "Añadir",
+      "CriticalHit": "Golpe crítico",
+      "Fortune": "Suerte",
+      "FortuneTitle": "{title} Suerte",
+      "KeepHigher": "Mantener más Alto",
+      "KeepLower": "Mantener más Bajo",
+      "Misfortune": "Infortunio",
+      "MisfortuneTitle": "{title} Infortunio",
+      "Modifier": "Modificador",
+      "None": "Ninguno",
+      "Normal": "Normal",
+      "Roll": "Tirar",
+      "Type": "Tipo",
+      "UntypedPenalty": "Sin tipo (penalización)"
+    },
+
+    "ModifierTitle": "Modificador",
+    "RollModeLabel": "Modo de Tirada",
+
+    "Action": {
+      "AttackRoll": "Control de Precisión: {move}",
+      "DamageRoll": "Tirada de Daño: {move}",
+      "damage-roll": "Tirada de Daño",
+      "attack-roll": "Control de Precisión",
+      "AttackOutOfRange": "El objetivo está fuera de alcance",
+      "MoveWhileFrozen": "No puedes usar movimientos mientras estás congelado",
+      "MoveWhileSleeping": "No puedes usar movimientos mientras duermes",
+      "StatusAttackWhileRaging": "No puedes usar un movimiento de estado mientras estás furioso",
+      "DisabledMove": "Este movimiento está anulado",
+      "CannotAttack": "No puedes atacar",
+      "SuppressedMove": "Mientras estás suprimido sólo puedes usar movimientos Libres",
+      "ConfusionFail": "{name} está tan confuso que se hiere a sí mismo! Y recibe {damage} de daño.",
+      "Paralyzed": {
+        "Suppressed": {
+          "One": "Los efectos de",
+          "Two": "se han suprimido para esta ronda."
+        },
+        "Applicable": {
+          "One": "Los efectos de",
+          "Two": "tiene efecto este asalto."
+        },
+        "Fail": "¡{name} está paralizado y no puede moverse!",
+        "Success": "{name} está paralizado, ¡pero consigue moverse de todos modos!"
+      },
+      "Hypermode": {
+        "Suppressed": {
+          "One": "Los efectos de",
+          "Two": "se han suprimido para esta ronda."
+        },
+        "Applicable": {
+          "One": "Los efectos de",
+          "Two": "tiene efecto este asalto."
+        },
+        "Fail": "¡{name} está furioso y sólo puede usar Movimientos de ataque!",
+        "Success": "¡{name} apenas puede contener su rabia!",
+        "Create": "La furia de {name} se les está yendo de las manos, ¡entraron en Hiper Modo!"
+      },
+      "DamageSelector": "Selector de Daño",
+      "Damage": "Daño",
+      "Apply": "Aplicar Daño",
+      "CaptureRoll": "Tirada de Captura",
+      "CaptureNoTarget": "Tienes que apuntar a un Pokémon para capturarlo",
+      "CaptureWrongTarget": "Tienes que apuntar a un Pokémon para capturarlo",
+      "Use": "Aplicar efecto",
+      "NoTarget": "Es necesario apuntar a un actor antes de utilizar un movimiento"
+    },
+
+    "Traits": {
+      "Substitution": "{type} ({substitution})"
+    },
+
+    "DamageLabel": "Daño",
+    "CriticalDamageLabel": "Crítico",
+    "CriticalImmunityLabel": "Crítico convertido en golpe debido a la inmunidad a crítico",
+
+    "Recalc": "Haz clic para añadir los objetivos actuales a esta tirada, Shift+Clic para sobrescribir los objetivos actuales",
+
+    "Tags": {
+      "Effect": "Efecto",
+      "Frequency": "Frecuencia",
+      "Range": "Rango",
+      "DB": "Daño Base"
+    },
+
+    "Applicators": {
+      "Hit": "Impacta (clic para cambiar)",
+      "Miss": "Falla (clic para cambiar)",
+      "Crit": "Crítico (clic para cambiar)",
+      "NoCrit": "Sin Crítico (clic para cambiar)",
+      "Full": "Aplicar Normal",
+      "Half": "Aplicar Mitad",
+      "Weak": "Aplicar Resistir menos",
+      "Resist": "Aplicar Resistir mas",
+      "Flat": "Aplicar Daño Directo"
+    },
+    "ApplyButtons": {
+      "Apply": "Aplicar Daño",
+      "Full": "Completo",
+      "Half": "Mitad",
+      "Weak": "Débil",
+      "Resist": "Resistente",
+      "Flat": "Directo"
+    },
+    "Notifications": {
+      "CannotApplyOnMiss": "No puedes aplicar daño a un objetivo que no ha sido golpeado.",
+      "InvalidRoll": "Algo salió mal al aplicar el daño",
+      "NoEffect": "Parece que este movimiento no tiene ningún efecto especial."
+    },
+    "UI": {
+      "ShiftModifyDamageTitle": "Ajustar tirada del daño/la curación",
+      "ShiftModifyDamageLabel": "Ajustar el daño/curación",
+      "ShiftModifySkipIWRLabel": "Omitir inmunidades/debilidades/resistencias"
+    },
+    "Type": {
+      "normal": "Normal",
+      "fighting": "Lucha",
+      "flying": "Volador",
+      "poison": "Veneno",
+      "ground": "Tierra",
+      "rock": "Roca",
+      "bug": "Bicho",
+      "ghost": "Fantasma",
+      "steel": "Acero",
+      "fire": "Fuego",
+      "water": "Agua",
+      "grass": "Planta",
+      "electric": "Eléctrico",
+      "psychic": "Psíquico",
+      "ice": "Hielo",
+      "dragon": "Dragón",
+      "dark": "Siniestro",
+      "fairy": "Hada",
+      "nuclear": "Nuclear",
+      "untyped": "Sin tipo"
+    },
+    "Modifiers": {
+      "Label": "Modificadores",
+      "Total": "Total",
+      "Defense": "Defensa",
+      "SpecialDefense": "Defensa Especial",
+      "DamageReduction": "Reducción de Daño",
+      "Effectiveness": "Aplicador de Efectividad",
+      "Combined": "Efectividad Total",
+      "ItemOverwrite": {
+        "hp": "Defensa PS",
+        "atk": "Defensa ATQ",
+        "def": "Defensa DEF",
+        "spatk": "Defensa ATQES",
+        "spdef": "Defensa DEFES",
+        "spd": "Defensa VEL"
+      }
+    },
+    "ApplyDamage": {
+      "AtFullHealth": "<actor>{actor}</actor> ya está a plena salud.",
+      "DamagedForN": "<actor>{actor}</actor> recibe {hpDamage} de daño.",
+      "HealedForN": "<actor>{actor}</actor> se cura {hpDamage} de daño.",
+      "GainedTempHp": "<actor>{actor}</actor> gana {hpDamage} puntos de vida temporales.",
+      "TakesNoDamage": "<actor>{actor}</actor> no recibe ningún daño.",
+      "TheTarget": "El objetivo",
+      "Revert": "Deshacer Daño",
+      "BossBarBroken": "¡La barra de PS del Jefe <actor>{actor}</actor>está agotada! ({bars} izquierda)",
+      "MassiveDamageInjury": "<actor>{actor}</actor> gana 1 herida por recibir Daño Masivo.",
+      "HpThresholdInjury": "<actor>{actor}</actor> ha ganado 1 herida por llegar al {porcentaje}% de PS.",
+      "BossHalfBarInjury": "¡<actor>{actor}</actor> gana 1 herida por haber perdido la mitad de sus Barras de PS de Jefe!"
+    },
+    "InitiativeRoll": "Tirada de Iniciativa de {name}",
+    "SaveCheck": "Salvación de {save} de {name}",
+
+    "Migrations": {
+      "Finished": "¡Migración del sistema PTR a la versión {version} completada!",
+      "OnlyGMCanUse": "Sólo el Director de Juego puede utilizar esta herramienta.",
+      "OutsideSchemaRange": "The specified range is outside the system's schema version range (between {minimum} and {maximum}).",
+      "Starting": "Applying PTR System Migration to version {version}. Please be patient and do not close your game or shut down your server.",
+      "Summary": {
+        "Documents": "Documentos",
+        "HelpResources": "An unexpected error was encountered while migrating some actors or items. If you would like further assistance, feel free to report an issue at the <a href=\"https://github.com/dylanpiera/foundry-Pokemon-Tabletop-United-System/issues\">system repository</a> or visit us on <a href=\"https://discord.gg/ptrfvtt\">Discord</a> for community support.",
+        "Migrated": "Migrado",
+        "Remigrate": "Remigrar",
+        "Title": "Resumen de la migración",
+        "Total": "Total",
+        "Troubleshoot": {
+          "Hint": "Here you can run a remigration, which will attempt to automatically fix issues with actors and items.",
+          "Title": "Solución de problemas del sistema",
+          "Type": "Tipo de documento",
+          "Name": "Nombre del documento",
+          "Uuid": "UUID del documento"
+        }
+      },
+      "Progress": {
+        "Starting": "Iniciar la migración",
+        "Progress": "Fase {phase} de {phases} de la migración: migrar documento...",
+        "Completed": "Migración completada"
+      },
+      "Troubleshooting": "Solución de problemas",
+      "WorldNotReady": "El mundo del juego no está listo: inténtalo de nuevo en unos segundos."
+    },
+
+    "Actor": {
+      "Plural": "Actores",
+      "Singular": "Actor",
+      "Config": {
+        "Theme": {
+          "Label": "Tema",
+          "Hint": "si está vacío se usará por defecto tu pokeball (si es un pokemon) o 'por defecto', si no se encuentra el tema se usará el tema de pergamino."
+        },
+        "Alliance": {
+          "Label": "Alianza",
+          "Hint": "La alianza del actor."
+        }
+      }
+    },
+    "Item": {
+      "Plural": "Objetos",
+      "Singular": "Objeto"
+    },
+    "OK": "OK",
+    "UserNeedsToOwnCharacter": "Para poder utilizar esta opción, debe asignar un carácter a su usuario.",
+
+    "RuleEditor": {
+      "FlatModifier": {
+        "HideIfDisabled": "Ocultar (si está desactivado)"
+      },
+      "General": {
+        "Brackets": "Soportes",
+        "Label": "Etiqueta",
+        "Predicate": "Predicado",
+        "Primitive": "Primitivo",
+        "Range": "Rang",
+        "Selectors": "Selectores",
+        "Value": "Valor",
+        "Domain": "Dominio",
+        "Option": "Opción",
+        "UUID": "UUID",
+        "Type": "Tipo",
+        "Target": "Objetivo",
+        "Origin": "Origen",
+        "Affects": "Afecta",
+        "Modes": {
+          "Label": "Modo",
+          "Add": "Añadir",
+          "Subtract": "Resta",
+          "Remove": "Eliminar",
+          "Multiply": "Multiplique",
+          "Downgrade": "Degradar",
+          "Upgrade": "Mejorar",
+          "Override": "Anular"
+        },
+        "Phases": {
+          "Label": "Fase",
+          "ApplyAEs": "Por defecto",
+          "BeforeDerived": "Antes Derivado",
+          "AfterDerived": "Después Derivado",
+          "BeforeRoll": "Antes de Tirar"
+        },
+        "Path": "Ruta"
+      },
+      "GrantItem": {
+        "AllowDuplicate": "Permitir duplicados",
+        "ReevaluateOnUpdate": "Reevaluar en la actualización",
+        "ReplaceSelf": "Sustituirse a sí mismo"
+      }
+    },
+    "Check": {
+      "Check": "Prueba",
+      "SkillCheck": "Prueba de {skill}",
+      "SkillMod": "Modificador de Aptitud",
+      "SkillDice": "Rango de Aptitud"
+    },
+    "Configure": "Configurar {name}",
+
+    "Settings": {
+      "ResetChanges": "Restablecer cambios",
+      "AddType": {
+        "ExistsLabel": "Editar Tipo",
+        "Label": "Añadir Tipo",
+        "Hint": "Indique el nombre y el icono del nuevo tipo.",
+        "Name": {
+          "Name": "Nombre del Tipo",
+          "Hint": "El nombre del tipo."
+        },
+        "IconImg": {
+          "Name": "Icono del Tipo",
+          "Hint": "El icono que se utilizará para el tipo."
+        },
+        "BarImg": {
+          "Name": "Imagen de la barra de tipos",
+          "Hint": "La imagen de la barra que se utilizará para el tipo cuando se muestre en el Chat."
+        }
+      },
+
+      "Variant": {
+        "Name": "Reglas variantes",
+        "Label": "Alternar normas variantes",
+        "Hint": "Habilitar y configurar reglas de variantes como 'Usar Dex EXP' para el sistema.",
+        "UseTutorPoints": {
+          "Name": "Utiliza los Puntos de Tutor para Pokémon",
+          "Hint": "Por otro lado, utilice los cambios sugeridos en el Consejo de DJ y Houserules sugerido (ver: https://pastebin.com/iDt2Mj0d)"
+        },
+        "UseDexExp": {
+          "Name": "Usar Dex Exp para Entrenadores",
+          "Hint": "Si el sistema debería comprobar cuántos pokémon están marcados como Capturados en la dex de un Entrenador, y sumarlo a su total de experiencia dex."
+        },
+        "TrainerRevamp": {
+          "Name": "Usar Reconstrucción del Entrenador (max nvl 25)",
+          "Hint": "Usa las reglas alt. Trainer Revamp ruleset, desactiva Dex Exp. (ver: https://shorturl.at/oCDWY)"
+        },
+        "trainerAdvancement": {
+          "Name": "Trainer Advancement Track",
+          "Hint": "The Trainer Advancement Track to use for Trainer Leveling.",
+          "Original": "PTU Original Standard Progression",
+          "DataRevamp": "DataNinja's Revamped Condensed Progression",
+          "ShortTrack": "PTR Condensed Progression",
+          "PTRUpdate": "PTR Standard Progression",
+          "LongTrack": "PTR Extended Progression"
+        },
+        "SpiritPlaytest": {
+          "Name": "Habilitar la Amistad y el Espíritu [Playtest]",
+          "Hint": "Habilita el juego de reglas Amistad y Espíritu. Para más información https://ptufvtt.com/Rules/Playtests/Spirit-Friendship"
+        },
+        "ImprovedStatsRework": {
+          "Name": "Activar la mejora de las estadísticas",
+          "Hint": "Habilite el conjunto de reglas Rework de estadísticas mejoradas. Para más información https://ptufvtt.com/en/Rules/Playing-The-Game/Stats#new-playtest"
+        }
+      },
+      "Automation": {
+        "Name": "Automatización",
+        "Label": "Activar Automatización",
+        "Hint": "Habilite y configure reglas de automatización como 'Eliminar efectos caducados' para el sistema.",
+        "LevelUpScreen": {
+          "Name": "Mostrar ventana de Subida de Nivel",
+          "Hint": "Permite que la ventana de subida de nivel aparezca siempre que un Pokémon suba de nivel."
+        },
+        "RemoveExpiredEffects": {
+          "Name": "Eliminar efectos expirados",
+          "Hint": "Eliminar los efectos expirados de los actores."
+        },
+        "AutoExpireEffects": {
+          "Name": "Efectos de autoexpiración",
+          "Hint": "Expira automáticamente los efectos cuando se acaba su duración."
+        },
+        "FailAttackIfOutOfRange": {
+          "Name": "Ataque fallido si está fuera de alcance",
+          "Hint": "Falla automáticamente un ataque si el objetivo está fuera de alcance."
+        },
+        "FailAttackIfNoTarget": {
+          "Name": "Ataque fallido si no hay objetivo",
+          "Hint": "Falla automáticamente un ataque si ningún actor es el objetivo."
+        },
+        "FlankingDetection": {
+          "Name": "Detección de flanqueo",
+          "Hint": "Aplicar automáticamente el flanqueo para los ataques."
+        },
+        "AutoFaint": {
+          "Name": "Auto debilitado",
+          "Hint": "Añade automáticamente la condición Debilitado a un Pokémon cuando llega a 0 PS."
+        },
+        "AutoFaintRecovery": {
+          "Name": "Autorecuperación de debilitado",
+          "Hint": "Elimina automáticamente la condición de debilitado de un Pokémon cuando se cura por encima de 0 PS."
+        },
+        "MassiveDamageThreshold": {
+          "Name": "Daño Masivo (%)",
+          "Hint": "El % de los PS máximos provocan una Herida por Daño Masivo. (Un porcentaje enorme, como 10000, prácticamente desactiva las lesiones de esta fuente)."
+        },
+        "HpInjuryGateInterval": {
+          "Name": "Intervalo de PS para Heridas (%)",
+          "Hint": "A partir del 100% de los PS máximos, alcanzar cada intervalo de este porcentaje causa una lesión. Por ejemplo, 50% => 50%, 0%, -50%... (Un porcentaje enorme como 10000 prácticamente desactiva las Heridas de esta fuente)."
+        }
+      },
+      "Generation": {
+        "Name": "Generación",
+        "Label": "Activar generación",
+        "Hint": "Habilita y configura reglas de generación como 'Directorio de imágenes por defecto' para el sistema.",
+        "DefaultImageDirectory": {
+          "Name": "Directorio de imágenes por defecto",
+          "Hint": "El directorio por defecto para buscar imágenes al generar un Pokémon."
+        },
+        "DefaultImageExtension": {
+          "Name": "Extensión de imagen por defecto",
+          "Hint": "La extensión por defecto a utilizar cuando se buscan imágenes para generar un Pokémon."
+        },
+        "DefaultPokemonImageNameType": {
+          "Name": "Nombre del tipo de imagen Pokémon",
+          "Hint": "Si las imágenes se basan en el nombre (marcada) o en el número dex (desmarcada)"
+        },
+        "DefaultDexDragInLevelMin": {
+          "Name": "Nivel mínimo de arrastre de especies por defecto",
+          "Hint": "El nivel mínimo por defecto para un Pokémon arrastrado a una escena desde un objeto de Especie."
+        },
+        "DefaultDexDragInLevelMax": {
+          "Name": "Nivel máximo de arrastre de especies por defecto",
+          "Hint": "El nivel máximo por defecto para un Pokémon arrastrado a una escena desde un objeto de Especie."
+        },
+        "DefaultDexDragInShinyChance": {
+          "Name": "Probabilidad (%) de Shiny para Especies arrastradas",
+          "Hint": "La probabilidad de shiny por defecto para un Pokémon arrastrado a una escena desde un objeto de Especie."
+        },
+        "DefaultDexDragInStatRandomness": {
+          "Name": "Especies Arrastradas con estadísticas aleatorias (%) por defecto",
+          "Hint": "La aleatoriedad de las estadísticas por defecto para un Pokémon arrastrado a una escena desde un objeto de especie."
+        },
+        "DefaultDexDragInPreventEvolution": {
+          "Name": "El arrastre de especies impide la evolución por defecto",
+          "Hint": "Si se debe impedir la evolución de un Pokémon durante la Generación de Arrastre de Especies."
+        }
+      },
+      "Metagame": {
+        "Name": "Metajuego",
+        "Label": "Limitar la información sobre el metajuego",
+        "Hint": "Limitar qué tipo de información sobre el metajuego está a disposición de los jugadores.",
+        "DexPermissions": {
+          "Name": "Permisos en la Pokédex",
+          "Hint": "Permiso necesario para que un jugador pueda ver una entrada de la Pokédex"
+        },
+        "AlwaysShowCrits": {
+          "Name": "Mostrar siempre los Críticos",
+          "Hint": "Mostrar siempre los criticos en el chat aunque no se haya sacado ningún crítico."
+        },
+        "AllowPlayersToEditSpecies": {
+          "Name": "Permitir a los jugadores editar especies",
+          "Hint": "Permitir a los jugadores editar las especies de sus Pokémon."
+        }
+      },
+      "Homebrew": {
+        "Name": "Material Casero",
+        "Label": "Gestionar Material Casero",
+        "Hint": "Gestiona tus ajustes relacionados con el material casero.",
+        "NuclearType": {
+          "Name": "Enable Nuclear Type",
+          "Hint": "Adds Pokémon Uranium's Nuclear Type to the game based on DataNinja's Homebrew Compilation's Uranium Data."
+        },
+        "ShadowType": {
+          "Name": "Enable Shadow Type",
+          "Hint": "Adds Pokémon Colosseum's Shadow Type to the game based on PTR Ruleset's Shadow Type."
+        }
+      },
+      "Type": {
+        "Name": "Editor de Tipos personalizados",
+        "Label": "Editor de Tipos personalizados",
+        "Hint": "Modificar la eficacia de los tipos y añadir nuevos tipos al sistema",
+        "TypeEffectiveness": {
+          "Name": "Efectividad por Tipo",
+          "Hint": "La eficacia de un tipo frente a otro tipo"
+        },
+        "Delete": {
+          "Title": "Borrar tipo",
+          "Label": "Borrar",
+          "Content": "¿Está seguro de que desea eliminar este tipo?"
+        },
+        "Submit": "Aceptar",
+        "Reset": {
+          "Title": "Restaurar la Efectividad por Tipo",
+          "Content": "¿Estás seguro de que quieres restablecer la eficacia de los tipos a los valores por defecto?"
+        }
+      }
+    },
+    "Contests": {
+      "Dice": "Dados",
+      "Type": "Tipo de Concurso",
+      "Stats": "De las Estads.",
+      "Reserve": "Dados de reserva",
+      "Poffins": "De Pokochos",
+      "Voltage": "Puntos de Exhibición",
+      "DiceTotal": "Dados Totales",
+      "Appeal": "Estilo"
+    },
+    "Spirit": {
+      "Friendship": "Amistad",
+      "Spirit": "Espíritu",
+      "Weary": "Desgaste",
+      "Effects": "Efectos pasivos"
+    },
+    "Broadcast": {
+      "TempHP": {
+        "PluralNew": "{actor} ahora tiene {newQuantity} puntos de salud temporales {wasAt} a causa de {item}.",
+        "SingleNew": "{actor} ahora tiene {newQuantity} puntos de salud temporal {wasAt} a causa de {item}.",
+        "WasAt": "(estaba en {oldQuantity})"
+      },
+      "ApplyEffect": "<actor>{source}</actor> aplicado {effect} a <actor>{actor}</actor>"
+    },
+    "Dialog": {
+      "CaptureSuccess": {
+        "Title": "Captura con éxito",
+        "Hint": "¿A qué equipo del entrenador debe añadirse el Pokemon?",
+        "Trainer": {
+          "Name": "Entrenador",
+          "Hint": "El entrenador para añadir el Pokemon a"
+        },
+        "PartyChoice": {
+          "Name": "Localización del Equipo",
+          "Hint": "¿En qué parte del Equipo debería añadirse el Pokemon?",
+          "Party": "Equipo",
+          "Box": "Caja",
+          "Available": "Disponible"
+        },
+        "Submit": "Aceptar",
+        "Cancel": "Cancelar",
+        "TrainerNotFound": "Se ha seleccionado un entrenador inválido, inténtalo de nuevo.",
+        "LocationNotFound": "Se ha seleccionado una ubicación inválida, inténtalo de nuevo.",
+        "PokemonNotFound": "No se puede encontrar el Pokemon, ¿lo has borrado?",
+        "ChatMessage": "¡{trainer} ha atrapado un {pokemon}! Ha sido añadido a {location}."
+      },
+      "ContestedCheck": {
+        "Title": "{name} realiza una prueba de Concurso de {skill}",
+        "Hint": "Selecciona la aptitud a tirar",
+        "Skill": "Aptitud por la tirada",
+        "Submit": "Aceptar",
+        "Cancel": "Cancelar"
+      }
+    },
+    "Token": {
+      "Size": {
+        "Dimensions": "Dimensiones",
+        "Label": "Tamaño",
+        "LinkToActorSize": {
+          "Link": "Vincular con el tamaño del actor",
+          "Unlink": "Desvincular con el tamaño del actor"
+        }
+      }
+    },
+    "ExpBudget": "Recompensa de EXP:",
+    "TypeMatrix": {
+      "Title": "Tabla de Tipos"
+    },
+    "CompendiumBrowser": {
+      "ProgressBar": {
+        "LoadingComplete": "Carga completa",
+        "LoadingPack": "Cargando {pack}"
+      },
+      "Tabs": {
+        "Abilities": "Habilidades",
+        "Capabilities": "Capacidades",
+        "Edges": "Umbrales",
+        "Effects": "Efectos",
+        "Feats": "Rasgos",
+        "Items": "Objetos",
+        "Moves": "Movimientos",
+        "PokeEdges": "Poke Umbrales",
+        "Species": "Especies",
+        "Settings": "Ajustes"
+      },
+      "PackNotLoaded": "El compendio \"{pack}\" no se ha podido cargar.",
+      "Title": "Buscador de compendios",
+      "Hint": "Seleccione una pestaña para continuar...",
+      "CompendiumPacks": "Buscador de Compendios",
+      "FilterOptions": {
+        "Source": "Fuente",
+        "Name": "Nombre",
+        "Class": "Clase",
+        "Cost": "Coste",
+        "ItemType": "Tipo de Objeto",
+        "MoveType": "Tipo",
+        "Category": "Categoría",
+        "DamageBase": "Daño Base",
+        "Number": "Número Dex",
+        "HasForm": "Tiene forma"
+      },
+      "Search": {
+        "Placeholder": "Tu consulta...",
+        "Title": "Buscar"
+      },
+      "Filter": {
+        "SortBy": "Ordenar por",
+        "ClearFilters": "Limpiar filtros",
+        "AndLabel": "Todo lo anterior",
+        "OrLabel": "Cualquiera de los anteriores"
+      }
+    },
+    "Alliance": {
+      "Default": "Propietario por defecto ({alliance})",
+      "Neutral": "Neutral",
+      "Opposition": "Contrincante",
+      "Party": "Equipo"
+    }
+  },
+
+  "physical-evasion": "Evasión Física",
+  "special-evasion": "Evasión Especial",
+  "speed-evasion": "Evasión de Velocidad",
+  "vulnerable": "Vulnerable: Sin Evasión",
+  "capture-dc": "CD de Captura",
+
+  "overland": "Tierra",
+  "sky": "Vuelo",
+  "swim": "Natación",
+  "levitate": "Levitación",
+  "burrow": "Excavar",
+  "highJump": "Salto de Altura",
+  "longJump": "Salto de Longitud",
+  "teleporter": "Teletransportador",
+  "power": "Potencia",
+  "naturewalk": "Terreno Predilecto",
+  "weightClass": "Clase de Peso",
+  "throwingRange": "Alcance de Lanzamiento",
+
+  "party": "Equipo",
+  "neutral": "Neutral",
+  "opposition": "Contrincante"
+}

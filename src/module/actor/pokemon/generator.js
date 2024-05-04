@@ -24,7 +24,7 @@ export class PokemonGenerator {
         if (!this.level) {
             this.level = (() => {
                 if (minLevel == maxLevel) return minLevel;
-                return Math.clamped(0, (Math.floor(Math.random() * (maxLevel - minLevel + 1)) + minLevel), 100);
+                return Math.clamp(0, (Math.floor(Math.random() * (maxLevel - minLevel + 1)) + minLevel), 100);
             })();
         }
 
@@ -50,9 +50,16 @@ export class PokemonGenerator {
         if (!this.abilities) this.prepareAbilities();
         if (!this.capabilities) this.prepareCapabilities();
         if (!this.shiny) this.prepareShinyness(shinyChance);
-        if (!this.species.system.form) this.prepareForm();
+        if (!this.form) this.prepareForm();
 
         this.img = await PokemonGenerator.getImage(this.species, { gender: this.gender, shiny: this.shiny });
+        this.tokenImg = (() => {
+            if(!this.img) return;
+            const tokenImageExtension = game.settings.get("ptu", "generation.defaultTokenImageExtension");
+            if(this.img.endsWith(tokenImageExtension)) return this.img;
+            const actorImageExtension = game.settings.get("ptu", "generation.defaultImageExtension");
+            return this.img.replace(actorImageExtension, tokenImageExtension);
+        })();
 
         if (saveDefault) {
             //TODO: Save Default Settings to system
@@ -78,14 +85,15 @@ export class PokemonGenerator {
 
         const foundryDefaultSettings = {...game.settings.get("core", "defaultToken")} ?? {};
 
-        const prototypeToken = mergeObject(foundryDefaultSettings, {
+        const prototypeToken = foundry.utils.mergeObject(foundryDefaultSettings, {
             width: this.size.width,
             height: this.size.height,
             actorLink: true,
             displayBars: foundryDefaultSettings.displayBars ?? CONST.TOKEN_DISPLAY_MODES.OWNER_HOVER,
             displayName: foundryDefaultSettings.displayName ?? CONST.TOKEN_DISPLAY_MODES.OWNER,
             bar1: { attribute: foundryDefaultSettings.bar1?.attribute || "health" },
-            img: this.img
+            img: this.tokenImg,
+            "texture.src": this.tokenImg,
         });
 
         const actorData = {
@@ -101,11 +109,12 @@ export class PokemonGenerator {
                 nature: {
                     value: this.nature
                 },
-                gender: this.gender
+                gender: this.gender,
             },
             folder: folder?.id,
             prototypeToken
         }
+        if(this.form) actorData.system.form = this.form;
 
         const species = this.species.toObject();
         species.flags.core = {
@@ -312,11 +321,13 @@ export class PokemonGenerator {
     prepareForm() {
         //unown
         const unown_types = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "!", "Qu"];
-        if (this.species.system.number === 201) return this.species.system.form = unown_types[Math.floor(Math.random() * unown_types.length)];
+        if (this.species.system.number === 201) return this.form = this.species.system.form = unown_types[Math.floor(Math.random() * unown_types.length)];
 
         //toxtricity
         const lowKeyNatures = ["lonely", "bold", "relaxed", "timid", "serious", "modest", "mild", "quiet", "bashful", "calm", "gentle", "careful"]
-        if (this.species.system.number === 849 && lowKeyNatures.includes(this.nature.toLowerCase())) return this.species.system.form = "LowKey";
+        if (this.species.system.number === 849 && lowKeyNatures.includes(this.nature.toLowerCase())) return this.form = this.species.system.form = "LowKey";
+
+        return this.form = this.species?.system?.form;
     }
 
     static isEvolutionRestricted(stage, { gender } = {}) {

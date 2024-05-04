@@ -1,5 +1,5 @@
 function calcBaseStats(stats, speciesData, nature, baseStatModifier, ignoreStages = false) {
-    const newStats = duplicate(stats);
+    const newStats = foundry.utils.duplicate(stats);
 
     newStats.hp.base = _calcBaseStat(speciesData, nature, "HP", ignoreStages);
     newStats.hp.value = (baseStatModifier?.hp.total ?? 0) + newStats.hp.base;
@@ -152,7 +152,7 @@ function dev(stats) {
 globalThis.dev = dev;
 
 function calculateStatTotal({ level, actorStats, nature, isTrainer, twistedPower, hybridArmor }) {
-    const stats = duplicate(actorStats);
+    const stats = foundry.utils.duplicate(actorStats);
     const levelDivisionConstant = isTrainer ? 25 : 50;
     const longShortStatDict = {
         "HP": "hp",
@@ -196,15 +196,15 @@ function calculateStatTotal({ level, actorStats, nature, isTrainer, twistedPower
     }
 
     if (twistedPower) {
-        const atkTotal = duplicate(stats.atk.total);
-        const spatkTotal = duplicate(stats.spatk.total);
+        const atkTotal = foundry.utils.duplicate(stats.atk.total);
+        const spatkTotal = foundry.utils.duplicate(stats.spatk.total);
 
         stats.atk.total += Math.floor(spatkTotal / 3);
         stats.spatk.total += Math.floor(atkTotal / 3);
     }
     if (hybridArmor) {
-        const defTotal = duplicate(stats.def.total);
-        const spdefTotal = duplicate(stats.spdef.total);
+        const defTotal = foundry.utils.duplicate(stats.def.total);
+        const spdefTotal = foundry.utils.duplicate(stats.spdef.total);
 
         stats.def.total += Math.floor(spdefTotal / 3);
         stats.spdef.total += Math.floor(defTotal / 3);
@@ -223,7 +223,7 @@ function calculateStatTotal({ level, actorStats, nature, isTrainer, twistedPower
     for (const [key, value] of Object.entries(stats)) {
         const sub = value["total"] + value["mod"].value + value["mod"].mod;
 
-        if (key != "hp") value["stage"].total = Math.clamped((value["stage"]?.value ?? 0) + (value["stage"]?.mod ?? 0), -6, 6);
+        if (key != "hp") value["stage"].total = Math.clamp((value["stage"]?.value ?? 0) + (value["stage"]?.mod ?? 0), -6, 6);
         if (value["stage"]?.total > 0) {
             if (playtestStats) {
                 value["total"] = Math.floor(sub * value["stage"].total * (0.275 * Math.log10(130 - (isTrainer ? level * 2 : level)) - 0.325) + sub)

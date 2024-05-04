@@ -9,6 +9,15 @@ class PTUItemItem extends PTUItem {
         return this.system.container;
     }
 
+    prepareBaseData() {
+        super.prepareBaseData();
+        
+        if(this.enabled) {
+            this.flags.ptu.rollOptions.all[`item:equipped`] = true;
+            this.flags.ptu.rollOptions.item[`item:equipped`] = true;
+        }
+    }
+
     /** @override */
     prepareSiblingData() {
         const itemGrants = this.flags.ptu.itemGrants;
@@ -48,6 +57,37 @@ class PTUItemItem extends PTUItem {
 
         if(oldClass?.actor) await oldClass.actor.update(oldClass.update);
         if(newClass?.actor) await newClass.actor.update(newClass.update);
+    }
+
+    async purchase() {
+        const actor = (() => {
+            const character = game.user.character;
+            if(character) return character;
+
+            const token = canvas.tokens.controlled[0];
+            if(token) return token.actor;
+
+            return null;
+        })();
+        if(!actor) return ui.notifications.error("No actor selected");
+
+        const amount = this.system.cost;
+        
+        if ((actor.system.money ?? 0) < amount) return ui.notifications.error(`${actor.name} does not have enough money to pay for ${this.name} (Cost: ${amount} Poké, Current: ${actor.system.money})`);
+        await actor.update({
+            "system.money": actor.system.money - amount,
+        });
+
+        // If duplicate item gets added instead increase the quantity
+		const existingItem = actor.items.getName(this.name);
+		if (existingItem && existingItem.system.quantity) {
+			const quantity = foundry.utils.duplicate(existingItem.system.quantity);
+			await existingItem.update({ "system.quantity": Number(quantity) + (this.system.quantity > 0 ? Number(this.system.quantity) : 1) });
+		}
+        else {
+            await Item.create(this.toObject(), {parent: actor});
+        }
+        return ui.notifications.info(`${actor.name} Paid ${amount} Poké for ${this.name} (New Total: ${actor.system.money})`);
     }
 }
 

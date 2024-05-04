@@ -22,7 +22,7 @@ class PTUPokemonActor extends PTUActor {
     }
 
     get allowedItemTypes() {
-        return ["species", "pokeedge", "move", "contestmove", "ability", "capability", "effect", "condition", "spiritaction"]
+        return ["species", "pokeedge", "move", "contestmove", "ability", "capability", "effect", "condition", "spiritaction", "item"]
     }
 
     get nature() {
@@ -193,7 +193,7 @@ class PTUPokemonActor extends PTUActor {
         system.stats = this._calcBaseStats();
 
         const leftoverLevelUpPoints = system.levelUpPoints - Object.values(system.stats).reduce((a, v) => v.levelUp + a, 0);
-        const actualLevel = Math.max(1, system.level.current - Math.max(0, Math.clamped(0, leftoverLevelUpPoints, leftoverLevelUpPoints - system.modifiers.statPoints.total ?? 0)));
+        const actualLevel = Math.max(1, system.level.current - Math.max(0, Math.clamp(0, leftoverLevelUpPoints, leftoverLevelUpPoints - system.modifiers.statPoints.total ?? 0)));
 
         const result = calculateStatTotal({
             level: actualLevel,
@@ -252,6 +252,7 @@ class PTUPokemonActor extends PTUActor {
 
         // Calculate Skill Ranks
         for (const [key, skill] of Object.entries(speciesSystem?.skills ?? {})) {
+            system.skills[key].slug = key;
             system.skills[key]["value"]["value"] = skill["value"]
             system.skills[key]["value"]["total"] = skill["value"] + system.skills[key]["value"]["mod"];
             system.skills[key]["modifier"]["value"] = skill["modifier"]
@@ -297,7 +298,11 @@ class PTUPokemonActor extends PTUActor {
 
         this.attributes.health.max = system.health.max;
 
-        this.attributes.level.cap = Math.ceil(5 + (1.58 * ((this.trainer?.system.level.current ?? 0) * (game.settings.get("ptu", "variant.trainerRevamp") ? 2 : 1))) + ((4 / 3) * (system.friendship ?? 0) * Math.pow(1 + (((this.trainer?.system.level.current ?? 0) * (game.settings.get("ptu", "variant.trainerRevamp") ? 2 : 1)) / 34), 2)));
+        const calcLevelCap = (friendship) => Math.ceil(5 + (1.58 * ((this.trainer?.system.level.current ?? 0) * (["data-revamp", "short-track"].includes(game.settings.get("ptu", "variant.trainerAdvancement")) ? 2 : ["long-track"].includes(game.settings.get("ptu", "variant.trainerAdvancement")) ? 0.5 : 1))) + ((4 / 3) * (friendship) * Math.pow(1 + (((this.trainer?.system.level.current ?? 0) * (["data-revamp", "short-track"].includes(game.settings.get("ptu", "variant.trainerAdvancement")) ? 2 : ["long-track"].includes(game.settings.get("ptu", "variant.trainerAdvancement")) ? 0.5 : 1)) / 34), 2)));
+        this.attributes.level.cap = {
+            current: calcLevelCap(system.friendship ?? 0),
+            training: calcLevelCap(0),
+        }
 
         /* The Corner of Exceptions */
 
@@ -309,7 +314,7 @@ class PTUPokemonActor extends PTUActor {
     }
 
     _calcBaseStats() {
-        const stats = duplicate(this.system.stats);
+        const stats = foundry.utils.duplicate(this.system.stats);
 
         const speciesStats = this.species?.system?.stats;
         for (const stat of Object.keys(stats)) {
@@ -356,12 +361,12 @@ class PTUPokemonActor extends PTUActor {
 
     // TODO: Implement rules for capability changing items
     _calcCapabilities() {
-        const speciesCapabilities = duplicate(this.species?.system?.capabilities ?? {});
+        const speciesCapabilities = foundry.utils.duplicate(this.species?.system?.capabilities ?? {});
         if (!speciesCapabilities) return {};
 
         const finalCapabilities = {}
         // Anything that is not a part of CONFIG.PTU.Capabilities.numericNonMovement or CONFIG.PTU.Capabilities.stringArray is considered movement, without explicitly listing them hardcoded.
-        const capsFromSpeciesOrModifiers = [...Object.keys(this.system.modifiers.capabilities), ...Object.keys(speciesCapabilities)]
+        const capsFromSpeciesOrModifiers = [...Object.keys(this.system.modifiers.capabilities), ...Object.keys(speciesCapabilities)].filter(cap => cap !== "all")
         const movementCapabilities = capsFromSpeciesOrModifiers.filter(cap => !CONFIG.PTU.Capabilities.stringArray.includes(cap) || !CONFIG.PTU.Capabilities.numericNonMovement.includes(cap))
 
         const speedCombatStages = this.system.stats.spd.stage.value + this.system.stats.spd.stage.mod;
@@ -374,6 +379,7 @@ class PTUPokemonActor extends PTUActor {
             if (this.system.modifiers.capabilities[moveCap] || speciesCapabilities[moveCap]) {
                 const mod = this.system.modifiers?.capabilities[moveCap] ? this.system.modifiers?.capabilities[moveCap] : 0
                 const speciesCap = speciesCapabilities[moveCap] ? speciesCapabilities[moveCap] : 0
+                if(speciesCap <= 0 && mod <= 0) continue;
                 finalCapabilities[moveCap] = Math.max(1, Math.floor(slowedMultiplier * (speciesCap + spdCsChanges + omniMovementMod + mod)))
             } else {
                 delete finalCapabilities[moveCap];
@@ -400,6 +406,9 @@ class PTUPokemonActor extends PTUActor {
             finalCapabilities[cap] = speciesCapabilities[cap]
         }
 
+        if(finalCapabilities["levitate"] === undefined) finalCapabilities["levitate"] = 0;
+        if(finalCapabilities["sky"] === undefined) finalCapabilities["sky"] = 0;
+
         return finalCapabilities;
     }
 
@@ -413,7 +422,7 @@ class PTUPokemonActor extends PTUActor {
                 if (!changes["system"]["skills"][value]) changes["system"]["skills"][value] = {}
                 if (!changes["system"]["skills"][value]['value']) changes["system"]["skills"][value]['value'] = {}
                 if (!changes["system"]["skills"][value]['value']['mod']) changes["system"]["skills"][value]['value']['mod'] = {}
-                changes["system"]["skills"][value]['value']['mod'][randomID()] = { mode: 'add', value: 1, source: "Skill Background" };
+                changes["system"]["skills"][value]['value']['mod'][foundry.utils.randomID()] = { mode: 'add', value: 1, source: "Skill Background" };
             }
         }
         for (const value of Object.values(this.system.background.decreased)) {
@@ -422,7 +431,7 @@ class PTUPokemonActor extends PTUActor {
                 if (!changes["system"]["skills"][value]) changes["system"]["skills"][value] = {}
                 if (!changes["system"]["skills"][value]['value']) changes["system"]["skills"][value]['value'] = {}
                 if (!changes["system"]["skills"][value]['value']['mod']) changes["system"]["skills"][value]['value']['mod'] = {}
-                changes["system"]["skills"][value]['value']['mod'][randomID()] = { mode: 'add', value: -1, source: "Skill Background" };
+                changes["system"]["skills"][value]['value']['mod'][foundry.utils.randomID()] = { mode: 'add', value: -1, source: "Skill Background" };
             }
         }
         if (game.settings.get("ptu", "variant.spiritPlaytest")) {
@@ -446,46 +455,46 @@ class PTUPokemonActor extends PTUActor {
                 case 5:
                 case 4:
                 case 3: {
-                    changes["system"]["modifiers"]["acBonus"]["mod"][randomID()] = { mode: 'add', value: 1, source: "Spirit" };
-                    changes["system"]["modifiers"]["evasion"]["physical"]["mod"][randomID()] = { mode: 'add', value: 1, source: "Spirit" };
-                    changes["system"]["modifiers"]["evasion"]["special"]["mod"][randomID()] = { mode: 'add', value: 1, source: "Spirit" };
-                    changes["system"]["modifiers"]["evasion"]["speed"]["mod"][randomID()] = { mode: 'add', value: 1, source: "Spirit" };
-                    changes["system"]["modifiers"]["critRange"]["mod"][randomID()] = { mode: 'add', value: 1, source: "Spirit" };
-                    changes["system"]["modifiers"]["saveChecks"]["mod"][randomID()] = { mode: 'add', value: 2, source: "Spirit" };
-                    changes["system"]["modifiers"]["skillBonus"]["mod"][randomID()] = { mode: 'add', value: 2, source: "Spirit" };
+                    changes["system"]["modifiers"]["acBonus"]["mod"][foundry.utils.randomID()] = { mode: 'add', value: 1, source: "Spirit" };
+                    changes["system"]["modifiers"]["evasion"]["physical"]["mod"][foundry.utils.randomID()] = { mode: 'add', value: 1, source: "Spirit" };
+                    changes["system"]["modifiers"]["evasion"]["special"]["mod"][foundry.utils.randomID()] = { mode: 'add', value: 1, source: "Spirit" };
+                    changes["system"]["modifiers"]["evasion"]["speed"]["mod"][foundry.utils.randomID()] = { mode: 'add', value: 1, source: "Spirit" };
+                    changes["system"]["modifiers"]["critRange"]["mod"][foundry.utils.randomID()] = { mode: 'add', value: 1, source: "Spirit" };
+                    changes["system"]["modifiers"]["saveChecks"]["mod"][foundry.utils.randomID()] = { mode: 'add', value: 2, source: "Spirit" };
+                    changes["system"]["modifiers"]["skillBonus"]["mod"][foundry.utils.randomID()] = { mode: 'add', value: 2, source: "Spirit" };
                     break;
                 }
                 case 2: {
-                    changes["system"]["modifiers"]["saveChecks"]["mod"][randomID()] = { mode: 'add', value: 2, source: "Spirit" };
-                    changes["system"]["modifiers"]["skillBonus"]["mod"][randomID()] = { mode: 'add', value: 2, source: "Spirit" };
+                    changes["system"]["modifiers"]["saveChecks"]["mod"][foundry.utils.randomID()] = { mode: 'add', value: 2, source: "Spirit" };
+                    changes["system"]["modifiers"]["skillBonus"]["mod"][foundry.utils.randomID()] = { mode: 'add', value: 2, source: "Spirit" };
                     break;
                 }
                 case 1: {
-                    changes["system"]["modifiers"]["skillBonus"]["mod"][randomID()] = { mode: 'add', value: 2, source: "Spirit" };
+                    changes["system"]["modifiers"]["skillBonus"]["mod"][foundry.utils.randomID()] = { mode: 'add', value: 2, source: "Spirit" };
                     break;
                 }
                 case -1: {
-                    changes["system"]["modifiers"]["skillBonus"]["mod"][randomID()] = { mode: 'add', value: -2, source: "Spirit" };
+                    changes["system"]["modifiers"]["skillBonus"]["mod"][foundry.utils.randomID()] = { mode: 'add', value: -2, source: "Spirit" };
                     break;
                 }
                 case -2: {
-                    changes["system"]["modifiers"]["saveChecks"]["mod"][randomID()] = { mode: 'add', value: -2, source: "Spirit" };
-                    changes["system"]["modifiers"]["skillBonus"]["mod"][randomID()] = { mode: 'add', value: -2, source: "Spirit" };
+                    changes["system"]["modifiers"]["saveChecks"]["mod"][foundry.utils.randomID()] = { mode: 'add', value: -2, source: "Spirit" };
+                    changes["system"]["modifiers"]["skillBonus"]["mod"][foundry.utils.randomID()] = { mode: 'add', value: -2, source: "Spirit" };
                     break;
                 }
                 case -3: {
-                    changes["system"]["modifiers"]["acBonus"]["mod"][randomID()] = { mode: 'add', value: -1, source: "Spirit" };
-                    changes["system"]["modifiers"]["evasion"]["physical"]["mod"][randomID()] = { mode: 'add', value: -1, source: "Spirit" };
-                    changes["system"]["modifiers"]["evasion"]["special"]["mod"][randomID()] = { mode: 'add', value: -1, source: "Spirit" };
-                    changes["system"]["modifiers"]["evasion"]["speed"]["mod"][randomID()] = { mode: 'add', value: -1, source: "Spirit" };
-                    changes["system"]["modifiers"]["critRange"]["mod"][randomID()] = { mode: 'add', value: -1, source: "Spirit" };
-                    changes["system"]["modifiers"]["saveChecks"]["mod"][randomID()] = { mode: 'add', value: -2, source: "Spirit" };
-                    changes["system"]["modifiers"]["skillBonus"]["mod"][randomID()] = { mode: 'add', value: -2, source: "Spirit" };
+                    changes["system"]["modifiers"]["acBonus"]["mod"][foundry.utils.randomID()] = { mode: 'add', value: -1, source: "Spirit" };
+                    changes["system"]["modifiers"]["evasion"]["physical"]["mod"][foundry.utils.randomID()] = { mode: 'add', value: -1, source: "Spirit" };
+                    changes["system"]["modifiers"]["evasion"]["special"]["mod"][foundry.utils.randomID()] = { mode: 'add', value: -1, source: "Spirit" };
+                    changes["system"]["modifiers"]["evasion"]["speed"]["mod"][foundry.utils.randomID()] = { mode: 'add', value: -1, source: "Spirit" };
+                    changes["system"]["modifiers"]["critRange"]["mod"][foundry.utils.randomID()] = { mode: 'add', value: -1, source: "Spirit" };
+                    changes["system"]["modifiers"]["saveChecks"]["mod"][foundry.utils.randomID()] = { mode: 'add', value: -2, source: "Spirit" };
+                    changes["system"]["modifiers"]["skillBonus"]["mod"][foundry.utils.randomID()] = { mode: 'add', value: -2, source: "Spirit" };
                     break;
                 }
             }
         }
-        this.system.changes = mergeObject(
+        this.system.changes = foundry.utils.mergeObject(
             this.system.changes,
             changes
         );
@@ -511,7 +520,7 @@ class PTUPokemonActor extends PTUActor {
         });
 
         if (result) {
-            if (result.changed) mergeObject(changed, result.changed);
+            if (result.changed) foundry.utils.mergeObject(changed, result.changed);
         }
 
         await super._preUpdate(changed, options, userId);
@@ -525,13 +534,26 @@ class PTUPokemonActor extends PTUActor {
             const tokenUpdates = {};
 
             const curImg = await PokemonGenerator.getImage(this.species, { gender: this.system.gender, shiny: this.system.shiny });
+            const curTokenImg = (() => {
+                const tokenImageExtension = game.settings.get("ptu", "generation.defaultTokenImageExtension");
+                if(curImg.endsWith(tokenImageExtension)) return curImg;
+                const actorImageExtension = game.settings.get("ptu", "generation.defaultImageExtension");
+                return curImg.replace(actorImageExtension, tokenImageExtension);
+            })();
             const newImg = await PokemonGenerator.getImage(result.evolution, { gender: this.system.gender, shiny: this.system.shiny });
+            const newTokenImg = (() => {
+                const tokenImageExtension = game.settings.get("ptu", "generation.defaultTokenImageExtension");
+                if(newImg.endsWith(tokenImageExtension)) return newImg;
+                const actorImageExtension = game.settings.get("ptu", "generation.defaultImageExtension");
+                return newImg.replace(actorImageExtension, tokenImageExtension);
+            })();
 
             if (this.img === curImg) update.img = newImg;
-            if (this.prototypeToken.texture.src === curImg) {
-                update["prototypeToken.texture.src"] = newImg;
+            if (this.prototypeToken.texture.src === curTokenImg) {
+                update["prototypeToken.texture.src"] = newTokenImg;
                 tokenUpdates["texture.src"] = update["prototypeToken.texture.src"];
             }
+
             if (sluggify(this.name) == this.species.slug) {
                 update.name = Handlebars.helpers.capitalizeFirst(result.evolution.name);
                 tokenUpdates["name"] = update.name;
@@ -580,7 +602,7 @@ class PTUPokemonActor extends PTUActor {
                 }
                 else if (!currentAbility) {
                     const newAbility = (await fromUuid(ability.uuid)).toObject();
-                    newAbility.flags.ptu = mergeObject(newAbility.flags?.ptu ?? {}, {
+                    newAbility.flags.ptu = foundry.utils.mergeObject(newAbility.flags?.ptu ?? {}, {
                         abilityChosen: ability.tier
                     });
                     toAdd.push(newAbility);

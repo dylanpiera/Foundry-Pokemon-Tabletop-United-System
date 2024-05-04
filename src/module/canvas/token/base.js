@@ -14,7 +14,7 @@ class PTUToken extends Token {
         }
 
         const { current, max, temp, injuries } = actor.attributes.health ?? {};
-        const healthPercent = Math.clamped(current, 0, max) / max;
+        const healthPercent = Math.clamp(current, 0, max) / max;
 
         // Compute the color based on health percentage, this formula is the one core foundry uses
         const black = 0x000000;
@@ -26,12 +26,12 @@ class PTUToken extends Token {
 
         // Bar size logic stolen from core
         let h = Math.max(canvas.dimensions.size / 12, 8);
-        const bs = Math.clamped(h / 8, 1, 2);
+        const bs = Math.clamp(h / 8, 1, 2);
         if (this.document.height >= 2) h *= 1.6; // Enlarge the bar for large tokens
 
         const { is, turns, bars } = actor.system.boss ?? {};
         const bossBars = is ? Math.max(turns - 1, bars) : 0;
-        const brokenBars = is ? Math.clamped(bossBars - bars, 0, bossBars) : 0;
+        const brokenBars = is ? Math.clamp(bossBars - bars, 0, bossBars) : 0;
 
         const numBars = (temp?.value > 0 ? 2 : 1) + bossBars + 1;
         const barHeight = h / numBars;
@@ -51,7 +51,7 @@ class PTUToken extends Token {
         // Draw temp hp
         if (temp?.value > 0) {
             const tempColor = 0x66ccff;
-            const tempPercent = Math.clamped(temp.value, 0, (temp.max < temp.value ? temp.value : temp.max)) / (temp.max < temp.value ? temp.value : temp.max);
+            const tempPercent = Math.clamp(temp.value, 0, (temp.max < temp.value ? temp.value : temp.max)) / (temp.max < temp.value ? temp.value : temp.max);
             const tempWidth = tempPercent * smallBarWidth - 2 * (bs - 1);
             bar.lineStyle(0).beginFill(black, 0.5).drawRoundedRect(smallWidthOffset, 0, smallBarWidth, barHeight, 3);
             bar.beginFill(tempColor, 1.0).drawRoundedRect(smallWidthOffset, 0, tempWidth, barHeight, 2);
@@ -75,7 +75,7 @@ class PTUToken extends Token {
         }
 
         // Detirmine the width of the health bar due to injuries
-        const injuryPercent = Math.clamped(injuries, 0, 10) / 10;
+        const injuryPercent = Math.clamp(injuries, 0, 10) / 10;
         const injuryWidth = injuryPercent * this.w;
         const healthWidth = (this.w - injuryWidth) * healthPercent;
 
@@ -272,7 +272,7 @@ class PTUToken extends Token {
                 const maxHP = this.actor?.system?.health?.max;
                 if (!quantity) return null;
 
-                const percent = Math.clamped(Math.abs(quantity) / maxHP, 0, 1);
+                const percent = Math.clamp(Math.abs(quantity) / maxHP, 0, 1);
                 const textColors = {
                     damage: 16711680, // reddish
                     healing: 65280, // greenish
@@ -336,7 +336,7 @@ class PTUToken extends Token {
         const selfElevation = this.document.elevation;
         const targetElevation = target.document.elevation;
         if (selfElevation === targetElevation || !this.actor || !target.actor) {
-            return measureDistanceCuboid(this.bounds, target.bounds, options);
+            return measureDistanceCuboid(this.bounds, target.bounds, {}, options);
         }
 
         return measureDistanceCuboid(this.bounds, target.bounds, {
@@ -404,7 +404,6 @@ class PTUToken extends Token {
             };
         }, {});
 
-        console.log(Object.entries(flankersFlanking).map(([id, count]) => `${canvas.tokens.get(id).name}: ${count}`));
         const flankedByCount = Object.values(flankersFlanking).reduce((acc, count) => Math.max(acc, count), 0);
 
         return flankedByCount >= flankerRequirement;

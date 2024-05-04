@@ -9,7 +9,7 @@ export function registerHandlebarsHelpers() {
 function _registerPTUHelpers() {
 
     Handlebars.registerHelper("getGameSetting", function (key) { return game.settings.get("ptu", key) });
-    Handlebars.registerHelper("getProperty", getProperty); // native foundry function
+    Handlebars.registerHelper("getProperty", foundry.utils.getProperty); // native foundry function
 
     Handlebars.registerHelper("json", function (context) { return JSON.stringify(context); });
 
@@ -37,7 +37,7 @@ function _registerPTUHelpers() {
     })
 
     Handlebars.registerHelper("calcHeight", function (percent) {
-        return Math.round((100 - percent) / 100 * 48);
+        return Math.clamp(Math.round((100 - percent) / 100 * 48), 0, 48);
     });
 
     // //pokeball themed background for pokemon
@@ -122,7 +122,7 @@ function _registerPTUHelpers() {
         const dbNumber = Number(item.damageBase.postStab ?? item);
         if (isNaN(dbNumber)) return "Not a valid DB";
 
-        const realDb = Math.clamped(dbNumber, 0, 28);
+        const realDb = Math.clamp(dbNumber, 0, 28);
         const dbString = CONFIG.PTU.data.dbData[realDb];
 
         if (!actor) return dbString;
@@ -347,6 +347,7 @@ function _registerBasicHelpers() {
     Handlebars.registerHelper("capitalizeFirst", (e) => { return "string" != typeof e ? e : e.charAt(0).toUpperCase() + e.slice(1) });
 
     const capitalize = function (input) {
+        if(!!input == false) return "";
         var i, j, str, lowers, uppers;
         str = input.replace(/([^\W_]+[^\s-]*) */g, function (txt) {
             return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();

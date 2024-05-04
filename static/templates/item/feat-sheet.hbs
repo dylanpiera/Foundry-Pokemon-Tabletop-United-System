@@ -62,14 +62,14 @@
                                         disabled
                                     />
                                 </span>
-                                <span style="flex: 0 0 100%">
-                                    TAGS 
-                                    <input
-                                        class="ml-2"
-                                        name=""
-                                        type="text"
-                                        value="{{item.system.tags}}"
-                                        placeholder=""
+                                <span class="d-flex justify-content-between" style="flex: 0 0 100%">
+                                    KEYWORDS 
+                                    <input 
+                                        type="text" 
+                                        class="ptu-tagify system-keywords" 
+                                        name="" 
+                                        value="{{json item.system.keywords}}" 
+                                        data-dtype="JSON"
                                         disabled
                                     />
                                 </span>
@@ -100,16 +100,12 @@
                 <input class="ml-1 mr-1" name="system.frequency" type="text" value="{{item.system.frequency}}" placeholder="{{localize "ITEM.Frequency"}}"/>
             </div>
             <div class="item-row">
-                <label for="system.tags">{{localize "ITEM.Tags"}}</label>
-                <input class="ml-1 mr-1" name="system.tags" type="text" value="{{item.system.tags}}" placeholder="{{localize "ITEM.Tags"}}"/>
-            </div>
-            <div class="item-row">
                 <label for="system.class">{{localize "ITEM.Class"}}</label>
                 <input class="ml-1 mr-1" name="system.class" type="text" value="{{item.system.class}}" placeholder="{{localize "ITEM.Class"}}"/>
             </div>
             <div class="item-row">
-                <label for="system.origin">{{localize "ITEM.Origin"}}</label>
-                <input class="ml-1 mr-1" name="system.origin" type="text" value="{{item.system.origin}}" placeholder="{{localize "ITEM.Origin"}}"/>
+                <label for="system.keywords">{{localize "ITEM.Keywords"}}</label>
+                <input type="text" class="ptu-tagify system-keywords" name="system.keywords" value="{{json item.system.keywords}}" data-dtype="JSON"/>
             </div>
             <div class="item-row">
                 <label for="system.referenceEffect">{{localize "ITEM.ReferenceEffect"}}</label>
@@ -118,6 +114,10 @@
             <div class="item-row">
                 <label for="system.effect">{{localize "ITEM.Effect"}}</label>
                 <textarea class="ml-1 mr-1" name="system.effect">{{item.system.effect}}</textarea>
+            </div>
+            <div class="item-row">
+                <label for="system.snippet">{{localize "ITEM.Snippet"}}</label>
+                <textarea class="ml-1 mr-1" name="system.snippet">{{item.system.snippet}}</textarea>
             </div>
             <div class="item-row" style="justify-content: flex-start;">
                 <label for="system.free">{{localize "ITEM.FreeFeat"}}</label>

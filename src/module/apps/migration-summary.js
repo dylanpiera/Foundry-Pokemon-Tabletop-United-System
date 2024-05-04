@@ -1,3 +1,4 @@
+
 import { MigrationList } from "../migration/index.js";
 import { MigrationRunner } from "../migration/runner/index.js"
 
@@ -16,7 +17,7 @@ class MigrationSummary extends Application {
             (app) => app instanceof MigrationSummary
         );
         if (existing) {
-            existing.options = mergeObject(existing.options, options);
+            existing.options = foundry.utils.mergeObject(existing.options, options);
             return existing;
         }
     }

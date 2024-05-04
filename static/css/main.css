@@ -1,6 +1,26 @@
+* {
+  scrollbar-color: auto;
+}
 .compendium-sidebar.directory .directory-footer {
   flex: 0 0 30px;
   display: flex;
+}
+.effect-popup {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.effect-popup .effect-effect {
+  white-space: pre-wrap;
+}
+.effect-popup .effect-range {
+  margin: 0 0.25rem 0.25rem 0.25rem;
+  text-align: center;
+  padding: 0.25rem 1rem;
+  background: #a88fff65;
+  border-radius: 5px;
+  width: fit-content;
+  align-self: center;
 }
 #token-hud .status-effects {
   padding: 5px;
@@ -74,6 +94,18 @@
 #token-hud .status-effects .effect-control:hover {
   filter: drop-shadow(0 0 5px #232323aa) drop-shadow(0 0 2px #ababab77);
 }
+.conjunction-not[not="true"] {
+  --tag-inset-shadow-size: 5em !important;
+  --tags-border-color: #d3a2a2 !important;
+  --tags-hover-border-color: #bc5151 !important;
+  --tags-focus-border-color: #bc5151 !important;
+  --tag-bg: #d3a2a2 !important;
+  --tag-hover: #bc5151 !important;
+  text-decoration: none;
+}
+.conjunction-not[not="true"][disabled] > .tagify__input {
+  display: none;
+}
 .tagify {
   --tag-inset-shadow-size: 5em !important;
   --tags-border-color: #AED3A2 !important;
@@ -81,6 +113,7 @@
   --tags-focus-border-color: #82bc51 !important;
   --tag-bg: #AED3A2 !important;
   --tag-hover: #82bc51 !important;
+  text-decoration: none;
 }
 .tagify[disabled] > .tagify__input {
   display: none;
@@ -195,6 +228,14 @@
   border-radius: 5px;
   margin-top: 5px;
   padding: 2px;
+}
+#compendium-browser section.window-content .content-box section.content .tab.active .content-grid .control-area .slidercontainer-flex {
+  display: flex;
+  justify-content: space-around;
+  align-items: baseline;
+}
+#compendium-browser section.window-content .content-box section.content .tab.active .content-grid .control-area .slidercontainer-flex label {
+  width: 10px;
 }
 #compendium-browser section.window-content .content-box section.content .tab.active .content-grid .control-area input {
   width: 100%;
@@ -429,6 +470,301 @@
 }
 .dice-checks.dialog section .check-modifiers-content.skill {
   background: linear-gradient(45deg, #c3eaec, #b7ffdb);
+}
+a.pokedollar.cost {
+  color: #ff5a68;
+}
+a.pokedollar.cost span::before {
+  filter: invert(46%) sepia(46%) saturate(1698%) hue-rotate(321deg) brightness(102%) contrast(101%);
+}
+a.pokedollar span {
+  position: relative;
+  padding-left: 10px;
+}
+a.pokedollar span::before {
+  content: "";
+  background: url(/systems/ptu/static/css/images/Pokémon_Dollar_sign.svg);
+  background-size: contain;
+  background-repeat: no-repeat;
+  position: absolute;
+  height: 11px;
+  width: 8px;
+  bottom: 3px;
+  left: 1px;
+  filter: invert(28%) sepia(2%) saturate(3040%) hue-rotate(14deg) brightness(78%) contrast(75%);
+}
+.ptu.rulebook {
+  background: linear-gradient(45deg, #ECDBEBfa, #DFFFFEa3);
+}
+.ptu.rulebook ::-webkit-scrollbar-thumb {
+  outline: none;
+  border-radius: 3px;
+  background: #ff5a68 !important;
+  border: 1px solid #ff4150 !important;
+}
+.ptu.rulebook ::-webkit-scrollbar-track {
+  box-shadow: 0 0 1px #ff6a77 inset !important;
+  border-radius: 4px;
+}
+.ptu.rulebook table {
+  border-top: 1px solid #ff6a77;
+  border-bottom: 1px solid #ff6a77;
+}
+.ptu.rulebook table thead {
+  background: #ff6a77aa;
+  color: black;
+  text-shadow: unset;
+  border-bottom: 1px solid #ff6a77;
+}
+.ptu.rulebook table tr {
+  text-align: center;
+}
+.ptu.rulebook table tr:nth-child(odd) {
+  background: #ff6a7741;
+}
+.ptu.rulebook table tr:nth-child(even) {
+  background: #ff0e2246;
+}
+.ptu.rulebook table.nature-chart {
+  border: 2px solid #ff6a77;
+}
+.ptu.rulebook table.nature-chart td:nth-child(3) {
+  border-right: 2px solid #ff6a77;
+}
+.ptu.rulebook .journal-entry-content {
+  background: whitesmoke;
+}
+.ptu.rulebook aside {
+  padding: 0.1rem 0 0.1rem 0.4rem;
+}
+.ptu.rulebook .left {
+  float: left;
+  margin: 0 0.75rem 0 0;
+  clear: left;
+}
+.ptu.rulebook .right {
+  float: right;
+  margin: 0 0 0 0.75rem;
+  clear: right;
+}
+.ptu.rulebook .left,
+.ptu.rulebook .right {
+  max-width: 350px;
+  padding: 0.5rem;
+}
+.ptu.rulebook .left > h3,
+.ptu.rulebook .right > h3 {
+  text-align: center;
+  font-family: "Roundest Bold";
+  margin: 0 0 -8px 0;
+  font-size: 1rem;
+  color: black;
+}
+.ptu.rulebook.journal-entry {
+  min-width: 60rem;
+}
+.ptu.rulebook.journal-entry .journal-header {
+  text-align: center;
+  width: 100%;
+  margin: auto;
+  z-index: 2;
+  background: #ff6a77;
+  border-radius: 5px 0 0 5px;
+}
+.ptu.rulebook.journal-entry .journal-header input.title {
+  background: transparent;
+  color: black;
+  text-overflow: ellipsis;
+}
+.ptu.rulebook.journal-entry-page .editable .journal-page-content.editor-content figure.head img {
+  max-width: 700px;
+}
+.ptu.rulebook.journal-entry-page .editable .journal-page-content.editor-content figure img {
+  max-width: 300px;
+}
+.ptu.rulebook.journal-entry-page .editable .journal-page-content.editor-content aside img {
+  max-width: 128px;
+}
+.ptu.rulebook.journal-entry-page,
+.ptu.rulebook section.journal-entry-content {
+  border: unset;
+}
+.ptu.rulebook.journal-entry-page div.editable,
+.ptu.rulebook section.journal-entry-content div.editable {
+  margin: unset;
+}
+.ptu.rulebook.journal-entry-page div.editable div.scrollable,
+.ptu.rulebook section.journal-entry-content div.editable div.scrollable {
+  padding: 0.5rem 0;
+  scrollbar-gutter: stable both-edges;
+}
+.ptu.rulebook.journal-entry-page div.editable div.scrollable div.edit-container,
+.ptu.rulebook section.journal-entry-content div.editable div.scrollable div.edit-container {
+  z-index: 5;
+}
+.ptu.rulebook.journal-entry-page div.editable div.scrollable section.journal-page-content,
+.ptu.rulebook section.journal-entry-content div.editable div.scrollable section.journal-page-content {
+  padding: 0 1rem;
+  margin: 0.5rem 0;
+}
+.ptu.rulebook.journal-entry-page .journal-header,
+.ptu.rulebook section.journal-entry-content .journal-header {
+  z-index: 1;
+}
+.ptu.rulebook.journal-entry-page .journal-header input,
+.ptu.rulebook section.journal-entry-content .journal-header input {
+  color: black;
+  text-overflow: ellipsis;
+  border: none;
+  font-weight: bold;
+}
+.ptu.rulebook.journal-entry-page .journal-page-header,
+.ptu.rulebook section.journal-entry-content .journal-page-header {
+  position: relative;
+  margin: auto;
+  display: flex;
+  justify-content: center;
+}
+.ptu.rulebook.journal-entry-page .journal-page-header h1,
+.ptu.rulebook section.journal-entry-content .journal-page-header h1,
+.ptu.rulebook.journal-entry-page .journal-page-header h2,
+.ptu.rulebook section.journal-entry-content .journal-page-header h2,
+.ptu.rulebook.journal-entry-page .journal-page-header h3,
+.ptu.rulebook section.journal-entry-content .journal-page-header h3 {
+  margin: unset;
+  clear: both;
+  flex: 1;
+}
+.ptu.rulebook.journal-entry-page .journal-page-header h1,
+.ptu.rulebook section.journal-entry-content .journal-page-header h1 {
+  position: relative;
+  color: black;
+  text-align: center;
+  border: unset;
+  line-height: 2.5rem;
+  font-size: 2rem;
+  font-weight: bold;
+  border-bottom: 2px solid #ff6a77;
+  flex: 0 0 60%;
+}
+.ptu.rulebook.journal-entry-page .journal-page-header h2,
+.ptu.rulebook section.journal-entry-content .journal-page-header h2,
+.ptu.rulebook.journal-entry-page .journal-page-header h3,
+.ptu.rulebook section.journal-entry-content .journal-page-header h3 {
+  margin: 0.5rem 1rem 0.25rem 1rem;
+  width: auto;
+  line-height: 2rem;
+  font-size: 1.6rem;
+  color: black;
+  border-bottom: 2px solid black;
+}
+.ptu.rulebook.journal-entry aside.sidebar.flexcol.directory.journal-sidebar {
+  color: white;
+  border: unset;
+}
+.ptu.rulebook.journal-entry aside.sidebar.flexcol.directory.journal-sidebar div.action-buttons,
+.ptu.rulebook.journal-entry aside.sidebar.flexcol.directory.journal-sidebar header.directory-header {
+  z-index: 2;
+}
+.ptu.rulebook.journal-entry aside.sidebar.flexcol.directory.journal-sidebar div.action-buttons button.next,
+.ptu.rulebook.journal-entry aside.sidebar.flexcol.directory.journal-sidebar header.directory-header button.next,
+.ptu.rulebook.journal-entry aside.sidebar.flexcol.directory.journal-sidebar div.action-buttons button.previous,
+.ptu.rulebook.journal-entry aside.sidebar.flexcol.directory.journal-sidebar header.directory-header button.previous,
+.ptu.rulebook.journal-entry aside.sidebar.flexcol.directory.journal-sidebar div.action-buttons a.action-button,
+.ptu.rulebook.journal-entry aside.sidebar.flexcol.directory.journal-sidebar header.directory-header a.action-button,
+.ptu.rulebook.journal-entry aside.sidebar.flexcol.directory.journal-sidebar div.action-buttons input,
+.ptu.rulebook.journal-entry aside.sidebar.flexcol.directory.journal-sidebar header.directory-header input,
+.ptu.rulebook.journal-entry aside.sidebar.flexcol.directory.journal-sidebar div.action-buttons button.create,
+.ptu.rulebook.journal-entry aside.sidebar.flexcol.directory.journal-sidebar header.directory-header button.create {
+  margin: 0.25rem;
+  border: unset;
+  background: rgba(255, 255, 245, 0.75);
+  border-radius: 4px;
+  line-height: 28px;
+  height: 28px;
+  color: black;
+}
+.ptu.rulebook.journal-entry aside.sidebar.flexcol.directory.journal-sidebar ol.directory-list li.directory-item {
+  line-height: 30px;
+  border: unset;
+}
+.ptu.rulebook.journal-entry aside.sidebar.flexcol.directory.journal-sidebar ol.directory-list li.directory-item.active::after {
+  border: unset;
+}
+.ptu.rulebook.journal-entry aside.sidebar.flexcol.directory.journal-sidebar ol.directory-list li.directory-item span.page-title {
+  text-overflow: ellipsis;
+  font-size: 0.9rem;
+}
+.ptu.rulebook.journal-entry aside.sidebar.flexcol.directory.journal-sidebar ol.directory-list li.directory-item ol.headings {
+  display: none;
+}
+.ptu.rulebook.journal-entry aside.sidebar.flexcol.directory.journal-sidebar ol.directory-list li.directory-item .page-heading {
+  color: black;
+}
+.ptu.rulebook.journal-entry aside.sidebar.flexcol.directory.journal-sidebar ol.directory-list li.directory-item.level1::before {
+  content: "";
+  background-color: #ff6a77;
+  background-size: contain;
+  background-position: center;
+  top: 0;
+  width: 100%;
+  height: 0.5rem;
+  margin: 0.25rem 0;
+  border-radius: 5px;
+}
+.ptu.rulebook.journal-entry aside.sidebar.flexcol.directory.journal-sidebar ol.directory-list li.directory-item.level1 span.page-title {
+  font-size: 1.1rem;
+  font-weight: bold;
+}
+.ptu.rulebook.journal-entry aside.sidebar.flexcol.directory.journal-sidebar ol.directory-list li.directory-item.level2 span.page-title {
+  text-indent: 0rem;
+}
+.ptu.rulebook.journal-entry aside.sidebar.flexcol.directory.journal-sidebar ol.directory-list li.directory-item.level3 span.page-title {
+  text-indent: 0.5rem;
+}
+.ptu.rulebook.journal-entry aside.sidebar.flexcol.directory.journal-sidebar:not(.collapsed) {
+  flex-basis: 16rem;
+}
+.ptu.rulebook.journal-entry aside.sidebar.flexcol.directory.journal-sidebar:not(.collapsed) span.page-number {
+  color: transparent;
+  width: 24px;
+  margin-right: 2px;
+}
+.ptu.rulebook.journal-entry aside.sidebar.flexcol.directory.journal-sidebar:not(.collapsed) .active span.page-number {
+  background-image: url(/icons/svg/downgrade.svg);
+  filter: brightness(0);
+  rotate: 270deg;
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+.ptu.rulebook.journal-entry aside.sidebar.flexcol.directory.journal-sidebar:not(.collapsed) .active + .active span.page-number {
+  background-image: unset;
+}
+.ptu.rulebook.journal-entry aside.sidebar.flexcol.directory.journal-sidebar.collapsed {
+  padding: 0 0 0 0.1rem;
+  flex-basis: 2.5rem;
+}
+.ptu.rulebook.journal-entry aside.sidebar.flexcol.directory.journal-sidebar.collapsed .active {
+  font-weight: bold;
+}
+.ptu.rulebook.journal-entry aside.sidebar.flexcol.directory.journal-sidebar.collapsed .active div.page-heading {
+  background-color: #22222442;
+  border-radius: 8px;
+}
+.ptu.rulebook.journal-entry aside.sidebar.flexcol.directory.journal-sidebar.collapsed .page-number {
+  color: black;
+}
+.ptu.rulebook:not(.minimized) header.window-header {
+  padding-bottom: 2px;
+  line-height: 2rem;
+  z-index: 3;
+  border: unset;
+  filter: drop-shadow(1px 1px 4px #150c0c);
+}
+.ptu.rulebook:not(.minimized) header.window-header h4,
+.ptu.rulebook:not(.minimized) header.window-header a {
+  text-shadow: 1px 2px 3px black;
 }
 .token-panel {
   pointer-events: initial;
@@ -687,6 +1023,20 @@
   flex: 0 0 25px;
   display: flex;
 }
+.token-panel .main-panel .actions-accordion .action .icon.with-category,
+.token-panel .main-panel .items-accordion .action .icon.with-category {
+  flex: 0 0 44px;
+}
+.token-panel .main-panel .actions-accordion .action .icon.with-category img,
+.token-panel .main-panel .items-accordion .action .icon.with-category img {
+  height: 22px;
+  width: 22px;
+  flex: 0 0 22px;
+}
+.token-panel .main-panel .actions-accordion .action .icon.with-category img.category,
+.token-panel .main-panel .items-accordion .action .icon.with-category img.category {
+  border-radius: 0 5px 5px 0;
+}
 .token-panel .main-panel .actions-accordion .action .icon img,
 .token-panel .main-panel .items-accordion .action .icon img {
   height: 25px;
@@ -697,13 +1047,25 @@
 }
 .token-panel .main-panel .actions-accordion .action .name,
 .token-panel .main-panel .items-accordion .action .name {
-  flex: 0 0 auto;
+  flex: 0 0 100px;
   align-self: center;
+  font-size: 12px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .token-panel .main-panel .actions-accordion .action .tags,
 .token-panel .main-panel .items-accordion .action .tags {
   flex: 0 0 100%;
   height: 20px;
+}
+.token-panel .main-panel .actions-accordion .action.rollable:hover .icon,
+.token-panel .main-panel .items-accordion .action.rollable:hover .icon {
+  flex: 0 0 25px;
+}
+.token-panel .main-panel .actions-accordion .action.rollable:hover .name,
+.token-panel .main-panel .items-accordion .action.rollable:hover .name {
+  flex: 0 0 120px;
 }
 .token-panel .main-panel .items-accordion .pokeball-items,
 .token-panel .main-panel .items-accordion .other-items {
@@ -974,13 +1336,16 @@
   border: none;
   border-radius: 5px;
   position: relative;
+  height: 48px;
+  width: 52px;
+  object-fit: contain;
 }
 .token-panel .top-panel .party-overview .party-pokemon .pokemon img.black {
   border-left: 4px solid black;
   background-color: #00000065;
 }
 .token-panel .top-panel .party-overview .party-pokemon .pokemon img.darkred {
-  border-left: 4px solid #8b0000;
+  border-left: 4px solid #686161;
   background-color: #8b000065;
 }
 .token-panel .top-panel .party-overview .party-pokemon .pokemon img.red {
@@ -1889,30 +2254,30 @@ a.content-link img {
 .ptu.sheet.gen8.actor.compact main.sheet-body .capability .skills .type--spirit {
   background-color: #93c47daa;
 }
-.ptu.sheet.gen8.actor.compact main.sheet-body .capability .skills .skill--Pathetic {
+.ptu.sheet.gen8.actor.compact main.sheet-body .capability .skills .skill--pathetic {
   background: #cfe2f3;
 }
-.ptu.sheet.gen8.actor.compact main.sheet-body .capability .skills .skill--Untrained {
+.ptu.sheet.gen8.actor.compact main.sheet-body .capability .skills .skill--untrained {
   background: #9fc5e8;
 }
-.ptu.sheet.gen8.actor.compact main.sheet-body .capability .skills .skill--Novice {
+.ptu.sheet.gen8.actor.compact main.sheet-body .capability .skills .skill--novice {
   background: #6fa8dc;
 }
-.ptu.sheet.gen8.actor.compact main.sheet-body .capability .skills .skill--Adept {
+.ptu.sheet.gen8.actor.compact main.sheet-body .capability .skills .skill--adept {
   background: #3d85c6;
 }
-.ptu.sheet.gen8.actor.compact main.sheet-body .capability .skills .skill--Expert {
+.ptu.sheet.gen8.actor.compact main.sheet-body .capability .skills .skill--expert {
   background: #0b5394;
   color: #cfe2f3;
 }
-.ptu.sheet.gen8.actor.compact main.sheet-body .capability .skills .skill--Master {
+.ptu.sheet.gen8.actor.compact main.sheet-body .capability .skills .skill--master {
   background: #073763;
   color: #cfe2f3;
 }
-.ptu.sheet.gen8.actor.compact main.sheet-body .capability .skills .skill--Virtuoso {
+.ptu.sheet.gen8.actor.compact main.sheet-body .capability .skills .skill--virtuoso {
   background: #e9be25;
 }
-.ptu.sheet.gen8.actor.compact main.sheet-body .capability .skills .skill--Invalid {
+.ptu.sheet.gen8.actor.compact main.sheet-body .capability .skills .skill--invalid {
   background: #ff0f0faa;
 }
 .ptu.sheet.gen8.actor.compact main.sheet-body .extra .flex-row.hp,
@@ -2146,30 +2511,30 @@ a.content-link img {
 .ptu.sheet.gen8.actor main.sheet-body .stats .skills .type--spirit {
   background-color: #93c47daa;
 }
-.ptu.sheet.gen8.actor main.sheet-body .stats .skills .skill--Pathetic {
+.ptu.sheet.gen8.actor main.sheet-body .stats .skills .skill--pathetic {
   background: #cfe2f3;
 }
-.ptu.sheet.gen8.actor main.sheet-body .stats .skills .skill--Untrained {
+.ptu.sheet.gen8.actor main.sheet-body .stats .skills .skill--untrained {
   background: #9fc5e8;
 }
-.ptu.sheet.gen8.actor main.sheet-body .stats .skills .skill--Novice {
+.ptu.sheet.gen8.actor main.sheet-body .stats .skills .skill--novice {
   background: #6fa8dc;
 }
-.ptu.sheet.gen8.actor main.sheet-body .stats .skills .skill--Adept {
+.ptu.sheet.gen8.actor main.sheet-body .stats .skills .skill--adept {
   background: #3d85c6;
 }
-.ptu.sheet.gen8.actor main.sheet-body .stats .skills .skill--Expert {
+.ptu.sheet.gen8.actor main.sheet-body .stats .skills .skill--expert {
   background: #0b5394;
   color: #cfe2f3;
 }
-.ptu.sheet.gen8.actor main.sheet-body .stats .skills .skill--Master {
+.ptu.sheet.gen8.actor main.sheet-body .stats .skills .skill--master {
   background: #073763;
   color: #cfe2f3;
 }
-.ptu.sheet.gen8.actor main.sheet-body .stats .skills .skill--Virtuoso {
+.ptu.sheet.gen8.actor main.sheet-body .stats .skills .skill--virtuoso {
   background: #e9be25;
 }
-.ptu.sheet.gen8.actor main.sheet-body .stats .skills .skill--Invalid {
+.ptu.sheet.gen8.actor main.sheet-body .stats .skills .skill--invalid {
   background: #ff0f0faa;
 }
 .ptu.sheet.gen8.actor main.sheet-body .stats .skills,
@@ -2258,6 +2623,10 @@ a.content-link img {
 .ptu.sheet.gen8.dex .item-list-header .item-controls .item-control.item-create:hover {
   background: #788898cc;
   text-shadow: unset;
+}
+.ptu.sheet.gen8.actor .item-list-header .item-controls .item-control.item-create span,
+.ptu.sheet.gen8.dex .item-list-header .item-controls .item-control.item-create span {
+  white-space: nowrap;
 }
 .ptu.sheet.gen8.actor .item-list-header .item-controls .item-control.item-settings,
 .ptu.sheet.gen8.dex .item-list-header .item-controls .item-control.item-settings {
@@ -2544,7 +2913,7 @@ a.content-link img {
 }
 .ptu.sheet.gen8.actor .item-list .item .item-controls,
 .ptu.sheet.gen8.dex .item-list .item .item-controls {
-  flex: 0 0 72px;
+  flex: 0 0 90px;
   justify-content: end;
   display: flex;
   flex-direction: row;
@@ -2761,6 +3130,62 @@ a.content-link img {
 }
 .ptu.sheet.gen8 .swsh-box .swsh-body.dark-body {
   background: #b3b3b3;
+}
+.ptu.weather {
+  --weather-border-divider: 1px solid var(--color-underline-header);
+}
+.ptu.weather .window-content {
+  background: #d1fed4;
+}
+.ptu.weather .hint-text {
+  flex: 0 1 auto;
+  padding-bottom: 0.5rem;
+  border-bottom: var(--weather-border-divider);
+}
+.ptu.weather .effects {
+  flex: 1 0 auto;
+  display: flex;
+  flex-direction: column;
+}
+.ptu.weather .effects .effect {
+  flex: 0 0 25px;
+  display: flex;
+  flex-direction: row;
+  gap: 5px;
+  padding: 0.5rem 0;
+}
+.ptu.weather .effects .effect:nth-child(even) {
+  border-top: var(--weather-border-divider);
+}
+.ptu.weather .effects .effect:last-child {
+  border-bottom: var(--weather-border-divider);
+}
+.ptu.weather .effects .effect .icon {
+  flex: 0 0 25px;
+  height: 25px;
+}
+.ptu.weather .effects .effect .name {
+  flex: 1 0 auto;
+  align-self: center;
+  font-weight: bold;
+}
+.ptu.weather .effects .effect .mode-select {
+  flex: 0 0 100px;
+}
+.ptu.weather .effects .effect .item-controls {
+  flex: 0 1 40px;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-self: center;
+  justify-content: center;
+  gap: 5px;
+}
+.content-embed {
+  margin: 0.5rem 0;
+  padding: 0.5rem;
+  border: 2px solid #668170;
+  border-radius: 8px;
 }
 /* -------------------------------------------- */
 /*  Item Sheet                                  */
@@ -2989,7 +3414,8 @@ a.content-link img {
   flex: 0;
 }
 .sheet.item section form.item-sheet .sheet-body .rules .rules-list .rule-element .rule-body[data-key="GrantItem"] a.granted,
-.sheet.item section form.item-sheet .sheet-body .rules .rules-list .rule-element .rule-body[data-key="EphemeralEffect"] a.granted {
+.sheet.item section form.item-sheet .sheet-body .rules .rules-list .rule-element .rule-body[data-key="EphemeralEffect"] a.granted,
+.sheet.item section form.item-sheet .sheet-body .rules .rules-list .rule-element .rule-body[data-key="ApplyEffect"] a.granted {
   display: flex;
   flex: 0 0 auto;
   flex-direction: row;
@@ -2997,7 +3423,8 @@ a.content-link img {
   gap: 3px;
 }
 .sheet.item section form.item-sheet .sheet-body .rules .rules-list .rule-element .rule-body[data-key="GrantItem"] a.granted img,
-.sheet.item section form.item-sheet .sheet-body .rules .rules-list .rule-element .rule-body[data-key="EphemeralEffect"] a.granted img {
+.sheet.item section form.item-sheet .sheet-body .rules .rules-list .rule-element .rule-body[data-key="EphemeralEffect"] a.granted img,
+.sheet.item section form.item-sheet .sheet-body .rules .rules-list .rule-element .rule-body[data-key="ApplyEffect"] a.granted img {
   width: 16px;
   height: 16px;
 }
@@ -3031,9 +3458,14 @@ a.content-link img {
 .sheet.item section form.item-sheet .sheet-body .details .item-row input {
   flex: 1 0 0;
   padding-left: 0.25rem;
+  margin: 0 0.25rem;
 }
 .sheet.item section form.item-sheet .sheet-body .details .item-row input[type="checkbox"] {
   flex: 0 0 20px;
+}
+.sheet.item section form.item-sheet .sheet-body .details .item-row select {
+  flex: 1;
+  margin: 0 0.25rem;
 }
 .sheet.item section form.item-sheet .sheet-body .details .item-row tags {
   flex: 1 0 0;
@@ -3444,6 +3876,9 @@ a.content-link img {
   background: #788898cc;
   text-shadow: unset;
 }
+.sheet.item.species .item-list-header .item-controls .item-control.item-create span {
+  white-space: nowrap;
+}
 .sheet.item.species .item-list-header .item-controls .item-control.item-settings {
   flex: 0 0 18px;
   font-size: 12px;
@@ -3547,6 +3982,10 @@ a.content-link img {
 .sheet.item.species .capabilities > .fb-48 {
   max-height: 270px;
 }
+.sheet.item.species .capabilities tags.tagify,
+.sheet.item.species .capabilities .tagify__input {
+  width: 100%;
+}
 .sheet.item.species .evolutions {
   padding: 0.25rem 0.75rem;
   flex-direction: column;
@@ -3641,13 +4080,22 @@ a.content-link img {
   flex: 0 0 50px;
   border: unset;
 }
-.sheet.party .party-list .party-item label {
+.sheet.party .party-list .party-item .labels {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  justify-content: center;
+  text-align: center;
+}
+.sheet.party .party-list .party-item .labels label {
   text-align: center;
   align-self: center;
   margin: 0;
   padding: 0;
-  flex: 1;
   text-overflow: ellipsis;
+}
+.sheet.party .party-list .party-item .labels small {
+  font-size: 10px;
 }
 .sheet.party .party-list .party-item.empty {
   flex: 1;

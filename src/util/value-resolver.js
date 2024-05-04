@@ -40,7 +40,7 @@ function resolveInjectedProperties(source, injectionData) {
 
             const property = prop.replace(regex, replaceFunc);
 
-            const value = getProperty(data, property);
+            const value = foundry.utils.getProperty(data, property);
             if (value === undefined) {
                 console.error(`Failed to resolve injected property "${source}"`);
             }
@@ -91,9 +91,9 @@ function resolveValue(valueData, injectionData, defaultValue = 0, { evaluate = t
             const source = field.substring(0, seperator);
 
             switch (source) {
-                case "actor": return Number(getProperty(actor, field.substring(seperator + 1))) || 0;
-                case "item": return Number(getProperty(item, field.substring(seperator + 1))) || 0;
-                case "rule": return Number(getProperty(rule, field.substring(seperator + 1))) || 0;
+                case "actor": return Number(foundry.utils.getProperty(actor, field.substring(seperator + 1))) || 0;
+                case "item": return Number(foundry.utils.getProperty(item, field.substring(seperator + 1))) || 0;
+                case "rule": return Number(foundry.utils.getProperty(rule, field.substring(seperator + 1))) || 0;
                 default: return 0;
             }
         })();
@@ -131,7 +131,7 @@ function resolveValue(valueData, injectionData, defaultValue = 0, { evaluate = t
     };
 
     return value instanceof Object && defaultValue instanceof Object
-        ? mergeObject(defaultValue, value, { inplace: false })
+        ? foundry.utils.mergeObject(defaultValue, value, { inplace: false })
         : typeof value === "string" && evaluate
             ? saferEval(Roll.replaceFormulaData(value, { actor, item, rule }))
             : value;

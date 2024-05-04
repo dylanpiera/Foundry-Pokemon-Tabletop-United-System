@@ -15,7 +15,7 @@ export class TokenPanel extends Application {
 
     /** @override */
     static get defaultOptions() {
-        return mergeObject(super.defaultOptions, {
+        return foundry.utils.mergeObject(super.defaultOptions, {
             id: "ptu-token-panel",
             template: "systems/ptu/static/templates/apps/token-panel.hbs",
             popOut: false,
@@ -42,8 +42,12 @@ export class TokenPanel extends Application {
                 frequency: attack.item?.system.frequency ?? "At-Will",
                 id,
                 rollable: !!attack.roll,
-                effect: attack.item?.system.effect ?? "",
+                effect: attack.item?.system.effect ? await TextEditor.enrichHTML(foundry.utils.duplicate(attack.item.system.effect), {async: true}) : "",
+                range: attack.item?.system.range ?? "",
+                keywords: attack.item?.system.keywords ?? [],
+                sort: attack.item?.sort ?? 0,
             };
+            if(attack.item?.system.category) data.category = `/systems/ptu/static/css/images/types2/${attack.item?.system.category}IC_Icon.png`;
             if (attack.item.system.isStruggle) struggles.push(data);
             else attacks.push(data);
         }
@@ -63,10 +67,10 @@ export class TokenPanel extends Application {
                 name: feat.name,
                 img: feat.img,
                 id: feat.id,
-                effect: feat.system.effect,
+                effect: feat.system.effect ? await TextEditor.enrichHTML(foundry.utils.duplicate(feat.system.effect), {async: true}) : "",
                 frequency: feat.system.frequency,
                 rollable: !!feat.roll,
-                tags: feat.system.tags,
+                keywords: feat.system.keywords,
             })
         }
 
@@ -77,10 +81,22 @@ export class TokenPanel extends Application {
                 name: ability.name,
                 img: ability.img,
                 id: ability.id,
-                effect: ability.system.effect,
+                effect: ability.system.effect ? await TextEditor.enrichHTML(foundry.utils.duplicate(ability.system.effect), {async: true}) : "",
                 frequency: ability.system.frequency,
                 rollable: !!ability.roll,
             })
+        }
+
+        const effects = [];
+        for (const effect of actor.itemTypes.effect?.sort((a, b) => a.sort - b.sort) ?? []) {
+            if (effect.getFlag("ptu", "showInTokenPanel") === false) continue;
+            effects.push({
+                id: effect.id,
+                parent: effect.parent.id,
+                name: effect.name,
+                img: effect.img,
+                effect: effect.system.effect ? await TextEditor.enrichHTML(foundry.utils.duplicate(effect.system.effect), {async: true}) : "",
+            });
         }
 
         let movement = [];
@@ -90,7 +106,8 @@ export class TokenPanel extends Application {
             {name: "Burrow", value: actor.system.capabilities?.burrow ?? 0, icon: "fas fa-mountain"},
             {name: "Levitate", value: actor.system.capabilities?.levitate ?? 0, icon: "fas fa-feather"},
             {name: "Sky", value: actor.system.capabilities?.sky ?? 0, icon: "fab fa-fly"},
-            {name: "Teleporter", value: actor.system.capabilities?.teleporter ?? 0, icon: "fas fa-people-arrows"}
+            {name: "Teleporter", value: actor.system.capabilities?.teleporter ?? 0, icon: "fas fa-people-arrows"},
+            {name: "Throwing", value: actor.system.capabilities?.throwingRange ?? 0, icon: "fas fa-baseball-ball"},
         );
 
         movement = movement.filter(item => item.value !== 0);
@@ -110,13 +127,13 @@ export class TokenPanel extends Application {
             ...(await super.getData(options)),
             user: { isGM: game.user.isGM },
             actor,
-            attacks,
+            attacks: attacks.sort((a, b) => a.sort - b.sort),
             struggles,
             items,
             show,
             party: this.#getPartyInfo(),
             conditions: actor.itemTypes.condition || [],
-            effects: actor.itemTypes.effect || [],
+            effects,
             feats,
             abilities,
             heldItem,
@@ -168,7 +185,8 @@ export class TokenPanel extends Application {
                             event,
                             options: msg.context.options ?? [],
                             actor: msg.actor,
-                            targets: msg.targets
+                            targets: msg.targets,
+                            rollResult: msg.context.rollResult ?? null,
                         }
                         const result = await attack.damage?.(params);
                         if (result === null) {
@@ -315,6 +333,8 @@ export class TokenPanel extends Application {
             theme: `tooltipster-shadow ball-themes ${this.actor?.sheet?.ballStyle}`,
 			position: 'top',
             maxWidth: 500,
+            contentAsHTML: true,
+            interactive: true,
 		});
     }
 

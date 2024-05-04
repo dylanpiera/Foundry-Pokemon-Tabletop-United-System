@@ -6,7 +6,7 @@ import { ItemSummaryRenderer } from "../sheet/item-summary.js";
 export class PTUPokemonSheet extends PTUActorSheet {
 	/** @override */
 	static get defaultOptions() {
-		const options = mergeObject(super.defaultOptions, {
+		const options = foundry.utils.mergeObject(super.defaultOptions, {
 			classes: ['ptu', 'sheet', 'actor', 'gen8'],
 			template: 'systems/ptu/static/templates/actor/pokemon-sheet.hbs',
 			width: 1200,
@@ -109,6 +109,7 @@ export class PTUPokemonSheet extends PTUActorSheet {
 		// Initialize containers.
 		const abilities = [];
 		const capabilities = [];
+		const items = [];
 		const edges = [];
 		const effects = [];
 		const conditions = this.actor.conditions;
@@ -139,6 +140,9 @@ export class PTUPokemonSheet extends PTUActorSheet {
 				case 'spiritaction':
 					spiritactions.push(i);
 					break;
+				case 'item':
+					items.push(i);
+					break;
 			}
 		}
 
@@ -150,6 +154,7 @@ export class PTUPokemonSheet extends PTUActorSheet {
 		sheetData.conditions = conditions;
 		sheetData.contestmoves = contestmoves;
 		sheetData.spiritactions = spiritactions;
+		sheetData.items = items;
 
 		sheetData.actions = await (async () => {
 			const moves = [];
@@ -237,7 +242,8 @@ export class PTUPokemonSheet extends PTUActorSheet {
 						event,
 						options: msg.context.options ?? [],
 						actor: msg.actor,
-						targets: msg.targets
+						targets: msg.targets,
+						rollResult: msg.context.rollResult ?? null,
 					}
 					const result = await attack.damage?.(params);
 					if (result === null) {
@@ -250,6 +256,13 @@ export class PTUPokemonSheet extends PTUActorSheet {
 
 		// Add Inventory Item
 		html.find('.item-create').click(this._onItemCreate.bind(this));
+
+		html.find('.item-enable').click((ev) => {
+			const li = $(ev.currentTarget).parents('.item');
+			/** @type {PTUItem} */
+			const item = this.actor.items.get(li.data('itemId'));
+			return item?.toggleEnableState?.();
+		});
 
 		html.find('.item-to-chat').click((ev) => {
 			const li = $(ev.currentTarget).parents('.item');
@@ -264,7 +277,51 @@ export class PTUPokemonSheet extends PTUActorSheet {
 			item.sheet.render(true);
 		});
 
+		html.find(".item-quantity input[type='number']").change((ev) => {
+			const value = Number(ev.currentTarget.value);
+			const id = ev.currentTarget.dataset.itemId;
+			if (value >= 0 && id) {
+				const item = this.actor.items.get(id);
+				item?.update({ "system.quantity": value });
+			}
+		});
+
 		html.find('.item-delete').click(this._onItemDelete.bind(this));
+
+		this._contextMenu(html);
+	}
+
+	_contextMenu(html) {
+		ContextMenu.create(this, html, ".move-item", [
+			{
+				name: "Roll",
+				icon: '<i class="fas fa-dice"></i>',
+				callback: this.#onMoveRoll.bind(this),
+			},
+			{
+				name: "Send to Chat",
+				icon: '<i class="fas fa-comment"></i>',
+				callback: (ev) => {
+					const li = $(ev.currentTarget).parents('.item');
+					const item = this.actor.items.get(li.data('itemId'));
+					return item?.sendToChat?.();
+				}
+			},
+			{
+				name: "Edit",
+				icon: '<i class="fas fa-edit"></i>',
+				callback: (ev) => {
+					const li = $(ev.currentTarget).parents('.item');
+					const item = this.actor.items.get(li.data('itemId'));
+					item.sheet.render(true);
+				}
+			},
+			{
+				name: "Delete",
+				icon: '<i class="fas fa-trash"></i>',
+				callback: this._onItemDelete.bind(this),
+			},
+		], {})
 	}
 
 	/**
@@ -278,7 +335,7 @@ export class PTUPokemonSheet extends PTUActorSheet {
 		// Get the type of item to create.
 		const type = header.dataset.type;
 		// Grab any data associated with this control.
-		const data = duplicate(header.dataset);
+		const data = foundry.utils.duplicate(header.dataset);
 		// Initialize a default name.
 		const name = `New ${game.i18n.localize(`TYPES.Item.${type}`)}`;
 		// Prepare the item object.

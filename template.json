@@ -38,6 +38,14 @@
             "value": 0,
             "mod": 0
           },
+          "featPoints": {
+            "value": 0,
+            "mod": 0
+          },
+          "edgePoints": {
+            "value": 0,
+            "mod": 0
+          },
           "acBonus": {
             "value": 0,
             "mod": 0
@@ -591,6 +599,7 @@
         "effect": "",
         "snippet": "",
         "rules": [],
+        "enabled": true,
         "slug": null,
         "schema": {
           "version": null,
@@ -599,7 +608,9 @@
         "referenceEffect": "",
         "source": {
           "value": "Homebrew"
-        }
+        },
+        "stackSlugs": false,
+        "keywords": []
       },
       "interactions": {
         "sheerForce": false,
@@ -621,7 +632,6 @@
       "templates": ["base"],
       "prerequisites": [],
       "frequency": "At Will - Standard Action",
-      "tags": "",
       "notes": "",
       "free": false,
       "class": ""

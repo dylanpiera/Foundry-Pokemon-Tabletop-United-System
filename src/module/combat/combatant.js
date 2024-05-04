@@ -91,7 +91,7 @@ class PTUCombatant extends Combatant {
                     hidden,
                     sceneId,
                     tokenId,
-                    ...(index === 0 && turns > 1 ? { flags: { ptu: { isPrimaryBossCombatant: true } } } : {})
+                    ...(index === 0 ? { flags: { ptu: { isPrimaryBossCombatant: true } } } : {})
                 }));
         });
         return super.createDocuments(realData, context);
@@ -107,6 +107,8 @@ class PTUCombatant extends Combatant {
         }
         const paralyzed = actor.conditions.active.find(c => c.slug == "paralysis");
         if (paralyzed) await PTUCondition.HandleParalyzed(actor, paralyzed);
+        const hyperMode = actor.conditions.active.find(c => c.slug == "hyper-mode");
+        if (hyperMode) await PTUCondition.HandleHyperMode(actor, hyperMode);
 
         if (this.isBoss) {
             await this.bossTurns.mainTurn.update({ "flags.ptu.roundOfLastTurn": encounter.round });

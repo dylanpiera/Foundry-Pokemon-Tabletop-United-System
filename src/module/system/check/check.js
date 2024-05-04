@@ -214,6 +214,9 @@ class PTUDiceCheck {
                 ? rollResult.terms.find(t => t instanceof NumericTerm)
                 : rollResult.dice.find(d => d instanceof Die && d.faces === diceSize
                 ))?.total ?? 1;
+
+        options.rollResult = result;
+
         const total = rollResult.total;
         const targets = [];
         if (options.dcs?.targets.size > 0) {
@@ -276,12 +279,13 @@ class PTUDiceCheck {
                     title,
                     type,
                     skipDialog,
-                    isReroll
+                    isReroll,
+                    rollResult: result
                 },
                 modifierName: this.statistic.slug,
                 modifiers: this.statistic.modifiers.map(m => m.toObject()),
                 origin: options.origin,
-                resolved: targets.length > 0 ? game.settings.get("ptu", "autoRollDamage") : false
+                resolved: targets.length > 0 ? game.settings.get("ptu", "autoRollDamage") : false,
             }
         }
         if (attack) flags.ptu.attack = attack;
@@ -300,6 +304,7 @@ class PTUDiceCheck {
         return {
             rolls: this.rolls,
             targets,
+            rollResult: result,
         }
     }
 
@@ -408,7 +413,7 @@ class PTUDiceCheck {
  */
 class PTUCheck {
     static async roll(check, context, event, callback, diceStatistic = null) {
-        if (event) mergeObject(context, eventToRollParams(event));
+        if (event) foundry.utils.mergeObject(context, eventToRollParams(event));
 
         context.skipDialog ??= game.settings.get("ptu", "skipRollDialog");
         context.createMessage ??= true;

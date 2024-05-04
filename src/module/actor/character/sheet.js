@@ -9,7 +9,7 @@ export class PTUCharacterSheet extends PTUActorSheet {
 
 	/** @override */
 	static get defaultOptions() {
-		const options = mergeObject(super.defaultOptions, {
+		const options = foundry.utils.mergeObject(super.defaultOptions, {
 			classes: ['ptu', 'sheet', 'actor', 'gen8'],
 			template: 'systems/ptu/static/templates/actor/trainer-sheet.hbs',
 			width: 1200,
@@ -63,6 +63,27 @@ export class PTUCharacterSheet extends PTUActorSheet {
 			data.columns = columns;
 		}
 		else data.columns = this.actor.getFlag("ptu", "itemColumns");
+
+		const IWR = this.actor.iwr;
+		data.effectiveness = {
+			weaknesses: [],
+			resistances: [],
+			immunities: []
+		}
+		for(const [type, value] of Object.entries(IWR.all)) {
+			if(value === 0) {
+				data.effectiveness.immunities.push({type: type.capitalize(), value: IWR.getRealValue(type)});
+				continue;
+			}
+			if(value > 1) {
+				data.effectiveness.weaknesses.push({type: type.capitalize(), value: IWR.getRealValue(type)});
+				continue;
+			}
+			if(value < 1) {
+				data.effectiveness.resistances.push({type: type.capitalize(), value: IWR.getRealValue(type)});
+				continue;
+			}
+		}
 
 		return data;
 	}
@@ -245,7 +266,8 @@ export class PTUCharacterSheet extends PTUActorSheet {
 						event,
 						options: msg.context.options ?? [],
 						actor: msg.actor,
-						targets: msg.targets
+						targets: msg.targets,
+						rollResult: msg.context.rollResult ?? null,
 					}
 					const result = await attack.damage?.(params);
 					if (result === null) {
@@ -293,6 +315,13 @@ export class PTUCharacterSheet extends PTUActorSheet {
 			}
 		});
 
+		html.find('.item-enable').click((ev) => {
+			const li = $(ev.currentTarget).parents('.item');
+			/** @type {PTUItem} */
+			const item = this.actor.items.get(li.data('itemId'));
+			return item?.toggleEnableState?.();
+		});
+
 		html.find('.item-to-chat').click((ev) => {
 			const li = $(ev.currentTarget).parents('.item');
 			const item = this.actor.items.get(li.data('itemId'));
@@ -302,7 +331,7 @@ export class PTUCharacterSheet extends PTUActorSheet {
 		html.find(".item-quantity input[type='number']").change((ev) => {
 			const value = Number(ev.currentTarget.value);
 			const id = ev.currentTarget.dataset.itemId;
-			if (value > 0 && id) {
+			if (value >= 0 && id) {
 				const item = this.actor.items.get(id);
 				item?.update({ "system.quantity": value });
 			}
@@ -409,7 +438,7 @@ export class PTUCharacterSheet extends PTUActorSheet {
 		// If duplicate item gets added instead increase the quantity
 		const existingItem = this.actor.items.getName(item.name);
 		if (existingItem && existingItem.id != item.id && existingItem.system.quantity) {
-			const quantity = duplicate(existingItem.system.quantity);
+			const quantity = foundry.utils.duplicate(existingItem.system.quantity);
 			await existingItem.update({ "system.quantity": Number(quantity) + (item.system.quantity > 0 ? Number(item.system.quantity) : 1) });
 			return false;
 		}
@@ -435,7 +464,7 @@ export class PTUCharacterSheet extends PTUActorSheet {
 		// Get the type of item to create.
 		const type = header.dataset.type;
 		// Grab any data associated with this control.
-		const data = duplicate(header.dataset);
+		const data = foundry.utils.duplicate(header.dataset);
 		// Initialize a default name.
 		const name = `New ${game.i18n.localize(`TYPES.Item.${type}`)}`;
 		// Prepare the item object.

@@ -30,19 +30,27 @@ class PTUTrainerActor extends PTUActor {
             system.skills[novice].value.mod += 1;
         }
 
-        system.level.dexexp = game.settings.get("ptu", "variant.useDexExp") == true 
-            ? (this.system.dex?.owned?.length || 0) 
-            : game.settings.get("ptu", "variant.advancementRework") && game.settings.get("ptu", "variant.trainerRevamp") 
-                ? (this.system.dex?.owned?.length || 0) 
-                : 0;
-        const levelUpRequirement = game.settings.get("ptu", "variant.advancementRework") && game.settings.get("ptu", "variant.trainerRevamp") ? 20 : 10;
+        system.level.dexexp = game.settings.get("ptu", "variant.useDexExp") == true
+            ? (this.system.dex?.owned?.length || 0)
+            : 0
+
+        const levelUpRequirement = game.settings.get("ptu", "variant.trainerAdvancement") === "short-track" ? 20 : 10;
+
+        const maxLevel = {
+            "original": 50,
+            "data-revamp": 25,
+            "short-track": 25,
+            "ptr-update": 50,
+            "long-track": 100,
+        }
+
         system.level.current =
-            Math.clamped(
+            Math.clamp(
                 1
                 + Number(system.level.milestones)
                 + Math.trunc((Number(system.level.miscexp) / levelUpRequirement) + (Number(system.level.dexexp) / levelUpRequirement)),
                 1,
-                (game.settings.get("ptu", "variant.trainerRevamp") ? 25 : 50)
+                maxLevel[game.settings.get("ptu", "variant.trainerAdvancement")] ?? 50
             );
 
         // Set attributes which are underrived data
@@ -82,6 +90,7 @@ class PTUTrainerActor extends PTUActor {
         }
 
         for (let [key, skill] of Object.entries(system.skills)) {
+            skill["slug"] = key;
             skill["value"]["total"] = skill["value"]["value"] + skill["value"]["mod"];
             skill["rank"] = PTUSkills.getRankSlug(skill["value"]["total"]);
             skill["modifier"]["total"] = skill["modifier"]["value"] + skill["modifier"]["mod"] + (system.modifiers.skillBonus?.total ?? 0);
@@ -106,14 +115,39 @@ class PTUTrainerActor extends PTUActor {
         }
 
         // Use Data
-        system.levelUpPoints = (game.settings.get("ptu", "variant.trainerRevamp") ? (system.level.current * 2) : system.level.current) + system.modifiers.statPoints.total + 9;
+        system.levelUpPoints = (() => {
+            switch (game.settings.get("ptu", "variant.trainerAdvancement")) {
+                case "original": return system.level.current;
+                case "data-revamp": return system.level.current * 2;
+                case "short-track": {
+                    let points = system.level.current * 2;
+                    if (system.level.current >= 5) points += 5;
+                    if (system.level.current >= 10) points += 5;
+                    if (system.level.current >= 15) points += 5;
+                    if (system.level.current >= 20) points += 5;
+                    if (system.level.current == 25) points += 15;
+                    return points;
+                };
+                case "ptr-update": {
+                    let points = system.level.current;
+                    if (system.level.current >= 5) points += 3;
+                    if (system.level.current >= 10) points += 5;
+                    if (system.level.current >= 20) points += 5;
+                    if (system.level.current >= 25) points += 3;
+                    if (system.level.current >= 35) points += 5;
+                    return points;
+                }
+                case "long-track": return system.level.current;
+            }
+        })() + system.modifiers.statPoints.total + 9;
+
         system.stats = this._calcBaseStats();
 
         const leftoverLevelUpPoints = system.levelUpPoints - Object.values(system.stats).reduce((a, v) => v.levelUp + a, 0);
-        const actualLevel = Math.max(1, system.level.current - Math.max(0, Math.clamped(0, leftoverLevelUpPoints, leftoverLevelUpPoints - system.modifiers.statPoints.total ?? 0)));
+        const actualLevel = Math.max(1, system.level.current - Math.max(0, Math.clamp(0, leftoverLevelUpPoints, leftoverLevelUpPoints - system.modifiers.statPoints.total ?? 0)));
 
         const result = calculateStatTotal({
-            level: game.settings.get("ptu", "variant.trainerRevamp") ? actualLevel * 2 : actualLevel,
+            level: ["data-revamp", "short-track"].includes(game.settings.get("ptu", "variant.trainerAdvancement")) ? actualLevel * 2 : (game.settings.get("ptu", "variant.trainerAdvancement") === "long-track" ? actualLevel * 0.5 : actualLevel),
             actorStats: system.stats,
             nature: null,
             isTrainer: true,
@@ -124,7 +158,7 @@ class PTUTrainerActor extends PTUActor {
         system.stats = result.stats;
         system.levelUpPoints = system.levelUpPoints - result.pointsSpend;
 
-        system.health.total = 10 + (system.level.current * (game.settings.get("ptu", "variant.trainerRevamp") ? 4 : 2)) + (system.stats.hp.total * 3);
+        system.health.total = 10 + (system.level.current * (["data-revamp", "short-track"].includes(game.settings.get("ptu", "variant.trainerAdvancement")) ? 4 : (game.settings.get("ptu", "variant.trainerAdvancement") === "long-track" ? 1 : 2))) + (system.stats.hp.total * 3);
         system.health.max = system.health.injuries > 0 ? Math.trunc(system.health.total * (1 - ((system.modifiers.hardened ? Math.min(system.health.injuries, 5) : system.health.injuries) / 10))) : system.health.total;
 
         system.health.percent = Math.round((system.health.value / system.health.max) * 100);
@@ -136,25 +170,85 @@ class PTUTrainerActor extends PTUActor {
 
         system.feats = {
             total: this.items.filter(x => x.type == "feat" && !x.system.free).length,
-            max: 4 + (game.settings.get("ptu", "variant.trainerRevamp") ? system.level.current : Math.ceil(system.level.current / 2))
+            max: ((level) => {
+                switch (game.settings.get("ptu", "variant.trainerAdvancement")) {
+                    case "original": return 4 + Math.ceil(level / 2);
+                    case "data-revamp": return 4 + level;
+                    case "short-track": {
+                        let feats = 4 + level;
+                        if (level >= 5) feats += 1;
+                        if (level >= 10) feats += 1;
+                        if (level >= 15) feats += 1;
+                        if (level >= 20) feats += 1;
+                        if (level == 25) feats += 3;
+                        return feats;
+                    }
+                    case "ptr-update": {
+                        let feats = 4 + Math.ceil(level / 2);
+                        if (level >= 5) feats += 1;
+                        if (level >= 15) feats += 1;
+                        if (level >= 25) feats += 1;
+                        if (level >= 45) feats += 1;
+                        if (level == 50) feats += 2;
+                        return feats;
+                    };
+                    case "long-track": return 4 + Math.ceil(level / 2);
+                }
+            })(Number(system.level.current)) + (system.modifiers.featPoints?.total ?? 0)
         }
 
         system.edges = {
             total: this.items.filter(x => x.type == "edge" && !x.system.free).length,
-            max: 4
-                + (game.settings.get("ptu", "variant.trainerRevamp") ? system.level.current : Math.floor(system.level.current / 2))
-                + (system.level.current >= 2 ? 1 : 0)
-                + (system.level.current >= 6 ? 1 : 0)
-                + (system.level.current >= 12 ? 1 : 0)
-                + (game.settings.get("ptu", "variant.trainerRevamp") ? (system.level.current >= 5 ? 1 : 0) : 0)
-                + (game.settings.get("ptu", "variant.trainerRevamp") ? (system.level.current >= 10 ? 1 : 0) : 0)
-                + (game.settings.get("ptu", "variant.trainerRevamp") ? (system.level.current >= 15 ? 1 : 0) : 0)
-                + (game.settings.get("ptu", "variant.trainerRevamp") ? (system.level.current >= 20 ? 1 : 0) : 0)
-                + (game.settings.get("ptu", "variant.trainerRevamp") ? (system.level.current >= 25 ? 1 : 0) : 0)
+            max: ((level) => {
+                switch (game.settings.get("ptu", "variant.trainerAdvancement")) {
+                    case "original": {
+                        let edges = 4 + Math.floor(level / 2);
+                        if (level >= 2) edges += 1;
+                        if (level >= 6) edges += 1;
+                        if (level >= 12) edges += 1;
+                        return edges;
+                    }
+                    case "data-revamp": {
+                        let edges = 4 + level;
+                        if (level >= 2) edges += 1;
+                        if (level >= 6) edges += 1;
+                        if (level >= 12) edges += 1;
+                        return edges;
+                    }
+                    case "short-track": {
+                        let edges = 4 + level;
+                        if (level >= 2) edges += 1;
+                        if (level >= 6) edges += 1;
+                        if (level >= 10) edges += 1;
+                        if (level >= 12) edges += 1;
+                        if (level >= 15) edges += 1;
+                        if (level >= 20) edges += 2;
+                        if (level == 25) edges += 3;
+                        return edges;
+                    }
+                    case "ptr-update": {
+                        let edges = 4 + Math.floor(level / 2);
+                        if (level >= 2) edges += 1;
+                        if (level >= 8) edges += 1;
+                        if (level >= 10) edges += 1;
+                        if (level >= 16) edges += 1;
+                        if (level >= 20) edges += 1;
+                        if (level >= 35) edges += 2;
+                        if (level == 50) edges += 3;
+                        return edges;
+                    };
+                    case "long-track": {
+                        let edges = 4 + Math.floor(level / 2);
+                        if (level >= 10) edges += 1;
+                        if (level >= 20) edges += 1;
+                        return edges;
+                    }
+                }
+            })(Number(system.level.current)) + (system.modifiers.edgePoints?.total ?? 0)
         }
 
-        system.ap.bound = Number(this.synthetics.apAdjustments.bound.map(b => b.value).reduce((a,b)=> a+b, 0)) || 0
-        system.ap.drained = Number(this.synthetics.apAdjustments.drained.map(d => d.value).reduce((a,b)=> a+b, 0)) || 0
+        system.ap.bound = Number(this.synthetics.apAdjustments.bound.map(b => b.value).reduce((a, b) => a + b, 0)) || 0
+        system.ap.drained = Number(this.synthetics.apAdjustments.drained.map(d => d.value).reduce((a, b) => a + b, 0)) || 0
         system.ap.max = this.baseMaxAp - system.ap.bound - system.ap.drained
 
         system.initiative = { value: system.stats.spd.total + system.modifiers.initiative.total };
@@ -196,7 +290,7 @@ class PTUTrainerActor extends PTUActor {
     }
 
     _calcBaseStats() {
-        const stats = duplicate(this.system.stats);
+        const stats = foundry.utils.duplicate(this.system.stats);
 
         for (const stat of Object.keys(stats)) {
             if (stat === "hp") stats[stat].base = 10;
@@ -218,7 +312,7 @@ class PTUTrainerActor extends PTUActor {
                 if (!changes["system"]["skills"][value]) changes["system"]["skills"][value] = {}
                 if (!changes["system"]["skills"][value]['value']) changes["system"]["skills"][value]['value'] = {}
                 if (!changes["system"]["skills"][value]['value']['mod']) changes["system"]["skills"][value]['value']['mod'] = {}
-                changes["system"]["skills"][value]['value']['mod'][randomID()] = { mode: 'add', value: -1, source: "Pathetic Background Skills" };
+                changes["system"]["skills"][value]['value']['mod'][foundry.utils.randomID()] = { mode: 'add', value: -1, source: "Pathetic Background Skills" };
             }
         }
         const { adept, novice } = this.system.background;
@@ -227,14 +321,14 @@ class PTUTrainerActor extends PTUActor {
             if (!changes["system"]["skills"][adept]) changes["system"]["skills"][adept] = {}
             if (!changes["system"]["skills"][adept]['value']) changes["system"]["skills"][adept]['value'] = {}
             if (!changes["system"]["skills"][adept]['value']['mod']) changes["system"]["skills"][adept]['value']['mod'] = {}
-            changes["system"]["skills"][adept]['value']['mod'][randomID()] = { mode: 'add', value: 2, source: "Adept Background Skill" };
+            changes["system"]["skills"][adept]['value']['mod'][foundry.utils.randomID()] = { mode: 'add', value: 2, source: "Adept Background Skill" };
         }
         if (novice && novice != "blank") {
             if (!changes["system"]["skills"]) changes["system"]["skills"] = {}
             if (!changes["system"]["skills"][novice]) changes["system"]["skills"][novice] = {}
             if (!changes["system"]["skills"][novice]['value']) changes["system"]["skills"][novice]['value'] = {}
             if (!changes["system"]["skills"][novice]['value']['mod']) changes["system"]["skills"][novice]['value']['mod'] = {}
-            changes["system"]["skills"][novice]['value']['mod'][randomID()] = { mode: 'add', value: 1, source: "Novice Background Skill" };
+            changes["system"]["skills"][novice]['value']['mod'][foundry.utils.randomID()] = { mode: 'add', value: 1, source: "Novice Background Skill" };
         }
         changes.system.maxAp = {
             1: {
@@ -258,7 +352,7 @@ class PTUTrainerActor extends PTUActor {
                 value: - b.value
             }
         })
-        this.system.changes = mergeObject(
+        this.system.changes = foundry.utils.mergeObject(
             this.system.changes,
             changes
         );

@@ -103,7 +103,6 @@ function calculateTrainerCapabilities(trainerSkills, items, speedCombatStages, m
     if (spcsChanges > 0 || spcsChanges < 0) {
         if (capabilities["overland"] > 0) { 
             capabilities["overland"] = Math.max(capabilities["overland"] + spcsChanges, capabilities["overland"] > 1 ? 2 : 1)
-            if(isSlowed) capabilities["overland"] = Math.max(1, Math.floor(capabilities["overland"] * 0.5));
         }
     }
 
@@ -116,6 +115,12 @@ function calculateTrainerCapabilities(trainerSkills, items, speedCombatStages, m
     for(const key of Object.keys(modifiers)) {
         if(key === "all") continue;
         if(capabilities[key] === 0 || capabilities[key] === undefined) capabilities[key] = modifiers[key] + Number(modifiers["all"] ?? 0);
+    }
+    if(isSlowed) {
+        for(const key of Object.keys(capabilities)) {
+            if(CONFIG.PTU.Capabilities.numericNonMovement.includes(key)) continue;
+            capabilities[key] = Math.max(1, Math.floor(capabilities[key] * 0.5));
+        }
     }
 
     return capabilities;

@@ -114,8 +114,8 @@ class Statistic extends SimpleStatistic {
      * @param {RollOptionsParameters | null} options 
      */
     withRollOptions(options) {
-        const newOptions = mergeObject(this.options ?? {}, options ?? {}, { inplace: false });
-        return new Statistic(this.actor, deepClone(this.data), newOptions);
+        const newOptions = foundry.utils.mergeObject(this.options ?? {}, options ?? {}, { inplace: false });
+        return new Statistic(this.actor, foundry.utils.deepClone(this.data), newOptions);
     }
 
     /**
@@ -128,7 +128,7 @@ class Statistic extends SimpleStatistic {
             return [...new Set([arr1 ?? [], arr2 ?? []].flat())];
         }
 
-        const result = mergeObject(deepClone(this.data), data);
+        const result = foundry.utils.mergeObject(foundry.utils.deepClone(this.data), data);
         result.domains = maybeMergeArrays(this.domains, data.domains);
         result.modifiers = maybeMergeArrays(this.data.modifiers, data.modifiers);
         result.rollOptions = maybeMergeArrays(this.data.rollOptions, data.rollOptions);
@@ -251,7 +251,7 @@ class StatisticCheck {
                 const event = args.event?.originalEvent ?? args.event;
                 if(event instanceof MouseEvent) {
                     const { rollMode, skipDialog } = args;
-                    return mergeObject({rollMode, skipDialog}, eventToRollParams(event));
+                    return foundry.utils.mergeObject({rollMode, skipDialog}, eventToRollParams(event));
                 }
             }
             return args;
@@ -309,7 +309,7 @@ class StatisticCheck {
             context,
             null,
             args.callback,
-            new StatisticDiceModifier(args.label || this.label, this.diceModifiers, options)
+            (args?.slug || this.slug || this.parent?.slug) === 'save-check' ? null : new StatisticDiceModifier(args.label || this.label, this.diceModifiers, options)
         )
 
         for(const rule of actor.rules.filter(r => !r.ignored)) {

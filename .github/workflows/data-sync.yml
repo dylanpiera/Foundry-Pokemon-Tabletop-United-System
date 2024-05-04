@@ -1,0 +1,69 @@
+name: PTR Data Sync
+on:
+  push:
+    branches:
+    - master
+  workflow_dispatch:
+
+jobs:
+  export-to-json:
+    name: Export to JSON
+    runs-on: ubuntu-latest
+    steps: 
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with: 
+          path: ./Data/systems/ptu
+      - name: Install Foundry CLI
+        run: npm install -g @foundryvtt/foundryvtt-cli 
+      - name: Setup Foundry CLI
+        run: |
+          fvtt configure set dataPath ./
+          fvtt configure set currentPackageType System
+          fvtt configure set currentPackageId ptu
+      - name: Export Feats Compendium
+        run: | 
+          fvtt package unpack abilities
+          fvtt package unpack capabilities
+          fvtt package unpack edges
+          fvtt package unpack effects
+          fvtt package unpack feats
+          fvtt package unpack habitats
+          fvtt package unpack items
+          fvtt package unpack macros
+          fvtt package unpack moves
+          fvtt package unpack poke-edges
+          fvtt package unpack references
+          fvtt package unpack species
+          fvtt package unpack spirit-actions
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: ptr-data-jsons
+          path: /home/runner/work/Foundry-Pokemon-Tabletop-United-System/Foundry-Pokemon-Tabletop-United-System/Data/systems/ptu/packs/**/*.json
+          retention-days: 1
+  commit-to-ptr-data:
+    name: Commit to PTR-Data
+    needs: export-to-json
+    runs-on: ubuntu-latest
+    steps: 
+      - name: Checkout PTR-Data Repository
+        uses: actions/checkout@v4
+        with:
+          repository: pokemon-tabletop-reunited/PTR-Data
+          ref: master
+          token: ${{ secrets.ACTIONS_GITHUB_TOKEN }}
+      - name: Load Artifacts
+        uses: actions/download-artifact@v4
+        with: 
+          name: ptr-data-jsons
+      - name: Commit & Push
+        run: |
+          git config --global user.email "ashe@soaringnetwork.com"
+          git config --global user.name "Github Actions"
+          if [[ `git status --porcelain` ]]; then
+            git commit -am "Github-Actions Data Sync"
+            git push
+          else
+            echo "WARNING: No changes were detected. git commit push action aborted."
+          fi

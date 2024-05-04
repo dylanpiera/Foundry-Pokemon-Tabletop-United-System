@@ -12,6 +12,10 @@ class PTUMove extends PTUItem {
     /** @override */
     get rollOptions() {
         const options = super.rollOptions;
+        if(this.isDamaging && this.damageBase.isStab) {
+            options.all['move:is-stab'] = true;
+            options.item['move:is-stab'] = true;
+        }
         if (this.isDamaging && this.damageBase.isStab && !!options.all[`move:damage-base:${this.damageBase.preStab}`]) {
             delete this.flags.ptu.rollOptions.all[`move:damage-base:${this.damageBase.preStab}`];
             delete this.flags.ptu.rollOptions.item[`move:damage-base:${this.damageBase.preStab}`];
@@ -21,6 +25,10 @@ class PTUMove extends PTUItem {
 
             options.all[`move:damage-base:${this.damageBase.postStab}`] = true;
             options.item[`move:damage-base:${this.damageBase.postStab}`] = true;
+        }
+        for(const keyword of this.system.keywords) {
+            options.all[`move:${sluggify(keyword)}`] = true;
+            options.item[`move:${sluggify(keyword)}`] = true;
         }
         return options;
     }
@@ -37,7 +45,7 @@ class PTUMove extends PTUItem {
     }
 
     get isFiveStrike() {
-        return !!this.rollOptions.item["move:range:five-strike"];
+        return (!!this.rollOptions.item["move:range:five-strike"]) || (!!this.rollOptions.item["move:five-strike"]);
     }
 
     get damageBase() {
@@ -76,7 +84,7 @@ class PTUMove extends PTUItem {
         if (!isNaN(Number(this.system.ac))) rollOptions.all[`move:ac:${this.system.ac}`] = true;
         rollOptions.item = rollOptions.all;
 
-        this.flags.ptu = mergeObject(this.flags.ptu, {rollOptions});
+        this.flags.ptu = foundry.utils.mergeObject(this.flags.ptu, {rollOptions});
         this.flags.ptu.rollOptions.attack = Object.keys(this.flags.ptu.rollOptions.all).reduce((obj, key) => {
             obj[key.replace("move:", "attack:").replace("item:", "attack:")] = true;
             return obj;

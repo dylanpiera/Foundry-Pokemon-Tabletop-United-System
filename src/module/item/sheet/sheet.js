@@ -1,18 +1,22 @@
 import { sluggify, sortStringRecord } from "../../../util/misc.js";
-import { tagify } from "../../../util/tags.js";
 import { RuleElements } from "../../rules/index.js";
 import { RULE_ELEMENT_FORMS, RuleElementForm } from "./rule-elements/index.js";
 
 class PTUItemSheet extends ItemSheet {
     /** @override */
     static get defaultOptions() {
-        return mergeObject(super.defaultOptions, {
+        return foundry.utils.mergeObject(super.defaultOptions, {
             classes: ["ptu", "sheet", "item"],
             width: 650,
             height: 510,
             tabs: [{ navSelector: ".tabs", contentSelector: ".sheet-body", initial: "overview" }],
             dragDrop: [{ dragSelector: null, dropSelector: null }]
         });
+    }
+
+    /** @override */
+    _canDragDrop(selector) {
+        return this.isEditable;
     }
 
     /** @override */
@@ -28,8 +32,14 @@ class PTUItemSheet extends ItemSheet {
 
         this.object._updateIcon({update: true});
 
-        data.referenceEffect = this.item.referenceEffect ? await TextEditor.enrichHTML(`@UUID[${duplicate(this.item.referenceEffect)}]`, {async: true}) : null;
-        data.itemEffect = this.item.system.effect ? await TextEditor.enrichHTML(duplicate(this.item.system.effect), {async: true}) : this.item.system.effect;
+        data.referenceEffect = this.item.referenceEffect ? await TextEditor.enrichHTML(`@UUID[${foundry.utils.duplicate(this.item.referenceEffect)}]`, {async: true}) : null;
+        data.itemEffect = this.item.system.effect ? await TextEditor.enrichHTML(foundry.utils.duplicate(this.item.system.effect), {async: true}) : this.item.system.effect;
+        data.itemCost = await (async () => {
+            const cost = parseInt(this.item.system.cost);
+            if(!cost) return this.item.system.cost || "-";
+
+            return TextEditor.enrichHTML(`@Poke[${this.item.uuid} noname]`, {async: true})
+        })();
 
         const rules = this.item.toObject().system.rules ?? [];
         this.ruleElementForms = {};
@@ -54,7 +64,7 @@ class PTUItemSheet extends ItemSheet {
                 selected: this.selectedRuleElementType,
                 types: sortStringRecord(
                     Object.keys(RuleElements.all).reduce(
-                        (result, key) => mergeObject(result, {[key]: `RULES.Types.${key}`}),
+                        (result, key) => foundry.utils.mergeObject(result, {[key]: `RULES.Types.${key}`}),
                         {}
                     )
                 )
@@ -70,7 +80,7 @@ class PTUItemSheet extends ItemSheet {
 
         if(this.item.flags.ptu?.showInTokenPanel === undefined) {
             if(this.item.type === "item" && this.item.roll) data.item.flags.ptu.showInTokenPanel = true;
-            if (["move", "ability", "feat"].includes(this.item.type)) data.item.flags.ptu.showInTokenPanel = true;
+            if (["move", "ability", "feat", "effect"].includes(this.item.type)) data.item.flags.ptu.showInTokenPanel = true;
         }
         
         return data;
@@ -78,6 +88,13 @@ class PTUItemSheet extends ItemSheet {
 
     async _onDrop(event) {
         const data = JSON.parse(event.dataTransfer.getData('text/plain'));
+
+        if(data.type === "pokedollar" && this.item.type === "item") {
+            const amount = parseInt(data.data.amount);
+            if(!amount) return;
+
+            this.object.update({"system.cost": amount});
+        }
 
         if(data.type === "Item" && data.uuid) {
             const item = await fromUuid(data.uuid);
@@ -104,10 +121,6 @@ class PTUItemSheet extends ItemSheet {
     /** @override */
     activateListeners(html) {
         super.activateListeners(html);
-
-        for(const taggifyElement of html.find(".ptu-tagify")) {
-            tagify(taggifyElement);
-        }
 
         html.find('select[data-action=select-rule-element]').on('change', (event) => {
             this.selectedRuleElementType = event.target.value;
@@ -189,10 +202,13 @@ class PTUItemSheet extends ItemSheet {
 
     /** @override */
     async _updateObject(event, formData) {
-        const expanded = expandObject(formData);
+        const expanded = foundry.utils.expandObject(formData);
 
         if(Array.isArray(expanded.system.prerequisites)) {
             expanded.system.prerequisites = expanded.system.prerequisites.map(s => s.value).filter(s => !!s)
+        }
+        if(Array.isArray(expanded.system.keywords)) {
+            expanded.system.keywords = expanded.system.keywords.map(s => s.value).filter(s => !!s)
         }
 
         if(expanded.system?.rules) {
@@ -221,7 +237,7 @@ class PTUItemSheet extends ItemSheet {
 
                 if(!value) continue;
 
-                rules[idx] = mergeObject(rules[idx] ?? {}, value);
+                rules[idx] = foundry.utils.mergeObject(rules[idx] ?? {}, value);
 
                 // Call specific subhandlers
                 this.ruleElementForms[idx]?._updateObject(rules[idx])
@@ -246,7 +262,7 @@ class PTUItemSheet extends ItemSheet {
             expanded.system.rules = rules;
         }
 
-        return super._updateObject(event, flattenObject(expanded));
+        return super._updateObject(event, foundry.utils.flattenObject(expanded));
     }
 }
 

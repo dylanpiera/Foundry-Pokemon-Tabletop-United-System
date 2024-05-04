@@ -36,16 +36,30 @@
                     <div class="item-name">
                         <h4>{{item.name}}</h4>
                     </div>
-                        <div class="item-tags">
-                            {{#if item.grantedBy}}
-                                <div class="tag shadowless tooltip" title="Granted by {{item.grantedBy.name}}">
-                                    <img src="/systems/ptu/static/css/images/icons/granted_icon.png"/>
+                    <div class="item-tags">
+                        {{#if item.grantedBy}}
+                            <div class="tag shadowless tooltip" title="Granted by {{item.grantedBy.name}}">
+                                <img src="/systems/ptu/static/css/images/icons/granted_icon.png"/>
+                            </div>
+                        {{/if}}
+                        {{#if item.hasAutomation}}
+                            {{#if item.enabled}}
+                                <div class="tag shadowless tooltip" title="This item has automation!">
+                                    <img src="/systems/ptu/static/css/images/icons/automated_icon.png"/>
+                                </div>
+                            {{else}}
+                                <div class="tag shadowless tooltip" title="This item has disabled automation!">
+                                    <img src="/systems/ptu/static/css/images/icons/automated_disabled_icon.png" style="opacity: 0.5"/>
                                 </div>
                             {{/if}}
-                        </div>
+                        {{/if}}
+                    </div>
                     <div class="item-controls">
-                        <a class="item-control item-to-chat" title="Send {{item.type}} to chat"><i class="fas fa-external-link-alt"></i></a>
                         {{#unless ../no-add}}
+                            {{#if item.hasAutomation}}
+                                <a class="item-control item-enable" title="{{#if item.enabled}}Disable Automation{{else}}Enable Automation{{/if}}">{{#if item.enabled}}<i class="fas fa-toggle-on"></i>{{else}}<i class="fas fa-toggle-off"></i>{{/if}}</a>
+                            {{/if}}
+                            <a class="item-control item-to-chat" title="Send {{item.type}} to chat"><i class="fas fa-external-link-alt"></i></a>
                             <a class="item-control item-edit" title="Edit {{item.type}}"><i class="fas fa-edit"></i></a>
                             <a class="item-control item-delete" title="Delete {{item.type}}"><i class="fas fa-trash"></i></a>
                         {{/unless}}
@@ -95,6 +109,13 @@
                                 {{/if}}
                             {{/each}}
                         {{/if}}
+                        {{#if item.system.keywords}}
+                            {{#each item.system.keywords as | keyword |}}
+                                <div class="tag gradient">
+                                    <span>{{keyword}}</span>
+                                </div>
+                            {{/each}}
+                        {{/if}}
                     </div>
                 </div>
             </li>
@@ -133,13 +154,19 @@
                             {{/if}}
                             {{#unless (or (is type "effect") (is type "condition"))}}
                                 {{#if item.hasAutomation}}
-                                    <div class="tag shadowless tooltip" title="This item has automation!">
-                                        <img src="/systems/ptu/static/css/images/icons/automated_icon.png"/>
-                                    </div>
+                                    {{#if item.enabled}}
+                                        <div class="tag shadowless tooltip" title="This item has automation!">
+                                            <img src="/systems/ptu/static/css/images/icons/automated_icon.png"/>
+                                        </div>
+                                    {{else}}
+                                        <div class="tag shadowless tooltip" title="This item has disabled automation!">
+                                            <img src="/systems/ptu/static/css/images/icons/automated_disabled_icon.png" style="opacity: 0.5"/>
+                                        </div>
+                                    {{/if}}
                                 {{/if}}
                             {{/unless}}
                         </div>
-                        {{#if item.system.quantity}}
+                        {{#if item.system.quantity includeZero=true}}
                             <div class="item-quantity">
                                 <input class="ml-1 mr-1" data-item-id="{{item.id}}" data-binding="system.quantity" type="number" value="{{item.system.quantity}}" placeholder="{{localize "ITEM.Quantity"}}"/>
                             </div>
@@ -147,6 +174,11 @@
                         <div class="item-controls">
                             {{#if item.grants}}
                                 <a class="item-control collapse-sub-items" title="Collapse sub-items"><i class="fas fa-minus-square"></i></a>
+                            {{/if}}
+                            {{#if (is item.type "item")}}
+                                <a class="item-control item-enable" title="{{#if item.enabled}}Unequip Item{{else}}Equip Item{{/if}}">{{#if item.enabled}}<i class="fas fa-shirt"></i>{{else}}<i class="fas fa-grip-lines"></i>{{/if}}</a>
+                            {{else}}
+                                <a class="item-control item-enable" title="{{#if item.enabled}}Disable Automation{{else}}Enable Automation{{/if}}">{{#if item.enabled}}<i class="fas fa-toggle-on"></i>{{else}}<i class="fas fa-toggle-off"></i>{{/if}}</a>
                             {{/if}}
                             <a class="item-control item-to-chat" title="Send {{item.type}} to chat"><i class="fas fa-external-link-alt"></i></a>
                             {{#unless (is item.type "condition")}}
@@ -188,9 +220,15 @@
                             </div>
                         {{/if}}
                         {{#if item.system.rules}}
-                            <div class="tag shadowless tooltip" title="This item has automation!">
-                                <img src="/systems/ptu/static/css/images/icons/automated_icon.png"/>
-                            </div>
+                            {{#if item.enabled}}
+                                <div class="tag shadowless tooltip" title="This item has automation!">
+                                    <img src="/systems/ptu/static/css/images/icons/automated_icon.png"/>
+                                </div>
+                            {{else}}
+                                <div class="tag shadowless tooltip" title="This item has disabled automation!">
+                                    <img src="/systems/ptu/static/css/images/icons/automated_disabled_icon.png" style="opacity: 0.5"/>
+                                </div>
+                            {{/if}}
                         {{/if}}
                     </div>
                     {{#if item.system.quantity}}
@@ -199,6 +237,11 @@
                         </div>
                     {{/if}}
                     <div class="item-controls">
+                        {{#if (is item.type "item")}}
+                            <a class="item-control item-enable" title="{{#if item.enabled}}Unequip Item{{else}}Equip Item{{/if}}">{{#if item.enabled}}<i class="fas fa-shirt"></i>{{else}}<i class="fas fa-grip-lines"></i>{{/if}}</a>
+                        {{else}}
+                            <a class="item-control item-enable" title="{{#if item.enabled}}Disable Automation{{else}}Enable Automation{{/if}}">{{#if item.enabled}}<i class="fas fa-toggle-on"></i>{{else}}<i class="fas fa-toggle-off"></i>{{/if}}</a>
+                        {{/if}}
                         <a class="item-control item-to-chat" title="Send {{item.type}} to chat"><i class="fas fa-external-link-alt"></i></a>
                         <a class="item-control item-edit" title="Edit {{item.type}}"><i class="fas fa-edit"></i></a>
                         <a class="item-control item-delete" title="Delete {{item.type}}"><i class="fas fa-trash"></i></a>

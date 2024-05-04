@@ -80,6 +80,13 @@
 {{/if}}
 
 <div class="form-group">
+    <label class="short">{{localize "PTU.RuleEditor.General.Priority"}}</label>
+    <div class="attached-input">
+        <input type="number" name="system.rules.{{index}}.priority" value="{{rule.priority}}"/>
+    </div>
+</div>
+
+<div class="form-group">
     <label class="short">{{localize "PTU.RuleEditor.General.Predicate"}}</label>
     <div class="attached-input">
         <button type="button" class="attachment" data-action="toggle-predicate">

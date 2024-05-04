@@ -17,8 +17,9 @@ class AELikeRuleElement extends RuleElementPTU {
             ...super.defineSchema(),
             mode: new foundry.data.fields.StringField({ type: String, required: true, choices: Object.keys(AELikeRuleElement.CHANGE_MODES), initial: undefined }),
             path: new foundry.data.fields.StringField({ type: String, required: true, nullable: false, blank: false, initial: undefined }),
-            phase: new foundry.data.fields.StringField({ type: String, required: false, nullable: false, choices: deepClone(AELikeRuleElement.PHASES), initial: "applyAEs" }),
-            value: new ResolvableValueField({ required: true, nullable: true, initial: undefined })
+            phase: new foundry.data.fields.StringField({ type: String, required: false, nullable: false, choices: foundry.utils.deepClone(AELikeRuleElement.PHASES), initial: "applyAEs" }),
+            value: new ResolvableValueField({ required: true, nullable: true, initial: undefined }),
+            priority: new foundry.data.fields.NumberField({ required: false, nullable: true, initial: undefined }),
         }
     }
 
@@ -40,7 +41,7 @@ class AELikeRuleElement extends RuleElementPTU {
             typeof this.path === "string" &&
             this.path.length > 0 &&
             [this.path, this.path.replace(/\.\w+$/, ""), this.path.replace(/\.?\w+\.\w+$/, "")].some(
-                (path) => typeof getProperty(actor, path) !== undefined
+                (path) => typeof foundry.utils.getProperty(actor, path) !== undefined
             );
         if (!pathIsValid) return this._warn("path");
     }
@@ -101,7 +102,7 @@ class AELikeRuleElement extends RuleElementPTU {
 
     apply(rollOptions) {
         this.validateData();
-        if (!this.test(rollOptions)) return;
+        if (!this.test(rollOptions ?? this.actor.getRollOptions())) return;
 
         const path = this.resolveInjectedProperties(this.path);
 
@@ -109,7 +110,7 @@ class AELikeRuleElement extends RuleElementPTU {
         if (/\bundefined\b/.test(path)) return;
 
         const { actor } = this;
-        const current = getProperty(actor, path);
+        const current = foundry.utils.getProperty(actor, path);
         const change = this.resolveValue(this.value)
         const newValue = this.getNewValue(current, change);
         if (this.ignored) return;
@@ -125,7 +126,7 @@ class AELikeRuleElement extends RuleElementPTU {
             return;
         }
         try {
-            setProperty(actor, path, newValue);
+            foundry.utils.setProperty(actor, path, newValue);
             this._logChange(change);
         } catch (error) {
             console.warn(error);
@@ -212,7 +213,7 @@ class AELikeRuleElement extends RuleElementPTU {
         const { changes } = this.actor.system;
         const realPath = this.resolveInjectedProperties(this.path);
         const entries = (changes[realPath] ??= {});
-        entries[randomID()] = { mode: this.mode, value, sourceId: this.item.uuid, source: this.item.name.includes(":") ? this.item.name.split(":")[1].trim() : this.item.name };
+        entries[foundry.utils.randomID()] = { mode: this.mode, value, sourceId: this.item.isGlobal ? (this.item.flags?.core?.sourceId ?? this.item.uuid) : this.item.uuid, source: this.item.name.includes(":") ? this.item.name.split(":")[1].trim() : this.item.name};
     }
 
     _warn(property) {

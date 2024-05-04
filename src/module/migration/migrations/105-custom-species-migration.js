@@ -18,11 +18,14 @@ export class Migration105CustomSpeciesMigration extends MigrationBase {
             const species = [];
             for (const data of oldCS.data) {
                 const specie = await CONFIG.PTU.Item.documentClasses.species.convertToPTUSpecies(data, { prepareOnly: true });
+                specie._id = foundry.utils.randomID();
+                const ownEvolution = specie.system.evolutions.at(1);
+                if(!!ownEvolution.uuid) ownEvolution.uuid = specie._id;
                 specie.folder = folder.id;
                 species.push(specie);
             }
 
-            const customSpecies = await Item.createDocuments(species);
+            const customSpecies = await Item.createDocuments(species, { keepId: true});
             if (customSpecies.length > 0) {
                 await game.settings.set("ptu", "customSpeciesData", { flags: { schemaVersion: this.version } });
             }
