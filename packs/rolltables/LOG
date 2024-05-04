@@ -1,8 +1,15 @@
-2024/04/07-14:24:18.091 98e4 Recovering log #407
-2024/04/07-14:24:18.096 98e4 Delete type=0 #407
-2024/04/07-14:24:18.096 98e4 Delete type=3 #405
-2024/04/07-16:38:21.774 ad90 Level-0 table #412: started
-2024/04/07-16:38:21.774 ad90 Level-0 table #412: 0 bytes OK
-2024/04/07-16:38:21.776 ad90 Delete type=0 #410
-2024/04/07-16:38:21.781 ad90 Manual compaction at level-0 from '!folders!2QGVmITcIgGCeRtD' @ 72057594037927935 : 1 .. '!tables.results!wdOETkq5aY7M7hJg.rSBY0YfY0tm73sIu' @ 0 : 0; will stop at (end)
-2024/04/07-16:38:21.858 ad90 Manual compaction at level-1 from '!folders!2QGVmITcIgGCeRtD' @ 72057594037927935 : 1 .. '!tables.results!wdOETkq5aY7M7hJg.rSBY0YfY0tm73sIu' @ 0 : 0; will stop at (end)
+2024/05/04-20:44:09.113 83ec Recovering log #411
+2024/05/04-20:44:09.117 83ec Delete type=0 #411
+2024/05/04-20:44:09.118 83ec Delete type=3 #409
+2024/05/04-20:48:30.921 a684 Level-0 table #416: started
+2024/05/04-20:48:30.926 a684 Level-0 table #416: 98941 bytes OK
+2024/05/04-20:48:30.927 a684 Delete type=0 #414
+2024/05/04-20:48:30.950 a684 Manual compaction at level-0 from '!folders!2QGVmITcIgGCeRtD' @ 72057594037927935 : 1 .. '!tables.results!wdOETkq5aY7M7hJg.rSBY0YfY0tm73sIu' @ 0 : 0; will stop at (end)
+2024/05/04-20:48:31.010 a684 Manual compaction at level-1 from '!folders!2QGVmITcIgGCeRtD' @ 72057594037927935 : 1 .. '!tables.results!wdOETkq5aY7M7hJg.rSBY0YfY0tm73sIu' @ 0 : 0; will stop at '!tables.results!wdOETkq5aY7M7hJg.rSBY0YfY0tm73sIu' @ 8219 : 1
+2024/05/04-20:48:31.010 a684 Compacting 1@1 + 1@2 files
+2024/05/04-20:48:31.020 a684 Generated table #417@1: 604 keys, 73950 bytes
+2024/05/04-20:48:31.020 a684 Compacted 1@1 + 1@2 files => 73950 bytes
+2024/05/04-20:48:31.022 a684 compacted to: files[ 0 0 1 0 0 0 0 ]
+2024/05/04-20:48:31.022 a684 Delete type=2 #370
+2024/05/04-20:48:31.023 a684 Delete type=2 #416
+2024/05/04-20:48:31.024 a684 Manual compaction at level-1 from '!tables.results!wdOETkq5aY7M7hJg.rSBY0YfY0tm73sIu' @ 8219 : 1 .. '!tables.results!wdOETkq5aY7M7hJg.rSBY0YfY0tm73sIu' @ 0 : 0; will stop at (end)

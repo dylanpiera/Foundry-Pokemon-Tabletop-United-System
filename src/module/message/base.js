@@ -213,7 +213,6 @@ class ChatMessagePTU extends ChatMessage {
 
             await item?.use();
         });
-        console.log('Apply Capture Hook')
         $html.find("button.apply-capture").on("click", async event => {
             event.preventDefault();
             event.stopImmediatePropagation();

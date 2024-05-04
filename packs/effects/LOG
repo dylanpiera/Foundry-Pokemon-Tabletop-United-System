@@ -1,15 +1,15 @@
-2024/04/07-14:24:18.100 98e4 Recovering log #1061
-2024/04/07-14:24:18.104 98e4 Delete type=0 #1061
-2024/04/07-14:24:18.104 98e4 Delete type=3 #1059
-2024/04/07-16:38:21.781 ad90 Level-0 table #1067: started
-2024/04/07-16:38:21.784 ad90 Level-0 table #1067: 168188 bytes OK
-2024/04/07-16:38:21.787 ad90 Delete type=0 #1065
-2024/04/07-16:38:21.860 ad90 Manual compaction at level-0 from '!folders!0TZD9QPsChqsbVo7' @ 72057594037927935 : 1 .. '!items!znvgEviVbL2WnCGJ' @ 0 : 0; will stop at (end)
-2024/04/07-16:38:21.862 ad90 Manual compaction at level-1 from '!folders!0TZD9QPsChqsbVo7' @ 72057594037927935 : 1 .. '!items!znvgEviVbL2WnCGJ' @ 0 : 0; will stop at '!items!zYlXw6cdHtfeKo58' @ 3857 : 1
-2024/04/07-16:38:21.862 ad90 Compacting 1@1 + 1@2 files
-2024/04/07-16:38:21.869 ad90 Generated table #1068@1: 673 keys, 397267 bytes
-2024/04/07-16:38:21.869 ad90 Compacted 1@1 + 1@2 files => 397267 bytes
-2024/04/07-16:38:21.871 ad90 compacted to: files[ 0 0 1 0 0 0 0 ]
-2024/04/07-16:38:21.871 ad90 Delete type=2 #1063
-2024/04/07-16:38:21.871 ad90 Delete type=2 #1067
-2024/04/07-16:38:21.873 ad90 Manual compaction at level-1 from '!items!zYlXw6cdHtfeKo58' @ 3857 : 1 .. '!items!znvgEviVbL2WnCGJ' @ 0 : 0; will stop at (end)
+2024/05/04-20:44:09.123 a7a8 Recovering log #1066
+2024/05/04-20:44:09.128 a7a8 Delete type=0 #1066
+2024/05/04-20:44:09.128 a7a8 Delete type=3 #1064
+2024/05/04-20:48:31.025 a684 Level-0 table #1072: started
+2024/05/04-20:48:31.034 a684 Level-0 table #1072: 405797 bytes OK
+2024/05/04-20:48:31.038 a684 Delete type=0 #1070
+2024/05/04-20:48:31.172 a684 Manual compaction at level-0 from '!folders!0TZD9QPsChqsbVo7' @ 72057594037927935 : 1 .. '!items!znvgEviVbL2WnCGJ' @ 0 : 0; will stop at (end)
+2024/05/04-20:48:31.311 a684 Manual compaction at level-1 from '!folders!0TZD9QPsChqsbVo7' @ 72057594037927935 : 1 .. '!items!znvgEviVbL2WnCGJ' @ 0 : 0; will stop at '!items!znvgEviVbL2WnCGJ' @ 4874 : 1
+2024/05/04-20:48:31.311 a684 Compacting 1@1 + 1@2 files
+2024/05/04-20:48:31.321 a684 Generated table #1073@1: 673 keys, 411777 bytes
+2024/05/04-20:48:31.321 a684 Compacted 1@1 + 1@2 files => 411777 bytes
+2024/05/04-20:48:31.323 a684 compacted to: files[ 0 0 1 0 0 0 0 ]
+2024/05/04-20:48:31.323 a684 Delete type=2 #1068
+2024/05/04-20:48:31.323 a684 Delete type=2 #1072
+2024/05/04-20:48:31.334 a684 Manual compaction at level-1 from '!items!znvgEviVbL2WnCGJ' @ 4874 : 1 .. '!items!znvgEviVbL2WnCGJ' @ 0 : 0; will stop at (end)
