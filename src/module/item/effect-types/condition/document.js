@@ -15,6 +15,10 @@ class PTUCondition extends BaseEffectPTU {
         return this.system.value.value ? { type: "counter", value: this.system.value.value } : null;
     }
 
+    get tint() {
+        return Color.from(0xffffff);
+    }
+
     get key() {
         return this.slug;
     }

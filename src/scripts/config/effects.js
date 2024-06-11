@@ -1,7 +1,7 @@
 export const statusEffects = [
     {
         "id": "fainted",
-        "label": "PTU.ConditionFainted",
+        "name": "PTU.ConditionFainted",
         "icon": "systems/ptu/static/images/conditions/Fainted.svg",
         "changes": [
             {
@@ -20,7 +20,7 @@ export const statusEffects = [
     },
     {
         "id": "burned",
-        "label": "PTU.ConditionBurned",
+        "name": "PTU.ConditionBurned",
         "icon": "systems/ptu/static/images/conditions/Burned.svg",
         "changes": [
             {
@@ -39,7 +39,7 @@ export const statusEffects = [
     },
     {
         "id": "frozen",
-        "label": "PTU.ConditionFrozen",
+        "name": "PTU.ConditionFrozen",
         "icon": "systems/ptu/static/images/conditions/Frozen.svg",
         "changes": [
             {
@@ -58,7 +58,7 @@ export const statusEffects = [
     },
     {
         "id": "paralysis",
-        "label": "PTU.ConditionParalysis",
+        "name": "PTU.ConditionParalysis",
         "icon": "systems/ptu/static/images/conditions/Paralysis.svg",
         "changes": [
             {
@@ -71,7 +71,7 @@ export const statusEffects = [
     },
     {
         "id": "poisoned",
-        "label": "PTU.ConditionPoisoned",
+        "name": "PTU.ConditionPoisoned",
         "icon": "systems/ptu/static/images/conditions/Poisoned.svg",
         "changes": [
             {
@@ -84,7 +84,7 @@ export const statusEffects = [
     },
     {
         "id": "badly-poisoned",
-        "label": "PTU.ConditionBadlyPoisoned",
+        "name": "PTU.ConditionBadlyPoisoned",
         "icon": "systems/ptu/static/images/conditions/Badly-Poisoned.svg",
         "changes": [
             {
@@ -103,7 +103,7 @@ export const statusEffects = [
     },
     {
         "id": "confused",
-        "label": "PTU.ConditionConfused",
+        "name": "PTU.ConditionConfused",
         "icon": "systems/ptu/static/images/conditions/Confused.svg",
         "changes": [
             {
@@ -116,7 +116,7 @@ export const statusEffects = [
     },
     {
         "id": "cursed",
-        "label": "PTU.ConditionCursed",
+        "name": "PTU.ConditionCursed",
         "icon": "systems/ptu/static/images/conditions/Cursed.svg",
         "changes": [
             {
@@ -129,7 +129,7 @@ export const statusEffects = [
     },
     {
         "id": "disabled",
-        "label": "PTU.ConditionDisabled",
+        "name": "PTU.ConditionDisabled",
         "icon": "systems/ptu/static/images/conditions/Disabled.svg",
         "changes": [
             {
@@ -142,7 +142,7 @@ export const statusEffects = [
     },
     {
         "id": "flinch",
-        "label": "PTU.ConditionFlinch",
+        "name": "PTU.ConditionFlinch",
         "icon": "systems/ptu/static/images/conditions/Flinched.svg",
         "changes": [
             {
@@ -161,7 +161,7 @@ export const statusEffects = [
     },
     {
         "id": "infatuation",
-        "label": "PTU.ConditionInfatuation",
+        "name": "PTU.ConditionInfatuation",
         "icon": "systems/ptu/static/images/conditions/Infatuated.svg",
         "changes": [
             {
@@ -174,7 +174,7 @@ export const statusEffects = [
     },
     {
         "id": "rage",
-        "label": "PTU.ConditionRage",
+        "name": "PTU.ConditionRage",
         "icon": "systems/ptu/static/images/conditions/Rage.svg",
         "changes": [
             {
@@ -187,7 +187,7 @@ export const statusEffects = [
     },
     {
         "id": "sleep",
-        "label": "PTU.ConditionSleep",
+        "name": "PTU.ConditionSleep",
         "icon": "systems/ptu/static/images/conditions/Sleep.svg",
         "changes": [
             {
@@ -206,7 +206,7 @@ export const statusEffects = [
     },
     {
         "id": "bad-sleep",
-        "label": "PTU.ConditionBadSleep",
+        "name": "PTU.ConditionBadSleep",
         "icon": "systems/ptu/static/images/conditions/Bad-Sleep.svg",
         "changes": [
             {
@@ -219,7 +219,7 @@ export const statusEffects = [
     },
     {
         "id": "suppressed",
-        "label": "PTU.ConditionSuppressed",
+        "name": "PTU.ConditionSuppressed",
         "icon": "systems/ptu/static/images/conditions/Suppressed.svg",
         "changes": [
             {
@@ -232,7 +232,7 @@ export const statusEffects = [
     },
     {
         "id": "blindness",
-        "label": "PTU.ConditionBlindness",
+        "name": "PTU.ConditionBlindness",
         "icon": "systems/ptu/static/images/conditions/Blindness.svg",
         "changes": [
             {
@@ -257,7 +257,7 @@ export const statusEffects = [
     },
     {
         "id": "total-blindness",
-        "label": "PTU.ConditionTotalBlindness",
+        "name": "PTU.ConditionTotalBlindness",
         "icon": "systems/ptu/static/images/conditions/Total-Blindness.svg",
         "changes": [
             {
@@ -288,7 +288,7 @@ export const statusEffects = [
     },
     {
         "id": "slowed",
-        "label": "PTU.ConditionSlowed",
+        "name": "PTU.ConditionSlowed",
         "icon": "systems/ptu/static/images/conditions/Slowed.svg",
         "changes": [
             {
@@ -301,7 +301,7 @@ export const statusEffects = [
     },
     {
         "id": "stuck",
-        "label": "PTU.ConditionStuck",
+        "name": "PTU.ConditionStuck",
         "icon": "systems/ptu/static/images/conditions/Stuck.svg",
         "changes": [
             {
@@ -314,7 +314,7 @@ export const statusEffects = [
     },
     {
         "id": "trapped",
-        "label": "PTU.ConditionTrapped",
+        "name": "PTU.ConditionTrapped",
         "icon": "systems/ptu/static/images/conditions/Trapped.svg",
         "changes": [
             {
@@ -327,7 +327,7 @@ export const statusEffects = [
     },
     {
         "id": "tripped",
-        "label": "PTU.ConditionTripped",
+        "name": "PTU.ConditionTripped",
         "icon": "systems/ptu/static/images/conditions/Tripped.svg",
         "changes": [
             {
@@ -346,7 +346,7 @@ export const statusEffects = [
     },
     {
         "id": "vulnerable",
-        "label": "PTU.ConditionVulnerable",
+        "name": "PTU.ConditionVulnerable",
         "icon": "systems/ptu/static/images/conditions/Vulnerable.svg",
         "changes": [
             {
@@ -359,7 +359,7 @@ export const statusEffects = [
     },
     {
         "id": "tagged",
-        "label": "PTU.ConditionTagged",
+        "name": "PTU.ConditionTagged",
         "icon": "systems/ptu/static/images/conditions/Tagged.svg",
         "changes": [
             {
@@ -372,7 +372,7 @@ export const statusEffects = [
     },
     {
         "id": "cheered",
-        "label": "PTU.ConditionCheered",
+        "name": "PTU.ConditionCheered",
         "icon": "systems/ptu/static/images/conditions/Cheered.svg",
         "changes": [
             {
@@ -385,7 +385,7 @@ export const statusEffects = [
     },
     {
         "id": "vortex",
-        "label": "PTU.ConditionVortex",
+        "name": "PTU.ConditionVortex",
         "icon": "systems/ptu/static/images/conditions/Vortex.svg",
         "changes": [
             {
@@ -410,7 +410,7 @@ export const statusEffects = [
     },
     {
         "id": "seeded",
-        "label": "PTU.ConditionSeeded",
+        "name": "PTU.ConditionSeeded",
         "icon": "systems/ptu/static/images/conditions/Seeded.svg",
         "changes": [
             {

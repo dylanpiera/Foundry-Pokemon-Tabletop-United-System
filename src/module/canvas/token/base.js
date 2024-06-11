@@ -94,7 +94,7 @@ class PTUToken extends Token {
     }
 
     /** @override */
-    async drawEffects() {
+    async _drawEffects() {
         // await super.drawEffects();
         const wasVisible = this.effects.visible;
         this.effects.visible = false;
@@ -377,7 +377,7 @@ class PTUToken extends Token {
         const flankersFlanking = flankingTokens.reduce((acc, flanker) => {
             const otherFlankers = flankingTokens.filter(t => t !== flanker);
             const sizeFlankCount = (() => {
-                switch(roundToNearest(flanker.document.width * flanker.document.height, [1, 4, 9, 16, 25])) {
+                switch (roundToNearest(flanker.document.width * flanker.document.height, [1, 4, 9, 16, 25])) {
                     case 1:
                         return 1;
                     case 4:
@@ -410,9 +410,9 @@ class PTUToken extends Token {
     }
 
     canFlank(flankee) {
-        if(!this.actor || !flankee.actor) return false;
+        if (!this.actor || !flankee.actor) return false;
         if (this === flankee || !game.settings.get("ptu", "automation.flankingDetection")) return false;
-        if(this.actor.conditions.bySlug("fainted").length > 0) return false;
+        if (this.actor.conditions.bySlug("fainted").length > 0) return false;
 
         if (!this.actor.isEnemyOf(flankee.actor)) return false;
 
