@@ -348,10 +348,12 @@ class PTUPokemonActor extends PTUActor {
             };
         }
 
+        const evasionLimit = game.settings.get("ptu", "automation.maxEvasion") ?? 20;
+
         const evasion = {
-            "physical": Math.max(Math.min(Math.floor(this.system.stats.def.total / 5), 6) + this.system.modifiers.evasion.physical.total, 0),
-            "special": Math.max(Math.min(Math.floor(this.system.stats.spdef.total / 5), 6) + this.system.modifiers.evasion.special.total, 0),
-            "speed": Math.max(Math.min(Math.floor(this.system.stats.spd.total / 5), 6) + this.system.modifiers.evasion.speed.total, 0)
+            "physical": Math.clamp(Math.min(Math.floor(this.system.stats.def.total / 5), 6) + this.system.modifiers.evasion.physical.total, 0, evasionLimit),
+            "special": Math.clamp(Math.min(Math.floor(this.system.stats.spdef.total / 5), 6) + this.system.modifiers.evasion.special.total, 0, evasionLimit),
+            "speed": Math.clamp(Math.min(Math.floor(this.system.stats.spd.total / 5), 6) + this.system.modifiers.evasion.speed.total, 0, evasionLimit)
         };
 
         if (this.rollOptions.conditions?.["stuck"] && !this.rollOptions.all["self:types:ghost"]) evasion.speed = 0;

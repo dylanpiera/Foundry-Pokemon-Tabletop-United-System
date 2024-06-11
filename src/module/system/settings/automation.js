@@ -49,6 +49,14 @@ const AutomationSettingsConfig = {
         type: Boolean,
         default: true
     },
+    "maxEvasion":{
+        name: "PTU.Settings.Automation.MaxEvasion.Name",
+        hint: "PTU.Settings.Automation.MaxEvasion.Hint",
+        scope: "world",
+        config: true,
+        default: 9,
+        type: Number,
+    },
     "massiveDamageThresholdPercent":{
         name: "PTU.Settings.Automation.MassiveDamageThreshold.Name",
         hint: "PTU.Settings.Automation.MassiveDamageThreshold.Hint",

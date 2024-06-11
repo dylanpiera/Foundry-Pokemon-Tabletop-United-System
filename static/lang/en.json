@@ -849,6 +849,10 @@
           "Name": "Show Level-Up Window",
           "Hint": "Allow the level-up window to appear whenever a Pokémon levels up."
         },
+        "MaxEvasion": {
+            "Name": "Max Evasion",
+            "Hint": "The maximum evasion a creature can have. (Default 9)"
+        },
         "RemoveExpiredEffects": {
           "Name": "Remove Expired Effects",
           "Hint": "Remove expired effects from actors."

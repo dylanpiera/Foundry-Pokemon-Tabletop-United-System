@@ -339,7 +339,6 @@ function calculatePTStatTotal(levelUpPoints, level, stats, { twistedPower, ignor
 }
 
 function calculateEvasions(data, ptuFlags, actor_items) {
-
     const abilities = {};
     for (let ability of actor_items.filter(x => x.type == "ability")) {
         if (ability.name.toLowerCase().includes("tangled feet")) abilities.tangled_feet = true;
@@ -353,10 +352,12 @@ function calculateEvasions(data, ptuFlags, actor_items) {
         "speed": 0
     };
 
+    const evasionLimit = game.settings.get("ptu", "automation.maxEvasion") ?? 20;
+
     let evasion = {
-        "physical": Math.max(Math.min(Math.floor(data.stats.def.total / 5), 6) + data.modifiers.evasion.physical.total + tangled_feet_modifier, 0),
-        "special": Math.max(Math.min(Math.floor(data.stats.spdef.total / 5), 6) + data.modifiers.evasion.special.total + tangled_feet_modifier, 0),
-        "speed": Math.max(Math.min(Math.floor(data.stats.spd.total / 5), 6) + data.modifiers.evasion.speed.total + tangled_feet_modifier, 0)
+        "physical": Math.clamp(Math.min(Math.floor(data.stats.def.total / 5), 6) + data.modifiers.evasion.physical.total + tangled_feet_modifier, 0, evasionLimit),
+        "special": Math.clamp(Math.min(Math.floor(data.stats.spdef.total / 5), 6) + data.modifiers.evasion.special.total + tangled_feet_modifier, 0, evasionLimit),
+        "speed": Math.clamp(Math.min(Math.floor(data.stats.spd.total / 5), 6) + data.modifiers.evasion.speed.total + tangled_feet_modifier, 0, evasionLimit)
     };
 
     if (ptuFlags?.is_stuck) evasion.speed = 0;
