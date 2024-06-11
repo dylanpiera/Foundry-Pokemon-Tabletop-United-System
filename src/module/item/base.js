@@ -65,7 +65,7 @@ class PTUItem extends Item {
         return this.img.includes("class");
     }
 
-    get enabled(){
+    get enabled() {
         return !!(this.system.enabled ?? true)
     }
 
@@ -74,11 +74,11 @@ class PTUItem extends Item {
      * @param newState
      * @return {Promise<abstract.Document|*>}
      */
-    async toggleEnableState(newState = !this.enabled){
-        await this.update({"system.enabled": newState})
-        for(const rule of this.rules) {
-            if(rule.ignored || !(rule instanceof GrantItemRuleElement)) continue;
-            return this.actor.update({"system.timestamp": Date.now()})
+    async toggleEnableState(newState = !this.enabled) {
+        await this.update({ "system.enabled": newState })
+        for (const rule of this.rules) {
+            if (rule.ignored || !(rule instanceof GrantItemRuleElement)) continue;
+            return this.actor.update({ "system.timestamp": Date.now() })
         }
     }
 
@@ -103,7 +103,7 @@ class PTUItem extends Item {
             }
         });
 
-        if(this.enabled) {
+        if (this.enabled) {
             this.flags.ptu.rollOptions.all[`item:enabled`] = true;
             this.flags.ptu.rollOptions.item[`item:enabled`] = true;
         }
@@ -122,6 +122,24 @@ class PTUItem extends Item {
             return this;
         }
         return super.delete(context);
+    }
+
+    /** @override */
+    async _buildEmbedHTML(config, options = {}) {
+        options = { ...options, _embedDepth: options._embedDepth + 1, relativeTo: this };
+        if (!this.system?.effect) return document.createElement("div");
+        const {
+            secrets = options.secrets,
+            documents = options.documents,
+            links = options.links,
+            rolls = options.rolls,
+            embeds = options.embeds
+        } = config;
+        foundry.utils.mergeObject(options, { secrets, documents, links, rolls, embeds });
+        const enrichedPage = await TextEditor.enrichHTML(this.system.effect, options);
+        const container = document.createElement("div");
+        container.innerHTML = enrichedPage;
+        return container;
     }
 
     /**
@@ -199,7 +217,7 @@ class PTUItem extends Item {
                 source._id = foundry.utils.randomID();
             }
 
-            if(source.system.stackSlugs) source.system.slug = sluggify(source.name + foundry.utils.randomID());
+            if (source.system.stackSlugs) source.system.slug = sluggify(source.name + foundry.utils.randomID());
 
             const item = new CONFIG.Item.documentClass(source, { parent: actor });
 
