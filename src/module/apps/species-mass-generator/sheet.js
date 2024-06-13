@@ -158,10 +158,10 @@ export class PTUSpeciesMassGenerator extends FormApplication {
             for (const result of results) {
                 const species = await (() => {
                     switch (result.type) {
-                        case 1: {
+                        case CONST.TABLE_RESULT_TYPES.DOCUMENT: {
                             return game.items.get(result.documentId)
                         }
-                        case 2: {
+                        case CONST.TABLE_RESULT_TYPES.COMPENDIUM: {
                             return game.packs.get(result.documentCollection).getDocument(result.documentId)
                         }
                     }
