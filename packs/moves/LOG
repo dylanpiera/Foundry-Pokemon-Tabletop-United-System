@@ -1,14 +1,14 @@
-2024/06/11-14:23:42.591 18a94 Recovering log #1079
-2024/06/11-14:23:42.597 18a94 Delete type=0 #1079
-2024/06/11-14:23:42.597 18a94 Delete type=3 #1077
-2024/06/11-15:40:45.438 19e48 Level-0 table #1085: started
-2024/06/11-15:40:45.454 19e48 Level-0 table #1085: 709253 bytes OK
-2024/06/11-15:40:45.456 19e48 Delete type=0 #1083
-2024/06/11-15:40:45.475 19e48 Manual compaction at level-0 from '!folders!3AhTAywjx4AYtRjv' @ 72057594037927935 : 1 .. '!items!zxUzqjCE0wNYL1er' @ 0 : 0; will stop at '!items!zxUzqjCE0wNYL1er' @ 30173 : 1
-2024/06/11-15:40:45.475 19e48 Compacting 1@0 + 1@1 files
-2024/06/11-15:40:45.494 19e48 Generated table #1086@0: 1310 keys, 708284 bytes
-2024/06/11-15:40:45.494 19e48 Compacted 1@0 + 1@1 files => 708284 bytes
-2024/06/11-15:40:45.497 19e48 compacted to: files[ 0 1 0 0 0 0 0 ]
-2024/06/11-15:40:45.498 19e48 Delete type=2 #1081
-2024/06/11-15:40:45.498 19e48 Delete type=2 #1085
-2024/06/11-15:40:45.518 19e48 Manual compaction at level-0 from '!items!zxUzqjCE0wNYL1er' @ 30173 : 1 .. '!items!zxUzqjCE0wNYL1er' @ 0 : 0; will stop at (end)
+2024/07/23-15:37:48.417 8754 Recovering log #1097
+2024/07/23-15:37:48.422 8754 Delete type=0 #1097
+2024/07/23-15:37:48.422 8754 Delete type=3 #1095
+2024/07/23-16:12:07.539 2f0c Level-0 table #1102: started
+2024/07/23-16:12:07.544 2f0c Level-0 table #1102: 1573 bytes OK
+2024/07/23-16:12:07.545 2f0c Delete type=0 #1100
+2024/07/23-16:12:07.555 2f0c Manual compaction at level-0 from '!folders!3AhTAywjx4AYtRjv' @ 72057594037927935 : 1 .. '!items!zxUzqjCE0wNYL1er' @ 0 : 0; will stop at '!items!dM7JNhVHOmnTxRhy' @ 30184 : 1
+2024/07/23-16:12:07.555 2f0c Compacting 1@0 + 1@1 files
+2024/07/23-16:12:07.571 2f0c Generated table #1103@0: 1310 keys, 708268 bytes
+2024/07/23-16:12:07.571 2f0c Compacted 1@0 + 1@1 files => 708268 bytes
+2024/07/23-16:12:07.573 2f0c compacted to: files[ 0 1 0 0 0 0 0 ]
+2024/07/23-16:12:07.573 2f0c Delete type=2 #1086
+2024/07/23-16:12:07.573 2f0c Delete type=2 #1102
+2024/07/23-16:12:07.616 2f0c Manual compaction at level-0 from '!items!dM7JNhVHOmnTxRhy' @ 30184 : 1 .. '!items!zxUzqjCE0wNYL1er' @ 0 : 0; will stop at (end)

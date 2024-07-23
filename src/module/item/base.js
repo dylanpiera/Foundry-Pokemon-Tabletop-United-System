@@ -18,7 +18,9 @@ class PTUItem extends Item {
     }
 
     get grantedBy() {
-        return this.actor?.items.get(this.flags.ptu.grantedBy?.id ?? "") ?? null;
+      // return this.flags.ptu.grantedBy ? this.actor?.items.get(this.flags.ptu.grantedBy.id) : null;
+      const id = this.flags.ptu.grantedBy?.id ?? "";
+      return ((id === this.id) ? null : (this.actor?.items.get(id) ?? null));
     }
 
     get grantedBySameType() {

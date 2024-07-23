@@ -72,6 +72,7 @@ class PTUFeat extends PTUItem {
         const itemGrants = this.flags.ptu.itemGrants;
         if(!itemGrants) return this.grants = [];
         this.grants = Object.values(itemGrants).flatMap((grant) => {
+            if(grant.id === this._id) return [];
             return this.actor?.items.get(grant.id) ? [this.actor.items.get(grant.id)] : [];
         }).sort((a,b) => (a.sort || 0) - (b.sort || 0));
     }

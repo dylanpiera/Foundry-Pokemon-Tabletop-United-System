@@ -22,7 +22,7 @@ export class TypeOverwriteRuleElement extends RuleElementPTU {
         const realTypes = typeSet.map(t => t.trim()).filter(t => !!t && CONFIG.PTU.data.typeEffectiveness[t]);
 
         if(this.overwrite) {
-            return this.actor.synthetics.typeOverride.typing = realTypes
+            return this.actor.synthetics.typeOverride.typing = [...realTypes]
         }
 
         if(!this.actor.synthetics.typeOverride.typing) {
