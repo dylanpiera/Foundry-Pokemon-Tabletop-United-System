@@ -7,8 +7,7 @@
 # PTU System
 A Pokemon Tabletop United System for use in FoundryVTT.
 
-For any questions, feel free to open an issue or message me on Discord: SoaringDylan#0380.
-You can also join our Discord Server for any questions & feedback: https://discord.gg/ZTFfKYDxZf
+For any questions & feedback, feel free to open an issue or join our discord server https://discord.gg/ptrfvtt.
 
 ## How to Install
 Download the zip of the [PTU 1.05 Branch](https://github.com/dylanpiera/Foundry-Pokemon-Tabletop-United-System/archive/refs/heads/PTU-1.05.zip)
