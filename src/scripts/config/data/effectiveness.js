@@ -2,7 +2,7 @@ const typeEffectiveness = {
     "Normal":{
         "images":{
             "icon":"systems/ptu/static/css/images/types2/NormalIC_Icon.png",
-            "bar":"/systems/ptu/static/css/images/types2/NormalIC.png"
+            "bar":"systems/ptu/static/css/images/types2/NormalIC.png"
         },
         "effectiveness":{
             "Normal":1,
@@ -30,7 +30,7 @@ const typeEffectiveness = {
     "Fighting":{
         "images":{
             "icon":"systems/ptu/static/css/images/types2/FightingIC_Icon.png",
-            "bar":"/systems/ptu/static/css/images/types2/FightingIC.png"
+            "bar":"systems/ptu/static/css/images/types2/FightingIC.png"
         },
         "effectiveness":{
             "Normal":1,
@@ -58,7 +58,7 @@ const typeEffectiveness = {
     "Flying":{
         "images":{
             "icon":"systems/ptu/static/css/images/types2/FlyingIC_Icon.png",
-            "bar":"/systems/ptu/static/css/images/types2/FlyingIC.png"
+            "bar":"systems/ptu/static/css/images/types2/FlyingIC.png"
         },
         "effectiveness":{
             "Normal":1,
@@ -86,7 +86,7 @@ const typeEffectiveness = {
     "Poison":{
         "images":{
             "icon":"systems/ptu/static/css/images/types2/PoisonIC_Icon.png",
-            "bar":"/systems/ptu/static/css/images/types2/PoisonIC.png"
+            "bar":"systems/ptu/static/css/images/types2/PoisonIC.png"
         },
         "effectiveness":{
             "Normal":1,
@@ -114,7 +114,7 @@ const typeEffectiveness = {
     "Ground":{
         "images":{
             "icon":"systems/ptu/static/css/images/types2/GroundIC_Icon.png",
-            "bar":"/systems/ptu/static/css/images/types2/GroundIC.png"
+            "bar":"systems/ptu/static/css/images/types2/GroundIC.png"
         },
         "effectiveness":{
             "Normal":1,
@@ -142,7 +142,7 @@ const typeEffectiveness = {
     "Rock":{
         "images":{
             "icon":"systems/ptu/static/css/images/types2/RockIC_Icon.png",
-            "bar":"/systems/ptu/static/css/images/types2/RockIC.png"
+            "bar":"systems/ptu/static/css/images/types2/RockIC.png"
         },
         "effectiveness":{
             "Normal":0.5,
@@ -170,7 +170,7 @@ const typeEffectiveness = {
     "Bug":{
         "images":{
             "icon":"systems/ptu/static/css/images/types2/BugIC_Icon.png",
-            "bar":"/systems/ptu/static/css/images/types2/BugIC.png"
+            "bar":"systems/ptu/static/css/images/types2/BugIC.png"
         },
         "effectiveness":{
             "Normal":1,
@@ -198,7 +198,7 @@ const typeEffectiveness = {
     "Ghost":{
         "images":{
             "icon":"systems/ptu/static/css/images/types2/GhostIC_Icon.png",
-            "bar":"/systems/ptu/static/css/images/types2/GhostIC.png"
+            "bar":"systems/ptu/static/css/images/types2/GhostIC.png"
         },
         "effectiveness":{
             "Normal":0,
@@ -226,7 +226,7 @@ const typeEffectiveness = {
     "Steel":{
         "images":{
             "icon":"systems/ptu/static/css/images/types2/SteelIC_Icon.png",
-            "bar":"/systems/ptu/static/css/images/types2/SteelIC.png"
+            "bar":"systems/ptu/static/css/images/types2/SteelIC.png"
         },
         "effectiveness":{
             "Normal":0.5,
@@ -254,7 +254,7 @@ const typeEffectiveness = {
     "Fire":{
         "images":{
             "icon":"systems/ptu/static/css/images/types2/FireIC_Icon.png",
-            "bar":"/systems/ptu/static/css/images/types2/FireIC.png"
+            "bar":"systems/ptu/static/css/images/types2/FireIC.png"
         },
         "effectiveness":{
             "Normal":1,
@@ -282,7 +282,7 @@ const typeEffectiveness = {
     "Water":{
         "images":{
             "icon":"systems/ptu/static/css/images/types2/WaterIC_Icon.png",
-            "bar":"/systems/ptu/static/css/images/types2/WaterIC.png"
+            "bar":"systems/ptu/static/css/images/types2/WaterIC.png"
         },
         "effectiveness":{
             "Normal":1,
@@ -310,7 +310,7 @@ const typeEffectiveness = {
     "Grass":{
         "images":{
             "icon":"systems/ptu/static/css/images/types2/GrassIC_Icon.png",
-            "bar":"/systems/ptu/static/css/images/types2/GrassIC.png"
+            "bar":"systems/ptu/static/css/images/types2/GrassIC.png"
         },
         "effectiveness":{
             "Normal":1,
@@ -338,7 +338,7 @@ const typeEffectiveness = {
     "Electric":{
         "images":{
             "icon":"systems/ptu/static/css/images/types2/ElectricIC_Icon.png",
-            "bar":"/systems/ptu/static/css/images/types2/ElectricIC.png"
+            "bar":"systems/ptu/static/css/images/types2/ElectricIC.png"
         },
         "effectiveness":{
             "Normal":1,
@@ -366,7 +366,7 @@ const typeEffectiveness = {
     "Psychic":{
         "images":{
             "icon":"systems/ptu/static/css/images/types2/PsychicIC_Icon.png",
-            "bar":"/systems/ptu/static/css/images/types2/PsychicIC.png"
+            "bar":"systems/ptu/static/css/images/types2/PsychicIC.png"
         },
         "effectiveness":{
             "Normal":1,
@@ -394,7 +394,7 @@ const typeEffectiveness = {
     "Ice":{
         "images":{
             "icon":"systems/ptu/static/css/images/types2/IceIC_Icon.png",
-            "bar":"/systems/ptu/static/css/images/types2/IceIC.png"
+            "bar":"systems/ptu/static/css/images/types2/IceIC.png"
         },
         "effectiveness":{
             "Normal":1,
@@ -422,7 +422,7 @@ const typeEffectiveness = {
     "Dragon":{
         "images":{
             "icon":"systems/ptu/static/css/images/types2/DragonIC_Icon.png",
-            "bar":"/systems/ptu/static/css/images/types2/DragonIC.png"
+            "bar":"systems/ptu/static/css/images/types2/DragonIC.png"
         },
         "effectiveness":{
             "Normal":1,
@@ -450,7 +450,7 @@ const typeEffectiveness = {
     "Dark":{
         "images":{
             "icon":"systems/ptu/static/css/images/types2/DarkIC_Icon.png",
-            "bar":"/systems/ptu/static/css/images/types2/DarkIC.png"
+            "bar":"systems/ptu/static/css/images/types2/DarkIC.png"
         },
         "effectiveness":{
             "Normal":1,
@@ -478,7 +478,7 @@ const typeEffectiveness = {
     "Fairy":{
         "images":{
             "icon":"systems/ptu/static/css/images/types2/FairyIC_Icon.png",
-            "bar":"/systems/ptu/static/css/images/types2/FairyIC.png"
+            "bar":"systems/ptu/static/css/images/types2/FairyIC.png"
         },
         "effectiveness":{
             "Normal":1,
@@ -506,7 +506,7 @@ const typeEffectiveness = {
     "Nuclear":{
         "images":{
             "icon":"systems/ptu/static/css/images/types2/NuclearIC_Icon.png",
-            "bar":"/systems/ptu/static/css/images/types2/NuclearIC.png"
+            "bar":"systems/ptu/static/css/images/types2/NuclearIC.png"
         },
         "effectiveness":{
             "Normal":2,
@@ -562,7 +562,7 @@ const typeEffectiveness = {
     "Untyped":{
         "images":{
             "icon":"systems/ptu/static/css/images/types2/UntypedIC_Icon.png",
-            "bar":"/systems/ptu/static/css/images/types2/UntypedIC.png"
+            "bar":"systems/ptu/static/css/images/types2/UntypedIC.png"
         },
         "effectiveness":{
             "Normal":1,

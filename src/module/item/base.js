@@ -172,16 +172,16 @@ class PTUItem extends Item {
         source ??= foundry.utils.duplicate(this);
 
         let required = false;
-        source.img ||= `/systems/ptu/static/css/images/icons/${source.type}_icon.png`
+        source.img ||= `systems/ptu/static/css/images/icons/${source.type}_icon.png`
         if (source.img == "icons/svg/item-bag.svg" || source.img == "icons/svg/mystery-man.svg") {
             if (source.type == "move") {
                 source.img = CONFIG.PTU.data.typeEffectiveness[source.system.type.titleCase()].images.icon;
             }
             else if (source.type == "contestmove") {
-                source.img = `/systems/ptu/static/css/images/types2/${source.system.type}IC_Icon.png`;
+                source.img = `systems/ptu/static/css/images/types2/${source.system.type}IC_Icon.png`;
             }
             else {
-                source.img = `/systems/ptu/static/css/images/icons/${source.type}_icon.png`;
+                source.img = `systems/ptu/static/css/images/icons/${source.type}_icon.png`;
             }
             required = true;
         }
@@ -420,7 +420,7 @@ class PTUItem extends Item {
                 category.classList.add("type-img");
 
                 const categoryImg = document.createElement("img");
-                categoryImg.src = `/systems/ptu/static/css/images/categories/${this.system.category}.png`;
+                categoryImg.src = `systems/ptu/static/css/images/categories/${this.system.category}.png`;
                 category.append(categoryImg);
 
                 header.append(category, type);
@@ -458,7 +458,7 @@ class PTUItem extends Item {
             referenceEffect
         }
 
-        ChatMessage.create({ content: await renderTemplate(`/systems/ptu/static/templates/chat/chat-items.hbs`, chatData), flavor, flags: { ptu: { origin: { item: this.uuid } } } })
+        ChatMessage.create({ content: await renderTemplate(`systems/ptu/static/templates/chat/chat-items.hbs`, chatData), flavor, flags: { ptu: { origin: { item: this.uuid } } } })
     }
 }
 

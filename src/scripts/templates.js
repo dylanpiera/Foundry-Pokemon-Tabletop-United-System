@@ -19,6 +19,6 @@ export function registerTemplates() {
 
         // Charactermancer Partials
         // "systems/ptu/templates/partials/charactermancer-evolution-partial.hbs",
-        // "/systems/ptu/templates/partials/charactermancer/stat-block-partial.hbs"
+        // "systems/ptu/templates/partials/charactermancer/stat-block-partial.hbs"
     ]);
 };

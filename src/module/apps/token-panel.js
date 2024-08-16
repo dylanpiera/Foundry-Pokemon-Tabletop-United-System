@@ -47,7 +47,7 @@ export class TokenPanel extends Application {
                 keywords: attack.item?.system.keywords ?? [],
                 sort: attack.item?.sort ?? 0,
             };
-            if(attack.item?.system.category) data.category = `/systems/ptu/static/css/images/types2/${attack.item?.system.category}IC_Icon.png`;
+            if(attack.item?.system.category) data.category = `systems/ptu/static/css/images/types2/${attack.item?.system.category}IC_Icon.png`;
             if (attack.item.system.isStruggle) struggles.push(data);
             else attacks.push(data);
         }

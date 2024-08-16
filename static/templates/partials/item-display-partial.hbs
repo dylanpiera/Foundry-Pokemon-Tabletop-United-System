@@ -39,17 +39,17 @@
                     <div class="item-tags">
                         {{#if item.grantedBy}}
                             <div class="tag shadowless tooltip" title="Granted by {{item.grantedBy.name}}">
-                                <img src="/systems/ptu/static/css/images/icons/granted_icon.png"/>
+                                <img src="systems/ptu/static/css/images/icons/granted_icon.png"/>
                             </div>
                         {{/if}}
                         {{#if item.hasAutomation}}
                             {{#if item.enabled}}
                                 <div class="tag shadowless tooltip" title="This item has automation!">
-                                    <img src="/systems/ptu/static/css/images/icons/automated_icon.png"/>
+                                    <img src="systems/ptu/static/css/images/icons/automated_icon.png"/>
                                 </div>
                             {{else}}
                                 <div class="tag shadowless tooltip" title="This item has disabled automation!">
-                                    <img src="/systems/ptu/static/css/images/icons/automated_disabled_icon.png" style="opacity: 0.5"/>
+                                    <img src="systems/ptu/static/css/images/icons/automated_disabled_icon.png" style="opacity: 0.5"/>
                                 </div>
                             {{/if}}
                         {{/if}}
@@ -73,7 +73,7 @@
                         {{/if}}
                         {{#if item.system.category}}
                             <div class="tag gradient">
-                                <img src="/systems/ptu/static/css/images/types2/{{item.system.category}}IC_Icon.png" title="{{item.system.category}}"/>
+                                <img src="systems/ptu/static/css/images/types2/{{item.system.category}}IC_Icon.png" title="{{item.system.category}}"/>
                                 <span>{{item.system.category}}</span>
                             </div>
                         {{/if}}
@@ -149,18 +149,18 @@
                             {{/if}}
                             {{#if item.isGranted}}
                                 <div class="tag shadowless tooltip" title="Granted by {{item.grantedBy.name}}">
-                                    <img src="/systems/ptu/static/css/images/icons/granted_icon.png"/>
+                                    <img src="systems/ptu/static/css/images/icons/granted_icon.png"/>
                                 </div>
                             {{/if}}
                             {{#unless (or (is type "effect") (is type "condition"))}}
                                 {{#if item.hasAutomation}}
                                     {{#if item.enabled}}
                                         <div class="tag shadowless tooltip" title="This item has automation!">
-                                            <img src="/systems/ptu/static/css/images/icons/automated_icon.png"/>
+                                            <img src="systems/ptu/static/css/images/icons/automated_icon.png"/>
                                         </div>
                                     {{else}}
                                         <div class="tag shadowless tooltip" title="This item has disabled automation!">
-                                            <img src="/systems/ptu/static/css/images/icons/automated_disabled_icon.png" style="opacity: 0.5"/>
+                                            <img src="systems/ptu/static/css/images/icons/automated_disabled_icon.png" style="opacity: 0.5"/>
                                         </div>
                                     {{/if}}
                                 {{/if}}
@@ -216,17 +216,17 @@
                     <div class="item-tags">
                         {{#if item.isGranted}}
                             <div class="tag shadowless tooltip" title="Granted by {{item.grantedBy.name}}">
-                                <img src="/systems/ptu/static/css/images/icons/granted_icon.png"/>
+                                <img src="systems/ptu/static/css/images/icons/granted_icon.png"/>
                             </div>
                         {{/if}}
                         {{#if item.system.rules}}
                             {{#if item.enabled}}
                                 <div class="tag shadowless tooltip" title="This item has automation!">
-                                    <img src="/systems/ptu/static/css/images/icons/automated_icon.png"/>
+                                    <img src="systems/ptu/static/css/images/icons/automated_icon.png"/>
                                 </div>
                             {{else}}
                                 <div class="tag shadowless tooltip" title="This item has disabled automation!">
-                                    <img src="/systems/ptu/static/css/images/icons/automated_disabled_icon.png" style="opacity: 0.5"/>
+                                    <img src="systems/ptu/static/css/images/icons/automated_disabled_icon.png" style="opacity: 0.5"/>
                                 </div>
                             {{/if}}
                         {{/if}}

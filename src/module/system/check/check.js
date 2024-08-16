@@ -643,7 +643,7 @@ class PTUCheck {
                 category.classList.add("type-img");
 
                 const categoryImg = document.createElement("img");
-                categoryImg.src = `/systems/ptu/static/css/images/categories/${item.system.category}.png`;
+                categoryImg.src = `systems/ptu/static/css/images/categories/${item.system.category}.png`;
                 category.append(categoryImg);
 
                 header.append(category, type);
