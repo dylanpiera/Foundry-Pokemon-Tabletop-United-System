@@ -30,7 +30,7 @@
             <li class="item {{item.type}}-item" data-item-id="{{item.realId}}">
                 <div class="item-icon {{#if item.rollable}}rollable{{/if}} move">
                     <img class="icon" src="{{item.img}}" title="{{item.name}}"/>
-                    <img class="dice" src="/icons/svg/d20.svg" title="Roll {{item.name}}">
+                    <img class="dice" src="icons/svg/d20.svg" title="Roll {{item.name}}">
                 </div>
                 <div class="move-info">
                     <div class="item-name">
@@ -130,7 +130,7 @@
                     {{#if item.rollable}}
                         <div class="item-icon rollable">
                             <img class="icon" src="{{item.img}}" title="{{item.name}} ({{item.type}})"/>
-                            <img class="dice" src="/icons/svg/d20.svg" title="Roll {{item.name}}">
+                            <img class="dice" src="icons/svg/d20.svg" title="Roll {{item.name}}">
                         </div>
                     {{else}}
                         <div class="item-icon">
@@ -202,7 +202,7 @@
                 {{#if (and system.frequency (not system.frequency "Static"))}}
                     <div class="item-icon rollable">
                         <img class="icon" src="{{item.img}}" title="{{item.name}} ({{item.type}})"/>
-                        <img class="dice" src="/icons/svg/d20.svg" title="Roll {{item.name}}">
+                        <img class="dice" src="icons/svg/d20.svg" title="Roll {{item.name}}">
                     </div>
                 {{else}}
                     <div class="item-icon">

@@ -489,7 +489,7 @@ a.pokedollar span {
 }
 a.pokedollar span::before {
   content: "";
-  background: url(/systems/ptu/static/css/images/Pokémon_Dollar_sign.svg);
+  background: url(systems/ptu/static/css/images/Pokémon_Dollar_sign.svg);
   background-size: contain;
   background-repeat: no-repeat;
   position: absolute;
@@ -737,7 +737,7 @@ a.pokedollar span::before {
   margin-right: 2px;
 }
 .ptu.rulebook.journal-entry aside.sidebar.flexcol.directory.journal-sidebar:not(.collapsed) .active span.page-number {
-  background-image: url(/icons/svg/downgrade.svg);
+  background-image: url(icons/svg/downgrade.svg);
   filter: brightness(0);
   rotate: 270deg;
   background-size: contain;
@@ -787,7 +787,7 @@ a.pokedollar span::before {
   min-width: 300px;
   max-height: 150px;
   height: 150px;
-  background: url(/ui/denim075.png) repeat;
+  background: url(ui/denim075.png) repeat;
   max-width: calc(100vw - 320px - 205px);
   display: flex;
   flex-direction: row;
@@ -1225,7 +1225,7 @@ a.pokedollar span::before {
   position: absolute;
   height: 45px;
   border-radius: 0 0 15px 15px;
-  background: url(/ui/denim075.png) repeat;
+  background: url(ui/denim075.png) repeat;
   padding: 5px;
   bottom: -45px;
   right: 10px;
@@ -1251,7 +1251,7 @@ a.pokedollar span::before {
 .token-panel .top-panel {
   position: absolute;
   border-radius: 15px 15px 0 0;
-  background: url(/ui/denim075.png) repeat;
+  background: url(ui/denim075.png) repeat;
   right: 10px;
   width: 172px;
   bottom: 150px;
