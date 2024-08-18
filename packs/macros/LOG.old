@@ -1,8 +1,21 @@
-2024/06/12-18:17:51.758 1e94 Recovering log #829
-2024/06/12-18:17:51.763 1e94 Delete type=0 #829
-2024/06/12-18:17:51.763 1e94 Delete type=3 #827
-2024/06/13-10:10:52.995 8e94 Level-0 table #834: started
-2024/06/13-10:10:52.995 8e94 Level-0 table #834: 0 bytes OK
-2024/06/13-10:10:52.997 8e94 Delete type=0 #832
-2024/06/13-10:10:53.000 8e94 Manual compaction at level-0 from '!macros!1RNSAw20k8gBHhUd' @ 72057594037927935 : 1 .. '!macros!sYZbyUkyC8f4nCek' @ 0 : 0; will stop at (end)
-2024/06/13-10:10:53.000 8e94 Manual compaction at level-1 from '!macros!1RNSAw20k8gBHhUd' @ 72057594037927935 : 1 .. '!macros!sYZbyUkyC8f4nCek' @ 0 : 0; will stop at (end)
+2024/08/17-20:27:10.988 18e0 Recovering log #851
+2024/08/17-20:27:11.115 18e0 Delete type=0 #851
+2024/08/17-20:27:11.116 18e0 Delete type=3 #849
+2024/08/17-21:11:57.561 3dc4 Level-0 table #855: started
+2024/08/17-21:11:57.562 3dc4 Level-0 table #855: 0 bytes OK
+2024/08/17-21:11:57.611 3dc4 Delete type=0 #853
+2024/08/17-21:11:57.784 3dc4 Manual compaction at level-0 from '!macros!1RNSAw20k8gBHhUd' @ 72057594037927935 : 1 .. '!macros!sYZbyUkyC8f4nCek' @ 0 : 0; will stop at '!macros!H929lnw6f59DTuWQ' @ 79 : 1
+2024/08/17-21:11:57.784 3dc4 Compacting 1@0 + 0@1 files
+2024/08/17-21:11:57.836 3dc4 Generated table #856@0: 1 keys, 743 bytes
+2024/08/17-21:11:57.836 3dc4 Compacted 1@0 + 0@1 files => 743 bytes
+2024/08/17-21:11:57.883 3dc4 compacted to: files[ 0 1 1 0 0 0 0 ]
+2024/08/17-21:11:57.885 3dc4 Delete type=2 #850
+2024/08/17-21:11:57.974 3dc4 Manual compaction at level-0 from '!macros!H929lnw6f59DTuWQ' @ 79 : 1 .. '!macros!sYZbyUkyC8f4nCek' @ 0 : 0; will stop at (end)
+2024/08/17-21:11:57.975 3dc4 Manual compaction at level-1 from '!macros!1RNSAw20k8gBHhUd' @ 72057594037927935 : 1 .. '!macros!sYZbyUkyC8f4nCek' @ 0 : 0; will stop at '!macros!H929lnw6f59DTuWQ' @ 79 : 1
+2024/08/17-21:11:57.975 3dc4 Compacting 1@1 + 1@2 files
+2024/08/17-21:11:58.072 3dc4 Generated table #857@1: 6 keys, 3649 bytes
+2024/08/17-21:11:58.072 3dc4 Compacted 1@1 + 1@2 files => 3649 bytes
+2024/08/17-21:11:58.112 3dc4 compacted to: files[ 0 0 1 0 0 0 0 ]
+2024/08/17-21:11:58.112 3dc4 Delete type=2 #822
+2024/08/17-21:11:58.112 3dc4 Delete type=2 #856
+2024/08/17-21:11:58.313 3dc4 Manual compaction at level-1 from '!macros!H929lnw6f59DTuWQ' @ 79 : 1 .. '!macros!sYZbyUkyC8f4nCek' @ 0 : 0; will stop at (end)
