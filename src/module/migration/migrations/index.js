@@ -13,3 +13,4 @@ export { Migration112AgilityReference} from './112-agility-reference.js';
 export { Migration113Keywords} from './113-keywords.js';
 export { Migration114Hardened} from './114-hardened.js';
 export { Migration115RulesAutomation} from './115-rules-automation.js';
+export { Migration116SpriteRelativePathFix} from './116-rules-automation.js';
