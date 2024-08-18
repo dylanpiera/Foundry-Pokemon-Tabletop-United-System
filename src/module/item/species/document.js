@@ -12,7 +12,7 @@ class PTUSpecies extends PTUItem {
         const femaleTag = gender.toLowerCase() == "female" ? "f" : "";
         const shinyTag = shiny ? "s" : "";
 
-        return `${path.startsWith('/') ? "" : "/"}${path}${path.endsWith('/') ? "" : "/"}${useName ? this.slug : Handlebars.helpers.lpad(this.system.number, 3, 0)}${femaleTag}${shinyTag}${this.system.form ? ("_" + this.system.form) : ""}${suffix ?? ""}${extension.startsWith('.') ? "" : "."}${extension}`;
+        return `${path}${path.endsWith('/') ? "" : "/"}${useName ? this.slug : Handlebars.helpers.lpad(this.system.number, 3, 0)}${femaleTag}${shinyTag}${this.system.form ? ("_" + this.system.form) : ""}${suffix ?? ""}${extension.startsWith('.') ? "" : "."}${extension}`;
     }
 
     static async convertToPTUSpecies(speciesData, options = {}) {

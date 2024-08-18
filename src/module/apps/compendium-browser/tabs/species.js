@@ -162,7 +162,7 @@ export class CompendiumBrowserSpeciesTab extends CompendiumBrowserTab {
         const useName = game.settings.get("ptu", "generation.defaultPokemonImageNameType");
         const extension = game.settings.get("ptu", "generation.defaultImageExtension")
 
-        return `${path.startsWith('/') ? "" : "/"}${path}${path.endsWith('/') ? "" : "/"}${useName ? sluggify(speciesName) : Handlebars.helpers.lpad(speciesNumber, 3, 0)}${extension.startsWith('.') ? "" : "."}${extension}`;
+        return `${path}${path.endsWith('/') ? "" : "/"}${useName ? sluggify(speciesName) : Handlebars.helpers.lpad(speciesNumber, 3, 0)}${extension.startsWith('.') ? "" : "."}${extension}`;
     }
 
     generateSourceCheckboxOptions(sources) {
