@@ -13,10 +13,10 @@ export class SpeciesGeneratorData {
         this.tableSelect = {
             value: undefined,
             updated: false,
-            options: game.tables.map(t => ({ label: t.name, value: t.uuid }))
+            options: game.tables.map(t => ({ label: t.name, uuid: t.uuid }))
         }
         if (this.tableSelect.options?.length > 0) {
-            this.tableSelect.value = this.tableSelect.options[0].value;
+            this.tableSelect.value = this.tableSelect.options[0].uuid;
             this.tableSelect.updated = true;
         }
         this.folder = undefined;
