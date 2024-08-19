@@ -391,10 +391,17 @@ class PokeballItem extends PTUItemItem {
         // If the current trainer is in the list, add them to the front
         else trainers.unshift(trainers.splice(trainers.indexOf(this.actor), 1)[0]);
 
+        const locationOptions = {
+            "party": game.i18n.localize("PTU.Dialog.CaptureSuccess.PartyChoice.Party"),
+            "box": game.i18n.localize("PTU.Dialog.CaptureSuccess.PartyChoice.Box"),
+            "available": game.i18n.localize("PTU.Dialog.CaptureSuccess.PartyChoice.Available")
+        }
+
         const dialog = new Dialog({
             title: game.i18n.localize("PTU.Dialog.CaptureSuccess.Title"),
             content: await renderTemplate("systems/ptu/static/templates/apps/capture-success.hbs", {
                 trainers,
+                locationOptions,
                 location: game.settings.get("ptu", "captureDefaultPartyState") || "party"
             }),
             buttons: {

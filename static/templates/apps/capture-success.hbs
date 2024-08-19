@@ -15,11 +15,7 @@
         <label for="party-choice">{{localize "PTU.Dialog.CaptureSuccess.PartyChoice.Name"}}</label>
         <div class="form-fields">
             <select name="location">
-                {{#select location}}
-                    <option value="party">{{localize "PTU.Dialog.CaptureSuccess.PartyChoice.Party"}}</option>
-                    <option value="box">{{localize "PTU.Dialog.CaptureSuccess.PartyChoice.Box"}}</option>
-                    <option value="available">{{localize "PTU.Dialog.CaptureSuccess.PartyChoice.Available"}}</option>
-                {{/select}}
+                {{selectOptions locationOptions selected=location}}
             </select>
         </div>
         <p class="notes">{{localize "PTU.Dialog.CaptureSuccess.PartyChoice.Hint"}}</p>
