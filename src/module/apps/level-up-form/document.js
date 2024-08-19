@@ -1,4 +1,4 @@
-import { getItemFromCompendium } from "../../../util/misc.js";
+import { getItemFromCompendium, formatSlug } from "../../../util/misc.js";
 import { calculateStatTotal } from "../../actor/helpers.js";
 import { PTUPokemonActor } from "../../actor/index.js"
 import { PokemonGenerator } from "../../actor/pokemon/generator.js";
@@ -215,6 +215,11 @@ class LevelUpData {
                 else {
                     this.evolutions.current = lastStage;
                 }
+            }
+
+            this.evolutions.selectOptions = {};
+            for (const evo of this.evolutions.available) {
+                this.evolutions.selectOptions[evo.slug] = formatSlug(evo.slug);
             }
         }
 

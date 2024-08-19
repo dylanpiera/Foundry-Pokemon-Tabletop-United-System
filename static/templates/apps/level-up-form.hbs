@@ -24,13 +24,9 @@
                     </div>
                 </span>
                 <div class="fb-25" style="align-self: center;">
-                    {{#select data.evolutions.current.slug}}
-                        <select id="evolve-select">
-                            {{#each data.evolutions.available as | evolution |}}
-                                <option value="{{evolution.slug}}">{{formatSlug evolution.slug}}</option>
-                            {{/each}}
-                        </select>
-                    {{/select}}
+                    <select id="evolve-select">
+                        {{selectOptions data.evolutions.selectOptions selected=data.evolutions.current.slug}}
+                    </select>
                 </div>
             </div>
         {{/if}}
