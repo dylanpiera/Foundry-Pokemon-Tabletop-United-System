@@ -8,12 +8,7 @@
             <img src="{{icon}}" alt="{{name}}" class="icon">
             <span class="name">{{name}}</span>
             <select name="mode" class="mode-select">
-                {{#select mode}}
-                    <option value="disabled">Off</option>
-                    <option value="players">Players</option>
-                    <option value="opposition">Opposition</option>
-                    <option value="all">All</option>
-                {{/select}}
+                {{selectOptions ../modeOptions selected=mode localize=true}}
             </select>
             <div class="item-controls">
                 <a class="item-control effect-to-chat" title="Send Effect to chat"><i

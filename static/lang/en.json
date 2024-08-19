@@ -363,6 +363,14 @@
     "SearchButtonHint": "<div class='toolclip'><h4>PTR Search</h4><p>Search the PTR Data Source for information</p></div>",
     "WeatherButtonName": "Weather & Global Effects Menu",
     "WeatherButtonHint": "<div class='toolclip'><h4>Weather & Global Effects Menu</h4><p>Set and edit ongoing weather or other global effects!</p></div>",
+    "Weather": {
+      "Mode": {
+        "Off": "Off",
+        "Players": "Players",
+        "Opposition": "Opposition",
+        "All": "All"
+      }
+    },
 
     "AutomationTarget.TARGET": "Target",
     "AutomationTarget.MOVE": "Move",

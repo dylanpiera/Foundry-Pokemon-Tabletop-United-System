@@ -89,6 +89,14 @@ const data = {
       "encounter": "ITEM.Duration.Unit.Encounter",
       "rounds": "ITEM.Duration.Unit.Rounds",
     }
+  },
+  weather: {
+    modeOptions: {
+      "disabled": "PTU.Weather.Mode.Off",
+      "players": "PTU.Weather.Mode.Players",
+      "opposition": "PTU.Weather.Mode.Opposition",
+      "all": "PTU.Weather.Mode.All"
+    }
   }
 }
 
