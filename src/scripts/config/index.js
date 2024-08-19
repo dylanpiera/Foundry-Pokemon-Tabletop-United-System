@@ -78,6 +78,13 @@ const data = {
   helpText,
   tmData,
   alliances: ["party", "opposition", "neutral"],
+  contestTypes: {
+    "cool": "PTU.Contests.Cool",
+    "tough": "PTU.Contests.Tough",
+    "beauty": "PTU.Contests.Beauty",
+    "smart": "PTU.Contests.Smart",
+    "cute": "PTU.Contests.Cute",
+  },
   effects: {
     expiryOptions: {
       "turn-start": "ITEM.Duration.Expiry.TurnStart",

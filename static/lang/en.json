@@ -1004,7 +1004,12 @@
       "Poffins": "From Poffins",
       "Voltage": "Voltage",
       "DiceTotal": "Dice Total",
-      "Appeal": "Appeal"
+      "Appeal": "Appeal",
+      "Cool": "Cool",
+      "Tough": "Tough",
+      "Beauty": "Beauty",
+      "Smart": "Smart",
+      "Cute": "Cute"
     },
     "Spirit": {
       "Friendship": "Friendship",
