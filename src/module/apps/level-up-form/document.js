@@ -189,7 +189,6 @@ class LevelUpData {
                         uuid: evolution.uuid,
                         slug: evolution.slug,
                         level: evolution.level,
-                        value: evolution.slug,
                         label: formatSlug(evolution.slug)
                     });
                     continue;
@@ -204,7 +203,6 @@ class LevelUpData {
                         uuid: evolution.uuid,
                         slug: evolution.slug,
                         level: evolution.level,
-                        value: evolution.slug,
                         label: formatSlug(evolution.slug)
                     });
                 }
