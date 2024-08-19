@@ -188,7 +188,9 @@ class LevelUpData {
                     this.evolutions.available.push({
                         uuid: evolution.uuid,
                         slug: evolution.slug,
-                        level: evolution.level
+                        level: evolution.level,
+                        value: evolution.slug,
+                        label: formatSlug(evolution.slug)
                     });
                     continue;
                 }
@@ -201,7 +203,9 @@ class LevelUpData {
                     this.evolutions.available.push({
                         uuid: evolution.uuid,
                         slug: evolution.slug,
-                        level: evolution.level
+                        level: evolution.level,
+                        value: evolution.slug,
+                        label: formatSlug(evolution.slug)
                     });
                 }
             }
@@ -215,11 +219,6 @@ class LevelUpData {
                 else {
                     this.evolutions.current = lastStage;
                 }
-            }
-
-            this.evolutions.selectOptions = {};
-            for (const evo of this.evolutions.available) {
-                this.evolutions.selectOptions[evo.slug] = formatSlug(evo.slug);
             }
         }
 
