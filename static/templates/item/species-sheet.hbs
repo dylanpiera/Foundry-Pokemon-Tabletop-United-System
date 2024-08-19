@@ -78,23 +78,15 @@
                             <ol class="inventory-list p-0 m-0">
                                 {{#each item.system.types as |type|}}
                                     <li class="item pb-1 arrow-box">
-                                        {{#select type}}
-                                            <select name="system.type.{{@index}}" class="type-select" style="background: url('{{loadTypeImageBar type}}')">
-                                                {{#each ../types}}
-                                                    <option value="{{this}}">{{this}}</option>
-                                                {{/each}}
-                                            </select>
-                                        {{/select}}
+                                        <select name="system.type.{{@index}}" class="type-select" style="background: url('{{loadTypeImageBar type}}')">
+                                            {{selectOptions ../types selected=type valueAttr="label"}}
+                                        </select>
                                     </li>
                                     {{#if (and @last (not type "Untyped"))}}
                                         <li class="item pb-1 arrow-box optional">
-                                            {{#select "Untyped"}}
-                                                <select name="system.type.{{inc @index}}" class="type-select" style="background: url('{{loadTypeImageBar "Untyped"}}')">
-                                                    {{#each ../types}}
-                                                        <option value="{{this}}">{{this}}</option>
-                                                    {{/each}}
-                                                </select>
-                                            {{/select}}
+                                            <select name="system.type.{{inc @index}}" class="type-select" style="background: url('{{loadTypeImageBar "Untyped"}}')">
+                                                {{selectOptions ../types selected="Untyped" valueAttr="label"}}
+                                            </select>
                                         </li>
                                     {{/if}}
                                 {{/each}}
