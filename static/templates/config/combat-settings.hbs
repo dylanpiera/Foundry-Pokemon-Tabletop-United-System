@@ -3,16 +3,8 @@
     <div class="form-group">
         <label>{{localize 'COMBAT.Resource'}}</label>
         <select name="resource">
-            {{#select settings.resource}}
             <option value="">{{ localize "None" }}</option>
-            {{#each attributeChoices as |attrs label|}}
-            <optgroup label="{{ label }}">
-                {{#each attrs}}
-                <option value="{{this}}">{{this}}</option>
-                {{/each}}
-            </optgroup>
-            {{/each}}
-            {{/select}}
+            {{selectOptions attributeChoices selected=settings.resource}}
         </select>
         <p class="notes">{{localize 'COMBAT.ResourceHint'}}</p>
     </div>
@@ -30,20 +22,18 @@
     </div>
     {{/if}}
 
+    {{#if combatTheme.choices}}
     <div class="form-group" data-setting-id="core.combatTheme">
         <label>{{ localize combatTheme.name }}</label>
         <div class="form-fields">
             <select name="combatTheme">
-                {{#select selectedTheme}}
-                {{#each combatTheme.choices as |name k|}}
-                <option value="{{k}}">{{localize name}}</option>
-                {{/each}}
-                {{/select}}
+                {{selectOptions combatTheme.choices selected=selectedTheme localize=true}}
             </select>
             <i data-tooltip="{{localize 'Preview'}}" class="fas fa-play audio-preview"></i>
         </div>
         <p class="notes">{{ localize combatTheme.hint }}</p>
     </div>
+    {{/if}}
 
     <button type="submit">
         <i class="fas fa-save"></i> {{localize 'COMBAT.SettingsSave'}}
