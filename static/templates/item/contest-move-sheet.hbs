@@ -77,11 +77,7 @@
                 <label for="system.type">{{localize "ITEM.Type"}}</label>
                 <div class="arrow-box">
                     <select data-target="system.type" class="type-select" style="background: url('/systems/ptu/static/css/images/types2/{{capitalize item.system.type}}IC.png');" {{#if editLocked}}disabled{{/if}}>
-                        {{#select item.system.type}}
-                            {{#each types}}
-                                <option value="{{this}}">{{this}}</option>
-                            {{/each}}
-                        {{/select}}
+                        {{selectOptions types selected=item.system.type valueAttr="label"}}
                     </select>
                 </div>
             </div>
