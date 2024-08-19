@@ -45,7 +45,6 @@ export class PTUCharacterSheet extends PTUActorSheet {
 	async getData() {
 		const data = await super.getData();
 		data.dtypes = ['String', 'Number', 'Boolean'];
-		data.config = CONFIG.PTU.data;
 
 		// Prepare items.
 		if (this.actor.type == 'character') {
