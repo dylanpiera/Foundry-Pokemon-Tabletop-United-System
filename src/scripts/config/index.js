@@ -78,6 +78,13 @@ const data = {
   helpText,
   tmData,
   alliances: ["party", "opposition", "neutral"],
+  capture: {
+    locationOptions: {
+      "party": "PTU.Dialog.CaptureSuccess.PartyChoice.Party",
+      "box": "PTU.Dialog.CaptureSuccess.PartyChoice.Box",
+      "available": "PTU.Dialog.CaptureSuccess.PartyChoice.Available",
+    }
+  },
   contestTypes: {
     "cool": "PTU.Contests.Cool",
     "tough": "PTU.Contests.Tough",
