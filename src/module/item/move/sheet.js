@@ -15,12 +15,6 @@ class PTUMoveSheet extends PTUItemSheet {
         if(!game.settings.get("ptu", "homebrew.nuclearType")) data.types = data.types.filter(type => type != "Nuclear");
         if(!game.settings.get("ptu", "homebrew.shadowType")) data.types = data.types.filter(type => type != "Shadow");
 
-        data.moveCategories = {
-            "Status": "PTU.Move.Category.Status",
-            "Physical": "PTU.Move.Category.Physical",
-            "Special": "PTU.Move.Category.Special",
-        }
-
         return data;
     }
 }

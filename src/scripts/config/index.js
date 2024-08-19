@@ -104,6 +104,13 @@ const data = {
       "rounds": "ITEM.Duration.Unit.Rounds",
     }
   },
+  moves: {
+    categories: {
+      "Status": "PTU.Move.Category.Status",
+      "Physical": "PTU.Move.Category.Physical",
+      "Special": "PTU.Move.Category.Special",
+    }
+  },
   weather: {
     modeOptions: {
       "disabled": "PTU.Weather.Mode.Off",
