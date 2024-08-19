@@ -1,17 +1,9 @@
 <div class="form-group">
     <label class="short">{{localize "PTU.RuleEditor.General.Modes.Label"}}</label>
     <div class="attached-input">
-        {{#select rule.mode}}
         <select name="system.rules.{{index}}.mode">
-            <option value="add">{{localize "PTU.RuleEditor.General.Modes.Add"}}</option>
-            <option value="subtract">{{localize "PTU.RuleEditor.General.Modes.Subtract"}}</option>
-            <option value="remove">{{localize "PTU.RuleEditor.General.Modes.Remove"}}</option>
-            <option value="multiply">{{localize "PTU.RuleEditor.General.Modes.Multiply"}}</option>
-            <option value="downgrade">{{localize "PTU.RuleEditor.General.Modes.Downgrade"}}</option>
-            <option value="upgrade">{{localize "PTU.RuleEditor.General.Modes.Upgrade"}}</option>
-            <option value="override">{{localize "PTU.RuleEditor.General.Modes.Override"}}</option>
+            {{selectOptions ruleModes selected=rule.mode localize=true}}
         </select>
-        {{/select}}
     </div>
 </div>
 
@@ -25,14 +17,9 @@
 <div class="form-group">
     <label class="short">{{localize "PTU.RuleEditor.General.Phases.Label"}}</label>
     <div class="attached-input">
-        {{#select rule.phase}}
         <select name="system.rules.{{index}}.phase">
-            <option value="applyAEs">{{localize "PTU.RuleEditor.General.Phases.ApplyAEs"}}</option>
-            <option value="beforeDerived">{{localize "PTU.RuleEditor.General.Phases.BeforeDerived"}}</option>
-            <option value="afterDerived">{{localize "PTU.RuleEditor.General.Phases.AfterDerived"}}</option>
-            <option value="beforeRoll">{{localize "PTU.RuleEditor.General.Phases.BeforeRoll"}}</option>
+            {{selectOptions rulePhases selected=rule.phase localize=true}}
         </select>
-        {{/select}}
     </div>
 </div>
 
