@@ -47,13 +47,9 @@
             {{else}}
                 <div class="d-flex flex-row justify-content-center mt-1">
                     <div class="d-flex flex-row justify-content-center m-1 center-text fb-60">
-                        {{#select data.tableSelect.value}}
-                            <select id="tableSelect">
-                                {{#each data.tableSelect.options as | option |}}
-                                    <option value="{{option.uuid}}">{{option.label}}</option>
-                                {{/each}}
-                            </select>
-                        {{/select}}
+                        <select id="tableSelect">
+                            {{selectOptions data.tableSelect.options selected=data.tableSelect.value}}
+                        </select>
                     </div>
                 </div>
                 {{#if data.helpText.table}}
