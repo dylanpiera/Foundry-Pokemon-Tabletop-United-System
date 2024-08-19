@@ -392,9 +392,9 @@ class PokeballItem extends PTUItemItem {
         else trainers.unshift(trainers.splice(trainers.indexOf(this.actor), 1)[0]);
 
         const locationOptions = {
-            "party": game.i18n.localize("PTU.Dialog.CaptureSuccess.PartyChoice.Party"),
-            "box": game.i18n.localize("PTU.Dialog.CaptureSuccess.PartyChoice.Box"),
-            "available": game.i18n.localize("PTU.Dialog.CaptureSuccess.PartyChoice.Available")
+            "party": "PTU.Dialog.CaptureSuccess.PartyChoice.Party",
+            "box": "PTU.Dialog.CaptureSuccess.PartyChoice.Box",
+            "available": "PTU.Dialog.CaptureSuccess.PartyChoice.Available"
         }
 
         const dialog = new Dialog({
