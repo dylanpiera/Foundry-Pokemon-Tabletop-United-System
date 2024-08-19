@@ -220,6 +220,13 @@
     "MoveAc": "AC",
     "MoveRange": "Range",
     "MoveEffect": "Effect",
+    "Move": {
+      "Category": {
+        "Status":"Status",
+        "Physical":"Physical",
+        "Special":"Special"
+      }
+    },
 
     "CapabilityNaturewalk": "Naturewalk",
     "CapabilityOther": "Other Capabilities",
