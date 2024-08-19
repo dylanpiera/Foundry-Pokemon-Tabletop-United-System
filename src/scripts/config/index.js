@@ -78,6 +78,18 @@ const data = {
   helpText,
   tmData,
   alliances: ["party", "opposition", "neutral"],
+  effects: {
+    expiryOptions: {
+      "turn-start": "ITEM.Duration.Expiry.TurnStart",
+      "turn-end": "ITEM.Duration.Expiry.TurnEnd",
+      "round-end": "ITEM.Duration.Expiry.RoundStart",
+    },
+    durationUnitOptions: {
+      "unlimited": "ITEM.Duration.Unit.Unlimited",
+      "encounter": "ITEM.Duration.Unit.Encounter",
+      "rounds": "ITEM.Duration.Unit.Rounds",
+    }
+  }
 }
 
 const ui = {
