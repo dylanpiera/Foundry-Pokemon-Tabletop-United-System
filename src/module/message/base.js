@@ -234,12 +234,16 @@ class ChatMessagePTU extends ChatMessage {
             const tokenDocument = await fromUuid(token);
 
             const skill = this.context.skill;
+            const skillOptions = {}
+            for (const s of Object.keys(target.actor.system.skills).sort()) {
+                skillOptions[s] = game.i18n.localize(`PTU.Skills.${s}`);
+            }
 
             const dialog = new Dialog({
                 title: game.i18n.format("PTU.Dialog.ContestedCheck.Title", {name: target.actor.name, skill: game.i18n.localize(`PTU.Skills.${skill}`)}),
                 content: await renderTemplate("systems/ptu/static/templates/apps/contested-check.hbs", {
                     skill,
-                    skills: Object.keys(target.actor.system.skills).sort()
+                    skillOptions,
                 }),
                 buttons: {
                     submit: {

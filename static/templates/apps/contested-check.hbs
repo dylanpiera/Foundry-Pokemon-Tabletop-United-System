@@ -4,11 +4,12 @@
         <label for="skill">{{localize "PTU.Dialog.ContestedCheck.Skill"}}</label>
         <div class="form-fields">
             <select name="skill">
-                {{#select skill}}
+                {{selectOptions skillOptions selected=skill}}
+                {{!-- {{#select skill}}
                     {{#each skills as |skill|}}
                         <option value="{{skill}}">{{localize (concat "PTU.Skills." skill)}}</option>
                     {{/each}}
-                {{/select}}
+                {{/select}} --}}
             </select>
         </div>
     </div>
