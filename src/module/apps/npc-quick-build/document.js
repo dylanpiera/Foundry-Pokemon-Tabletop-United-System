@@ -241,7 +241,7 @@ export class NpcQuickBuildData {
         const unmetPrereqs = {
             minLevel: 1,
             skills: {},
-            warnings: [],
+            unmet: [],
             unknown: [],
         };
         for (const feature of Object.values(this.trainer.classes.selected)) {
@@ -287,12 +287,21 @@ export class NpcQuickBuildData {
          *      unknown,
          *  }
          */
-        const checkTextPrereq = async (textPrereq, firstPass=true)=>{
+        const checkTextPrereq = async (textPrereq)=>{
             const newFeatures = [];
             const newEdges = [];
             const allNew = [];
             const skillUpdates = {};
+            const unmet = [];
             const unknown = [];
+            const RETURN = {
+                newFeatures,
+                newEdges,
+                allNew,
+                skillUpdates,
+                unmet,
+                unknown,
+            };
 
             const compareName = function (t) {
                 return (f)=>simplifyString(f.name) == simplifyString(t);
@@ -302,50 +311,26 @@ export class NpcQuickBuildData {
             };
     
             // check if this is the name of a class, feature, or edge we already have
-            if (featuresComputed.find(compareName(textPrereq)) || edgesComputed.find(compareName(textPrereq))) return {
-                newFeatures,
-                newEdges,
-                allNew,
-                skillUpdates,
-                unknown,
-            };
+            if (featuresComputed.find(compareName(textPrereq)) || edgesComputed.find(compareName(textPrereq))) return RETURN;
     
             // check if it's the name of a class, feature or edge we don't already have
             const featureClass = await this._findFromMultiselect("classes", compareLabel(textPrereq));
             if (featureClass) {
                 newFeatures.push(featureClass);
                 allNew.push(featureClass);
-                return {
-                    newFeatures,
-                    newEdges,
-                    allNew,
-                    skillUpdates,
-                    unknown,
-                };
+                return RETURN;
             }
             const feature = await this._findFromMultiselect("features", compareLabel(textPrereq));
             if (feature) {
                 newFeatures.push(feature);
                 allNew.push(feature);
-                return {
-                    newFeatures,
-                    newEdges,
-                    allNew,
-                    skillUpdates,
-                    unknown,
-                };
+                return RETURN;
             }
             const edge = await this._findFromMultiselect("edges", compareLabel(textPrereq));
             if (edge) {
                 newEdges.push(edge);
                 allNew.push(edge);
-                return {
-                    newFeatures,
-                    newEdges,
-                    allNew,
-                    skillUpdates,
-                    unknown,
-                };
+                return RETURN;
             }
 
             const getSkill = function (t) {
@@ -363,31 +348,18 @@ export class NpcQuickBuildData {
                 const skill = getSkill(singleSkillMatch.groups.skill);
                 if (rank && skill) {
                     skillUpdates[skill] = Math.max(rank, skillUpdates[skill] ?? 0);
-                    return {
-                        newFeatures,
-                        newEdges,
-                        allNew,
-                        skillUpdates,
-                        unknown,
-                    };
+                    return RETURN;
                 }
                 // check multi-skill?
                 if (singleSkillMatch.groups.skill.includes(" or ")) {
                     const skills = singleSkillMatch.groups.skill.split(" or ").map(getSkill);
-                    console.log(skills);
                     // check if we meet any of those prereqs. If so, return.
                     for (const s of skills) {
-                        console.log("checking", s, this.trainer.skills[s], skillUpdates[s]);
-                        if (rank <= Math.max(this.trainer.skills[s]?.value, skillUpdates[s] ?? 0)) return {
-                            newFeatures,
-                            newEdges,
-                            allNew,
-                            skillUpdates,
-                            unknown,
-                        };
-                        console.log("didn't pass with", s, this.trainer.skills[s], skillUpdates[s]);
+                        if (rank <= Math.max(this.trainer.skills[s]?.value, skillUpdates[s] ?? 0)) return RETURN;
                     }
-
+                    // otherwise, we do not meet this prerequisite
+                    unmet.push(textPrereq);
+                    return RETURN;
                 }
             }
 
@@ -399,14 +371,11 @@ export class NpcQuickBuildData {
                 const rank = [1,2,3,4,5,6,8].find(r=>CONFIG.PTU.data.skills.PTUSkills.getRankSlug(r) == anySkillMatch.groups.rank.toLowerCase());
                 const n = parseIntA(anySkillMatch.groups.n || "100");
                 if (rank && n) {
-                    if (CONFIG.PTU.data.skills.keys.filter(k=>rank <= Math.max(this.trainer.skills[k]?.value, skillUpdates[k] ?? 0)).length >= n) return {
-                        newFeatures,
-                        newEdges,
-                        allNew,
-                        skillUpdates,
-                        unknown,
-                    };
-                    console.log("failed this", rank, n, anySkillMatch);
+                    if (CONFIG.PTU.data.skills.keys.filter(k=>rank <= Math.max(this.trainer.skills[k]?.value, skillUpdates[k] ?? 0)).length >= n) return RETURN;
+                    else {
+                        unmet.push(textPrereq);
+                        return RETURN;
+                    }
                 }
             }
             
@@ -419,16 +388,11 @@ export class NpcQuickBuildData {
                 const n = parseIntA(nSkillMatch.groups.n || "100");
                 const skills = nSkillMatch.groups.skills.split(" or ").map(getSkill);
                 if (rank && n) {
-                    if (skills.filter(k=>rank <= Math.max(this.trainer.skills[k]?.value, skillUpdates[k] ?? 0)).length >= n) return {
-                        newFeatures,
-                        newEdges,
-                        allNew,
-                        skillUpdates,
-                        unknown,
-                    };
-                    console.log("failed this", rank, n, nSkillMatch);
-                } else {
-                    console.log("failed this else", rank, n, nSkillMatch);
+                    if (skills.filter(k=>rank <= Math.max(this.trainer.skills[k]?.value, skillUpdates[k] ?? 0)).length >= n) return RETURN;
+                    else {
+                        unmet.push(textPrereq);
+                        return RETURN;
+                    }
                 }
             }
 
@@ -436,28 +400,9 @@ export class NpcQuickBuildData {
             // check if it's an OR clause, and we already match any of the terms
     
     
-            // don't do more on the first pass, just push it up into the unknown bucket
-            if (firstPass) {
-                if (!unmetPrereqs.unknown.includes(textPrereq)) unknown.push(textPrereq);
-                return {
-                    newFeatures,
-                    newEdges,
-                    allNew,
-                    skillUpdates,
-                    unknown,
-                };
-            };
-    
-            // consider a more complicated check here?
-    
-            // give up for now. This may be easier to resolve after a few loops
-            return {
-                newFeatures,
-                newEdges,
-                allNew,
-                skillUpdates,
-                unknown,
-            };
+            // we can't figure out what this is, return
+            if (!unmetPrereqs.unknown.includes(textPrereq)) unknown.push(textPrereq);
+            return RETURN
         };
         
         // Get all the prerequisites
@@ -473,6 +418,9 @@ export class NpcQuickBuildData {
                 Object.entries(results.skillUpdates).forEach(([k,v])=>{
                     if (unmetPrereqs.skills[k] ?? 0 < v) unmetPrereqs.skills[k] = v;
                 });
+                results.unmet.forEach(u=>{
+                    if (!unmetPrereqs.unmet.includes(u)) unmetPrereqs.unmet.push(u);
+                })
                 results.unknown.forEach(u=>{
                     if (!unmetPrereqs.unknown.includes(u)) unmetPrereqs.unknown.push(u);
                 })
@@ -485,7 +433,10 @@ export class NpcQuickBuildData {
         console.log(unmetPrereqs);
 
         // set warnings
-        this.warnings = unmetPrereqs.unknown.map(u=>`Unknown/unmet prerequisite "${u}"`);
+        this.warnings = [
+            ...unmetPrereqs.unmet.map(u=>`Prerequisite "${u}" not met!`),
+            ...unmetPrereqs.unknown.map(u=>`Unknown prerequisite "${u}"`),
+        ];
 
         // apply established skill minimums
         const newSkills = foundry.utils.deepClone(this.trainer.skills);
