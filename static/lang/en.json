@@ -503,6 +503,27 @@
       "Submit": "Generate"
     },
 
+    "NpcQuickBuild": {
+      "TrainerQuickBuild": "Trainer Quick Build",
+      "Name": "Name",
+      "Alliance": "Alliance",
+      "TrainerLevel": "Trainer Level",
+      "Classes": "Classes",
+      "Features": "Features",
+      "Edges": "Edges",
+      "Skills": "Skills",
+      "Stats": "Stats",
+      "PartyPkmn": "Party Pokemon",
+      "Level": "Level",
+      "Gender": "Gender",
+      "Shiny": "Shiny",
+      "DropSpecies": "Drop Species Here",
+      "SpeciesName": "Species",
+      "Prev": "Previous",
+      "Next": "Next",
+      "Submit": "Submit"
+    },
+
     "Stats": {
       "hp": "HP",
       "atk": "Attack",
