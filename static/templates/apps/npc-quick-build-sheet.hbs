@@ -5,14 +5,18 @@
         </div>
         {{#if (eq data.page 1)}}
             <div class="d-flex flex-row justify-content-center center-text mb-2">
-                <label>{{localize "PTU.NpcQuickBuild.Name"}}</label>
-                <input class="fb-40" type="text" name="trainer.name" value="{{data.trainer.name}}"/>
-            </div>
-            <div class="d-flex flex-row justify-content-center center-text mb-2">
                 <label>{{localize "PTU.NpcQuickBuild.Alliance"}}</label>
                 <select name="alliance">
                     {{selectOptions allianceOptions selected=data.alliance localize=true}}
                 </select>
+            </div>
+            <div class="d-flex flex-row justify-content-center center-text mb-2">
+                <label>{{localize "PTU.NpcQuickBuild.Name"}}</label>
+                <input class="fb-40" type="text" name="trainer.name" value="{{data.trainer.name}}"/>
+            </div>
+            <div class="d-flex flex-row justify-content-center center-text mb-2">
+                <label>{{localize "PTU.NpcQuickBuild.Sex"}}</label>
+                <input class="ptu-tagify trainer-sex" name="trainer.sex" data-filter-name="sex" value="{{json data.trainer.sex}}" data-dtype="JSON" />
             </div>
             <div class="d-flex flex-row justify-content-center center-text mb-2">
                 <label>{{localize "PTU.NpcQuickBuild.TrainerLevel"}}</label>

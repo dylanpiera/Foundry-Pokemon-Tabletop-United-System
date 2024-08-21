@@ -462,6 +462,7 @@
     "Genderless": "Genderless",
     "Male": "Male",
     "Female": "Female",
+    "Nonbinary": "Nonbinary",
     "BossBarTooltip": "The Reserve boss bars is intended to be the amount of Boss Turns - 1",
 
     "LevelUpForm": {
@@ -516,6 +517,7 @@
       "PartyPkmn": "Party Pokemon",
       "Level": "Level",
       "Gender": "Gender",
+      "Sex": "Sex",
       "Shiny": "Shiny",
       "DropSpecies": "Drop Species Here",
       "SpeciesName": "Species",

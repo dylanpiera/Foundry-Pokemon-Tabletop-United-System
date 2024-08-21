@@ -29,6 +29,7 @@ export class NpcQuickBuildData {
         this.alliance = CONFIG.PTU.data.alliances.includes("opposition") ? "opposition" : CONFIG.PTU.data.alliances[0];
         this.trainer = {
             name: "",
+            gender: [],
             level: 1, // TODO: add this as a game setting? game.settings.get("ptu", "generation.defaultTrainerLevel");
             classes: {
                 selected: [],
@@ -109,6 +110,27 @@ export class NpcQuickBuildData {
         }
 
         this.multiselects = {
+            sex: {
+                options: [
+                    {
+                        label: game.i18n.format("PTU.Male"),
+                        value: "Male",
+                    },
+                    {
+                        label: game.i18n.format("PTU.Female"),
+                        value: "Female",
+                    },
+                    {
+                        label: game.i18n.format("PTU.Nonbinary"),
+                        value: "Nonbinary",
+                    },
+                    {
+                        label: game.i18n.format("PTU.Genderless"),
+                        value: "",
+                    }
+                ],
+                maxTags: 1,
+            },
             classes: {
                 options: []
             },
@@ -463,7 +485,7 @@ export class NpcQuickBuildData {
         console.log(unmetPrereqs);
 
         // set warnings
-        this.warnings = unmetPrereqs.unknown.map(u=>`Unable to parse prerequisite "${u}"`);
+        this.warnings = unmetPrereqs.unknown.map(u=>`Unknown/unmet prerequisite "${u}"`);
 
         // apply established skill minimums
         const newSkills = foundry.utils.deepClone(this.trainer.skills);
@@ -537,6 +559,7 @@ export class NpcQuickBuildData {
             this.party[slot] = pkmn;
         }
 
+        console.log(this);
     }
 
     async finalize() {
@@ -623,6 +646,7 @@ export class NpcQuickBuildData {
                     dexexp: 0,
                     miscexp: 0,
                 },
+                sex: this.trainer.sex.length > 0 ? this.trainer.sex[0].label : "",
             },
             items,
             folder: mainFolder?._id ?? null,

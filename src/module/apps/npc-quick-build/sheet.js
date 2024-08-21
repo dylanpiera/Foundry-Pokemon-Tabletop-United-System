@@ -64,7 +64,7 @@ export class PTUNpcQuickBuild extends FormApplication {
             const savePath = multiselect.name;
 
             const tagify = new Tagify(multiselect, {
-                enforceWhitelist: true,
+                enforceWhitelist: !multiselect.matches(".trainer-gender"),
                 keepInvalidTags: false,
                 editTags: false,
                 tagTextProp: "label",
@@ -106,7 +106,7 @@ export class PTUNpcQuickBuild extends FormApplication {
 
                 if (isValid && savePath) {
                     foundry.utils.setProperty(this.data, savePath, selections);
-                    this.data.refresh().then(()=>this.render());
+                    this.render();
                 }
             });
         }
@@ -160,7 +160,6 @@ export class PTUNpcQuickBuild extends FormApplication {
             foundry.utils.setProperty(this.data, key, value);
         }
 
-        await this.data.refresh();
         return this.render(true);
     }
 
@@ -187,18 +186,18 @@ export class PTUNpcQuickBuild extends FormApplication {
     }
 
     /** @override */
-    // render(force = false, options = {}) {
-    //     // const localthis = this;
-    //     // this.data.refresh().then(() => localthis._render(force, options)).catch(err => {
-    //     //     this._state = Application.RENDER_STATES.ERROR;
-    //     //     Hooks.onError("Application#render", err, {
-    //     //         msg: `An error occurred while rendering ${this.constructor.name} ${this.appId}`,
-    //     //         log: "error",
-    //     //         ...options
-    //     //     });
-    //     // });
-    //     // return this;
-    // }
+    render(force = false, options = {}) {
+        const localthis = this;
+        this.data.refresh().then(() => localthis._render(force, options)).catch(err => {
+            this._state = Application.RENDER_STATES.ERROR;
+            Hooks.onError("Application#render", err, {
+                msg: `An error occurred while rendering ${this.constructor.name} ${this.appId}`,
+                log: "error",
+                ...options
+            });
+        });
+        return this;
+    }
 
     /** @override */
     // async _renderInner(data) {
