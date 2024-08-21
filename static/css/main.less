@@ -2498,6 +2498,26 @@ a.content-link {
             }
         }
     }
+    
+    // NPC Quick Build
+    &.npc-quick-build {
+        .three-column {
+            display: grid;
+            grid-template-columns: auto auto auto;
+            gap: 0.5rem;
+        }
+
+        .party-pokemon {
+            img {
+                width: 60px;
+                height: 60px;
+            }
+        }
+
+        .content-link.auto {
+            border-style: dotted;
+        }
+    }
 }
 
 .ptu.level-up {

@@ -2046,6 +2046,18 @@ a.content-link img {
 .ptu.pokemon.generator form .species .content-link {
   margin-left: 0.25rem;
 }
+.ptu.pokemon.npc-quick-build .three-column {
+  display: grid;
+  grid-template-columns: auto auto auto;
+  gap: 0.5rem;
+}
+.ptu.pokemon.npc-quick-build .party-pokemon img {
+  width: 60px;
+  height: 60px;
+}
+.ptu.pokemon.npc-quick-build .content-link.auto {
+  border-style: dotted;
+}
 .ptu.level-up section {
   background: unset;
   padding: unset;

@@ -19,6 +19,7 @@ import { StatusEffects } from '../../module/canvas/status-effect.js';
 import { PTUToken } from '../../module/canvas/token/index.js';
 import { PTUSpeciesDragOptionsPrompt } from '../../module/apps/species-drag-in/sheet.js';
 import { PTUSpeciesMassGenerator } from '../../module/apps/species-mass-generator/sheet.js';
+import { PTUNpcQuickBuild } from '../../module/apps/npc-quick-build/sheet.js';
 import { LevelUpForm } from '../../module/apps/level-up-form/sheet.js';
 import { LevelUpData } from '../../module/apps/level-up-form/document.js';
 import { AttackRoll } from '../../module/system/check/rolls/attack-roll.js';
@@ -65,6 +66,16 @@ const data = {
       "stealth",
       "survival",
     ], PTUSkills
+  },
+  stats: {
+    keys: [
+      "hp",
+      "atk",
+      "def",
+      "spatk",
+      "spdef",
+      "spd"
+    ],
   },
   levelProgression,
   typeEffectiveness,
@@ -126,6 +137,9 @@ const ui = {
   },
   speciesMassGenerator: {
     sheetClass: PTUSpeciesMassGenerator
+  },
+  npcQuickBuild: {
+    sheetClass: PTUNpcQuickBuild
   },
   levelUpForm: {
     sheetClass: LevelUpForm,
