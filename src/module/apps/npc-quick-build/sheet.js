@@ -70,7 +70,7 @@ export class PTUNpcQuickBuild extends FormApplication {
                 tagTextProp: "label",
                 dropdown: {
                     enabled: 0,
-                    fuzzySearch: false,
+                    fuzzySearch: true,
                     mapValueTo: "label",
                     maxItems: data.options.length,
                     searchKeys: ["label"],
