@@ -29,7 +29,7 @@ export class NpcQuickBuildData {
         this.alliance = CONFIG.PTU.data.alliances.includes("opposition") ? "opposition" : CONFIG.PTU.data.alliances[0];
         this.trainer = {
             name: "",
-            gender: [],
+            sex: [],
             level: 1, // TODO: add this as a game setting? game.settings.get("ptu", "generation.defaultTrainerLevel");
             classes: {
                 selected: [],
@@ -599,12 +599,23 @@ export class NpcQuickBuildData {
                 },
                 sex: this.trainer.sex.length > 0 ? this.trainer.sex[0].label : "",
             },
-            items,
+            // items,
             folder: mainFolder?._id ?? null,
         };
-        console.log(trainerData);
+        console.log(trainerData, items);
         // create trainer
-        const createdTrainer = await CONFIG.PTU.Actor.documentClasses.character.createDocuments([trainerData]);
+        const createdTrainer = (await CONFIG.PTU.Actor.documentClasses.character.createDocuments([trainerData]))?.[0];
+        console.log(createdTrainer);
+        // create items
+        // createdTrainer.createDocuments(items, {parent: createdTrainer});
+        // TODO: auto-pick choices first
+        for (const itemType of Object.keys(CONFIG.PTU.Item.documentClasses)) {
+            const itemsOfType = items.filter(f=>f.type == itemType);
+            if (itemsOfType) {
+                await CONFIG.PTU.Item.documentClasses[itemType]?.createDocuments(itemsOfType, {parent: createdTrainer});
+            }
+        }
+
 
 
 
