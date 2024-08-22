@@ -8,6 +8,8 @@ const SINGLE_MIN_SKILL_RANK_RE = /(?<rank>(Untrained)|(Novice)|(Adept)|(Expert)|
 const ANY_N_SKILLS_AT_RE = /(any )?(?<n>([0-9]+)|(One)|(Two)|(Three)|(Four)|(Five)|(Six)|(Seven)|(Eight)|(Nine)) Skills at (?<rank>(Untrained)|(Novice)|(Adept)|(Expert)|(Master)|(Virtuoso))( Rank)?/i;
 const N_SKILLS_AT_FROM_LIST_RE = /(?<n>([0-9]+)|(One)|(Two)|(Three)|(Four)|(Five)|(Six)|(Seven)|(Eight)|(Nine))( Skills)? of (?<skills>.+) at (?<rank>(Untrained)|(Novice)|(Adept)|(Expert)|(Master)|(Virtuoso))( Rank)?/i;
 
+const FEAT_WITH_SUB_RE = /(?<main>.+) (\((?<sub>.+)\))/i;
+
 function parseIntA(s) {
     let i = parseInt(s);
     if (!Number.isNaN(i)) return i;
@@ -288,10 +290,13 @@ export class NpcQuickBuildData {
          *  }
          */
         const checkTextPrereq = async (textPrereq)=>{
+            const originalPrereq = textPrereq;
+
             const newFeatures = [];
             const newEdges = [];
             const allNew = [];
             const skillUpdates = {};
+            const subs = [];
             const unmet = [];
             const unknown = [];
             const RETURN = {
@@ -299,6 +304,7 @@ export class NpcQuickBuildData {
                 newEdges,
                 allNew,
                 skillUpdates,
+                subs,
                 unmet,
                 unknown,
             };
@@ -309,6 +315,16 @@ export class NpcQuickBuildData {
             const compareLabel = function (t) {
                 return (f)=>simplifyString(f.label) == simplifyString(t);
             };
+
+            // check if this has a parenthesized section (for selection of feat, for instance)
+            const withSub = textPrereq.match(FEAT_WITH_SUB_RE);
+            if (withSub) {
+                subs.push({
+                    main: withSub.groups.main,
+                    sub: withSub.groups.sub,
+                });
+                textPrereq = withSub.groups.main;
+            }
     
             // check if this is the name of a class, feature, or edge we already have
             if (featuresComputed.find(compareName(textPrereq)) || edgesComputed.find(compareName(textPrereq))) return RETURN;
@@ -331,6 +347,12 @@ export class NpcQuickBuildData {
                 newEdges.push(edge);
                 allNew.push(edge);
                 return RETURN;
+            }
+
+            if (withSub) {
+                // this is clearly not a feat/edge with a sub
+                textPrereq = originalPrereq;
+                subs = [];
             }
 
             const getSkill = function (t) {
