@@ -43,6 +43,22 @@ export class PTUNpcQuickBuild extends FormApplication {
     }
 
     /** @override */
+    _getHeaderButtons() {
+        const buttons = super._getHeaderButtons();
+        const sheet = this;
+
+        // Add notes button
+        buttons.unshift({
+            label: "Randomize",
+            class: "randomize",
+            icon: "fas fa-dice",
+            onclick: () => sheet.loading().then(()=>sheet.data.randomizeAll()).then(()=>sheet.renderAsync()).then(()=>this.disabled = false),
+        })
+
+        return buttons;
+    }
+
+    /** @override */
     activateListeners($html) {
         super.activateListeners($html);
 
@@ -66,7 +82,7 @@ export class PTUNpcQuickBuild extends FormApplication {
             const savePath = multiselect.name;
 
             const tagify = new Tagify(multiselect, {
-                enforceWhitelist: !multiselect.matches(".trainer-gender"),
+                enforceWhitelist: !multiselect.matches(".trainer-sex"),
                 keepInvalidTags: false,
                 editTags: false,
                 tagTextProp: "label",
@@ -162,7 +178,7 @@ export class PTUNpcQuickBuild extends FormApplication {
         event.preventDefault();
         for (const [key, value] of Object.entries(formData)) {
             if (!key) continue;
-            foundry.utils.setProperty(this.data, key, value);
+            this.data.setProperty(key, value);
         }
 
         return this.render(true);
@@ -188,6 +204,10 @@ export class PTUNpcQuickBuild extends FormApplication {
         // }
 
         return this.render(true);
+    }
+
+    async loading() {
+
     }
 
     async renderAsync(force = false, options = {}) {
