@@ -4,7 +4,7 @@ import { PokemonGenerator } from "../../actor/pokemon/generator.js";
 const MaxPartyPokemon = 6;
 
 
-const SINGLE_MIN_SKILL_RANK_RE = /(?<rank>(Untrained)|(Novice)|(Adept)|(Expert)|(Master)|(Virtuoso)) (?<skill>.+)/i;
+const SINGLE_MIN_SKILL_RANK_RE = /(?<rank>(Pathetic)|(Untrained)|(Novice)|(Adept)|(Expert)|(Master)|(Virtuoso)) (?<skill>.+)/i;
 const ANY_N_SKILLS_AT_RE = /(any )?(?<n>([0-9]+)|(One)|(Two)|(Three)|(Four)|(Five)|(Six)|(Seven)|(Eight)|(Nine)) Skills at (?<rank>(Untrained)|(Novice)|(Adept)|(Expert)|(Master)|(Virtuoso))( Rank)?/i;
 const N_SKILLS_AT_FROM_LIST_RE = /(?<n>([0-9]+)|(One)|(Two)|(Three)|(Four)|(Five)|(Six)|(Seven)|(Eight)|(Nine))( Skills)? of (?<skills>.+) at (?<rank>(Untrained)|(Novice)|(Adept)|(Expert)|(Master)|(Virtuoso))( Rank)?/i;
 
@@ -20,7 +20,7 @@ function parseIntA(s) {
 }
 
 function simplifyString(s) {
-    return s.toLowerCase().replaceAll("pokémon", "pokemon").replaceAll("tech education", "technology education");
+    return s.toLowerCase().replaceAll("pokémon", "pokemon").replaceAll("tech education", "technology education").replaceAll("intimidation", "intimidate");
 }
 
 
@@ -127,20 +127,7 @@ export class NpcQuickBuildData {
 
         this.multiselects = {
             sex: {
-                options: [
-                    {
-                        label: game.i18n.format("PTU.Male"),
-                        value: "Male",
-                    },
-                    {
-                        label: game.i18n.format("PTU.Female"),
-                        value: "Female",
-                    },
-                    {
-                        label: game.i18n.format("PTU.Nonbinary"),
-                        value: "Nonbinary",
-                    }
-                ],
+                options: ["PTU.Male", "PTU.Female", "PTU.Nonbinary"].map(x=>game.i18n.format(x)).map(x=>({ label: x, value: x})),
                 maxTags: 1,
             },
             classes: {
@@ -279,7 +266,8 @@ export class NpcQuickBuildData {
     }
 
     async randomizeSex() {
-        this.trainer.sex = [chooseFrom(this.multiselects.sex.options)];
+        this.trainer.sex = [chooseFrom(["PTU.Male", "PTU.Female"].map(x=>game.i18n.format(x)).map(x=>({ label: x, value: x})))];
+        if (Math.random() * 400 <= 3) this.trainer.sex = [chooseFrom(this.multiselects.sex.options)];
     }
 
     async randomizeLevel() {
@@ -292,7 +280,8 @@ export class NpcQuickBuildData {
     }
 
     async randomizeClass() {
-
+        // Stat Ace and Type Ace are problematic with their A/B prerequisites
+        this.trainer.classes.selected = [chooseFrom(this.multiselects.classes.options.filter(c=>!(c.label.startsWith("Stat Ace") || c.label.startsWith("Type Ace"))))];
     }
 
     async randomizeFeatures() {
@@ -629,11 +618,13 @@ export class NpcQuickBuildData {
 
         // apply established skill minimums
         const newSkills = foundry.utils.deepClone(this.trainer.skills);
-        for (const [skill, value] of Object.entries(unmetPrereqs.skills)) {
-            newSkills[skill].min = Math.max(value, newSkills[skill].min ?? 1);
-            newSkills[skill].value = Math.max(value, newSkills[skill].value ?? 1);
+        for (const [key, skill] of Object.entries(newSkills)) {
+            const min = unmetPrereqs.skills[key] ?? 1;
+            skill.min = min;
+            skill.value = Math.max(skill.value, min);
         }
         this.trainer.skills = newSkills;
+        console.log("newSkills", newSkills, unmetPrereqs.skills);
 
 
         // check if any pokemon have been newly configured

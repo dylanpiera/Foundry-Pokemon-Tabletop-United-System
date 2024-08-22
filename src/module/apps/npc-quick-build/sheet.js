@@ -52,7 +52,7 @@ export class PTUNpcQuickBuild extends FormApplication {
             label: "Randomize",
             class: "randomize",
             icon: "fas fa-dice",
-            onclick: () => sheet.loading().then(()=>sheet.data.randomizeAll()).then(()=>sheet.renderAsync()).then(()=>this.disabled = false),
+            onclick: () => sheet.loading().then(()=>sheet.data.randomizeAll()).then(()=>sheet.renderAsync()).then(()=>this.unloading()).then(()=>this.disabled = false),
         })
 
         return buttons;
@@ -146,10 +146,7 @@ export class PTUNpcQuickBuild extends FormApplication {
         $html.find("input[type='submit']").on("click", (event) => {
             event.preventDefault();
             if (this.data.ready) {
-                event.target.disabled = true;
-                this.close({ properClose: true }).finally(()=>{
-                    event.target.disabled = false;
-                });
+                this.loading().then(()=>this.close({ properClose: true }));
             }
         });
     }
@@ -207,7 +204,28 @@ export class PTUNpcQuickBuild extends FormApplication {
     }
 
     async loading() {
+        // hide the header buttons
+        const root = this._element?.get(0);
+        const headerButtons = root?.getElementsByClassName("header-button");
+        if (headerButtons) Array.prototype.forEach.call(headerButtons, btn=>btn.hidden = true);
 
+        const form = root?.getElementsByTagName("form")?.[0];
+        if (form) {
+            const loadingScreen = document.createElement("div");
+            loadingScreen.classList.add("loading");
+            const loadingWheel = document.createElement("div");
+            loadingWheel.classList.add("load-wheel");
+            loadingScreen.appendChild(loadingWheel);
+
+            form.replaceWith(loadingScreen);
+        }
+    }
+
+    async unloading() {
+        // unhide the header buttons
+        const root = this._element?.get(0);
+        const headerButtons = root?.getElementsByClassName("header-button");
+        if (headerButtons) Array.prototype.forEach.call(headerButtons, btn=>btn.hidden = false);
     }
 
     async renderAsync(force = false, options = {}) {
