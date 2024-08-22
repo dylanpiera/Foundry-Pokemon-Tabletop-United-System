@@ -18,8 +18,7 @@ export const ActorButtons = {
             $("#sidebar #actors .directory-header .action-buttons .quick-build").on("click", async (event) => {
                 event.target.disabled = true;
                 const npcQuickBuild = new CONFIG.PTU.ui.npcQuickBuild.sheetClass();
-                await npcQuickBuild.preload()
-                npcQuickBuild.render(true).finally(()=>{
+                return npcQuickBuild.preload().then(()=>npcQuickBuild.renderAsync(true)).finally(()=>{
                     event.target.disabled = false;
                 });
             });

@@ -190,17 +190,22 @@ export class PTUNpcQuickBuild extends FormApplication {
         return this.render(true);
     }
 
-    /** @override */
-    render(force = false, options = {}) {
+    async renderAsync(force = false, options = {}) {
         const localthis = this;
-        this.data.refresh().then(() => localthis._render(force, options))/*.catch(err => {
+        await this.data.refresh().then(() => localthis._render(force, options)).catch(err => {
             this._state = Application.RENDER_STATES.ERROR;
             Hooks.onError("Application#render", err, {
                 msg: `An error occurred while rendering ${this.constructor.name} ${this.appId}`,
                 log: "error",
                 ...options
             });
-        });*/
+        });
+        return this
+    }
+
+    /** @override */
+    render(force = false, options = {}) {
+        this.renderAsync(force, options);
         return this;
     }
 
