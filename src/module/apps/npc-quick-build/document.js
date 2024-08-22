@@ -582,6 +582,8 @@ export class NpcQuickBuildData {
             items.push(eobj);
         }
 
+        const trainingItem = (await fromUuid(["Compendium.ptu.feats.Item.TQ6scoBM3iZKMuZT", "Compendium.ptu.feats.Item.MolTHMn3UrNiIZ3h", "Compendium.ptu.feats.Item.FLSt79Zix8j69T07", "Compendium.ptu.feats.Item.WfLcIrUmRwblAaYr"][Math.random() * 4 | 0])).toObject();
+
         const trainerData = {
             name: this.trainer.name || "Unnamed Trainer",
             img: "icons/svg/mystery-man.svg",
@@ -600,6 +602,7 @@ export class NpcQuickBuildData {
                 sex: this.trainer.sex.length > 0 ? this.trainer.sex[0].label : "",
             },
             // items,
+            items: [trainingItem],
             folder: mainFolder?._id ?? null,
         };
         console.log(trainerData, items);
