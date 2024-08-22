@@ -9,6 +9,7 @@ const ANY_N_SKILLS_AT_RE = /(any )?(?<n>([0-9]+)|(One)|(Two)|(Three)|(Four)|(Fiv
 const N_SKILLS_AT_FROM_LIST_RE = /(?<n>([0-9]+)|(One)|(Two)|(Three)|(Four)|(Five)|(Six)|(Seven)|(Eight)|(Nine))( Skills)? of (?<skills>.+) at (?<rank>(Untrained)|(Novice)|(Adept)|(Expert)|(Master)|(Virtuoso))( Rank)?/i;
 
 const FEAT_WITH_SUB_RE = /(?<main>.+) (\((?<sub>.+)\))/i;
+const COMPENDIUM_ITEM_RE = /Compendium\.([\w\.]+).Item.[a-zA-Z0-9]+/;
 
 function parseIntA(s) {
     let i = parseInt(s);
@@ -19,7 +20,7 @@ function parseIntA(s) {
 }
 
 function simplifyString(s) {
-    return s.toLowerCase().replace("pokémon", "pokemon").replace("tech education", "technology education");
+    return s.toLowerCase().replaceAll("pokémon", "pokemon").replaceAll("tech education", "technology education");
 }
 
 export class NpcQuickBuildData {
@@ -45,6 +46,7 @@ export class NpcQuickBuildData {
                 selected: [],
                 computed: [],
             },
+            subSelectables: {},
             skills: {},
             stats: {},
         };
@@ -187,6 +189,7 @@ export class NpcQuickBuildData {
                     label: feature.name,
                     value: feature.uuid,
                     prerequisites: feature?.system?.prerequisites ?? [],
+                    hydrated: null,
                 })
             }
         }
@@ -201,6 +204,7 @@ export class NpcQuickBuildData {
                     label: edge.name,
                     value: edge.uuid,
                     prerequisites: edge?.system?.prerequisites ?? [],
+                    hydrated: null,
                 })
             }
         }
@@ -234,15 +238,20 @@ export class NpcQuickBuildData {
 
     
     async refresh() {
+        // TODO: make a js mutex. This really should be synchronized in some way...
+        // disaster waiting to happen
+
         // grab the features and prerequisites
         const allComputed = [];
         const featuresComputed = [];
         const edgesComputed = [];
+        const subSelectables = {};
 
         // Prerequisites that aren't yet met
         const unmetPrereqs = {
             minLevel: 1,
             skills: {},
+            subs: [],
             unmet: [],
             unknown: [],
         };
@@ -296,7 +305,6 @@ export class NpcQuickBuildData {
             const newEdges = [];
             const allNew = [];
             const skillUpdates = {};
-            const subs = [];
             const unmet = [];
             const unknown = [];
             const RETURN = {
@@ -304,7 +312,7 @@ export class NpcQuickBuildData {
                 newEdges,
                 allNew,
                 skillUpdates,
-                subs,
+                sub: null,
                 unmet,
                 unknown,
             };
@@ -319,40 +327,47 @@ export class NpcQuickBuildData {
             // check if this has a parenthesized section (for selection of feat, for instance)
             const withSub = textPrereq.match(FEAT_WITH_SUB_RE);
             if (withSub) {
-                subs.push({
+                RETURN.sub = {
                     main: withSub.groups.main,
-                    sub: withSub.groups.sub,
-                });
+                    subvalue: withSub.groups.sub,
+                };
                 textPrereq = withSub.groups.main;
             }
     
             // check if this is the name of a class, feature, or edge we already have
-            if (featuresComputed.find(compareName(textPrereq)) || edgesComputed.find(compareName(textPrereq))) return RETURN;
+            const existingItem = allComputed.find(compareName(textPrereq));
+            if (existingItem) {
+                if (RETURN.sub) RETURN.sub.uuid = existingItem.uuid;
+                return RETURN;
+            }
     
             // check if it's the name of a class, feature or edge we don't already have
             const featureClass = await this._findFromMultiselect("classes", compareLabel(textPrereq));
             if (featureClass) {
                 newFeatures.push(featureClass);
                 allNew.push(featureClass);
+                if (RETURN.sub) RETURN.sub.uuid = featureClass.uuid;
                 return RETURN;
             }
             const feature = await this._findFromMultiselect("features", compareLabel(textPrereq));
             if (feature) {
                 newFeatures.push(feature);
                 allNew.push(feature);
+                if (RETURN.sub) RETURN.sub.uuid = feature.uuid;
                 return RETURN;
             }
             const edge = await this._findFromMultiselect("edges", compareLabel(textPrereq));
             if (edge) {
                 newEdges.push(edge);
                 allNew.push(edge);
+                if (RETURN.sub) RETURN.sub.uuid = edge.uuid;
                 return RETURN;
             }
 
             if (withSub) {
                 // this is clearly not a feat/edge with a sub
                 textPrereq = originalPrereq;
-                subs = [];
+                RETURN.sub = null;
             }
 
             const getSkill = function (t) {
@@ -440,6 +455,7 @@ export class NpcQuickBuildData {
                 Object.entries(results.skillUpdates).forEach(([k,v])=>{
                     if (unmetPrereqs.skills[k] ?? 0 < v) unmetPrereqs.skills[k] = v;
                 });
+                if (results.sub != null) unmetPrereqs.subs.push(results.sub);
                 results.unmet.forEach(u=>{
                     if (!unmetPrereqs.unmet.includes(u)) unmetPrereqs.unmet.push(u);
                 })
@@ -449,10 +465,72 @@ export class NpcQuickBuildData {
             }
         }
 
+        // get selectable choices from the computed features/edges
+        for (const choice of allComputed) {
+            if ((choice?.system?.rules ?? []).length == 0) continue;
+            const choiceSets = choice.system.rules.filter(r=>r.key == "ChoiceSet");
+            if (choiceSets?.length == 0) continue;
+            const alreadySelected = new Set();
+            const relatedChanges = [];
+            for (const [idx, choiceSet] of choiceSets.entries()) {
+                const choices = choiceSet.choices.map(c=>({...c}));
+                const uuid = choice.uuid;
+                const key = `${uuid}-${idx}`.replaceAll(".", "-");
+                const subSelectable = {
+                    key,
+                    uuid,
+                    idx,
+                    label: choice.name,
+                    choices,
+                    selected: this.trainer?.subSelectables?.[key]?.selected ?? null,
+                    visible: true,
+                };
+                // check if the choices are items in the compendium
+                if (choices.every(c=>COMPENDIUM_ITEM_RE.test(c.value))) {
+                    const choiceItems = await Promise.all(choices.map(c=>fromUuid(c.value)));
+                    subSelectable.choices = choiceItems.map(i=>({
+                        label: i.name,
+                        value: i.uuid,
+                    }));
+                }
+
+                // check if we've got an unmet prerequisite for this still
+                const unmet = unmetPrereqs.subs.find(s=>s.uuid == uuid);
+                if (unmet && choices.find(c=>c.label == unmet.subvalue)) {
+                    subSelectable.selected = choices.find(c=>c.label == unmet.subvalue)?.value ?? null;
+                    subSelectable.visible = false;
+                    unmetPrereqs.subs.splice(unmetPrereqs.subs.indexOf(unmet), 1);
+                }
+                // if (alreadySelected.has(subSelectable.selected)) {
+                //     subSelectable.selected = null;
+                //     subSelectable.visible = true;
+                // }
+                subSelectables[key] = subSelectable;
+                relatedChanges.push(subSelectable);
+                alreadySelected.add(subSelectable.selected);
+            }
+
+            // disable shared items that are already selected
+            for (const subSelectable of relatedChanges) {
+                subSelectable.choices = subSelectable.choices.map(c=>({
+                    ...c,
+                    disabled: !(c.value == subSelectable.selected || !alreadySelected.has(c.value)),
+                }));
+            }
+        }
+        console.log("subSelectables", subSelectables);
+
+        // try to infer auto stat changes
+        // TODO
+
+
+        // set them as the values in the trainer
         this.trainer.features.computed = featuresComputed;
         this.trainer.edges.computed = edgesComputed;
+        this.trainer.subSelectables = subSelectables;
         console.log(allComputed);
         console.log(unmetPrereqs);
+
 
         // set warnings
         this.warnings = [
@@ -588,20 +666,29 @@ export class NpcQuickBuildData {
             }
         }
 
+        const allItems = [...this.trainer.features.computed, ...this.trainer.edges.computed]
         const items = [];
-        for (const feature of this.trainer.features.computed) {
-            const fobj = (await fromUuid(feature.uuid))?.toObject();
-            fobj.flags.core = {
-                sourceId: feature.uuid,
-            };
-            items.push(fobj);
-        }
-        for (const edge of this.trainer.edges.computed) {
-            const eobj = (await fromUuid(edge.uuid))?.toObject();
-            eobj.flags.core = {
-                sourceId: edge.uuid,
-            };
-            items.push(eobj);
+        for (const item of allItems) {
+            const iobj = (await fromUuid(item.uuid))?.toObject(); // TODO do we actually need to do this? or is item sufficient?
+            iobj.flags ??= {}
+            iobj.flags.core ??= {};
+            iobj.flags.core.sourceId = item.uuid;
+
+            // do choice-set assignments
+            if ((iobj?.system?.rules ?? []).length > 0) {
+                const choiceSets = iobj.system.rules.filter(r=>r.key == "ChoiceSet");
+                if (choiceSets?.length == 0) continue;
+                // iobj.flags.ptu ??= {}
+                // iobj.flags.ptu.rulesSelections ??= {}
+                for (const [idx, choiceSet] of choiceSets.entries()) {
+                    const uuid = item.uuid;
+                    const key = `${uuid}-${idx}`.replaceAll(".", "-");
+                    console.log("key:", key);
+                    choiceSet.selection = this.trainer.subSelectables[key].selected;
+                    // iobj.flags.ptu.rulesSelections[choiceSet.flag] = this.trainer.subSelectables[key].selected;
+                }
+            }
+            items.push(iobj);
         }
 
         const trainingItem = (await fromUuid(["Compendium.ptu.feats.Item.TQ6scoBM3iZKMuZT", "Compendium.ptu.feats.Item.MolTHMn3UrNiIZ3h", "Compendium.ptu.feats.Item.FLSt79Zix8j69T07", "Compendium.ptu.feats.Item.WfLcIrUmRwblAaYr"][Math.random() * 4 | 0])).toObject();

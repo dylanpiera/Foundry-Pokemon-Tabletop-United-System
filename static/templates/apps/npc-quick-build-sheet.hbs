@@ -52,6 +52,19 @@
                     <a class="content-link{{#if edge.auto}} auto{{/if}}" draggable="true" data-link="" data-uuid="{{edge.uuid}}" data-id="{{edge._id}}" data-type="Item" data-tooltip="Edge Item"><i class="fas fa-suitcase"></i>{{edge.name}}</a>
                 {{/each}}
             </div>
+
+            {{!-- All the sub-selectables --}}
+            {{#each data.trainer.subSelectables as | sub |}}
+            {{#if sub.visible}}
+            <div class="d-flex flex-row justify-content-center center-text mb-2">
+                {{!-- <a class="content-link{{#if edge.auto}} auto{{/if}}" draggable="true" data-link="" data-uuid="{{edge.uuid}}" data-id="{{edge._id}}" data-type="Item" data-tooltip="Edge Item"><i class="fas fa-suitcase"></i>{{edge.name}}</a> --}}
+                <label>Selection for {{sub.label}}</label>
+                {{#each sub.choices as | choice |}}
+                    <label class="sub-choice {{#if (eq sub.selected choice.value)}}checked{{/if}} {{#if choice.disabled}}disabled{{/if}}">{{choice.label}} <input type="radio" name="trainer.subSelectables.{{sub.key}}.selected" value="{{choice.value}}" {{#if (eq sub.selected choice.value)}}checked{{/if}} {{#if choice.disabled}}disabled{{/if}} /></label>
+                {{/each}}
+            </div>
+            {{/if}}
+            {{/each}}
         {{/if}}
 
         {{!-- Skills --}}

@@ -16,9 +16,12 @@ export const ActorButtons = {
                 new CONFIG.PTU.ui.speciesMassGenerator.sheetClass().render(true);
             });
             $("#sidebar #actors .directory-header .action-buttons .quick-build").on("click", async (event) => {
+                event.target.disabled = true;
                 const npcQuickBuild = new CONFIG.PTU.ui.npcQuickBuild.sheetClass();
                 await npcQuickBuild.preload()
-                npcQuickBuild.render(true);
+                npcQuickBuild.render(true).finally(()=>{
+                    event.target.disabled = false;
+                });
             });
         });
 

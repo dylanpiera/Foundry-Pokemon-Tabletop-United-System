@@ -49,11 +49,13 @@ export class PTUNpcQuickBuild extends FormApplication {
         // next/prev page listeners
         $html.find('.next-page').on('click', (event) => {
             event.preventDefault();
+            event.target.disabled = true;
             this.data.page = parseInt($html.get(0)?.dataset?.page || "0") + 1;
             this.render(true);
         });
         $html.find('.prev-page').on('click', (event) => {
             event.preventDefault();
+            event.target.disabled = true;
             this.data.page = parseInt($html.get(0)?.dataset?.page || "2") - 1;
             this.render(true);
         });
@@ -128,7 +130,10 @@ export class PTUNpcQuickBuild extends FormApplication {
         $html.find("input[type='submit']").on("click", (event) => {
             event.preventDefault();
             if (this.data.ready) {
-                this.close({ properClose: true });
+                event.target.disabled = true;
+                this.close({ properClose: true }).finally(()=>{
+                    event.target.disabled = false;
+                });
             }
         });
     }
@@ -188,14 +193,14 @@ export class PTUNpcQuickBuild extends FormApplication {
     /** @override */
     render(force = false, options = {}) {
         const localthis = this;
-        this.data.refresh().then(() => localthis._render(force, options)).catch(err => {
+        this.data.refresh().then(() => localthis._render(force, options))/*.catch(err => {
             this._state = Application.RENDER_STATES.ERROR;
             Hooks.onError("Application#render", err, {
                 msg: `An error occurred while rendering ${this.constructor.name} ${this.appId}`,
                 log: "error",
                 ...options
             });
-        });
+        });*/
         return this;
     }
 
