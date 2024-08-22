@@ -258,6 +258,8 @@ export class NpcQuickBuildData {
         if (!noUpdate.has("trainer.name")) await this.randomizeName();
         if (!noUpdate.has("trainer.level")) await this.randomizeLevel();
         if (!noUpdate.has("trainer.classes.selected")) await this.randomizeClass();
+        if (!noUpdate.has("trainer.features.selected")) await this.randomizeFeatures();
+        if (!noUpdate.has("trainer.edges.selected")) await this.randomizeEdges();
         // TODO
     }
 
@@ -286,11 +288,14 @@ export class NpcQuickBuildData {
 
     async randomizeFeatures() {
         // TODO add an option to keep existing, but add more
-
+        const N = 1 + Math.floor(Math.sqrt(this.trainer.level));
+        this.trainer.features.selected = Array.from(new Set(Array.from({length: N}, () => chooseFrom(this.multiselects.features.options))));
     }
 
     async randomizeEdges() {
         // TODO add an option to keep existing, but add more
+        const N = 1 + Math.floor(Math.sqrt(this.trainer.level));
+        this.trainer.edges.selected = Array.from(new Set(Array.from({length: N}, () => chooseFrom(this.multiselects.edges.options))));
     }
 
     async randomizeSkill(slug) {
@@ -314,6 +319,176 @@ export class NpcQuickBuildData {
     }
 
 
+    /**
+     * 
+     * @param {*} textPrereq 
+     * @param {*} param1 
+     * @returns { met, newFeatures, newEdges, newSkills, skillRank, subOption, unknown } 
+     */
+    async checkTextPrereq(textPrereq, { allComputed, skillsComputed, previousSkillRank=null}) {
+        const originalPrereq = textPrereq;
+        const RETURN = {
+            met: false,
+            newFeatures: [],
+            newEdges: [],
+            newSkills: {},
+            skillRank: null,
+            subOption: null,
+            unknown: false,
+        };
+
+        const compareName = function (t) {
+            return (f) => simplifyString(f.name) == simplifyString(t);
+        };
+        const compareLabel = function (t) {
+            return (f) => simplifyString(f.label) == simplifyString(t);
+        };
+
+        // check if this has a parenthesized section (for selection of feat, for instance)
+        const withSub = textPrereq.match(FEAT_WITH_SUB_RE);
+        if (withSub) {
+            RETURN.subOption = {
+                main: withSub.groups.main,
+                subvalue: withSub.groups.sub,
+            };
+            textPrereq = withSub.groups.main;
+        }
+
+        // check if the prereq is GM Permission
+        if (originalPrereq == "GM Permission") {
+            RETURN.met = true;
+            RETURN.subOption = null; // the suboption doesn't matter, GM Permission is all that's needed
+            return RETURN;
+        }
+
+        // check if this is the name of a class, feature, or edge we already have
+        const existingItem = allComputed.find(compareName(textPrereq));
+        if (existingItem) {
+            RETURN.met = true;
+            if (RETURN.subOption) RETURN.subOption.uuid = existingItem.uuid;
+            return RETURN;
+        }
+
+        // check if it's the name of a class, feature or edge we don't already have
+        const featureClass = await this._findFromMultiselect("classes", compareLabel(textPrereq));
+        if (featureClass) {
+            RETURN.newFeatures.push(featureClass);
+            if (RETURN.subOption) RETURN.subOption.uuid = featureClass.uuid;
+            return RETURN;
+        }
+        const feature = await this._findFromMultiselect("features", compareLabel(textPrereq));
+        if (feature) {
+            RETURN.newFeatures.push(feature);
+            if (RETURN.subOption) RETURN.subOption.uuid = feature.uuid;
+            return RETURN;
+        }
+        const edge = await this._findFromMultiselect("edges", compareLabel(textPrereq));
+        if (edge) {
+            RETURN.newEdges.push(edge);
+            if (RETURN.subOption) RETURN.subOption.uuid = edge.uuid;
+            return RETURN;
+        }
+
+        if (withSub) {
+            // this is clearly not a feat/edge with a sub
+            textPrereq = originalPrereq;
+            RETURN.subOption = null;
+        }
+
+
+        const getSkill = function (t) {
+            // TODO: do better, act right :(
+            // this is very gross. Let's add some stuff in index.js so we don't have to rely on the translations
+            return CONFIG.PTU.data.skills.keys.find(k => simplifyString(t) == simplifyString(game.i18n.format(`SKILL.${k}`)));
+        };
+
+        // check if it's a single minimum skill rank
+        const singleSkillMatch = textPrereq.match(SINGLE_MIN_SKILL_RANK_RE);
+        if (singleSkillMatch) {
+            // TODO: do better, act right :(
+            // this is very gross. Let's add some stuff in index.js so we don't have to rely on the translations
+            const rank = [1, 2, 3, 4, 5, 6, 8].find(r => CONFIG.PTU.data.skills.PTUSkills.getRankSlug(r) == singleSkillMatch.groups.rank.toLowerCase());
+            const skill = getSkill(singleSkillMatch.groups.skill);
+            if (rank && skill) {
+                RETURN.met = (skillsComputed[skill] ?? 1) >= rank;
+                RETURN.newSkills[skill] = rank;
+                return RETURN;
+            }
+            // // check multi-skill?
+            // if (singleSkillMatch.groups.skill.includes(" or ")) {
+            //     const skills = singleSkillMatch.groups.skill.split(" or ").map(getSkill);
+            //     // check if we meet any of those prereqs. If so, return.
+            //     for (const s of skills) {
+            //         if (rank <= skillUpdates[s] ?? 0) return RETURN;
+            //     }
+            //     // otherwise, we do not meet this prerequisite
+            //     unmet.push(textPrereq);
+            //     return RETURN;
+            // }
+        }
+
+        // check if there's "N Skills at RANK"
+        const anySkillMatch = textPrereq.match(ANY_N_SKILLS_AT_RE);
+        if (anySkillMatch) {
+            // TODO: do better, act right :(
+            // this is somewhat gross. Let's add some stuff in index.js so we don't have to rely on the translations
+            const rank = [1, 2, 3, 4, 5, 6, 8].find(r => CONFIG.PTU.data.skills.PTUSkills.getRankSlug(r) == anySkillMatch.groups.rank.toLowerCase());
+            const n = parseIntA(anySkillMatch.groups.n || "100");
+            if (rank && n) {
+                if (CONFIG.PTU.data.skills.keys.filter(k => rank <= skillsComputed[k] ?? 0).length >= n) {
+                    RETURN.met = true;
+                    return RETURN;
+                }
+                else return RETURN;
+            }
+        }
+
+        // check if there's "any N of SKILLS at RANK"
+        const nSkillMatch = textPrereq.match(N_SKILLS_AT_FROM_LIST_RE);
+        if (nSkillMatch) {
+            // TODO: do better, act right :(
+            // this is somewhat gross. Let's add some stuff in index.js so we don't have to rely on the translations
+            const rank = [1, 2, 3, 4, 5, 6, 8].find(r => CONFIG.PTU.data.skills.PTUSkills.getRankSlug(r) == nSkillMatch.groups.rank.toLowerCase());
+            const n = parseIntA(nSkillMatch.groups.n || "100");
+            const skills = nSkillMatch.groups.skills.split(" or ").map(getSkill);
+            if (rank && n) {
+                if (skills.filter(k => rank <= skillsComputed[k] ?? 0).length >= n) {
+                    RETURN.met = true;
+                    return RETURN;
+                } 
+                else return RETURN;
+            }
+        }
+
+        // if its just a skill by itself and we have a non-null "previousSkillRank"
+        const loneSkill = getSkill(textPrereq);
+        if (loneSkill && previousSkillRank) {
+            RETURN.met = (skillsComputed[skill] ?? 1) >= previousSkillRank;
+            RETURN.newSkills[skill] = previousSkillRank;
+            return RETURN;
+        }
+
+        // check if it's an OR clause; recurse!
+        if (textPrereq.includes(" or ")) {
+            const terms = textPrereq.split(" or ");
+            let sr = null;
+            for (const term of terms) {
+                const { met, skillRank, unknown } = await this.checkTextPrereq(term, { allComputed, skillsComputed, previousSkillRank: sr });
+                if (met) {
+                    RETURN.met = true;
+                    return RETURN;
+                }
+                sr = skillRank;
+                RETURN.unknown ||= unknown; 
+            }
+            if (!RETURN.unknown) return RETURN;
+        }
+
+        // we can't figure out what this is, return
+        RETURN.unknown = true;
+        return RETURN
+    };
+
 
     /*-----------------------------------------------------------------------*/
 
@@ -324,15 +499,12 @@ export class NpcQuickBuildData {
         const featuresComputed = [];
         const edgesComputed = [];
         const subSelectables = {};
+        const skillsMinimum = {};
+        const skillsComputed = {};
+        const allSuboptions = [];
+        const allUnmet = [];
+        const allUnknown = [];
 
-        // Prerequisites that aren't yet met
-        const unmetPrereqs = {
-            minLevel: 1,
-            skills: {},
-            subs: [],
-            unmet: [],
-            unknown: [],
-        };
         for (const feature of Object.values(this.trainer.classes.selected)) {
             if (!feature.value) continue;
             const item = (await fromUuid(feature.value))?.toObject();
@@ -364,161 +536,10 @@ export class NpcQuickBuildData {
             allComputed.push(item);
         }
 
-        /**
-         * 
-         * @param {*} textPrereq 
-         * @param {*} firstPass 
-         * @returns {
-         *      newFeatures,
-         *      newEdges,
-         *      allNew,
-         *      skillUpdates,
-         *      unknown,
-         *  }
-         */
-        const checkTextPrereq = async (textPrereq) => {
-            const originalPrereq = textPrereq;
-
-            const newFeatures = [];
-            const newEdges = [];
-            const allNew = [];
-            const skillUpdates = {};
-            const unmet = [];
-            const unknown = [];
-            const RETURN = {
-                newFeatures,
-                newEdges,
-                allNew,
-                skillUpdates,
-                sub: null,
-                unmet,
-                unknown,
-            };
-
-            const compareName = function (t) {
-                return (f) => simplifyString(f.name) == simplifyString(t);
-            };
-            const compareLabel = function (t) {
-                return (f) => simplifyString(f.label) == simplifyString(t);
-            };
-
-            // check if this has a parenthesized section (for selection of feat, for instance)
-            const withSub = textPrereq.match(FEAT_WITH_SUB_RE);
-            if (withSub) {
-                RETURN.sub = {
-                    main: withSub.groups.main,
-                    subvalue: withSub.groups.sub,
-                };
-                textPrereq = withSub.groups.main;
-            }
-
-            // check if this is the name of a class, feature, or edge we already have
-            const existingItem = allComputed.find(compareName(textPrereq));
-            if (existingItem) {
-                if (RETURN.sub) RETURN.sub.uuid = existingItem.uuid;
-                return RETURN;
-            }
-
-            // check if it's the name of a class, feature or edge we don't already have
-            const featureClass = await this._findFromMultiselect("classes", compareLabel(textPrereq));
-            if (featureClass) {
-                newFeatures.push(featureClass);
-                allNew.push(featureClass);
-                if (RETURN.sub) RETURN.sub.uuid = featureClass.uuid;
-                return RETURN;
-            }
-            const feature = await this._findFromMultiselect("features", compareLabel(textPrereq));
-            if (feature) {
-                newFeatures.push(feature);
-                allNew.push(feature);
-                if (RETURN.sub) RETURN.sub.uuid = feature.uuid;
-                return RETURN;
-            }
-            const edge = await this._findFromMultiselect("edges", compareLabel(textPrereq));
-            if (edge) {
-                newEdges.push(edge);
-                allNew.push(edge);
-                if (RETURN.sub) RETURN.sub.uuid = edge.uuid;
-                return RETURN;
-            }
-
-            if (withSub) {
-                // this is clearly not a feat/edge with a sub
-                textPrereq = originalPrereq;
-                RETURN.sub = null;
-            }
-
-            const getSkill = function (t) {
-                // TODO: do better, act right :(
-                // this is very gross. Let's add some stuff in index.js so we don't have to rely on the translations
-                return CONFIG.PTU.data.skills.keys.find(k => simplifyString(t) == simplifyString(game.i18n.format(`SKILL.${k}`)));
-            };
-
-            // check if it's a single minimum skill rank
-            const singleSkillMatch = textPrereq.match(SINGLE_MIN_SKILL_RANK_RE);
-            if (singleSkillMatch) {
-                // TODO: do better, act right :(
-                // this is very gross. Let's add some stuff in index.js so we don't have to rely on the translations
-                const rank = [1, 2, 3, 4, 5, 6, 8].find(r => CONFIG.PTU.data.skills.PTUSkills.getRankSlug(r) == singleSkillMatch.groups.rank.toLowerCase());
-                const skill = getSkill(singleSkillMatch.groups.skill);
-                if (rank && skill) {
-                    skillUpdates[skill] = Math.max(rank, skillUpdates[skill] ?? 0);
-                    return RETURN;
-                }
-                // check multi-skill?
-                if (singleSkillMatch.groups.skill.includes(" or ")) {
-                    const skills = singleSkillMatch.groups.skill.split(" or ").map(getSkill);
-                    // check if we meet any of those prereqs. If so, return.
-                    for (const s of skills) {
-                        if (rank <= Math.max(this.trainer.skills[s]?.value, skillUpdates[s] ?? 0)) return RETURN;
-                    }
-                    // otherwise, we do not meet this prerequisite
-                    unmet.push(textPrereq);
-                    return RETURN;
-                }
-            }
-
-            // check if there's "N Skills at RANK"
-            const anySkillMatch = textPrereq.match(ANY_N_SKILLS_AT_RE);
-            if (anySkillMatch) {
-                // TODO: do better, act right :(
-                // this is somewhat gross. Let's add some stuff in index.js so we don't have to rely on the translations
-                const rank = [1, 2, 3, 4, 5, 6, 8].find(r => CONFIG.PTU.data.skills.PTUSkills.getRankSlug(r) == anySkillMatch.groups.rank.toLowerCase());
-                const n = parseIntA(anySkillMatch.groups.n || "100");
-                if (rank && n) {
-                    if (CONFIG.PTU.data.skills.keys.filter(k => rank <= Math.max(this.trainer.skills[k]?.value, skillUpdates[k] ?? 0)).length >= n) return RETURN;
-                    else {
-                        unmet.push(textPrereq);
-                        return RETURN;
-                    }
-                }
-            }
-
-            // check if there's "any N of SKILLS at RANK"
-            const nSkillMatch = textPrereq.match(N_SKILLS_AT_FROM_LIST_RE);
-            if (nSkillMatch) {
-                // TODO: do better, act right :(
-                // this is somewhat gross. Let's add some stuff in index.js so we don't have to rely on the translations
-                const rank = [1, 2, 3, 4, 5, 6, 8].find(r => CONFIG.PTU.data.skills.PTUSkills.getRankSlug(r) == nSkillMatch.groups.rank.toLowerCase());
-                const n = parseIntA(nSkillMatch.groups.n || "100");
-                const skills = nSkillMatch.groups.skills.split(" or ").map(getSkill);
-                if (rank && n) {
-                    if (skills.filter(k => rank <= Math.max(this.trainer.skills[k]?.value, skillUpdates[k] ?? 0)).length >= n) return RETURN;
-                    else {
-                        unmet.push(textPrereq);
-                        return RETURN;
-                    }
-                }
-            }
-
-
-            // check if it's an OR clause, and we already match any of the terms
-
-
-            // we can't figure out what this is, return
-            if (!unmetPrereqs.unknown.includes(textPrereq)) unknown.push(textPrereq);
-            return RETURN
-        };
+        // populate skillsComputed
+        for (const skill of CONFIG.PTU.data.skills.keys) {
+            skillsComputed[skill] = this.trainer.skills[skill].value ?? 1;
+        }
 
         // Get all the prerequisites
         for (let idx = 0; idx < allComputed.length; idx++) {
@@ -526,20 +547,35 @@ export class NpcQuickBuildData {
 
             // parse all of the regular prerequisites
             for (const prereq of item.system.prerequisites) {
-                const results = await checkTextPrereq(prereq, true);
-                results.newFeatures.forEach(x => featuresComputed.push(Object.assign(x, { auto: true })));
-                results.newEdges.forEach(x => edgesComputed.push(Object.assign(x, { auto: true })));
-                results.allNew.forEach(x => allComputed.push(Object.assign(x, { auto: true })));
-                Object.entries(results.skillUpdates).forEach(([k, v]) => {
-                    if (unmetPrereqs.skills[k] ?? 0 < v) unmetPrereqs.skills[k] = v;
+                const { met, newFeatures, newEdges, newSkills, subOption, unknown } = await this.checkTextPrereq(prereq, { allComputed, skillsComputed });
+
+                // if it's unknown, store it as unknown and move on
+                if (unknown) {
+                    if (!allUnknown.includes(prereq)) allUnknown.push(prereq);
+                    continue;
+                }
+
+                // if it's unmet, and we're given nothing to meet it with, store the prereq as unmet and move on.
+                if (!met && newFeatures.length == 0 && newEdges.length == 0 && Object.keys(newSkills).length == 0) {
+                    if (!allUnmet.includes(prereq)) allUnmet.push(prereq);
+                    continue;
+                }
+
+                newFeatures.forEach(x => {
+                    Object.assign(x, { auto: true });
+                    featuresComputed.push(x);
+                    allComputed.push(x);
                 });
-                if (results.sub != null) unmetPrereqs.subs.push(results.sub);
-                results.unmet.forEach(u => {
-                    if (!unmetPrereqs.unmet.includes(u)) unmetPrereqs.unmet.push(u);
-                })
-                results.unknown.forEach(u => {
-                    if (!unmetPrereqs.unknown.includes(u)) unmetPrereqs.unknown.push(u);
-                })
+                newEdges.forEach(x => {
+                    Object.assign(x, { auto: true });
+                    edgesComputed.push(x);
+                    allComputed.push(x);
+                });
+                Object.entries(newSkills).forEach(([k, v]) => {
+                    skillsMinimum[k] = Math.max(skillsMinimum[k] ?? 1, v ?? 1);
+                    if (newSkills[k] ?? 0 < v) skillsComputed[k] = v;
+                });
+                if (subOption != null) allSuboptions.push(subOption);
             }
         }
 
@@ -573,11 +609,11 @@ export class NpcQuickBuildData {
                 }
 
                 // check if we've got an unmet prerequisite for this still
-                const unmet = unmetPrereqs.subs.find(s => s.uuid == uuid);
+                const unmet = allSuboptions.find(s => s.uuid == uuid);
                 if (unmet && choices.find(c => c.label == unmet.subvalue)) {
                     subSelectable.selected = choices.find(c => c.label == unmet.subvalue)?.value ?? null;
                     subSelectable.visible = false;
-                    unmetPrereqs.subs.splice(unmetPrereqs.subs.indexOf(unmet), 1);
+                    allSuboptions.splice(allSuboptions.indexOf(unmet), 1);
                 }
                 // if (alreadySelected.has(subSelectable.selected)) {
                 //     subSelectable.selected = null;
@@ -612,19 +648,18 @@ export class NpcQuickBuildData {
 
         // set warnings
         this.warnings = [
-            ...unmetPrereqs.unmet.map(u => `Prerequisite "${u}" not met!`),
-            ...unmetPrereqs.unknown.map(u => `Unknown prerequisite "${u}"`),
+            ...allUnmet.map(u => `Prerequisite "${u}" not met!`),
+            ...allUnknown.map(u => `Unknown prerequisite "${u}"`),
         ];
 
         // apply established skill minimums
         const newSkills = foundry.utils.deepClone(this.trainer.skills);
         for (const [key, skill] of Object.entries(newSkills)) {
-            const min = unmetPrereqs.skills[key] ?? 1;
+            const min = skillsMinimum[key] ?? 1;
             skill.min = min;
             skill.value = Math.max(skill.value, min);
         }
         this.trainer.skills = newSkills;
-        console.log("newSkills", newSkills, unmetPrereqs.skills);
 
 
         // check if any pokemon have been newly configured

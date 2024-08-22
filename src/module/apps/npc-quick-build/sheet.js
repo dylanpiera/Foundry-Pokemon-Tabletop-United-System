@@ -174,7 +174,7 @@ export class PTUNpcQuickBuild extends FormApplication {
     async _updateObject(event, formData) {
         event.preventDefault();
         for (const [key, value] of Object.entries(formData)) {
-            if (!key) continue;
+            if (!key || value == undefined) continue;
             this.data.setProperty(key, value);
         }
 
@@ -230,14 +230,14 @@ export class PTUNpcQuickBuild extends FormApplication {
 
     async renderAsync(force = false, options = {}) {
         const localthis = this;
-        await this.data.refresh().then(() => localthis._render(force, options)).catch(err => {
+        await this.data.refresh().then(() => localthis._render(force, options))/*.catch(err => {
             this._state = Application.RENDER_STATES.ERROR;
             Hooks.onError("Application#render", err, {
                 msg: `An error occurred while rendering ${this.constructor.name} ${this.appId}`,
                 log: "error",
                 ...options
             });
-        });
+        });*/
         return this
     }
 
