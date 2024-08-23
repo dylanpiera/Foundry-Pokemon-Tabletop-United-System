@@ -1,5 +1,5 @@
 import { PokemonGenerator } from "../../actor/pokemon/generator.js";
-
+import Mutex from '../../../util/mutex.js';
 
 const MaxPartyPokemon = 6;
 
@@ -8,12 +8,13 @@ const SINGLE_MIN_SKILL_RANK_RE = /(?<rank>(Pathetic)|(Untrained)|(Novice)|(Adept
 const ANY_N_SKILLS_AT_RE = /(any )?(?<n>([0-9]+)|(One)|(Two)|(Three)|(Four)|(Five)|(Six)|(Seven)|(Eight)|(Nine)) Skills at (?<rank>(Untrained)|(Novice)|(Adept)|(Expert)|(Master)|(Virtuoso))( Rank)?/i;
 const N_SKILLS_AT_FROM_LIST_RE = /(?<n>([0-9]+)|(One)|(Two)|(Three)|(Four)|(Five)|(Six)|(Seven)|(Eight)|(Nine))( Skills)? of (?<skills>.+) at (?<rank>(Untrained)|(Novice)|(Adept)|(Expert)|(Master)|(Virtuoso))( Rank)?/i;
 
-const FEAT_WITH_SUB_RE = /(?<main>.+) (\((?<sub>.+)\))/i;
+const FEAT_WITH_SUB_RE = /(?<main>.+)( \((?<sub>.+)\)?(?<cr> \[CR\])?)/i;
 const COMPENDIUM_ITEM_RE = /Compendium\.([\w\.]+).Item.[a-zA-Z0-9]+/;
 
 const LEVEL_RE = /Level (?<lv>[0-9]+)/i
 
-const OR_RE = / or /gi
+// REGULAR EXPRESSIONS WITH global (/g) flag are NOT safe to use async
+// They cause very very weird bugs if you try
 
 function parseIntA(s) {
     let i = parseInt(s);
@@ -30,6 +31,7 @@ function simplifyString(s) {
         "tech education": "technology",
         "technology education": "technology",
         "medicine education": "medicine",
+        "medicine edu": "medicine",
         "pokemon education": "pokemon",
         "occult education": "occult",
         "intimidation": "intimidate",
@@ -165,6 +167,8 @@ export class NpcQuickBuildData {
 
 
         this.warnings = [];
+
+        this._refreshMutex = new Mutex();
     }
 
     async preload() {
@@ -225,6 +229,10 @@ export class NpcQuickBuildData {
         for (const compendium of speciesCompendiums) {
             for (const species of game.packs.get(compendium).index) {
                 if (species.type !== "species") continue;
+                if (species.name.includes("-Mega")) continue; // Mega evolutions aren't real evolutions
+                if (species.name.includes("-Terrastal")) continue; // Same with 
+                if (species.name.includes("-Eternamax")) continue; // Same with Terrastalized
+                if (species.name.startsWith("Delta ")) continue; // What even is this?
                 this.multiselects.species.options.push({
                     label: species.name,
                     value: species.uuid,
@@ -298,6 +306,15 @@ export class NpcQuickBuildData {
         
         // TODO
 
+        for (let s = 1; s <= 6; s++) {
+            const slot = `slot${s}`;
+            if (noUpdate.has(`party.${slot}.species.selected`)) continue;
+            if (noUpdate.has(`party.${slot}.nickname`)) continue;
+            if (noUpdate.has(`party.${slot}.gender.selected`)) continue;
+            if (noUpdate.has(`party.${slot}.shiny`)) continue;
+            await this.randomizePartyPokemon(slot);
+        }
+
 
         await this.refresh();
     }
@@ -311,12 +328,17 @@ export class NpcQuickBuildData {
         if (Math.random() * 400 <= 3) this.trainer.sex = [chooseFrom(this.multiselects.sex.options)];
     }
 
-    async randomizeLevel() {
-        const estimatedAppropriateLevel = this.estimatedAppropriateLevel;
+    static normalDistribution(mean, std_dev) {
         // average ~8 Math.random() calls to simulate a normal distribution (mean~=0.5+C, std_dev~=0.1)
         const N = 8;
-        const C = 0.4;
-        const randomNormal = average(Array.from({length: N}, () => C + Math.random()));
+        const C = mean;
+        const X = std_dev * 10;
+        return average(Array.from({length: N}, () => C + ((Math.random() - 0.5) * X)));
+    }
+
+    async randomizeLevel() {
+        const estimatedAppropriateLevel = this.estimatedAppropriateLevel;
+        const randomNormal = NpcQuickBuildData.normalDistribution(0.9, 0.1);
         this.trainer.level = Math.min(50, Math.max(1, Math.round(estimatedAppropriateLevel * randomNormal)));
     }
 
@@ -502,16 +524,16 @@ export class NpcQuickBuildData {
         }
     }
 
-    async randomizeStat(slug) {
-
-    }
-
     async randomizeStats() {
 
     }
 
     async randomizePartyPokemon(slot) {
-
+        // randomize level
+        const pkmnLevel = Math.min(100, Math.max(1, Math.round((this.trainer.level * 2) * NpcQuickBuildData.normalDistribution(1.0, 0.1))));
+        console.log(`generated pkmn level ${pkmnLevel} for ${this.trainer.level}`);
+        // randomize species
+        const validSpeciesToGenerate = [];
     }
 
 
@@ -542,7 +564,7 @@ export class NpcQuickBuildData {
 
         // check if this has a parenthesized section (for selection of feat, for instance)
         const withSub = textPrereq.match(FEAT_WITH_SUB_RE);
-        if (withSub) {
+        if (withSub?.groups?.sub) {
             RETURN.subOption = {
                 main: withSub.groups.main,
                 subvalue: withSub.groups.sub,
@@ -645,7 +667,7 @@ export class NpcQuickBuildData {
             // this is somewhat gross. Let's add some stuff in index.js so we don't have to rely on the translations
             const rank = [1, 2, 3, 4, 5, 6, 8].find(r => CONFIG.PTU.data.skills.PTUSkills.getRankSlug(r) == nSkillMatch.groups.rank.toLowerCase());
             const n = parseIntA(nSkillMatch.groups.n || "100");
-            const skills = nSkillMatch.groups.skills.split(OR_RE).map(getSkill);
+            const skills = nSkillMatch.groups.skills.split(/ or /gi).map(getSkill);
             if (rank && n) {
                 if (skills.filter(k => rank <= skillsComputed[k] ?? 0).length >= n) {
                     RETURN.met = true;
@@ -664,12 +686,15 @@ export class NpcQuickBuildData {
         }
 
         // check if it's an OR clause; recurse!
-        if (OR_RE.test(textPrereq)) {
-            const terms = textPrereq.split(OR_RE);
+        if ((/ or /gi).test(textPrereq)) {
+            const terms = textPrereq.split(/ or /gi);
             let sr = null;
+            RETURN.unknown = false;
             for (const term of terms) {
-                const { met, skillRank, unknown } = await this.checkTextPrereq(term, { allComputed, skillsComputed, previousSkillRank: sr });
+                const { met, skillRank, unknown } = await this.checkTextPrereq(term, { level, allComputed, skillsComputed, previousSkillRank: sr });
                 if (met) {
+                    console.log("MET", originalPrereq, textPrereq, RETURN);
+                    RETURN.unknown = false;
                     RETURN.met = true;
                     return RETURN;
                 }
@@ -677,6 +702,7 @@ export class NpcQuickBuildData {
                 RETURN.unknown ||= unknown; 
             }
             if (!RETURN.unknown) return RETURN;
+            console.log("UNMET", originalPrereq, textPrereq, RETURN);
         }
 
         // we can't figure out what this is, return
@@ -693,31 +719,39 @@ export class NpcQuickBuildData {
         const allNewUnmet = [];
         const allNewUnknown = [];
 
-        for (const prereq of prereqs) {
-            const { met, newFeatures, newEdges, newSkills, subOption, unknown } = await this.checkTextPrereq(prereq, { level, allComputed, skillsComputed });
+        const allNewItems = [{ system: { prerequisites: prereqs } }];
+        const newSkillsComputed = {...skillsComputed};
 
-            // if it's unknown, store it as unknown and move on
-            if (unknown) {
-                if (!allNewUnknown.includes(prereq)) allNewUnknown.push(prereq);
-                continue;
+        for (let n = 0; n < allNewItems.length; n++) {
+            for (const prereq of allNewItems[n].system.prerequisites) {
+                const { met, newFeatures, newEdges, newSkills, subOption, unknown } = await this.checkTextPrereq(prereq, { level, allComputed, skillsComputed: newSkillsComputed });
+
+                // if it's unknown, store it as unknown and move on
+                if (unknown) {
+                    if (!allNewUnknown.includes(prereq)) allNewUnknown.push(prereq);
+                    continue;
+                }
+
+                // if it's unmet, and we're given nothing to meet it with, store the prereq as unmet and move on.
+                if (!met && newFeatures.length == 0 && newEdges.length == 0 && Object.keys(newSkills).length == 0) {
+                    if (!allNewUnmet.includes(prereq)) allNewUnmet.push(prereq);
+                    continue;
+                }
+
+                newFeatures.forEach(x => {
+                    allNewFeatures.push(x);
+                    allNewItems.push(x);
+                });
+                newEdges.forEach(x => {
+                    allNewEdges.push(x);
+                    allNewItems.push(x);
+                });
+                Object.entries(newSkills).forEach(([k, v]) => {
+                    allNewSkills[k] = Math.max(allNewSkills[k] ?? 1, v ?? 1);
+                    newSkillsComputed[k] = Math.max(newSkillsComputed[k] ?? 1, v ?? 1)
+                });
+                if (subOption != null) allNewSubOptions.push(subOption);
             }
-
-            // if it's unmet, and we're given nothing to meet it with, store the prereq as unmet and move on.
-            if (!met && newFeatures.length == 0 && newEdges.length == 0 && Object.keys(newSkills).length == 0) {
-                if (!allNewUnmet.includes(prereq)) allNewUnmet.push(prereq);
-                continue;
-            }
-
-            newFeatures.forEach(x => {
-                allNewFeatures.push(x);
-            });
-            newEdges.forEach(x => {
-                allNewEdges.push(x);
-            });
-            Object.entries(newSkills).forEach(([k, v]) => {
-                allNewSkills[k] = Math.max(allNewSkills[k] ?? 1, v ?? 1);
-            });
-            if (subOption != null) allNewSubOptions.push(subOption);
         }
         return {
             allNewFeatures,
@@ -733,6 +767,7 @@ export class NpcQuickBuildData {
     /*-----------------------------------------------------------------------*/
 
     async refresh() {
+        const unlock = await this._refreshMutex.lock()
         // grab the features and prerequisites
         // the actual structure of these foundry items, plus "uuid" and "auto"
         const allComputed = [];
@@ -809,10 +844,10 @@ export class NpcQuickBuildData {
                 if (!allSuboptions.includes(x)) allSuboptions.push(x);
             });
             allNewUnmet.forEach(x => {
-                if (!allUnmet.includes(x)) allUnmet.push(x);
+                allUnmet.push(x);
             });
             allNewUnknown.forEach(x => {
-                if (!allUnknown.includes(x)) allUnknown.push(x);
+                allUnknown.push(x);
             });
         }
 
@@ -962,7 +997,8 @@ export class NpcQuickBuildData {
             this.party[slot] = pkmn;
         }
 
-
+        console.log(this);
+        await unlock();
     }
 
     async finalize() {
