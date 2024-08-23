@@ -11,6 +11,8 @@ const N_SKILLS_AT_FROM_LIST_RE = /(?<n>([0-9]+)|(One)|(Two)|(Three)|(Four)|(Five
 const FEAT_WITH_SUB_RE = /(?<main>.+) (\((?<sub>.+)\))/i;
 const COMPENDIUM_ITEM_RE = /Compendium\.([\w\.]+).Item.[a-zA-Z0-9]+/;
 
+const LEVEL_RE = /Level (?<lv>[0-9]+)/i
+
 function parseIntA(s) {
     let i = parseInt(s);
     if (!Number.isNaN(i)) return i;
@@ -20,7 +22,17 @@ function parseIntA(s) {
 }
 
 function simplifyString(s) {
-    return s.toLowerCase().replaceAll("pokémon", "pokemon").replaceAll("tech education", "technology education").replaceAll("intimidation", "intimidate");
+    const replacements = {
+        "pokémon": "pokemon",
+        "general education": "general",
+        "tech education": "technology",
+        "technology education": "technology",
+        "medicine education": "medicine",
+        "pokemon education": "pokemon",
+        "occult education": "occult",
+        "intimidation": "intimidate",
+    };
+    return Object.keys(replacements).reduce(((a, b)=>a.replaceAll(b, replacements[b])), s.toLowerCase());
 }
 
 
@@ -30,6 +42,10 @@ function chooseFrom(list) {
 
 function average(list) {
     return list.reduce((a,b)=>a+b, 0) / list.length;
+}
+
+function shuffle(list) {
+    return list.map(value => ({ value, sort: Math.random() })).sort((a, b) => a.sort - b.sort).map(({ value }) => value);
 }
 
 export class NpcQuickBuildData {
@@ -240,8 +256,7 @@ export class NpcQuickBuildData {
     setProperty(key, value) {
         const originalProperty = foundry.utils.getProperty(this, key);
         foundry.utils.setProperty(this, key, value);
-        if ((typeof originalProperty != "object" && originalProperty != value) || (typeof originalProperty == "object" && JSON.stringify(originalProperty) != JSON.stringify(value))) {
-            console.log("these were not equal", originalProperty, value)
+        if ((typeof originalProperty != typeof value) || (typeof originalProperty != "object" && originalProperty != value) || (typeof originalProperty == "object" && JSON.stringify(originalProperty) != JSON.stringify(value))) {
             this.manuallyUpdatedFields.add(key);
         }
     }
@@ -254,13 +269,23 @@ export class NpcQuickBuildData {
         if (force) this.manuallyUpdatedFields = new Set();
         const noUpdate = new Set(this.manuallyUpdatedFields); // make sure the set doesn't change under us
 
+        console.log(noUpdate);
+
         if (!noUpdate.has("trainer.sex")) await this.randomizeSex(); // I want to make a joke here so badly. What am I, 12?
         if (!noUpdate.has("trainer.name")) await this.randomizeName();
         if (!noUpdate.has("trainer.level")) await this.randomizeLevel();
         if (!noUpdate.has("trainer.classes.selected")) await this.randomizeClass();
         if (!noUpdate.has("trainer.features.selected")) await this.randomizeFeatures();
         if (!noUpdate.has("trainer.edges.selected")) await this.randomizeEdges();
+
+        // get the updated min/max values for skills and stats
+        await this.refresh();
+        await this.randomizeSkills();
+        
         // TODO
+
+
+        await this.refresh();
     }
 
     async randomizeName() {
@@ -298,12 +323,56 @@ export class NpcQuickBuildData {
         this.trainer.edges.selected = Array.from(new Set(Array.from({length: N}, () => chooseFrom(this.multiselects.edges.options))));
     }
 
-    async randomizeSkill(slug) {
-
-    }
-
     async randomizeSkills() {
+        const noUpdate = new Set(this.manuallyUpdatedFields); // make sure the set doesn't change under us
 
+        let pointsUsed = 0;
+        for (const slug of CONFIG.PTU.data.skills.keys) {
+            const skill = this.trainer.skills[slug];
+
+            if (!noUpdate.has(`trainer.skills.${slug}.value`)) {
+                pointsUsed += skill.min - 1;
+            } else {
+                pointsUsed += skill.value - 1;
+            }
+        }
+        // each edge also subtracts from the number of skill advancements possible
+        pointsUsed += this.trainer.edges.selected.length;
+
+        // maximum points per skill by level
+        let limit = 3;
+        if (this.trainer.level >= 12) limit = 6;
+        else if (this.trainer.level >= 6) limit = 5;
+        else if (this.trainer.level >= 2) limit = 4;
+
+        // you start with a number of points equal to the number of skills
+        // every even level you gain an edge
+        // level 2, gain +1
+        // level 6, gain +1
+        // level 12, gain +1
+
+        let maxPoints = CONFIG.PTU.data.skills.keys.length + Math.floor(this.trainer.level / 2);
+
+        const modifiableSkills = CONFIG.PTU.data.skills.keys.filter(slug=>!noUpdate.has(`trainer.skills.${slug}.value`));
+        // unspend all points
+        for (const slug of modifiableSkills) {
+            const skill = this.trainer.skills[slug];
+            skill.value = skill.min;
+        }
+
+        // spend points until we're out of points, or out of things to spend them on!
+        const spendable = shuffle(modifiableSkills.filter(slug=>this.trainer.skills[slug].min < Math.min(limit, this.trainer.skills[slug].max)));
+        while (maxPoints > pointsUsed) {
+            let pointAvailability = 0;
+            for (const slug of spendable) {
+                const skill = this.trainer.skills[slug];
+                const amountToIncrease = Math.round(Math.random() * Math.min(Math.min(limit, skill.max) - skill.value, maxPoints-pointsUsed))
+                skill.value = skill.value + amountToIncrease;
+                pointsUsed += amountToIncrease;
+                pointAvailability += skill.max - skill.value;
+            }
+            if (pointAvailability <= 0) break;
+        }
     }
 
     async randomizeStat(slug) {
@@ -325,7 +394,7 @@ export class NpcQuickBuildData {
      * @param {*} param1 
      * @returns { met, newFeatures, newEdges, newSkills, skillRank, subOption, unknown } 
      */
-    async checkTextPrereq(textPrereq, { allComputed, skillsComputed, previousSkillRank=null}) {
+    async checkTextPrereq(textPrereq, { level, allComputed, skillsComputed, previousSkillRank=null}) {
         const originalPrereq = textPrereq;
         const RETURN = {
             met: false,
@@ -360,6 +429,15 @@ export class NpcQuickBuildData {
             RETURN.subOption = null; // the suboption doesn't matter, GM Permission is all that's needed
             return RETURN;
         }
+
+        // check if the prereq is a minimum level
+        const levelRequirement = textPrereq.match(LEVEL_RE);
+        if (levelRequirement) {
+            const lvRequired = parseInt(levelRequirement.groups.lv);
+            RETURN.met = level >= lvRequired;
+            RETURN.subOption = null; // the suboption doesn't matter
+            return RETURN;
+        };
 
         // check if this is the name of a class, feature, or edge we already have
         const existingItem = allComputed.find(compareName(textPrereq));
@@ -411,6 +489,7 @@ export class NpcQuickBuildData {
             const skill = getSkill(singleSkillMatch.groups.skill);
             if (rank && skill) {
                 RETURN.met = (skillsComputed[skill] ?? 1) >= rank;
+                RETURN.skillRank = rank;
                 RETURN.newSkills[skill] = rank;
                 return RETURN;
             }
@@ -463,8 +542,8 @@ export class NpcQuickBuildData {
         // if its just a skill by itself and we have a non-null "previousSkillRank"
         const loneSkill = getSkill(textPrereq);
         if (loneSkill && previousSkillRank) {
-            RETURN.met = (skillsComputed[skill] ?? 1) >= previousSkillRank;
-            RETURN.newSkills[skill] = previousSkillRank;
+            RETURN.met = (skillsComputed[loneSkill] ?? 1) >= previousSkillRank;
+            RETURN.newSkills[loneSkill] = previousSkillRank;
             return RETURN;
         }
 
@@ -547,7 +626,7 @@ export class NpcQuickBuildData {
 
             // parse all of the regular prerequisites
             for (const prereq of item.system.prerequisites) {
-                const { met, newFeatures, newEdges, newSkills, subOption, unknown } = await this.checkTextPrereq(prereq, { allComputed, skillsComputed });
+                const { met, newFeatures, newEdges, newSkills, subOption, unknown } = await this.checkTextPrereq(prereq, { level: this.trainer.level, allComputed, skillsComputed });
 
                 // if it's unknown, store it as unknown and move on
                 if (unknown) {

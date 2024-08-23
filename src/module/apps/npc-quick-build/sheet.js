@@ -123,7 +123,7 @@ export class PTUNpcQuickBuild extends FormApplication {
                     selections.every((s) => typeof s === "object" && typeof s["value"] === "string");
 
                 if (isValid && savePath) {
-                    foundry.utils.setProperty(this.data, savePath, selections);
+                    this.data.setProperty(savePath, selections);
                     this.render();
                 }
             });
