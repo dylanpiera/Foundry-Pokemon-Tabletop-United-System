@@ -13,6 +13,8 @@ const COMPENDIUM_ITEM_RE = /Compendium\.([\w\.]+).Item.[a-zA-Z0-9]+/;
 
 const LEVEL_RE = /Level (?<lv>[0-9]+)/i
 
+const OR_RE = / or /gi
+
 function parseIntA(s) {
     let i = parseInt(s);
     if (!Number.isNaN(i)) return i;
@@ -32,7 +34,7 @@ function simplifyString(s) {
         "occult education": "occult",
         "intimidation": "intimidate",
     };
-    return Object.keys(replacements).reduce(((a, b)=>a.replaceAll(b, replacements[b])), s.toLowerCase());
+    return Object.keys(replacements).reduce(((a, b)=>a?.replaceAll(b, replacements[b])), s?.toLowerCase());
 }
 
 
@@ -200,7 +202,6 @@ export class NpcQuickBuildData {
                     label: feature.name,
                     value: feature.uuid,
                     prerequisites: feature?.system?.prerequisites ?? [],
-                    hydrated: null,
                 })
             }
         }
@@ -215,7 +216,6 @@ export class NpcQuickBuildData {
                     label: edge.name,
                     value: edge.uuid,
                     prerequisites: edge?.system?.prerequisites ?? [],
-                    hydrated: null,
                 })
             }
         }
@@ -271,15 +271,29 @@ export class NpcQuickBuildData {
 
         console.log(noUpdate);
 
-        if (!noUpdate.has("trainer.sex")) await this.randomizeSex(); // I want to make a joke here so badly. What am I, 12?
+        // remove classes, features, and edges if they've not been manually set.
+        if (!noUpdate.has("trainer.classes.selected")) this.trainer.classes.selected = [];
+        if (!noUpdate.has("trainer.features.selected")) this.trainer.features.selected = [];
+        if (!noUpdate.has("trainer.edges.selected")) this.trainer.edges.selected = [];
+        await this.refresh();
+
+        // set skills to their minimum value
+        for (const slug of CONFIG.PTU.data.skills.keys) {
+            if (noUpdate.has(`trainer.skills.${slug}.value`)) continue;
+            const skill = this.trainer.skills[slug];
+            skill.value = skill.min;
+        }
+
+        // TODO stats to min
+
+        // start generating!
+        if (!noUpdate.has("trainer.sex")) await this.randomizeSex();
         if (!noUpdate.has("trainer.name")) await this.randomizeName();
         if (!noUpdate.has("trainer.level")) await this.randomizeLevel();
         if (!noUpdate.has("trainer.classes.selected")) await this.randomizeClass();
         if (!noUpdate.has("trainer.features.selected")) await this.randomizeFeatures();
         if (!noUpdate.has("trainer.edges.selected")) await this.randomizeEdges();
 
-        // get the updated min/max values for skills and stats
-        await this.refresh();
         await this.randomizeSkills();
         
         // TODO
@@ -306,21 +320,137 @@ export class NpcQuickBuildData {
         this.trainer.level = Math.min(50, Math.max(1, Math.round(estimatedAppropriateLevel * randomNormal)));
     }
 
-    async randomizeClass() {
+    get expectedClassNumber() {
+        return 1 + Math.floor(Math.sqrt(this.trainer.level / 5));
+    }
+
+    get expectedFeatureNumber() {
+        return 1 + Math.floor(Math.sqrt(this.trainer.level));
+    }
+
+    get expectedEdgeNumber() {
+        return 1 + Math.floor(Math.sqrt(this.trainer.level));
+    }
+
+    async randomizeClass(keepExisting=false) {
+        const newClasses = keepExisting ? [...this.trainer.classes.selected] : [];
+        if (!keepExisting) {
+            this.trainer.classes.selected = [];
+            await this.refresh();
+        }
+
+        const N = this.expectedClassNumber;
+        const N_F = this.expectedFeatureNumber;
+        const N_E = this.expectedEdgeNumber;
+        const MAX_ATTEMPTS = 5 + (N * 3);
+        const allComputed = [...this.trainer.features.computed, ...this.trainer.edges.computed];
+
+        // assume we have maxed skills for our level
+        const skillsComputed = {};
+        const skillLimit = this.skillLimit;
+        for (const skill of CONFIG.PTU.data.skills.keys) {
+            skillsComputed[skill] = Math.max(skillLimit, this.trainer.skills[skill].value ?? 1);
+        }
+
         // Stat Ace and Type Ace are problematic with their A/B prerequisites
-        this.trainer.classes.selected = [chooseFrom(this.multiselects.classes.options.filter(c=>!(c.label.startsWith("Stat Ace") || c.label.startsWith("Type Ace"))))];
+        const curatedOptions = this.multiselects.classes.options.filter(c=>!(c.label.startsWith("Stat Ace") || c.label.startsWith("Type Ace")));
+
+        let numChosen = newClasses.length;
+        let numFeaturesChosen = this.trainer.features.computed.length;
+        let numEdgesChosen = this.trainer.edges.computed.length;
+        for (let attempt = 0; attempt < MAX_ATTEMPTS; attempt++) {
+            const chosen = chooseFrom(curatedOptions);
+
+            const { allNewFeatures, allNewEdges, allNewUnmet } = await this.allItemPrereqs(chosen.prerequisites, { level: this.trainer.level, allComputed, skillsComputed })
+            if (allNewUnmet.length == 0 && numChosen + 1 <= N && numFeaturesChosen + allNewFeatures.length <= N_F && numEdgesChosen + allNewEdges.length <= N_E) {
+                newClasses.push(chosen);
+                numChosen += 1;
+                numFeaturesChosen += allNewFeatures.length;
+                numEdgesChosen += allNewEdges.length;
+            }
+
+            if (numChosen >= N) break;
+        }
+        this.trainer.classes.selected = newClasses;
+        await this.refresh()
     }
 
-    async randomizeFeatures() {
-        // TODO add an option to keep existing, but add more
-        const N = 1 + Math.floor(Math.sqrt(this.trainer.level));
-        this.trainer.features.selected = Array.from(new Set(Array.from({length: N}, () => chooseFrom(this.multiselects.features.options))));
+    async randomizeFeatures(keepExisting=false) {
+        const newFeatures = keepExisting ? [...this.trainer.features.selected] : [];
+        if (!keepExisting) {
+            this.trainer.features.selected = [];
+            await this.refresh();
+        }
+
+        const N = this.expectedFeatureNumber;
+        const MAX_ATTEMPTS = 5 + (N * 3);
+        const allComputed = [...this.trainer.features.computed, ...this.trainer.edges.computed];
+
+        // assume we have maxed skills for our level
+        const skillsComputed = {};
+        const skillLimit = this.skillLimit;
+        for (const skill of CONFIG.PTU.data.skills.keys) {
+            skillsComputed[skill] = Math.max(skillLimit, this.trainer.skills[skill].value ?? 1);
+        }
+
+        let numChosen = newFeatures.length + this.trainer.features.computed.length;
+        for (let attempt = 0; attempt < MAX_ATTEMPTS; attempt++) {
+            const chosen = chooseFrom(this.multiselects.features.options);
+
+            const { allNewFeatures, allNewUnmet } = await this.allItemPrereqs(chosen.prerequisites, { level: this.trainer.level, allComputed, skillsComputed })
+            if (allNewUnmet.length == 0 && numChosen + 1 + allNewFeatures.length <= N) {
+                newFeatures.push(chosen);
+                numChosen += 1 + allNewFeatures.length;
+            }
+
+            if (numChosen >= N) break;
+        }
+        this.trainer.features.selected = newFeatures;
+        await this.refresh()
     }
 
-    async randomizeEdges() {
-        // TODO add an option to keep existing, but add more
-        const N = 1 + Math.floor(Math.sqrt(this.trainer.level));
-        this.trainer.edges.selected = Array.from(new Set(Array.from({length: N}, () => chooseFrom(this.multiselects.edges.options))));
+    async randomizeEdges(keepExisting=false) {
+        const newEdges = keepExisting ? [...this.trainer.edges.selected] : [];
+        if (!keepExisting) {
+            this.trainer.edges.selected = [];
+            await this.refresh();
+        }
+
+        const N = this.expectedEdgeNumber;
+        const MAX_ATTEMPTS = 5 + (N * 3);
+        const allComputed = [...this.trainer.features.computed, ...this.trainer.edges.computed];
+
+        // assume we have maxed skills for our level
+        const skillsComputed = {};
+        const skillLimit = this.skillLimit;
+        for (const skill of CONFIG.PTU.data.skills.keys) {
+            skillsComputed[skill] = Math.max(skillLimit, this.trainer.skills[skill].value ?? 1);
+        }
+
+        const curatedOptions = this.multiselects.edges.options.filter(e=>!["Basic Skills", "Adept Skills", "Expert Skills", "Master Skills"].includes(e.label));
+
+        let numChosen = newEdges.length + this.trainer.edges.computed.length;
+        for (let attempt = 0; attempt < MAX_ATTEMPTS; attempt++) {
+            const chosen = chooseFrom(curatedOptions);
+
+            const { allNewEdges, allNewUnmet } = await this.allItemPrereqs(chosen.prerequisites, { level: this.trainer.level, allComputed, skillsComputed })
+            if (allNewUnmet.length == 0 && numChosen + 1 + allNewEdges.length <= N) {
+                newEdges.push(chosen);
+                numChosen += 1 + allNewEdges.length;
+            }
+
+            if (numChosen >= N) break;
+        }
+        this.trainer.edges.selected = newEdges;
+        await this.refresh()
+    }
+
+    get skillLimit() {
+        let limit = 3;
+        if (this.trainer.level >= 12) limit = 6;
+        else if (this.trainer.level >= 6) limit = 5;
+        else if (this.trainer.level >= 2) limit = 4;
+        return limit;
     }
 
     async randomizeSkills() {
@@ -340,10 +470,7 @@ export class NpcQuickBuildData {
         pointsUsed += this.trainer.edges.selected.length;
 
         // maximum points per skill by level
-        let limit = 3;
-        if (this.trainer.level >= 12) limit = 6;
-        else if (this.trainer.level >= 6) limit = 5;
-        else if (this.trainer.level >= 2) limit = 4;
+        const limit = this.skillLimit;
 
         // you start with a number of points equal to the number of skills
         // every even level you gain an edge
@@ -493,17 +620,6 @@ export class NpcQuickBuildData {
                 RETURN.newSkills[skill] = rank;
                 return RETURN;
             }
-            // // check multi-skill?
-            // if (singleSkillMatch.groups.skill.includes(" or ")) {
-            //     const skills = singleSkillMatch.groups.skill.split(" or ").map(getSkill);
-            //     // check if we meet any of those prereqs. If so, return.
-            //     for (const s of skills) {
-            //         if (rank <= skillUpdates[s] ?? 0) return RETURN;
-            //     }
-            //     // otherwise, we do not meet this prerequisite
-            //     unmet.push(textPrereq);
-            //     return RETURN;
-            // }
         }
 
         // check if there's "N Skills at RANK"
@@ -529,7 +645,7 @@ export class NpcQuickBuildData {
             // this is somewhat gross. Let's add some stuff in index.js so we don't have to rely on the translations
             const rank = [1, 2, 3, 4, 5, 6, 8].find(r => CONFIG.PTU.data.skills.PTUSkills.getRankSlug(r) == nSkillMatch.groups.rank.toLowerCase());
             const n = parseIntA(nSkillMatch.groups.n || "100");
-            const skills = nSkillMatch.groups.skills.split(" or ").map(getSkill);
+            const skills = nSkillMatch.groups.skills.split(OR_RE).map(getSkill);
             if (rank && n) {
                 if (skills.filter(k => rank <= skillsComputed[k] ?? 0).length >= n) {
                     RETURN.met = true;
@@ -548,8 +664,8 @@ export class NpcQuickBuildData {
         }
 
         // check if it's an OR clause; recurse!
-        if (textPrereq.includes(" or ")) {
-            const terms = textPrereq.split(" or ");
+        if (OR_RE.test(textPrereq)) {
+            const terms = textPrereq.split(OR_RE);
             let sr = null;
             for (const term of terms) {
                 const { met, skillRank, unknown } = await this.checkTextPrereq(term, { allComputed, skillsComputed, previousSkillRank: sr });
@@ -567,6 +683,51 @@ export class NpcQuickBuildData {
         RETURN.unknown = true;
         return RETURN
     };
+
+
+    async allItemPrereqs(prereqs, { level, allComputed, skillsComputed }) {
+        const allNewFeatures = [];
+        const allNewEdges = [];
+        const allNewSkills = {};
+        const allNewSubOptions = [];
+        const allNewUnmet = [];
+        const allNewUnknown = [];
+
+        for (const prereq of prereqs) {
+            const { met, newFeatures, newEdges, newSkills, subOption, unknown } = await this.checkTextPrereq(prereq, { level, allComputed, skillsComputed });
+
+            // if it's unknown, store it as unknown and move on
+            if (unknown) {
+                if (!allNewUnknown.includes(prereq)) allNewUnknown.push(prereq);
+                continue;
+            }
+
+            // if it's unmet, and we're given nothing to meet it with, store the prereq as unmet and move on.
+            if (!met && newFeatures.length == 0 && newEdges.length == 0 && Object.keys(newSkills).length == 0) {
+                if (!allNewUnmet.includes(prereq)) allNewUnmet.push(prereq);
+                continue;
+            }
+
+            newFeatures.forEach(x => {
+                allNewFeatures.push(x);
+            });
+            newEdges.forEach(x => {
+                allNewEdges.push(x);
+            });
+            Object.entries(newSkills).forEach(([k, v]) => {
+                allNewSkills[k] = Math.max(allNewSkills[k] ?? 1, v ?? 1);
+            });
+            if (subOption != null) allNewSubOptions.push(subOption);
+        }
+        return {
+            allNewFeatures,
+            allNewEdges,
+            allNewSkills,
+            allNewSubOptions,
+            allNewUnmet,
+            allNewUnknown,
+        };
+    }
 
 
     /*-----------------------------------------------------------------------*/
@@ -625,37 +786,34 @@ export class NpcQuickBuildData {
             const item = allComputed[idx];
 
             // parse all of the regular prerequisites
-            for (const prereq of item.system.prerequisites) {
-                const { met, newFeatures, newEdges, newSkills, subOption, unknown } = await this.checkTextPrereq(prereq, { level: this.trainer.level, allComputed, skillsComputed });
-
-                // if it's unknown, store it as unknown and move on
-                if (unknown) {
-                    if (!allUnknown.includes(prereq)) allUnknown.push(prereq);
-                    continue;
-                }
-
-                // if it's unmet, and we're given nothing to meet it with, store the prereq as unmet and move on.
-                if (!met && newFeatures.length == 0 && newEdges.length == 0 && Object.keys(newSkills).length == 0) {
-                    if (!allUnmet.includes(prereq)) allUnmet.push(prereq);
-                    continue;
-                }
-
-                newFeatures.forEach(x => {
-                    Object.assign(x, { auto: true });
-                    featuresComputed.push(x);
-                    allComputed.push(x);
-                });
-                newEdges.forEach(x => {
-                    Object.assign(x, { auto: true });
-                    edgesComputed.push(x);
-                    allComputed.push(x);
-                });
-                Object.entries(newSkills).forEach(([k, v]) => {
-                    skillsMinimum[k] = Math.max(skillsMinimum[k] ?? 1, v ?? 1);
-                    if (newSkills[k] ?? 0 < v) skillsComputed[k] = v;
-                });
-                if (subOption != null) allSuboptions.push(subOption);
-            }
+            const { allNewFeatures, allNewEdges, allNewSkills, allNewSubOptions, allNewUnmet, allNewUnknown } = await this.allItemPrereqs(item.system.prerequisites, { level: this.trainer.level, allComputed, skillsComputed });
+            allNewFeatures.forEach(x => {
+                Object.assign(x, { auto: true });
+                featuresComputed.push(x);
+                allComputed.push(x);
+            });
+            allNewEdges.forEach(x => {
+                Object.assign(x, { auto: true });
+                edgesComputed.push(x);
+                allComputed.push(x);
+            });
+            allNewEdges.forEach(x => {
+                edgesComputed.push(x);
+                allComputed.push(x);
+            });
+            Object.entries(allNewSkills).forEach(([k, v]) => {
+                skillsMinimum[k] = Math.max(skillsMinimum[k] ?? 1, v ?? 1);
+                if (skillsComputed[k] ?? 0 < v) skillsComputed[k] = v;
+            });
+            allNewSubOptions.forEach(x => {
+                if (!allSuboptions.includes(x)) allSuboptions.push(x);
+            });
+            allNewUnmet.forEach(x => {
+                if (!allUnmet.includes(x)) allUnmet.push(x);
+            });
+            allNewUnknown.forEach(x => {
+                if (!allUnknown.includes(x)) allUnknown.push(x);
+            });
         }
 
         // get selectable choices from the computed features/edges
