@@ -2060,9 +2060,10 @@ a.content-link img {
 }
 .ptu.pokemon.npc-quick-build .loading .load-wheel {
   margin: auto;
-  border: 20px solid #EAF0F6;
+  border: 1.8em solid #f0f0f0;
   border-radius: 50%;
-  border-top: 20px solid #FF7A59;
+  border-top: 1.8em solid #ee1515;
+  border-right: 1.8em solid #ee1515;
   width: 5em;
   height: 5em;
   position: absolute;
