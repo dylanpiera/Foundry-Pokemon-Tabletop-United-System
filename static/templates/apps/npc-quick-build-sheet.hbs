@@ -1,29 +1,35 @@
 <form class="{{cssClass}} container-fluid d-flex flex-column" autocomplete="off" data-page="{{data.page}}">
     <div class="d-flex flex-column">
-        <div class="d-flex flex-row justify-content-center mb-2 header-bar ball-themes default highlight">
-            <h3>{{localize "PTU.NpcQuickBuild.TrainerQuickBuild"}}</h3>
+        <div class="header-bar">
+            <h2 class="title">{{localize "PTU.NpcQuickBuild.TrainerQuickBuild"}}</h2>
+            <nav>
+                <a class="page {{#if (eq data.page 1)}}current{{/if}}" data-page="1" {{#if (eq data.page 1)}}disabled{{/if}}>{{localize "PTU.NpcQuickBuild.Page.TrainerInfo"}}</a>
+                <a class="page {{#if (eq data.page 2)}}current{{/if}}" data-page="2" {{#if (eq data.page 2)}}disabled{{/if}}>{{localize "PTU.NpcQuickBuild.Page.FeaturesEdges"}}</a>
+                <a class="page {{#if (eq data.page 3)}}current{{/if}}" data-page="3" {{#if (eq data.page 3)}}disabled{{/if}}>{{localize "PTU.NpcQuickBuild.Page.SkillsStats"}}</a>
+                <a class="page {{#if (eq data.page 4)}}current{{/if}}" data-page="4" {{#if (eq data.page 4)}}disabled{{/if}}>{{localize "PTU.NpcQuickBuild.Page.Party"}}</a>
+            </nav>
         </div>
         {{#if (eq data.page 1)}}
-            <div class="d-flex flex-row justify-content-center center-text mb-2">
+            <div class="">
                 <label>{{localize "PTU.NpcQuickBuild.Alliance"}}</label>
                 <select name="alliance">
                     {{selectOptions allianceOptions selected=data.alliance localize=true}}
                 </select>
             </div>
-            <div class="d-flex flex-row justify-content-center center-text mb-2">
+            <div class="">
                 <label>{{localize "PTU.NpcQuickBuild.Name"}}</label>
                 <input class="fb-40" type="text" name="trainer.name" value="{{data.trainer.name}}"/>
             </div>
-            <div class="d-flex flex-row justify-content-center center-text mb-2">
+            <div class="">
                 <label>{{localize "PTU.NpcQuickBuild.Sex"}}</label>
-                <input class="ptu-tagify trainer-sex" name="trainer.sex" data-filter-name="sex" value="{{json data.trainer.sex}}" data-dtype="JSON" />
+                <input class="ptu-tagify trainer-sex one-entry" name="trainer.sex" data-filter-name="sex" value="{{json data.trainer.sex}}" data-dtype="JSON" />
             </div>
-            <div class="d-flex flex-row justify-content-center center-text mb-2">
+            <div class="">
                 <label>{{localize "PTU.NpcQuickBuild.TrainerLevel"}}</label>
                 <input class="fb-40" type="number" name="trainer.level" min="1" max="50" value="{{data.trainer.level}}"/>
             </div>
 
-            <div class="d-flex flex-row justify-content-center center-text mb-2">
+            <div class="">
                 <label>{{localize "PTU.NpcQuickBuild.Classes"}}</label>
                 <input class="ptu-tagify trainer-classes" name="trainer.classes.selected" data-filter-name="classes" value="{{json data.trainer.classes.selected}}" data-dtype="JSON" />
             </div>
@@ -31,23 +37,23 @@
 
         {{!-- Features / Edges --}}
         {{#if (eq data.page 2)}}
-            <div class="d-flex flex-row justify-content-center center-text mb-2">
+            <div class="">
                 <label>{{localize "PTU.NpcQuickBuild.Features"}}</label>
                 <input class="ptu-tagify trainer-features" name="trainer.features.selected" data-filter-name="features" value="{{json data.trainer.features.selected}}" data-dtype="JSON" />
             </div>
 
-            <div class="d-flex flex-row justify-content-center center-text mb-2">
+            <div class="computed-links computed-features">
                 {{#each data.trainer.features.computed as |feature|}}
                     <a class="content-link{{#if feature.auto}} auto{{/if}}" draggable="true" data-link="" data-uuid="{{feature.uuid}}" data-id="{{feature._id}}" data-type="Item" data-tooltip="Feature Item"><i class="fas fa-suitcase"></i>{{feature.name}}</a>
                 {{/each}}
             </div>
 
-            <div class="d-flex flex-row justify-content-center center-text mb-2">
+            <div class="">
                 <label>{{localize "PTU.NpcQuickBuild.Edges"}}</label>
                 <input class="ptu-tagify trainer-features" name="trainer.edges.selected" data-filter-name="edges" value="{{json data.trainer.edges.selected}}" data-dtype="JSON" />
             </div>
 
-            <div class="d-flex flex-row justify-content-center center-text mb-2">
+            <div class="computed-links computed-edges">
                 {{#each data.trainer.edges.computed as |edge|}}
                     <a class="content-link{{#if edge.auto}} auto{{/if}}" draggable="true" data-link="" data-uuid="{{edge.uuid}}" data-id="{{edge._id}}" data-type="Item" data-tooltip="Edge Item"><i class="fas fa-suitcase"></i>{{edge.name}}</a>
                 {{/each}}
@@ -56,12 +62,14 @@
             {{!-- All the sub-selectables --}}
             {{#each data.trainer.subSelectables as | sub |}}
             {{#if sub.visible}}
-            <div class="d-flex flex-row justify-content-center center-text mb-2">
+            <div class="sub-choices">
                 {{!-- <a class="content-link{{#if edge.auto}} auto{{/if}}" draggable="true" data-link="" data-uuid="{{edge.uuid}}" data-id="{{edge._id}}" data-type="Item" data-tooltip="Edge Item"><i class="fas fa-suitcase"></i>{{edge.name}}</a> --}}
-                <label>Selection for {{sub.label}}</label>
+                <h4>Selection for {{sub.label}}</h4>
+                <div class="options">
                 {{#each sub.choices as | choice |}}
                     <label class="sub-choice {{#if (eq sub.selected choice.value)}}checked{{/if}} {{#if choice.disabled}}disabled{{/if}}">{{choice.label}} <input type="radio" name="trainer.subSelectables.{{sub.key}}.selected" value="{{choice.value}}" {{#if (eq sub.selected choice.value)}}checked{{/if}} {{#if choice.disabled}}disabled{{/if}} /></label>
                 {{/each}}
+                </div>
             </div>
             {{/if}}
             {{/each}}
@@ -69,21 +77,38 @@
 
         {{!-- Skills --}}
         {{#if (eq data.page 3)}}
-            <div class="d-flex flex-row justify-content-center center-text mb-2">
-                <label>{{localize "PTU.NpcQuickBuild.Skills"}}</label>
-            </div>
-            <div class="d-flex flex-row justify-content-center center-text three-column mb-2">
+            <div class="skills-box">
+                <h4>{{localize "PTU.NpcQuickBuild.Skills"}}</h4>
+                <div class="skills">
                 {{#each data.trainer.skills as | skill key |}}
-                    <div>
-                        <label>{{localize skill.label}}</label>
-                        <input type="number" name="trainer.skills.{{key}}.value" min="{{skill.min}}" max="{{skill.max}}" value="{{skill.value}}"/>
+                    <div class="skill skill-{{skill.rankSlug}}">
+                         
+                        <label class="skill-name">{{localize skill.label}}</label>
+                        <label class="skill-rank">{{localize skill.valueLabel}}</label>
+                        {{!-- These are just icons. The real buttons come later --}}
+                        {{#if skill.prevRank}}<span class="skill-prev-rank"><i class="fa-solid fa-minus"></i></span>{{/if}}
+                        {{#if skill.nextRank}}<span class="skill-next-rank disabled"><i class="fa-solid fa-plus"></i></span>{{/if}}
+                        
+                        {{!-- These get turned into shaders, and are the "real" buttons --}}
+                        {{#if skill.prevRank}}
+                            <a class="skill-prev-rank-clickarea button-set" data-value="{{skill.prevRank}}" data-path="trainer.skills.{{key}}.value" data-dtype="Number"></a>
+                        {{else}}
+                            <span class="skill-prev-rank-clickarea disabled"></span>
+                        {{/if}}
+                        {{#if skill.nextRank}}
+                            <a class="skill-next-rank-clickarea button-set" data-value="{{skill.nextRank}}" data-path="trainer.skills.{{key}}.value" data-dtype="Number"></a>
+                        {{else}}
+                            <span class="skill-next-rank-clickarea disabled"></span>
+                        {{/if}}
+                        {{!-- <input type="number" name="trainer.skills.{{key}}.value" min="{{skill.min}}" max="{{skill.max}}" value="{{skill.value}}"/> --}}
                     </div>
                 {{/each}}
+                </div>
             </div>
-            <div class="d-flex flex-row justify-content-center center-text mb-2">
+            <div class="">
                 <label>{{localize "PTU.NpcQuickBuild.Stats"}}</label>
             </div>
-            <div class="d-flex flex-row justify-content-center center-text mb-2">
+            <div class="">
                 {{#each data.trainer.stats as | stat key |}}
                     <div>
                         <label>{{localize stat.label}}</label>
@@ -95,7 +120,7 @@
 
         {{!-- Party Pokemon --}}
         {{#if (eq data.page 4)}}
-            <div class="d-flex flex-row justify-content-center center-text mb-2">
+            <div class="">
                 <label>{{localize "PTU.NpcQuickBuild.PartyPkmn"}}</label>
             </div>
             {{#each data.party as | pkmn key |}}
@@ -131,22 +156,30 @@
             {{else}}
                 <div class="party-pokemon {{key}} species-unset" data-slot="{{key}}"></div>
                     <label>{{localize "PTU.NpcQuickBuild.SpeciesName"}}</label>
-                    <input class="ptu-tagify pokemon-species" name="party.{{key}}.species.selected" data-filter-name="species" value="{{json pkmn.species.selected}}" data-dtype="JSON" />
+                    <input class="ptu-tagify pokemon-species one-entry" name="party.{{key}}.species.selected" data-filter-name="species" value="{{json pkmn.species.selected}}" data-dtype="JSON" />
                 </div>
             {{/if}}
             {{/each}}
         {{/if}}
     </div>
 
-    {{#if data.warnings}}
-    <div class="d-flex flex-column mb-2">
-    {{#each data.warnings as |warning|}}
-        <p>{{warning}}</p>
-    {{/each}}
+
+    {{!-- Warnings box  --}}
+    {{#if (gt data.warnings.num 0)}}
+    <div class="warning-box">
+        <h4 class="warning-title">Validation Warnings <span class="warning-num">({{data.warnings.num}})</span></h4>
+        <div class="warnings">
+        {{#each data.warnings.unmet as |warning|}}
+            <p class="unmet">{{warning}}</p>
+        {{/each}}
+        {{#each data.warnings.unknown as |warning|}}
+            <p class="unknown">{{warning}}</p>
+        {{/each}}
+        </div>
     </div>
     {{/if}}
 
-    <div class="d-flex flex-row justify-content-center mt-auto mb-2">
+    <div class="">
         {{!-- {{#if (gt data.page 1)}}
         <input type="button" class="prev-page" value="{{localize "PTU.NpcQuickBuild.Prev"}}"/>
         {{/if}}
@@ -160,10 +193,6 @@
         {{else}}
         <input type="button" class="next-page" autofocus value="{{localize "PTU.NpcQuickBuild.Next"}}"/>
         {{/if}} --}}
-        <input type="button" class="page" data-page="1" {{#if (eq data.page 1)}}disabled{{/if}} value="{{localize "PTU.NpcQuickBuild.Page.TrainerInfo"}}"/>
-        <input type="button" class="page" data-page="2" {{#if (eq data.page 2)}}disabled{{/if}} value="{{localize "PTU.NpcQuickBuild.Page.FeaturesEdges"}}"/>
-        <input type="button" class="page" data-page="3" {{#if (eq data.page 3)}}disabled{{/if}} value="{{localize "PTU.NpcQuickBuild.Page.SkillsStats"}}"/>
-        <input type="button" class="page" data-page="4" {{#if (eq data.page 4)}}disabled{{/if}} value="{{localize "PTU.NpcQuickBuild.Page.Party"}}"/>
         <input type="submit" {{#if data.ready}}autofocus{{else}}disabled{{/if}} value="{{localize "PTU.NpcQuickBuild.Submit"}}"/>
     </div>
 </form>

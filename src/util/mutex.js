@@ -1,6 +1,6 @@
 // Originally taken from https://github.com/mgtitimoli/await-mutex
 
-class Mutex {
+export class Mutex {
   constructor() {
     this._locking = Promise.resolve();
     this._locked = false;

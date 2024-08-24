@@ -62,12 +62,27 @@ export class PTUNpcQuickBuild extends FormApplication {
     activateListeners($html) {
         super.activateListeners($html);
 
+        const globalThis = this;
+
         // next/prev page listeners
-        $html.find('.page').on('click', (event) => {
+        $html.find('.page').on('click', function (event) {
             event.preventDefault();
+            if (event.target.disabled) return;
             event.target.disabled = true;
-            this.data.page = parseInt(event?.target?.dataset?.page ?? this.data.page);
-            this.render(true);
+            globalThis.data.page = parseInt(event?.target?.dataset?.page ?? globalThis.data.page);
+            globalThis.render(true);
+        });
+
+        $html.find('.button-set[data-path][data-value][data-dtype="Number"]').on('click', function (event) {
+            event.preventDefault();
+            console.log("hit listener!")
+            // if (event.target.disabled) return;
+            // event.target.disabled = true;
+            const dataset = this?.dataset;
+            globalThis.data.setProperty(dataset?.path, parseInt(dataset?.value));
+            console.log("set property!", dataset?.path, parseInt(dataset?.value), this);
+            globalThis.render(true);
+
         });
         // $html.find('.prev-page').on('click', (event) => {
         //     event.preventDefault();

@@ -1,5 +1,6 @@
 import { PokemonGenerator } from "../../actor/pokemon/generator.js";
-import Mutex from '../../../util/mutex.js';
+import { PTUSkills } from '../../actor/index.js';
+import { Mutex } from '../../../util/mutex.js';
 
 const MaxPartyPokemon = 6;
 
@@ -89,9 +90,13 @@ export class NpcQuickBuildData {
         for (const skill of CONFIG.PTU.data.skills.keys) {
             this.trainer.skills[skill] = {
                 label: `SKILL.${skill}`,
-                value: 1,
+                value: 2,
                 min: 1,
                 max: 6,
+                rankSlug: "untrained",
+                valueLabel: "Untrained",
+                prevRank: 2,
+                nextRank: 3,
             }
         }
 
@@ -168,7 +173,11 @@ export class NpcQuickBuildData {
         };
 
 
-        this.warnings = [];
+        this.warnings = {
+            num: 0,
+            unmet: [],
+            unknown: [],
+        };
 
         this._refreshMutex = new Mutex();
     }
@@ -538,7 +547,7 @@ export class NpcQuickBuildData {
         // currently this is weighted towards species with more evolutions...
         // but it's really really slow to try to avoid that problem
         let speciesOption = chooseFrom(this.multiselects.species.options);
-        let species = (await fromUuid(speciesOption.value)).toObject();
+        let species = (await fromUuid(speciesOption.value));
         let evolutionChain = species.system.evolutions;
         
         // make sure we're at the right evolution level
@@ -546,10 +555,15 @@ export class NpcQuickBuildData {
             label: ev.slug[0].toUpperCase() + ev.slug.slice(1),
             value: ev.uuid,
         }))?.[0];
-        species = (await fromUuid(speciesOption.value)).toObject();
+        species = (await fromUuid(speciesOption.value)) ?? species;
 
         this.party[slot].species.selected = [speciesOption];
+        this.party[slot].species.object = species;
+        this.party[slot].species.name = species.name;
+        this.party[slot].species.uuid = speciesOption.value;
         this.party[slot].level.value = pkmnLevel;
+
+        this.party[slot].configured = true;
 
         // console.log(validSpeciesToGenerate);
     }
@@ -958,10 +972,11 @@ export class NpcQuickBuildData {
 
 
         // set warnings
-        this.warnings = [
-            ...allUnmet.map(u => `Prerequisite "${u}" not met!`),
-            ...allUnknown.map(u => `Unknown prerequisite "${u}"`),
-        ];
+        this.warnings = {
+            num: allUnmet.length + allUnknown.length,
+            unmet: allUnmet.map(u => `Prerequisite "${u}" not met!`),
+            unknown: allUnknown.map(u => `Unknown prerequisite "${u}"`),
+        }
 
         // apply established skill minimums
         const newSkills = foundry.utils.deepClone(this.trainer.skills);
@@ -969,6 +984,11 @@ export class NpcQuickBuildData {
             const min = skillsMinimum[key] ?? 1;
             skill.min = min;
             skill.value = Math.max(skill.value, min);
+
+            skill.rankSlug = PTUSkills.getRankSlug(skill.value);
+            skill.valueLabel = `PTU.Skill${skill.rankSlug[0].toUpperCase() + skill.rankSlug.slice(1)}`;
+            skill.prevRank = skill.value > skill.min ? skill.value - 1 : null;
+            skill.nextRank = skill.value < skill.max ? skill.value + 1 : null;
         }
         this.trainer.skills = newSkills;
 
@@ -1023,7 +1043,7 @@ export class NpcQuickBuildData {
                     pkmn.level.value = pkmn.level.min;
                 }
 
-                pkmn.configured = true;
+                this.party[slot].configured = true;
             };
             // get image
             const img = await PokemonGenerator.getImage(pkmn.species.object, {
