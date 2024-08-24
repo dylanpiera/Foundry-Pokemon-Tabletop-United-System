@@ -5,10 +5,11 @@ const MaxPartyPokemon = 6;
 
 
 const SINGLE_MIN_SKILL_RANK_RE = /(?<rank>(Pathetic)|(Untrained)|(Novice)|(Adept)|(Expert)|(Master)|(Virtuoso)) (?<skill>.+)/i;
-const ANY_N_SKILLS_AT_RE = /(any )?(?<n>([0-9]+)|(One)|(Two)|(Three)|(Four)|(Five)|(Six)|(Seven)|(Eight)|(Nine)) Skills at (?<rank>(Untrained)|(Novice)|(Adept)|(Expert)|(Master)|(Virtuoso))( Rank)?/i;
-const N_SKILLS_AT_FROM_LIST_RE = /(?<n>([0-9]+)|(One)|(Two)|(Three)|(Four)|(Five)|(Six)|(Seven)|(Eight)|(Nine))( Skills)? of (?<skills>.+) at (?<rank>(Untrained)|(Novice)|(Adept)|(Expert)|(Master)|(Virtuoso))( Rank)?/i;
+const ANY_N_SKILLS_AT_RE = /(any )?(?<n>([0-9]+)|(A)|(One)|(Two)|(Three)|(Four)|(Five)|(Six)|(Seven)|(Eight)|(Nine)) Skills? at (?<rank>(Untrained)|(Novice)|(Adept)|(Expert)|(Master)|(Virtuoso))( Rank)?/i;
+const N_SKILLS_AT_FROM_LIST_RE = /(?<n>([0-9]+)|(A)|(One)|(Two)|(Three)|(Four)|(Five)|(Six)|(Seven)|(Eight)|(Nine))( Skills?)? of (?<skills>.+) at (?<rank>(Untrained)|(Novice)|(Adept)|(Expert)|(Master)|(Virtuoso))( Rank)?( or higher)?/i;
 
 const FEAT_WITH_SUB_RE = /(?<main>.+)( \((?<sub>.+)\)?(?<cr> \[CR\])?)/i;
+const N_FEATS_FROM_LIST_RE = /(?<n>([0-9]+)|(A)|(One)|(Two)|(Three)|(Four)|(Five)|(Six)|(Seven)|(Eight)|(Nine)) of (?<features>.+)?/i;
 const COMPENDIUM_ITEM_RE = /Compendium\.([\w\.]+).Item.[a-zA-Z0-9]+/;
 
 const LEVEL_RE = /Level (?<lv>[0-9]+)/i
@@ -19,6 +20,7 @@ const LEVEL_RE = /Level (?<lv>[0-9]+)/i
 function parseIntA(s) {
     let i = parseInt(s);
     if (!Number.isNaN(i)) return i;
+    if (s.toLowerCase() == "a") return 1;
     i = ["zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine"].indexOf(s.toLowerCase());
     if (i >= 0) return i;
     return Number.NaN;
@@ -531,9 +533,25 @@ export class NpcQuickBuildData {
     async randomizePartyPokemon(slot) {
         // randomize level
         const pkmnLevel = Math.min(100, Math.max(1, Math.round((this.trainer.level * 2) * NpcQuickBuildData.normalDistribution(1.0, 0.1))));
-        console.log(`generated pkmn level ${pkmnLevel} for ${this.trainer.level}`);
+        
         // randomize species
-        const validSpeciesToGenerate = [];
+        // currently this is weighted towards species with more evolutions...
+        // but it's really really slow to try to avoid that problem
+        let speciesOption = chooseFrom(this.multiselects.species.options);
+        let species = (await fromUuid(speciesOption.value)).toObject();
+        let evolutionChain = species.system.evolutions;
+        
+        // make sure we're at the right evolution level
+        speciesOption = evolutionChain.filter(ev=>ev.level <= pkmnLevel).sort(ev=>-ev.level).map(ev=>({
+            label: ev.slug[0].toUpperCase() + ev.slug.slice(1),
+            value: ev.uuid,
+        }))?.[0];
+        species = (await fromUuid(speciesOption.value)).toObject();
+
+        this.party[slot].species.selected = [speciesOption];
+        this.party[slot].level.value = pkmnLevel;
+
+        // console.log(validSpeciesToGenerate);
     }
 
 
@@ -622,6 +640,30 @@ export class NpcQuickBuildData {
             RETURN.subOption = null;
         }
 
+        // check if it's "any X of list" features
+        const nFeaturesOf = textPrereq.match(N_FEATS_FROM_LIST_RE)
+        if (nFeaturesOf) {
+            const n = parseIntA(nFeaturesOf.groups.n || "100");
+            const items = nFeaturesOf.groups.features.split(/ or /gi).map(name=>{
+                for (const bucket of ["classes", "features", "edges"]) {
+                    const result = this.multiselects[bucket]?.options?.find(compareLabel(name))
+                    if (result) return name;
+                }
+                return null;
+            });
+            if (n && items.filter(item=>item == null).length == 0) {
+                if (items.filter(name=>allComputed.find(compareName(name)) != null).length >= n) {
+                    RETURN.met = true;
+                    return RETURN;
+                }
+                RETURN.met = false;
+                return RETURN;
+            }
+        }
+
+        //
+        // Check for skills & variations
+        //
 
         const getSkill = function (t) {
             // TODO: do better, act right :(
@@ -698,7 +740,8 @@ export class NpcQuickBuildData {
                     RETURN.met = true;
                     return RETURN;
                 }
-                sr = skillRank;
+                if (unknown) console.log("UNKNOWN", term, { level, allComputed, skillsComputed, previousSkillRank: sr })
+                sr = skillRank ?? sr;
                 RETURN.unknown ||= unknown; 
             }
             if (!RETURN.unknown) return RETURN;
@@ -832,10 +875,6 @@ export class NpcQuickBuildData {
                 edgesComputed.push(x);
                 allComputed.push(x);
             });
-            allNewEdges.forEach(x => {
-                edgesComputed.push(x);
-                allComputed.push(x);
-            });
             Object.entries(allNewSkills).forEach(([k, v]) => {
                 skillsMinimum[k] = Math.max(skillsMinimum[k] ?? 1, v ?? 1);
                 if (skillsComputed[k] ?? 0 < v) skillsComputed[k] = v;
@@ -844,10 +883,10 @@ export class NpcQuickBuildData {
                 if (!allSuboptions.includes(x)) allSuboptions.push(x);
             });
             allNewUnmet.forEach(x => {
-                allUnmet.push(x);
+                if (!allUnmet.includes(x)) allUnmet.push(x);
             });
             allNewUnknown.forEach(x => {
-                allUnknown.push(x);
+                if (!allUnknown.includes(x)) allUnknown.push(x);
             });
         }
 
@@ -998,7 +1037,7 @@ export class NpcQuickBuildData {
         }
 
         console.log(this);
-        await unlock();
+        unlock();
     }
 
     async finalize() {

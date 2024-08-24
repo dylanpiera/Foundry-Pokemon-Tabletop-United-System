@@ -103,7 +103,10 @@
                 <div class="party-pokemon {{key}}" data-slot="{{key}}">
                     <img src="{{pkmn.species.img}}" data-edit="party.{{key}}.species.img" />
 
-                    <div>{{pkmn.species.name}}</div>
+                    <div>
+                        <label>{{localize "PTU.NpcQuickBuild.Nickname"}}</label>
+                        <input type="text" name="party.{{key}}.nickname" placeholder="{{pkmn.species.name}}" value="{{pkmn.nickname}}"/>
+                    </div>
 
                     <div>
                         <label>{{localize "PTU.NpcQuickBuild.Level"}}</label>
@@ -127,11 +130,8 @@
                 </div>
             {{else}}
                 <div class="party-pokemon {{key}} species-unset" data-slot="{{key}}"></div>
-                    <p>{{localize "PTU.NpcQuickBuild.DropSpecies"}}</p>
-                    <div>
-                        <label>{{localize "PTU.NpcQuickBuild.SpeciesName"}}</label>
-                        <input class="ptu-tagify pokemon-species" name="party.{{key}}.species.selected" data-filter-name="species" value="{{json pkmn.species.selected}}" data-dtype="JSON" />
-                    </div>
+                    <label>{{localize "PTU.NpcQuickBuild.SpeciesName"}}</label>
+                    <input class="ptu-tagify pokemon-species" name="party.{{key}}.species.selected" data-filter-name="species" value="{{json pkmn.species.selected}}" data-dtype="JSON" />
                 </div>
             {{/if}}
             {{/each}}
@@ -147,7 +147,7 @@
     {{/if}}
 
     <div class="d-flex flex-row justify-content-center mt-auto mb-2">
-        {{#if (gt data.page 1)}}
+        {{!-- {{#if (gt data.page 1)}}
         <input type="button" class="prev-page" value="{{localize "PTU.NpcQuickBuild.Prev"}}"/>
         {{/if}}
 
@@ -159,6 +159,11 @@
             {{/if}}
         {{else}}
         <input type="button" class="next-page" autofocus value="{{localize "PTU.NpcQuickBuild.Next"}}"/>
-        {{/if}}
+        {{/if}} --}}
+        <input type="button" class="page" data-page="1" {{#if (eq data.page 1)}}disabled{{/if}} value="{{localize "PTU.NpcQuickBuild.Page.TrainerInfo"}}"/>
+        <input type="button" class="page" data-page="2" {{#if (eq data.page 2)}}disabled{{/if}} value="{{localize "PTU.NpcQuickBuild.Page.FeaturesEdges"}}"/>
+        <input type="button" class="page" data-page="3" {{#if (eq data.page 3)}}disabled{{/if}} value="{{localize "PTU.NpcQuickBuild.Page.SkillsStats"}}"/>
+        <input type="button" class="page" data-page="4" {{#if (eq data.page 4)}}disabled{{/if}} value="{{localize "PTU.NpcQuickBuild.Page.Party"}}"/>
+        <input type="submit" {{#if data.ready}}autofocus{{else}}disabled{{/if}} value="{{localize "PTU.NpcQuickBuild.Submit"}}"/>
     </div>
 </form>

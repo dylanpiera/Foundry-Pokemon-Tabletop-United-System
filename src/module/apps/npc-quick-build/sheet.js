@@ -63,18 +63,18 @@ export class PTUNpcQuickBuild extends FormApplication {
         super.activateListeners($html);
 
         // next/prev page listeners
-        $html.find('.next-page').on('click', (event) => {
+        $html.find('.page').on('click', (event) => {
             event.preventDefault();
             event.target.disabled = true;
-            this.data.page = parseInt($html.get(0)?.dataset?.page || "0") + 1;
+            this.data.page = parseInt(event?.target?.dataset?.page ?? this.data.page);
             this.render(true);
         });
-        $html.find('.prev-page').on('click', (event) => {
-            event.preventDefault();
-            event.target.disabled = true;
-            this.data.page = parseInt($html.get(0)?.dataset?.page || "2") - 1;
-            this.render(true);
-        });
+        // $html.find('.prev-page').on('click', (event) => {
+        //     event.preventDefault();
+        //     event.target.disabled = true;
+        //     this.data.page = parseInt($html.get(0)?.dataset?.page || "2") - 1;
+        //     this.render(true);
+        // });
 
         for (const multiselect of $html.find('.ptu-tagify[data-filter-name]')) {
             // await tagify(element);
