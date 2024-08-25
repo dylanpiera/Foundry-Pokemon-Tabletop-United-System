@@ -99,35 +99,51 @@
                         <label class="skill-name">{{localize skill.label}}</label>
                         <label class="skill-rank">{{localize skill.valueLabel}}</label>
                         {{!-- These are just icons. The real buttons come later --}}
-                        {{#if skill.prevRank}}<span class="skill-prev-rank"><i class="fa-solid fa-minus"></i></span>{{/if}}
-                        {{#if skill.nextRank}}<span class="skill-next-rank disabled"><i class="fa-solid fa-plus"></i></span>{{/if}}
+                        {{#if skill.prevRank includeZero=true}}<span class="skill-prev-rank"><i class="fa-solid fa-minus"></i></span>{{/if}}
+                        {{#if skill.nextRank includeZero=true}}<span class="skill-next-rank"><i class="fa-solid fa-plus"></i></span>{{/if}}
                         
                         {{!-- These get turned into shaders, and are the "real" buttons --}}
-                        {{#if skill.prevRank}}
+                        {{#if skill.prevRank includeZero=true}}
                             <a class="skill-prev-rank-clickarea button-set" data-value="{{skill.prevRank}}" data-path="trainer.skills.{{key}}.value" data-dtype="Number"></a>
                         {{else}}
                             <span class="skill-prev-rank-clickarea disabled"></span>
                         {{/if}}
-                        {{#if skill.nextRank}}
+                        {{#if skill.nextRank includeZero=true}}
                             <a class="skill-next-rank-clickarea button-set" data-value="{{skill.nextRank}}" data-path="trainer.skills.{{key}}.value" data-dtype="Number"></a>
                         {{else}}
                             <span class="skill-next-rank-clickarea disabled"></span>
                         {{/if}}
-                        {{!-- <input type="number" name="trainer.skills.{{key}}.value" min="{{skill.min}}" max="{{skill.max}}" value="{{skill.value}}"/> --}}
                     </div>
                 {{/each}}
                 </div>
+                <p class="skill-points-remaining">{{localize "PTU.NpcQuickBuild.ApproximatePointsRemaining" points=data.skillPointsRemaining}}</p>
             </div>
             <div class="stats-box">
                 <h4>{{localize "PTU.NpcQuickBuild.Stats"}}</h4>
                 <div class="stats">
                 {{#each data.trainer.stats as | stat key |}}
-                    <div class="stat">
-                        <label>{{localize stat.label}}</label>
-                        <input type="number" name="trainer.stats.{{key}}.value" min="{{stat.min}}" max="{{stat.max}}" value="{{stat.value}}"/>
+                    <div class="stat stat-{{stat.ranking}}">
+                        <label class="stat-name">{{localize stat.label}}</label>
+                        <input type="number" class="stat-value" name="trainer.stats.{{key}}.value" min="{{stat.min}}" max="{{stat.max}}" value="{{stat.value}}"/>
+                        {{!-- These are just icons. The real buttons come later --}}
+                        {{#if stat.prev includeZero=true}}<span class="stat-prev"><i class="fa-solid fa-minus"></i></span>{{/if}}
+                        {{#if stat.next includeZero=true}}<span class="stat-next"><i class="fa-solid fa-plus"></i></span>{{/if}}
+
+                        {{!-- These get turned into shaders, and are the "real" buttons --}}
+                        {{#if stat.prev includeZero=true}}
+                            <a class="stat-prev-clickarea button-set" data-value="{{stat.prev}}" data-path="trainer.stats.{{key}}.value" data-dtype="Number"></a>
+                        {{else}}
+                            <span class="stat-prev-clickarea disabled"></span>
+                        {{/if}}
+                        {{#if stat.next includeZero=true}}
+                            <a class="stat-next-clickarea button-set" data-value="{{stat.next}}" data-path="trainer.stats.{{key}}.value" data-dtype="Number"></a>
+                        {{else}}
+                            <span class="stat-next-clickarea disabled"></span>
+                        {{/if}}
                     </div>
                 {{/each}}
                 </div>
+                <p class="stat-points-remaining">{{localize "PTU.NpcQuickBuild.ApproximatePointsRemaining" points=data.statPointsRemaining}}</p>
             </div>
         {{/if}}
 

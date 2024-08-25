@@ -2591,9 +2591,14 @@ a.content-link {
             .warnings {
                 text-align: center;
                 max-height: 60px;
+                transition: max-height 1s ease-in-out;
                 overflow-y: auto;
                 scrollbar-width: thin;
                 scrollbar-color: var(--color-scrollbar) var(--color-scrollbar-track);
+            }
+            &:hover .warnings {
+                max-height: 150px;
+                transition-delay: 500ms;
             }
         }
 
@@ -2604,7 +2609,8 @@ a.content-link {
             gap: 0.2em 2em;
         }
 
-        .skills-box .skills {
+        .skills-box .skills,
+        .stats-box .stats {
             display: grid;
             grid-template-columns: 1fr 1fr;
             column-gap: 4em;
@@ -2614,7 +2620,8 @@ a.content-link {
             margin-left: 1em;
             margin-right: 1em;
 
-            .skill {
+            .skill,
+            .stat {
                 display: grid;
                 grid-template-columns: 2em 1fr 2em;
                 grid-template-rows: 1fr 1fr;
@@ -2626,7 +2633,8 @@ a.content-link {
                 position: relative;
 
                 // set up click areas
-                .skill-prev-rank-clickarea {
+                .skill-prev-rank-clickarea,
+                .stat-prev-clickarea {
                     position: absolute;
                     top: 0;
                     left: 0;
@@ -2646,7 +2654,8 @@ a.content-link {
                     }
                     
                 }
-                .skill-next-rank-clickarea {
+                .skill-next-rank-clickarea,
+                .stat-next-clickarea {
                     position: absolute;
                     top: 0;
                     right: 0;
@@ -2664,81 +2673,106 @@ a.content-link {
                     text-align: center;
                 }
 
-                .skill-prev-rank {
+                .skill-prev-rank,
+                .stat-prev {
                     grid-column: 1;
                     grid-row: 1 / 3;
                 }
-                .skill-next-rank {
+                .skill-next-rank,
+                .stat-next {
                     grid-column: 3;
                     grid-row: 1 / 3;
                 }
-                .skill-name {
+                .skill-name,
+                .stat-name {
                     grid-column: 2;
                     grid-row: 1;
                 }
-                .skill-rank {
+                .skill-rank,
+                .stat-value {
                     grid-column: 2;
                     grid-row: 2;
                 }
 
-                &.skill-pathetic {
-                    background-color: var(--skillBkgColor--pathetic);
-                    color: var(--skillFgColor--pathetic);
-                }
-
-                &.skill-untrained {
-                    background-color: var(--skillBkgColor--untrained);
-                    color: var(--skillFgColor--untrained);
-                }
-
-                &.skill-novice {
-                    background-color: var(--skillBkgColor--novice);
-                    color: var(--skillFgColor--novice);
-                }
-
-                &.skill-adept {
-                    background-color: var(--skillBkgColor--adept);
-                    color: var(--skillFgColor--adept);
-                }
-
-                &.skill-expert {
-                    background-color: var(--skillBkgColor--expert);
-                    color: var(--skillFgColor--expert);
-                }
-
-                &.skill-master {
-                    background-color: var(--skillBkgColor--master);
-                    color: var(--skillFgColor--master);
-                }
-
-                &.skill-virtuoso {
-                    background-color: var(--skillBkgColor--virtuoso);
-                    color: var(--skillFgColor--virtuoso);
-                }
-
-                &.skill-invalid {
-                    background-color: var(--skillBkgColor--invalid);
-                    color: var(--skillFgColor--invalid);
+                input {
+                    background: unset;
+                    border: unset;
+                    &:hover {
+                        border: 1px solid gray;
+                        padding: 0px 2px; // 1 less than their default
+                    }
                 }
             }
+
+            .skill-points-remaining,
+            .stat-points-remaining {
+                text-align: center;
+                font-style: italic;
+            }
         }
-        .stats-box .stats {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            column-gap: 4em;
 
-            .stat {
-                display: flex;
-                gap: 1em;
+        .skills-box .skills .skill {
+            &.skill-pathetic {
+                background-color: var(--skillBkgColor--pathetic);
+                color: var(--skillFgColor--pathetic);
+            }
 
-                label {
-                    flex: 1;
-                    text-align: right;
-                }
-                input {
-                    width: 4em;
-                    flex: none;
-                }
+            &.skill-untrained {
+                background-color: var(--skillBkgColor--untrained);
+                color: var(--skillFgColor--untrained);
+            }
+
+            &.skill-novice {
+                background-color: var(--skillBkgColor--novice);
+                color: var(--skillFgColor--novice);
+            }
+
+            &.skill-adept {
+                background-color: var(--skillBkgColor--adept);
+                color: var(--skillFgColor--adept);
+            }
+
+            &.skill-expert {
+                background-color: var(--skillBkgColor--expert);
+                color: var(--skillFgColor--expert);
+            }
+
+            &.skill-master {
+                background-color: var(--skillBkgColor--master);
+                color: var(--skillFgColor--master);
+            }
+
+            &.skill-virtuoso {
+                background-color: var(--skillBkgColor--virtuoso);
+                color: var(--skillFgColor--virtuoso);
+            }
+
+            &.skill-invalid {
+                background-color: var(--skillBkgColor--invalid);
+                color: var(--skillFgColor--invalid);
+            }
+        }
+
+        .stats-box .stats .stat {
+            &.stat-pathetic {
+                background-color: #990000;
+                color: white;
+            }
+            &.stat-low {
+                background-color: #e08a8a;
+                color: black;
+            }
+            &.stat-average {
+                background-color: #d6d6d6;
+                color: black;
+            }
+            &.stat-high {
+                background-color: #85ca7e;
+                color: black;
+            }
+            &.stat-extreme {
+                background-color: #19850d;
+                color: white;
             }
         }
 
@@ -2829,7 +2863,7 @@ a.content-link {
                         &.gender-Male {
                             i {
                                 color: #046dda;
-                                text-shadow: 2px 2px #70baff;
+                                text-shadow: 1px 1px #70baff;
                             }
                             select,
                             div {
@@ -2842,7 +2876,7 @@ a.content-link {
                         &.gender-Female {
                             i {
                                 color: #ee2617;
-                                text-shadow: 2px 2px #ff9ca7;
+                                text-shadow: 1px 1px #ff9ca7;
                             }
                             select,
                             div {

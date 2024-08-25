@@ -48,7 +48,16 @@ function chooseFrom(list) {
 }
 
 function average(list) {
-    return list.reduce((a,b)=>a+b, 0) / list.length;
+    return list.reduce((a,x)=>a+x, 0) / list.length;
+}
+
+function statistics(list) {
+    const avg = average(list);
+    const stdDev = Math.sqrt(list.reduce((a,x)=>Math.pow(x - avg, 2) + a, 0) / list.length)
+    return {
+        avg,
+        stdDev
+    }
 }
 
 function shuffle(list) {
@@ -107,6 +116,9 @@ export class NpcQuickBuildData {
                 value: 0,
                 min: 0,
                 max: 10 + ((this.trainer.level - 1) * 2),
+                ranking: "average",
+                prev: null,
+                next: 1,
             }
         }
 
@@ -313,8 +325,7 @@ export class NpcQuickBuildData {
         await this.randomizeSubOptions();
 
         await this.randomizeSkills();
-        
-        // TODO
+        await this.randomizeStats();
 
         for (let s = 1; s <= 6; s++) {
             const slot = `slot${s}`;
@@ -516,6 +527,31 @@ export class NpcQuickBuildData {
         return limit;
     }
 
+    get maxSkillPoints() {
+        // you start with a number of points equal to the number of skills * 2
+        // every even level you gain an edge
+        // level 1, start with 4 edges
+        // level 2, gain +1
+        // level 6, gain +1
+        // level 12, gain +1
+        const baseSP = (CONFIG.PTU.data.skills.keys.length * 2) + Math.floor(this.trainer.level / 2) + 4;
+        if (this.trainer.level >= 12) return baseSP + 3;
+        if (this.trainer.level >= 6) return baseSP + 2;
+        if (this.trainer.level >= 2) return baseSP + 1;
+        return baseSP;
+    }
+
+    get skillPointsRemaining() {
+        const maxPoints = this.maxSkillPoints;
+        let pointsRemaining = maxPoints;
+        for (const slug of CONFIG.PTU.data.skills.keys) {
+            pointsRemaining -= this.trainer.skills[slug]?.value ?? 1;
+        }
+        // subtracts 1 for each edge
+        pointsRemaining -= this.trainer.edges.computed.length;
+        return pointsRemaining;
+    }
+
     async randomizeSkills() {
         const noUpdate = new Set(this.manuallyUpdatedFields); // make sure the set doesn't change under us
 
@@ -524,25 +560,18 @@ export class NpcQuickBuildData {
             const skill = this.trainer.skills[slug];
 
             if (!noUpdate.has(`trainer.skills.${slug}.value`)) {
-                pointsUsed += skill.min - 1;
+                pointsUsed += skill.min;
             } else {
-                pointsUsed += skill.value - 1;
+                pointsUsed += skill.value;
             }
         }
         // each edge also subtracts from the number of skill advancements possible
-        pointsUsed += this.trainer.edges.selected.length;
+        pointsUsed += this.trainer.edges.computed.length;
 
         // maximum points per skill by level
         const limit = this.skillLimit;
 
-        // you start with a number of points equal to the number of skills
-        // every even level you gain an edge
-        // level 2, gain +1
-        // level 6, gain +1
-        // level 12, gain +1
-
-        let maxPoints = CONFIG.PTU.data.skills.keys.length + Math.floor(this.trainer.level / 2);
-
+        const maxPoints = this.maxSkillPoints;
         const modifiableSkills = CONFIG.PTU.data.skills.keys.filter(slug=>!noUpdate.has(`trainer.skills.${slug}.value`));
         // unspend all points
         for (const slug of modifiableSkills) {
@@ -565,7 +594,58 @@ export class NpcQuickBuildData {
         }
     }
 
+    get maxStatPoints() {
+        return 10 + ((this.trainer.level - 1) * 2);
+    }
+
+    get statPointsRemaining() {
+        const totalStatPoints = this.maxStatPoints;
+        let remainingStatPoints = totalStatPoints;
+        for (const stat of Object.values(this.trainer.stats)) {
+            remainingStatPoints -= stat.value ?? 0;
+        }
+        return remainingStatPoints;
+    }
+
     async randomizeStats() {
+        // ensure the stat distribution is at least semi-even
+
+        const noUpdate = new Set(this.manuallyUpdatedFields); // make sure the set doesn't change under us
+
+        const statKeys = CONFIG.PTU.data.stats.keys;
+        const totalStatPoints = this.maxStatPoints;
+        const basicAmount = Math.floor(totalStatPoints / (statKeys.length * 1.2));
+        let remainingPoints = totalStatPoints;
+        for (const slug of statKeys) {
+            const stat = this.trainer.stats[slug];
+
+            if (!noUpdate.has(`trainer.stats.${slug}.value`)) {
+                remainingPoints -= Math.max(stat.min, basicAmount);
+            } else {
+                remainingPoints -= stat.value;
+            }
+        }
+
+        const modifiableStats = statKeys.filter(slug=>!noUpdate.has(`trainer.stats.${slug}.value`));
+
+        for (const slug of shuffle(modifiableStats)) {
+            const stat = this.trainer.stats[slug];
+            
+            // allow a stat to "steal" points from up to 2 other stats
+            stat.max = totalStatPoints;
+            stat.value = Math.max(stat.min, Math.min(stat.max, basicAmount + Math.floor(Math.random() * Math.min(basicAmount, remainingPoints)), remainingPoints));
+            remainingPoints -= stat.value - Math.max(stat.min, basicAmount);
+        }
+
+        // put the remaining points on a random non-maxed stat
+        while (remainingPoints > 0) {
+            const validStatsToIncrease = modifiableStats.map(slug=>this.trainer.stats[slug]).filter(s=>s.value < s.max);
+            if (validStatsToIncrease.length == 0) break;
+            const stat = chooseFrom(validStatsToIncrease);
+            const delta = Math.min(stat.max - stat.value, remainingPoints);
+            stat.value += delta;
+            remainingPoints -= delta;
+        }
 
     }
 
@@ -1064,6 +1144,27 @@ export class NpcQuickBuildData {
             skill.nextRank = skill.value < skill.max ? skill.value + 1 : null;
         }
         this.trainer.skills = newSkills;
+
+        // update stat ranks
+        const newStats = foundry.utils.deepClone(this.trainer.stats);
+        const statArray = [];
+        for (const stat of Object.values(newStats)) {
+            stat.max = this.maxStatPoints;
+            stat.prev = stat.value > stat.min ? stat.value - 1 : null;
+            stat.next = stat.value < stat.max ? stat.value + 1 : null;
+            statArray.push(stat.value);
+        }
+        // set relative rankings
+        const statStats = statistics(statArray);
+        const rankings = ["pathetic", "low", "average", "high", "extreme"];
+        for (const stat of Object.values(newStats)) {
+            // find out how many deviations from the mean we are
+            const statDev = (stat.value - statStats.avg) / statStats.stdDev;
+            const idx = Math.min(Math.max(Math.round(statDev + ((rankings.length - 1) / 2)), 0), rankings.length - 1);
+            stat.ranking = rankings[idx];
+        }
+        this.trainer.stats = newStats;
+
 
 
         // check if any pokemon have been newly configured

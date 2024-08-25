@@ -528,6 +528,7 @@
         "SkillsStats": "Skills & Stats",
         "Party": "Party Pokemon"
       },
+      "ApproximatePointsRemaining": "Approximate Points Remaining: {points}",
       "Next": "Next",
       "Submit": "Submit"
     },
