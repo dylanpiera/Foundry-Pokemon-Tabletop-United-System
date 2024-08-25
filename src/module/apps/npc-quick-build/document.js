@@ -154,7 +154,7 @@ export class NpcQuickBuildData {
 
         this.multiselects = {
             sex: {
-                options: ["PTU.Male", "PTU.Female", "PTU.Nonbinary"].map(x=>game.i18n.format(x)).map(x=>({ label: x, value: x})),
+                options: ["Male", "Female", "Nonbinary"].map(x=>({ label: x, value: x})),
                 maxTags: 1,
             },
             classes: {
@@ -329,13 +329,15 @@ export class NpcQuickBuildData {
         await this.refresh();
     }
 
-    async randomizeName() {
-        this.trainer.name = chooseFrom(["Alex", "Beth", "Carmen", "Dylan", "Emma", "Felix", "Gertrude", "Harold", "Indara"]);
+    async randomizeSex() {
+        this.trainer.sex = [chooseFrom(["Male", "Female"].map(x=>({ label: x, value: x})))];
+        if (Math.random() * 400 <= 3) this.trainer.sex = [chooseFrom(this.multiselects.sex.options)];
     }
 
-    async randomizeSex() {
-        this.trainer.sex = [chooseFrom(["PTU.Male", "PTU.Female"].map(x=>game.i18n.format(x)).map(x=>({ label: x, value: x})))];
-        if (Math.random() * 400 <= 3) this.trainer.sex = [chooseFrom(this.multiselects.sex.options)];
+    async randomizeName() {
+        const randomNamesBins = CONFIG.PTU.data.randomNames;
+        const nameBin = randomNamesBins[this.trainer.sex] ?? randomNamesBins[chooseFrom(Object.keys(randomNamesBins))];
+        this.trainer.name = chooseFrom(nameBin);
     }
 
     static normalDistribution(mean, std_dev) {

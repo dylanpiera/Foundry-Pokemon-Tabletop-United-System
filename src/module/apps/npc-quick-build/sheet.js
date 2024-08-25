@@ -82,12 +82,10 @@ export class PTUNpcQuickBuild extends FormApplication {
 
         $html.find('.button-set[data-path][data-value][data-dtype="Number"]').on('click', function (event) {
             event.preventDefault();
-            console.log("hit listener!")
             // if (event.target.disabled) return;
             // event.target.disabled = true;
             const dataset = this?.dataset;
             globalThis.data.setProperty(dataset?.path, parseInt(dataset?.value));
-            console.log("set property!", dataset?.path, parseInt(dataset?.value), this);
             globalThis.render(true);
 
         });

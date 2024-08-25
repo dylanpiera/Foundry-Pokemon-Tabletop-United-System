@@ -89,6 +89,11 @@ const data = {
   helpText,
   tmData,
   alliances: ["party", "opposition", "neutral"],
+  randomNames: {
+    "Male": ["Liam", "Noah", "Oliver", "James", "Elijah", "Mateo", "Theodore", "Henry", "Lucas", "William", "Benjamin", "Levi", "Sebastian", "Jack", "Ezra", "Michael", "Daniel", "Leo", "Owen", "Samuel", "Hudson", "Alexander", "Asher", "Luca", "Ethan", "John", "David", "Jackson", "Joseph", "Mason"],
+    "Female": ["Olivia", "Emma", "Charlotte", "Amelia", "Sophia", "Mia", "Isabella", "Ava", "Evelyn", "Luna", "Harper", "Sofia", "Camila", "Eleanor", "Elizabeth", "Violet", "Scarlett", "Emily", "Hazel", "Lily", "Gianna", "Aurora", "Penelope", "Aria", "Nora", "Chloe", "Ellie", "Mila", "Avery", "Layla"],
+    "Nonbinary": ["Noah", "James", "Evelyn", "Harper", "Michael", "Logan", "Avery", "Madison", "Riley", "Jayden", "Ainsley", "Arden", "Dakota", "Finley", "Hayden", "Lennox", "Lindsey", "Robin", "Rowan", "Sloan", "Alexis", "Angel", "Briar", "Kirby", "Madhu", "Marley", "Morgan", "River", "Skyler", "Taylor"],
+  }
 }
 
 const ui = {
