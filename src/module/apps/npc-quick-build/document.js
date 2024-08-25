@@ -336,7 +336,7 @@ export class NpcQuickBuildData {
 
     async randomizeName() {
         const randomNamesBins = CONFIG.PTU.data.randomNames;
-        const nameBin = randomNamesBins[this.trainer.sex] ?? randomNamesBins[chooseFrom(Object.keys(randomNamesBins))];
+        const nameBin = randomNamesBins[this.trainer.sex?.[0]?.value] ?? randomNamesBins[chooseFrom(Object.keys(randomNamesBins))];
         this.trainer.name = chooseFrom(nameBin);
     }
 
