@@ -517,14 +517,18 @@
       "Stats": "Stats",
       "PartyPkmn": "Party Pokemon",
       "Level": "Level",
+      "Lv": "Lv.",
       "Gender": "Gender",
       "Sex": "Sex",
       "Shiny": "Shiny",
       "SpeciesName": "Species",
-      "Page.TrainerInfo": "Trainer Info",
-      "Page.FeaturesEdges": "Features & Edges",
-      "Page.SkillsStats": "Skills & Stats",
-      "Page.Party": "Party Pokemon",
+      "Page": {
+        "TrainerInfo": "Trainer Info",
+        "FeaturesEdges": "Features & Edges",
+        "SkillsStats": "Skills & Stats",
+        "Party": "Party Pokemon"
+      },
+      "Next": "Next",
       "Submit": "Submit"
     },
 

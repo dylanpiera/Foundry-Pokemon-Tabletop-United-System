@@ -557,15 +557,64 @@ export class NpcQuickBuildData {
         }))?.[0];
         species = (await fromUuid(speciesOption.value)) ?? species;
 
-        this.party[slot].species.selected = [speciesOption];
-        this.party[slot].species.object = species;
-        this.party[slot].species.name = species.name;
-        this.party[slot].species.uuid = speciesOption.value;
         this.party[slot].level.value = pkmnLevel;
+        await this.configurePokemonSpecies(slot, { species, uuid: speciesOption.value });
 
-        this.party[slot].configured = true;
 
         // console.log(validSpeciesToGenerate);
+    }
+
+
+    async configurePokemonSpecies(slot, { species, uuid }) {
+        const pkmn = this.party[slot];
+
+        if (!species && !uuid) return;
+        // get the pokemon species
+        if (!species) {
+            species = await fromUuid(uuid);
+        }
+
+        pkmn.species.uuid = uuid;
+        pkmn.species.object = species;
+        pkmn.species.name = species.name;
+        // set available genders
+        const genders = [];
+        const genderRatio = species.system.breeding.genderRatio;
+        if (genderRatio == -1) {
+            genders.push({
+                label: "PTU.Genderless",
+                value: "Genderless"
+            });
+        }
+        if (genderRatio >= 0 && genderRatio < 100) {
+            genders.push({
+                label: "PTU.Male",
+                value: "Male"
+            });
+        }
+        if (genderRatio > 0 && genderRatio <= 100) {
+            genders.push({
+                label: "PTU.Female",
+                value: "Female"
+            });
+        }
+        if (!genders.find(g => g.value == pkmn.species.gender.selected)) {
+            if (genderRatio == -1) {
+                pkmn.species.gender.selected = "Genderless";
+            } else {
+                pkmn.species.gender.selected = Math.random() * 100 < genderRatio ? "Male" : "Female";
+            }
+        }
+        pkmn.species.gender.options = genders;
+        pkmn.species.gender.choosable = genders.length > 1;
+
+        // get minimum level for this evolution
+        pkmn.level.min = species.system.evolutions.find(e => e.slug == species.system.slug)?.level ?? 1;
+        if (pkmn.level.value < pkmn.level.min) {
+            pkmn.level.value = pkmn.level.min;
+        }
+
+        this.party[slot].configured = true;
     }
 
 
@@ -995,56 +1044,14 @@ export class NpcQuickBuildData {
 
         // check if any pokemon have been newly configured
         for (const slot of Object.keys(this.party)) {
-            const pkmn = foundry.utils.deepClone(this.party[slot]);
-            if (!pkmn.configured) {
+            if (!this.party[slot].configured) {
                 // get the uuid of the pokemon
-                const uuid = pkmn?.species?.uuid || pkmn?.species?.selected?.at(0)?.value;
+                const uuid = this.party[slot]?.species?.uuid || this.party[slot]?.species?.selected?.at(0)?.value;
                 if (!uuid) continue;
-
-                pkmn.species.uuid = uuid;
-                // get the pokemon species
-                const species = await fromUuid(uuid);
-                pkmn.species.object = species;
-                pkmn.species.name = species.name;
-                // set available genders
-                const genders = [];
-                const genderRatio = species.system.breeding.genderRatio;
-                if (genderRatio == -1) {
-                    genders.push({
-                        label: "PTU.Genderless",
-                        value: "Genderless"
-                    });
-                }
-                if (genderRatio >= 0 && genderRatio < 100) {
-                    genders.push({
-                        label: "PTU.Male",
-                        value: "Male"
-                    });
-                }
-                if (genderRatio > 0 && genderRatio <= 100) {
-                    genders.push({
-                        label: "PTU.Female",
-                        value: "Female"
-                    });
-                }
-                if (!genders.find(g => g.value == pkmn.species.gender.selected)) {
-                    if (genderRatio == -1) {
-                        pkmn.species.gender.selected = "Genderless";
-                    } else {
-                        pkmn.species.gender.selected = Math.random() * 100 < genderRatio ? "Male" : "Female";
-                    }
-                }
-                pkmn.species.gender.options = genders;
-                pkmn.species.gender.choosable = genders.length > 1;
-
-                // get minimum level for this evolution
-                pkmn.level.min = species.system.evolutions.find(e => e.slug == species.system.slug)?.level ?? 1;
-                if (pkmn.level.value < pkmn.level.min) {
-                    pkmn.level.value = pkmn.level.min;
-                }
-
-                this.party[slot].configured = true;
+                await this.configurePokemonSpecies(slot, { uuid });
             };
+            const pkmn = foundry.utils.deepClone(this.party[slot]);
+            if (!pkmn?.species?.object) continue;
             // get image
             const img = await PokemonGenerator.getImage(pkmn.species.object, {
                 gender: pkmn.species.gender.selected,
@@ -1076,6 +1083,7 @@ export class NpcQuickBuildData {
             type: "Actor",
             parent: null,
             folder: mainFolder._id,
+            sorting: "m",
         });
 
         // build the NPC
@@ -1214,6 +1222,6 @@ export class NpcQuickBuildData {
     }
 
     get ready() {
-        return true;
+        return this.page == 4;
     }
 }

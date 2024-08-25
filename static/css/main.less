@@ -2533,7 +2533,7 @@ a.content-link {
     }
     
     // NPC Quick Build
-    &.npc-quick-build {
+    &.npc-quick-build .window-content {
 
         @pokeballRed: #ee1515;
         @pokeballWhite: #f0f0f0;
@@ -2556,128 +2556,331 @@ a.content-link {
             padding: 0.5em;
             padding-bottom: 0.2em;
         }
-
-        .skills-box {
-            h4 {
-                text-align: center;
-                font-weight: bold;
+        .footer-controls {
+            display: flex;
+            flex-direction: row;
+            justify-content: flex-end;
+            margin-top: 1em;
+            
+            [type="button"] {
+                padding-left: 1em;
+                padding-right: 1em;
+                padding-top: 0.3em;
+                padding-bottom: 0.3em;
             }
+        }
 
-            .skills {
+        h4 {
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .warning-box {
+            border: 2px dashed rgba(255, 136, 0, 0.5);
+            background-color: rgba(255, 136, 0, 0.2);
+            border-radius: 20px;
+            position: relative;
+            top: -0.7em;
+            padding: 0.2em 1em;
+
+            .warning-title {
+                font-size: large;
+                color: orangered;
+                text-shadow: 1px 1px orange;
+            }
+            .warnings {
+                text-align: center;
+                max-height: 60px;
+                overflow-y: auto;
+                scrollbar-width: thin;
+                scrollbar-color: var(--color-scrollbar) var(--color-scrollbar-track);
+            }
+        }
+
+        .trainer-info {
+            display: grid;
+            grid-template-columns: max-content 1fr;
+            grid-template-rows: 1fr 1fr 1fr 1fr 1fr;
+            align-items: baseline;
+            gap: 0.2em 2em;
+        }
+
+        .skills-box .skills {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            column-gap: 4em;
+            row-gap: 0.2em;
+            justify-items: stretch;
+            align-items: stretch;
+            margin-left: 1em;
+            margin-right: 1em;
+
+            .skill {
+                display: grid;
+                grid-template-columns: 2em 1fr 2em;
+                grid-template-rows: 1fr 1fr;
+                justify-items: center;
+                align-items: center;
+
+                @skillBorderRadius: 0.4em;
+                border-radius: @skillBorderRadius;
+                position: relative;
+
+                // set up click areas
+                .skill-prev-rank-clickarea {
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    width: 40%;
+                    height: 100%;
+                    border-top-left-radius: @skillBorderRadius;
+                    border-bottom-left-radius: @skillBorderRadius;
+                    &:not(.disabled) {
+                        background: linear-gradient(90deg, rgba(255, 255, 255, .15) 0%, rgba(255, 255, 255, 0) 100%);
+                        &:hover {
+                            background: linear-gradient(90deg, rgba(120, 120, 120, .25) 0%, rgba(120, 120, 120, 0) 100%);
+                        }
+                    }
+                    &.disabled:hover{
+                        background: linear-gradient(90deg, rgba(120, 60, 60, .25) 0%, rgba(120, 60, 60, 0) 100%);
+                        cursor: not-allowed;
+                    }
+                    
+                }
+                .skill-next-rank-clickarea {
+                    position: absolute;
+                    top: 0;
+                    right: 0;
+                    width: 40%;
+                    height: 100%;
+                    border-top-right-radius: @skillBorderRadius;
+                    border-bottom-right-radius: @skillBorderRadius;
+                    background: linear-gradient(270deg, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0) 100%);
+                    &:hover {
+                        background: linear-gradient(270deg, rgba(120, 120, 120, .25) 0%, rgba(120, 120, 120, 0) 100%);
+                    }
+                }
+
+                * {
+                    text-align: center;
+                }
+
+                .skill-prev-rank {
+                    grid-column: 1;
+                    grid-row: 1 / 3;
+                }
+                .skill-next-rank {
+                    grid-column: 3;
+                    grid-row: 1 / 3;
+                }
+                .skill-name {
+                    grid-column: 2;
+                    grid-row: 1;
+                }
+                .skill-rank {
+                    grid-column: 2;
+                    grid-row: 2;
+                }
+
+                &.skill-pathetic {
+                    background-color: var(--skillBkgColor--pathetic);
+                    color: var(--skillFgColor--pathetic);
+                }
+
+                &.skill-untrained {
+                    background-color: var(--skillBkgColor--untrained);
+                    color: var(--skillFgColor--untrained);
+                }
+
+                &.skill-novice {
+                    background-color: var(--skillBkgColor--novice);
+                    color: var(--skillFgColor--novice);
+                }
+
+                &.skill-adept {
+                    background-color: var(--skillBkgColor--adept);
+                    color: var(--skillFgColor--adept);
+                }
+
+                &.skill-expert {
+                    background-color: var(--skillBkgColor--expert);
+                    color: var(--skillFgColor--expert);
+                }
+
+                &.skill-master {
+                    background-color: var(--skillBkgColor--master);
+                    color: var(--skillFgColor--master);
+                }
+
+                &.skill-virtuoso {
+                    background-color: var(--skillBkgColor--virtuoso);
+                    color: var(--skillFgColor--virtuoso);
+                }
+
+                &.skill-invalid {
+                    background-color: var(--skillBkgColor--invalid);
+                    color: var(--skillFgColor--invalid);
+                }
+            }
+        }
+        .stats-box .stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            column-gap: 4em;
+
+            .stat {
+                display: flex;
+                gap: 1em;
+
+                label {
+                    flex: 1;
+                    text-align: right;
+                }
+                input {
+                    width: 4em;
+                    flex: none;
+                }
+            }
+        }
+
+
+        .pokemon-box {
+            .all-party-pokemon {
                 display: grid;
                 grid-template-columns: 1fr 1fr;
-                column-gap: 4em;
-                row-gap: 0.2em;
-                justify-items: stretch;
-                align-items: stretch;
-                margin-left: 1em;
-                margin-right: 1em;
+                gap: 0.5em;
+                padding-bottom: 15px;
 
-                .skill {
-                    display: grid;
-                    grid-template-columns: 2em 1fr 2em;
-                    grid-template-rows: 1fr 1fr;
-                    justify-items: center;
-                    align-items: center;
-
-                    @skillBorderRadius: 0.4em;
-                    border-radius: @skillBorderRadius;
+                .party-pokemon {
                     position: relative;
+                    display: grid;
+                    grid-template-columns: 70px 1fr 2fr 1fr;
+                    grid-template-rows: 35px 35px 25px;
+                    align-items: center;
+                    justify-items: center;
 
-                    // set up click areas
-                    .skill-prev-rank-clickarea {
-                        position: absolute;
-                        top: 0;
-                        left: 0;
-                        width: 40%;
-                        height: 100%;
-                        border-top-left-radius: @skillBorderRadius;
-                        border-bottom-left-radius: @skillBorderRadius;
-                        &:not(.disabled) {
-                            background: linear-gradient(90deg, rgba(255, 255, 255, .15) 0%, rgba(255, 255, 255, 0) 100%);
-                            &:hover {
-                                background: linear-gradient(90deg, rgba(120, 120, 120, .25) 0%, rgba(120, 120, 120, 0) 100%);
-                            }
-                        }
-                        &.disabled:hover{
-                            background: linear-gradient(90deg, rgba(120, 60, 60, .25) 0%, rgba(120, 60, 60, 0) 100%);
-                            cursor: not-allowed;
-                        }
-                        
+                    &:nth-child(even) {
+                        top: 15px;
                     }
-                    .skill-next-rank-clickarea {
-                        position: absolute;
-                        top: 0;
-                        right: 0;
-                        width: 40%;
-                        height: 100%;
-                        border-top-right-radius: @skillBorderRadius;
-                        border-bottom-right-radius: @skillBorderRadius;
-                        background: linear-gradient(270deg, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0) 100%);
+
+                    background: linear-gradient(180deg, rgba(0,104,32,1) 0%, rgba(0,104,32,1) 48%, rgba(4,126,36,1) 49%, rgba(4,126,36,1) 51%, rgba(0,129,47,1) 52%, rgba(0,144,56,1) 100%);
+                    border-radius: 10px;
+                    border-top-left-radius: 50px;
+                    border: 3px solid #6bd771;
+
+                    color: white;
+                    text-shadow: 2px 2px black;
+                    font-size: large;
+
+                    // affect all inputs
+                    input {
+                        color: white;
+                        text-shadow: 2px 2px black;
+                        background: unset;
+                        border: unset;
+                        &::placeholder {
+                            color: white;
+                            text-shadow: 2px 2px black;
+                            opacity: 1; /* for Firefox */
+                        }
                         &:hover {
-                            background: linear-gradient(270deg, rgba(120, 120, 120, .25) 0%, rgba(120, 120, 120, 0) 100%);
+                            border: 1px solid gray;
+                            padding: 0px 2px; // 1 less than their default
                         }
                     }
 
-                    * {
-                        text-align: center;
-                    }
-
-                    .skill-prev-rank {
-                        grid-column: 1;
-                        grid-row: 1 / 3;
-                    }
-                    .skill-next-rank {
-                        grid-column: 3;
-                        grid-row: 1 / 3;
-                    }
-                    .skill-name {
-                        grid-column: 2;
-                        grid-row: 1;
-                    }
-                    .skill-rank {
-                        grid-column: 2;
+                    .pokemon-species {
+                        grid-column: 1 / 5;
                         grid-row: 2;
                     }
 
-                    &.skill-pathetic {
-                        background-color: var(--skillBkgColor--pathetic);
-                        color: var(--skillFgColor--pathetic);
+                    .pokemon-img {
+                        grid-column: 1;
+                        grid-row: 1 / 3;
+                        padding-left: 5px;
+                        padding-top: 5px;
+                        border: unset;
                     }
-
-                    &.skill-untrained {
-                        background-color: var(--skillBkgColor--untrained);
-                        color: var(--skillFgColor--untrained);
+                    
+                    .pokemon-name {
+                        grid-column: 2 / 4;
+                        grid-row: 1;
+                        display: flex;
+                        font-size: larger;
+                        label {
+                            display: none;
+                        }
                     }
+                    
+                    .pokemon-gender {
+                        grid-column: 4;
+                        grid-row: 1;
+                        font-size: medium;
+                        display: flex;
+                        justify-content: flex-end;
+                        align-items: baseline;
+                        
+                        label {
+                            display: none;
+                        }
+                        &.gender-Genderless {
+                            display: none;
+                        }
 
-                    &.skill-novice {
-                        background-color: var(--skillBkgColor--novice);
-                        color: var(--skillFgColor--novice);
+                        &.gender-Male {
+                            i {
+                                color: #046dda;
+                                text-shadow: 2px 2px #70baff;
+                            }
+                            select,
+                            div {
+                                display: none
+                            }
+                            &:hover select {
+                                display: inline-block;
+                            }
+                        }
+                        &.gender-Female {
+                            i {
+                                color: #ee2617;
+                                text-shadow: 2px 2px #ff9ca7;
+                            }
+                            select,
+                            div {
+                                display: none
+                            }
+                            &:hover select {
+                                display: inline-block;
+                            }
+                        }
                     }
+                    
+                    .pokemon-level {
+                        grid-column: 1;
+                        grid-row: 3;
+                        display: flex;
+                        align-items: baseline;
 
-                    &.skill-adept {
-                        background-color: var(--skillBkgColor--adept);
-                        color: var(--skillFgColor--adept);
+                        padding-left: 5px;
                     }
+                    
+                    .pokemon-shiny {
+                        grid-column: 2;
+                        grid-row: 2 / 4;
+                        justify-self: left;
+                        align-self: start;
+                        padding-left: 5px;
+                        padding-top: 5px;
 
-                    &.skill-expert {
-                        background-color: var(--skillBkgColor--expert);
-                        color: var(--skillFgColor--expert);
-                    }
+                        display: flex;
 
-                    &.skill-master {
-                        background-color: var(--skillBkgColor--master);
-                        color: var(--skillFgColor--master);
-                    }
-
-                    &.skill-virtuoso {
-                        background-color: var(--skillBkgColor--virtuoso);
-                        color: var(--skillFgColor--virtuoso);
-                    }
-
-                    &.skill-invalid {
-                        background-color: var(--skillBkgColor--invalid);
-                        color: var(--skillFgColor--invalid);
+                        input {
+                            display: none;
+                        }
+                        opacity: 0.2;
+                        &.checked {
+                            opacity: 1;
+                        }
                     }
                 }
             }
@@ -2734,13 +2937,6 @@ a.content-link {
                         opacity: 0.6;
                     }
                 }
-            }
-        }
-
-        .party-pokemon {
-            img {
-                width: 60px;
-                height: 60px;
             }
         }
 

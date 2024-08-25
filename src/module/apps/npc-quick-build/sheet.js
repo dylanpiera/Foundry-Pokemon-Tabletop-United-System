@@ -72,6 +72,13 @@ export class PTUNpcQuickBuild extends FormApplication {
             globalThis.data.page = parseInt(event?.target?.dataset?.page ?? globalThis.data.page);
             globalThis.render(true);
         });
+        $html.find('.next-page').on('click', (event) => {
+            event.preventDefault();
+            if (event.target.disabled) return;
+            event.target.disabled = true;
+            globalThis.data.page = parseInt($html.get(0)?.dataset?.page || "0") + 1;
+            globalThis.render(true);
+        });
 
         $html.find('.button-set[data-path][data-value][data-dtype="Number"]').on('click', function (event) {
             event.preventDefault();
@@ -84,12 +91,6 @@ export class PTUNpcQuickBuild extends FormApplication {
             globalThis.render(true);
 
         });
-        // $html.find('.prev-page').on('click', (event) => {
-        //     event.preventDefault();
-        //     event.target.disabled = true;
-        //     this.data.page = parseInt($html.get(0)?.dataset?.page || "2") - 1;
-        //     this.render(true);
-        // });
 
         for (const multiselect of $html.find('.ptu-tagify[data-filter-name]')) {
             // await tagify(element);
@@ -158,7 +159,7 @@ export class PTUNpcQuickBuild extends FormApplication {
         //     this.render(true);
         // });
 
-        $html.find("input[type='submit']").on("click", (event) => {
+        $html.find("input.submit[type='button']").on("click", (event) => {
             event.preventDefault();
             if (this.data.ready) {
                 this.loading().then(()=>this.close({ properClose: true }));
@@ -231,6 +232,8 @@ export class PTUNpcQuickBuild extends FormApplication {
             const loadingWheel = document.createElement("div");
             loadingWheel.classList.add("load-wheel");
             loadingScreen.appendChild(loadingWheel);
+            loadingScreen.style["min-width"] = `${form.offsetWidth}px`;
+            loadingScreen.style["min-height"] = `${form.offsetHeight}px`;
 
             form.replaceWith(loadingScreen);
         }
