@@ -2120,7 +2120,6 @@ a.content-link img {
 .ptu.pokemon.npc-quick-build .window-content .trainer-info {
   display: grid;
   grid-template-columns: max-content 1fr;
-  grid-template-rows: 1fr 1fr 1fr 1fr 1fr;
   align-items: baseline;
   gap: 0.2em 2em;
 }

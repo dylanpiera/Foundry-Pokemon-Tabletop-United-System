@@ -288,8 +288,6 @@ export class NpcQuickBuildData {
         if (force) this.manuallyUpdatedFields = new Set();
         const noUpdate = new Set(this.manuallyUpdatedFields); // make sure the set doesn't change under us
 
-        console.log(noUpdate);
-
         // remove classes, features, and edges if they've not been manually set.
         if (!noUpdate.has("trainer.classes.selected")) this.trainer.classes.selected = [];
         if (!noUpdate.has("trainer.features.selected")) this.trainer.features.selected = [];
@@ -312,6 +310,7 @@ export class NpcQuickBuildData {
         if (!noUpdate.has("trainer.classes.selected")) await this.randomizeClass();
         if (!noUpdate.has("trainer.features.selected")) await this.randomizeFeatures();
         if (!noUpdate.has("trainer.edges.selected")) await this.randomizeEdges();
+        await this.randomizeSubOptions();
 
         await this.randomizeSkills();
         
@@ -478,6 +477,35 @@ export class NpcQuickBuildData {
         await this.refresh()
     }
 
+    async randomizeSubOptions() {
+        const selectionsByUuid = {};
+
+        const subSelectables = foundry.utils.deepClone(this.trainer.subSelectables);
+        const subSelectablesArray = Object.values(subSelectables);
+        for (let i = 0; i < subSelectablesArray.length; i++) {
+            const subSelectable = subSelectablesArray[i];    
+            if (subSelectable.visible) {
+                subSelectable.selected = chooseFrom(subSelectable.choices.filter(c=>!c.disabled))?.value ?? null;
+            }
+
+            selectionsByUuid[subSelectable.uuid] ??= new Set();
+            selectionsByUuid[subSelectable.uuid].add(subSelectable.selected);
+
+            // disable shared items that are already selected
+            for (let j = i + 1; j < subSelectablesArray.length; j++) {
+                const nextSubSelectable = subSelectablesArray[j];
+                if (!nextSubSelectable.visible) continue;
+                if (nextSubSelectable.uuid != subSelectable.uuid) continue;
+
+                nextSubSelectable.choices = nextSubSelectable.choices.map(c => ({
+                    ...c,
+                    disabled: !(c.value == nextSubSelectable.selected || !selectionsByUuid[nextSubSelectable.uuid].has(c.value)),
+                }));
+            }
+        }
+        this.trainer.subSelectables = subSelectables;
+    };
+
     get skillLimit() {
         let limit = 3;
         if (this.trainer.level >= 12) limit = 6;
@@ -559,9 +587,6 @@ export class NpcQuickBuildData {
 
         this.party[slot].level.value = pkmnLevel;
         await this.configurePokemonSpecies(slot, { species, uuid: speciesOption.value });
-
-
-        // console.log(validSpeciesToGenerate);
     }
 
 
@@ -798,17 +823,14 @@ export class NpcQuickBuildData {
             for (const term of terms) {
                 const { met, skillRank, unknown } = await this.checkTextPrereq(term, { level, allComputed, skillsComputed, previousSkillRank: sr });
                 if (met) {
-                    console.log("MET", originalPrereq, textPrereq, RETURN);
                     RETURN.unknown = false;
                     RETURN.met = true;
                     return RETURN;
                 }
-                if (unknown) console.log("UNKNOWN", term, { level, allComputed, skillsComputed, previousSkillRank: sr })
                 sr = skillRank ?? sr;
                 RETURN.unknown ||= unknown; 
             }
             if (!RETURN.unknown) return RETURN;
-            console.log("UNMET", originalPrereq, textPrereq, RETURN);
         }
 
         // we can't figure out what this is, return
@@ -1063,7 +1085,6 @@ export class NpcQuickBuildData {
             this.party[slot] = pkmn;
         }
 
-        console.log(this);
         unlock();
     }
 
@@ -1216,8 +1237,9 @@ export class NpcQuickBuildData {
             monActorsToGenerate.push(actorData);
         }
         if (monActorsToGenerate) {
-            const createdActors = await CONFIG.PTU.Actor.documentClasses.pokemon.createDocuments(monActorsToGenerate);
-
+            await CONFIG.PTU.Actor.documentClasses.pokemon.createDocuments(monActorsToGenerate).catch((err)=>{
+                ui.notifications.error("Error creating party Pokemon, some automations may not function properly; view console error log for details");
+            });
         }
     }
 
