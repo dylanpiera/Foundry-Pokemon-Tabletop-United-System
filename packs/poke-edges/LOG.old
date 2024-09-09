@@ -1,7 +1,5 @@
-2024/06/12-18:17:51.669 18d4 Recovering log #1060
-2024/06/12-18:17:51.674 18d4 Delete type=0 #1060
-2024/06/12-18:17:51.674 18d4 Delete type=3 #1058
-2024/06/13-10:10:52.984 8e94 Level-0 table #1065: started
-2024/06/13-10:10:52.984 8e94 Level-0 table #1065: 0 bytes OK
-2024/06/13-10:10:52.986 8e94 Delete type=0 #1063
-2024/06/13-10:10:52.989 8e94 Manual compaction at level-0 from '!folders!GxOcRgTdTg3A1OUR' @ 72057594037927935 : 1 .. '!items!ybZJ0nAa5nVWBokc' @ 0 : 0; will stop at (end)
+2024/09/09-10:51:52.307 6ed0 Log #1088: 0 ops saved to Table #1089 OK
+2024/09/09-10:51:52.307 6ed0 Archiving C:\Users\dylan\AppData\Local\FoundryVTT\Data\systems\ptu\packs\poke-edges/001088.log: OK
+2024/09/09-10:51:52.307 6ed0 Table #1053: 41 entries OK
+2024/09/09-10:51:52.310 6ed0 Archiving C:\Users\dylan\AppData\Local\FoundryVTT\Data\systems\ptu\packs\poke-edges/MANIFEST-001086: OK
+2024/09/09-10:51:52.314 6ed0 **** Repaired leveldb C:\Users\dylan\AppData\Local\FoundryVTT\Data\systems\ptu\packs\poke-edges; recovered 1 files; 20616 bytes. Some data may have been lost. ****

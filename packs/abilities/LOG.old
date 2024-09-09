@@ -1,7 +1,5 @@
-2024/06/12-18:17:51.584 8dc4 Recovering log #1083
-2024/06/12-18:17:51.589 8dc4 Delete type=0 #1083
-2024/06/12-18:17:51.589 8dc4 Delete type=3 #1081
-2024/06/13-10:10:52.970 8e94 Level-0 table #1088: started
-2024/06/13-10:10:52.970 8e94 Level-0 table #1088: 0 bytes OK
-2024/06/13-10:10:52.971 8e94 Delete type=0 #1086
-2024/06/13-10:10:52.972 8e94 Manual compaction at level-0 from '!folders!MsdL8dYgE7JbY1ya' @ 72057594037927935 : 1 .. '!items!ztjoTjB46kPDTEfV' @ 0 : 0; will stop at (end)
+2024/09/09-10:51:52.112 2e0c Log #1112: 0 ops saved to Table #1113 OK
+2024/09/09-10:51:52.113 2e0c Archiving C:\Users\dylan\AppData\Local\FoundryVTT\Data\systems\ptu\packs\abilities/001112.log: OK
+2024/09/09-10:51:52.115 2e0c Table #1093: 634 entries OK
+2024/09/09-10:51:52.119 2e0c Archiving C:\Users\dylan\AppData\Local\FoundryVTT\Data\systems\ptu\packs\abilities/MANIFEST-001110: OK
+2024/09/09-10:51:52.124 2e0c **** Repaired leveldb C:\Users\dylan\AppData\Local\FoundryVTT\Data\systems\ptu\packs\abilities; recovered 1 files; 263434 bytes. Some data may have been lost. ****

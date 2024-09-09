@@ -1,8 +1,5 @@
-2024/06/12-18:17:51.776 57a8 Recovering log #712
-2024/06/12-18:17:51.781 57a8 Delete type=0 #712
-2024/06/12-18:17:51.781 57a8 Delete type=3 #710
-2024/06/13-10:10:53.001 8e94 Level-0 table #717: started
-2024/06/13-10:10:53.001 8e94 Level-0 table #717: 0 bytes OK
-2024/06/13-10:10:53.004 8e94 Delete type=0 #715
-2024/06/13-10:10:53.032 8e94 Manual compaction at level-0 from '!folders!DIBPjL86EbMDaAMi' @ 72057594037927935 : 1 .. '!items!zW8DWXGrCPQAtxWZ' @ 0 : 0; will stop at (end)
-2024/06/13-10:10:53.032 8e94 Manual compaction at level-1 from '!folders!DIBPjL86EbMDaAMi' @ 72057594037927935 : 1 .. '!items!zW8DWXGrCPQAtxWZ' @ 0 : 0; will stop at (end)
+2024/09/09-10:51:52.553 48f0 Log #740: 0 ops saved to Table #741 OK
+2024/09/09-10:51:52.554 48f0 Archiving C:\Users\dylan\AppData\Local\FoundryVTT\Data\systems\ptu\packs\spirit-actions/000740.log: OK
+2024/09/09-10:51:52.554 48f0 Table #705: 42 entries OK
+2024/09/09-10:51:52.557 48f0 Archiving C:\Users\dylan\AppData\Local\FoundryVTT\Data\systems\ptu\packs\spirit-actions/MANIFEST-000738: OK
+2024/09/09-10:51:52.562 48f0 **** Repaired leveldb C:\Users\dylan\AppData\Local\FoundryVTT\Data\systems\ptu\packs\spirit-actions; recovered 1 files; 12685 bytes. Some data may have been lost. ****

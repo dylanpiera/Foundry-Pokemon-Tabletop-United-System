@@ -1,17 +1,12 @@
-2024/09/09-10:28:35.276 2e0c Recovering log #1109
-2024/09/09-10:28:35.281 2e0c Delete type=0 #1109
-2024/09/09-10:28:35.281 2e0c Delete type=3 #1107
-2024/09/09-10:34:41.940 4c24 Level-0 table #1114: started
-2024/09/09-10:34:41.942 4c24 Level-0 table #1114: 1300 bytes OK
-2024/09/09-10:34:41.944 4c24 Delete type=0 #1093
-2024/09/09-10:34:41.944 4c24 Delete type=0 #1112
-2024/09/09-10:34:41.944 4c24 Delete type=3 #1091
-2024/09/09-10:34:41.945 4c24 Manual compaction at level-0 from '!folders!0TZD9QPsChqsbVo7' @ 72057594037927935 : 1 .. '!items!znvgEviVbL2WnCGJ' @ 0 : 0; will stop at (end)
-2024/09/09-10:34:41.945 4c24 Manual compaction at level-1 from '!folders!0TZD9QPsChqsbVo7' @ 72057594037927935 : 1 .. '!items!znvgEviVbL2WnCGJ' @ 0 : 0; will stop at '!items!8sWNt84GAXcgtwjC' @ 4883 : 1
-2024/09/09-10:34:41.946 4c24 Compacting 1@1 + 1@2 files
-2024/09/09-10:34:41.957 4c24 Generated table #1115@1: 673 keys, 410838 bytes
-2024/09/09-10:34:41.957 4c24 Compacted 1@1 + 1@2 files => 410838 bytes
-2024/09/09-10:34:41.960 4c24 compacted to: files[ 0 0 1 0 0 0 0 ]
-2024/09/09-10:34:41.960 4c24 Delete type=2 #1078
-2024/09/09-10:34:41.960 4c24 Delete type=2 #1114
-2024/09/09-10:34:41.970 4c24 Manual compaction at level-1 from '!items!8sWNt84GAXcgtwjC' @ 4883 : 1 .. '!items!znvgEviVbL2WnCGJ' @ 0 : 0; will stop at (end)
+2024/09/09-10:51:52.398 48f0 Delete type=3 #1
+2024/09/09-11:01:52.898 4c24 Level-0 table #1120: started
+2024/09/09-11:01:52.900 4c24 Level-0 table #1120: 1300 bytes OK
+2024/09/09-11:01:52.902 4c24 Delete type=0 #1118
+2024/09/09-11:01:52.922 4c24 Manual compaction at level-0 from '!folders!0TZD9QPsChqsbVo7' @ 72057594037927935 : 1 .. '!items!znvgEviVbL2WnCGJ' @ 0 : 0; will stop at '!items!6ugXmtsjIsaGbtRS' @ 4884 : 1
+2024/09/09-11:01:52.922 4c24 Compacting 2@0 + 0@1 files
+2024/09/09-11:01:52.932 4c24 Generated table #1121@0: 673 keys, 410847 bytes
+2024/09/09-11:01:52.932 4c24 Compacted 2@0 + 0@1 files => 410847 bytes
+2024/09/09-11:01:52.934 4c24 compacted to: files[ 0 1 0 0 0 0 0 ]
+2024/09/09-11:01:52.934 4c24 Delete type=2 #1115
+2024/09/09-11:01:52.935 4c24 Delete type=2 #1120
+2024/09/09-11:01:52.935 4c24 Manual compaction at level-0 from '!items!6ugXmtsjIsaGbtRS' @ 4884 : 1 .. '!items!znvgEviVbL2WnCGJ' @ 0 : 0; will stop at (end)

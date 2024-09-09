@@ -1,8 +1,5 @@
-2024/06/12-18:17:51.693 18d4 Recovering log #428
-2024/06/12-18:17:51.697 18d4 Delete type=0 #428
-2024/06/12-18:17:51.697 18d4 Delete type=3 #426
-2024/06/13-10:10:52.986 8e94 Level-0 table #433: started
-2024/06/13-10:10:52.986 8e94 Level-0 table #433: 0 bytes OK
-2024/06/13-10:10:52.987 8e94 Delete type=0 #431
-2024/06/13-10:10:52.989 8e94 Manual compaction at level-0 from '!folders!2QGVmITcIgGCeRtD' @ 72057594037927935 : 1 .. '!tables.results!wdOETkq5aY7M7hJg.rSBY0YfY0tm73sIu' @ 0 : 0; will stop at (end)
-2024/06/13-10:10:52.990 8e94 Manual compaction at level-1 from '!folders!2QGVmITcIgGCeRtD' @ 72057594037927935 : 1 .. '!tables.results!wdOETkq5aY7M7hJg.rSBY0YfY0tm73sIu' @ 0 : 0; will stop at (end)
+2024/09/09-10:51:52.356 48f0 Log #456: 0 ops saved to Table #457 OK
+2024/09/09-10:51:52.357 48f0 Archiving C:\Users\dylan\AppData\Local\FoundryVTT\Data\systems\ptu\packs\rolltables/000456.log: OK
+2024/09/09-10:51:52.358 48f0 Table #421: 604 entries OK
+2024/09/09-10:51:52.361 48f0 Archiving C:\Users\dylan\AppData\Local\FoundryVTT\Data\systems\ptu\packs\rolltables/MANIFEST-000454: OK
+2024/09/09-10:51:52.364 48f0 **** Repaired leveldb C:\Users\dylan\AppData\Local\FoundryVTT\Data\systems\ptu\packs\rolltables; recovered 1 files; 73911 bytes. Some data may have been lost. ****
