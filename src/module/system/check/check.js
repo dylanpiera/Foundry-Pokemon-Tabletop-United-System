@@ -163,7 +163,7 @@ class PTUDiceCheck {
         
         const skipDialog  = skipDialogArg ?? eventToRollParams(this.event).skipDialog;
 
-        const rollMode = rollModeArg ?? this.options.has("secret") ? (game.user.isGM ? "gmroll" : "blindroll") : "roll";
+        const rollMode = rollModeArg ?? (this.options.has("secret") ? (game.user.isGM ? "gmroll" : "blindroll") : "roll");
 
         const dialogContext = await (async () => {
             if (skipDialog) return {
