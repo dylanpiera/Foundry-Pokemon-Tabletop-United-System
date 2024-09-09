@@ -156,7 +156,7 @@ export class CheckDialog extends Application {
         const rollModeInput = $html.find("select[name=rollmode]")[0];
         rollModeInput?.addEventListener("change", () => {
             const rollMode = rollModeInput.value;
-            if (!tupleHasValue(Object.values(CONST.DICE_ROLL_MODES), rollMode)) {
+            if (!Object.values(CONST.DICE_ROLL_MODES).includes(rollMode)) {
                 throw Error("Unexpected roll mode");
             }
             this.rollMode = rollMode;
@@ -292,7 +292,7 @@ export class CheckModifiersDialog extends Application {
         const rollModeInput = $html.find("select[name=rollmode]")[0];
         rollModeInput?.addEventListener("change", () => {
             const rollMode = rollModeInput.value;
-            if (!tupleHasValue(Object.values(CONST.DICE_ROLL_MODES), rollMode)) {
+            if (!Object.values(CONST.DICE_ROLL_MODES).includes(rollMode)) {
                 throw Error("Unexpected roll mode");
             }
             this.context.rollMode = rollMode;

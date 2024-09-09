@@ -795,15 +795,9 @@
                     <div class="swsh-box mb-2 w-100">
                         <div class="d-flex flexrow align-items-center">
                             <b class="ball-themes {{ballStyle}} highlight pt-3 pb-3 fb-48 center-text">{{localize "PTU.Contests.Type"}}</b>
-                            {{#select actor.system.contests.type}}
                             <select name="system.contests.type" class="ml-2 mr-2 fb-40">
-                                <option value="cool">Cool</option>
-                                <option value="tough">Tough</option>
-                                <option value="beauty">Beauty</option>
-                                <option value="smart">Smart</option>
-                                <option value="cute">Cute</option>
+                                {{selectOptions config.contestTypes selected=actor.system.contests.type localize=true}}
                             </select>
-                            {{/select}}
                         </div>
                     </div>
                     <div class="swsh-box mb-2 w-100">
@@ -1109,34 +1103,22 @@
                         </div>
                         <div class="swsh-body mt-1 mb-1">
                             <div class="fb-33 center-text">
-                                {{#select actor.system.background.pathetic.one}}
-                                    <select name="system.background.pathetic.one">
-                                        <option value="blank">{{localize "PTU.SelectNone"}}</option>
-                                        {{#each skills as | skill key |}}
-                                            <option value="{{key}}">{{skill.label}}</option>
-                                        {{/each}}
-                                    </select>
-                                {{/select}}
+                                <select name="system.background.pathetic.one">
+                                    <option value="blank">{{localize "PTU.SelectNone"}}</option>
+                                    {{selectOptions skills selected=actor.system.background.pathetic.one valueAttr="slug"}}
+                                </select>
                             </div>
                             <div class="fb-33 center-text">
-                                {{#select actor.system.background.pathetic.two}}
-                                    <select name="system.background.pathetic.two">
-                                        <option value="blank">{{localize "PTU.SelectNone"}}</option>
-                                        {{#each skills as | skill key |}}
-                                            <option value="{{key}}">{{skill.label}}</option>
-                                        {{/each}}
-                                    </select>
-                                {{/select}}
+                                <select name="system.background.pathetic.two">
+                                    <option value="blank">{{localize "PTU.SelectNone"}}</option>
+                                    {{selectOptions skills selected=actor.system.background.pathetic.two valueAttr="slug"}}
+                                </select>
                             </div>
                             <div class="fb-33 center-text">
-                                {{#select actor.system.background.pathetic.three}}
-                                    <select name="system.background.pathetic.three">
-                                        <option value="blank">{{localize "PTU.SelectNone"}}</option>
-                                        {{#each skills as | skill key |}}
-                                            <option value="{{key}}">{{skill.label}}</option>
-                                        {{/each}}
-                                    </select>
-                                {{/select}}
+                                <select name="system.background.pathetic.three">
+                                    <option value="blank">{{localize "PTU.SelectNone"}}</option>
+                                    {{selectOptions skills selected=actor.system.background.pathetic.three valueAttr="slug"}}
+                                </select>
                             </div>
                         </div>
                         <div class="swsh-header ball-themes {{ballStyle}} highlight pt-2 pb-2 center-text justify-content-between">
@@ -1149,24 +1131,16 @@
                         </div>
                         <div class="swsh-body mt-1 mb-1">
                             <div class="fb-50 center-text">
-                                {{#select actor.system.background.novice}}
-                                    <select name="system.background.novice">
-                                        <option value="blank">{{localize "PTU.SelectNone"}}</option>
-                                        {{#each skills as | skill key |}}
-                                            <option value="{{key}}">{{skill.label}}</option>
-                                        {{/each}}
-                                    </select>
-                                {{/select}}
+                                <select name="system.background.novice">
+                                    <option value="blank">{{localize "PTU.SelectNone"}}</option>
+                                    {{selectOptions skills selected=actor.system.background.novice valueAttr="slug"}}
+                                </select>
                             </div>
                             <div class="fb-50 center-text">
-                                {{#select actor.system.background.adept}}
-                                    <select name="system.background.adept">
-                                        <option value="blank">{{localize "PTU.SelectNone"}}</option>
-                                        {{#each skills as | skill key |}}
-                                            <option value="{{key}}">{{skill.label}}</option>
-                                        {{/each}}
-                                    </select>
-                                {{/select}}
+                                <select name="system.background.adept">
+                                    <option value="blank">{{localize "PTU.SelectNone"}}</option>
+                                    {{selectOptions skills selected=actor.system.background.adept valueAttr="slug"}}
+                                </select>
                             </div>
                         </div>
                     </div>

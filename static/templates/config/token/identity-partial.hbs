@@ -16,12 +16,8 @@
     <div class="form-group">
         <label>{{localize "TOKEN.CharActor"}}</label>
         <select class="actor-template" name="actorId">
-            {{#select object.actorId}}
             <option value="">{{ localize "None" }}</option>
-            {{#each actors}}
-            <option value="{{this._id}}">{{this.name}}</option>
-            {{/each}}
-            {{/select}}
+            {{selectOptions actors selected=object.actorId valueAttr="_id" labelAttr="name"}}
         </select>
     </div>
     {{/unless}}

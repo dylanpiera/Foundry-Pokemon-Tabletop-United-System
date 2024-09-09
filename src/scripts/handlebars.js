@@ -1,4 +1,5 @@
 import { pokeballStyles, pokeballShapes } from "./config/data/pokeball-themes.js";
+import { capitalize, formatSlug } from "../util/misc.js";
 
 export function registerHandlebarsHelpers() {
     _registerBasicHelpers();
@@ -346,32 +347,6 @@ function _registerBasicHelpers() {
 
     Handlebars.registerHelper("capitalizeFirst", (e) => { return "string" != typeof e ? e : e.charAt(0).toUpperCase() + e.slice(1) });
 
-    const capitalize = function (input) {
-        if(!!input == false) return "";
-        var i, j, str, lowers, uppers;
-        str = input.replace(/([^\W_]+[^\s-]*) */g, function (txt) {
-            return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
-        });
-
-        // Certain minor words should be left lowercase unless 
-        // they are the first or last words in the string
-        lowers = ['A', 'An', 'The', 'And', 'But', 'Or', 'For', 'Nor', 'As', 'At',
-            'By', 'For', 'From', 'In', 'Into', 'Near', 'Of', 'On', 'Onto', 'To', 'With'];
-        for (i = 0, j = lowers.length; i < j; i++)
-            str = str.replace(new RegExp('\\s' + lowers[i] + '\\s', 'g'),
-                function (txt) {
-                    return txt.toLowerCase();
-                });
-
-        // Certain words such as initialisms or acronyms should be left uppercase
-        uppers = ['Id', 'Tv'];
-        for (i = 0, j = uppers.length; i < j; i++)
-            str = str.replace(new RegExp('\\b' + uppers[i] + '\\b', 'g'),
-                uppers[i].toUpperCase());
-
-        return str;
-    }
-
     Handlebars.registerHelper("capitalize", capitalize);
 
     Handlebars.registerHelper("formatLocalize", (key, value) => ({
@@ -380,9 +355,7 @@ function _registerBasicHelpers() {
         }
     }));
 
-    Handlebars.registerHelper("formatSlug", (slug) => {
-        return capitalize(slug).replaceAll('-', ' ');
-    });
+    Handlebars.registerHelper("formatSlug", formatSlug);
 
     Handlebars.registerHelper("isdefined", function (value) {
         return value !== undefined;

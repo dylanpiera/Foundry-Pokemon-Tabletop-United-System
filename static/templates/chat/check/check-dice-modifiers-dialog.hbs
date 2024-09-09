@@ -64,11 +64,7 @@
         <div class="roll-mode-panel d-flex flex-row align-items-center justify-content-between">
             <span class="label fb-30">{{localize "PTU.RollModeLabel"}}</span>
             <select class="fb-50" name="rollmode">
-                {{#select rollMode}}
-                    {{#each rollModes as |label key|}}
-                        <option value="{{key}}">{{localize label}}</option>
-                    {{/each}}
-                {{/select}}
+                {{selectOptions rollModes selected=rollMode localize=true}}
             </select>
         </div>
         <hr/>

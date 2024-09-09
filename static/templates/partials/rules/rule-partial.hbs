@@ -54,11 +54,7 @@
     {{/each}}
     <div class="create-rule-element">
         <select data-action="select-rule-element">
-            {{#select rules.selection.selected}}
-                {{#each rules.selection.types as |value key|}}
-                    <option value="{{key}}">{{localize value}}</option>
-                {{/each}}
-            {{/select}}
+            {{selectOptions rules.selection.types selected=rules.selection.selected localize=true}}
         </select>
         <a class="add-rule-element"><i class="fas fa-plus"></i> {{localize "ITEM.AddRulesButton"}}</a>
     </div>

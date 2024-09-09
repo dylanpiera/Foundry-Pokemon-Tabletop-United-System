@@ -220,6 +220,13 @@
     "MoveAc": "AC",
     "MoveRange": "Range",
     "MoveEffect": "Effect",
+    "Move": {
+      "Category": {
+        "Status":"Status",
+        "Physical":"Physical",
+        "Special":"Special"
+      }
+    },
 
     "CapabilityNaturewalk": "Naturewalk",
     "CapabilityOther": "Other Capabilities",
@@ -356,6 +363,14 @@
     "SearchButtonHint": "<div class='toolclip'><h4>PTR Search</h4><p>Search the PTR Data Source for information</p></div>",
     "WeatherButtonName": "Weather & Global Effects Menu",
     "WeatherButtonHint": "<div class='toolclip'><h4>Weather & Global Effects Menu</h4><p>Set and edit ongoing weather or other global effects!</p></div>",
+    "Weather": {
+      "Mode": {
+        "Off": "Off",
+        "Players": "Players",
+        "Opposition": "Opposition",
+        "All": "All"
+      }
+    },
 
     "AutomationTarget.TARGET": "Target",
     "AutomationTarget.MOVE": "Move",
@@ -462,6 +477,7 @@
     "Genderless": "Genderless",
     "Male": "Male",
     "Female": "Female",
+    "Nonbinary": "Nonbinary",
     "BossBarTooltip": "The Reserve boss bars is intended to be the amount of Boss Turns - 1",
 
     "LevelUpForm": {
@@ -501,6 +517,35 @@
       "FoundFolder": "Detected Folder",
       "CouldNotFindFolder": "Folder {folder} not found, it will be created upon submit",
       "Submit": "Generate"
+    },
+
+    "NpcQuickBuild": {
+      "TrainerQuickBuild": "Trainer Quick Build",
+      "Name": "Name",
+      "Nickname": "Nickname",
+      "Alliance": "Alliance",
+      "TrainerLevel": "Trainer Level",
+      "Classes": "Classes",
+      "Features": "Features",
+      "Edges": "Edges",
+      "Skills": "Skills",
+      "Stats": "Stats",
+      "PartyPkmn": "Party Pokemon",
+      "Level": "Level",
+      "Lv": "Lv.",
+      "Gender": "Gender",
+      "Sex": "Sex",
+      "Shiny": "Shiny",
+      "SpeciesName": "Species",
+      "Page": {
+        "TrainerInfo": "Trainer Info",
+        "FeaturesEdges": "Features & Edges",
+        "SkillsStats": "Skills & Stats",
+        "Party": "Party Pokemon"
+      },
+      "ApproximatePointsRemaining": "Approximate Points Remaining: {points}",
+      "Next": "Next",
+      "Submit": "Submit"
     },
 
     "Stats": {
@@ -989,7 +1034,12 @@
       "Poffins": "From Poffins",
       "Voltage": "Voltage",
       "DiceTotal": "Dice Total",
-      "Appeal": "Appeal"
+      "Appeal": "Appeal",
+      "Cool": "Cool",
+      "Tough": "Tough",
+      "Beauty": "Beauty",
+      "Smart": "Smart",
+      "Cute": "Cute"
     },
     "Spirit": {
       "Friendship": "Friendship",
@@ -1023,6 +1073,7 @@
         "Submit": "Submit",
         "Cancel": "Cancel",
         "TrainerNotFound": "An invalid trainer was selected, please try again.",
+        "UserNotFound": "The selected trainer is not assigned to a user, please try again.",
         "LocationNotFound": "An invalid location was selected, please try again.",
         "PokemonNotFound": "Unable to find the Pokemon, did you delete it?",
         "ChatMessage": "{trainer} Caught {pokemon}! They have been added to {location}."

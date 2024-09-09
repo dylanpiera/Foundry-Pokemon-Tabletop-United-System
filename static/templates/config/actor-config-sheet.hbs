@@ -7,11 +7,7 @@
     <div class="form-group">
         <label>{{localize "PTU.Actor.Config.Alliance.Label"}}</label>
         <select name="system.alliance">
-            {{#select alliance}}
-                {{#each allianceOptions as |label key|}}
-                    <option value="{{key}}">{{label}}</option>
-                {{/each}}
-            {{/select}}
+            {{selectOptions allianceOptions selected=alliance}}
         </select>
         <p class="hint">{{localize "PTU.Actor.Config.Alliance.Hint"}}</p>
     </div>

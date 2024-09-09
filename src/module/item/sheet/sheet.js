@@ -27,6 +27,7 @@ class PTUItemSheet extends ItemSheet {
     /** @override */
     async getData() {
         const data = super.getData();
+        data.config = CONFIG.PTU.data;
         
         data.editLocked = data.editable == false ? true : this.object.getFlag('ptu', 'editLocked') ?? false;
 

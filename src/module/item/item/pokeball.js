@@ -395,6 +395,7 @@ class PokeballItem extends PTUItemItem {
             title: game.i18n.localize("PTU.Dialog.CaptureSuccess.Title"),
             content: await renderTemplate("systems/ptu/static/templates/apps/capture-success.hbs", {
                 trainers,
+                locationOptions: CONST.PTU.data.capture.locationOptions,
                 location: game.settings.get("ptu", "captureDefaultPartyState") || "party"
             }),
             buttons: {
@@ -410,6 +411,9 @@ class PokeballItem extends PTUItemItem {
                         const trainer = game.actors.get(formData.trainer);
                         if (!trainer) return ui.notifications.error("PTU.Dialog.CaptureSuccess.TrainerNotFound", { localize: true });
 
+                        const user = game.users.find(u => u.character?.id === trainer.id);
+                        if (!user) return ui.notifications.error("PTU.Dialog.CaptureSuccess.UserNotFound", { localize: true });
+
                         const party = new PTUPartySheet({ actor: trainer });
 
                         const location = formData.location;
@@ -417,8 +421,6 @@ class PokeballItem extends PTUItemItem {
 
                         const pokemon = await fromUuid(args.targets[0].actor);
                         if (!pokemon) return ui.notifications.error("PTU.Dialog.CaptureSuccess.PokemonNotFound", { localize: true });
-
-                        const user = game.users.find(u => u.character?.id === trainer.id);
 
                         const pokemonUpdateData = {
                             "_id": pokemon.id,

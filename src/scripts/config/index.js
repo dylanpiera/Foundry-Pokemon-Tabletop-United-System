@@ -19,6 +19,7 @@ import { StatusEffects } from '../../module/canvas/status-effect.js';
 import { PTUToken } from '../../module/canvas/token/index.js';
 import { PTUSpeciesDragOptionsPrompt } from '../../module/apps/species-drag-in/sheet.js';
 import { PTUSpeciesMassGenerator } from '../../module/apps/species-mass-generator/sheet.js';
+import { PTUNpcQuickBuild } from '../../module/apps/npc-quick-build/sheet.js';
 import { LevelUpForm } from '../../module/apps/level-up-form/sheet.js';
 import { LevelUpData } from '../../module/apps/level-up-form/document.js';
 import { AttackRoll } from '../../module/system/check/rolls/attack-roll.js';
@@ -66,6 +67,16 @@ const data = {
       "survival",
     ], PTUSkills
   },
+  stats: {
+    keys: [
+      "hp",
+      "atk",
+      "def",
+      "spatk",
+      "spdef",
+      "spd"
+    ],
+  },
   levelProgression,
   typeEffectiveness,
   natureData,
@@ -78,6 +89,52 @@ const data = {
   helpText,
   tmData,
   alliances: ["party", "opposition", "neutral"],
+  capture: {
+    locationOptions: {
+      "party": "PTU.Dialog.CaptureSuccess.PartyChoice.Party",
+      "box": "PTU.Dialog.CaptureSuccess.PartyChoice.Box",
+      "available": "PTU.Dialog.CaptureSuccess.PartyChoice.Available",
+    }
+  },
+  contestTypes: {
+    "cool": "PTU.Contests.Cool",
+    "tough": "PTU.Contests.Tough",
+    "beauty": "PTU.Contests.Beauty",
+    "smart": "PTU.Contests.Smart",
+    "cute": "PTU.Contests.Cute",
+  },
+  effects: {
+    expiryOptions: {
+      "turn-start": "ITEM.Duration.Expiry.TurnStart",
+      "turn-end": "ITEM.Duration.Expiry.TurnEnd",
+      "round-end": "ITEM.Duration.Expiry.RoundStart",
+    },
+    durationUnitOptions: {
+      "unlimited": "ITEM.Duration.Unit.Unlimited",
+      "encounter": "ITEM.Duration.Unit.Encounter",
+      "rounds": "ITEM.Duration.Unit.Rounds",
+    }
+  },
+  moves: {
+    categories: {
+      "Status": "PTU.Move.Category.Status",
+      "Physical": "PTU.Move.Category.Physical",
+      "Special": "PTU.Move.Category.Special",
+    }
+  },
+  weather: {
+    modeOptions: {
+      "disabled": "PTU.Weather.Mode.Off",
+      "players": "PTU.Weather.Mode.Players",
+      "opposition": "PTU.Weather.Mode.Opposition",
+      "all": "PTU.Weather.Mode.All"
+    }
+  },
+  randomNames: {
+    "Male": ["Liam", "Noah", "Oliver", "James", "Elijah", "Mateo", "Theodore", "Henry", "Lucas", "William", "Benjamin", "Levi", "Sebastian", "Jack", "Ezra", "Michael", "Daniel", "Leo", "Owen", "Samuel", "Hudson", "Alexander", "Asher", "Luca", "Ethan", "John", "David", "Jackson", "Joseph", "Mason"],
+    "Female": ["Olivia", "Emma", "Charlotte", "Amelia", "Sophia", "Mia", "Isabella", "Ava", "Evelyn", "Luna", "Harper", "Sofia", "Camila", "Eleanor", "Elizabeth", "Violet", "Scarlett", "Emily", "Hazel", "Lily", "Gianna", "Aurora", "Penelope", "Aria", "Nora", "Chloe", "Ellie", "Mila", "Avery", "Layla"],
+    "Nonbinary": ["Noah", "James", "Evelyn", "Harper", "Michael", "Logan", "Avery", "Madison", "Riley", "Jayden", "Ainsley", "Arden", "Dakota", "Finley", "Hayden", "Lennox", "Lindsey", "Robin", "Rowan", "Sloan", "Alexis", "Angel", "Briar", "Kirby", "Madhu", "Marley", "Morgan", "River", "Skyler", "Taylor"],
+  }
 }
 
 const ui = {
@@ -126,6 +183,9 @@ const ui = {
   },
   speciesMassGenerator: {
     sheetClass: PTUSpeciesMassGenerator
+  },
+  npcQuickBuild: {
+    sheetClass: PTUNpcQuickBuild
   },
   levelUpForm: {
     sheetClass: LevelUpForm,

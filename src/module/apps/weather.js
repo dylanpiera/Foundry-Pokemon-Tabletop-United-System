@@ -44,6 +44,8 @@ class Weather extends Application {
             });
         }
 
+        data.modeOptions = CONFIG.PTU.data.weather.modeOptions;
+
         return data;
     }
 

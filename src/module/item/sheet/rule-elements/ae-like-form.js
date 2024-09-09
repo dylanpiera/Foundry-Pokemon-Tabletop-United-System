@@ -20,8 +20,27 @@ class AELikeForm extends RuleElementForm {
 
         if(this.rule.predicate === undefined) this.updateItem({predicate: []})
 
+        const ruleModes = {
+            "add": "PTU.RuleEditor.General.Modes.Add",
+            "subtract": "PTU.RuleEditor.General.Modes.Subtract",
+            "remove": "PTU.RuleEditor.General.Modes.Remove",
+            "multiply": "PTU.RuleEditor.General.Modes.Multiply",
+            "downgrade": "PTU.RuleEditor.General.Modes.Downgrade",
+            "upgrade": "PTU.RuleEditor.General.Modes.Upgrade",
+            "override": "PTU.RuleEditor.General.Modes.Override",
+        };
+
+        const rulePhases = {
+            "applyAEs": "PTU.RuleEditor.General.Phases.ApplyAEs",
+            "beforeDerived": "PTU.RuleEditor.General.Phases.BeforeDerived",
+            "afterDerived": "PTU.RuleEditor.General.Phases.AfterDerived",
+            "beforeRoll": "PTU.RuleEditor.General.Phases.BeforeRoll",
+        }
+
         return {
             ...data,
+            ruleModes,
+            rulePhases,
             predicationIsMultiple: Array.isArray(this.rule.predicate) && this.rule.predicate.every(p => typeof p === "string"),
             value: {
                 mode: valueMode,
