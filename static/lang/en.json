@@ -1043,6 +1043,7 @@
         "Submit": "Submit",
         "Cancel": "Cancel",
         "TrainerNotFound": "An invalid trainer was selected, please try again.",
+        "UserNotFound": "The selected trainer is not assigned to a user, please try again.",
         "LocationNotFound": "An invalid location was selected, please try again.",
         "PokemonNotFound": "Unable to find the Pokemon, did you delete it?",
         "ChatMessage": "{trainer} Caught {pokemon}! They have been added to {location}."
