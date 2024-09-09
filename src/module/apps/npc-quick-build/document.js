@@ -200,6 +200,7 @@ export class NpcQuickBuildData {
 
         // load feats with pack loader/compendium browser!
         if (!NpcQuickBuildData._preloadedCompendiums) {
+            compendiumBrowser.initCompendiumList();
             await compendiumBrowser.tabs.feats.loadData();
             await compendiumBrowser.tabs.edges.loadData();
             await compendiumBrowser.tabs.species.loadData();
@@ -212,11 +213,11 @@ export class NpcQuickBuildData {
         let speciesCompendiums = ["ptu.species"];
 
         // try to use the ones set up in the compendium browser
-        const compendiumSettings = game.settings.get("ptu", "compendiumBrowserPacks");
+        const compendiumSettings = compendiumBrowser.settings;
         if (compendiumSettings) {
-            featureCompendiums = Object.keys(compendiumSettings.feats).filter(c => compendiumSettings.feats[c].load);
-            edgeCompendiums = Object.keys(compendiumSettings.edges).filter(c => compendiumSettings.edges[c].load);
-            speciesCompendiums = Object.keys(compendiumSettings.species).filter(c => compendiumSettings.species[c].load);
+            featureCompendiums = Object.keys(compendiumSettings.feats ?? {}).filter(c => compendiumSettings.feats[c].load);
+            edgeCompendiums = Object.keys(compendiumSettings.edges ?? {}).filter(c => compendiumSettings.edges[c].load);
+            speciesCompendiums = Object.keys(compendiumSettings.species ?? {}).filter(c => compendiumSettings.species[c].load);
         }
 
         // get classes/features
@@ -281,7 +282,7 @@ export class NpcQuickBuildData {
     get estimatedAppropriateLevel () {
         // this generator broadly speaking assumes that power level goes up with the square of level
         const playerLevelsSquared = game.users.filter(u=>u.character?.id != undefined).map(u=>Math.pow(u.character?.system?.level?.current ?? 1, 2));
-        return Math.sqrt(average(playerLevelsSquared));
+        return Math.sqrt(average(playerLevelsSquared)) || 1;
     }
 
     setProperty(key, value) {
