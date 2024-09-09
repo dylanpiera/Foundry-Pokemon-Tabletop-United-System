@@ -395,6 +395,7 @@ class PokeballItem extends PTUItemItem {
             title: game.i18n.localize("PTU.Dialog.CaptureSuccess.Title"),
             content: await renderTemplate("systems/ptu/static/templates/apps/capture-success.hbs", {
                 trainers,
+                locationOptions: CONST.PTU.data.capture.locationOptions,
                 location: game.settings.get("ptu", "captureDefaultPartyState") || "party"
             }),
             buttons: {

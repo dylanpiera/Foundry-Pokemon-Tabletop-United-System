@@ -73,6 +73,14 @@ class PTUActorSheet extends ActorSheet {
         new ActorConfig(this.actor).render(true);
     }
 
+    
+	/** @override */
+	async getData() {
+		const data = await super.getData();
+		data.config = CONFIG.PTU.data;
+        return data;
+    }
+
     /** Emulate a sheet item drop from the canvas */
     async emulateItemDrop(data) {
         return this._onDropItem({ preventDefault: () => { } }, data);

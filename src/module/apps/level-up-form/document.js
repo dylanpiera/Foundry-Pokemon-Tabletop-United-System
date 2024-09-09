@@ -1,4 +1,4 @@
-import { getItemFromCompendium } from "../../../util/misc.js";
+import { getItemFromCompendium, formatSlug } from "../../../util/misc.js";
 import { calculateStatTotal } from "../../actor/helpers.js";
 import { PTUPokemonActor } from "../../actor/index.js"
 import { PokemonGenerator } from "../../actor/pokemon/generator.js";
@@ -188,7 +188,8 @@ class LevelUpData {
                     this.evolutions.available.push({
                         uuid: evolution.uuid,
                         slug: evolution.slug,
-                        level: evolution.level
+                        level: evolution.level,
+                        label: formatSlug(evolution.slug)
                     });
                     continue;
                 }
@@ -201,7 +202,8 @@ class LevelUpData {
                     this.evolutions.available.push({
                         uuid: evolution.uuid,
                         slug: evolution.slug,
-                        level: evolution.level
+                        level: evolution.level,
+                        label: formatSlug(evolution.slug)
                     });
                 }
             }

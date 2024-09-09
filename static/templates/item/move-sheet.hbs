@@ -134,11 +134,7 @@
                 <label for="system.type">{{localize "ITEM.Type"}}</label>
                 <div class="arrow-box">
                     <select data-target="system.type" class="type-select" style="background: url('{{loadTypeImageBar item.system.type}}');" {{#if editLocked}}disabled{{/if}}>
-                        {{#select item.system.type}}
-                            {{#each types}}
-                                <option value="{{this}}">{{this}}</option>
-                            {{/each}}
-                        {{/select}}
+                        {{selectOptions types selected=item.system.type valueAttr="label"}}
                     </select>
                 </div>
             </div>
@@ -146,11 +142,7 @@
                 <label for="system.category">{{localize "ITEM.Category"}}</label>
                 <div class="arrow-box">
                     <select data-target="system.category" class="type-select" style="background: url('/systems/ptu/static/css/images/types2/{{item.system.category}}IC.png');" {{#if editLocked}}disabled{{/if}}>
-                        {{#select item.system.category}}
-                            <option value="Status">Status</option>
-                            <option value="Physical">Physical</option>
-                            <option value="Special">Special</option>
-                        {{/select}}
+                        {{selectOptions config.moves.categories selected=item.system.category localize=true}}
                     </select>
                 </div>
             </div>

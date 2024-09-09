@@ -1065,34 +1065,22 @@
                         <div class="swsh-body">
                             <div class="d-flex w-100 mt-1 mb-1 fs-9">
                                 <div class="col-sm-4">
-                                    {{#select data.background.pathetic.one}}
                                     <select name="system.background.pathetic.one">
                                         <option value="blank">{{localize "PTU.SelectNone"}}</option>
-                                        {{#each skills as | skill key |}}
-                                        <option value="{{key}}">{{skill.label}}</option>
-                                        {{/each}}
+                                        {{selectOptions skills selected=actor.system.background.pathetic.one valueAttr="slug"}}
                                     </select>
-                                    {{/select}}
                                 </div>
                                 <div class="col-sm-4">
-                                    {{#select data.background.pathetic.two}}
                                     <select name="system.background.pathetic.two">
                                         <option value="blank">{{localize "PTU.SelectNone"}}</option>
-                                        {{#each skills as | skill key |}}
-                                        <option value="{{key}}">{{skill.label}}</option>
-                                        {{/each}}
+                                        {{selectOptions skills selected=actor.system.background.pathetic.two valueAttr="slug"}}
                                     </select>
-                                    {{/select}}
                                 </div>
                                 <div class="col-sm-4">
-                                    {{#select data.background.pathetic.three}}
                                     <select name="system.background.pathetic.three">
                                         <option value="blank">{{localize "PTU.SelectNone"}}</option>
-                                        {{#each skills as | skill key |}}
-                                        <option value="{{key}}">{{skill.label}}</option>
-                                        {{/each}}
+                                        {{selectOptions skills selected=actor.system.background.pathetic.three valueAttr="slug"}}
                                     </select>
-                                    {{/select}}
                                 </div>
                             </div>
                         </div>
@@ -1111,24 +1099,16 @@
                         <div class="swsh-body">
                             <div class="d-flex w-100 mt-1 mb-1 fs-9">
                                 <div class="col-sm-6">
-                                    {{#select data.background.novice}}
                                     <select name="system.background.novice">
                                         <option value="blank">{{localize "PTU.SelectNone"}}</option>
-                                        {{#each skills as | skill key |}}
-                                        <option value="{{key}}">{{skill.label}}</option>
-                                        {{/each}}
+                                        {{selectOptions skills selected=actor.system.background.novice valueAttr="slug"}}
                                     </select>
-                                    {{/select}}
                                 </div>
                                 <div class="col-sm-6">
-                                    {{#select data.background.adept}}
                                     <select name="system.background.adept">
                                         <option value="blank">{{localize "PTU.SelectNone"}}</option>
-                                        {{#each skills as | skill key |}}
-                                        <option value="{{key}}">{{skill.label}}</option>
-                                        {{/each}}
+                                        {{selectOptions skills selected=actor.system.background.adept valueAttr="slug"}}
                                     </select>
-                                    {{/select}}
                                 </div>
                             </div>
                         </div>

@@ -78,6 +78,47 @@ const data = {
   helpText,
   tmData,
   alliances: ["party", "opposition", "neutral"],
+  capture: {
+    locationOptions: {
+      "party": "PTU.Dialog.CaptureSuccess.PartyChoice.Party",
+      "box": "PTU.Dialog.CaptureSuccess.PartyChoice.Box",
+      "available": "PTU.Dialog.CaptureSuccess.PartyChoice.Available",
+    }
+  },
+  contestTypes: {
+    "cool": "PTU.Contests.Cool",
+    "tough": "PTU.Contests.Tough",
+    "beauty": "PTU.Contests.Beauty",
+    "smart": "PTU.Contests.Smart",
+    "cute": "PTU.Contests.Cute",
+  },
+  effects: {
+    expiryOptions: {
+      "turn-start": "ITEM.Duration.Expiry.TurnStart",
+      "turn-end": "ITEM.Duration.Expiry.TurnEnd",
+      "round-end": "ITEM.Duration.Expiry.RoundStart",
+    },
+    durationUnitOptions: {
+      "unlimited": "ITEM.Duration.Unit.Unlimited",
+      "encounter": "ITEM.Duration.Unit.Encounter",
+      "rounds": "ITEM.Duration.Unit.Rounds",
+    }
+  },
+  moves: {
+    categories: {
+      "Status": "PTU.Move.Category.Status",
+      "Physical": "PTU.Move.Category.Physical",
+      "Special": "PTU.Move.Category.Special",
+    }
+  },
+  weather: {
+    modeOptions: {
+      "disabled": "PTU.Weather.Mode.Off",
+      "players": "PTU.Weather.Mode.Players",
+      "opposition": "PTU.Weather.Mode.Opposition",
+      "all": "PTU.Weather.Mode.All"
+    }
+  }
 }
 
 const ui = {

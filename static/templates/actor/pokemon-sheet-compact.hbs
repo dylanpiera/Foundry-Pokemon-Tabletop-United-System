@@ -215,13 +215,9 @@
                                     <div
                                         class="d-flex w-100 pt-1 pb-1 align-items-center justify-content-center center-text">
                                         <div class="fb-45">
-                                            {{#select actor.system.nature.value}}
                                             <select name="system.nature.value" class="w-100">
-                                                {{#each natures as | nature key |}}
-                                                <option value="{{key}}">{{key}}</option>
-                                                {{/each}}
+                                                {{selectOptions natures selected=actor.system.nature.value labelAttr="value"}}
                                             </select>
-                                            {{/select}}
                                         </div>
                                     </div>
                                 </div>
@@ -407,15 +403,9 @@
                     <div class="swsh-box mb-2 w-100">
                         <div class="d-flex flexrow align-items-center">
                             <b class="ball-themes {{ballStyle}} highlight pt-3 pb-3 fb-48 center-text">{{localize "PTU.Contests.Type"}}</b>
-                            {{#select actor.system.contests.type}}
                             <select name="system.contests.type" class="ml-2 mr-2 fb-40">
-                                <option value="cool">Cool</option>
-                                <option value="tough">Tough</option>
-                                <option value="beauty">Beauty</option>
-                                <option value="smart">Smart</option>
-                                <option value="cute">Cute</option>
+                                {{selectOptions config.contestTypes selected=actor.system.contests.type localize=true}}
                             </select>
-                            {{/select}}
                         </div>
                     </div>
                     <div class="swsh-box mb-2 w-100">
@@ -1368,34 +1358,22 @@
                         </div>
                         <div class="swsh-body mt-1 mb-1">
                             <div class="fb-33 center-text">
-                                {{#select actor.system.background.increased.one}}
                                 <select name="system.background.increased.one">
                                     <option value="blank">{{localize "PTU.SelectNone"}}</option>
-                                    {{#each skills as | skill key |}}
-                                    <option value="{{key}}">{{skill.label}}</option>
-                                    {{/each}}
+                                    {{selectOptions skills selected=actor.system.background.increased.one valueAttr="slug"}}
                                 </select>
-                                {{/select}}
                             </div>
                             <div class="fb-33 center-text">
-                                {{#select actor.system.background.increased.two}}
                                 <select name="system.background.increased.two">
                                     <option value="blank">{{localize "PTU.SelectNone"}}</option>
-                                    {{#each skills as | skill key |}}
-                                    <option value="{{key}}">{{skill.label}}</option>
-                                    {{/each}}
+                                    {{selectOptions skills selected=actor.system.background.increased.two valueAttr="slug"}}
                                 </select>
-                                {{/select}}
                             </div>
                             <div class="fb-33 center-text">
-                                {{#select actor.system.background.increased.three}}
                                 <select name="system.background.increased.three">
                                     <option value="blank">{{localize "PTU.SelectNone"}}</option>
-                                    {{#each skills as | skill key |}}
-                                    <option value="{{key}}">{{skill.label}}</option>
-                                    {{/each}}
+                                    {{selectOptions skills selected=actor.system.background.increased.three valueAttr="slug"}}
                                 </select>
-                                {{/select}}
                             </div>
                         </div>
                         <div
@@ -1415,34 +1393,22 @@
                         </div>
                         <div class="swsh-body mt-1 mb-1">
                             <div class="fb-33 center-text">
-                                {{#select actor.system.background.decreased.one}}
                                 <select name="system.background.decreased.one">
                                     <option value="blank">{{localize "PTU.SelectNone"}}</option>
-                                    {{#each skills as | skill key |}}
-                                    <option value="{{key}}">{{skill.label}}</option>
-                                    {{/each}}
+                                    {{selectOptions skills selected=actor.system.background.decreased.one valueAttr="slug"}}
                                 </select>
-                                {{/select}}
                             </div>
                             <div class="fb-33 center-text">
-                                {{#select actor.system.background.decreased.two}}
                                 <select name="system.background.decreased.two">
                                     <option value="blank">{{localize "PTU.SelectNone"}}</option>
-                                    {{#each skills as | skill key |}}
-                                    <option value="{{key}}">{{skill.label}}</option>
-                                    {{/each}}
+                                    {{selectOptions skills selected=actor.system.background.decreased.two valueAttr="slug"}}
                                 </select>
-                                {{/select}}
                             </div>
                             <div class="fb-33 center-text">
-                                {{#select actor.system.background.decreased.three}}
                                 <select name="system.background.decreased.three">
                                     <option value="blank">{{localize "PTU.SelectNone"}}</option>
-                                    {{#each skills as | skill key |}}
-                                    <option value="{{key}}">{{skill.label}}</option>
-                                    {{/each}}
+                                    {{selectOptions skills selected=actor.system.background.decreased.three valueAttr="slug"}}
                                 </select>
-                                {{/select}}
                             </div>
                         </div>
                     </div>
