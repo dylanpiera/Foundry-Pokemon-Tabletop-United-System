@@ -7,7 +7,7 @@
     "verified": "12.329",
     "maximum": 12
   },
-  "version": "4.3.3",
+  "version": "4.3.4",
   "templateVersion": 2,
   "authors": [
     {
@@ -77,19 +77,6 @@
       "name": "feats",
       "path": "packs/feats.db",
       "system": "ptu"
-    },
-    {
-      "label": "Dex (DO NOT USE)",
-      "type": "Item",
-      "name": "dex-entries",
-      "path": "packs/dex-entries.db",
-      "system": "ptu",
-      "ownership": {
-        "PLAYER": "LIMITED",
-        "TRUSTED": "LIMITED",
-        "ASSISTANT": "LIMITED",
-        "GAMEMASTER": "LIMITED"
-      }
     },
     {
       "label": "PTR Edges",
