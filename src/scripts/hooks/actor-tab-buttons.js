@@ -7,12 +7,20 @@ export const ActorButtons = {
             if (sidebarButtons.find(".import-party").length > 0) return;
             sidebarButtons.append(`<button class="import-party"><i class="fas fa-upload"></i>Import Party</button>`)
             sidebarButtons.append(`<button class="mass-generator"><i class="fas fa-users"></i>Pkmn Generator</button>`)
+            sidebarButtons.append(`<button class="quick-build"><i class="fas fa-users"></i>NPC Quick Build</button>`)
 
             $("#sidebar #actors .directory-header .action-buttons .import-party").on("click", async (event) => {
                 await CONFIG.PTU.ui.party.sheetClass.importParty();
             });
             $("#sidebar #actors .directory-header .action-buttons .mass-generator").on("click", async (event) => {
                 new CONFIG.PTU.ui.speciesMassGenerator.sheetClass().render(true);
+            });
+            $("#sidebar #actors .directory-header .action-buttons .quick-build").on("click", async (event) => {
+                event.target.disabled = true;
+                const npcQuickBuild = new CONFIG.PTU.ui.npcQuickBuild.sheetClass();
+                return npcQuickBuild.preload().then(()=>npcQuickBuild.renderAsync(true)).finally(()=>{
+                    event.target.disabled = false;
+                });
             });
         });
 

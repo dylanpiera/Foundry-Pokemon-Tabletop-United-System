@@ -1,3 +1,36 @@
+
+/* Define Colors as variables at root */
+
+
+
+:root {
+    --skillBkgColor--pathetic: #cfe2f3;
+    --skillFgColor--pathetic: var(--color-text-dark-primary);
+
+    --skillBkgColor--untrained: #9fc5e8;
+    --skillFgColor--untrained: var(--color-text-dark-primary);
+
+    --skillBkgColor--novice: #6fa8dc;
+    --skillFgColor--novice: var(--color-text-dark-primary);
+
+    --skillBkgColor--adept: #3d85c6;
+    --skillFgColor--adept: var(--color-text-dark-primary);
+
+    --skillBkgColor--expert: #0b5394;
+    --skillFgColor--expert: #cfe2f3;
+
+    --skillBkgColor--master: #073763;
+    --skillFgColor--master: #cfe2f3;
+
+    --skillBkgColor--virtuoso: #e9be25;
+    --skillFgColor--virtuoso: var(--color-text-dark-primary);
+
+    --skillBkgColor--invalid: #ff0f0faa;
+    --skillFgColor--invalid: var(--color-text-dark-primary);
+}
+
+
+
 * {
     scrollbar-color: auto;
 }
@@ -2496,6 +2529,471 @@ a.content-link {
                     margin-left: 0.25rem;
                 }
             }
+        }
+    }
+    
+    // NPC Quick Build
+    &.npc-quick-build .window-content {
+
+        @pokeballRed: #ee1515;
+        @pokeballWhite: #f0f0f0;
+        @pokeballBlack: #222224;
+        .header-bar {
+            .title {
+                text-align: center;
+            }
+            nav {
+                display: flex;
+                justify-content: space-evenly;
+
+                a.current {
+                    text-shadow: 0 0 8px var(--color-shadow-primary);
+                }
+            }
+            // background-color: @pokeballRed;
+            border-bottom: 2px solid @pokeballBlack;
+            margin-bottom: 1.3em;
+            padding: 0.5em;
+            padding-bottom: 0.2em;
+        }
+        .footer-controls {
+            display: flex;
+            flex-direction: row;
+            justify-content: flex-end;
+            margin-top: 1em;
+            
+            [type="button"] {
+                padding-left: 1em;
+                padding-right: 1em;
+                padding-top: 0.3em;
+                padding-bottom: 0.3em;
+            }
+        }
+
+        h4 {
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .warning-box {
+            border: 2px dashed rgba(255, 136, 0, 0.5);
+            background-color: rgba(255, 136, 0, 0.2);
+            border-radius: 20px;
+            position: relative;
+            top: -0.7em;
+            padding: 0.2em 1em;
+
+            .warning-title {
+                font-size: large;
+                color: orangered;
+                text-shadow: 1px 1px orange;
+            }
+            .warnings {
+                text-align: center;
+                max-height: 60px;
+                transition: max-height 1s ease-in-out;
+                overflow-y: auto;
+                scrollbar-width: thin;
+                scrollbar-color: var(--color-scrollbar) var(--color-scrollbar-track);
+            }
+            &:hover .warnings {
+                max-height: 150px;
+                transition-delay: 500ms;
+            }
+        }
+
+        .trainer-info {
+            display: grid;
+            grid-template-columns: max-content 1fr;
+            align-items: baseline;
+            gap: 0.2em 2em;
+        }
+
+        .skills-box .skills,
+        .stats-box .stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            column-gap: 4em;
+            row-gap: 0.2em;
+            justify-items: stretch;
+            align-items: stretch;
+            margin-left: 1em;
+            margin-right: 1em;
+
+            .skill,
+            .stat {
+                display: grid;
+                grid-template-columns: 2em 1fr 2em;
+                grid-template-rows: 1fr 1fr;
+                justify-items: center;
+                align-items: center;
+
+                @skillBorderRadius: 0.4em;
+                border-radius: @skillBorderRadius;
+                position: relative;
+
+                // set up click areas
+                .skill-prev-rank-clickarea,
+                .stat-prev-clickarea {
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    width: 40%;
+                    height: 100%;
+                    border-top-left-radius: @skillBorderRadius;
+                    border-bottom-left-radius: @skillBorderRadius;
+                    &:not(.disabled) {
+                        background: linear-gradient(90deg, rgba(255, 255, 255, .15) 0%, rgba(255, 255, 255, 0) 100%);
+                        &:hover {
+                            background: linear-gradient(90deg, rgba(120, 120, 120, .25) 0%, rgba(120, 120, 120, 0) 100%);
+                        }
+                    }
+                    &.disabled:hover{
+                        background: linear-gradient(90deg, rgba(120, 60, 60, .25) 0%, rgba(120, 60, 60, 0) 100%);
+                        cursor: not-allowed;
+                    }
+                    
+                }
+                .skill-next-rank-clickarea,
+                .stat-next-clickarea {
+                    position: absolute;
+                    top: 0;
+                    right: 0;
+                    width: 40%;
+                    height: 100%;
+                    border-top-right-radius: @skillBorderRadius;
+                    border-bottom-right-radius: @skillBorderRadius;
+                    background: linear-gradient(270deg, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0) 100%);
+                    &:hover {
+                        background: linear-gradient(270deg, rgba(120, 120, 120, .25) 0%, rgba(120, 120, 120, 0) 100%);
+                    }
+                }
+
+                * {
+                    text-align: center;
+                }
+
+                .skill-prev-rank,
+                .stat-prev {
+                    grid-column: 1;
+                    grid-row: 1 / 3;
+                }
+                .skill-next-rank,
+                .stat-next {
+                    grid-column: 3;
+                    grid-row: 1 / 3;
+                }
+                .skill-name,
+                .stat-name {
+                    grid-column: 2;
+                    grid-row: 1;
+                }
+                .skill-rank,
+                .stat-value {
+                    grid-column: 2;
+                    grid-row: 2;
+                }
+
+                input {
+                    background: unset;
+                    border: unset;
+                    &:hover {
+                        border: 1px solid gray;
+                        padding: 0px 2px; // 1 less than their default
+                    }
+                }
+            }
+
+            .skill-points-remaining,
+            .stat-points-remaining {
+                text-align: center;
+                font-style: italic;
+            }
+        }
+
+        .skills-box .skills .skill {
+            &.skill-pathetic {
+                background-color: var(--skillBkgColor--pathetic);
+                color: var(--skillFgColor--pathetic);
+            }
+
+            &.skill-untrained {
+                background-color: var(--skillBkgColor--untrained);
+                color: var(--skillFgColor--untrained);
+            }
+
+            &.skill-novice {
+                background-color: var(--skillBkgColor--novice);
+                color: var(--skillFgColor--novice);
+            }
+
+            &.skill-adept {
+                background-color: var(--skillBkgColor--adept);
+                color: var(--skillFgColor--adept);
+            }
+
+            &.skill-expert {
+                background-color: var(--skillBkgColor--expert);
+                color: var(--skillFgColor--expert);
+            }
+
+            &.skill-master {
+                background-color: var(--skillBkgColor--master);
+                color: var(--skillFgColor--master);
+            }
+
+            &.skill-virtuoso {
+                background-color: var(--skillBkgColor--virtuoso);
+                color: var(--skillFgColor--virtuoso);
+            }
+
+            &.skill-invalid {
+                background-color: var(--skillBkgColor--invalid);
+                color: var(--skillFgColor--invalid);
+            }
+        }
+
+        .stats-box .stats .stat {
+            &.stat-pathetic {
+                background-color: #990000;
+                color: white;
+            }
+            &.stat-low {
+                background-color: #e08a8a;
+                color: black;
+            }
+            &.stat-average {
+                background-color: #d6d6d6;
+                color: black;
+            }
+            &.stat-high {
+                background-color: #85ca7e;
+                color: black;
+            }
+            &.stat-extreme {
+                background-color: #19850d;
+                color: white;
+            }
+        }
+
+
+        .pokemon-box {
+            .all-party-pokemon {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 0.5em;
+                padding-bottom: 15px;
+
+                .party-pokemon {
+                    position: relative;
+                    display: grid;
+                    grid-template-columns: 70px 1fr 2fr 1fr;
+                    grid-template-rows: 35px 35px 25px;
+                    align-items: center;
+                    justify-items: center;
+
+                    &:nth-child(even) {
+                        top: 15px;
+                    }
+
+                    background: linear-gradient(180deg, rgba(0,104,32,1) 0%, rgba(0,104,32,1) 48%, rgba(4,126,36,1) 49%, rgba(4,126,36,1) 51%, rgba(0,129,47,1) 52%, rgba(0,144,56,1) 100%);
+                    border-radius: 10px;
+                    border-top-left-radius: 50px;
+                    border: 3px solid #6bd771;
+
+                    color: white;
+                    text-shadow: 2px 2px black;
+                    font-size: large;
+
+                    // affect all inputs
+                    input {
+                        color: white;
+                        text-shadow: 2px 2px black;
+                        background: unset;
+                        border: unset;
+                        &::placeholder {
+                            color: white;
+                            text-shadow: 2px 2px black;
+                            opacity: 1; /* for Firefox */
+                        }
+                        &:hover {
+                            border: 1px solid gray;
+                            padding: 0px 2px; // 1 less than their default
+                        }
+                    }
+
+                    .pokemon-species {
+                        grid-column: 1 / 5;
+                        grid-row: 2;
+                    }
+
+                    .pokemon-img {
+                        grid-column: 1;
+                        grid-row: 1 / 3;
+                        padding-left: 5px;
+                        padding-top: 5px;
+                        border: unset;
+                    }
+                    
+                    .pokemon-name {
+                        grid-column: 2 / 4;
+                        grid-row: 1;
+                        display: flex;
+                        font-size: larger;
+                        label {
+                            display: none;
+                        }
+                    }
+                    
+                    .pokemon-gender {
+                        grid-column: 4;
+                        grid-row: 1;
+                        font-size: medium;
+                        display: flex;
+                        justify-content: flex-end;
+                        align-items: baseline;
+                        
+                        label {
+                            display: none;
+                        }
+                        &.gender-Genderless {
+                            display: none;
+                        }
+
+                        &.gender-Male {
+                            i {
+                                color: #046dda;
+                                text-shadow: 1px 1px #70baff;
+                            }
+                            select,
+                            div {
+                                display: none
+                            }
+                            &:hover select {
+                                display: inline-block;
+                            }
+                        }
+                        &.gender-Female {
+                            i {
+                                color: #ee2617;
+                                text-shadow: 1px 1px #ff9ca7;
+                            }
+                            select,
+                            div {
+                                display: none
+                            }
+                            &:hover select {
+                                display: inline-block;
+                            }
+                        }
+                    }
+                    
+                    .pokemon-level {
+                        grid-column: 1;
+                        grid-row: 3;
+                        display: flex;
+                        align-items: baseline;
+
+                        padding-left: 5px;
+                    }
+                    
+                    .pokemon-shiny {
+                        grid-column: 2;
+                        grid-row: 2 / 4;
+                        justify-self: left;
+                        align-self: start;
+                        padding-left: 5px;
+                        padding-top: 5px;
+
+                        display: flex;
+
+                        input {
+                            display: none;
+                        }
+                        opacity: 0.2;
+                        &.checked {
+                            opacity: 1;
+                        }
+                    }
+                }
+            }
+        }
+
+        .tagify.one-entry {
+            [role="textbox"]:not(:first-child) {
+                display: none;
+            }
+        }
+
+        .computed-links {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 0.25em;
+            width: 100%;
+        }
+
+        .sub-choices {
+            margin-top: 0.6em;
+            h4 {
+                text-align: center;
+            }
+            .options {
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 0.25em;
+                width: 100%;
+                .sub-choice {
+                    input[type="radio"] {
+                        display: none;
+                    }
+    
+                    background-color: #e4f8f8;
+                    border-radius: 5px;
+                    border: 1px solid var(--color-border-dark-1);
+                    padding-left: 1em;
+                    padding-right: 1em;
+                    padding-top: 0.25em;
+                    padding-bottom: 0.25em;
+    
+                    &.checked,
+                    &:not(.disabled):hover {
+                        background-color: #b0fdfd;
+                    }
+                    &:not(.checked):not(.disabled) {
+                        cursor: pointer;
+                    }
+                    &.disabled {
+                        background-color: #cce4e4;
+                        cursor: not-allowed;
+                        opacity: 0.6;
+                    }
+                }
+            }
+        }
+
+        .content-link.auto {
+            border-style: dotted;
+        }
+
+        .loading .load-wheel {
+            margin: auto;
+            border: 1.8em solid @pokeballWhite;
+            border-radius: 50%;
+            border-top: 1.8em solid @pokeballRed;
+            border-right: 1.8em solid @pokeballRed;
+            width: 5em;
+            height: 5em;
+            position: absolute;
+            left: calc(50% - 2.5em);
+            top: calc(50% - 2.5em);
+            animation: spinner 4s linear infinite;
+        }
+         
+        @keyframes spinner {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
     }
 }

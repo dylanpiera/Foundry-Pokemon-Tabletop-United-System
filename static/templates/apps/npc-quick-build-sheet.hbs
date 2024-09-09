@@ -1,0 +1,229 @@
+<form class="{{cssClass}} container-fluid d-flex flex-column" autocomplete="off" data-page="{{data.page}}">
+    <div class="d-flex flex-column">
+        <div class="header-bar">
+            <h2 class="title">{{localize "PTU.NpcQuickBuild.TrainerQuickBuild"}}</h2>
+            <nav>
+                <a class="page {{#if (eq data.page 1)}}current{{/if}}" data-page="1" {{#if (eq data.page 1)}}disabled{{/if}}>{{localize "PTU.NpcQuickBuild.Page.TrainerInfo"}}</a>
+                <a class="page {{#if (eq data.page 2)}}current{{/if}}" data-page="2" {{#if (eq data.page 2)}}disabled{{/if}}>{{localize "PTU.NpcQuickBuild.Page.FeaturesEdges"}}</a>
+                <a class="page {{#if (eq data.page 3)}}current{{/if}}" data-page="3" {{#if (eq data.page 3)}}disabled{{/if}}>{{localize "PTU.NpcQuickBuild.Page.SkillsStats"}}</a>
+                <a class="page {{#if (eq data.page 4)}}current{{/if}}" data-page="4" {{#if (eq data.page 4)}}disabled{{/if}}>{{localize "PTU.NpcQuickBuild.Page.Party"}}</a>
+            </nav>
+        </div>
+
+
+        {{!-- Warnings box  --}}
+        {{#if (gt data.warnings.num 0)}}
+        <div class="warning-box">
+            <h4 class="warning-title"><i class="fa-solid fa-triangle-exclamation"></i> Validation Warnings <span class="warning-num">({{data.warnings.num}})</span></h4>
+            <div class="warnings">
+            {{#each data.warnings.unmet as |warning|}}
+                <p class="unmet">{{warning}}</p>
+            {{/each}}
+            {{#each data.warnings.unknown as |warning|}}
+                <p class="unknown">{{warning}}</p>
+            {{/each}}
+            </div>
+        </div>
+        {{/if}}
+
+
+        {{#if (eq data.page 1)}}
+        <div class="trainer-info">
+            <label>{{localize "PTU.NpcQuickBuild.Alliance"}}</label>
+            <select name="alliance">
+                {{selectOptions allianceOptions selected=data.alliance localize=true}}
+            </select>
+            
+            <label>{{localize "PTU.NpcQuickBuild.Name"}}</label>
+            <input class="fb-40" type="text" name="trainer.name" value="{{data.trainer.name}}"/>
+
+            <label>{{localize "PTU.NpcQuickBuild.Sex"}}</label>
+            <input class="ptu-tagify trainer-sex one-entry" name="trainer.sex" data-filter-name="sex" value="{{json data.trainer.sex}}" data-dtype="JSON" />
+
+            <label>{{localize "PTU.NpcQuickBuild.TrainerLevel"}}</label>
+            <input class="fb-40" type="number" name="trainer.level" min="1" max="50" value="{{data.trainer.level}}"/>
+
+            <label>{{localize "PTU.NpcQuickBuild.Classes"}}</label>
+            <input class="ptu-tagify trainer-classes" name="trainer.classes.selected" data-filter-name="classes" value="{{json data.trainer.classes.selected}}" data-dtype="JSON" />
+        </div>
+        {{/if}}
+
+        {{!-- Features / Edges --}}
+        {{#if (eq data.page 2)}}
+            <div class="selected-features">
+                <h4>{{localize "PTU.NpcQuickBuild.Features"}}</h4>
+                <input class="ptu-tagify trainer-features" name="trainer.features.selected" data-filter-name="features" value="{{json data.trainer.features.selected}}" data-dtype="JSON" />
+            </div>
+
+            <div class="computed-links computed-features">
+                {{#each data.trainer.features.computed as |feature|}}
+                    <a class="content-link{{#if feature.auto}} auto{{/if}}" draggable="true" data-link="" data-uuid="{{feature.uuid}}" data-id="{{feature._id}}" data-type="Item" data-tooltip="Feature Item"><i class="fas fa-suitcase"></i>{{feature.name}}</a>
+                {{/each}}
+            </div>
+
+            <div class="selected-edges">
+                <h4>{{localize "PTU.NpcQuickBuild.Edges"}}</h4>
+                <input class="ptu-tagify trainer-features" name="trainer.edges.selected" data-filter-name="edges" value="{{json data.trainer.edges.selected}}" data-dtype="JSON" />
+            </div>
+
+            <div class="computed-links computed-edges">
+                {{#each data.trainer.edges.computed as |edge|}}
+                    <a class="content-link{{#if edge.auto}} auto{{/if}}" draggable="true" data-link="" data-uuid="{{edge.uuid}}" data-id="{{edge._id}}" data-type="Item" data-tooltip="Edge Item"><i class="fas fa-suitcase"></i>{{edge.name}}</a>
+                {{/each}}
+            </div>
+
+            {{!-- All the sub-selectables --}}
+            {{#each data.trainer.subSelectables as | sub |}}
+            {{#if sub.visible}}
+            <div class="sub-choices">
+                {{!-- <a class="content-link{{#if edge.auto}} auto{{/if}}" draggable="true" data-link="" data-uuid="{{edge.uuid}}" data-id="{{edge._id}}" data-type="Item" data-tooltip="Edge Item"><i class="fas fa-suitcase"></i>{{edge.name}}</a> --}}
+                <h4>Selection for {{sub.label}}</h4>
+                <div class="options">
+                {{#each sub.choices as | choice |}}
+                    <label class="sub-choice {{#if (eq sub.selected choice.value)}}checked{{/if}} {{#if choice.disabled}}disabled{{/if}}">{{choice.label}} <input type="radio" name="trainer.subSelectables.{{sub.key}}.selected" value="{{choice.value}}" {{#if (eq sub.selected choice.value)}}checked{{/if}} {{#if choice.disabled}}disabled{{/if}} /></label>
+                {{/each}}
+                </div>
+            </div>
+            {{/if}}
+            {{/each}}
+        {{/if}}
+
+        {{!-- Skills --}}
+        {{#if (eq data.page 3)}}
+            <div class="skills-box">
+                <h4>{{localize "PTU.NpcQuickBuild.Skills"}}</h4>
+                <div class="skills">
+                {{#each data.trainer.skills as | skill key |}}
+                    <div class="skill skill-{{skill.rankSlug}}">
+                         
+                        <label class="skill-name">{{localize skill.label}}</label>
+                        <label class="skill-rank">{{localize skill.valueLabel}}</label>
+                        {{!-- These are just icons. The real buttons come later --}}
+                        {{#if skill.prevRank includeZero=true}}<span class="skill-prev-rank"><i class="fa-solid fa-minus"></i></span>{{/if}}
+                        {{#if skill.nextRank includeZero=true}}<span class="skill-next-rank"><i class="fa-solid fa-plus"></i></span>{{/if}}
+                        
+                        {{!-- These get turned into shaders, and are the "real" buttons --}}
+                        {{#if skill.prevRank includeZero=true}}
+                            <a class="skill-prev-rank-clickarea button-set" data-value="{{skill.prevRank}}" data-path="trainer.skills.{{key}}.value" data-dtype="Number"></a>
+                        {{else}}
+                            <span class="skill-prev-rank-clickarea disabled"></span>
+                        {{/if}}
+                        {{#if skill.nextRank includeZero=true}}
+                            <a class="skill-next-rank-clickarea button-set" data-value="{{skill.nextRank}}" data-path="trainer.skills.{{key}}.value" data-dtype="Number"></a>
+                        {{else}}
+                            <span class="skill-next-rank-clickarea disabled"></span>
+                        {{/if}}
+                    </div>
+                {{/each}}
+                </div>
+                <p class="skill-points-remaining">{{localize "PTU.NpcQuickBuild.ApproximatePointsRemaining" points=data.skillPointsRemaining}}</p>
+            </div>
+            <div class="stats-box">
+                <h4>{{localize "PTU.NpcQuickBuild.Stats"}}</h4>
+                <div class="stats">
+                {{#each data.trainer.stats as | stat key |}}
+                    <div class="stat stat-{{stat.ranking}}">
+                        <label class="stat-name">{{localize stat.label}}</label>
+                        <input type="number" class="stat-value" name="trainer.stats.{{key}}.value" min="{{stat.min}}" max="{{stat.max}}" value="{{stat.value}}"/>
+                        {{!-- These are just icons. The real buttons come later --}}
+                        {{#if stat.prev includeZero=true}}<span class="stat-prev"><i class="fa-solid fa-minus"></i></span>{{/if}}
+                        {{#if stat.next includeZero=true}}<span class="stat-next"><i class="fa-solid fa-plus"></i></span>{{/if}}
+
+                        {{!-- These get turned into shaders, and are the "real" buttons --}}
+                        {{#if stat.prev includeZero=true}}
+                            <a class="stat-prev-clickarea button-set" data-value="{{stat.prev}}" data-path="trainer.stats.{{key}}.value" data-dtype="Number"></a>
+                        {{else}}
+                            <span class="stat-prev-clickarea disabled"></span>
+                        {{/if}}
+                        {{#if stat.next includeZero=true}}
+                            <a class="stat-next-clickarea button-set" data-value="{{stat.next}}" data-path="trainer.stats.{{key}}.value" data-dtype="Number"></a>
+                        {{else}}
+                            <span class="stat-next-clickarea disabled"></span>
+                        {{/if}}
+                    </div>
+                {{/each}}
+                </div>
+                <p class="stat-points-remaining">{{localize "PTU.NpcQuickBuild.ApproximatePointsRemaining" points=data.statPointsRemaining}}</p>
+            </div>
+        {{/if}}
+
+        {{!-- Party Pokemon --}}
+        {{#if (eq data.page 4)}}
+            <div class="pokemon-box">
+                <h4>{{localize "PTU.NpcQuickBuild.PartyPkmn"}}</h4>
+                <div class="all-party-pokemon">
+                {{#each data.party as | pkmn key |}}
+                {{#if pkmn.configured}}
+                    <div class="party-pokemon {{key}}" data-slot="{{key}}">
+                        <img class="pokemon-img" src="{{pkmn.species.img}}" data-edit="party.{{key}}.species.img" />
+
+                        <div class="pokemon-name" data-tooltip="PTU.NpcQuickBuild.Nickname">
+                            <label>{{localize "PTU.NpcQuickBuild.Name"}}</label>
+                            <input type="text" name="party.{{key}}.nickname" placeholder="{{pkmn.species.name}}" value="{{pkmn.nickname}}"/>
+                        </div>
+
+                        <div class="pokemon-gender gender-{{pkmn.species.gender.selected}}" data-tooltip="PTU.NpcQuickBuild.Gender">
+                            <label>{{localize "PTU.NpcQuickBuild.Gender"}}</label>
+                            {{#if pkmn.species.gender.choosable}}
+                            <select name="party.{{key}}.species.gender.selected">
+                                {{selectOptions pkmn.species.gender.options selected=pkmn.species.gender.selected localize=true}}
+                            </select>
+                            {{else}}
+                            <div>{{pkmn.species.gender.selected}}</div>
+                            {{/if}}
+
+                            {{#if (eq pkmn.species.gender.selected "Male")}}
+                            <i class="fa-solid fa-mars"></i>
+                            {{/if}}
+                            {{#if (eq pkmn.species.gender.selected "Female")}}
+                            <i class="fa-solid fa-venus"></i>
+                            {{/if}}
+                        </div>
+
+                        <div class="pokemon-level" data-tooltip="PTU.NpcQuickBuild.Level">
+                            <label>{{localize "PTU.NpcQuickBuild.Lv"}}</label>
+                            <input type="number" name="party.{{key}}.level.value" min="{{pkmn.level.min}}" max="{{pkmn.level.max}}" value="{{pkmn.level.value}}"/>
+                        </div>
+                        
+                        <div class="pokemon-shiny {{checked pkmn.shiny}}" data-tooltip="PTU.NpcQuickBuild.Shiny">
+                            <label>
+                                <i class="fa-solid fa-sparkles"></i>
+                                <input type="checkbox" name="party.{{key}}.shiny" {{checked pkmn.shiny}}/>
+                            </label>
+                        </div>
+                    </div>
+                {{else}}
+                    <div class="party-pokemon {{key}} species-unset" data-slot="{{key}}">
+                        <div class="pokemon-species">
+                            <label>{{localize "PTU.NpcQuickBuild.SpeciesName"}}</label>
+                            <input class="ptu-tagify one-entry" name="party.{{key}}.species.selected" data-filter-name="species" value="{{json pkmn.species.selected}}" data-dtype="JSON" />
+                        </div>
+                    </div>
+                {{/if}}
+                {{/each}}
+                </div>
+            </div>
+        {{/if}}
+    </div>
+
+    <div class="footer-controls">
+        {{!-- {{#if (gt data.page 1)}}
+        <input type="button" class="prev-page" value="{{localize "PTU.NpcQuickBuild.Prev"}}"/>
+        {{/if}}
+
+        {{#if (gt data.page 3)}}
+            {{#if data.ready}}
+            <input type="submit" autofocus value="{{localize "PTU.NpcQuickBuild.Submit"}}"/>
+            {{else}}
+            <input type="button" autofocus disabled value="{{localize "PTU.NpcQuickBuild.Submit"}}"/>
+            {{/if}}
+        {{else}}
+        <input type="button" class="next-page" autofocus value="{{localize "PTU.NpcQuickBuild.Next"}}"/>
+        {{/if}} --}}
+        {{#if data.ready}}
+        <input type="button" class="submit" value="{{localize "PTU.NpcQuickBuild.Submit"}}"/>
+        {{else}}
+        <input type="button" class="next-page" autofocus value="{{localize "PTU.NpcQuickBuild.Next"}}"/>
+        {{/if}}
+    </div>
+</form>

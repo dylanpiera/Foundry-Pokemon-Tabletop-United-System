@@ -19,6 +19,7 @@ import { StatusEffects } from '../../module/canvas/status-effect.js';
 import { PTUToken } from '../../module/canvas/token/index.js';
 import { PTUSpeciesDragOptionsPrompt } from '../../module/apps/species-drag-in/sheet.js';
 import { PTUSpeciesMassGenerator } from '../../module/apps/species-mass-generator/sheet.js';
+import { PTUNpcQuickBuild } from '../../module/apps/npc-quick-build/sheet.js';
 import { LevelUpForm } from '../../module/apps/level-up-form/sheet.js';
 import { LevelUpData } from '../../module/apps/level-up-form/document.js';
 import { AttackRoll } from '../../module/system/check/rolls/attack-roll.js';
@@ -65,6 +66,16 @@ const data = {
       "stealth",
       "survival",
     ], PTUSkills
+  },
+  stats: {
+    keys: [
+      "hp",
+      "atk",
+      "def",
+      "spatk",
+      "spdef",
+      "spd"
+    ],
   },
   levelProgression,
   typeEffectiveness,
@@ -118,6 +129,11 @@ const data = {
       "opposition": "PTU.Weather.Mode.Opposition",
       "all": "PTU.Weather.Mode.All"
     }
+  },
+  randomNames: {
+    "Male": ["Liam", "Noah", "Oliver", "James", "Elijah", "Mateo", "Theodore", "Henry", "Lucas", "William", "Benjamin", "Levi", "Sebastian", "Jack", "Ezra", "Michael", "Daniel", "Leo", "Owen", "Samuel", "Hudson", "Alexander", "Asher", "Luca", "Ethan", "John", "David", "Jackson", "Joseph", "Mason"],
+    "Female": ["Olivia", "Emma", "Charlotte", "Amelia", "Sophia", "Mia", "Isabella", "Ava", "Evelyn", "Luna", "Harper", "Sofia", "Camila", "Eleanor", "Elizabeth", "Violet", "Scarlett", "Emily", "Hazel", "Lily", "Gianna", "Aurora", "Penelope", "Aria", "Nora", "Chloe", "Ellie", "Mila", "Avery", "Layla"],
+    "Nonbinary": ["Noah", "James", "Evelyn", "Harper", "Michael", "Logan", "Avery", "Madison", "Riley", "Jayden", "Ainsley", "Arden", "Dakota", "Finley", "Hayden", "Lennox", "Lindsey", "Robin", "Rowan", "Sloan", "Alexis", "Angel", "Briar", "Kirby", "Madhu", "Marley", "Morgan", "River", "Skyler", "Taylor"],
   }
 }
 
@@ -167,6 +183,9 @@ const ui = {
   },
   speciesMassGenerator: {
     sheetClass: PTUSpeciesMassGenerator
+  },
+  npcQuickBuild: {
+    sheetClass: PTUNpcQuickBuild
   },
   levelUpForm: {
     sheetClass: LevelUpForm,

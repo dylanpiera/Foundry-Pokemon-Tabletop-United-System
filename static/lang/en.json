@@ -477,6 +477,7 @@
     "Genderless": "Genderless",
     "Male": "Male",
     "Female": "Female",
+    "Nonbinary": "Nonbinary",
     "BossBarTooltip": "The Reserve boss bars is intended to be the amount of Boss Turns - 1",
 
     "LevelUpForm": {
@@ -516,6 +517,35 @@
       "FoundFolder": "Detected Folder",
       "CouldNotFindFolder": "Folder {folder} not found, it will be created upon submit",
       "Submit": "Generate"
+    },
+
+    "NpcQuickBuild": {
+      "TrainerQuickBuild": "Trainer Quick Build",
+      "Name": "Name",
+      "Nickname": "Nickname",
+      "Alliance": "Alliance",
+      "TrainerLevel": "Trainer Level",
+      "Classes": "Classes",
+      "Features": "Features",
+      "Edges": "Edges",
+      "Skills": "Skills",
+      "Stats": "Stats",
+      "PartyPkmn": "Party Pokemon",
+      "Level": "Level",
+      "Lv": "Lv.",
+      "Gender": "Gender",
+      "Sex": "Sex",
+      "Shiny": "Shiny",
+      "SpeciesName": "Species",
+      "Page": {
+        "TrainerInfo": "Trainer Info",
+        "FeaturesEdges": "Features & Edges",
+        "SkillsStats": "Skills & Stats",
+        "Party": "Party Pokemon"
+      },
+      "ApproximatePointsRemaining": "Approximate Points Remaining: {points}",
+      "Next": "Next",
+      "Submit": "Submit"
     },
 
     "Stats": {
