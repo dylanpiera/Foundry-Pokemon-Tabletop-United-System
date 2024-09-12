@@ -146,11 +146,18 @@ export class PTUNpcQuickBuild extends FormApplication {
         // "remove pokemon" button
         $html.find('.pokemon-remove').on('click', function (event) {
             event.preventDefault();
-            // if (event.target.disabled) return;
-            // event.target.disabled = true;
             const dataset = this.closest(".party-pokemon")?.dataset;
-            globalThis.data.resetPokemonSlot(dataset?.slot);
-            globalThis.render(true);
+            globalThis.data.resetPokemonSlot(dataset?.slot).then(
+                ()=>globalThis.render(true));
+        });
+
+        // "randomize pokemon" button
+        $html.find('.pokemon-randomize').on('click', function (event) {
+            event.preventDefault();
+            const dataset = this.closest(".party-pokemon")?.dataset;
+            globalThis.loading().then(
+                ()=>globalThis.data.randomizePartyPokemon(dataset?.slot)).then(
+                ()=>globalThis.render(true));
         });
 
         // $html.find('.tab-button').on('click', (event) => {

@@ -728,7 +728,7 @@ export class NpcQuickBuildData {
             shiny: false,
             nickname: "",
             level: {
-                value: game.settings.get("ptu", "generation.defaultDexDragInLevelMin"), // TODO: use a different default? Maybe 2x trainer level?
+                value: this.trainer.level * 2,
                 min: 1,
                 max: 100,
             }

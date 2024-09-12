@@ -2389,7 +2389,7 @@ a.content-link img {
   padding: 0px 2px;
 }
 .ptu.pokemon.npc-quick-build .window-content .pokemon-box .all-party-pokemon .party-pokemon .pokemon-species {
-  grid-column: 1 / 5;
+  grid-column: 1 / 4;
   grid-row: 2;
 }
 .ptu.pokemon.npc-quick-build .window-content .pokemon-box .all-party-pokemon .party-pokemon .pokemon-img {
@@ -2470,6 +2470,10 @@ a.content-link img {
 .ptu.pokemon.npc-quick-build .window-content .pokemon-box .all-party-pokemon .party-pokemon .pokemon-remove {
   grid-column: 4;
   grid-row: 3;
+}
+.ptu.pokemon.npc-quick-build .window-content .pokemon-box .all-party-pokemon .party-pokemon .pokemon-randomize {
+  grid-column: 4;
+  grid-row: 2;
 }
 .ptu.pokemon.npc-quick-build .window-content .tagify.one-entry [role="textbox"]:not(:first-child) {
   display: none;

@@ -538,6 +538,7 @@
       "Shiny": "Shiny",
       "SpeciesName": "Species",
       "RemovePokemon": "Remove Pokemon",
+      "RandomizePokemon": "Randomize Pokemon",
       "Page": {
         "TrainerInfo": "Trainer Info",
         "FeaturesEdges": "Features & Edges",
