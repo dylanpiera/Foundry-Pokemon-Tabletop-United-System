@@ -43,6 +43,9 @@
             <label>{{localize "PTU.NpcQuickBuild.TrainerLevel"}}</label>
             <input class="fb-40" type="number" name="trainer.level" min="1" max="50" value="{{data.trainer.level}}"/>
 
+            <label>{{localize "PTU.NpcQuickBuild.PartySize"}}</label>
+            <input class="fb-40" type="number" name="trainer.partySize" min="1" value="{{data.trainer.partySize}}"/>
+
             <label>{{localize "PTU.NpcQuickBuild.Classes"}}</label>
             <input class="ptu-tagify trainer-classes" name="trainer.classes.selected" data-filter-name="classes" value="{{json data.trainer.classes.selected}}" data-dtype="JSON" />
         </div>
@@ -151,6 +154,10 @@
         {{#if (eq data.page 4)}}
             <div class="pokemon-box">
                 <h4>{{localize "PTU.NpcQuickBuild.PartyPkmn"}}</h4>
+                <div class="pokemon-party-size">
+                    <label>{{localize "PTU.NpcQuickBuild.PartySize"}}</label>
+                    <input type="number" name="trainer.partySize" min="1" value="{{data.trainer.partySize}}"/>
+                </div>
                 <div class="all-party-pokemon">
                 {{#each data.party as | pkmn key |}}
                 {{#if pkmn.configured}}

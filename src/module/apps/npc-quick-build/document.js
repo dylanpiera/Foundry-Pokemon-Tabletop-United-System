@@ -2,9 +2,6 @@ import { PokemonGenerator } from "../../actor/pokemon/generator.js";
 import { PTUSkills } from '../../actor/index.js';
 import { Mutex } from '../../../util/mutex.js';
 
-const MaxPartyPokemon = 6;
-
-
 const SINGLE_MIN_SKILL_RANK_RE = /(?<rank>(Pathetic)|(Untrained)|(Novice)|(Adept)|(Expert)|(Master)|(Virtuoso)) (?<skill>.+)/i;
 const ANY_N_SKILLS_AT_RE = /(any )?(?<n>([0-9]+)|(A)|(One)|(Two)|(Three)|(Four)|(Five)|(Six)|(Seven)|(Eight)|(Nine)) Skills? at (?<rank>(Untrained)|(Novice)|(Adept)|(Expert)|(Master)|(Virtuoso))( Rank)?/i;
 const N_SKILLS_AT_FROM_LIST_RE = /(?<n>([0-9]+)|(A)|(One)|(Two)|(Three)|(Four)|(Five)|(Six)|(Seven)|(Eight)|(Nine))( Skills?)? of (?<skills>.+) at (?<rank>(Untrained)|(Novice)|(Adept)|(Expert)|(Master)|(Virtuoso))( Rank)?( or higher)?/i;
@@ -78,6 +75,7 @@ export class NpcQuickBuildData {
             name: "",
             sex: [],
             level: Math.floor(this.estimatedAppropriateLevel),
+            partySize: 6,
             classes: {
                 selected: [],
                 restricted: true,
@@ -125,7 +123,7 @@ export class NpcQuickBuildData {
         // Configure party pokemon slots
 
         this.party = {};
-        for (let n = 1; n <= MaxPartyPokemon; n++) {
+        for (let n = 1; n <= this.trainer.partySize; n++) {
             this.resetPokemonSlot(`slot${n}`);
         }
 
@@ -302,7 +300,7 @@ export class NpcQuickBuildData {
         await this.randomizeSkills();
         await this.randomizeStats();
 
-        for (let s = 1; s <= 6; s++) {
+        for (let s = 1; s <= this.trainer.partySize; s++) {
             const slot = `slot${s}`;
             if (noUpdate.has(`party.${slot}.species.selected`)) continue;
             if (noUpdate.has(`party.${slot}.nickname`)) continue;
@@ -625,6 +623,7 @@ export class NpcQuickBuildData {
     }
 
     async randomizePartyPokemon(slot) {
+        this.resetPokemonSlot(slot);
         // randomize level
         const pkmnLevel = Math.min(100, Math.max(1, Math.round((this.trainer.level * 2) * NpcQuickBuildData.normalDistribution(1.0, 0.1))));
         
@@ -632,18 +631,23 @@ export class NpcQuickBuildData {
         // currently this is weighted towards species with more evolutions...
         // but it's really really slow to try to avoid that problem
         let speciesOption = chooseFrom(this.multiselects.species.options);
-        let species = (await fromUuid(speciesOption.value));
-        let evolutionChain = species.system.evolutions;
+        let species = (await fromUuid(speciesOption.uuid));
+        let evolutionChain = species?.system?.evolutions;
+
+        if (!species) {
+            console.log(`failed to generate pokemon in ${slot}:`, speciesOption);
+            return;
+        }
         
         // make sure we're at the right evolution level
         speciesOption = evolutionChain.filter(ev=>ev.level <= pkmnLevel).sort(ev=>-ev.level).map(ev=>({
             label: ev.slug[0].toUpperCase() + ev.slug.slice(1),
-            value: ev.uuid,
+            uuid: ev.uuid,
         }))?.[0];
-        species = (await fromUuid(speciesOption.value)) ?? species;
+        species = (await fromUuid(speciesOption.uuid)) ?? species;
 
         this.party[slot].level.value = pkmnLevel;
-        await this.configurePokemonSpecies(slot, { species, uuid: speciesOption.value });
+        await this.configurePokemonSpecies(slot, { species, uuid: speciesOption.uuid });
     }
 
 
@@ -705,7 +709,7 @@ export class NpcQuickBuildData {
         this.party[slot].configured = true;
     }
 
-    async resetPokemonSlot(slot) {
+    resetPokemonSlot(slot) {
         this.party[slot] = {
             slot,
             configured: false,
@@ -1002,7 +1006,7 @@ export class NpcQuickBuildData {
         const unlock = await this._refreshMutex.lock()
 
         this.multiselects = foundry.utils.deepClone(this._staticMultiselects);
-        
+
         // grab the features and prerequisites
         // the actual structure of these foundry items, plus "uuid" and "auto"
         const allComputed = [];
@@ -1208,6 +1212,15 @@ export class NpcQuickBuildData {
                 pkmn.species.img = img;
             }
             this.party[slot] = pkmn;
+        }
+        for (let n = 1; n <= this.trainer.partySize; n++) {
+            if (this.party[`slot${n}`] == undefined) {
+                this.resetPokemonSlot(`slot${n}`);
+            }
+        }
+        // remove invalid slots
+        for (const slot of (new Set(Object.keys(this.party))).difference(new Set(Array.from({length: this.trainer.partySize}, (_, i) => `slot${i + 1}`)))) {
+            delete this.party[slot];
         }
 
         // update the multiselects to account for all pre-selected features/edges

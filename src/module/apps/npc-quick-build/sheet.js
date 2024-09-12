@@ -52,7 +52,7 @@ export class PTUNpcQuickBuild extends FormApplication {
             label: "Randomize",
             class: "randomize",
             icon: "fas fa-dice",
-            onclick: () => sheet.loading().then(()=>sheet.data.randomizeAll()).then(()=>sheet.renderAsync()).then(()=>this.unloading()).then(()=>this.disabled = false),
+            onclick: () => sheet.loading().then(()=>sheet.data.randomizeAll()).then(()=>sheet.renderAsync()).then(()=>this.disabled = false),
         })
 
         return buttons;
@@ -159,17 +159,17 @@ export class PTUNpcQuickBuild extends FormApplication {
         $html.find('.pokemon-remove').on('click', function (event) {
             event.preventDefault();
             const dataset = this.closest(".party-pokemon")?.dataset;
-            globalThis.data.resetPokemonSlot(dataset?.slot).then(
-                ()=>globalThis.render(true));
+            globalThis.data.resetPokemonSlot(dataset?.slot);
+            globalThis.render(true);
         });
 
         // "randomize pokemon" button
-        $html.find('.pokemon-randomize').on('click', function (event) {
+        $html.find('.pokemon-randomize').on('click', async function (event) {
             event.preventDefault();
             const dataset = this.closest(".party-pokemon")?.dataset;
-            globalThis.loading().then(
-                ()=>globalThis.data.randomizePartyPokemon(dataset?.slot)).then(
-                ()=>globalThis.render(true));
+            await globalThis.loading();
+            await globalThis.data.randomizePartyPokemon(dataset?.slot);
+            await globalThis.render(true);
         });
 
         // $html.find('.tab-button').on('click', (event) => {
@@ -284,6 +284,7 @@ export class PTUNpcQuickBuild extends FormApplication {
             });
             return this.unloading();
         });
+        await this.unloading();
         return this;
     }
 
