@@ -156,7 +156,7 @@ export class NpcQuickBuildData {
             updated: false,
             options: [
                 { label: "Compendium Browser Settings", uuid: "" },
-                ...game.tables.map(t => ({ label: t.name, uuid: t.uuid }))
+                ...game.tables.map(t => ({ label: t.name, uuid: t.uuid, group: t.folder?.name }))
             ],
             link: {
                 label: undefined,
