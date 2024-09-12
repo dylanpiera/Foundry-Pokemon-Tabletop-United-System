@@ -129,7 +129,7 @@ export class NpcQuickBuildData {
             this.resetPokemonSlot(`slot${n}`);
         }
 
-        this.multiselects = {
+        this._staticMultiselects = {
             sex: {
                 options: ["Male", "Female", "Nonbinary"].map(x=>({ label: x, value: x})),
                 maxTags: 1,
@@ -148,6 +148,8 @@ export class NpcQuickBuildData {
                 maxTags: 1,
             }
         };
+
+        this.multiselects = foundry.utils.deepClone(this._staticMultiselects);
 
 
         this.warnings = {
@@ -191,28 +193,30 @@ export class NpcQuickBuildData {
                 if (feature.type !== "feat") continue;
                 let bucket = "features";
                 if (feature?.system?.keywords?.includes("Class")) bucket = "classes";
-                this.multiselects[bucket].options.push({
+                this._staticMultiselects[bucket].options.push({
                     label: feature.name,
-                    value: feature.uuid,
+                    value: feature.name,
+                    uuid: feature.uuid,
                     prerequisites: feature?.system?.prerequisites ?? [],
                 })
             }
         }
-        this.multiselects.classes.options.sort((a, b) => a.label.localeCompare(b.label));
-        this.multiselects.features.options.sort((a, b) => a.label.localeCompare(b.label));
+        this._staticMultiselects.classes.options.sort((a, b) => a.label.localeCompare(b.label));
+        this._staticMultiselects.features.options.sort((a, b) => a.label.localeCompare(b.label));
 
         // get edges
         for (const compendium of edgeCompendiums) {
             for (const edge of game.packs.get(compendium).index) {
                 if (edge.type !== "edge") continue;
-                this.multiselects.edges.options.push({
+                this._staticMultiselects.edges.options.push({
                     label: edge.name,
-                    value: edge.uuid,
+                    value: edge.name,
+                    uuid: edge.uuid,
                     prerequisites: edge?.system?.prerequisites ?? [],
                 })
             }
         }
-        this.multiselects.edges.options.sort((a, b) => a.label.localeCompare(b.label));
+        this._staticMultiselects.edges.options.sort((a, b) => a.label.localeCompare(b.label));
 
         // get species
         for (const compendium of speciesCompendiums) {
@@ -222,19 +226,23 @@ export class NpcQuickBuildData {
                 if (species.name.includes("-Terrastal")) continue; // Same with 
                 if (species.name.includes("-Eternamax")) continue; // Same with Terrastalized
                 if (species.name.startsWith("Delta ")) continue; // What even is this?
-                this.multiselects.species.options.push({
+                this._staticMultiselects.species.options.push({
                     label: species.name,
-                    value: species.uuid,
+                    value: species.name,
+                    uuid: species.uuid,
                 })
             }
         }
-        this.multiselects.species.options.sort((a, b) => a.label.localeCompare(b.label));
+        this._staticMultiselects.species.options.sort((a, b) => a.label.localeCompare(b.label));
+
+        
+        this.multiselects = foundry.utils.deepClone(this._staticMultiselects);
     }
 
     async _findFromMultiselect(bucket, searchfunction) {
         const found = this.multiselects[bucket]?.options?.find(searchfunction);
         if (!found) return null;
-        const uuid = found.value || found.uuid;
+        const uuid = found.uuid || found.value;
         if (!uuid) return null;
         const foundItem = (await fromUuid(uuid))?.toObject();
         if (!foundItem) return null;
@@ -1004,31 +1012,34 @@ export class NpcQuickBuildData {
         const allUnknown = [];
 
         for (const feature of Object.values(this.trainer.classes.selected)) {
-            if (!feature.value) continue;
-            const item = (await fromUuid(feature.value))?.toObject();
+            if (!feature.uuid) continue;
+            const item = (await fromUuid(feature.uuid))?.toObject();
             if (!item) continue;
             Object.assign(item, {
-                uuid: feature.value,
+                uuid: feature.uuid,
+                label: feature.label,
             });
             featuresComputed.push(item);
             allComputed.push(item);
         }
         for (const feature of Object.values(this.trainer.features.selected)) {
-            if (!feature.value) continue;
-            const item = (await fromUuid(feature.value))?.toObject();
+            if (!feature.uuid) continue;
+            const item = (await fromUuid(feature.uuid))?.toObject();
             if (!item) continue;
             Object.assign(item, {
-                uuid: feature.value,
+                uuid: feature.uuid,
+                label: feature.label,
             });
             featuresComputed.push(item);
             allComputed.push(item);
         }
         for (const edge of Object.values(this.trainer.edges.selected)) {
-            if (!edge.value) continue;
-            const item = (await fromUuid(edge.value))?.toObject();
+            if (!edge.uuid) continue;
+            const item = (await fromUuid(edge.uuid))?.toObject();
             if (!item) continue;
             Object.assign(item, {
-                uuid: edge.value,
+                uuid: edge.uuid,
+                label: edge.label,
             });
             edgesComputed.push(item);
             allComputed.push(item);
@@ -1080,12 +1091,13 @@ export class NpcQuickBuildData {
             for (const [idx, choiceSet] of choiceSets.entries()) {
                 const choices = choiceSet.choices.map(c => ({ ...c }));
                 const uuid = choice.uuid;
-                const key = `${uuid}-${idx}`.replaceAll(".", "-");
+                const label = choice.label;
+                const key = `${label}-${idx}`.replaceAll(".", "-");
                 const subSelectable = {
                     key,
                     uuid,
+                    label,
                     idx,
-                    label: choice.name,
                     choices,
                     selected: this.trainer?.subSelectables?.[key]?.selected ?? null,
                     visible: true,
@@ -1124,18 +1136,13 @@ export class NpcQuickBuildData {
             }
         }
 
-
         // try to infer auto stat changes
         // TODO
-
 
         // set them as the values in the trainer
         this.trainer.features.computed = featuresComputed;
         this.trainer.edges.computed = edgesComputed;
         this.trainer.subSelectables = subSelectables;
-
-
-
 
         // set warnings
         this.warnings = {
@@ -1178,8 +1185,6 @@ export class NpcQuickBuildData {
         }
         this.trainer.stats = newStats;
 
-
-
         // check if any pokemon have been newly configured
         for (const slot of Object.keys(this.party)) {
             if (!this.party[slot].configured) {
@@ -1199,6 +1204,27 @@ export class NpcQuickBuildData {
                 pkmn.species.img = img;
             }
             this.party[slot] = pkmn;
+        }
+
+        // update the multiselects to account for all pre-selected features/edges
+        for (const key of ["features", "edges"]) {
+            const multiselectOptions = foundry.utils.deepClone(this._staticMultiselects[key].options);
+            for (const selOption of this.trainer[key].selected) {
+                let n = 2;
+                let nsfLabel;
+                do {
+                    nsfLabel = `${selOption.originalLabel ?? selOption.label} (${n++})`;
+                    if (multiselectOptions.find(f=>f.label == nsfLabel) == null) {
+                        multiselectOptions.push({
+                            ...selOption,
+                            originalLabel: selOption.originalLabel ?? selOption.label,
+                            label: nsfLabel,
+                            value: nsfLabel,
+                        });
+                    }
+                } while (this.trainer[key].selected.find(f=>f.label == nsfLabel) != null)
+            }
+            this.multiselects[key].options = multiselectOptions;
         }
 
         unlock();
@@ -1273,8 +1299,8 @@ export class NpcQuickBuildData {
                 // iobj.flags.ptu ??= {}
                 // iobj.flags.ptu.rulesSelections ??= {}
                 for (const [idx, choiceSet] of choiceSets.entries()) {
-                    const uuid = item.uuid;
-                    const key = `${uuid}-${idx}`.replaceAll(".", "-");
+                    const label = item.label;
+                    const key = `${label}-${idx}`.replaceAll(".", "-");
                     choiceSet.selection = this.trainer.subSelectables[key].selected;
                 }
             }
