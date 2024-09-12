@@ -114,6 +114,13 @@ export class PTUNpcQuickBuild extends FormApplication {
                 tagifyOptions.enforceWhitelist = false;
             }
 
+            if (multiselect.matches(".trainer-features")) {
+                tagifyOptions.templates ??= {};
+                tagifyOptions.templates.dropdownItem = function(tagData) {
+                    return `<div label="${tagData.label}" value="${tagData.value}" uuid="${tagData.uuid}" mappedvalue="${tagData.mappedValue}" class="tagify__dropdown__item ${tagData.label} ${tagData.crossClass ? "crossclass" : ""}" tabindex="0" role="option">${tagData.label}</div>`
+                };
+            }
+
             const tagify = new Tagify(multiselect, tagifyOptions);
 
             // // Add the name to the tags html as an indicator for refreshing

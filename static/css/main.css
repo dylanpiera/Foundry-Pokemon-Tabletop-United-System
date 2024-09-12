@@ -4719,6 +4719,10 @@ a.content-link img {
   color: black;
   flex: 1;
 }
+/* Tagify drop-down styling for NPC Quick Builder */
+.tagify__dropdown__item.crossclass {
+  background-color: lightcoral;
+}
 /* mod-field styling */
 .mod-input {
   position: relative;

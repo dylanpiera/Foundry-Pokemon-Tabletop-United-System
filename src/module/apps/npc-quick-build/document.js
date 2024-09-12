@@ -198,6 +198,7 @@ export class NpcQuickBuildData {
                     value: feature.name,
                     uuid: feature.uuid,
                     prerequisites: feature?.system?.prerequisites ?? [],
+                    class: feature?.system?.class,
                 })
             }
         }
@@ -999,6 +1000,9 @@ export class NpcQuickBuildData {
 
     async refresh() {
         const unlock = await this._refreshMutex.lock()
+
+        this.multiselects = foundry.utils.deepClone(this._staticMultiselects);
+        
         // grab the features and prerequisites
         // the actual structure of these foundry items, plus "uuid" and "auto"
         const allComputed = [];
@@ -1226,6 +1230,14 @@ export class NpcQuickBuildData {
             }
             this.multiselects[key].options = multiselectOptions;
         }
+        // Sort the features and add classifiers (from currently selected classes, etc)
+        const selectedClasses = this.trainer.classes.selected.map(c=>c.value);
+        for (const featureOption of this.multiselects.features.options) {
+            featureOption.crossClass = (selectedClasses.length > 0 && featureOption?.class) ? !selectedClasses.includes(featureOption.class) : false;
+        }
+        this.multiselects.features.options.sort((a, b)=> a.crossClass - b.crossClass || a.label.localeCompare(b.label));
+        
+        this.multiselects.edges.options.sort((a, b)=> a.label.localeCompare(b.label));
 
         unlock();
     }
