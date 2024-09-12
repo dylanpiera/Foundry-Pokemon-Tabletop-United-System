@@ -2128,6 +2128,10 @@ a.content-link img {
   align-items: baseline;
   gap: 0.2em 2em;
 }
+.ptu.pokemon.npc-quick-build .window-content .selected-features .tagify,
+.ptu.pokemon.npc-quick-build .window-content .selected-edges .tagify {
+  min-width: 100%;
+}
 .ptu.pokemon.npc-quick-build .window-content .skills-box .skills,
 .ptu.pokemon.npc-quick-build .window-content .stats-box .stats {
   display: grid;
@@ -2479,6 +2483,8 @@ a.content-link img {
 .ptu.pokemon.npc-quick-build .window-content .pokemon-box .all-party-pokemon .party-pokemon .pokemon-remove {
   grid-column: 4;
   grid-row: 3;
+  justify-self: end;
+  padding-right: 5px;
 }
 .ptu.pokemon.npc-quick-build .window-content .pokemon-box .all-party-pokemon .party-pokemon .pokemon-randomize {
   grid-column: 4;

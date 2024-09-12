@@ -2609,6 +2609,13 @@ a.content-link {
             gap: 0.2em 2em;
         }
 
+        .selected-features,
+        .selected-edges {
+            .tagify {
+                min-width: 100%;
+            }
+        }
+
         .skills-box .skills,
         .stats-box .stats {
             display: grid;
@@ -2782,7 +2789,7 @@ a.content-link {
                 align-items: baseline;
                 gap: 1em;
                 margin-bottom: 1em;
-                
+
                 input {
                     flex: 0.25;
                 }
@@ -2929,6 +2936,8 @@ a.content-link {
                     .pokemon-remove {
                         grid-column: 4;
                         grid-row: 3;
+                        justify-self: end;
+                        padding-right: 5px;
                     }
 
                     .pokemon-randomize {
