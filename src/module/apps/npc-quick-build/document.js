@@ -6,7 +6,7 @@ const SINGLE_MIN_SKILL_RANK_RE = /(?<rank>(Pathetic)|(Untrained)|(Novice)|(Adept
 const ANY_N_SKILLS_AT_RE = /(any )?(?<n>([0-9]+)|(A)|(One)|(Two)|(Three)|(Four)|(Five)|(Six)|(Seven)|(Eight)|(Nine)) Skills? at (?<rank>(Untrained)|(Novice)|(Adept)|(Expert)|(Master)|(Virtuoso))( Rank)?/i;
 const N_SKILLS_AT_FROM_LIST_RE = /(?<n>([0-9]+)|(A)|(One)|(Two)|(Three)|(Four)|(Five)|(Six)|(Seven)|(Eight)|(Nine))( Skills?)? of (?<skills>.+) at (?<rank>(Untrained)|(Novice)|(Adept)|(Expert)|(Master)|(Virtuoso))( Rank)?( or higher)?/i;
 
-const FEAT_WITH_SUB_RE = /(?<main>.+)( \((?<sub>.+)\)?(?<cr> \[CR\])?)/i;
+const FEAT_WITH_SUB_RE = /(?<main>[^\(\)]+) (\((?<sub>.+)\)) ?(?<cr>\[CR\])?/i;
 const N_FEATS_FROM_LIST_RE = /(?<n>([0-9]+)|(A)|(One)|(Two)|(Three)|(Four)|(Five)|(Six)|(Seven)|(Eight)|(Nine)) of (?<features>.+)?/i;
 const COMPENDIUM_ITEM_RE = /Compendium\.([\w\.]+).Item.[a-zA-Z0-9]+/;
 
@@ -1099,7 +1099,7 @@ export class NpcQuickBuildData {
             for (const [idx, choiceSet] of choiceSets.entries()) {
                 const choices = choiceSet.choices.map(c => ({ ...c }));
                 const uuid = choice.uuid;
-                const label = choice.label;
+                const label = choice.label ?? choice.name;
                 const key = `${label}-${idx}`.replaceAll(".", "-");
                 const subSelectable = {
                     key,
@@ -1108,7 +1108,7 @@ export class NpcQuickBuildData {
                     idx,
                     choices,
                     selected: this.trainer?.subSelectables?.[key]?.selected ?? null,
-                    visible: true,
+                    visible: this.trainer?.subSelectables?.[key]?.visible ?? true,
                 };
                 // check if the choices are items in the compendium
                 if (choices.every(c => COMPENDIUM_ITEM_RE.test(c.value))) {
@@ -1121,15 +1121,11 @@ export class NpcQuickBuildData {
 
                 // check if we've got an unmet prerequisite for this still
                 const unmet = allSuboptions.find(s => s.uuid == uuid);
-                if (unmet && choices.find(c => c.label == unmet.subvalue)) {
+                if (unmet && !subSelectable.selected && choices.find(c => c.label == unmet.subvalue)) {
                     subSelectable.selected = choices.find(c => c.label == unmet.subvalue)?.value ?? null;
                     subSelectable.visible = false;
                     allSuboptions.splice(allSuboptions.indexOf(unmet), 1);
                 }
-                // if (alreadySelected.has(subSelectable.selected)) {
-                //     subSelectable.selected = null;
-                //     subSelectable.visible = true;
-                // }
                 subSelectables[key] = subSelectable;
                 relatedChanges.push(subSelectable);
                 alreadySelected.add(subSelectable.selected);
