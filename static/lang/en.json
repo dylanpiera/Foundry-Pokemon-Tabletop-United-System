@@ -537,6 +537,7 @@
       "Sex": "Sex",
       "Shiny": "Shiny",
       "SpeciesName": "Species",
+      "RemovePokemon": "Remove Pokemon",
       "Page": {
         "TrainerInfo": "Trainer Info",
         "FeaturesEdges": "Features & Edges",

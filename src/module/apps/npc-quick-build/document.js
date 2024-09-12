@@ -126,42 +126,7 @@ export class NpcQuickBuildData {
 
         this.party = {};
         for (let n = 1; n <= MaxPartyPokemon; n++) {
-            this.party[`slot${n}`] = {
-                slot: `slot${n}`,
-                configured: false,
-                species: {
-                    object: null,
-                    name: "",
-                    img: "icons/svg/mystery-man.svg",
-                    uuid: "",
-                    selected: [],
-                    gender: {
-                        selected: "",
-                        options: [],
-                        choosable: false,
-                    },
-                    variations: {
-                        selected: "",
-                        options: [],
-                    },
-                    optimization: {
-                        selected: "good",
-                        options: [
-                            { label: "PTU.OptimizationLevel.Bad", value: "bad" },
-                            { label: "PTU.OptimizationLevel.Neutral", value: "neutral" },
-                            { label: "PTU.OptimizationLevel.Good", value: "good" },
-                            { label: "PTU.OptimizationLevel.MinMaxed", value: "minmax" },
-                        ]
-                    },
-                },
-                shiny: false,
-                nickname: "",
-                level: {
-                    value: game.settings.get("ptu", "generation.defaultDexDragInLevelMin"), // TODO: use a different default? Maybe 2x trainer level?
-                    min: 1,
-                    max: 100,
-                }
-            };
+            this.resetPokemonSlot(`slot${n}`);
         }
 
         this.multiselects = {
@@ -294,8 +259,8 @@ export class NpcQuickBuildData {
     }
 
     /*-----------------------------------------------------------------------*/
-
     /*                           AUTO GENERATION                             */
+    /*-----------------------------------------------------------------------*/
 
     async randomizeAll(force = false) {
         if (force) this.manuallyUpdatedFields = new Set();
@@ -673,6 +638,12 @@ export class NpcQuickBuildData {
     }
 
 
+    
+
+    /*-----------------------------------------------------------------------*/
+    /*                        Party Pokemon Settings                         */
+    /*-----------------------------------------------------------------------*/
+
     async configurePokemonSpecies(slot, { species, uuid }) {
         const pkmn = this.party[slot];
 
@@ -724,6 +695,47 @@ export class NpcQuickBuildData {
 
         this.party[slot].configured = true;
     }
+
+    async resetPokemonSlot(slot) {
+        this.party[slot] = {
+            slot,
+            configured: false,
+            species: {
+                object: null,
+                name: "",
+                img: "icons/svg/mystery-man.svg",
+                uuid: "",
+                selected: [],
+                gender: {
+                    selected: "",
+                    options: [],
+                    choosable: false,
+                },
+                variations: {
+                    selected: "",
+                    options: [],
+                },
+                optimization: {
+                    selected: "good",
+                    options: [
+                        { label: "PTU.OptimizationLevel.Bad", value: "bad" },
+                        { label: "PTU.OptimizationLevel.Neutral", value: "neutral" },
+                        { label: "PTU.OptimizationLevel.Good", value: "good" },
+                        { label: "PTU.OptimizationLevel.MinMaxed", value: "minmax" },
+                    ]
+                },
+            },
+            shiny: false,
+            nickname: "",
+            level: {
+                value: game.settings.get("ptu", "generation.defaultDexDragInLevelMin"), // TODO: use a different default? Maybe 2x trainer level?
+                min: 1,
+                max: 100,
+            }
+        };
+    }
+
+
 
 
     /**

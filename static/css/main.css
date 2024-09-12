@@ -2467,6 +2467,10 @@ a.content-link img {
 .ptu.pokemon.npc-quick-build .window-content .pokemon-box .all-party-pokemon .party-pokemon .pokemon-shiny.checked {
   opacity: 1;
 }
+.ptu.pokemon.npc-quick-build .window-content .pokemon-box .all-party-pokemon .party-pokemon .pokemon-remove {
+  grid-column: 4;
+  grid-row: 3;
+}
 .ptu.pokemon.npc-quick-build .window-content .tagify.one-entry [role="textbox"]:not(:first-child) {
   display: none;
 }
