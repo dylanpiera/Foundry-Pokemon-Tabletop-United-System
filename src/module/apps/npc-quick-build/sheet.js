@@ -303,7 +303,15 @@ export class PTUNpcQuickBuild extends FormApplication {
     /** @override */
     async close(options) {
         if (options?.properClose) {
-            await this.data.finalize().then(()=>this.data.generate());
+            await this.data.finalize().then(()=>this.data.generate()).catch(err => {
+                ui.notifications.error("Could not generate the NPC! Check the dev console for more details.");
+                Hooks.onError("Application#close", err, {
+                    msg: `An error occurred while closing ${this.constructor.name} ${this.appId}`,
+                    log: "error",
+                    ...options
+                });
+                return this.unloading();
+            });;
         }
 
         return super.close({ ...options, force: true });

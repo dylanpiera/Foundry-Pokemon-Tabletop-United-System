@@ -1101,14 +1101,16 @@ export class NpcQuickBuildData {
                 const uuid = choice.uuid;
                 const label = choice.label ?? choice.name;
                 const key = `${label}-${idx}`.replaceAll(".", "-");
+                const original = this.trainer?.subSelectables?.[key];
+                const selected = original?.visible ? original?.selected ?? null : null;
                 const subSelectable = {
                     key,
                     uuid,
                     label,
                     idx,
                     choices,
-                    selected: this.trainer?.subSelectables?.[key]?.selected ?? null,
-                    visible: this.trainer?.subSelectables?.[key]?.visible ?? true,
+                    selected,
+                    visible: true,
                 };
                 // check if the choices are items in the compendium
                 if (choices.every(c => COMPENDIUM_ITEM_RE.test(c.value))) {
@@ -1320,7 +1322,7 @@ export class NpcQuickBuildData {
                 // iobj.flags.ptu ??= {}
                 // iobj.flags.ptu.rulesSelections ??= {}
                 for (const [idx, choiceSet] of choiceSets.entries()) {
-                    const label = item.label;
+                    const label = item.label ?? item.name;
                     const key = `${label}-${idx}`.replaceAll(".", "-");
                     choiceSet.selection = this.trainer.subSelectables[key].selected;
                 }
