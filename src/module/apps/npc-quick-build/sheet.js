@@ -94,9 +94,8 @@ export class PTUNpcQuickBuild extends FormApplication {
             // await tagify(element);
             const data = this.data.multiselects[multiselect.dataset.filterName];
             const savePath = multiselect.name;
-
-            const tagify = new Tagify(multiselect, {
-                enforceWhitelist: !multiselect.matches(".trainer-sex"),
+            const tagifyOptions = {
+                enforceWhitelist: true,
                 keepInvalidTags: false,
                 editTags: false,
                 tagTextProp: "label",
@@ -109,7 +108,13 @@ export class PTUNpcQuickBuild extends FormApplication {
                 },
                 whitelist: data.options,
                 maxTags: data.maxTags,
-            });
+            };
+
+            if (multiselect.matches(".trainer-sex")) {
+                tagifyOptions.enforceWhitelist = false;
+            }
+
+            const tagify = new Tagify(multiselect, tagifyOptions);
 
             // // Add the name to the tags html as an indicator for refreshing
             // if (multiselect.name) {
