@@ -43,6 +43,9 @@
             <label>{{localize "PTU.NpcQuickBuild.TrainerLevel"}}</label>
             <input class="fb-40" type="number" name="trainer.level" min="1" max="50" value="{{data.trainer.level}}"/>
 
+            <label>{{localize "PTU.NpcQuickBuild.PartySize"}}</label>
+            <input class="fb-40" type="number" name="trainer.partySize" min="1" value="{{data.trainer.partySize}}"/>
+
             <label>{{localize "PTU.NpcQuickBuild.Classes"}}</label>
             <input class="ptu-tagify trainer-classes" name="trainer.classes.selected" data-filter-name="classes" value="{{json data.trainer.classes.selected}}" data-dtype="JSON" />
         </div>
@@ -63,7 +66,7 @@
 
             <div class="selected-edges">
                 <h4>{{localize "PTU.NpcQuickBuild.Edges"}}</h4>
-                <input class="ptu-tagify trainer-features" name="trainer.edges.selected" data-filter-name="edges" value="{{json data.trainer.edges.selected}}" data-dtype="JSON" />
+                <input class="ptu-tagify trainer-edges" name="trainer.edges.selected" data-filter-name="edges" value="{{json data.trainer.edges.selected}}" data-dtype="JSON" />
             </div>
 
             <div class="computed-links computed-edges">
@@ -151,6 +154,22 @@
         {{#if (eq data.page 4)}}
             <div class="pokemon-box">
                 <h4>{{localize "PTU.NpcQuickBuild.PartyPkmn"}}</h4>
+                <div class="pokemon-party-settings">
+                    <div class="pokemon-party-size">
+                        <label>{{localize "PTU.NpcQuickBuild.PartySize"}}</label>
+                        <input type="number" name="trainer.partySize" min="1" value="{{data.trainer.partySize}}"/>
+                    </div>
+                    <div class="pokemon-data-source">
+                        <select id="sourceSelect">
+                            {{selectOptions data.sourceSelect.options selected=data.sourceSelect.value valueAttr="uuid"}}
+                        </select>
+                        {{#if data.sourceSelect.link.uuid}}
+                        <div>
+                            {{localize "PTU.MassGenerator.FoundTable"}} <a class="content-link" draggable="true" data-link="" data-uuid="{{data.sourceSelect.link.uuid}}" data-id="{{data.sourceSelect.link._id}}" data-type="RollTable" data-tooltip="Roll Table"><i class="fas fa-th-list"></i>{{data.sourceSelect.link.label}}</a>
+                        </div>
+                        {{/if}}
+                    </div>
+                </div>
                 <div class="all-party-pokemon">
                 {{#each data.party as | pkmn key |}}
                 {{#if pkmn.configured}}
@@ -191,6 +210,8 @@
                                 <input type="checkbox" name="party.{{key}}.shiny" {{checked pkmn.shiny}}/>
                             </label>
                         </div>
+
+                        <a class="pokemon-remove" data-tooltip="PTU.NpcQuickBuild.RemovePokemon"><i class="fa-solid fa-trash"></i></a>
                     </div>
                 {{else}}
                     <div class="party-pokemon {{key}} species-unset" data-slot="{{key}}">
@@ -198,6 +219,8 @@
                             <label>{{localize "PTU.NpcQuickBuild.SpeciesName"}}</label>
                             <input class="ptu-tagify one-entry" name="party.{{key}}.species.selected" data-filter-name="species" value="{{json pkmn.species.selected}}" data-dtype="JSON" />
                         </div>
+
+                        <a class="pokemon-randomize" data-tooltip="PTU.NpcQuickBuild.RandomizePokemon"><i class="fa-solid fa-dice"></i></a>
                     </div>
                 {{/if}}
                 {{/each}}

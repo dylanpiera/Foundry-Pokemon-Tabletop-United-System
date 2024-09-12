@@ -2,14 +2,11 @@ import { PokemonGenerator } from "../../actor/pokemon/generator.js";
 import { PTUSkills } from '../../actor/index.js';
 import { Mutex } from '../../../util/mutex.js';
 
-const MaxPartyPokemon = 6;
-
-
 const SINGLE_MIN_SKILL_RANK_RE = /(?<rank>(Pathetic)|(Untrained)|(Novice)|(Adept)|(Expert)|(Master)|(Virtuoso)) (?<skill>.+)/i;
 const ANY_N_SKILLS_AT_RE = /(any )?(?<n>([0-9]+)|(A)|(One)|(Two)|(Three)|(Four)|(Five)|(Six)|(Seven)|(Eight)|(Nine)) Skills? at (?<rank>(Untrained)|(Novice)|(Adept)|(Expert)|(Master)|(Virtuoso))( Rank)?/i;
 const N_SKILLS_AT_FROM_LIST_RE = /(?<n>([0-9]+)|(A)|(One)|(Two)|(Three)|(Four)|(Five)|(Six)|(Seven)|(Eight)|(Nine))( Skills?)? of (?<skills>.+) at (?<rank>(Untrained)|(Novice)|(Adept)|(Expert)|(Master)|(Virtuoso))( Rank)?( or higher)?/i;
 
-const FEAT_WITH_SUB_RE = /(?<main>.+)( \((?<sub>.+)\)?(?<cr> \[CR\])?)/i;
+const FEAT_WITH_SUB_RE = /(?<main>[^\(\)]+) (\((?<sub>.+)\)) ?(?<cr>\[CR\])?/i;
 const N_FEATS_FROM_LIST_RE = /(?<n>([0-9]+)|(A)|(One)|(Two)|(Three)|(Four)|(Five)|(Six)|(Seven)|(Eight)|(Nine)) of (?<features>.+)?/i;
 const COMPENDIUM_ITEM_RE = /Compendium\.([\w\.]+).Item.[a-zA-Z0-9]+/;
 
@@ -78,6 +75,7 @@ export class NpcQuickBuildData {
             name: "",
             sex: [],
             level: Math.floor(this.estimatedAppropriateLevel),
+            partySize: 6,
             classes: {
                 selected: [],
                 restricted: true,
@@ -125,46 +123,11 @@ export class NpcQuickBuildData {
         // Configure party pokemon slots
 
         this.party = {};
-        for (let n = 1; n <= MaxPartyPokemon; n++) {
-            this.party[`slot${n}`] = {
-                slot: `slot${n}`,
-                configured: false,
-                species: {
-                    object: null,
-                    name: "",
-                    img: "icons/svg/mystery-man.svg",
-                    uuid: "",
-                    selected: [],
-                    gender: {
-                        selected: "",
-                        options: [],
-                        choosable: false,
-                    },
-                    variations: {
-                        selected: "",
-                        options: [],
-                    },
-                    optimization: {
-                        selected: "good",
-                        options: [
-                            { label: "PTU.OptimizationLevel.Bad", value: "bad" },
-                            { label: "PTU.OptimizationLevel.Neutral", value: "neutral" },
-                            { label: "PTU.OptimizationLevel.Good", value: "good" },
-                            { label: "PTU.OptimizationLevel.MinMaxed", value: "minmax" },
-                        ]
-                    },
-                },
-                shiny: false,
-                nickname: "",
-                level: {
-                    value: game.settings.get("ptu", "generation.defaultDexDragInLevelMin"), // TODO: use a different default? Maybe 2x trainer level?
-                    min: 1,
-                    max: 100,
-                }
-            };
+        for (let n = 1; n <= this.trainer.partySize; n++) {
+            this.resetPokemonSlot(`slot${n}`);
         }
 
-        this.multiselects = {
+        this._staticMultiselects = {
             sex: {
                 options: ["Male", "Female", "Nonbinary"].map(x=>({ label: x, value: x})),
                 maxTags: 1,
@@ -183,6 +146,29 @@ export class NpcQuickBuildData {
                 maxTags: 1,
             }
         };
+
+        this.multiselects = foundry.utils.deepClone(this._staticMultiselects);
+
+        // source selection
+        this.source = undefined;
+        this.sourceSelect = {
+            value: undefined,
+            updated: false,
+            options: [
+                { label: "Compendium Browser Settings", uuid: "" },
+                ...game.tables.map(t => ({ label: t.name, uuid: t.uuid, group: t.folder?.name }))
+            ],
+            link: {
+                label: undefined,
+                uuid: undefined,
+                _id: undefined,
+            }
+        }
+
+
+        this.helpText = {
+            source: undefined,
+        }
 
 
         this.warnings = {
@@ -226,28 +212,31 @@ export class NpcQuickBuildData {
                 if (feature.type !== "feat") continue;
                 let bucket = "features";
                 if (feature?.system?.keywords?.includes("Class")) bucket = "classes";
-                this.multiselects[bucket].options.push({
+                this._staticMultiselects[bucket].options.push({
                     label: feature.name,
-                    value: feature.uuid,
+                    value: feature.name,
+                    uuid: feature.uuid,
                     prerequisites: feature?.system?.prerequisites ?? [],
+                    class: feature?.system?.class,
                 })
             }
         }
-        this.multiselects.classes.options.sort((a, b) => a.label.localeCompare(b.label));
-        this.multiselects.features.options.sort((a, b) => a.label.localeCompare(b.label));
+        this._staticMultiselects.classes.options.sort((a, b) => a.label.localeCompare(b.label));
+        this._staticMultiselects.features.options.sort((a, b) => a.label.localeCompare(b.label));
 
         // get edges
         for (const compendium of edgeCompendiums) {
             for (const edge of game.packs.get(compendium).index) {
                 if (edge.type !== "edge") continue;
-                this.multiselects.edges.options.push({
+                this._staticMultiselects.edges.options.push({
                     label: edge.name,
-                    value: edge.uuid,
+                    value: edge.name,
+                    uuid: edge.uuid,
                     prerequisites: edge?.system?.prerequisites ?? [],
                 })
             }
         }
-        this.multiselects.edges.options.sort((a, b) => a.label.localeCompare(b.label));
+        this._staticMultiselects.edges.options.sort((a, b) => a.label.localeCompare(b.label));
 
         // get species
         for (const compendium of speciesCompendiums) {
@@ -257,19 +246,23 @@ export class NpcQuickBuildData {
                 if (species.name.includes("-Terrastal")) continue; // Same with 
                 if (species.name.includes("-Eternamax")) continue; // Same with Terrastalized
                 if (species.name.startsWith("Delta ")) continue; // What even is this?
-                this.multiselects.species.options.push({
+                this._staticMultiselects.species.options.push({
                     label: species.name,
-                    value: species.uuid,
+                    value: species.name,
+                    uuid: species.uuid,
                 })
             }
         }
-        this.multiselects.species.options.sort((a, b) => a.label.localeCompare(b.label));
+        this._staticMultiselects.species.options.sort((a, b) => a.label.localeCompare(b.label));
+
+        
+        this.multiselects = foundry.utils.deepClone(this._staticMultiselects);
     }
 
     async _findFromMultiselect(bucket, searchfunction) {
         const found = this.multiselects[bucket]?.options?.find(searchfunction);
         if (!found) return null;
-        const uuid = found.value || found.uuid;
+        const uuid = found.uuid || found.value;
         if (!uuid) return null;
         const foundItem = (await fromUuid(uuid))?.toObject();
         if (!foundItem) return null;
@@ -294,8 +287,8 @@ export class NpcQuickBuildData {
     }
 
     /*-----------------------------------------------------------------------*/
-
     /*                           AUTO GENERATION                             */
+    /*-----------------------------------------------------------------------*/
 
     async randomizeAll(force = false) {
         if (force) this.manuallyUpdatedFields = new Set();
@@ -328,7 +321,7 @@ export class NpcQuickBuildData {
         await this.randomizeSkills();
         await this.randomizeStats();
 
-        for (let s = 1; s <= 6; s++) {
+        for (let s = 1; s <= this.trainer.partySize; s++) {
             const slot = `slot${s}`;
             if (noUpdate.has(`party.${slot}.species.selected`)) continue;
             if (noUpdate.has(`party.${slot}.nickname`)) continue;
@@ -651,27 +644,73 @@ export class NpcQuickBuildData {
     }
 
     async randomizePartyPokemon(slot) {
+        this.resetPokemonSlot(slot);
         // randomize level
         const pkmnLevel = Math.min(100, Math.max(1, Math.round((this.trainer.level * 2) * NpcQuickBuildData.normalDistribution(1.0, 0.1))));
         
         // randomize species
         // currently this is weighted towards species with more evolutions...
         // but it's really really slow to try to avoid that problem
-        let speciesOption = chooseFrom(this.multiselects.species.options);
-        let species = (await fromUuid(speciesOption.value));
-        let evolutionChain = species.system.evolutions;
+        let speciesOption = null;
+        let species = null;
+        if (!this.source) {
+            // choose from the drop-downs
+            speciesOption = chooseFrom(this.multiselects.species.options);
+            species = (await fromUuid(speciesOption.uuid));
+        } else {
+            // roll the table
+            const { results } = await this.source.roll();
+            if (!results || results.length == 0) {
+                console.error(`No result obtained from RollTable.`);
+                return;
+            }
+            const [result] = results;
+            const constructedUuid = (()=>{
+                switch (result.type) {
+                    case "pack": return `Compendium.${result.documentCollection}.Item.${result.documentId}`;
+                    case "document": return `${result.documentCollection}.${result.documentId}`;
+                    default: return "";
+                }
+            })();
+            if (!constructedUuid) {
+                console.error(`Result "${result.text}" is of unsupported type ${result.type}`);
+                return;
+            }
+            species = (await fromUuid(constructedUuid));
+            if (!species || species.type != "species") {
+                console.error(`Result "${result.text}" (${constructedUuid}) did not resolve to a species item.`);
+                return;
+            }
+            speciesOption = {
+                label: result.text,
+                uuid: constructedUuid
+            }
+        }
+        
+        const evolutionChain = species?.system?.evolutions;
+
+        if (!species) {
+            console.error(`failed to generate pokemon in ${slot}:`, speciesOption);
+            return;
+        }
         
         // make sure we're at the right evolution level
-        speciesOption = evolutionChain.filter(ev=>ev.level <= pkmnLevel).sort(ev=>-ev.level).map(ev=>({
+        speciesOption = [...(evolutionChain.filter(ev=>ev.level <= pkmnLevel).sort(ev=>-ev.level).map(ev=>({
             label: ev.slug[0].toUpperCase() + ev.slug.slice(1),
-            value: ev.uuid,
-        }))?.[0];
-        species = (await fromUuid(speciesOption.value)) ?? species;
+            uuid: ev.uuid,
+        })) ?? []), speciesOption][0];
+        species = (await fromUuid(speciesOption.uuid)) ?? species;
 
         this.party[slot].level.value = pkmnLevel;
-        await this.configurePokemonSpecies(slot, { species, uuid: speciesOption.value });
+        await this.configurePokemonSpecies(slot, { species, uuid: speciesOption.uuid });
     }
 
+
+    
+
+    /*-----------------------------------------------------------------------*/
+    /*                        Party Pokemon Settings                         */
+    /*-----------------------------------------------------------------------*/
 
     async configurePokemonSpecies(slot, { species, uuid }) {
         const pkmn = this.party[slot];
@@ -724,6 +763,47 @@ export class NpcQuickBuildData {
 
         this.party[slot].configured = true;
     }
+
+    resetPokemonSlot(slot) {
+        this.party[slot] = {
+            slot,
+            configured: false,
+            species: {
+                object: null,
+                name: "",
+                img: "icons/svg/mystery-man.svg",
+                uuid: "",
+                selected: [],
+                gender: {
+                    selected: "",
+                    options: [],
+                    choosable: false,
+                },
+                variations: {
+                    selected: "",
+                    options: [],
+                },
+                optimization: {
+                    selected: "good",
+                    options: [
+                        { label: "PTU.OptimizationLevel.Bad", value: "bad" },
+                        { label: "PTU.OptimizationLevel.Neutral", value: "neutral" },
+                        { label: "PTU.OptimizationLevel.Good", value: "good" },
+                        { label: "PTU.OptimizationLevel.MinMaxed", value: "minmax" },
+                    ]
+                },
+            },
+            shiny: false,
+            nickname: "",
+            level: {
+                value: this.trainer.level * 2,
+                min: 1,
+                max: 100,
+            }
+        };
+    }
+
+
 
 
     /**
@@ -979,6 +1059,9 @@ export class NpcQuickBuildData {
 
     async refresh() {
         const unlock = await this._refreshMutex.lock()
+
+        this.multiselects = foundry.utils.deepClone(this._staticMultiselects);
+
         // grab the features and prerequisites
         // the actual structure of these foundry items, plus "uuid" and "auto"
         const allComputed = [];
@@ -992,31 +1075,34 @@ export class NpcQuickBuildData {
         const allUnknown = [];
 
         for (const feature of Object.values(this.trainer.classes.selected)) {
-            if (!feature.value) continue;
-            const item = (await fromUuid(feature.value))?.toObject();
+            if (!feature.uuid) continue;
+            const item = (await fromUuid(feature.uuid))?.toObject();
             if (!item) continue;
             Object.assign(item, {
-                uuid: feature.value,
+                uuid: feature.uuid,
+                label: feature.label,
             });
             featuresComputed.push(item);
             allComputed.push(item);
         }
         for (const feature of Object.values(this.trainer.features.selected)) {
-            if (!feature.value) continue;
-            const item = (await fromUuid(feature.value))?.toObject();
+            if (!feature.uuid) continue;
+            const item = (await fromUuid(feature.uuid))?.toObject();
             if (!item) continue;
             Object.assign(item, {
-                uuid: feature.value,
+                uuid: feature.uuid,
+                label: feature.label,
             });
             featuresComputed.push(item);
             allComputed.push(item);
         }
         for (const edge of Object.values(this.trainer.edges.selected)) {
-            if (!edge.value) continue;
-            const item = (await fromUuid(edge.value))?.toObject();
+            if (!edge.uuid) continue;
+            const item = (await fromUuid(edge.uuid))?.toObject();
             if (!item) continue;
             Object.assign(item, {
-                uuid: edge.value,
+                uuid: edge.uuid,
+                label: edge.label,
             });
             edgesComputed.push(item);
             allComputed.push(item);
@@ -1068,14 +1154,17 @@ export class NpcQuickBuildData {
             for (const [idx, choiceSet] of choiceSets.entries()) {
                 const choices = choiceSet.choices.map(c => ({ ...c }));
                 const uuid = choice.uuid;
-                const key = `${uuid}-${idx}`.replaceAll(".", "-");
+                const label = choice.label ?? choice.name;
+                const key = `${label}-${idx}`.replaceAll(".", "-");
+                const original = this.trainer?.subSelectables?.[key];
+                const selected = original?.visible ? original?.selected ?? null : null;
                 const subSelectable = {
                     key,
                     uuid,
+                    label,
                     idx,
-                    label: choice.name,
                     choices,
-                    selected: this.trainer?.subSelectables?.[key]?.selected ?? null,
+                    selected,
                     visible: true,
                 };
                 // check if the choices are items in the compendium
@@ -1089,15 +1178,11 @@ export class NpcQuickBuildData {
 
                 // check if we've got an unmet prerequisite for this still
                 const unmet = allSuboptions.find(s => s.uuid == uuid);
-                if (unmet && choices.find(c => c.label == unmet.subvalue)) {
+                if (unmet && !subSelectable.selected && choices.find(c => c.label == unmet.subvalue)) {
                     subSelectable.selected = choices.find(c => c.label == unmet.subvalue)?.value ?? null;
                     subSelectable.visible = false;
                     allSuboptions.splice(allSuboptions.indexOf(unmet), 1);
                 }
-                // if (alreadySelected.has(subSelectable.selected)) {
-                //     subSelectable.selected = null;
-                //     subSelectable.visible = true;
-                // }
                 subSelectables[key] = subSelectable;
                 relatedChanges.push(subSelectable);
                 alreadySelected.add(subSelectable.selected);
@@ -1112,18 +1197,13 @@ export class NpcQuickBuildData {
             }
         }
 
-
         // try to infer auto stat changes
         // TODO
-
 
         // set them as the values in the trainer
         this.trainer.features.computed = featuresComputed;
         this.trainer.edges.computed = edgesComputed;
         this.trainer.subSelectables = subSelectables;
-
-
-
 
         // set warnings
         this.warnings = {
@@ -1166,8 +1246,6 @@ export class NpcQuickBuildData {
         }
         this.trainer.stats = newStats;
 
-
-
         // check if any pokemon have been newly configured
         for (const slot of Object.keys(this.party)) {
             if (!this.party[slot].configured) {
@@ -1187,6 +1265,72 @@ export class NpcQuickBuildData {
                 pkmn.species.img = img;
             }
             this.party[slot] = pkmn;
+        }
+        for (let n = 1; n <= this.trainer.partySize; n++) {
+            if (this.party[`slot${n}`] == undefined) {
+                this.resetPokemonSlot(`slot${n}`);
+            }
+        }
+        // remove invalid slots
+        for (const slot of (new Set(Object.keys(this.party))).difference(new Set(Array.from({length: this.trainer.partySize}, (_, i) => `slot${i + 1}`)))) {
+            delete this.party[slot];
+        }
+
+        // update the multiselects to account for all pre-selected features/edges
+        for (const key of ["features", "edges"]) {
+            const multiselectOptions = foundry.utils.deepClone(this._staticMultiselects[key].options);
+            for (const selOption of this.trainer[key].selected) {
+                let n = 2;
+                let nsfLabel;
+                do {
+                    nsfLabel = `${selOption.originalLabel ?? selOption.label} (${n++})`;
+                    if (multiselectOptions.find(f=>f.label == nsfLabel) == null) {
+                        multiselectOptions.push({
+                            ...selOption,
+                            originalLabel: selOption.originalLabel ?? selOption.label,
+                            label: nsfLabel,
+                            value: nsfLabel,
+                        });
+                    }
+                } while (this.trainer[key].selected.find(f=>f.label == nsfLabel) != null)
+            }
+            this.multiselects[key].options = multiselectOptions;
+        }
+        // Sort the features and add classifiers (from currently selected classes, etc)
+        const selectedClasses = this.trainer.classes.selected.map(c=>c.value);
+        for (const featureOption of this.multiselects.features.options) {
+            featureOption.crossClass = (selectedClasses.length > 0 && featureOption?.class) ? !selectedClasses.includes(featureOption.class) : false;
+        }
+        this.multiselects.features.options.sort((a, b)=> a.crossClass - b.crossClass || a.label.localeCompare(b.label));
+        
+        this.multiselects.edges.options.sort((a, b)=> a.label.localeCompare(b.label));
+
+        // get the pokemon generation table to use
+        if (this.sourceSelect.updated) {
+            if (!this.sourceSelect.value) {
+                this.source = undefined;
+            }
+            else if (!isNaN(Number(this.sourceSelect.value))) {
+                this.source = game.tables.get(this.sourceSelect.value);
+            }
+            else if (this.sourceSelect.value.includes("RollTable.")) {
+                this.source = await fromUuid(this.sourceSelect.value);
+            }
+            this.sourceSelect.updated = false;
+        }
+
+        if (this.source) {
+            this.sourceSelect.link = {
+                uuid: this.source.uuid,
+                _id: this.source._id,
+                label: this.source.name,
+            }
+        } else {
+            this.sourceSelect.link = {
+                uuid: undefined,
+                _id: undefined,
+                label: undefined,
+            }
         }
 
         unlock();
@@ -1261,8 +1405,8 @@ export class NpcQuickBuildData {
                 // iobj.flags.ptu ??= {}
                 // iobj.flags.ptu.rulesSelections ??= {}
                 for (const [idx, choiceSet] of choiceSets.entries()) {
-                    const uuid = item.uuid;
-                    const key = `${uuid}-${idx}`.replaceAll(".", "-");
+                    const label = item.label ?? item.name;
+                    const key = `${label}-${idx}`.replaceAll(".", "-");
                     choiceSet.selection = this.trainer.subSelectables[key].selected;
                 }
             }

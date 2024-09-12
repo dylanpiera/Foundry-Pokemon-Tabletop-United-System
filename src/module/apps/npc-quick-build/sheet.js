@@ -52,7 +52,7 @@ export class PTUNpcQuickBuild extends FormApplication {
             label: "Randomize",
             class: "randomize",
             icon: "fas fa-dice",
-            onclick: () => sheet.loading().then(()=>sheet.data.randomizeAll()).then(()=>sheet.renderAsync()).then(()=>this.unloading()).then(()=>this.disabled = false),
+            onclick: () => sheet.loading().then(()=>sheet.data.randomizeAll()).then(()=>sheet.renderAsync()).then(()=>this.disabled = false),
         })
 
         return buttons;
@@ -94,9 +94,8 @@ export class PTUNpcQuickBuild extends FormApplication {
             // await tagify(element);
             const data = this.data.multiselects[multiselect.dataset.filterName];
             const savePath = multiselect.name;
-
-            const tagify = new Tagify(multiselect, {
-                enforceWhitelist: !multiselect.matches(".trainer-sex"),
+            const tagifyOptions = {
+                enforceWhitelist: true,
                 keepInvalidTags: false,
                 editTags: false,
                 tagTextProp: "label",
@@ -109,7 +108,20 @@ export class PTUNpcQuickBuild extends FormApplication {
                 },
                 whitelist: data.options,
                 maxTags: data.maxTags,
-            });
+            };
+
+            if (multiselect.matches(".trainer-sex")) {
+                tagifyOptions.enforceWhitelist = false;
+            }
+
+            if (multiselect.matches(".trainer-features")) {
+                tagifyOptions.templates ??= {};
+                tagifyOptions.templates.dropdownItem = function(tagData) {
+                    return `<div label="${tagData.label}" value="${tagData.value}" uuid="${tagData.uuid}" mappedvalue="${tagData.mappedValue}" class="tagify__dropdown__item ${tagData.label} ${tagData.crossClass ? "crossclass" : ""}" tabindex="0" role="option">${tagData.label}</div>`
+                };
+            }
+
+            const tagify = new Tagify(multiselect, tagifyOptions);
 
             // // Add the name to the tags html as an indicator for refreshing
             // if (multiselect.name) {
@@ -143,19 +155,30 @@ export class PTUNpcQuickBuild extends FormApplication {
             });
         }
 
-        // $html.find('.tab-button').on('click', (event) => {
-        //     event.preventDefault();
+        // "remove pokemon" button
+        $html.find('.pokemon-remove').on('click', function (event) {
+            event.preventDefault();
+            const dataset = this.closest(".party-pokemon")?.dataset;
+            globalThis.data.resetPokemonSlot(dataset?.slot);
+            globalThis.render(true);
+        });
 
-        //     this.data.speciesTab = event.currentTarget.dataset.tab;
-        //     this.render(true);
-        // });
+        // "randomize pokemon" button
+        $html.find('.pokemon-randomize').on('click', async function (event) {
+            event.preventDefault();
+            const dataset = this.closest(".party-pokemon")?.dataset;
+            await globalThis.loading();
+            await globalThis.data.randomizePartyPokemon(dataset?.slot);
+            globalThis.render(true);
+        });
 
-        // $html.find("#tableSelect").on("change", (event) => {
-        //     this.data.tableSelect.value = event.currentTarget.value;
-        //     this.data.tableSelect.updated = true;
+        $html.find("#sourceSelect").on("change", function (event) {
+            event.preventDefault();
+            globalThis.data.sourceSelect.value = this?.value;
+            globalThis.data.sourceSelect.updated = true;
 
-        //     this.render(true);
-        // });
+            globalThis.render(true);
+        });
 
         $html.find("input.submit[type='button']").on("click", (event) => {
             event.preventDefault();
@@ -255,6 +278,7 @@ export class PTUNpcQuickBuild extends FormApplication {
             });
             return this.unloading();
         });
+        await this.unloading();
         return this;
     }
 
@@ -273,7 +297,15 @@ export class PTUNpcQuickBuild extends FormApplication {
     /** @override */
     async close(options) {
         if (options?.properClose) {
-            await this.data.finalize().then(()=>this.data.generate());
+            await this.data.finalize().then(()=>this.data.generate()).catch(err => {
+                ui.notifications.error("Could not generate the NPC! Check the dev console for more details.");
+                Hooks.onError("Application#close", err, {
+                    msg: `An error occurred while closing ${this.constructor.name} ${this.appId}`,
+                    log: "error",
+                    ...options
+                });
+                return this.unloading();
+            });;
         }
 
         return super.close({ ...options, force: true });
