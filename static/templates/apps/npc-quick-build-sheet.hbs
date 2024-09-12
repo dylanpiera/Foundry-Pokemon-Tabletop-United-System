@@ -154,9 +154,21 @@
         {{#if (eq data.page 4)}}
             <div class="pokemon-box">
                 <h4>{{localize "PTU.NpcQuickBuild.PartyPkmn"}}</h4>
-                <div class="pokemon-party-size">
-                    <label>{{localize "PTU.NpcQuickBuild.PartySize"}}</label>
-                    <input type="number" name="trainer.partySize" min="1" value="{{data.trainer.partySize}}"/>
+                <div class="pokemon-party-settings">
+                    <div class="pokemon-party-size">
+                        <label>{{localize "PTU.NpcQuickBuild.PartySize"}}</label>
+                        <input type="number" name="trainer.partySize" min="1" value="{{data.trainer.partySize}}"/>
+                    </div>
+                    <div class="pokemon-data-source">
+                        <select id="sourceSelect">
+                            {{selectOptions data.sourceSelect.options selected=data.sourceSelect.value valueAttr="uuid"}}
+                        </select>
+                        {{#if data.sourceSelect.link.uuid}}
+                        <div>
+                            {{localize "PTU.MassGenerator.FoundTable"}} <a class="content-link" draggable="true" data-link="" data-uuid="{{data.sourceSelect.link.uuid}}" data-id="{{data.sourceSelect.link._id}}" data-type="RollTable" data-tooltip="Roll Table"><i class="fas fa-th-list"></i>{{data.sourceSelect.link.label}}</a>
+                        </div>
+                        {{/if}}
+                    </div>
                 </div>
                 <div class="all-party-pokemon">
                 {{#each data.party as | pkmn key |}}

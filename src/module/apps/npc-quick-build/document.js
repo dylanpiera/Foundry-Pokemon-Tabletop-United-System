@@ -149,6 +149,27 @@ export class NpcQuickBuildData {
 
         this.multiselects = foundry.utils.deepClone(this._staticMultiselects);
 
+        // source selection
+        this.source = undefined;
+        this.sourceSelect = {
+            value: undefined,
+            updated: false,
+            options: [
+                { label: "Compendium Browser Settings", uuid: "" },
+                ...game.tables.map(t => ({ label: t.name, uuid: t.uuid }))
+            ],
+            link: {
+                label: undefined,
+                uuid: undefined,
+                _id: undefined,
+            }
+        }
+
+
+        this.helpText = {
+            source: undefined,
+        }
+
 
         this.warnings = {
             num: 0,
@@ -630,20 +651,54 @@ export class NpcQuickBuildData {
         // randomize species
         // currently this is weighted towards species with more evolutions...
         // but it's really really slow to try to avoid that problem
-        let speciesOption = chooseFrom(this.multiselects.species.options);
-        let species = (await fromUuid(speciesOption.uuid));
-        let evolutionChain = species?.system?.evolutions;
+        let speciesOption = null;
+        let species = null;
+        if (!this.source) {
+            // choose from the drop-downs
+            speciesOption = chooseFrom(this.multiselects.species.options);
+            species = (await fromUuid(speciesOption.uuid));
+        } else {
+            // roll the table
+            const { results } = await this.source.roll();
+            if (!results || results.length == 0) {
+                console.error(`No result obtained from RollTable.`);
+                return;
+            }
+            const [result] = results;
+            const constructedUuid = (()=>{
+                switch (result.type) {
+                    case "pack": return `Compendium.${result.documentCollection}.Item.${result.documentId}`;
+                    case "document": return `${result.documentCollection}.${result.documentId}`;
+                    default: return "";
+                }
+            })();
+            if (!constructedUuid) {
+                console.error(`Result "${result.text}" is of unsupported type ${result.type}`);
+                return;
+            }
+            species = (await fromUuid(constructedUuid));
+            if (!species || species.type != "species") {
+                console.error(`Result "${result.text}" (${constructedUuid}) did not resolve to a species item.`);
+                return;
+            }
+            speciesOption = {
+                label: result.text,
+                uuid: constructedUuid
+            }
+        }
+        
+        const evolutionChain = species?.system?.evolutions;
 
         if (!species) {
-            console.log(`failed to generate pokemon in ${slot}:`, speciesOption);
+            console.error(`failed to generate pokemon in ${slot}:`, speciesOption);
             return;
         }
         
         // make sure we're at the right evolution level
-        speciesOption = evolutionChain.filter(ev=>ev.level <= pkmnLevel).sort(ev=>-ev.level).map(ev=>({
+        speciesOption = [...(evolutionChain.filter(ev=>ev.level <= pkmnLevel).sort(ev=>-ev.level).map(ev=>({
             label: ev.slug[0].toUpperCase() + ev.slug.slice(1),
             uuid: ev.uuid,
-        }))?.[0];
+        })) ?? []), speciesOption][0];
         species = (await fromUuid(speciesOption.uuid)) ?? species;
 
         this.party[slot].level.value = pkmnLevel;
@@ -1249,6 +1304,34 @@ export class NpcQuickBuildData {
         this.multiselects.features.options.sort((a, b)=> a.crossClass - b.crossClass || a.label.localeCompare(b.label));
         
         this.multiselects.edges.options.sort((a, b)=> a.label.localeCompare(b.label));
+
+        // get the pokemon generation table to use
+        if (this.sourceSelect.updated) {
+            if (!this.sourceSelect.value) {
+                this.source = undefined;
+            }
+            else if (!isNaN(Number(this.sourceSelect.value))) {
+                this.source = game.tables.get(this.sourceSelect.value);
+            }
+            else if (this.sourceSelect.value.includes("RollTable.")) {
+                this.source = await fromUuid(this.sourceSelect.value);
+            }
+            this.sourceSelect.updated = false;
+        }
+
+        if (this.source) {
+            this.sourceSelect.link = {
+                uuid: this.source.uuid,
+                _id: this.source._id,
+                label: this.source.name,
+            }
+        } else {
+            this.sourceSelect.link = {
+                uuid: undefined,
+                _id: undefined,
+                label: undefined,
+            }
+        }
 
         unlock();
     }

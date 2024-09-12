@@ -2352,13 +2352,17 @@ a.content-link img {
   background-color: #19850d;
   color: white;
 }
-.ptu.pokemon.npc-quick-build .window-content .pokemon-box .pokemon-party-size {
+.ptu.pokemon.npc-quick-build .window-content .pokemon-box .pokemon-party-settings {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  margin-bottom: 1em;
+}
+.ptu.pokemon.npc-quick-build .window-content .pokemon-box .pokemon-party-settings .pokemon-party-size {
   display: flex;
   align-items: baseline;
   gap: 1em;
-  margin-bottom: 1em;
 }
-.ptu.pokemon.npc-quick-build .window-content .pokemon-box .pokemon-party-size input {
+.ptu.pokemon.npc-quick-build .window-content .pokemon-box .pokemon-party-settings .pokemon-party-size input {
   flex: 0.25;
 }
 .ptu.pokemon.npc-quick-build .window-content .pokemon-box .all-party-pokemon {

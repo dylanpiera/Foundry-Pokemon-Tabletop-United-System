@@ -169,22 +169,16 @@ export class PTUNpcQuickBuild extends FormApplication {
             const dataset = this.closest(".party-pokemon")?.dataset;
             await globalThis.loading();
             await globalThis.data.randomizePartyPokemon(dataset?.slot);
-            await globalThis.render(true);
+            globalThis.render(true);
         });
 
-        // $html.find('.tab-button').on('click', (event) => {
-        //     event.preventDefault();
+        $html.find("#sourceSelect").on("change", function (event) {
+            event.preventDefault();
+            globalThis.data.sourceSelect.value = this?.value;
+            globalThis.data.sourceSelect.updated = true;
 
-        //     this.data.speciesTab = event.currentTarget.dataset.tab;
-        //     this.render(true);
-        // });
-
-        // $html.find("#tableSelect").on("change", (event) => {
-        //     this.data.tableSelect.value = event.currentTarget.value;
-        //     this.data.tableSelect.updated = true;
-
-        //     this.render(true);
-        // });
+            globalThis.render(true);
+        });
 
         $html.find("input.submit[type='button']").on("click", (event) => {
             event.preventDefault();
