@@ -1,5 +1,7 @@
-2024/09/09-10:51:52.226 85d0 Log #1096: 0 ops saved to Table #1097 OK
-2024/09/09-10:51:52.226 85d0 Archiving C:\Users\dylan\AppData\Local\FoundryVTT\Data\systems\ptu\packs\edges/001096.log: OK
-2024/09/09-10:51:52.226 85d0 Table #1061: 86 entries OK
-2024/09/09-10:51:52.230 85d0 Archiving C:\Users\dylan\AppData\Local\FoundryVTT\Data\systems\ptu\packs\edges/MANIFEST-001094: OK
-2024/09/09-10:51:52.235 85d0 **** Repaired leveldb C:\Users\dylan\AppData\Local\FoundryVTT\Data\systems\ptu\packs\edges; recovered 1 files; 45081 bytes. Some data may have been lost. ****
+2024/10/14-09:12:34.463 5908 Recovering log #1105
+2024/10/14-09:12:34.468 5908 Delete type=0 #1105
+2024/10/14-09:12:34.469 5908 Delete type=3 #1103
+2024/10/14-22:04:36.066 8194 Level-0 table #1110: started
+2024/10/14-22:04:36.066 8194 Level-0 table #1110: 0 bytes OK
+2024/10/14-22:04:36.068 8194 Delete type=0 #1108
+2024/10/14-22:04:36.072 8194 Manual compaction at level-0 from '!folders!KvpdGqvbgL2nQUcL' @ 72057594037927935 : 1 .. '!items!zixXV4XTysXtm8vK' @ 0 : 0; will stop at (end)

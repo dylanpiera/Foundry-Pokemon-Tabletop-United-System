@@ -1,5 +1,7 @@
-2024/09/09-10:51:52.504 85d0 Log #857: 0 ops saved to Table #858 OK
-2024/09/09-10:51:52.504 85d0 Archiving C:\Users\dylan\AppData\Local\FoundryVTT\Data\systems\ptu\packs\macros/000857.log: OK
-2024/09/09-10:51:52.505 85d0 Table #822: 6 entries OK
-2024/09/09-10:51:52.509 85d0 Archiving C:\Users\dylan\AppData\Local\FoundryVTT\Data\systems\ptu\packs\macros/MANIFEST-000855: OK
-2024/09/09-10:51:52.512 85d0 **** Repaired leveldb C:\Users\dylan\AppData\Local\FoundryVTT\Data\systems\ptu\packs\macros; recovered 1 files; 3596 bytes. Some data may have been lost. ****
+2024/10/14-09:12:34.597 7ed0 Recovering log #866
+2024/10/14-09:12:34.602 7ed0 Delete type=0 #866
+2024/10/14-09:12:34.602 7ed0 Delete type=3 #864
+2024/10/14-22:04:36.089 8194 Level-0 table #871: started
+2024/10/14-22:04:36.089 8194 Level-0 table #871: 0 bytes OK
+2024/10/14-22:04:36.091 8194 Delete type=0 #869
+2024/10/14-22:04:36.097 8194 Manual compaction at level-0 from '!macros!1RNSAw20k8gBHhUd' @ 72057594037927935 : 1 .. '!macros!sYZbyUkyC8f4nCek' @ 0 : 0; will stop at (end)

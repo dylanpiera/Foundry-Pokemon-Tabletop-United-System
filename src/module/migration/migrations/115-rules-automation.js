@@ -5,6 +5,8 @@ export class Migration115RulesAutomation extends MigrationBase {
     static version = 0.115;
     requiresFlush = true;
 
+    static once = false;
+
     /**
      * @type {MigrationBase['updateItem']} 
      */
@@ -44,8 +46,8 @@ export class Migration115RulesAutomation extends MigrationBase {
 
         item.system.rules = oldRules.concat(newRules);
 
-        if(!this.once) {
-            this.once = true;
+        if(!Migration115RulesAutomation.once) {
+          Migration115RulesAutomation.once = true;
             await ChatMessage.create({
                 speaker: { alias: "System" },
                 content: "<h1>Move Rules Automation Updated!</h1><p>All moves have been updated to include newly created rules automation.</p><p>If you had manually created rules automation before, they have been added in addition, therefore you may now find duplicate automation on your moves.</p><p>Please double check this in case you added custom automation to core moves!</p>"
