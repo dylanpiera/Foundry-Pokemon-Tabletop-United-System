@@ -2128,6 +2128,10 @@ a.content-link img {
   align-items: baseline;
   gap: 0.2em 2em;
 }
+.ptu.pokemon.npc-quick-build .window-content .selected-features .tagify,
+.ptu.pokemon.npc-quick-build .window-content .selected-edges .tagify {
+  min-width: 100%;
+}
 .ptu.pokemon.npc-quick-build .window-content .skills-box .skills,
 .ptu.pokemon.npc-quick-build .window-content .stats-box .stats {
   display: grid;
@@ -2348,6 +2352,19 @@ a.content-link img {
   background-color: #19850d;
   color: white;
 }
+.ptu.pokemon.npc-quick-build .window-content .pokemon-box .pokemon-party-settings {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  margin-bottom: 1em;
+}
+.ptu.pokemon.npc-quick-build .window-content .pokemon-box .pokemon-party-settings .pokemon-party-size {
+  display: flex;
+  align-items: baseline;
+  gap: 1em;
+}
+.ptu.pokemon.npc-quick-build .window-content .pokemon-box .pokemon-party-settings .pokemon-party-size input {
+  flex: 0.25;
+}
 .ptu.pokemon.npc-quick-build .window-content .pokemon-box .all-party-pokemon {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -2389,7 +2406,7 @@ a.content-link img {
   padding: 0px 2px;
 }
 .ptu.pokemon.npc-quick-build .window-content .pokemon-box .all-party-pokemon .party-pokemon .pokemon-species {
-  grid-column: 1 / 5;
+  grid-column: 1 / 4;
   grid-row: 2;
 }
 .ptu.pokemon.npc-quick-build .window-content .pokemon-box .all-party-pokemon .party-pokemon .pokemon-img {
@@ -2466,6 +2483,16 @@ a.content-link img {
 }
 .ptu.pokemon.npc-quick-build .window-content .pokemon-box .all-party-pokemon .party-pokemon .pokemon-shiny.checked {
   opacity: 1;
+}
+.ptu.pokemon.npc-quick-build .window-content .pokemon-box .all-party-pokemon .party-pokemon .pokemon-remove {
+  grid-column: 4;
+  grid-row: 3;
+  justify-self: end;
+  padding-right: 5px;
+}
+.ptu.pokemon.npc-quick-build .window-content .pokemon-box .all-party-pokemon .party-pokemon .pokemon-randomize {
+  grid-column: 4;
+  grid-row: 2;
 }
 .ptu.pokemon.npc-quick-build .window-content .tagify.one-entry [role="textbox"]:not(:first-child) {
   display: none;
@@ -4710,6 +4737,10 @@ a.content-link img {
 .app.choice-set-prompt section.window-content .choices .drop-zone span {
   color: black;
   flex: 1;
+}
+/* Tagify drop-down styling for NPC Quick Builder */
+.tagify__dropdown__item.crossclass {
+  background-color: lightcoral;
 }
 /* mod-field styling */
 .mod-input {
