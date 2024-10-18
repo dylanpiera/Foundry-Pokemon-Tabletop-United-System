@@ -5,7 +5,7 @@ export class Migration115RulesAutomation extends MigrationBase {
     static version = 0.115;
     requiresFlush = true;
 
-    static once = false;
+    static once = game.settings.get("ptu","worldSchemaVersion") >= Migration115RulesAutomation.version;
 
     /**
      * @type {MigrationBase['updateItem']} 
